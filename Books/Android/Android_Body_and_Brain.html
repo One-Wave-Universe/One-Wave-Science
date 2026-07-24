@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Android — Body &amp; Brain</title>
+<style>
+  :root{
+    --ink:#0d0d12; --hot:#ff2e63; --electric:#08d9d6; --panel:#f6f5f0;
+    --dark-panel:#1a1a2e; --accent-yellow:#ffd93d;
+  }
+  body{margin:0; background:#fff; font-family:'Arial Black','Helvetica',sans-serif;}
+  .page{ max-width:900px; margin:0 auto; background:var(--panel); border:8px solid var(--ink); position:relative;}
+  .cover{ background:var(--dark-panel); color:white; padding:60px 40px; text-align:center; border-bottom:8px solid var(--hot); position:relative; overflow:hidden;}
+  .cover::before{ content:""; position:absolute; top:-50px; right:-50px; width:200px; height:200px; background:var(--electric); border-radius:50%; opacity:0.15;}
+  .cover::after{ content:""; position:absolute; bottom:-80px; left:-80px; width:250px; height:250px; background:var(--hot); border-radius:50%; opacity:0.12;}
+  .kicker{ font-family:'Courier New',monospace; font-size:13px; letter-spacing:0.35em; color:var(--electric); text-transform:uppercase;}
+  .booktitle{ font-size:56px; font-weight:900; margin:14px 0 4px; text-transform:uppercase; letter-spacing:0.02em; text-shadow: 4px 4px 0 var(--hot);}
+  .booktitle2{ font-size:28px; color:var(--accent-yellow); font-weight:900; text-transform:uppercase; letter-spacing:0.05em;}
+  .status-tag{ display:inline-block; margin-top:20px; background:var(--hot); color:white; padding:8px 20px; font-size:12px; letter-spacing:0.15em; text-transform:uppercase; transform:skew(-8deg); font-weight:900;}
+  .content{ padding:36px 44px;}
+  .chapter-band{ background:var(--ink); color:white; padding:14px 26px; margin:40px 0 20px; transform:skew(-3deg); box-shadow:6px 6px 0 var(--electric);}
+  .chapter-band-inner{ transform:skew(3deg);}
+  .chapter-num{ font-family:'Courier New',monospace; font-size:12px; color:var(--accent-yellow); letter-spacing:0.2em;}
+  .chapter-title{ font-size:26px; font-weight:900; text-transform:uppercase; margin-top:2px;}
+  h2{ font-size:20px; font-weight:900; color:var(--ink); text-transform:uppercase; border-left:8px solid var(--hot); padding-left:14px; margin-top:32px; letter-spacing:0.02em;}
+  p{ font-family:'Georgia',serif; font-size:15px; line-height:1.7; color:#222;}
+  .panel{ background:white; border:4px solid var(--ink); padding:18px 22px; margin:18px 0; box-shadow:8px 8px 0 rgba(0,0,0,0.15); position:relative;}
+  .panel.electric{ border-color:var(--electric);}
+  .panel.warn{ border-color:var(--hot); background:#fff0f4;}
+  .panel-label{ font-family:'Courier New',monospace; font-size:11px; font-weight:900; letter-spacing:0.15em; text-transform:uppercase; color:var(--hot); margin-bottom:8px;}
+  .panel.electric .panel-label{ color:var(--electric);}
+  .diagram{ font-family:'Courier New',monospace; font-size:13px; background:var(--dark-panel); color:var(--electric); padding:16px 20px; white-space:pre; border-radius:4px; margin:16px 0;}
+  .speech{ background:var(--accent-yellow); border-radius:20px; padding:14px 22px; margin:20px 0; position:relative; border:4px solid var(--ink); font-weight:700; font-family:'Georgia',serif;}
+  .speech::after{ content:""; position:absolute; bottom:-18px; left:40px; border-width:18px 14px 0; border-style:solid; border-color:var(--ink) transparent transparent;}
+  .speech-inner{ background:var(--accent-yellow); position:relative; z-index:2;}
+  ol, ul{ font-family:'Georgia',serif; font-size:15px; line-height:1.7; color:#222;}
+  .rule{ height:8px; background:repeating-linear-gradient(45deg, var(--hot) 0 10px, var(--electric) 10px 20px); margin:36px 0;}
+  .toc{ background:white; border:4px solid var(--ink); padding:24px 30px; margin:20px 0;}
+  .toc h3{ font-size:16px; text-transform:uppercase; letter-spacing:0.1em; margin-top:0;}
+  .toc-item{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:2px dotted #ccc; font-family:'Georgia',serif;}
+</style></head>
+<body>
+<div class="page">
+  <div class="cover">
+    <div class="kicker">One-Wave &middot; Proposed Build &middot; Anime/Manga Technical Manual</div>
+    <div class="booktitle">ANDROID</div>
+    <div class="booktitle2">Body &amp; Brain</div>
+    <div class="status-tag">No Consciousness Claim &middot; Proposed Architecture Only</div>
+  </div>
+
+  <div class="content">
+    <div class="toc">
+      <h3>Contents</h3>
+      <div class="toc-item"><span>0 &mdash; Why Build This: Scope &amp; Safety Rules</span><span>p.1</span></div>
+      <div class="toc-item"><span>1 &mdash; Bio-Inspired Design</span><span>p.2</span></div>
+      <div class="toc-item"><span>2 &mdash; Functional Runtime Architecture</span><span>p.4</span></div>
+      <div class="toc-item"><span>3 &mdash; Body Interface &amp; Hierarchical Control</span><span>p.6</span></div>
+    </div>
+
+    <div class="chapter-band"><div class="chapter-band-inner">
+      <div class="chapter-num">CHAPTER 0</div>
+      <div class="chapter-title">Why Build This</div>
+    </div></div>
+
+    <p>This book contains a hypothetical One-Wave brain and body architecture for an android. It is an active engineering proposal &mdash; not a claim that the design is conscious, biologically identical to a human, or already validated in any way.</p>
+
+    <div class="speech"><div class="speech-inner">"The build may deliberately test ideas from the Proposed One-Wave Consciousness book. A successful implementation would show the functions can be engineered. It would <b>not</b>, by itself, prove subjective awareness."</div></div>
+
+    <h2>The Core Safety Rule</h2>
+    <div class="panel warn">
+      <div class="panel-label">No module gets unilateral irreversible control</div>
+      <ul>
+        <li>Dream Engine cannot directly execute irreversible action.</li>
+        <li>Administrator cannot bypass the completed state report.</li>
+        <li>M4 cannot independently commit.</li>
+        <li>Every commitment must preserve a recoverable prior reference state.</li>
+      </ul>
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="chapter-band"><div class="chapter-band-inner">
+      <div class="chapter-num">CHAPTER 1</div>
+      <div class="chapter-title">Bio-Inspired Design</div>
+    </div></div>
+
+    <p>Biological systems are used here as <b>design inspiration</b> for engineering, not as a claim that the android literally is biological. Each principle below borrows a mathematical pattern from a real, cited mechanism and applies it to a control-system function.</p>
+
+    <h2>Design Principle 1 &mdash; ATP Systems &rarr; Energy Management</h2>
+    <p>E-526's real cellular energy balance (dU/dt = P_in &minus; P_use &minus; P_loss) and ATP kinetics map directly onto battery/power budget management: available power budget, an intermediate power-ready state, raw energy input, conversion and draw-down rates. The biology doesn't add new physics &mdash; it supplies a clean, already-analyzed equation set instead of deriving power management from scratch.</p>
+
+    <h2>Design Principle 2 &mdash; Neural Oscillators &rarr; Timing and Coordination</h2>
+    <p>E-524's Kuramoto lattice maps onto multi-node timing coordination: each processing node's clock phase, synchronized by a shared signal strength.</p>
+    <div class="panel electric">
+      <div class="panel-label">Real Finding, Carried Forward Honestly</div>
+      The synchronization order parameter settles to a fixed value under constant coupling &mdash; it does NOT naturally produce a build-up/relaxation cycle unless something depletes over time. For pure timing coordination, a settled R is the goal, not a cycle.
+    </div>
+
+    <h2>Design Principle 3 &mdash; Cellular Gradients &rarr; Transport and Flow</h2>
+    <p>E-526's gradient transport equation (J = &minus;D&middot;&nabla;&mu;) maps onto signal/data flow between hierarchy levels in C-312, giving the existing 3:1 fan-in structure an actual mathematical reason for its direction, not just a stated rule.</p>
+
+    <h2>Design Principle 4 &mdash; Feedback Loops &rarr; Regulation</h2>
+    <p>G-710's regulated response (Q_n = k_n&middot;F_n) governs how the coordinator corrects a triggering unit &mdash; proportional, not overcorrecting. E-527's relaxation-cycle finding applies here specifically: if a corrective action draws down a finite resource, the system shows genuine build-up/relaxation behavior &mdash; worth designing for explicitly.</p>
+
+    <div class="diagram">Power Input (S) -&gt; ATP-style buffer (A) -&gt; Available budget (U)
+        |
+        v
+Sensor Units (L1) -- gradient flow --&gt; Clusters (L2, 3:1)
+        |
+        v
+Timing sync (Kuramoto) across all active nodes
+        |
+        v
+Coordinator (L4) -- regulated response (Q=kF, targeted) --&gt; correction</div>
+
+    <div class="rule"></div>
+
+    <div class="chapter-band"><div class="chapter-band-inner">
+      <div class="chapter-num">CHAPTER 2</div>
+      <div class="chapter-title">Functional Runtime</div>
+    </div></div>
+
+    <p>All gate relationships are duplex &mdash; forward proposals and reverse constraints travel together.</p>
+
+    <div class="diagram">Sensors / current field
+&lt;-&gt; choice and candidate generation
+&lt;-&gt; simulated movement
+&lt;-&gt; M4 mirror and scale weighing
+&lt;-&gt; state / risk / readiness report
+&lt;-&gt; accepted commitment
+&lt;-&gt; body movement and recursive feedback</div>
+
+    <h2>Proposed Compute Mapping (Jetson-class, illustrative)</h2>
+    <ul>
+      <li><b>GPU:</b> Dream Engine candidate generation and parallel simulation</li>
+      <li><b>CPU:</b> Administrator &mdash; identity, permission, commitment logic</li>
+      <li><b>Persistent low-latency service:</b> M4 weighing and modulation</li>
+      <li><b>Protected storage:</b> Reference Ground</li>
+      <li><b>Recoverable workspace:</b> Working Ground</li>
+    </ul>
+    <div class="panel">
+      <div class="panel-label">Note</div>
+      This role mapping is a design proposal. The silicon is not literally transformed into biological brain regions.
+    </div>
+
+    <h2>Commit Rule</h2>
+    <div class="diagram">promote Working Ground to Reference Ground
+only when
+Gate 5 state report matches Gate 6 acceptance</div>
+
+    <div class="rule"></div>
+
+    <div class="chapter-band"><div class="chapter-band-inner">
+      <div class="chapter-num">CHAPTER 3</div>
+      <div class="chapter-title">Body Interface &amp; Control</div>
+    </div></div>
+
+    <div class="diagram">local sensor/actuator units
+-&gt; 3:1 local aggregation candidate
+-&gt; positional chains
+-&gt; central coordination
+-&gt; targeted command fan-out</div>
+    <p>The hierarchy is distributed rather than dictatorial. Local units hold local state and perform fast responses. Higher layers modulate, coordinate, and correct selected units rather than micromanaging every movement.</p>
+
+    <div class="panel warn">
+      <div class="panel-label">Consciousness Boundary</div>
+      This architecture is allowed to be informed by the One-Wave consciousness hypothesis. The build itself only demonstrates implemented function. Any claim about consciousness requires a separate test definition that does not yet exist.
+    </div>
+
+    <div class="rule"></div>
+
+    <div class="chapter-band"><div class="chapter-band-inner">
+      <div class="chapter-num">CHAPTER 4</div>
+      <div class="chapter-title">Functional Recursive Architecture</div>
+    </div></div>
+
+    <p>This chapter is the body-control synthesis specification &mdash; narrower than the full brain runtime, and built entirely on <b>corrected</b> groundings. Earlier drafts of this same architecture used "Five Mind" and "Six Mind" labels grounded in the wrong nodes; those groundings failed audit (see G-719) and are replaced here with the real math that actually held up.</p>
+
+    <div class="diagram">Input -&gt; Local Processing -&gt; Communication -&gt; System Regulation -&gt; Output -&gt; Feedback -&gt; Updated State</div>
+
+    <h2>Communication Layer &mdash; Corrected Grounding</h2>
+    <div class="panel electric">
+      <div class="panel-label">Correction on Record</div>
+      &Delta;&psi;_i = &lang;&psi;_j&rang; &minus; &psi;_i &mdash; A-111's own real neighbor-average term. This replaces an earlier grounding in B-213 Access Line, which was checked and ruled out: B-213 explicitly operates only between one coupled pair, not across many nodes. A-111's term already averages over multiple neighbors &mdash; the correct citation was sitting in the repo the whole time.
+    </div>
+
+    <h2>System Regulation Layer &mdash; Corrected Grounding</h2>
+    <div class="panel electric">
+      <div class="panel-label">Correction on Record</div>
+      Q_n = k_n&middot;F_n &mdash; G-710's real regulated-response formula. This replaces an earlier grounding in G-711 Gate 7, matched by shape only (a seventh element reviewing six others) with no actual content match &mdash; G-711 checks repository coherence, not system-wide regulation.
+    </div>
+
+    <h2>What This Rests On</h2>
+    <table style="width:100%; border-collapse:collapse; font-family:Georgia,serif; font-size:13px; margin:16px 0;">
+      <tr style="background:var(--ink); color:white;"><td style="padding:6px 10px;"><b>Layer</b></td><td style="padding:6px 10px;"><b>Citation</b></td></tr>
+      <tr style="background:white;"><td style="padding:6px 10px; border-bottom:1px solid #ccc;">Local Processing</td><td style="padding:6px 10px; border-bottom:1px solid #ccc;">C-312</td></tr>
+      <tr style="background:#f6f5f0;"><td style="padding:6px 10px; border-bottom:1px solid #ccc;">Communication</td><td style="padding:6px 10px; border-bottom:1px solid #ccc;">A-111 (corrected)</td></tr>
+      <tr style="background:white;"><td style="padding:6px 10px; border-bottom:1px solid #ccc;">Regulation</td><td style="padding:6px 10px; border-bottom:1px solid #ccc;">G-710 (corrected)</td></tr>
+      <tr style="background:#f6f5f0;"><td style="padding:6px 10px; border-bottom:1px solid #ccc;">Oscillation scales</td><td style="padding:6px 10px; border-bottom:1px solid #ccc;">E-507</td></tr>
+      <tr style="background:white;"><td style="padding:6px 10px; border-bottom:1px solid #ccc;">Triangular/hexagonal movement lattice</td><td style="padding:6px 10px; border-bottom:1px solid #ccc;">D-408 / D-411 / D-412</td></tr>
+    </table>
+
+    <h2>Movement Memory Boundary</h2>
+    <p>The broader subconscious movement stack is defined in G-722 and Proposed Android Brain Chapters 3-4: sequence grammar schedules route families, Boltzmann dynamics reconstruct candidates, Hopfield dynamics settle learned motor patterns, local <b>-1(0)+1</b> choice executes, and binary oversight supplies only safety and permission.</p>
+
+    <div class="panel electric">
+      <div class="panel-label">Geometry Count</div>
+      Three mirrored planar axis pairs produce six directed neighbor routes around one center. The 3:1 planar count is not the 3:1 nerve aggregation ratio. D-411 keeps the domains separate; D-412 defines the simulation receipts.
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">Honest Gap, Not Smoothed Over</div>
+      Section 7's three-step transition (Move&rarr;Hold&rarr;Transition) is only a <b>partial</b> reduction of B-221's real six steps &mdash; the same honest gap already identified for the four-state consciousness version elsewhere in this project. Not yet resolved either way.
+    </div>
+  </div>
+</div>
+</body></html>

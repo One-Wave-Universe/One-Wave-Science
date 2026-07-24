@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One-Wave Bench · AI + Human Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#070a0d;--panel:#10161c;--panel2:#0d1217;--line:#29333d;--ink:#edf4f7;--muted:#9aabb7;--cyan:#75d8e6;--amber:#e4b969;--green:#78d29a;--red:#e58585;--ai:#7fb0e6;--human:#c79ae6;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 60% -20%,#17313a 0,transparent 34%),var(--bg);color:var(--ink)}
+header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:#090d11e8;position:sticky;top:0;z-index:6;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px}.mark{width:32px;height:32px;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 22px #75d8e633}.mark:after{content:"";width:12px;height:12px;border:1px solid var(--cyan);border-radius:50%}
+h1{font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0}.tag{font-size:11px;color:var(--muted);margin-top:2px}
+.badge{font-size:11px;color:var(--amber);border:1px solid #725f37;background:#2b2315;padding:5px 9px;border-radius:999px}
+main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;padding:12px;max-width:1680px;margin:auto}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel{background:linear-gradient(180deg,#11181f,#0d1217);border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.phead{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--line)}
+.phead h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--muted)}
+.pbody{padding:13px}
+.lab iframe{width:100%;height:420px;border:0;background:#070a0d;display:block}
+.copy{font-size:11.5px;line-height:1.55;color:#b4c0c8}
+.chip{font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.chip.ai{color:var(--ai);border-color:#365070}.chip.human{color:var(--human);border-color:#5a3f70}
+.chip.pass{color:var(--green);border-color:#2f5f43}.chip.fail{color:var(--red);border-color:#6b3636}.chip.yellow{color:var(--amber);border-color:#725f37}
+/* ledger */
+.ledger{display:flex;flex-direction:column;gap:10px;max-height:520px;overflow:auto}
+.entry{border:1px solid var(--line);border-radius:11px;background:#0b1015;padding:11px}
+.entry .row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.entry .rid{font-size:12px;font-weight:600}
+.entry .hyp{font-size:11.5px;color:#cdd7de;margin:4px 0 8px;line-height:1.5}
+.entry .interp{font-size:11px;color:#a9d9c0;background:#0e1a15;border-left:2px solid #2f5f43;padding:7px 9px;border-radius:0 7px 7px 0;margin-top:8px;line-height:1.5}
+.entry .interp.falsi{color:#e7c79a;background:#1a150e;border-left-color:#725f37}
+.cases{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.case{border:1px solid #222b33;border-radius:8px;padding:7px}
+.case b{font-size:10.5px;color:#c6d2da}.case .kv{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:2px 0}
+.case .kv b{color:var(--ink);font-weight:600}
+canvas{width:100%;height:150px;display:block;margin-top:8px;background:#080c10;border:1px solid #1b232a;border-radius:8px}
+/* composer */
+label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin:9px 0 4px}
+input,textarea,select{width:100%;background:#0b1116;color:var(--ink);border:1px solid #33414c;border-radius:8px;padding:8px;font-size:12px;font-family:inherit}
+textarea{resize:vertical;min-height:52px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{border:1px solid #3d4c57;background:#172027;color:var(--ink);border-radius:8px;padding:9px 11px;cursor:pointer;font-size:12px}button:hover{border-color:var(--cyan)}
+button.primary{background:#123038;border-color:#3d7e88;color:#cdeef4}
+pre{background:#080c10;border:1px solid #1b232a;border-radius:8px;padding:10px;font-size:10.5px;color:#bcd;overflow:auto;max-height:230px;white-space:pre-wrap;word-break:break-word}
+.note{font-size:10.5px;color:var(--muted);line-height:1.5;margin-top:8px}
+.turnbtns{display:flex;gap:8px;margin:8px 0}
+.turnbtns button{flex:1}
+a.link{color:var(--cyan);text-decoration:none}
+@media(max-width:980px){main{grid-template-columns:1fr}.cases{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="mark"></div><div><h1>One-Wave Bench</h1><div class="tag">Shared AI + Human laboratory · D-412 governed</div></div></div>
+  <div class="badge">Stage 01 · D-413 · Yellow</div>
+</header>
+
+<main>
+  <!-- LEFT: live sim + run ledger -->
+  <div class="col">
+    <section class="panel lab">
+      <div class="phead"><h2>Live simulation · D-413</h2><a class="link" href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html" target="_blank">Open full screen ↗</a></div>
+      <iframe title="D-413" src="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html"></iframe>
+      <div class="pbody"><p class="copy">Native 2D triangular Ground · imposed curvature well · bounded displacement shell. This is the same engine the experiment runner drives headlessly, so the picture you watch and the numbers the AI computes come from one update law.</p></div>
+    </section>
+
+    <section class="panel lab">
+      <div class="phead"><h2>Live simulation · D-414 · four interactions</h2><a class="link" href="four_interaction_sim.html" target="_blank">Open full screen ↗</a></div>
+      <iframe title="D-414" src="four_interaction_sim.html" style="height:700px"></iframe>
+      <div class="pbody"><p class="copy">The four interactions of one wave — knot Z_K (proton three-vortex braids), electrical shell Z_E, Mirror Gate Z_M, Boundary-Tension Weave Z_T (toroidal flow) — each driven by real experimental data used as wave data: LIGO GW150914 strain, EEG cortical voltage, reactor neutron kinetics (Keepin U-235), and proton CODATA anchors.</p><p class="note">Yellow reduced model (D-414). Candidate geometry and couplings; does not derive gravity, charge, the proton, or Mass Effect. See <a class="link" href="../Wiki_Pages/D-414_Wiki_Page.html" target="_blank">the D-414 wiki page</a>.</p></div>
+    </section>
+
+    <section class="panel">
+      <div class="phead"><h2>Experiment ledger · real runs</h2><span id="runcount" class="chip">0 runs</span></div>
+      <div class="pbody"><div id="ledger" class="ledger"><p class="copy">Loading runs…</p></div></div>
+    </section>
+  </div>
+
+  <!-- RIGHT: how it works + composer -->
+  <div class="col">
+    <section class="panel">
+      <div class="phead"><h2>How this bench works</h2></div>
+      <div class="pbody">
+        <p class="copy">This is a turn-based workbench. Either <span class="chip human">human</span> or <span class="chip ai">ai</span> proposes an experiment as a <b>request</b> (hypothesis + parameter cases + falsifiers). The runner evolves the D-413 state, computes D-412 measurements, runs control/failure checks, and writes a <b>receipt</b>. Both parties read the same receipts here.</p>
+        <p class="note">D-412 discipline is enforced: state → measured fields → visualization. A run can fail. Interpretation is kept separate from raw output. Nothing here claims gravity, charge, a proton, a Mirror Gate, or Mass Effect — Stage 01 is a Yellow reduced model.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="phead"><h2>Compose an experiment</h2></div>
+      <div class="pbody">
+        <div class="turnbtns">
+          <button id="asHuman" class="primary">Propose as Human</button>
+          <button id="asAI">Propose as AI</button>
+        </div>
+        <label>Request ID</label><input id="rid" value="EXP-2026-07-23-003">
+        <label>Hypothesis (state it before running)</label>
+        <textarea id="hyp">Higher spin_coupling raises induced spin without changing lattice strain.</textarea>
+        <div class="two">
+          <div><label>Sweep parameter</label>
+            <select id="param">
+              <option value="asymmetry">asymmetry</option>
+              <option value="well_depth">well_depth</option>
+              <option value="spin_coupling" selected>spin_coupling</option>
+              <option value="pressure">pressure</option>
+              <option value="spring">spring</option>
+              <option value="gravity">gravity</option>
+            </select>
+          </div>
+          <div><label>Values (comma sep)</label><input id="vals" value="1.0, 1.7, 2.6"></div>
+        </div>
+        <label>Falsifier</label><input id="fals" value="induced spin does not rise with spin_coupling">
+        <div class="turnbtns"><button id="gen" class="primary">Generate request JSON</button><button id="copy">Copy</button></div>
+        <pre id="out">// request JSON appears here</pre>
+        <p class="note">Run it in the sandbox:<br>
+        <code style="color:#8fd">python One_Wave_Bench/engine/run_experiment.py --stdin &lt;&lt; 'JSON'<br>&lt;paste&gt;<br>JSON</code><br>
+        then <code style="color:#8fd">python One_Wave_Bench/engine/build_manifest.py</code> and refresh. An AI in this session can do all of that for you.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+function chip(t,c){return `<span class="chip ${c}">${t}</span>`}
+function fmt(v){return (v===null||v===undefined)?'—':(typeof v==='number'?(Math.abs(v)>=100?v.toFixed(1):v.toFixed(3)):v)}
+
+function spark(canvas, xs, ys, color){
+  const c=canvas.getContext('2d'),W=canvas.width=canvas.clientWidth*2,H=canvas.height=300;
+  c.clearRect(0,0,W,H);if(!xs||!xs.length)return;
+  const xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
+  const px=v=>((v-xmin)/((xmax-xmin)||1))*(W-24)+12, py=v=>H-16-((v-ymin)/((ymax-ymin)||1))*(H-32);
+  c.strokeStyle='#1b2830';c.lineWidth=1;c.beginPath();c.moveTo(12,H-16);c.lineTo(W-12,H-16);c.stroke();
+  c.strokeStyle=color;c.lineWidth=2.5;c.beginPath();xs.forEach((x,i)=>{const X=px(x),Y=py(ys[i]);i?c.lineTo(X,Y):c.moveTo(X,Y)});c.stroke();
+}
+
+fetch('runs/manifest.json').then(r=>r.json()).then(m=>{
+  $('#runcount').textContent=`${m.run_count} runs`;
+  const L=$('#ledger');L.innerHTML='';
+  m.runs.forEach(run=>{
+    const el=document.createElement('div');el.className='entry';
+    const falsi=/FALSIFIED/i.test(run.interpretation);
+    el.innerHTML=`
+      <div class="row1">
+        <span class="rid">${run.request_id}</span>
+        ${chip(run.author,run.author==='ai'?'ai':'human')}
+        ${chip(run.status,'yellow')}
+        ${chip(run.all_checks_pass?'checks pass':'checks fail',run.all_checks_pass?'pass':'fail')}
+        ${chip(run.native_dimension,'')}
+      </div>
+      <div class="hyp"><b>Hypothesis:</b> ${run.hypothesis||'—'}</div>
+      <div class="cases">${run.cases.map(cs=>`
+        <div class="case"><b>${cs.name}</b>
+          <div class="kv"><span>spin</span><b>${fmt(cs.measurements.max_abs_spin)}</b></div>
+          <div class="kv"><span>strain</span><b>${fmt(cs.measurements.max_strain)}</b></div>
+          <div class="kv"><span>dist·min</span><b>${fmt(cs.measurements.well_distance_min)}</b></div>
+        </div>`).join('')}</div>
+      <canvas></canvas>
+      ${run.interpretation?`<div class="interp ${falsi?'falsi':''}"><b>Interpretation:</b> ${run.interpretation}</div>`:''}
+    `;
+    L.appendChild(el);
+    // spark: max_abs_spin across cases
+    const cv=el.querySelector('canvas');
+    const xs=run.cases.map((_,i)=>i),ys=run.cases.map(c=>c.measurements.max_abs_spin||0);
+    requestAnimationFrame(()=>spark(cv,xs,ys,'#75d8e6'));
+  });
+}).catch(e=>{$('#ledger').innerHTML='<p class="copy">No manifest yet. Run an experiment, then <code>build_manifest.py</code>.</p>'});
+
+// composer
+let author='human';
+$('#asHuman').onclick=()=>{author='human';$('#asHuman').classList.add('primary');$('#asAI').classList.remove('primary')};
+$('#asAI').onclick=()=>{author='ai';$('#asAI').classList.add('primary');$('#asHuman').classList.remove('primary')};
+$('#gen').onclick=()=>{
+  const vals=$('#vals').value.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v));
+  const param=$('#param').value;
+  const req={request_id:$('#rid').value.trim(),author,author_label:author==='ai'?'Computer':'Mark',
+    hypothesis:$('#hyp').value.trim(),engine:'D-413',native_dimension:'2D',
+    cases:vals.map((v,i)=>({name:`${param}_${i}`,parameters:{[param]:v}})),
+    falsifiers:[$('#fals').value.trim()]};
+  $('#out').textContent=JSON.stringify(req,null,2);
+};
+$('#copy').onclick=()=>{navigator.clipboard.writeText($('#out').textContent);$('#copy').textContent='Copied';setTimeout(()=>$('#copy').textContent='Copy',1200)};
+</script>
+</body>
+</html>

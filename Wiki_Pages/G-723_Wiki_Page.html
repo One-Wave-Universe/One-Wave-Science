@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>G-723: Pisot-Salem-Mahler Motor Stability Audit</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-723"><h1>G-723: Pisot-Salem-Mahler Motor Stability Audit</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (external algebraic definitions) / YELLOW (motor-controller relevance)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-g-723-pisot-salem-mahler-motor-stability-audit">Node G-723:
+Pisot-Salem-Mahler Motor Stability Audit</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (external algebraic definitions) /
+YELLOW (motor-controller relevance)</p>
+<p><strong>Classification:</strong> Spectral Audit /
+Expansion-Contraction-Rhythm Measurement</p>
+<p><strong>Dependencies</strong><br />
+Upstream: G-722 Android Motor Memory Architecture, G-706
+Validation<br />
+Lateral: G-721d, G-721e<br />
+Downstream: integer/substitution motor-controller experiments, G-723a
+advanced Mahler methods</p>
+<h2 id="purpose">Purpose</h2>
+<p>This node audits structured recurrence matrices and substitution
+systems. It does not generate foundational movement.</p>
+<h2 id="pisot-side">Pisot Side</h2>
+<p>A Pisot number <code>beta</code> is a real algebraic integer greater
+than one whose other algebraic conjugates have magnitude below one.</p>
+<p>A Pisot-like controller offers the candidate pattern</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mtext mathvariant="normal">dominant expression</mtext><mo>+</mo><mtext mathvariant="normal">contracting internal correction</mtext></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{\text{dominant expression}+\text{contracting internal correction}}.
+</annotation></semantics></math></p>
+<p>The plastic number is the smallest Pisot number and may be tested
+through G-721e. The golden ratio is another Pisot example.</p>
+<h2 id="salem-side">Salem Side</h2>
+<p>A Salem number <code>tau</code> is a real algebraic integer greater
+than one whose conjugates include <code>tau^-1</code>, with all
+remaining conjugates on the unit circle.</p>
+<p>A Salem-like spectrum offers the candidate pattern</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mtext mathvariant="normal">expression</mtext><mo>+</mo><mtext mathvariant="normal">reciprocal return</mtext><mo>+</mo><mtext mathvariant="normal">persistent bounded phase modes</mtext></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{\text{expression}+\text{reciprocal return}+\text{persistent bounded phase modes}}.
+</annotation></semantics></math></p>
+<p>This is potentially relevant to gait, counter-rotation, alternating
+pressure, and balance rhythms. It is an analogy and design target until
+an actual controller is built.</p>
+<h2 id="mahler-measure">Mahler Measure</h2>
+<p>For</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>a</mi><munder><mo>∏</mo><mi>j</mi></munder><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>−</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+P(x)=a\prod_j(x-\lambda_j),
+</annotation></semantics></math></p>
+<p>the multiplicative Mahler measure is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>P</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">|</mo><mi>a</mi><mo stretchy="true" form="postfix">|</mo></mrow><munder><mo>∏</mo><mi>j</mi></munder><mo>max</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>,</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>λ</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{M(P)=|a|\prod_j\max(1,|\lambda_j|)}.
+</annotation></semantics></math></p>
+<p>The logarithmic measure is <code>m(P)=log M(P)</code>.</p>
+<p>Mahler measure reports total algebraic expansion outside the unit
+circle. It does not report route identity, phase organization, transient
+non-normal growth, nonlinear safety, or physical balance.</p>
+<h2 id="required-spectral-report">Required Spectral Report</h2>
+<p>Every qualifying integer or substitution recurrence should
+report:</p>
+<ul>
+<li>characteristic and minimal polynomial where available;</li>
+<li>complete eigenvalue list;</li>
+<li>spectral radius;</li>
+<li>Mahler measure and log measure;</li>
+<li>counts of contracting, near-unit, unit-circle, and expanding
+modes;</li>
+<li>reciprocal-pairing error;</li>
+<li>arguments of complex modes;</li>
+<li>finite-time Lyapunov estimates for the actual nonlinear
+controller;</li>
+<li>transient amplification;</li>
+<li>physical error and safety violations.</li>
+</ul>
+<h2 id="lehmer-boundary">Lehmer Boundary</h2>
+<p>Lehmer’s conjecture asks whether non-cyclotomic integer polynomials
+have a universal Mahler-measure gap above one. The conjecture is open.
+Lehmer’s number is the smallest known example above one, not a proven
+android threshold.</p>
+<p>It may be used as a comparison case in an algebraic-controller
+benchmark. It may not be promoted to a universal motor-safety
+constant.</p>
+<h2 id="pisot-salem-combination-test">Pisot-Salem Combination Test</h2>
+<p>A practical controller need not have an exact Pisot or Salem minimal
+polynomial. Test the broader spectral target:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi></mrow></msub><mo>&lt;</mo><mn>0</mn><mspace width="1.0em"></mspace><mtext mathvariant="normal">in Lyapunov rate</mtext><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\lambda_{\mathrm{correction}}&lt;0\quad\text{in Lyapunov rate},
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">y</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">m</mi></mrow></msub><mo>≈</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\lambda_{\mathrm{rhythm}}\approx0,
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>&gt;</mo><mn>0</mn><mspace width="1.0em"></mspace><mtext mathvariant="normal">only while commanded and bounded</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\lambda_{\mathrm{drive}}&gt;0\quad\text{only while commanded and bounded}.
+</annotation></semantics></math></p>
+<p>The controller should settle errors, preserve required rhythms, and
+terminate or hold directed expression without runaway growth.</p>
+<h2 id="falsifiers">Falsifiers</h2>
+<p>Reject a spectral interpretation when it depends on arbitrary
+floating-point rounding into a prestigious algebraic family, when the
+full spectrum contradicts the claimed behavior, or when favorable
+eigenvalues fail to predict the nonlinear physical simulation.</p>
+<h2 id="reference-receipts">Reference Receipts</h2>
+<figure>
+<img src="../Nodes/G-723_Spectral_Validation/root_moduli.png"
+alt="Reference root moduli for Fibonacci, plastic, Tribonacci, and Lehmer polynomials." />
+<figcaption aria-hidden="true">Reference root moduli for Fibonacci,
+plastic, Tribonacci, and Lehmer polynomials.</figcaption>
+</figure>
+<p><code>Nodes/G-723_Spectral_Validation/</code> stores numerical root,
+spectral-radius, and Mahler-measure receipts. They are algebraic
+regression examples, not android safety limits.</p>
+</body>
+</html>

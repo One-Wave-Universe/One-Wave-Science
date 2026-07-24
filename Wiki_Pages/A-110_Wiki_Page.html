@@ -1,0 +1,95 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-110: OSCILLATION</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-110"><h1>A-110: OSCILLATION</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-110</h3><p><b>Classification</b><br>Dynamic Cycle Primitive</p><p><b>Canonical source</b><br>Nodes/A-110_Oscillation.md</p></div><div class="content"><p>NODE A-110: OSCILLATION STATUS: YELLOW CLASSIFICATION: Dynamic Cycle
+Primitive LAYER: Motion Layer</p>
+<p>DEPENDENCIES: UPSTREAM: A-107 Bounded Motion, A-109 Inertial Memory.
+DOWNSTREAM: A-111 Recursion / Higher Scale Pattern, E-519 Three
+Fundamental Oscillations (elaboration), E-524 Kuramoto Lattice
+Synchronization (candidate coupling extension, unverified).</p>
+<ol type="1">
+<li><p>PURPOSE FUNCTION: Defines repeated boundary crossing produced by
+bounded motion combined with inertial memory. INPUT: Bounded Motion
+condition, Inertial Memory contribution, Ground crossing threshold.
+OUTPUT: Oscillatory state behavior. ROLE: Converts preserved transition
+history into cyclic motion.</p></li>
+<li><p>DEFINITION Oscillation is repeated ground crossing under bounded
+motion with inertial memory.</p>
+<p>REQUIRED CONDITIONS: Bounded Motion + Inertial Memory + Ground
+Crossing → Oscillation.</p>
+<p>INSUFFICIENT CONDITION: Bounded Motion + Inertial Memory alone does
+NOT guarantee Oscillation.</p>
+<p>NO CROSSING: Bounded Motion + Memory - Crossing Threshold →
+Non-Oscillatory Return.</p></li>
+<li><p>STATE VARIABLES Ψᵢ(t) = Oscillatory field state. Aᵢ(t) =
+Amplitude / energy magnitude. θᵢ(t) = Phase / rotational position. Δψᵢⁿ
+= Memory displacement. Mᵢ = Inertial memory contribution. Rᵢ = Restoring
+response threshold. ωᵢ = Natural rotation frequency. βᵢ = Coupling
+strength.</p></li>
+<li><p>MATHEMATICS COMPLEX STATE: Ψᵢ(t)=Aᵢ(t)e^{jθᵢ(t)}</p>
+<p>INERTIAL MEMORY: Δψᵢⁿ=ψᵢⁿ-ψᵢⁿ⁻¹</p>
+<p>MEMORY CONTRIBUTION: Mᵢ=(1-γ)Δψᵢⁿ</p>
+<p>LIMITS: γ=0 → Full memory carry. γ=1 → No inertial carry. 0&lt;γ&lt;1
+→ Damped memory.</p>
+<p>PHASE: θᵢⁿ⁺¹=θᵢ+ωᵢ+φᵢ</p></li>
+<li><p>RELATIONSHIP CHAIN: A-105 Restoring Response → A-106 Pressure
+Response → A-107 Bounded Motion → A-109 Inertial Memory → A-110
+Oscillation → A-111 Recursion.</p>
+<p>ROLE: Restoring Response creates return behavior. Pressure Response
+organizes field structure. Bounded Motion provides confinement. Inertial
+Memory preserves transition history. Oscillation creates repeated cycle
+behavior.</p>
+<p>BOUNDARY: Oscillation does not define Recursion.</p></li>
+<li><p>OPERATIONAL RULE NO CROSSING: |Mᵢ|&lt;Rᵢ → Return without
+overshoot.</p>
+<p>CROSSING: |Mᵢ|&gt;Rᵢ → Boundary crossing occurs.</p>
+<p>REPEATED CROSSING: Repeated boundary crossings under bounded
+conditions create Oscillation.</p></li>
+<li><p>RECURSIVE POSITION FUNCTION: Converts bounded state transition
+into cyclic behavior.</p>
+<p>CHAIN: Differential → Gradient → Restoring Response → Pressure
+Response → Bounded Motion → Inertial Memory → Oscillation →
+Recursion.</p>
+<p>BOUNDARY: Does not define higher-scale pattern formation.</p></li>
+<li><p>RECURSIVE SCALING REQUIREMENT: Preserve oscillatory behavior
+across Micro, Small, Medium, Large, Macro.</p>
+<p>OPEN: Does oscillatory phase relationship remain invariant across
+recursive scales?</p></li>
+<li><p>CONSTRAINTS C-301: Ground crossing threshold requires
+definition.</p>
+<p>C-302: Restoring threshold Rᵢ requires derivation.</p>
+<p>C-303: Amplitude and phase coupling separation required.</p>
+<p>C-304: Oscillation must remain distinct from Bounded Motion.</p>
+<p>C-305: Scale-dependent frequency behavior unresolved.</p></li>
+<li><p>DEPENDENCIES UPSTREAM: A-107 Bounded Motion. A-109 Inertial
+Memory.</p>
+<p>DOWNSTREAM: A-111 Recursion.</p></li>
+<li><p>FAILURE MODES F-601: No crossing condition.</p>
+<p>F-602: Oscillation confused with Bounded Motion.</p>
+<p>F-603: Memory damping prevents cycle formation.</p>
+<p>F-604: Unbounded amplitude growth.</p>
+<p>F-605: Frequency or phase instability.</p></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN:</p>
+<ol type="1">
+<li>Ground crossing condition defined.</li>
+<li>Restoring threshold Rᵢ derived.</li>
+<li>Memory coupling validated.</li>
+<li>Frequency behavior characterized.</li>
+<li>Recursive transition confirmed.</li>
+</ol>
+<p>CURRENT: Definition ✅ Memory Foundation ✅ Bounded Motion Link ✅
+Crossing Condition ❌ Threshold Derivation ❌ Experimental Validation
+❌</p>
+<p>GATE: GREEN = Defined. YELLOW = Constrained/Testable. BRONZE =
+Validated. SILVER = Integrated. GOLD = Confirmed.</p></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE: A-110 Oscillation.</p>
+<p>DEFINITION: Oscillation is repeated ground crossing generated by
+bounded motion combined with inertial memory.</p>
+<p>EQUATION: Ψᵢ(t)=Aᵢ(t)e^{jθᵢ(t)}</p>
+<p>FUNCTION: Converts preserved state transition into cyclic field
+behavior.</p>
+<p>BOUNDARY: No Bounded Motion + No Inertial Memory + No Ground Crossing
+→ No Oscillation.</p>
+<p>STATUS: YELLOW.</p></li>
+</ol>
+</div><div class="clear"></div></div></body></html>

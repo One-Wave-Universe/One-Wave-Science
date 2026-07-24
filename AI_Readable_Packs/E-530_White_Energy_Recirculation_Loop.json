@@ -1,0 +1,19 @@
+{
+  "id": "E-530",
+  "name": "White Energy Recirculation Loop",
+  "no_expansion": true,
+  "equations": [
+    "dU_C/dt=P_cap+P_nu-lambda_C U_C-D_W h U_C",
+    "P_W=D_W h U_C",
+    "dE_W/dt=P_W-P_W_to_chi-boundary_flux",
+    "d(E_gamma+E_chi+E_nu+E_C+E_W)/dt=0 in closed domain"
+  ],
+  "open": [
+    "astrophysical calibration",
+    "closed-domain simulation",
+    "population stationarity"
+  ],
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (closed accounting and threshold model) / GREEN (quasar/white-hole identification)"
+}

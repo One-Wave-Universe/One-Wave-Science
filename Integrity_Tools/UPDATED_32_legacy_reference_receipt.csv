@@ -1,0 +1,47 @@
+legacy_id,occurrences,file_count,resolution,canonical_target,note
+A-01,1,1,ALIAS,A-101,Ground / Zero
+A-02,1,1,ALIAS,A-102,Displacement
+A-03,1,1,ALIAS,A-103,Differential
+A-04,4,4,ALIAS,A-104,Gradient
+A-05,2,2,ALIAS,A-105,Restoring Response
+A-05b,2,2,ALIAS,A-106,Pressure Response
+A-05c,1,1,ALIAS,B-201,Equilibrium Balance; title-based legacy mapping
+A-06,1,1,ALIAS,A-107,Bounded Motion
+A-07,5,3,ALIAS,A-109,Inertial Memory
+A-08,3,3,ALIAS,A-110,Oscillation
+A-09,6,3,ALIAS,A-111,Recursion
+A-10,14,9,ALIAS,A-112,Persistent Mode
+A-11,1,1,ALIAS,A-113,Projection
+B-01,7,4,ALIAS,B-201,Equilibrium Balance
+B-03,7,4,ALIAS,B-203,Expression
+B-04,6,4,ALIAS,B-204,Compression
+B-06,22,6,ALIAS,B-206,Paired Loop
+B-06b,49,12,ALIAS,B-206b,Four Views
+B-08,16,4,ALIAS,B-208,Threshold Windows
+B-09,11,4,ALIAS,B-209,Break Condition
+B-10,2,1,ALIAS,B-210,Return
+B-13,4,2,ALIAS,B-213,Access Line
+B-14,2,1,ALIAS,B-214,Recursive Access Growth
+B-15,6,4,ALIAS,B-215,Hyperloop
+B-16,2,1,ALIAS,B-216,Threshold Mathematics
+C-01,4,2,ALIAS,C-301,Mirror Gate
+C-08,12,4,ALIAS,C-308,Spin-half
+D-02,2,2,ALIAS,D-402,Resonant Mode
+D-02b,1,1,ALIAS,E-508,Real Persistence Under Loss
+D-04,1,1,ALIAS,D-404,Nested Resonance
+D-05,16,7,ALIAS,D-405,Harmonic Shell
+E-02,3,2,ALIAS,E-503,Pressure (Gradient Form)
+E-03,24,8,ALIAS,E-504,Surface
+E-04,14,5,ALIAS,E-505,Coupling
+E-05,1,1,ALIAS,E-506,Stability
+E-06,10,2,ALIAS,E-507,Scale-Invariant Loop
+F-04,4,2,ALIAS,F-604,Resonance
+F-05,14,5,ALIAS,F-605,Interference
+F-08,1,1,ALIAS,F-608,Attenuation
+F-609,6,6,DISPOSITION,,RETIRED_FORWARD_REFERENCE_NO_NODE
+F-610,6,6,DISPOSITION,,RETIRED_FORWARD_REFERENCE_NO_NODE
+G-02,3,2,ALIAS,G-702,Evaluation
+G-03,1,1,ALIAS,G-703,Modulation
+G-05,6,1,ALIAS,G-705,Correction
+I-09,1,1,ALIAS,A-115,Unified Compression Field
+J-106,1,1,ALIAS,C-314,Three Frames of Reference

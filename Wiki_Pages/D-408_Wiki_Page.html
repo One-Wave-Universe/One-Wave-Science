@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>D-408: Sixfold 2D Triangular-Hexagonal Lattice</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="D-408"><h1>D-408: Sixfold 2D Triangular-Hexagonal Lattice</h1><p><strong>Gate:</strong> GREEN &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (geometry) / GREEN (physical interpretation and dynamics)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">D-408 Wiki Page</h1>
+</header>
+<h1 id="node-d-408-sixfold-2d-triangular-hexagonal-lattice">Node D-408:
+Sixfold 2D Triangular-Hexagonal Lattice</h1>
+<p><strong>Legacy claim detail:</strong> YELLOW (geometry) / GREEN (physical
+interpretation and dynamics)</p>
+<p><strong>Classification:</strong> Native 2D Geometry / Simulation
+Foundation</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A-101 Ground / Zero, A-102 Displacement, A-104 Gradient, A-117
+Dimensional Integrity, B-206 Paired Loop<br />
+Lateral: D-411 Mirrored Axis Pairs, D-412 Lattice Simulation Standard,
+E-520 Recursive Self-Modeling Levels, E-524 Kuramoto Lattice
+Synchronization<br />
+Downstream: D-413 Ground-lattice orbital-restoring simulation,
+circulation-emergence simulation, quark-phase simulation, Wave Computer
+cell simulations</p>
+<h2 id="definition">Definition</h2>
+<p>The native 2D One-Wave lattice is a triangular connection lattice
+with a hexagonal cell or neighborhood view.</p>
+<p>Choose basis vectors</p>
+<p>[ a_1=a(1,0), a_2=a(,). ]</p>
+<p>A lattice site is</p>
+<p>[ r_{mn}=ma_1+na_2. ]</p>
+<p>Every interior site has six equidistant in-plane nearest neighbors.
+The native coordination is therefore</p>
+<p>[ . ]</p>
+<p>The triangle view records local connections. The hexagonal view
+records the bounded neighborhood and closed circulation routes generated
+by those connections. They are two views of the same 2D lattice, not
+separate mechanisms.</p>
+<p>The six directed neighbor routes form three mirrored axis pairs:</p>
+<p>[ . ]</p>
+<p>D-411 controls this counting distinction. The <code>3:1</code> planar
+axis-pair count is not automatically the neural <code>3:1</code>
+aggregation ratio.</p>
+<h2 id="seven-cell-cluster">Seven-Cell Cluster</h2>
+<p>The first complete local operating region is</p>
+<p>[ C_7=<br />
+{c_0,c_1,c_2,c_3,c_4,c_5,c_6}, ]</p>
+<p>where (c_0) is the active center/reference and (c_1c_6) are the
+surrounding ring.</p>
+<p>Thus</p>
+<p>[ . ]</p>
+<p>The outer six form the first closed loop around the center. The same
+site may be the center of one cluster and an outer member of another;
+clusters overlap throughout the lattice.</p>
+<h2 id="triangle-and-hexagon-roles">Triangle and Hexagon Roles</h2>
+<h3 id="triangular-connection-view">Triangular connection view</h3>
+<p>Each edge carries candidate local quantities such as:</p>
+<ul>
+<li>relative displacement,</li>
+<li>compression or extension,</li>
+<li>shear,</li>
+<li>relative velocity,</li>
+<li>phase difference,</li>
+<li>restoring response,</li>
+<li>transferred work.</li>
+</ul>
+<p>For an edge (ij), define its strain candidate as</p>
+<p>[ _{ij} = . ]</p>
+<h3 id="hexagonal-cell-view">Hexagonal cell view</h3>
+<p>Each bounded cell or center-plus-six neighborhood may carry derived
+quantities such as:</p>
+<ul>
+<li>area change,</li>
+<li>local pressure,</li>
+<li>circulation,</li>
+<li>vorticity proxy,</li>
+<li>boundary leakage,</li>
+<li>recurrence phase,</li>
+<li>center drift.</li>
+</ul>
+<p>For the six-edge ring, a discrete circulation measure is</p>
+<p>[ <em>6 = </em>{k=1}^{6} v_k_k. ]</p>
+<p>A nonzero (_6) is circulation evidence. It is not by itself a quark
+or stable Vortex Phase.</p>
+<h2 id="seed-of-life-and-flower-of-life-view">Seed of Life and Flower of
+Life View</h2>
+<p>Place equal-radius influence circles on the triangular-lattice
+centers. One center plus its six surrounding centers produces the
+seven-circle Seed-of-Life arrangement. Repetition produces the
+Flower-of-Life overlap pattern.</p>
+<p>Within simulations, these circles may visualize:</p>
+<ul>
+<li>influence radius,</li>
+<li>oscillation reach,</li>
+<li>overlap pressure,</li>
+<li>shared boundary range,</li>
+<li>phase-coupling range.</li>
+</ul>
+<p>They are generated from the same lattice coordinates. They are not
+extra physical objects.</p>
+<h2 id="metatron-connection-view">Metatron Connection View</h2>
+<p>Metatron’s Cube is treated as a finite higher-order connection
+overlay selected from centers in the same sixfold family. It may expose
+radial, triangular, hexagonal, mirrored, and longer-range pathways.</p>
+<p>It does <strong>not</strong> authorize every visible line as an
+active physical coupling. Every non-nearest-neighbor connection requires
+a declared rule, weight, and test.</p>
+<h2 id="stationary-ground-requirement">Stationary Ground
+Requirement</h2>
+<p>The undisplaced state is</p>
+<p>[ u_i=0, v_i=0 ]</p>
+<p>for all sites, with zero net update. Stationary means zero net
+motion, not a frozen lattice. Each site must remain capable of
+displacement, restoring response, transmission, and return.</p>
+<h2 id="required-first-simulations">Required First Simulations</h2>
+<ol type="1">
+<li>equilibrium hold with no spontaneous drift;</li>
+<li>single-site and seven-cell displacement/release;</li>
+<li>planar compression and recovery;</li>
+<li>shear input;</li>
+<li>ring-circulation input;</li>
+<li>resistance sweep;</li>
+<li>overlap-field visualization generated from the same state
+arrays.</li>
+</ol>
+<p>D-413 now supplies the first runnable reduced implementation of this
+geometry, including Ground-fixed and displacement-fixed views, a
+curvature-well candidate, lattice bunching, and torque ablations.</p>
+<p>Every run must satisfy D-412 and record:</p>
+<ul>
+<li>total numerical energy or work balance,</li>
+<li>maximum displacement,</li>
+<li>cell-area change,</li>
+<li>ring circulation,</li>
+<li>recovery time,</li>
+<li>residual drift,</li>
+<li>failure boundary.</li>
+</ul>
+<h2 id="dimensional-boundary">Dimensional Boundary</h2>
+<p>This node is natively 2D. It can test planar transfer and circulation
+emergence. It cannot establish a complete 3D Vortex Phase, Three-Vortex
+Knot, volumetric shell, or Mass Effect tensor.</p>
+<p>Those require D-409 and the relevant physical nodes.</p>
+<h2 id="failure-falsification">Failure / Falsification</h2>
+<p>The sixfold candidate fails if another 2D coordination geometry
+produces better isotropy, recurrence, stability, and perturbation
+recovery under the same update laws, or if the seven-cell cluster cannot
+transmit displacement without directional artifacts that survive
+refinement.</p>
+</body>
+</html>

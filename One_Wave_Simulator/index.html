@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One-Wave Simulator</title>
+<style>
+:root{color-scheme:dark;--bg:#070a0d;--panel:#10161c;--line:#29333d;--ink:#edf4f7;--muted:#9aabb7;--cyan:#75d8e6;--amber:#e4b969;--green:#78d29a;font-family:Inter,ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 55% -20%,#17313a 0,transparent 34%),var(--bg);color:var(--ink)}
+header{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);background:#090d11e8;position:sticky;top:0;z-index:4;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:11px}.mark{width:34px;height:34px;border:1px solid var(--cyan);border-radius:50%;display:grid;place-items:center;box-shadow:0 0 25px #75d8e633}.mark:after{content:"";width:13px;height:13px;border:1px solid var(--cyan);border-radius:50%}
+h1{font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin:0}.tag{font-size:11px;color:var(--muted);margin-top:2px}
+.badge{font-size:11px;color:var(--amber);border:1px solid #725f37;background:#2b2315;padding:6px 9px;border-radius:999px}
+main{display:grid;grid-template-columns:250px minmax(0,1fr) 270px;gap:12px;padding:12px;max-width:1800px;margin:auto;height:calc(100vh - 64px)}
+.panel{background:linear-gradient(180deg,#11181f,#0d1217);border:1px solid var(--line);border-radius:13px;overflow:hidden}.side{padding:13px;overflow:auto}
+.eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:3px 0 9px}.stage{border:1px solid var(--line);border-radius:10px;padding:10px;margin:7px 0;background:#0b1015;color:#7f929f;display:grid;grid-template-columns:25px 1fr;gap:8px;align-items:start}.stage strong{display:block;color:#a9b7c0;font-size:12px}.stage small{font-size:10px;line-height:1.35}.stage .n{width:22px;height:22px;border:1px solid #3b4751;border-radius:50%;display:grid;place-items:center;font-size:10px}.stage.active{border-color:#3d7e88;background:#102229;color:#b4c5cd}.stage.active strong{color:var(--ink)}.stage.active .n{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 16px #75d8e62b}.stage.locked{opacity:.54}
+.lab{display:grid;grid-template-rows:44px minmax(0,1fr);min-width:0}.labbar{display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid var(--line);font-size:12px}.labbar span{color:var(--muted)}.labbar a{color:var(--ink);text-decoration:none;border:1px solid #40505b;padding:6px 9px;border-radius:7px}.lab iframe{width:100%;height:100%;border:0;background:#070a0d}
+h2{font-size:13px;margin:0 0 8px}.copy{font-size:11px;line-height:1.55;color:#b4c0c8}.rule{height:1px;background:var(--line);margin:14px 0}.readout{display:grid;grid-template-columns:1fr auto;gap:7px;font-size:11px;padding:7px 0;border-bottom:1px solid #222b33}.readout span{color:var(--muted)}.readout b{font-weight:600}.ok{color:var(--green)}.warn{color:var(--amber)}
+button{width:100%;border:1px solid #3d4c57;background:#172027;color:var(--ink);border-radius:8px;padding:9px;margin-top:8px;text-align:left;cursor:pointer}button:hover{border-color:var(--cyan)}dialog{max-width:640px;background:#11181f;color:var(--ink);border:1px solid #3d4c57;border-radius:13px;padding:20px}dialog::backdrop{background:#000b}.close{width:auto;float:right;margin:0}
+@media(max-width:1100px){main{grid-template-columns:210px minmax(0,1fr)}.right{display:none}}@media(max-width:760px){header{position:relative}.badge{display:none}main{height:auto;grid-template-columns:1fr;padding:8px}.left{order:2}.lab{height:760px;order:1}.right{display:block;order:3}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="mark"></div><div><h1>One-Wave Simulator</h1><div class="tag">Master program · physical simulation ladder</div></div></div>
+  <div class="badge">Stage 01 · Yellow reduced model</div>
+</header>
+<main>
+  <aside class="panel side left">
+    <div class="eyebrow">Build sequence</div>
+    <div class="stage active"><div class="n">01</div><div><strong>Responsive Ground</strong><small>Triangular connection lattice, hexagonal neighborhood view, displacement and recovery.</small></div></div>
+    <div class="stage locked"><div class="n">02</div><div><strong>Circulation emergence</strong><small>Locked until ring circulation is derived and passes controls.</small></div></div>
+    <div class="stage locked"><div class="n">03</div><div><strong>Confined Vortex Phase</strong><small>Requires persistent bounded excitation in its native dimension.</small></div></div>
+    <div class="stage locked"><div class="n">04</div><div><strong>Three-phase coupling</strong><small>Three-vortex knot / proton candidate.</small></div></div>
+    <div class="stage locked"><div class="n">05</div><div><strong>Shell + Mirror Gate</strong><small>Electrical-shell differential and calculated gate response.</small></div></div>
+    <div class="stage locked"><div class="n">06</div><div><strong>Mass Effect</strong><small>Four-interaction response measured only after stable recurrence.</small></div></div>
+  </aside>
+  <section class="panel lab">
+    <div class="labbar"><span>Engine D-413 · native 2D · state-driven view</span><a href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html" target="_blank">Open lab full screen ↗</a></div>
+    <iframe title="D-413 Ground Lattice Simulator" src="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html"></iframe>
+  </section>
+  <aside class="panel side right">
+    <div class="eyebrow">Declaration</div>
+    <h2>What is running</h2>
+    <p class="copy">One evolving state drives the deformed lattice, triangular faces, strain, curvature contours, bounded displacement shell, torque, orbit trail, and graphs.</p>
+    <div class="rule"></div>
+    <div class="readout"><span>Native geometry</span><b>2D</b></div>
+    <div class="readout"><span>Coordination</span><b>6:1</b></div>
+    <div class="readout"><span>Axis pairs</span><b>3:1</b></div>
+    <div class="readout"><span>Local cluster</span><b>1 + 6</b></div>
+    <div class="readout"><span>Runnable engine</span><b class="ok">D-413</b></div>
+    <div class="readout"><span>Physical status</span><b class="warn">Yellow</b></div>
+    <div class="rule"></div>
+    <h2>Current boundary</h2>
+    <p class="copy">The well is imposed and the bounded shell is a reduced collective coordinate. The program does not claim gravity, a quark, a proton, charge, a Mirror Gate, or Mass Effect.</p>
+    <button id="scope">Why later stages are locked</button>
+    <button id="tests">Required next tests</button>
+  </aside>
+</main>
+<dialog id="modal"><button class="close" id="close">Close</button><h2 id="mt"></h2><div class="copy" id="mc"></div></dialog>
+<script>
+const modal=document.getElementById('modal'),mt=document.getElementById('mt'),mc=document.getElementById('mc');
+function show(t,html){mt.textContent=t;mc.innerHTML=html;modal.showModal()}
+document.getElementById('scope').onclick=()=>show('Stage gates','Each stage must evolve declared state, generate measurements from that state, expose failure cases, and preserve its native dimensional layer. A convincing animation cannot unlock the next stage.');
+document.getElementById('tests').onclick=()=>show('Next lattice work','Map stable and unstable parameter regions; add complete action–reaction work accounting; run timestep and spatial-refinement convergence; measure cell-area change, circulation, leakage, recovery time, recurrence error, center drift, and residual wake; compare interaction ablations and simpler controls.');
+document.getElementById('close').onclick=()=>modal.close();
+modal.onclick=e=>{if(e.target===modal)modal.close()};
+</script>
+</body>
+</html>

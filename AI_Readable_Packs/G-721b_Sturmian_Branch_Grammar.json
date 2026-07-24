@@ -1,0 +1,15 @@
+{
+  "node_id": "G-721b",
+  "title": "Sturmian Binary Branch Grammar",
+  "canonical_source": "Nodes/G-721b_Sturmian_Binary_Branch_Grammar.md",
+  "branch_rule": "r=2n+b, b=floor((t+1)alpha+rho)-floor(t alpha+rho)",
+  "tests": [
+    "p(m)=m+1",
+    "balance",
+    "aperiodicity",
+    "frequency convention"
+  ],
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (external word mathematics) / YELLOW (rabbit-route and android relevance)"
+}

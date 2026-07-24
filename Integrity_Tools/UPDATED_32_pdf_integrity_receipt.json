@@ -1,0 +1,14 @@
+{
+  "pass": true,
+  "pdf_count": 37,
+  "structurally_valid": 37,
+  "source_pdf_pairs": 23,
+  "stale_source_pdf_pairs": [],
+  "book1_pdf_count": 17,
+  "book1_pdfs_regenerated": 17,
+  "rendered_visual_samples": [
+    "Books/Book1_Micro/Book1_Ch03_Scale_Invariance.pdf page 1",
+    "Books/Book1_Micro/Book1_Ch17_AI_And_Human_Same_Architecture.pdf page 1"
+  ],
+  "errors": []
+}

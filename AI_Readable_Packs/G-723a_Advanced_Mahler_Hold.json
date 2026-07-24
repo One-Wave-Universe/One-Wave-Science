@@ -1,0 +1,9 @@
+{
+  "node_id": "G-723a",
+  "title": "Advanced Mahler and Regulator Computation Hold",
+  "canonical_source": "Nodes/G-723a_Advanced_Mahler_Regulator_Computation_Hold.md",
+  "entry_condition": "concrete qualifying integer or Laurent polynomial and a defined question ordinary spectral tools cannot answer",
+  "gate": "GREEN",
+  "lifecycle": "HELD",
+  "claim_gate_detail": "GRAY external reference / HELD until a qualifying polynomial exists"
+}

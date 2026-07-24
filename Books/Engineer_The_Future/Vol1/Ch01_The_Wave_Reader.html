@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Engineer the Future — Vol I, Ch 1: The Wave Reader</title>
+<style>
+  :root{
+    --brass:#a9752f; --brass-dark:#7a5220; --copper:#b5651d;
+    --paper:#ece0c8; --paper-dark:#dcc9a0; --ink:#2b1e0f;
+    --iron:#3a3229; --verdigris:#5c8a7a;
+  }
+  body{margin:0; background:var(--iron); font-family:'Georgia','Times New Roman',serif;}
+  .page{
+    max-width:880px; margin:30px auto; background:var(--paper);
+    background-image: radial-gradient(circle at 20% 10%, rgba(169,117,47,0.08), transparent 40%),
+                       radial-gradient(circle at 90% 80%, rgba(90,60,20,0.08), transparent 45%);
+    padding:0; border:10px solid var(--brass-dark);
+    box-shadow: 0 0 0 3px var(--brass), 0 0 40px rgba(0,0,0,0.6);
+  }
+  .band{ background:var(--brass-dark); color:var(--paper); text-align:center; padding:10px 0;
+    font-family:'Courier New',monospace; font-size:12px; letter-spacing:0.2em; text-transform:uppercase;}
+  .titleblock{ padding:36px 50px 20px; text-align:center; border-bottom:4px double var(--brass-dark);}
+  .series{ font-family:'Courier New',monospace; font-size:11px; letter-spacing:0.3em; color:var(--brass-dark); text-transform:uppercase;}
+  h1{ font-family:'Trebuchet MS','Georgia',serif; font-weight:800; font-size:38px; color:var(--ink); margin:8px 0 4px; letter-spacing:0.02em;}
+  .subtitle{ font-family:'Georgia','Times New Roman',serif; font-style:italic; font-size:16px; color:var(--brass-dark);}
+  .content{ padding:30px 55px 40px; color:var(--ink); font-size:16px; line-height:1.65;}
+  h2{ font-family:'Trebuchet MS','Georgia',serif; font-size:20px; color:var(--brass-dark); border-bottom:2px solid var(--brass); padding-bottom:6px; margin-top:34px; letter-spacing:0.03em;}
+  .dropcap{ font-family:'Trebuchet MS','Georgia',serif; font-size:64px; float:left; line-height:0.8; padding-right:8px; color:var(--brass-dark);}
+  .schematic{ border:3px solid var(--brass-dark); background:#f5eed8; padding:16px; margin:20px 0; font-family:'Courier New',monospace; font-size:13px; white-space:pre; color:var(--ink); box-shadow: inset 0 0 20px rgba(169,117,47,0.15);}
+  .schematic-caption{ font-family:'Courier New',monospace; font-size:11px; color:var(--brass-dark); text-align:center; margin-top:6px; letter-spacing:0.05em;}
+  .spec-table{ width:100%; border-collapse:collapse; margin:18px 0; font-family:'Courier New',monospace; font-size:13px;}
+  .spec-table th{ background:var(--brass-dark); color:var(--paper); padding:8px 12px; text-align:left; text-transform:uppercase; letter-spacing:0.05em; font-size:11px;}
+  .spec-table td{ padding:8px 12px; border-bottom:1px solid var(--paper-dark); background:rgba(255,255,255,0.3);}
+  .gray-plate{ background:#d9cfb8; border-left:5px solid var(--iron); padding:14px 18px; margin:20px 0; font-size:14px;}
+  .gray-plate .label{ font-family:'Courier New',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--iron); margin-bottom:6px;}
+  .yellow-plate{ background:#f0e3b8; border-left:5px solid var(--copper); padding:14px 18px; margin:20px 0; font-size:14px;}
+  .yellow-plate .label{ font-family:'Courier New',monospace; font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--copper); margin-bottom:6px;}
+  .rivet-rule{ height:6px; background: repeating-linear-gradient(90deg, var(--brass-dark) 0 8px, var(--brass) 8px 16px); margin:30px 0; border-radius:3px;}
+  .footer-plate{ text-align:center; font-family:'Courier New',monospace; font-size:10px; color:var(--paper); background:var(--iron); padding:14px; letter-spacing:0.1em;}
+</style></head>
+<body>
+<div class="page">
+  <div class="band">One-Wave &middot; Engineer the Future &middot; Volume I</div>
+  <div class="titleblock">
+    <div class="series">A Field Manual of Speculative Instrumentation</div>
+    <h1>The Wave Reader</h1>
+    <div class="subtitle">Chapter I &mdash; On the Differential Null and the Hunt for the Distortion Tail</div>
+  </div>
+
+  <div class="content">
+    <p><span class="dropcap">T</span>here exists, in the standard telling of signal and noise, a tidy division: that which we seek, and that which we discard. The Wave Reader is built on a contrary wager &mdash; that the field itself is continuous, and what we have been calling &ldquo;noise&rdquo; may be nothing more than the field's own incoherent fluctuation, unfiltered and unloved. To hear it properly, the instrument must not filter. It must <em>listen at the null</em>.</p>
+
+    <div class="gray-plate">
+      <div class="label">Standard Reference &mdash; The Instrumentation Amplifier</div>
+      Precision differential instrumentation amplifiers of the INA class are known to achieve common-mode rejection of 100&ndash;140 decibels under favorable conditions. This is established, unremarkable engineering &mdash; the wager below asks only that such an amplifier be pointed at an unusual question.
+    </div>
+
+    <h2>I. The Apparatus, in Brief</h2>
+    <p>Two emitters, phase-matched from a single master oscillator rather than left to run free &mdash; for no two independent clocks will agree closely enough for this purpose. A precision one-hundred-eighty-degree splitter divides the signal; two matched drivers carry it outward; two matched receivers bring it home to a differential amplifier tuned for the deepest null the instrument can hold.</p>
+
+    <div class="schematic">
+  [Master Oscillator]
+         |
+   [180deg Splitter]
+      /       \
+[Emitter A]  [Emitter B]   (phase-locked, not free-running)
+      \       /
+   [Matched Receivers]
+         |
+ [Differential Amplifier]  <-- target: ~120 dB CMRR
+         |
+    [24-bit ADC]
+         |
+ [Lock-in / Synchronous Detection, ref. to Master Oscillator]
+    </div>
+    <div class="schematic-caption">FIG. 1 &mdash; THE SIGNAL CHAIN, END TO END</div>
+
+    <h2>II. The Wager Itself</h2>
+    <p>If a stable field source &mdash; what this project calls a Logic Anchor, a Persistent Mode holding its own shape against the lattice &mdash; produces any non-linear disturbance beyond what linear theory predicts, then a sufficiently deep null should not read as clean zero in its presence. It should read a residual. A <em>distortion tail</em>, however faint, correlating with the nearby mass or charge that linear theory says should leave no such mark.</p>
+
+    <div class="yellow-plate">
+      <div class="label">Yellow Audit &mdash; Read Before Believing Any of This</div>
+      No such residual has been sought yet, let alone found. This chapter derives what the hunt would require &mdash; the sensitivity, the phase tolerance &mdash; not a result. The hypothesis is stated plainly so it can be tested plainly, and rejected plainly if the null simply reads zero.
+    </div>
+
+    <h2>III. The Numbers the Hunt Requires</h2>
+    <p>To resolve a hypothetical residual at one part in a million of the emitter's own amplitude &mdash; a reasonable first target, not a derived necessity &mdash; the instrument must hold to the following:</p>
+
+    <table class="spec-table">
+      <tr><th>Quantity</th><th>Target</th><th>Note</th></tr>
+      <tr><td>Common-mode rejection</td><td>&sim;120 dB</td><td>demanding, not exotic &mdash; within reach of precision INA-class parts</td></tr>
+      <tr><td>Phase matching, emitter to emitter</td><td>&lt; 0.08&deg;</td><td>the harder spec; requires a shared phase reference, not two free clocks</td></tr>
+      <tr><td>ADC resolution</td><td>24-bit class</td><td>dynamic range enough to see below the null point</td></tr>
+    </table>
+
+    <h2>IV. What This Chapter Does Not Claim</h2>
+    <p>It does not claim the distortion tail exists. It does not claim the apparatus, once built, would find it. It claims only that the apparatus can be built with parts that exist, to specifications that are demanding but not fanciful, and that building it is the only way the question stops being a wager and starts being an answer.</p>
+
+    <div class="rivet-rule"></div>
+    <p style="font-style:italic; text-align:center; color:var(--brass-dark);">Next: Chapter II, the Hierarchical Sensor-Control architecture that would carry this instrument's reading onward through a body.</p>
+  </div>
+
+  <div class="footer-plate">GROUNDED IN NODE C-315 &middot; ONE-WAVE ENGINEER THE FUTURE &middot; VOL. I, CH. I</div>
+</div>
+</body></html>

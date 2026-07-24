@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>E-510: Music Clock Harmonic Oscillation</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="E-510"><h1>E-510: Music Clock Harmonic Oscillation</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE_HYPOTHESIS</p><p><strong>Claim detail:</strong> YELLOW (proposed — new node, elaborates existing A-111 content)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">E-510 Music Clock Harmonic Oscillation</h1>
+</header>
+<h2 id="node-e-510-music-clock-harmonic-oscillation">Node E-510: Music
+Clock Harmonic Oscillation</h2>
+<p>Status: YELLOW (proposed — new node, elaborates existing A-111
+content)</p>
+<p>Class: FUNCTION</p>
+<p>Not a book chapter. Not a book node. This is a reusable function node
+within Appendix E, in the same class as other Appendix E functions
+(E-501 through E-509).</p>
+<p>Term disambiguation: “Chord” in this node refers exclusively to a
+musical chord (e.g., A Major). It is unrelated to “Operational Chain”
+(the standard per-node dependency field used throughout the repo) and
+unrelated to “Chapter” (a Book document-structure unit). No
+cross-meaning is intended anywhere in this node.</p>
+<p>Dependencies: Upstream: A-111 Recursion (Harmonic Mapping / Four
+Harmonic Behavior Axes sections) Lateral: G-721 Mirrored Alphabet
+Rabbit-Hop Coordinate Algorithm (separate symbolic coordinate system)
+Downstream: E-511 Chord Rotation</p>
+<p>Separation rule: The Music Clock and G-721 must not be collapsed. The
+Music Clock supplies a 12-position harmonic/movement relation. G-721
+supplies A-to-Z symbolic identity and mirrored recursive coordinates. A
+later compiler may connect them, but neither one is the other.</p>
+<p>Definition: The Music Clock is a rotational coordinate system for
+harmonic relationships, built on the 12-tone equal-temperament relation
+already stated in A-111:</p>
+<p>f_n = f_0(2^(n/12))</p>
+<p>A-111 established root distance, octave position, interval ratio, and
+oscillation width as the quantities to track, and named the Major/Minor,
+Forward/Backward axes. This node formalizes those into a signed
+12-position clock centered on a chosen root.</p>
+<p>CLOCK REFERENCE: Root position (12 o’clock) = (0), the harmonic zero
+reference — this is a root-relative instance of the same Ground/Zero
+pattern used throughout the repo (Δψ = ψ − ψ₀, from A-101), applied to
+pitch instead of field displacement.</p>
+<p>Clockwise rotation = positive displacement (Expression direction, per
+B-203/B-204 convention) Counter-clockwise rotation = negative
+displacement (Compression direction)</p>
+<p>SIGNED POSITIONS (example, root = A): Clockwise: A(0) -&gt; A#(+1)
+-&gt; B(+2) -&gt; C(+3) -&gt; C#(+4) -&gt; D(+5) Counter-clockwise: A(0)
+-&gt; G#(-1) -&gt; G(-2) -&gt; F#(-3) -&gt; F(-4) -&gt; E(-5) Opposite
+pole (6 o’clock) = (-0-), the mirror/inversion reference — this is the
+same Mirror operation as B-205, applied to the harmonic clock.</p>
+<p>VERTICAL DIAGRAM CONVENTION (added, consistent with the confirmed
+values above — this is a display convention, not a new claim): For a
+given chord, its Expression-side tone (positive position) is drawn on
+top, its root at center, and its Compression-side tone (negative
+position) on the bottom:</p>
+<pre><code>    C# (+4)
+      |
+    A  (0)
+      |
+    E  (-5)</code></pre>
+<p>Positive/Expression = up. Root = center. Negative/Compression = down.
+This matches the earlier cross-style diagrams used for the worked
+Major/Minor examples, now stated as an explicit convention rather than
+left implicit in each individual diagram.</p>
+<p>OCTAVE BOUNDARY / WRAPAROUND (added — closes a real gap: this clock
+was previously only defined for positions 0 through ±5, meeting at the
+shared 6 o’clock mirror point, with no stated behavior beyond that
+boundary):</p>
+<p>Octave transition: f(n+1) = 2 * f(n)</p>
+<p>When clock position would extend past +5 or -5 (i.e., past the G#/A
+boundary in either direction), the position wraps: the coordinate
+repeats (A is A again), but the scale has changed by one octave
+(frequency doubled or halved). This is the same “same recursive
+structure, different scale” principle already established for A-111/
+E-507 — applied here specifically to the clock’s own boundary rather
+than left unstated.</p>
+<p>Consequence: the Music Clock is not a single fixed 12-position ring.
+It is one ring repeated at every octave, with position 0 (root)
+recurring at every doubling of frequency. A chord tone that would “fall
+off” the ±5 boundary does not leave the system — it re-enters at the
+corresponding position one octave up or down.</p>
+<p>Mathematics: No independent mathematics beyond the clock positions
+above. The operation that uses this coordinate system — re-centering an
+arbitrary chord onto it — is defined separately in E-511 Chord Rotation,
+since a reference system and the function that operates on it are
+distinct (same split as A-101 Ground/Zero vs A-102 Displacement, or
+C-301 Mirror Gate vs B-205 Mirror).</p>
+<p>Operational Chain: A-111 Harmonic Mapping =&gt; Music Clock
+(reference frame) =&gt; E-511 Chord Rotation (function)</p>
+<p>Yellow Audit: - Relationship between clock position and actual
+perceived consonance/dissonance not derived, only positional -
+Connection to the guitar-signal physical validation goal
+(waveform/frequency measurement) not yet built — this node is currently
+music-theory-level, not signal-level - Relationship to B-206b’s Four
+Views (Inward/Outward/Across/Over) not yet mapped, despite conceptual
+similarity to Compression/Expression framing</p>
+<p>Future Work: Connect clock positions to actual measured guitar
+frequencies (bridge to the Wave Reader hardware work). Determine whether
+this node should formally cite B-203 Expression / B-204 Compression as
+upstream, given the shared directional convention.</p>
+<hr />
+</body>
+</html>

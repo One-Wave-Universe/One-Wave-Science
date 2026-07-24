@@ -1,0 +1,215 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-111: Recursion</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-111"><h1>A-111: Recursion</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-111</h3><p><b>Classification</b><br>A-Series technical node</p><p><b>Canonical source</b><br>Nodes/A-111_Recursion.md</p></div><div class="content"><h2 id="node-111-recursion">Node 111: Recursion</h2>
+<p><strong>Legacy claim detail:</strong> YELLOW<br />
+<strong>Dependencies:</strong><br />
+Upstream: A-109, A-110<br />
+Downstream: A-112, E-520 Recursive Self-Modeling Levels (hexagonal
+application), E-523 Circle Pit Vortex Transition (real published-physics
+structural parallel), G-719 Neural System Functional Analogy Map (Five
+Mind grounding, neighbor-average term)</p>
+<h3 id="definition">Definition</h3>
+<p>Recursion is a closed update cycle where the output of one step
+becomes the input of the next. Memory alone is not recursion. Recursion
+requires both memory and a feedback rule [1].</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ψ</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>ψ</mi><mi>n</mi></msub><mo>,</mo><msub><mi>ψ</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\psi_{n+1} = f(\psi_n, \psi_{n-1})
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Memory</mtext><mo>+</mo><mtext mathvariant="normal">Feedback Rule</mtext><mo>⇒</mo><mtext mathvariant="normal">Recursion</mtext></mrow><annotation encoding="application/x-tex">
+\text{Memory} + \text{Feedback Rule} \Rightarrow \text{Recursion}
+</annotation></semantics></math></p>
+<h3 id="mathematics">Mathematics</h3>
+<p>Full One-Wave update rule:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>ψ</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msubsup><mi>ψ</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>γ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>ψ</mi><mi>i</mi><mi>n</mi></msubsup><mo>−</mo><msubsup><mi>ψ</mi><mi>i</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><msub><mi>β</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">⟨</mo><msubsup><mi>ψ</mi><mi>j</mi><mi>n</mi></msubsup><mo stretchy="false" form="postfix">⟩</mo><mo>−</mo><msubsup><mi>ψ</mi><mi>i</mi><mi>n</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\psi_i^{n+1} = \psi_i^n + (1-\gamma)(\psi_i^n - \psi_i^{n-1}) + \beta_i(\langle \psi_j^n \rangle - \psi_i^n)
+</annotation></semantics></math></p>
+<p>Closed update cycle:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>f</mi><mi>k</mi></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>ψ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>ψ</mi><mspace width="1.0em"></mspace><mrow><mtext mathvariant="normal">for integer </mtext><mspace width="0.333em"></mspace></mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">
+f^k(\psi) = \psi \quad \text{for integer } k
+</annotation></semantics></math></p>
+<h3 id="locality-rule">Locality Rule</h3>
+<p>Nearest-neighbor coupling is confirmed through
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">⟨</mo><msubsup><mi>ψ</mi><mi>j</mi><mi>n</mi></msubsup><mo stretchy="false" form="postfix">⟩</mo><mo>−</mo><msubsup><mi>ψ</mi><mi>i</mi><mi>n</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_i(\langle \psi_j^n \rangle - \psi_i^n)</annotation></semantics></math>.
+Whether additional nonlocal effects beyond nearest-neighbor exist
+remains open [1].</p>
+<p>Oscillation is not required for recursion [1].</p>
+<h3 id="operational-chain">Operational Chain</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Oscillation</mtext><mo>+</mo><mtext mathvariant="normal">Memory</mtext><mo>+</mo><mtext mathvariant="normal">Feedback Rule</mtext><mo>⇒</mo><mtext mathvariant="normal">Recursion</mtext><mo>⇒</mo><mtext mathvariant="normal">Persistent Mode</mtext></mrow><annotation encoding="application/x-tex">
+\text{Oscillation} + \text{Memory} + \text{Feedback Rule} \Rightarrow \text{Recursion} \Rightarrow \text{Persistent Mode}
+</annotation></semantics></math></p>
+<h3 id="metadata-and-wave-layer">Metadata and Wave Layer</h3>
+<p>Metadata is the compressed description of a wave configuration. Wave
+data is metadata that has entered an active update cycle.</p>
+<p>A wave state is represented as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Ψ</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>,</mo><mi>f</mi><mo>,</mo><mi>ϕ</mi><mo>,</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo>,</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\Psi = (A, f, \phi, x, t, m)
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+= amplitude.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
+= frequency.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
+= phase.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+= position.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+= time.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+= metadata state.</li>
+</ul>
+<p>Recursive wave update:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Ψ</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>F</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>Ψ</mi><mi>n</mi></msub><mo>,</mo><msub><mi>Ψ</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>M</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\Psi_{n+1} = F(\Psi_n, \Psi_{n-1}, M)
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Ψ</mi><mi>n</mi></msub><annotation encoding="application/x-tex">\Psi_n</annotation></semantics></math>
+= current wave state.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Ψ</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">\Psi_{n-1}</annotation></semantics></math>
+= memory state.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
+= metadata constraints.</li>
+</ul>
+<p>Metadata describes the state. Wave data is metadata expressed as an
+active update process. Conversion requires state identity, coupling
+rule, timing relationship, and propagation behavior.</p>
+<h3 id="interference-layer">Interference Layer</h3>
+<p>For oscillating systems:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>A</mi><mo>sin</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>π</mi><mi>f</mi><mi>t</mi><mo>+</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\psi(t) = A\sin(2\pi f t + \phi)
+</annotation></semantics></math></p>
+<p>Multiple waves combine as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>A</mi><mi>k</mi></msub><mo>sin</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>2</mn><mi>π</mi><msub><mi>f</mi><mi>k</mi></msub><mi>t</mi><mo>+</mo><msub><mi>ϕ</mi><mi>k</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\Psi(t) = \sum_{k=1}^{N} A_k\sin(2\pi f_k t + \phi_k)
+</annotation></semantics></math></p>
+<p>Measure reinforcement, cancellation, harmonic overlap, and phase
+alignment.</p>
+<p>Beat frequency:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>b</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>f</mi><mn>1</mn></msub><mo>−</mo><msub><mi>f</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow></mrow><annotation encoding="application/x-tex">
+f_b = |f_1 - f_2|
+</annotation></semantics></math></p>
+<h3 id="harmonic-mapping">Harmonic Mapping</h3>
+<p>For guitar/frequency systems:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>n</mi></msub><mo>=</mo><msub><mi>f</mi><mn>0</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><msup><mn>2</mn><mrow><mi>n</mi><mi>/</mi><mn>12</mn></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+f_n = f_0(2^{n/12})
+</annotation></semantics></math></p>
+<p>Track root distance, octave position, interval ratio, and oscillation
+width.</p>
+<p>Relative frequency:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mfrac><msub><mi>f</mi><mn>2</mn></msub><msub><mi>f</mi><mn>1</mn></msub></mfrac></mrow><annotation encoding="application/x-tex">
+R = \frac{f_2}{f_1}
+</annotation></semantics></math></p>
+<p>A chord is not the final model. It is a label for wave
+relationships.</p>
+<h3 id="four-harmonic-behavior-axes">Four Harmonic Behavior Axes</h3>
+<p>Primary character:</p>
+<p>Major
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>↔</mo><annotation encoding="application/x-tex">\leftrightarrow</annotation></semantics></math>
+Minor</p>
+<p>Movement:</p>
+<p>Forward
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>↔</mo><annotation encoding="application/x-tex">\leftrightarrow</annotation></semantics></math>
+Backward</p>
+<p>Result:</p>
+<ol type="1">
+<li>Major / Forward.</li>
+<li>Major / Backward.</li>
+<li>Minor / Forward.</li>
+<li>Minor / Backward.</li>
+</ol>
+<h3 id="stability-measurement-layer">Stability Measurement Layer</h3>
+<p>Persistence is not defined as lack of movement. A persistent pattern
+may oscillate while preserving its structure.</p>
+<h4 id="state-difference">State Difference</h4>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>n</mi></msub><mo>=</mo><mo stretchy="false" form="postfix">∥</mo><msub><mi>Ψ</mi><mi>n</mi></msub><mo>−</mo><msub><mi>Ψ</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false" form="postfix">∥</mo></mrow><annotation encoding="application/x-tex">
+D_n = \|\Psi_n - \Psi_{n-1}\|
+</annotation></semantics></math></p>
+<p>Used to measure local change.</p>
+<h4 id="structural-stability">Structural Stability</h4>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>R</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>R</mi><mi>n</mi></msub><mo>−</mo><msub><mi>R</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">|</mo></mrow><msub><mi>R</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">
+S_R = 1 - \frac{|R_n - R_{n-1}|}{R_{max}}
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>n</mi></msub><annotation encoding="application/x-tex">R_n</annotation></semantics></math>
+= relationship state at time
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><annotation encoding="application/x-tex">R_{max}</annotation></semantics></math>
+= maximum allowed relational change.</li>
+</ul>
+<p>A wave remains stable when its internal relationships remain
+consistent.</p>
+<h4 id="combined-stability-score">Combined Stability Score</h4>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>=</mo><msub><mi>w</mi><mi>R</mi></msub><msub><mi>S</mi><mi>R</mi></msub><mo>+</mo><msub><mi>w</mi><mi>f</mi></msub><msub><mi>S</mi><mi>f</mi></msub><mo>+</mo><msub><mi>w</mi><mi>ϕ</mi></msub><msub><mi>S</mi><mi>ϕ</mi></msub><mo>+</mo><msub><mi>w</mi><mi>A</mi></msub><msub><mi>S</mi><mi>A</mi></msub></mrow><annotation encoding="application/x-tex">
+S_{total}
+=
+w_R S_R
++
+w_f S_f
++
+w_\phi S_\phi
++
+w_A S_A
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>R</mi></msub><annotation encoding="application/x-tex">S_R</annotation></semantics></math>
+= relational stability.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>f</mi></msub><annotation encoding="application/x-tex">S_f</annotation></semantics></math>
+= frequency stability.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>ϕ</mi></msub><annotation encoding="application/x-tex">S_\phi</annotation></semantics></math>
+= phase stability.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>A</mi></msub><annotation encoding="application/x-tex">S_A</annotation></semantics></math>
+= amplitude stability.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
+= weighting factors.</li>
+</ul>
+<h3 id="phase-lock-criterion">Phase Lock Criterion</h3>
+<p>A recursive wave enters a locked state when:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">|</mo><mi>Δ</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">|</mo></mrow><mo>&lt;</mo><mi>θ</mi></mrow><annotation encoding="application/x-tex">
+|\Delta \phi| &lt; \theta
+</annotation></semantics></math></p>
+<p>and:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">|</mo><mi>Δ</mi><mi>f</mi><mo stretchy="true" form="postfix">|</mo></mrow><mo>&lt;</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">
+|\Delta f| &lt; \delta
+</annotation></semantics></math></p>
+<p>over an observation window.</p>
+<h3 id="harmonic-selection-rule">Harmonic Selection Rule</h3>
+<p>A pattern is selected when:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>n</mi></msub><mo>&lt;</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">
+D_n &lt; \epsilon
+</annotation></semantics></math></p>
+<p>or when:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>&gt;</mo><msub><mi>S</mi><mrow><mi>t</mi><mi>h</mi><mi>r</mi><mi>e</mi><mi>s</mi><mi>h</mi><mi>o</mi><mi>l</mi><mi>d</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
+S_{total} &gt; S_{threshold}
+</annotation></semantics></math></p>
+<p>with bounded energy:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mrow><mi>t</mi><mi>o</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>&lt;</mo><msub><mi>E</mi><mrow><mi>l</mi><mi>i</mi><mi>m</mi><mi>i</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
+E_{total} &lt; E_{limit}
+</annotation></semantics></math></p>
+<p>Selection requires:</p>
+<ul>
+<li>Coherent relationship.</li>
+<li>Stable recurrence.</li>
+<li>Bounded interference.</li>
+<li>Repeatable structure.</li>
+</ul>
+<h3 id="persistence-test">Persistence Test</h3>
+<p>A recursive wave enters persistent mode when:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="postfix">∥</mo><msub><mi>Ψ</mi><mrow><mi>n</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>−</mo><msub><mi>Ψ</mi><mi>n</mi></msub><mo stretchy="false" form="postfix">∥</mo><mo>&lt;</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">
+\|\Psi_{n+k} - \Psi_n\| &lt; \epsilon
+</annotation></semantics></math></p>
+<p>for a defined tolerance.</p>
+<p>Possible outcomes:</p>
+<ul>
+<li>Fixed recursion.</li>
+<li>Periodic recursion.</li>
+<li>Chaotic recursion.</li>
+</ul>
+<p>A recursive system is stable when the wave state remains measurable,
+bounded, and repeatable under its own update rule.</p>
+<h3 id="yellow-audit">Yellow Audit</h3>
+</div><div class="clear"></div></div></body></html>

@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>D-414 · Four-Interaction Shell · Proton Braids &amp; Toroidal Flow</title>
+<style>
+  :root{--bg:#070b12;--panel:#0e1420;--line:#1d2635;--ink:#e8eef7;--dim:#8a97ab;
+        --knot:#ffd15c;--elec:#5cc8ff;--mirror:#c58bff;--weave:#5cff9e;--warn:#ff8a5c;}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:radial-gradient(1200px 700px at 60% -10%,#0d1626,#070b12 60%);color:var(--ink);
+    font:14px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{display:grid;grid-template-columns:1fr 340px;gap:14px;padding:14px;max-width:1280px;margin:0 auto}
+  @media(max-width:980px){.wrap{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,#0f1624,#0c1220);border:1px solid var(--line);border-radius:14px;padding:14px}
+  h1{font-size:17px;margin:0 0 2px;letter-spacing:.3px}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--dim);margin:0 0 10px}
+  .sub{color:var(--dim);font-size:12.5px;margin:0 0 10px}
+  canvas{width:100%;display:block;border-radius:10px;background:#060a11}
+  .tag{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--dim);margin-left:6px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:9px 0}
+  label{font-size:12.5px;color:var(--dim)}
+  input[type=range]{width:150px;accent-color:var(--elec)}
+  select,button{background:#0b1220;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:12.5px}
+  button{cursor:pointer}
+  button.primary{background:linear-gradient(180deg,#15406b,#0e2c4c);border-color:#1f5c96}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--dim);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .hud{position:relative}
+  .hud .badge{position:absolute;top:10px;left:12px;background:rgba(8,12,20,.72);border:1px solid var(--line);
+    border-radius:10px;padding:6px 10px;font-size:11.5px;color:var(--dim);backdrop-filter:blur(4px)}
+  .hud .cam{position:absolute;top:10px;right:12px;background:rgba(8,12,20,.72);border:1px solid var(--line);
+    border-radius:10px;padding:6px 10px;font-size:11px;color:var(--dim)}
+  .small{font-size:11.5px;color:var(--dim)}
+  .kv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:12px;margin-top:6px}
+  .kv b{color:var(--ink);font-weight:600}
+  .foot{font-size:11px;color:var(--dim);margin-top:10px;border-top:1px solid var(--line);padding-top:9px}
+  a{color:#7cc0ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card hud">
+    <h1>Proton as a Three-Vortex Braided Knot <span class="tag">D-414 · YELLOW</span></h1>
+    <p class="sub">Four interactions of <b>one</b> bounded field — knot <span style="color:var(--knot)">Z<sub>K</sub></span>, electrical shell <span style="color:var(--elec)">Z<sub>E</sub></span>, Mirror Gate <span style="color:var(--mirror)">Z<sub>M</sub></span>, Boundary-Tension Weave <span style="color:var(--weave)">Z<sub>T</sub></span> — driven by real experimental data as wave data.</p>
+    <div class="badge" id="badge">loading real wave data…</div>
+    <div class="cam" id="camlabel">view: braids + torus</div>
+    <canvas id="c" width="880" height="560"></canvas>
+    <div class="legend">
+      <span class="chip"><span class="dot" style="background:var(--knot)"></span>Three-Vortex braids (knot Z<sub>K</sub>)</span>
+      <span class="chip"><span class="dot" style="background:var(--weave)"></span>Toroidal weave flow (Z<sub>T</sub>)</span>
+      <span class="chip"><span class="dot" style="background:var(--elec)"></span>Electric shell + push-back (Z<sub>E</sub>)</span>
+      <span class="chip"><span class="dot" style="background:var(--mirror)"></span>Mirror-Gate boundary (Z<sub>M</sub>)</span>
+    </div>
+    <div class="foot">
+      Real data as wave data, all folded on the <b>B-221 six-step cycle</b> (BEGIN→MOVE→HOLD→BUILD→BREAK→LOOP), nested / doubling / bidirectional through the oscillation center:
+      braids &amp; internal phase from the <b>full CODATA proton/quark anchor set</b> (m<sub>p</sub>=938.272 MeV, r=0.8409 fm, uud);
+      shell push-back driven by <b>8 real EEG records</b> (5 subjects, incl. motor imagery; antimatter = sign-flipped shell);
+      Mirror-Gate boundary driven by <b>7 LIGO/Virgo events</b> (GW150914, GW151226, GW170817, GW190425, GW190521, GW190814, GW200105; 125 GeV Higgs = boundary scale);
+      weave/confinement driven by <b>5 reactor isotopes</b> (Keepin U-235 / Pu-239 / U-238 / U-233 / Th-232) + the nuclear binding curve. Yellow: geometry &amp; couplings are candidate, not derived.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Controls</h2>
+    <div class="row"><label>Interaction view</label>
+      <select id="view">
+        <option value="all">All four (braids+torus+shell)</option>
+        <option value="braids">Braids / knot only</option>
+        <option value="torus">Toroidal flow only</option>
+        <option value="shell">Electric shell push-back</option>
+        <option value="mirror">Mirror-Gate crossing</option>
+      </select></div>
+    <div class="row"><label>Scale (micro → macro)</label><input id="scale" type="range" min="0" max="100" value="14"></div>
+    <div class="row"><label>Braid twist (knot)</label><input id="twist" type="range" min="1" max="7" value="3" step="1"></div>
+    <div class="row"><label>Toroidal flow rate</label><input id="flow" type="range" min="0" max="100" value="55"></div>
+    <div class="row"><label>Shell coupling E<sub>×</sub></label><input id="cross" type="range" min="0" max="100" value="60"></div>
+    <div class="row"><label>Data drive</label>
+      <select id="drive">
+        <option value="all">All real data (blended)</option>
+        <optgroup label="Z_M Mirror Gate — 7 LIGO/Virgo events">
+          <option value="mirror:GW150914">GW150914 (black-hole merger)</option>
+          <option value="mirror:GW151226">GW151226 (Boxing Day BBH)</option>
+          <option value="mirror:GW170817">GW170817 (neutron-star merger)</option>
+          <option value="mirror:GW190425">GW190425 (2nd neutron-star merger)</option>
+          <option value="mirror:GW190521">GW190521 (massive BH)</option>
+          <option value="mirror:GW190814">GW190814 (asymmetric / mystery object)</option>
+          <option value="mirror:GW200105">GW200105 (neutron star – black hole)</option>
+        </optgroup>
+        <optgroup label="Z_E Electric Shell — 8 EEG records">
+          <option value="electric:S001R01">EEG S001 eyes-open</option>
+          <option value="electric:S001R02">EEG S001 eyes-closed (alpha)</option>
+          <option value="electric:S001R03">EEG S001 motor task</option>
+          <option value="electric:S001R04">EEG S001 motor imagery</option>
+          <option value="electric:S002R01">EEG subject 2</option>
+          <option value="electric:S003R01">EEG subject 3</option>
+          <option value="electric:S004R01">EEG subject 4</option>
+          <option value="electric:S005R01">EEG subject 5</option>
+          <option value="antimatter">Antimatter (inverted shell)</option>
+        </optgroup>
+        <optgroup label="Z_T Boundary-Tension Weave — 5 isotopes">
+          <option value="weave:U235_thermal">Reactor U-235</option>
+          <option value="weave:Pu239_thermal">Reactor Pu-239</option>
+          <option value="weave:U238_fast">Reactor U-238</option>
+          <option value="weave:U233_thermal">Reactor U-233</option>
+          <option value="weave:Th232_fast">Reactor Th-232 (largest β)</option>
+          <option value="binding">Nuclear binding curve</option>
+        </optgroup>
+        <optgroup label="Z_K Three-Vortex Knot">
+          <option value="knot">CODATA quark+lepton mass ladder</option>
+        </optgroup>
+        <option value="none">No drive (native)</option>
+      </select></div>
+    <div class="row"><button id="play" class="primary">Pause</button><button id="reset">Reset</button></div>
+
+    <h2 style="margin-top:16px">Live four-interaction energy</h2>
+    <canvas id="chart" width="312" height="120" style="height:120px"></canvas>
+    <div class="kv" id="kv"></div>
+    <div class="foot">Scale slider moves from a single proton-scale knot (micro) out to many shells whose retained wake is the Extended-Compression / dark-matter view (macro). Camera/scale never changes the physics.</div>
+  </div>
+</div>
+
+<script>
+const TAU=Math.PI*2;
+let WAVES=null, drive="all";
+const $=id=>document.getElementById(id);
+const cv=$('c'), X=cv.getContext('2d');
+const ch=$('chart'), CX=ch.getContext('2d');
+
+// ---------- load real wave data ----------
+// New bundle: nested channels, each dataset carries a fold with a
+// bidirectional_envelope (48 pts, doubled + mirror-reversed through the
+// oscillation center) = the B-221 six-step trace we animate.
+let WAVEMAP={};   // flat name -> Float array
+function buildWaveMap(d){
+  const m={};
+  const env=o=>(o&&o.fold&&o.fold.bidirectional_envelope)||null;
+  const M=d.Z_M_mirror_gate&&d.Z_M_mirror_gate.events||{};
+  for(const k in M){const e=env(M[k]); if(e)m["mirror:"+k]=e;}
+  if(m["mirror:GW150914"])m["mirror"]=m["mirror:GW150914"];
+  const R=d.Z_E_electric_shell&&d.Z_E_electric_shell.records||{};
+  for(const k in R){const e=env(R[k]); if(e)m["electric:"+k]=e;}
+  if(m["electric:S001R01"])m["electric"]=m["electric:S001R01"];
+  const am=d.Z_E_electric_shell&&d.Z_E_electric_shell.antimatter_mirror; if(env(am))m["antimatter"]=env(am);
+  const I=d.Z_T_boundary_tension_weave&&d.Z_T_boundary_tension_weave.isotopes||{};
+  for(const k in I){const e=env(I[k]); if(e)m["weave:"+k]=e;}
+  if(m["weave:U235_thermal"])m["weave"]=m["weave:U235_thermal"];
+  const bc=d.Z_T_boundary_tension_weave&&d.Z_T_boundary_tension_weave.nuclear_binding_curve; if(env(bc))m["binding"]=env(bc);
+  const kn=d.Z_K_three_vortex_knot; if(env(kn))m["knot"]=env(kn);
+  return m;
+}
+fetch('data/waves_bundle.json').then(r=>r.json()).then(d=>{WAVES=d; WAVEMAP=buildWaveMap(d);
+  const nM=Object.keys(WAVEMAP).filter(k=>k.indexOf('mirror:')==0).length;
+  const nE=Object.keys(WAVEMAP).filter(k=>k.indexOf('electric:')==0).length;
+  const nT=Object.keys(WAVEMAP).filter(k=>k.indexOf('weave:')==0).length;
+  $('badge').textContent='real wave data loaded · '+nM+' LIGO events + '+nE+' EEG records + '+nT+' reactor isotopes + binding curve + CODATA anchors · folded on the six-step cycle';
+}).catch(e=>{$('badge').textContent='wave data not found (serve over http)';});
+
+// sample a named wave (bidirectional six-step envelope) at phase u in [0,1)
+function wsample(name,u){
+  const w=WAVEMAP[name]; if(!w||!w.length) return 0;
+  const f=((u%1)+1)%1*w.length; const i=Math.floor(f)%w.length, j=(i+1)%w.length;
+  return w[i]+(w[j]-w[i])*(f-Math.floor(f));   // linear interp for smooth drive
+}
+function driveVal(u){
+  if(drive==="none") return 0;
+  if(drive==="all") return 0.5*wsample("mirror",u)+0.35*wsample("electric",u*1.7)+0.4*wsample("weave",u*0.6);
+  return wsample(drive,u);
+}
+
+// ---------- state ----------
+let t=0, playing=true, E=[[],[],[],[]];
+function reset(){t=0;E=[[],[],[],[]];}
+
+// ---------- 3D helpers (simple perspective) ----------
+function proj(x,y,z,cx,cy,zoom){
+  const d=6.2, s=zoom*d/(d+z);
+  return [cx+x*s, cy - y*s, s, z];
+}
+function rotY(p,a){const c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c];}
+function rotX(p,a){const c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c];}
+
+// ---------- draw ----------
+function frame(){
+  const w=cv.width,h=cv.height; X.clearRect(0,0,w,h);
+  const view=$('view').value;
+  const scale=+$('scale').value/100;          // 0 micro .. 1 macro
+  const twist=+$('twist').value;              // braid crossings
+  const flow=+$('flow').value/100;
+  const cross=+$('cross').value/100;
+  const cx=w*0.5, cy=h*0.52;
+  const dv=driveVal(t*0.06);                   // real-data drive value [-1..1]
+
+  // number of shells scales micro->macro
+  const shells = 1 + Math.round(scale*6);
+  const baseZoom = 150*(1-0.45*scale);
+
+  // background field glow (extended compression / wake at macro)
+  if(scale>0.02){
+    const g=X.createRadialGradient(cx,cy,10,cx,cy,320);
+    g.addColorStop(0,'rgba(92,255,158,'+(0.05+0.10*scale)+')');
+    g.addColorStop(1,'rgba(92,255,158,0)');
+    X.fillStyle=g; X.fillRect(0,0,w,h);
+  }
+
+  const camA=t*0.010, camB=0.42;
+  const RING=1.7, TUBE=0.62;                    // torus major/minor radius
+
+  for(let sIdx=0;sIdx<shells;sIdx++){
+    // place extra shells around center at macro scale
+    const ang=sIdx/shells*TAU, spread=scale*3.4*(sIdx>0?1:0);
+    const ox=Math.cos(ang)*spread, oy=Math.sin(ang)*spread*0.4, oz=Math.sin(ang*1.3)*spread*0.6;
+    const zoom=baseZoom*(sIdx>0?0.62:1);
+    drawShell(cx,cy,zoom,camA,camB,view,twist,flow,cross,dv,ox,oy,oz,RING,TUBE,sIdx>0);
+  }
+
+  // Mirror-Gate crossing flash driven by LIGO strain
+  if((view==="all"||view==="mirror")){
+    const m=Math.abs(wsample("mirror",t*0.06));
+    if(m>0.55){
+      X.save();X.globalAlpha=Math.min(0.5,(m-0.55)*1.4);
+      X.strokeStyle='#c58bff';X.lineWidth=2;
+      X.beginPath();X.ellipse(cx,cy,baseZoom*2.6*RING*0.5,baseZoom*2.6*RING*0.28,0,0,TAU);X.stroke();
+      X.restore();
+    }
+  }
+
+  updateChart(dv,twist,flow,cross);
+  if(playing) t+=1;
+  requestAnimationFrame(frame);
+}
+
+function drawShell(cx,cy,zoom,camA,camB,view,twist,flow,cross,dv,ox,oy,oz,RING,TUBE,faded){
+  const alpha=faded?0.4:1;
+  // ---- electric shell + push-back (Z_E): pulsing sphere shell ----
+  if(view==="all"||view==="shell"||view==="mirror"){
+    const push=1 + 0.16*dv*(0.4+cross);        // real EEG/data pushes shell in/out
+    const R=RING*1.42*push;
+    X.save();X.globalAlpha=0.9*alpha;
+    for(let ring=0;ring<3;ring++){
+      X.beginPath();
+      for(let i=0;i<=64;i++){
+        const a=i/64*TAU;
+        let p=[Math.cos(a)*R,Math.sin(a)*R*(0.42+0.12*ring),0];
+        p=rotX(rotY(p,camA),camB); p[0]+=ox;p[1]+=oy;p[2]+=oz;
+        const q=proj(p[0],p[1],p[2],cx,cy,zoom);
+        i?X.lineTo(q[0],q[1]):X.moveTo(q[0],q[1]);
+      }
+      X.closePath();
+      X.strokeStyle='rgba(92,200,255,'+(0.30-ring*0.07)+')';X.lineWidth=1.4;X.stroke();
+    }
+    // push-back arrows when data compresses the shell
+    if(dv<-0.15 && (view==="shell"||view==="all")){
+      X.strokeStyle='rgba(255,138,92,'+Math.min(0.8,-dv)+')';X.lineWidth=1.6;
+      for(let i=0;i<10;i++){const a=i/10*TAU;
+        let p1=[Math.cos(a)*R*1.05,Math.sin(a)*R*0.5,0], p2=[Math.cos(a)*R*0.78,Math.sin(a)*R*0.38,0];
+        p1=rotX(rotY(p1,camA),camB);p2=rotX(rotY(p2,camA),camB);
+        p1[0]+=ox;p1[1]+=oy;p2[0]+=ox;p2[1]+=oy;
+        const a1=proj(p1[0],p1[1],p1[2],cx,cy,zoom),a2=proj(p2[0],p2[1],p2[2],cx,cy,zoom);
+        X.beginPath();X.moveTo(a1[0],a1[1]);X.lineTo(a2[0],a2[1]);X.stroke();
+      }
+    }
+    X.restore();
+  }
+
+  // ---- toroidal weave flow (Z_T): flowing particles around a torus ----
+  if(view==="all"||view==="torus"){
+    const rate=flow*(1+0.5*Math.abs(wsample("weave",t*0.04)));  // reactor kinetics modulates flow
+    const soloView = (view==="torus");
+    const N = soloView?200:120;                 // fewer particles in the combined view
+    const baseA = soloView?0.55:0.16;           // much fainter when braids present
+    for(let i=0;i<N;i++){
+      const u=i/N*TAU;
+      const vth=(i*0.37 + t*0.02*rate*6)%TAU;   // around the tube
+      const rr=RING + TUBE*Math.cos(vth);
+      let p=[rr*Math.cos(u), rr*Math.sin(u), TUBE*Math.sin(vth)];
+      p=rotX(rotY(p,camA),camB); p[0]+=ox;p[1]+=oy;p[2]+=oz;
+      const q=proj(p[0],p[1],p[2],cx,cy,zoom);
+      const depth=(q[3]+TUBE+RING)/(2*(RING+TUBE));
+      X.fillStyle='rgba(92,255,158,'+(baseA*0.4+baseA*0.6*depth)*alpha+')';
+      const raw=(soloView?(1.0+1.4*depth):(0.6+1.0*depth))*q[2]/zoom*8;
+      const sz=Math.min(soloView?2.6:1.7, Math.max(0.4,raw));
+      X.beginPath();X.arc(q[0],q[1],sz,0,TAU);X.fill();
+    }
+  }
+
+  // ---- three-vortex braids (Z_K knot): 3 interwoven strands ----
+  if(view==="all"||view==="braids"){
+    const strands=3, seg=180;
+    const colBase=[[255,209,92],[255,170,90],[255,140,120]];
+    for(let s=0;s<strands;s++){
+      const phase=s/strands*TAU;
+      const pts=[];
+      for(let i=0;i<=seg;i++){
+        const u=i/seg*TAU;
+        // braid: main loop of radius RING with helical winding (twist crossings)
+        const wind=twist*u + phase + t*0.02;
+        const rr=RING + 0.42*Math.cos(wind);
+        const zz=0.42*Math.sin(wind);
+        // real-data phase wobble on the knot
+        const wob=0.10*wsample("mirror",(u/TAU + s*0.2 + t*0.02));
+        let p=[ (rr+wob)*Math.cos(u), (rr+wob)*Math.sin(u), zz ];
+        p=rotX(rotY(p,camA),camB); p[0]+=ox;p[1]+=oy;p[2]+=oz;
+        pts.push(proj(p[0],p[1],p[2],cx,cy,zoom));
+      }
+      // draw with depth-shaded width
+      for(let i=1;i<pts.length;i++){
+        const d=(pts[i][3]+RING+1)/(2*RING+2);
+        const c=colBase[s];
+        X.strokeStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+(0.30+0.62*d)*alpha+')';
+        X.lineWidth=(1.1+2.6*d);
+        X.beginPath();X.moveTo(pts[i-1][0],pts[i-1][1]);X.lineTo(pts[i][0],pts[i][1]);X.stroke();
+      }
+    }
+    // knot core glow
+    if(!faded){const gg=X.createRadialGradient(cx+ox,cy+oy,2,cx+ox,cy+oy,zoom*0.5);
+      gg.addColorStop(0,'rgba(255,209,92,0.22)');gg.addColorStop(1,'rgba(255,209,92,0)');
+      X.fillStyle=gg;X.beginPath();X.arc(cx+ox,cy+oy,zoom*0.5,0,TAU);X.fill();}
+  }
+}
+
+// ---------- energy chart ----------
+function updateChart(dv,twist,flow,cross){
+  // candidate cycle-averaged energies of the four channels (illustrative, Yellow)
+  const eK=0.5*twist*twist*(1+0.2*Math.abs(dv));
+  const eE=0.5*(1+cross)*(1+0.6*Math.abs(wsample("electric",t*0.06)));
+  const eM=0.6*(1+1.2*Math.abs(wsample("mirror",t*0.06)));
+  const eT=0.4*(0.4+flow)*(1+0.8*Math.abs(wsample("weave",t*0.04)));
+  const push=(v,a)=>{a.push(v);if(a.length>140)a.shift();};
+  push(eK,E[0]);push(eE,E[1]);push(eM,E[2]);push(eT,E[3]);
+  const w=ch.width,h=ch.height;CX.clearRect(0,0,w,h);
+  CX.fillStyle='#0a0f18';CX.fillRect(0,0,w,h);
+  const cols=['#ffd15c','#5cc8ff','#c58bff','#5cff9e'];
+  let mx=1;E.forEach(a=>a.forEach(v=>mx=Math.max(mx,v)));
+  E.forEach((a,idx)=>{CX.strokeStyle=cols[idx];CX.lineWidth=1.6;CX.beginPath();
+    a.forEach((v,i)=>{const x=i/139*w,y=h-6-(v/mx)*(h-14);i?CX.lineTo(x,y):CX.moveTo(x,y);});CX.stroke();});
+  $('kv').innerHTML=
+    '<span>Knot E<sub>K</sub></span><b style="color:#ffd15c">'+eK.toFixed(2)+'</b>'+
+    '<span>Shell E<sub>E</sub></span><b style="color:#5cc8ff">'+eE.toFixed(2)+'</b>'+
+    '<span>Mirror E<sub>M</sub></span><b style="color:#c58bff">'+eM.toFixed(2)+'</b>'+
+    '<span>Weave E<sub>T</sub></span><b style="color:#5cff9e">'+eT.toFixed(2)+'</b>'+
+    '<span>Cross E<sub>×</sub></span><b>'+(cross*(eK+eE+eM+eT)*0.25).toFixed(2)+'</b>'+
+    '<span>Data drive</span><b>'+dv.toFixed(3)+'</b>';
+}
+
+// ---------- wire UI ----------
+$('view').onchange=e=>{$('camlabel').textContent='view: '+e.target.value;};
+$('drive').onchange=e=>{drive=e.target.value;};
+$('play').onclick=e=>{playing=!playing;e.target.textContent=playing?'Pause':'Play';};
+$('reset').onclick=reset;
+frame();
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+{
+  "pass": true,
+  "legacy_reference_occurrences": 307,
+  "distinct_legacy_ids_used": 46,
+  "resolved_alias_occurrences": 295,
+  "declared_disposition_occurrences": 12,
+  "unresolved": [],
+  "top_legacy_ids": [
+    {
+      "legacy_id": "B-06b",
+      "occurrences": 49,
+      "canonical_target": "B-206b",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "E-03",
+      "occurrences": 24,
+      "canonical_target": "E-504",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-06",
+      "occurrences": 22,
+      "canonical_target": "B-206",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "D-05",
+      "occurrences": 16,
+      "canonical_target": "D-405",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-08",
+      "occurrences": 16,
+      "canonical_target": "B-208",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "E-04",
+      "occurrences": 14,
+      "canonical_target": "E-505",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "A-10",
+      "occurrences": 14,
+      "canonical_target": "A-112",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "F-05",
+      "occurrences": 14,
+      "canonical_target": "F-605",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "C-08",
+      "occurrences": 12,
+      "canonical_target": "C-308",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-09",
+      "occurrences": 11,
+      "canonical_target": "B-209",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "E-06",
+      "occurrences": 10,
+      "canonical_target": "E-507",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-01",
+      "occurrences": 7,
+      "canonical_target": "B-201",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-03",
+      "occurrences": 7,
+      "canonical_target": "B-203",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "F-609",
+      "occurrences": 6,
+      "canonical_target": "",
+      "resolution": "DISPOSITION"
+    },
+    {
+      "legacy_id": "F-610",
+      "occurrences": 6,
+      "canonical_target": "",
+      "resolution": "DISPOSITION"
+    },
+    {
+      "legacy_id": "B-04",
+      "occurrences": 6,
+      "canonical_target": "B-204",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "A-09",
+      "occurrences": 6,
+      "canonical_target": "A-111",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "B-15",
+      "occurrences": 6,
+      "canonical_target": "B-215",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "G-05",
+      "occurrences": 6,
+      "canonical_target": "G-705",
+      "resolution": "ALIAS"
+    },
+    {
+      "legacy_id": "A-07",
+      "occurrences": 5,
+      "canonical_target": "A-109",
+      "resolution": "ALIAS"
+    }
+  ]
+}

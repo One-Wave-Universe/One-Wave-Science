@@ -1,0 +1,17 @@
+{
+  "request_id": "EXP-2026-07-23-002",
+  "author": "ai",
+  "author_label": "Computer",
+  "hypothesis": "Deeper imposed curvature well pulls the shell closer (smaller well_distance_min) but does not, by itself, change induced spin.",
+  "engine": "D-413",
+  "native_dimension": "2D",
+  "cases": [
+    {"name": "well_shallow", "parameters": {"well_depth": 1.0}},
+    {"name": "well_mid",     "parameters": {"well_depth": 1.7}},
+    {"name": "well_deep",    "parameters": {"well_depth": 2.6}}
+  ],
+  "falsifiers": [
+    "well_distance_min does not decrease as well_depth increases",
+    "max_abs_spin changes strongly with well_depth at fixed asymmetry"
+  ]
+}

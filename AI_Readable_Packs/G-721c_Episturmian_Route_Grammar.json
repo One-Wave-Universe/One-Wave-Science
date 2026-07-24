@@ -1,0 +1,9 @@
+{
+  "node_id": "G-721c",
+  "title": "Episturmian Multi-Route Directive Grammar",
+  "canonical_source": "Nodes/G-721c_Episturmian_Multi_Route_Directive_Grammar.md",
+  "rule": "Sequence selects route family; -1(0)+1 selects negative, hold, or positive direction.",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (external word mathematics) / YELLOW (multi-route movement relevance)"
+}

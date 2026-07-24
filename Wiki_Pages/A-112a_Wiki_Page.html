@@ -1,0 +1,185 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-112a: Traveling Lattice Rupture</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-112a"><h1>A-112a: Traveling Lattice Rupture</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-112a</h3><p><b>Classification</b><br>Scale-Specific Persistent-Mode Formalization</p><p><b>Canonical source</b><br>Nodes/A-112a_Traveling_Lattice_Rupture.md</p></div><div class="content"><h2 id="node-a-112a-traveling-lattice-rupture">Node A-112a: Traveling
+Lattice Rupture</h2>
+<p>Status: YELLOW</p>
+<p>Classification: Scale-Specific Persistent-Mode Formalization</p>
+<p>Dependencies: Upstream: A-112 Persistent Mode, A-102 Displacement,
+A-104 Gradient, A-105 Restoring Response, B-203 Expression, B-204
+Compression, B-209 Break Condition, E-509 Propagation Limit Downstream:
+Book 5 Ch4 Black Holes and Quasars, future lattice-defect simulation,
+future moving-boundary measurements</p>
+<h2 id="scope">Scope</h2>
+<p>This node formalizes one narrow claim:</p>
+<blockquote>
+<p>A localized rupture can relocate through the lattice without creating
+an indefinitely lengthening permanent tear, provided rupture content is
+transported forward while the previous location re-closes.</p>
+</blockquote>
+<p>This is a kinematic Yellow model. It does not yet derive black-hole
+motion from first-principles One-Wave field dynamics.</p>
+<h2 id="state-variable">State Variable</h2>
+<p>For lattice site <code>i</code> and discrete step <code>n</code>,
+define</p>
+<pre class="text"><code>r_i^n in [0,1]</code></pre>
+<p>as local rupture occupancy:</p>
+<ul>
+<li><code>r=0</code> intact closure,</li>
+<li><code>0&lt;r&lt;1</code> strained or partially open,</li>
+<li><code>r=1</code> fully active rupture in the normalized model.</li>
+</ul>
+<p>Let lattice spacing be <code>Delta x</code> and step duration be
+<code>Delta t</code>.</p>
+<h2 id="conservative-relocation-rule">Conservative Relocation Rule</h2>
+<p>For right-moving transport, define rupture flux</p>
+<pre class="text"><code>J_(i+1/2)^n = nu_n r_i^n</code></pre>
+<p>and update by flux balance:</p>
+<pre class="text"><code>r_i^(n+1) = r_i^n + J_(i-1/2)^n - J_(i+1/2)^n
+          = r_i^n - nu_n(r_i^n-r_(i-1)^n).</code></pre>
+<p>Here</p>
+<pre class="text"><code>nu_n = v_n Delta t / Delta x</code></pre>
+<p>is the dimensionless transport number.</p>
+<p>For left-moving transport, reverse the upwind direction.</p>
+<h2 id="stability-bound">Stability Bound</h2>
+<p>The first-order transport update remains a convex combination</p>
+<pre class="text"><code>r_i^(n+1) = (1-nu)r_i^n + nu r_(i-1)^n</code></pre>
+<p>when</p>
+<pre class="text"><code>0 &lt;= nu &lt;= 1.</code></pre>
+<p>Therefore the update preserves <code>0 &lt;= r &lt;= 1</code> without
+generating new extrema. The bound is the discrete propagation condition
+for this minimal model.</p>
+<p>At <code>nu=1</code>, the profile shifts exactly one site per
+step:</p>
+<pre class="text"><code>r_i^(n+1) = r_(i-1)^n.</code></pre>
+<p>The defect shape and width are exactly preserved in that ideal shift
+case.</p>
+<h2 id="rupture-conservation">Rupture Conservation</h2>
+<p>Define total rupture content</p>
+<pre class="text"><code>R_n = sum_i r_i^n.</code></pre>
+<p>Under periodic boundaries or zero net boundary flux:</p>
+<pre class="text"><code>R_(n+1)-R_n
+= sum_i (J_(i-1/2)-J_(i+1/2))
+= 0.</code></pre>
+<p>The flux terms telescope. Therefore</p>
+<pre class="text"><code>R_(n+1) = R_n.</code></pre>
+<p>This is the mathematical form of</p>
+<pre class="text"><code>the rupture relocates; it does not accumulate.</code></pre>
+<h2 id="opening-ahead-and-reclosure-behind">Opening Ahead and Reclosure
+Behind</h2>
+<p>Define positive opening and closing rates:</p>
+<pre class="text"><code>O_i^n = [r_i^(n+1)-r_i^n]_+
+C_i^n = [r_i^n-r_i^(n+1)]_+.</code></pre>
+<p>For a right-moving localized profile:</p>
+<ul>
+<li><code>O_i</code> is concentrated at the forward edge,</li>
+<li><code>C_i</code> is concentrated at the rear edge.</li>
+</ul>
+<p>Because total rupture is conserved:</p>
+<pre class="text"><code>sum_i O_i^n = sum_i C_i^n</code></pre>
+<p>for each closed-system step. The amount opened ahead equals the
+amount reclosed behind.</p>
+<h2 id="velocity-and-acceleration">Velocity and Acceleration</h2>
+<p>For a defect with nonzero total rupture, define center of rupture</p>
+<pre class="text"><code>x_c^n = Delta x * (sum_i i r_i^n) / R_n.</code></pre>
+<p>Measured velocity is</p>
+<pre class="text"><code>v_n = (x_c^(n+1)-x_c^n) / Delta t.</code></pre>
+<p>Constant <code>nu</code> gives constant nominal velocity.
+Acceleration requires changing <code>nu_n</code>:</p>
+<pre class="text"><code>a_n = (v_(n+1)-v_n) / Delta t.</code></pre>
+<p>The physical law that determines <code>nu_n</code> from pressure
+asymmetry remains open.</p>
+<h2 id="permanent-scar-variable">Permanent Scar Variable</h2>
+<p>Rupture occupancy and irreversible damage are separate variables.
+Define</p>
+<pre class="text"><code>d_i^n in [0,1]</code></pre>
+<p>as persistent structural damage, with update</p>
+<pre class="text"><code>d_i^(n+1) = clip(
+  d_i^n
+  + kappa_d [r_i^n-r_damage]_+ (1-d_i^n)
+  - lambda_d d_i^n,
+  0,1).</code></pre>
+<p>Interpretation:</p>
+<ul>
+<li><code>r_damage</code> = damage threshold above ordinary transported
+rupture,</li>
+<li><code>kappa_d</code> = scar-formation rate,</li>
+<li><code>lambda_d</code> = repair rate.</li>
+</ul>
+<p>Behind a passing defect where <code>r -&gt; 0</code>:</p>
+<pre class="text"><code>d_i^(n+1) = (1-lambda_d)d_i^n.</code></pre>
+<p>Thus:</p>
+<ul>
+<li><code>lambda_d &gt; 0</code> gives repair and decay of damage,</li>
+<li><code>lambda_d = 0</code> preserves any scar permanently,</li>
+<li>ordinary travel creates no scar when
+<code>r &lt; r_damage</code>.</li>
+</ul>
+<p>This distinguishes a traveling rupture from a propagating
+fracture.</p>
+<h2 id="width-and-wake-measures">Width and Wake Measures</h2>
+<p>For occupancy threshold <code>r_c</code>, define defect width</p>
+<pre class="text"><code>W_n = Delta x * count{i : r_i^n &gt;= r_c}.</code></pre>
+<p>Define scar length</p>
+<pre class="text"><code>L_scar^n = Delta x * count{i : d_i^n &gt;= d_c}.</code></pre>
+<p>A stable traveling rupture should satisfy approximately</p>
+<pre class="text"><code>R_n constant,
+W_n bounded,
+L_scar^n not growing.</code></pre>
+<p>A propagating fracture is identified by sustained growth of
+<code>L_scar</code>.</p>
+<h2 id="boundary-conditions">Boundary Conditions</h2>
+<p>The conservation proof holds for:</p>
+<ol type="1">
+<li>periodic boundaries, or</li>
+<li>closed boundaries with zero rupture flux.</li>
+</ol>
+<p>Open boundaries allow rupture content to enter or leave and must
+report the net flux explicitly.</p>
+<h2 id="internal-consistency-checks-completed">Internal Consistency
+Checks Completed</h2>
+<ol type="1">
+<li><strong>Bounded state:</strong> <code>0&lt;=nu&lt;=1</code>
+preserves normalized occupancy bounds.</li>
+<li><strong>Conservation:</strong> total rupture is constant under
+closed boundaries.</li>
+<li><strong>Simultaneous exchange:</strong> opening ahead equals closure
+behind.</li>
+<li><strong>No automatic scar:</strong> damage is a separate thresholded
+variable.</li>
+<li><strong>Constant speed:</strong> fixed <code>nu</code> produces
+fixed nominal transport speed.</li>
+<li><strong>Acceleration:</strong> changing <code>nu</code> changes the
+defect velocity rather than its required total rupture.</li>
+</ol>
+<p>These results promote the relocation claim from Green description to
+Yellow mathematical model.</p>
+<h2 id="falsification-conditions-for-the-yellow-model">Falsification
+Conditions for the Yellow Model</h2>
+<p>The current model fails its own intended purpose if a later
+implementation shows any of the following under the stated
+conditions:</p>
+<ul>
+<li>total rupture grows with distance despite closed boundaries,</li>
+<li>opening and reclosure do not balance,</li>
+<li>bounded initial data generate values outside <code>[0,1]</code> for
+<code>0&lt;=nu&lt;=1</code>,</li>
+<li>a permanent scar grows when the damage threshold is never
+crossed,</li>
+<li>the measured center does not move at the transport velocity.</li>
+</ul>
+<h2 id="yellow-audit">Yellow Audit</h2>
+<ul>
+<li>The transport number <code>nu</code> is prescribed, not derived from
+One-Wave pressure and restoring-response equations.</li>
+<li>First-order transport introduces numerical diffusion for
+<code>0&lt;nu&lt;1</code>; a Bronze implementation should compare
+exact-shift, higher-order, and conservative schemes.</li>
+<li>The rupture field has not been tied to measured black-hole
+quantities.</li>
+<li>The structural-damage law is a candidate model requiring
+calibration.</li>
+<li>Bronze requires reproducible simulation code, metadata, parameter
+sweeps, graphs, and recorded failures.</li>
+</ul>
+</div><div class="clear"></div></div></body></html>

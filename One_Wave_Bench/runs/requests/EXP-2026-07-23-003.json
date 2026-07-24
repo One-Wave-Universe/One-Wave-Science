@@ -1,0 +1,30 @@
+{
+  "request_id": "EXP-2026-07-23-003",
+  "author": "ai",
+  "author_label": "Computer",
+  "engine": "D-413",
+  "native_dimension": "2D",
+  "hypothesis": "When orbit-launch velocity is held FIXED across cases, increasing imposed well_depth pulls the shell closer (smaller well_distance_min) and does NOT, by itself, drive induced spin. This isolates well depth from the orbit-velocity confound found in EXP-2026-07-23-002, where the auto orbit velocity was derived from well_depth (0.475 -> 0.619 -> 0.765) and therefore co-varied with torque.",
+  "controls_note": "All three cases start from the identical shell state: x = well_radius*1.25 = 4.625, y = 0, vx = 0, vy = 0.6188 (the mid-depth auto value), theta = 0.35, omega = 0.08. Only well_depth changes. gravity is left at its default so the imposed-well restoring gradient still scales with depth via the target() potential; the launch kinematics no longer do.",
+  "cases": [
+    {
+      "name": "vfix_well_shallow",
+      "parameters": {"well_depth": 1.0},
+      "initial": {"x": 4.625, "y": 0.0, "vx": 0.0, "vy": 0.6188, "theta": 0.35, "omega": 0.08}
+    },
+    {
+      "name": "vfix_well_mid",
+      "parameters": {"well_depth": 1.7},
+      "initial": {"x": 4.625, "y": 0.0, "vx": 0.0, "vy": 0.6188, "theta": 0.35, "omega": 0.08}
+    },
+    {
+      "name": "vfix_well_deep",
+      "parameters": {"well_depth": 2.6},
+      "initial": {"x": 4.625, "y": 0.0, "vx": 0.0, "vy": 0.6188, "theta": 0.35, "omega": 0.08}
+    }
+  ],
+  "falsifiers": [
+    "well_distance_min does not decrease monotonically as well_depth increases at fixed orbit velocity",
+    "max_abs_spin still varies strongly (> 0.05 spread) with well_depth once orbit velocity is held fixed"
+  ]
+}

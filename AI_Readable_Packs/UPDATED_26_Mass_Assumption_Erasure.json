@@ -1,0 +1,40 @@
+{
+  "update": 26,
+  "date": "2026-07-23",
+  "status": "PASS_LOCKED_ARCHITECTURE",
+  "permanent_correction": "The former transport-to-mass bridge arose from a misunderstanding of a false assumption about the propagation ceiling and is removed from canonical One-Wave architecture.",
+  "prohibited_derivation_inputs": [
+    "propagation speed",
+    "failure to propagate",
+    "damping",
+    "localization share",
+    "transport share",
+    "friction limit",
+    "local-to-transport ratio"
+  ],
+  "canonical_mass_effect": {
+    "definition": "Response to carrying and rebuilding the complete stable recurrence relative to Ground.",
+    "required_interactions": [
+      "internal 3D knot/vortex structure",
+      "electrical-shell interaction created by resistance",
+      "Mirror-Gate pressure and resistance",
+      "Boundary-Tension Weave confinement and stabilization"
+    ],
+    "cross_couplings_required": true,
+    "sole_interaction_mechanisms_allowed": false
+  },
+  "mirror_gate_measurement": {
+    "observed_scale": "approximately 125 GeV",
+    "interpretation": "Mirror-Gate boundary-response work",
+    "distinct_from_local_mass_effect": true
+  },
+  "audit": {
+    "active_text_files_scanned": 370,
+    "canonical_nodes_checked": 132,
+    "distributed_pdfs_checked": 34,
+    "markdown_pdf_pairs_checked": 23,
+    "stale_pairs_remaining": 0,
+    "retired_mechanism_matches_in_active_sources": 0,
+    "retired_mechanism_matches_in_pdf_text": 0
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "pass": true,
+  "errors": [],
+  "node_files": 150,
+  "appendix_packs_verified": 7,
+  "wiki_pages_checked": 147,
+  "json_packs_checked": 23,
+  "book1_chapters": 17,
+  "book1_sequence": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "local_markdown_links_checked": 8
+}

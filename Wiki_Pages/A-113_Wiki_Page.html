@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A-113: Projection</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="A-113"><h1>A-113: Projection</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<p>The full version for the update</p>
+<p>Below is the full updated version of the <strong>Node 113</strong>
+definition with the slice/projection distinction added and the wording
+tightened [1].</p>
+<h2 id="node-113-projection">Node 113: Projection</h2>
+<p><strong>Legacy claim detail:</strong> YELLOW</p>
+<p><strong>Dependencies:</strong><br />
+Upstream: A-101, A-103, A-104<br />
+Downstream: A-117 Dimensional Integrity and Projection Declaration; all
+2D interpretations throughout Books [1]</p>
+<h3 id="definition">Definition</h3>
+<p>Projection is the operation of representing a higher-dimensional
+field state in a lower-dimensional operational form. The 2D view is
+operational, not ontological. It is a tool, not the framework [1].</p>
+<p>Projection is a family of reduction operators. A slice is one special
+case of projection.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext mathvariant="normal">Projection</mtext><mrow><mn>2</mn><mi>D</mi></mrow></msub><mo>=</mo><mtext mathvariant="normal">operational reduction of full field</mtext></mrow><annotation encoding="application/x-tex">
+\text{Projection}_{2D} = \text{operational reduction of full field}
+</annotation></semantics></math></p>
+<h3 id="mathematical-forms">Mathematical Forms</h3>
+<h3 id="slice">Slice</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ψ</mi><mtext mathvariant="normal">slice</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><msub><mi>z</mi><mn>0</mn></msub><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\psi_{\text{slice}}(x,y,t)=\psi(x,y,z_0,t)
+</annotation></semantics></math></p>
+<p>A slice simply samples one plane.</p>
+<h3 id="projection">Projection</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ψ</mi><mtext mathvariant="normal">proj</mtext></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo>∫</mo><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">
+\psi_{\text{proj}}(x,y,t)=\int \psi(x,y,z,t)\,dz
+</annotation></semantics></math></p>
+<p>A true projection collapses one dimension through a defined reduction
+operator.</p>
+<h3 id="full-field-form">Full Field Form</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ψ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\psi(x, y, z, t)
+</annotation></semantics></math></p>
+<h3 id="information-lost">Information Lost</h3>
+<ul>
+<li>z-direction gradients:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><mi>d</mi><mi>ψ</mi></mrow><mrow><mi>d</mi><mi>z</mi></mrow></mfrac><annotation encoding="application/x-tex">\frac{d\psi}{dz}</annotation></semantics></math></li>
+<li>z-direction curvature:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mrow><msup><mi>d</mi><mn>2</mn></msup><mi>ψ</mi></mrow><mrow><mi>d</mi><msup><mi>z</mi><mn>2</mn></msup></mrow></mfrac><annotation encoding="application/x-tex">\frac{d^2\psi}{dz^2}</annotation></semantics></math></li>
+<li>Full 3D coupling structure [1]</li>
+</ul>
+<h3 id="hungry-gremlin-test">Hungry Gremlin Test</h3>
+<p>For operator
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mn>2</mn><mi>D</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>G</mi><mo>*</mo><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.278em"></mspace><mi>?</mi><mo>=</mo><mspace width="0.278em"></mspace><mi>G</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>P</mi><mrow><mn>2</mn><mi>D</mi></mrow></msub><mo>*</mo><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+P_{2D}(G * \psi_{3D}) \; ?= \; G(P_{2D} * \psi_{3D})
+</annotation></semantics></math></p>
+<p>Commutation holds if the six state components
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>E</mi><mo>,</mo><mi>C</mi><mo>,</mo><mi>F</mi><mo>,</mo><mi>B</mi><mo>,</mo><mi>U</mi><mo>,</mo><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(E, C, F, B, U, D)</annotation></semantics></math>
+evolve separably. It fails if they are cross-coupled [1].</p>
+<h3 id="operational-view">Operational View</h3>
+<p>The 2D view is a tool. It is not the framework [1].</p>
+<p>Operational Chain:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Full Field</mtext><mo>⇒</mo><mtext mathvariant="normal">Projection</mtext><mo>⇒</mo><mtext mathvariant="normal">2D Operational View</mtext></mrow><annotation encoding="application/x-tex">
+\text{Full Field} \Rightarrow \text{Projection} \Rightarrow \text{2D Operational View}
+</annotation></semantics></math></p>
+<h3 id="measurement-layer">Measurement Layer</h3>
+<p>Projection is not just reduction; it is measurable reduction. A valid
+projection must preserve the operational relation needed for the
+task.</p>
+<p>Define a projection loss:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>P</mi></msub><mo>=</mo><mo stretchy="false" form="postfix">∥</mo><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><mo>−</mo><msub><mover><mi>ψ</mi><mo accent="true">̂</mo></mover><mrow><mn>3</mn><mi>D</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>P</mi><mrow><mn>2</mn><mi>D</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">∥</mo></mrow><annotation encoding="application/x-tex">
+L_P = \| \psi_{3D} - \hat{\psi}_{3D}(P_{2D}(\psi_{3D})) \|
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><annotation encoding="application/x-tex">\psi_{3D}</annotation></semantics></math>
+= original field.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mn>2</mn><mi>D</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>ψ</mi><mrow><mn>3</mn><mi>D</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">P_{2D}(\psi_{3D})</annotation></semantics></math>
+= projected field.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>ψ</mi><mo accent="true">̂</mo></mover><mrow><mn>3</mn><mi>D</mi></mrow></msub><annotation encoding="application/x-tex">\hat{\psi}_{3D}</annotation></semantics></math>
+= reconstructed approximation from the projection.</li>
+</ul>
+<p>Define projection fidelity:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>P</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><msub><mi>L</mi><mi>P</mi></msub><msub><mi>L</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mfrac></mrow><annotation encoding="application/x-tex">
+F_P = 1 - \frac{L_P}{L_{max}}
+</annotation></semantics></math></p>
+<p>where:</p>
+<ul>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>P</mi></msub><annotation encoding="application/x-tex">F_P</annotation></semantics></math>
+near 1 means high-fidelity projection.</li>
+<li><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>P</mi></msub><annotation encoding="application/x-tex">F_P</annotation></semantics></math>
+near 0 means heavy distortion.</li>
+</ul>
+<h3 id="validity-criterion">Validity Criterion</h3>
+<p>A 2D projection is operationally valid when:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>P</mi></msub><mo>&lt;</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">
+L_P &lt; \epsilon
+</annotation></semantics></math></p>
+<p>and the projected structure preserves the relation needed for the
+task.</p>
+<p>A projection is invalid when it destroys the coupling or state
+relations required to recover the intended behavior [1].</p>
+<h3 id="ground-invariance">Ground Invariance</h3>
+<p>Ground invariance under projection remains unresolved (CCD-05). The
+open question is whether the projected slice or reduced projection
+preserves the same ground-state relation as the full field [1].</p>
+<h3 id="yellow-audit">Yellow Audit</h3>
+<ul>
+<li>Ground invariance under projection remains unresolved (CCD-05)
+[1].</li>
+<li>Information loss characterization is incomplete [1].</li>
+<li>Conditions under which 2D projection produces valid results are not
+yet formalized [1].</li>
+</ul>
+<h3 id="future-work">Future Work</h3>
+<ul>
+<li>Define a quantitative projection fidelity score.</li>
+<li>Test when projection commutes with field operators.</li>
+<li>Characterize which cross-couplings break the 2D view.</li>
+<li>Determine the boundary between valid operational reduction and
+destructive truncation.</li>
+<li>Formalize the conditions under which projection preserves ground
+structure.</li>
+</ul>
+<h3 id="core-bridge-statement">Core Bridge Statement</h3>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Full Field</mtext><mo>→</mo><mtext mathvariant="normal">Projection</mtext><mo>→</mo><mtext mathvariant="normal">Measurement</mtext><mo>→</mo><mtext mathvariant="normal">Operational View</mtext></mrow><annotation encoding="application/x-tex">
+\text{Full Field} \rightarrow \text{Projection} \rightarrow \text{Measurement} \rightarrow \text{Operational View}
+</annotation></semantics></math></p>
+<p>Projection is not reality reduced to flatness. It is reality made
+usable without pretending the loss is free [1].</p>
+<h3 id="dimensional-declaration-requirement">Dimensional Declaration
+Requirement</h3>
+<p>All uses of this node must follow A-117 and state the native
+dimension, rendered dimension, coordination ratio, projection operator,
+and omitted degrees of freedom.</p>
+<h3 id="notes-for-the-next-ai">Notes for the next AI</h3>
+<ul>
+<li>Do not treat the 2D slice as the true system.</li>
+<li>Preserve the distinction between operational representation and
+ontological structure.</li>
+<li>The main missing piece is a stricter fidelity threshold for when
+projection is safe.</li>
+<li>Keep the CCD-05 question alive until invariance is actually
+shown.</li>
+<li>Projection should be judged by preservation of task-relevant
+structure, not by visual simplicity [1].</li>
+</ul>
+</body>
+</html>

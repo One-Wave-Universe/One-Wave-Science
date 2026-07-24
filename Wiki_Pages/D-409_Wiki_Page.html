@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>D-409: Twelvefold 3D Close-Packed Coordination</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="D-409"><h1>D-409: Twelvefold 3D Close-Packed Coordination</h1><p><strong>Gate:</strong> GREEN &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (geometry) / GREEN (canonical physical-lattice candidate)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-d-409-twelvefold-3d-close-packed-coordination">Node D-409:
+Twelvefold 3D Close-Packed Coordination</h1>
+<p><strong>Legacy claim detail:</strong> YELLOW (geometry) / GREEN (canonical
+physical-lattice candidate)</p>
+<p><strong>Classification:</strong> Native 3D Geometry / Volumetric
+Simulation Foundation</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A-116 Three-Dimensional Spherical Default, A-117 Dimensional
+Integrity, D-408 Sixfold 2D Lattice, D-411 Mirrored Axis Pairs, D-412
+Lattice Simulation Standard, C-317 Boundary-Tension Weave<br />
+Downstream: bounded-excitation simulation, Vortex-Phase simulation,
+Three-Vortex-Knot simulation, electrical-shell simulation, Mass-Effect
+response simulation</p>
+<h2 id="definition">Definition</h2>
+<p>The native physical layer is three-dimensional and volumetric. The
+current canonical lattice candidate uses close-packed local
+coordination, where a center has twelve nearest neighbors:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mn>12</mn><mo>:</mo><mn>1</mn></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{12{:}1}.
+</annotation></semantics></math></p>
+<p>This is a distinct 3D coordination shell, not two flat six-cell rings
+pasted together and called a volume.</p>
+<h2 id="local-neighbor-shell">Local Neighbor Shell</h2>
+<p>One convenient normalized twelve-neighbor shell is the cuboctahedral
+set</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝒩</mi><mn>12</mn></msub><mo>=</mo><mfrac><mi>a</mi><msqrt><mn>2</mn></msqrt></mfrac><mrow><mo stretchy="true" form="prefix">{</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>±</mi><mn>1</mn><mo>,</mo><mi>±</mi><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>±</mi><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>±</mi><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><mi>±</mi><mn>1</mn><mo>,</mo><mi>±</mi><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathcal N_{12}
+=
+\frac{a}{\sqrt2}
+\left\{
+(\pm1,\pm1,0),
+(\pm1,0,\pm1),
+(0,\pm1,\pm1)
+\right\}.
+</annotation></semantics></math></p>
+<p>The twelve directed neighbor positions may be organized into six
+opposite coordinate pairs for a declared shell mapping. This gives a
+<code>6:1</code> mirrored-pair view and a <code>12:1</code>
+directed-neighbor view, controlled by D-411. It does not make every
+six-count mechanism identical.</p>
+<p>Each point lies at distance
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+from the center. The complete local cluster therefore contains</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> center</mtext></mrow><mo>+</mo><mn>12</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> nearest neighbors</mtext></mrow><mo>=</mo><mn>13</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> sites</mtext></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+1\text{ center}+12\text{ nearest neighbors}=13\text{ sites}.
+</annotation></semantics></math></p>
+<p>Face-centered cubic and hexagonal close-packed arrangements share
+this local coordination number while differing in their longer-range
+stacking. The repository must test stacking rather than quietly treating
+FCC and HCP as identical.</p>
+<h2 id="relationship-to-the-2d-sixfold-layer">Relationship to the 2D
+Sixfold Layer</h2>
+<p>A 2D slice or projection of a 3D close-packed neighborhood may expose
+sixfold rings, triangles, hexagons, seven-center clusters, or
+thirteen-center diagrams. Such a picture is a projection/indexing
+view.</p>
+<p>The native 3D state includes out-of-plane neighbors and gradients
+that the 2D view omits.</p>
+<p>Therefore</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mn>3</mn><mo>→</mo><mn>2</mn></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝒩</mi><mn>12</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>≠</mo><msub><mi>𝒩</mi><mn>12</mn></msub></mrow><annotation encoding="application/x-tex">
+P_{3\rightarrow2}(\mathcal N_{12})
+\neq
+\mathcal N_{12}
+</annotation></semantics></math></p>
+<p>as a full dynamical object, even when the projection preserves
+sixfold visual symmetry.</p>
+<h2 id="volumetric-state-variables">Volumetric State Variables</h2>
+<p>A 3D lattice site or cell may carry:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>X</mi><mi>i</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>3</mn><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐮</mi><mi>i</mi></msub><mo>,</mo><msub><mi>𝐯</mi><mi>i</mi></msub><mo>,</mo><msub><mi>ϕ</mi><mi>i</mi></msub><mo>,</mo><msub><mi>χ</mi><mi>i</mi></msub><mo>,</mo><msub><mi>𝐪</mi><mi>i</mi></msub><mo>,</mo><msub><mi>B</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+X_i^{(3)}
+=
+\left(
+\mathbf u_i,
+\mathbf v_i,
+\phi_i,
+\chi_i,
+\mathbf q_i,
+B_i
+\right),
+</annotation></semantics></math></p>
+<p>where candidate meanings include:</p>
+<ul>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐮</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathbf u_i</annotation></semantics></math>:
+3D displacement,</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐯</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathbf v_i</annotation></semantics></math>:
+3D local motion,</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ϕ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\phi_i</annotation></semantics></math>:
+recurrence phase,</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>χ</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\chi_i</annotation></semantics></math>:
+compression state,</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐪</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\mathbf q_i</annotation></semantics></math>:
+rotational/circulation state,</li>
+<li><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>B</mi><mi>i</mi></msub><annotation encoding="application/x-tex">B_i</annotation></semantics></math>:
+boundary or weave state.</li>
+</ul>
+<p>The exact physical update law remains to be derived and tested. These
+variables are a simulation interface, not proof of mechanism.</p>
+<h2 id="required-3d-behaviors">Required 3D Behaviors</h2>
+<p>The 3D lattice must be capable of displaying and measuring:</p>
+<ul>
+<li>volumetric compression and release,</li>
+<li>shear in multiple planes,</li>
+<li>rotational flow and vorticity,</li>
+<li>bounded recurrence,</li>
+<li>internal/external shell differentiation,</li>
+<li>Boundary-Tension Weave strain,</li>
+<li>Mirror-Gate approach and crossing,</li>
+<li>translation by sequential displacement and reconstruction,</li>
+<li>front compression, side transfer, and rear recovery.</li>
+</ul>
+<h2 id="relation-to-flower-of-life-and-metatron-views">Relation to
+Flower-of-Life and Metatron Views</h2>
+<p>Flower-of-Life, Fruit-of-Life, and Metatron-style diagrams may be
+used as 2D coordinate, overlap, or connection projections of selected
+centers. They are not the native 3D object.</p>
+<p>A thirteen-center 2D diagram may index the one-plus-twelve local
+shell, but the mapping must specify which projected point corresponds to
+which 3D neighbor and which lines represent actual couplings.</p>
+<h2 id="quark-and-proton-boundary">Quark and Proton Boundary</h2>
+<p>A Vortex Phase must be simulated in this 3D layer. A planar
+circulation in D-408 is only a precursor test.</p>
+<p>A proton candidate requires one continuous volumetric bounded
+excitation containing three persistent Vortex Phases coupled by the
+Boundary-Tension Weave. It cannot be validated in a single 2D ring.</p>
+<h2 id="required-first-3d-tests">Required First 3D Tests</h2>
+<ol type="1">
+<li>equilibrium hold of the twelve-neighbor shell;</li>
+<li>isotropy test under impulses in many directions;</li>
+<li>compression pulse and recovery;</li>
+<li>rotational perturbation and vorticity retention;</li>
+<li>localized bounded-excitation formation;</li>
+<li>perturbation recovery;</li>
+<li>FCC versus HCP stacking comparison;</li>
+<li>2D slice/projection comparison with measured information loss.</li>
+</ol>
+<h2 id="failure-falsification">Failure / Falsification</h2>
+<p>The close-packed candidate fails if:</p>
+<ul>
+<li>another 3D coordination produces demonstrably better isotropy and
+stable recurrence under the same laws;</li>
+<li>twelvefold local coordination cannot preserve bounded modes without
+imposed hard walls;</li>
+<li>the claimed 2D/3D correspondence cannot be defined without losing
+the quantities used by the physical interpretation.</li>
+</ul>
+</body>
+</html>

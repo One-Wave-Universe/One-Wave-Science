@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>G-721b: Sturmian Binary Branch Grammar</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-721b"><h1>G-721b: Sturmian Binary Branch Grammar</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (external word mathematics) / YELLOW (rabbit-route and android relevance)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-g-721b-sturmian-binary-branch-grammar">Node G-721b:
+Sturmian Binary Branch Grammar</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (external word mathematics) / YELLOW
+(rabbit-route and android relevance)</p>
+<p><strong>Classification:</strong> Binary Route Grammar / Branch-Trace
+Validator</p>
+<p><strong>Dependencies</strong><br />
+Upstream: G-721 Mirrored Alphabet Packet, G-721a Fibonacci Reference
+Validator<br />
+Lateral: G-706 Validation, G-720 No Control But Self-Control<br />
+Downstream: G-721c, G-721d, Android procedural route tests</p>
+<h2 id="purpose">Purpose</h2>
+<p>G-721a provides one fixed Fibonacci-word regression path. This node
+generalizes the ordered two-branch grammar to the Sturmian family.</p>
+<p>For irrational slope <code>alpha</code> and intercept
+<code>rho</code>, a lower mechanical word is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>b</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">⌊</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>+</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>α</mi><mo>+</mo><mi>ρ</mi><mo stretchy="false" form="postfix">⌋</mo><mo>−</mo><mo stretchy="false" form="prefix">⌊</mo><mi>t</mi><mi>α</mi><mo>+</mo><mi>ρ</mi><mo stretchy="false" form="postfix">⌋</mo><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{b_t=\lfloor(t+1)\alpha+\rho\rfloor-\lfloor t\alpha+\rho\rfloor\in\{0,1\}}.
+</annotation></semantics></math></p>
+<p>The selected recursive rail is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>r</mi><mi>t</mi></msub><mo>=</mo><mn>2</mn><msub><mi>n</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>t</mi></msub></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{r_t=2n_t+b_t}.
+</annotation></semantics></math></p>
+<p>Thus the packet provides the available rails <code>2n</code> and
+<code>2n+1</code>; the Sturmian word supplies their ordered branch
+grammar.</p>
+<h2 id="role-separation">Role Separation</h2>
+<ul>
+<li><code>n</code> identifies the alphabet location;</li>
+<li><code>2n</code> and <code>2n+1</code> are available recursive
+rails;</li>
+<li><code>b_t</code> selects one branch for a declared route
+grammar;</li>
+<li>mirror sign identifies coordinate side;</li>
+<li>live <code>-1(0)+1</code> choice still decides movement or
+hold;</li>
+<li>binary oversight may audit or block but does not generate
+choice.</li>
+</ul>
+<h2 id="validation-properties">Validation Properties</h2>
+<p>An infinite binary word is Sturmian when its factor complexity is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>m</mi><mo>+</mo><mn>1</mn></mrow></menclose><annotation encoding="application/x-tex">
+\boxed{p(m)=m+1}
+</annotation></semantics></math></p>
+<p>for every factor length <code>m</code>. Equivalent characterizations
+include aperiodicity plus balance, and coding by irrational rotations
+under appropriate conventions.</p>
+<p>For finite receipts, test:</p>
+<ol type="1">
+<li>packet legality <code>b_t in {0,1}</code>;</li>
+<li>observed factor complexity up to a declared maximum length;</li>
+<li>balance: equal-length factors differ in <code>1</code> count by at
+most one;</li>
+<li>recurrence gaps;</li>
+<li>period search;</li>
+<li>empirical symbol frequency against the declared slope
+convention.</li>
+</ol>
+<p>Finite samples can undercount factors at large <code>m</code>;
+reports must state sample length and tested range.</p>
+<h2 id="fibonacci-special-case">Fibonacci Special Case</h2>
+<p>The Fibonacci word is a Sturmian special case, but slope values
+depend on token convention. The common fixed point
+<code>0100101001...</code> has one-symbol frequency
+<code>1/phi^2</code>; its complement has the corresponding frequency
+<code>1/phi</code>.</p>
+<p>Therefore <code>1/phi</code> and <code>1/phi^2</code> are
+complementary conventions, not the same number.</p>
+<h2 id="mirror-and-reverse">Mirror and Reverse</h2>
+<p>Coordinate sign mirror, route reversal, and token complement are
+separate operations:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>n</mi><mo>,</mo><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>↦</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>−</mi><mi>n</mi><mo>,</mo><mi>−</mi><mi>r</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+(n,r)\mapsto(-n,-r),
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mn>0</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>b</mi><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>↦</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>b</mi><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>b</mi><mn>0</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+(b_0,\ldots,b_{N-1})\mapsto(b_{N-1},\ldots,b_0),
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>↦</mo><mn>1</mn><mo>−</mo><mi>b</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+b\mapsto1-b.
+</annotation></semantics></math></p>
+<p>No operation implies either of the other two without a declared
+bridge.</p>
+<h2 id="android-use">Android Use</h2>
+<p>A Sturmian trace may schedule two competing movement branches with
+nonperiodic balanced recurrence. It does not directly command a joint.
+It supplies a candidate timing/route grammar whose effect must be
+compared with periodic, random, and learned controls.</p>
+<h2 id="falsifiers">Falsifiers</h2>
+<p>Reject the exact Sturmian claim when factor complexity, balance, or
+aperiodicity fails in the valid finite-test range, or when alignment
+appears only after token deletion, reordering, selective windows, or
+post-hoc complementing.</p>
+</body>
+</html>

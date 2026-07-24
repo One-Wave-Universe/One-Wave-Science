@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One-Wave Fixed Simulation</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#06080b;color:#e9edf1}
+#wrap{position:relative;width:100%;height:100%;overflow:hidden}
+canvas{display:block;width:100%;height:100%}
+.cap{position:absolute;left:10px;top:10px;background:#090c10dc;border:1px solid #303a45;border-radius:9px;padding:8px 11px;max-width:70%}
+.cap h3{margin:0 0 3px;font-size:13px}.cap p{margin:0;font-size:11px;color:#aeb9c4;line-height:1.4}
+.badge{position:absolute;right:10px;top:10px;background:#2b2315;border:1px solid #725f37;color:#e4b969;font-size:10px;padding:4px 8px;border-radius:999px}
+.hud{position:absolute;left:10px;bottom:10px;background:#090c10dc;border:1px solid #303a45;border-radius:9px;padding:7px 10px;font-size:11px;line-height:1.5}
+.hud b{color:#fff}
+.cammode{position:absolute;right:10px;bottom:10px;background:#090c10dc;border:1px solid #303a45;border-radius:8px;font-size:10px;color:#9ca8b4;padding:5px 8px}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="stage"></canvas>
+  <div class="cap"><h3 id="capTitle">Fixed Simulation</h3><p id="capDesc"></p></div>
+  <div class="badge" id="badge">D-413 · Yellow</div>
+  <div class="hud" id="hud"></div>
+  <div class="cammode" id="cammode"></div>
+</div>
+<script>
+(()=>{'use strict';
+// ---------- fixed scenario library (locked, reproducible) ----------
+const SCENARIOS={
+  orbit_asymmetric:{title:"Orbital shell with induced spin",
+    desc:"Asymmetric bounded displacement orbits the imposed curvature well; the shell gains axial spin from calculated torque.",
+    cam:"ground", params:{wellDepth:1.9,wellRadius:3.7,gravity:1.35,asymmetry:0.30,spinCoupling:2.0,pressure:4.2,compression:2.0,packetRadius:1.15},
+    init:"orbit"},
+  travel_across:{title:"Displacement travelling across fixed Ground",
+    desc:"A bounded displacement moves across a stationary triangular lattice. Camera is Ground-fixed, so you see real translation and the wake.",
+    cam:"ground", params:{wellDepth:0.0,gravity:0.0,wellFollow:0.0,pressure:2.6,compression:1.6,asymmetry:0.18,spinCoupling:1.2,packetRadius:1.1,anchor:2.4,spring:16},
+    init:"cross"},
+  lattice_scrolls:{title:"Lattice scrolling with displacement centred",
+    desc:"Same run as travel-across, but the camera locks on the displacement so the Ground lattice scrolls past. The physics is identical; only the camera differs.",
+    cam:"packet", params:{wellDepth:0.0,gravity:0.0,wellFollow:0.0,pressure:2.6,compression:1.6,asymmetry:0.18,spinCoupling:1.2,packetRadius:1.1,anchor:2.4,spring:16},
+    init:"cross"},
+  deep_well:{title:"Deep curvature well capture",
+    desc:"A deeper imposed well captures the displacement into a tight restoring orbit with strong overshoot and spin.",
+    cam:"well", params:{wellDepth:2.6,wellRadius:3.4,gravity:1.6,asymmetry:0.28,spinCoupling:2.2,pressure:4.2,compression:2.2},
+    init:"drop"},
+};
+const qs=new URLSearchParams(location.search);
+const KEY=qs.get('scenario')||'orbit_asymmetric';
+const SC=SCENARIOS[KEY]||SCENARIOS.orbit_asymmetric;
+const autoplay=qs.get('autoplay')!=='0';
+
+// ---------- locked defaults + scenario overrides ----------
+const DEF={zExaggeration:2.2,wellDepth:1.7,wellRadius:3.7,gravity:1.25,wellX:0,wellY:0,spring:12,anchor:1.6,edgeDamp:0.55,localDamp:0.18,wellFollow:4.2,pressure:4.2,compression:2,packetRadius:1.15,asymmetry:0.24,spinCoupling:1.7,packetDamp:0.045};
+const V=Object.assign({},DEF,SC.params); const val=k=>V[k];
+
+const stage=document.getElementById('stage'),ctx=stage.getContext('2d'),SQ3=Math.sqrt(3);
+// larger ground so displacement can travel across it and scrolling looks continuous
+const RGRID=14, dt=1/120, projection='curved';
+let nodes=[],edges=[],faces=[],map=new Map(),packet,t=0,path=[],running=autoplay,last=performance.now(),acc=0;
+
+document.getElementById('capTitle').textContent=SC.title;
+document.getElementById('capDesc').textContent=SC.desc;
+document.getElementById('badge').textContent='D-413 · '+KEY;
+document.getElementById('cammode').textContent='camera: '+SC.cam+(SC.cam==='packet'?' (lattice scrolls)':'');
+
+function build(){nodes=[];edges=[];faces=[];map.clear();for(let q=-RGRID;q<=RGRID;q++){let a=Math.max(-RGRID,-q-RGRID),b=Math.min(RGRID,-q+RGRID);for(let r=a;r<=b;r++){let i=nodes.length;map.set(q+','+r,i);nodes.push({q,r,x0:q+r/2,y0:SQ3*r/2,ux:0,uy:0,z:0,vx:0,vy:0,vz:0,fx:0,fy:0,fz:0,strain:0,comp:0});}}for(let i=0;i<nodes.length;i++){let n=nodes[i];for(let d of [[1,0],[0,1],[-1,1]]){let j=map.get((n.q+d[0])+','+(n.r+d[1]));if(j!==undefined)edges.push([i,j]);}let a=map.get((n.q+1)+','+n.r),b=map.get(n.q+','+(n.r+1)),c=map.get((n.q+1)+','+(n.r-1));if(a!==undefined&&b!==undefined)faces.push([i,a,b]);if(a!==undefined&&c!==undefined)faces.push([i,a,c]);}for(let n of nodes)n.z=target(n.x0,n.y0);}
+function target(x,y){let dx=x-val('wellX'),dy=y-val('wellY'),s=val('wellRadius');return -val('wellDepth')*Math.exp(-(dx*dx+dy*dy)/(2*s*s));}
+function grad(x,y){let z=target(x,y),s=val('wellRadius');return {x:-z*(x-val('wellX'))/(s*s),y:-z*(y-val('wellY'))/(s*s),z};}
+function surface(x,y){let a=0,b=0;for(let n of nodes){let dx=n.x0+n.ux-x,dy=n.y0+n.uy-y,d2=dx*dx+dy*dy;if(d2<3){let w=1/(.08+d2*d2);a+=w;b+=w*n.z;}}let z=a?b/a:target(x,y),h=.05,samp=(px,py)=>{let s=0,t2=0;for(let n of nodes){let dx=n.x0+n.ux-px,dy=n.y0+n.uy-py,d2=dx*dx+dy*dy;if(d2<3){let w=1/(.08+d2*d2);s+=w;t2+=w*n.z;}}return s?t2/s:target(px,py)};return{z,gx:(samp(x+h,y)-samp(x-h,y))/(2*h),gy:(samp(x,y+h)-samp(x,y-h))/(2*h)};}
+
+function reset(){build();t=0;path=[];let r=val('wellRadius');
+  if(SC.init==='orbit')packet={x:r*1.25,y:0,vx:0,vy:Math.sqrt(Math.max(.05,val('gravity')*val('wellDepth')/(r*1.5))),theta:.35,omega:.08,ax:0,ay:0,alpha:0};
+  else if(SC.init==='drop')packet={x:-r*1.6,y:r*.72,vx:1.05,vy:-.08,theta:.6,omega:0,ax:0,ay:0,alpha:0};
+  else /*cross*/ packet={x:-RGRID*0.62,y:0,vx:2.2,vy:0,theta:0,omega:0,ax:0,ay:0,alpha:0};
+}
+function latticeForces(){for(let n of nodes){n.fx=-val('anchor')*n.ux-val('localDamp')*n.vx;n.fy=-val('anchor')*n.uy-val('localDamp')*n.vy;n.fz=-val('anchor')*n.z-val('localDamp')*n.vz;n.strain=0;n.comp=0;}for(let[i,j]of edges){let a=nodes[i],b=nodes[j],dx=b.x0+b.ux-a.x0-a.ux,dy=b.y0+b.uy-a.y0-a.uy,dz=b.z-a.z,L=Math.hypot(dx,dy,dz)||1,hx=dx/L,hy=dy/L,hz=dz/L,stretch=L-1,rv=(b.vx-a.vx)*hx+(b.vy-a.vy)*hy+(b.vz-a.vz)*hz,f=val('spring')*stretch+val('edgeDamp')*rv;a.fx+=f*hx;a.fy+=f*hy;a.fz+=f*hz;b.fx-=f*hx;b.fy-=f*hy;b.fz-=f*hz;let s=Math.abs(stretch);a.strain=Math.max(a.strain,s);b.strain=Math.max(b.strain,s);if(stretch<0){a.comp-=stretch;b.comp-=stretch;}}
+  for(let n of nodes){let x=n.x0+n.ux,y=n.y0+n.uy,g=grad(x,y);n.fz+=val('wellFollow')*(g.z-n.z);n.fx-=.22*val('wellFollow')*g.x;n.fy-=.22*val('wellFollow')*g.y;}
+  let sp=Math.hypot(packet.vx,packet.vy),hx=sp>1e-6?packet.vx/sp:Math.cos(packet.theta),hy=sp>1e-6?packet.vy/sp:Math.sin(packet.theta),sig=val('packetRadius')*1.35;for(let n of nodes){let x=n.x0+n.ux,y=n.y0+n.uy,dx=x-packet.x,dy=y-packet.y,r=Math.hypot(dx,dy)+1e-8,g=Math.exp(-r*r/(2*sig*sig));if(g<1e-4)continue;let front=Math.max(-1,Math.min(1,(dx*hx+dy*hy)/r)),skew=1+.5*front;n.fz-=val('pressure')*g*skew;let pull=-val('compression')*g*skew;n.fx+=pull*dx/r;n.fy+=pull*dy/r;}}
+function packetForce(){let R=val('packetRadius'),as=val('asymmetry'),a=R*(1+as),b=R*(1-as*.55),ct=Math.cos(packet.theta),st=Math.sin(packet.theta),fx=0,fy=0,tau=0,N=16;for(let k=0;k<N;k++){let p=2*Math.PI*k/N,bx=a*Math.cos(p),by=b*Math.sin(p),rx=ct*bx-st*by,ry=st*bx+ct*by,s=surface(packet.x+rx,packet.y+ry),sx=-val('gravity')*s.gx,sy=-val('gravity')*s.gy;fx+=sx;fy+=sy;tau+=rx*sy-ry*sx;}fx=fx/N-val('packetDamp')*packet.vx;fy=fy/N-val('packetDamp')*packet.vy;tau=val('spinCoupling')*tau/N-.045*packet.omega;packet.ax=fx/2.4;packet.ay=fy/2.4;packet.alpha=tau/1.6;
+  // for cross scenarios, keep a gentle drive so the displacement keeps travelling and wraps
+  if(SC.init==='cross'){packet.ax+=0;if(packet.x>RGRID*0.66){packet.x=-RGRID*0.62;path=[];}}}
+function tick(){latticeForces();for(let n of nodes){n.vx+=n.fx*dt;n.vy+=n.fy*dt;n.vz+=n.fz*dt;n.ux+=n.vx*dt;n.uy+=n.vy*dt;n.z+=n.vz*dt;}packetForce();packet.vx+=packet.ax*dt;packet.vy+=packet.ay*dt;packet.x+=packet.vx*dt;packet.y+=packet.vy*dt;packet.omega+=packet.alpha*dt;packet.theta+=packet.omega*dt;t+=dt;if(Math.floor(t*30)!==Math.floor((t-dt)*30)){path.push([packet.x,packet.y]);if(path.length>240)path.shift();}}
+
+function resize(){let d=Math.min(2,devicePixelRatio||1),r=stage.getBoundingClientRect();stage.width=r.width*d;stage.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);}addEventListener('resize',resize);
+function cam(){if(SC.cam==='packet')return{x:-packet.x,y:-packet.y};if(SC.cam==='well')return{x:-val('wellX'),y:-val('wellY')};return{x:0,y:0};}
+function P(x,y,z=0){let w=stage.clientWidth,h=stage.clientHeight,s=Math.min(w/(RGRID*2.4),h/(RGRID*1.9)),c=cam(),X=x+c.x,Y=y+c.y,ze=z*val('zExaggeration');return{x:w/2+s*(X+.25*Y),y:h/2+s*(.56*Y-.88*ze),s};}
+function draw(){let w=stage.clientWidth,h=stage.clientHeight;ctx.fillStyle='#06080b';ctx.fillRect(0,0,w,h);
+  // shaded curvature surface
+  let ordered=faces.map(f=>({f,key:f.reduce((a,i)=>a+P(nodes[i].x0+nodes[i].ux,nodes[i].y0+nodes[i].uy,nodes[i].z).y,0)/3})).sort((a,b)=>a.key-b.key);
+  for(let item of ordered){let ns=item.f.map(i=>nodes[i]),ps=ns.map(n=>P(n.x0+n.ux,n.y0+n.uy,n.z)),zavg=ns.reduce((a,n)=>a+n.z,0)/3,depth=Math.max(0,Math.min(1,-zavg/Math.max(.001,val('wellDepth')))),strain=Math.max(...ns.map(n=>n.strain)),comp=Math.max(...ns.map(n=>n.comp));ctx.beginPath();ctx.moveTo(ps[0].x,ps[0].y);ctx.lineTo(ps[1].x,ps[1].y);ctx.lineTo(ps[2].x,ps[2].y);ctx.closePath();let alpha=.10+.30*depth+.20*Math.min(1,strain*5);ctx.fillStyle=comp>.05?`rgba(211,166,103,${alpha})`:`rgba(${Math.round(62+55*depth)},${Math.round(84+70*depth)},${Math.round(105+95*depth)},${alpha})`;ctx.fill();}
+  // WELL contours (always shown when a well exists)
+  if(val('wellDepth')>0.01){for(let q=1;q<=6;q++){let rr=val('wellRadius')*q/3,pts=[];for(let k=0;k<=96;k++){let a=2*Math.PI*k/96,x=val('wellX')+rr*Math.cos(a),y=val('wellY')+rr*Math.sin(a),sf=surface(x,y);pts.push(P(x,y,sf.z));}ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle=`rgba(120,216,230,${.34-q*.03})`;ctx.lineWidth=q===3?1.7:1;ctx.stroke();}
+    let zB=surface(val('wellX'),val('wellY')).z,flat=P(val('wellX'),val('wellY'),0),bot=P(val('wellX'),val('wellY'),zB);ctx.save();ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(flat.x,flat.y);ctx.lineTo(bot.x,bot.y);ctx.strokeStyle='rgba(120,216,230,.7)';ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='rgba(180,235,245,.85)';ctx.font='11px system-ui';ctx.fillText('well depth '+Math.abs(zB).toFixed(2),bot.x+7,(flat.y+bot.y)/2);ctx.restore();}
+  // edges
+  for(let[i,j]of edges){let a=nodes[i],b=nodes[j],pa=P(a.x0+a.ux,a.y0+a.uy,a.z),pb=P(b.x0+b.ux,b.y0+b.uy,b.z),s=Math.min(1,Math.max(a.strain,b.strain)*6),co=a.comp+b.comp;ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.strokeStyle=co>.04?`rgba(236,190,120,${.2+.7*s})`:`rgba(155,198,230,${.14+.6*s})`;ctx.stroke();}
+  // nodes
+  for(let n of nodes){let p=P(n.x0+n.ux,n.y0+n.uy,n.z),c=Math.min(1,n.comp*3),depth=Math.max(0,Math.min(1,-n.z/Math.max(.001,val('wellDepth'))));ctx.beginPath();ctx.arc(p.x,p.y,1.1+1.7*c+1.0*depth,0,Math.PI*2);ctx.fillStyle=c>.08?`rgba(241,196,128,${.3+.65*c})`:`rgba(205,220,232,${.24+.35*depth})`;ctx.fill();}
+  // trail
+  if(path.length>1){ctx.beginPath();path.forEach((a,i)=>{let sf=surface(a[0],a[1]),p=P(a[0],a[1],sf.z-.05);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.strokeStyle='rgba(246,246,246,.5)';ctx.lineWidth=1.5;ctx.stroke();}
+  // SPINNING shell: ellipse rotates with theta; spin arm + spin arc emphasise rotation
+  let srf=surface(packet.x,packet.y),cp=P(packet.x,packet.y,srf.z-.1),R=val('packetRadius'),as=val('asymmetry'),a=R*(1+as),b=R*(1-as*.55),px=P(packet.x+1,packet.y,srf.z),sc=Math.abs(px.x-cp.x);
+  ctx.save();ctx.translate(cp.x,cp.y);ctx.rotate(packet.theta);ctx.scale(sc,sc*.62);
+  ctx.beginPath();ctx.ellipse(0,0,a,b,0,0,Math.PI*2);ctx.strokeStyle='rgba(245,245,245,.95)';ctx.lineWidth=2.4/sc;ctx.stroke();
+  // spin arm (shows orientation rotating)
+  ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(a,0);ctx.strokeStyle='rgba(120,216,230,.95)';ctx.lineWidth=2/sc;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,b*.7);ctx.strokeStyle='rgba(228,185,105,.8)';ctx.lineWidth=1.4/sc;ctx.stroke();
+  ctx.restore();
+  // spin magnitude arc around the shell
+  let spinR=sc*(R+.5),arc=Math.max(-Math.PI*1.6,Math.min(Math.PI*1.6,packet.omega*3));ctx.beginPath();ctx.arc(cp.x,cp.y,spinR,-Math.PI/2,-Math.PI/2+arc,arc<0);ctx.strokeStyle='rgba(120,216,230,.85)';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.beginPath();ctx.arc(cp.x,cp.y,3.5,0,Math.PI*2);ctx.fillStyle='#f5f5f5';ctx.fill();
+  // velocity arrow
+  let vp=P(packet.x+packet.vx*.5,packet.y+packet.vy*.5,srf.z);ctx.beginPath();ctx.moveTo(cp.x,cp.y);ctx.lineTo(vp.x,vp.y);ctx.strokeStyle='#eee';ctx.lineWidth=2;ctx.stroke();
+  // HUD
+  let dx=packet.x-val('wellX'),dy=packet.y-val('wellY');document.getElementById('hud').innerHTML=`t <b>${t.toFixed(2)}</b> · well-dist <b>${Math.hypot(dx,dy).toFixed(2)}</b> · spin <b>${packet.omega.toFixed(3)}</b> · speed <b>${Math.hypot(packet.vx,packet.vy).toFixed(2)}</b>`;
+}
+function loop(now){let e=Math.min(.05,(now-last)/1000);last=now;if(running){acc+=e;while(acc>=dt*2){tick();tick();acc-=dt*2;}}draw();requestAnimationFrame(loop);}
+// click to pause/resume
+stage.onclick=()=>{running=!running};
+resize();reset();requestAnimationFrame(loop);
+})();
+</script>
+</body></html>

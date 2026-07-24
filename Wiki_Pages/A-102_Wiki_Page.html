@@ -1,0 +1,114 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-102: DISPLACEMENT</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-102"><h1>A-102: DISPLACEMENT</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-102</h3><p><b>Classification</b><br>Foundation Transition Primitive</p><p><b>Canonical source</b><br>Nodes/A-102_Displacement.md</p></div><div class="content"><p>NODE A-102: DISPLACEMENT STATUS: YELLOW CLASSIFICATION: Foundation
+Transition Primitive LAYER: A-Series Core</p>
+<p>DEPENDENCIES: UPSTREAM: A-101 Ground / Zero</p>
+<pre><code>DOWNSTREAM:
+A-103 Differential</code></pre>
+<ol type="1">
+<li><p>PURPOSE FUNCTION: Defines measurable separation between a current
+field state and a defined reference ground.</p>
+<p>INPUT: Current field state ψ. Ground reference state ψ₀.</p>
+<p>OUTPUT: Displacement state x.</p>
+<p>ROLE: Converts Ground / Zero reference into a measurable
+offset.</p></li>
+<li><p>DEFINITION Displacement is the reference-dependent separation
+between a current field state and Ground / Zero.</p>
+<p>OPERATOR:</p>
+<p>x = Δ_ref(ψ, ψ₀)</p>
+<p>WHERE:</p>
+<p>ψ = current field state. ψ₀ = reference ground state. x =
+displacement relative to reference.</p>
+<p>REFERENCE RULE: No defined ground reference → No measurable
+displacement.</p>
+<p>BOUNDARY: One reference state produces one displacement
+state.</p></li>
+<li><p>STATE VARIABLES ψ = current field state.</p>
+<p>ψ₀ = ground/reference state.</p>
+<p>x = displacement state.</p>
+<p>TYPE: x follows the representation structure of ψ.</p>
+<p>CONDITIONS:</p>
+<p>ψ = ψ₀ → x = 0</p>
+<p>ψ ≠ ψ₀ → x ≠ 0</p></li>
+<li><p>MATHEMATICS GENERAL FORM:</p>
+<p>x = Δ_ref(ψ, ψ₀)</p>
+<p>REFERENCE CONDITION:</p>
+<p>ψ = ψ₀</p>
+<p>THEN:</p>
+<p>x = 0</p>
+<p>DISPLACED CONDITION:</p>
+<p>ψ ≠ ψ₀</p>
+<p>THEN:</p>
+<p>x ≠ 0</p>
+<p>REPRESENTATION REQUIREMENT:</p>
+<p>Δ_ref must be defined according to the active representation of
+ψ.</p></li>
+<li><p>RELATIONSHIP CHAIN:</p>
+<p>A-101 Ground / Zero → A-102 Displacement → A-103 Differential → A-104
+Gradient</p>
+<p>ROLE: A-101 provides the reference condition. A-102 produces
+separation from that reference. A-103 evaluates relationships between
+separated states.</p>
+<p>BOUNDARY: Displacement does not compare multiple states. Differential
+defines relationships between states.</p></li>
+<li><p>OPERATIONAL RULE REFERENCE RELATION:</p>
+<p>ψ relative to ψ₀ → x</p>
+<p>IF:</p>
+<p>ψ = ψ₀</p>
+<p>THEN:</p>
+<p>Displacement = 0</p>
+<p>IF:</p>
+<p>ψ ≠ ψ₀</p>
+<p>THEN:</p>
+<p>Displacement ≠ 0</p></li>
+<li><p>RECURSIVE POSITION FUNCTION: Transforms a reference relationship
+into measurable offset.</p>
+<p>CHAIN:</p>
+<p>Ground → Displacement → Differential → Gradient</p>
+<p>BOUNDARY: Does not define comparison between multiple
+states.</p></li>
+<li><p>RECURSIVE SCALING REQUIREMENT: Preserve displacement meaning
+across Micro, Small, Medium, Large, and Macro scales.</p>
+<p>OPEN: Determine whether Δ_ref remains invariant when ψ representation
+changes across scales.</p></li>
+<li><p>CONSTRAINTS Ground reference must be defined before displacement
+can exist.</p>
+<p>Displacement must remain distinct from Differential.</p>
+<p>Reference movement must be separated from measured displacement.</p>
+<p>Representation changes must preserve displacement meaning.</p></li>
+<li><p>DEPENDENCIES UPSTREAM: A-101 Ground / Zero.</p>
+<p>INPUT: ψ and ψ₀.</p>
+<p>REQUIREMENT: Δ_ref definition must be resolved for the active ψ
+representation.</p>
+<p>DOWNSTREAM: A-103 Differential.</p></li>
+<li><p>FAILURE MODES Undefined reference state.</p>
+<p>Reference drift interpreted as displacement.</p>
+<p>Incorrect displacement direction or sign.</p>
+<p>Displacement operation confused with Differential.</p>
+<p>Representation-dependent displacement left undefined.</p></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN:</p>
+<ol type="1">
+<li>Displacement relationship is formally defined.</li>
+<li>Reference stability can be evaluated.</li>
+<li>Δ_ref is defined for the active ψ representation.</li>
+<li>Recursive scaling preserves displacement meaning.</li>
+</ol>
+<p>CURRENT:</p>
+<p>Definition ✅ Reference Relationship ✅ Dependency Mapping ✅
+Operational Role ✅ Representation Definition ❌ Recursive Validation
+❌</p>
+<p>GATE:</p>
+<p>GREEN = Defined. YELLOW = Constrained/Testable. BRONZE = Validated.
+SILVER = Integrated. GOLD = Confirmed.</p></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE: A-102 Displacement.</p>
+<p>DEFINITION: Displacement is the measurable separation between a
+current field state and a defined Ground / Zero reference.</p>
+<p>EQUATION:</p>
+<p>x = Δ_ref(ψ, ψ₀)</p>
+<p>FUNCTION: Converts Ground / Zero into measurable state offset.</p>
+<p>BOUNDARY: Displacement establishes separation. Differential
+establishes relationships between separated states.</p>
+<p>STATUS: YELLOW.</p></li>
+</ol>
+</div><div class="clear"></div></div></body></html>

@@ -1,0 +1,163 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-108: LOCAL STABILITY</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-108"><h1>A-108: LOCAL STABILITY</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-108</h3><p><b>Classification</b><br>Stability Evaluation Primitive</p><p><b>Canonical source</b><br>Nodes/A-108_Local_Stability.md</p></div><div class="content"><p>NODE A-108: LOCAL STABILITY STATUS: YELLOW CLASSIFICATION: Stability
+Evaluation Primitive LAYER: Motion Layer</p>
+<p>DEPENDENCIES: UPSTREAM: A-101 Ground / Zero A-105 Restoring
+Response</p>
+<pre><code>DOWNSTREAM:
+    A-107 Bounded Motion
+    C-310 Resistance Field (checked directly, confirmed distinct from this node, not redundant)</code></pre>
+<ol type="1">
+<li><p>PURPOSE FUNCTION: Establishes whether a displaced state returns
+toward the Ground / Zero reference.</p>
+<p>INPUT: Ground / Zero reference. Restoring Response A(x).</p>
+<p>OUTPUT: Local Stability condition.</p>
+<p>ROLE: Provides the near-equilibrium stability condition required by
+A-107 Bounded Motion.</p></li>
+<li><p>DEFINITION Local Stability is the condition where a small
+displacement from equilibrium produces a restoring response toward the
+Ground / Zero reference.</p>
+<p>A-101 establishes: Ground / Zero reference state.</p>
+<p>A-105 establishes: Restoring response behavior.</p>
+<p>A-108 evaluates: Whether the response returns the system toward
+equilibrium.</p>
+<p>BOUNDARY: Local Stability ≠ Bounded Motion.</p>
+<p>CONDITION: x·A(x)&gt;0</p>
+<p>WHERE: x = displacement from equilibrium. A(x) = restoring response
+magnitude/operator.</p>
+<p>RESPONSE FORM: F_restore=-A(x)</p></li>
+<li><p>STATE VARIABLES x = Displacement from Ground / Zero.</p>
+<p>A(x) = Restoring response operator.</p>
+<p>V(x) = Potential function.</p>
+<p>α = Linear response coefficient.</p>
+<p>F_restore = Restoring force/response.</p></li>
+<li><p>MATHEMATICS LINEAR CASE:</p>
+<pre><code> A(x)=αx, α&gt;0</code></pre>
+<p>RESPONSE:</p>
+<pre><code> F_restore=-A(x)</code></pre>
+<p>POTENTIAL:</p>
+<pre><code> V(x)=½αx²</code></pre>
+<p>RESULT:</p>
+<pre><code> Ground state is a local minimum.</code></pre>
+<p>GENERAL CONDITION:</p>
+<pre><code> x·A(x)&gt;0 near x=0 → Local Stability.</code></pre>
+<p>ENERGY CONDITION:</p>
+<pre><code> V(x) has a local minimum at x=0.</code></pre>
+<p>RELATION:</p>
+<pre><code> Ground Reference + Restoring Response
+ → Local Stability.</code></pre></li>
+<li><p>RELATIONSHIP CHAIN:</p>
+<pre><code> A-101 Ground / Zero
+ +
+ A-105 Restoring Response
+ →
+ A-108 Local Stability
+ →
+ A-107 Bounded Motion</code></pre>
+<p>ROLE:</p>
+<pre><code> A-101 provides reference state.
+
+ A-105 provides response behavior.
+
+ A-108 evaluates return behavior.
+
+ A-107 uses stability for confinement.</code></pre>
+<p>BOUNDARY:</p>
+<pre><code> Does not define global confinement.</code></pre></li>
+<li><p>OPERATIONAL RULE IF:</p>
+<pre><code> x·A(x)&gt;0 near equilibrium.</code></pre>
+<p>THEN:</p>
+<pre><code> Local Stability = TRUE.</code></pre>
+<p>IF:</p>
+<pre><code> x·A(x)≤0 near equilibrium.</code></pre>
+<p>THEN:</p>
+<pre><code> Local Stability = FALSE.</code></pre></li>
+<li><p>RECURSIVE POSITION CHAIN:</p>
+<pre><code> Ground / Zero
+ →
+ Restoring Response
+ →
+ Local Stability
+ →
+ Bounded Motion</code></pre>
+<p>FUNCTION:</p>
+<pre><code> Tests return behavior after perturbation.</code></pre>
+<p>BOUNDARY:</p>
+<pre><code> Validates local equilibrium behavior only.</code></pre></li>
+<li><p>RECURSIVE SCALING REQUIREMENT:</p>
+<pre><code> Stability classification must remain consistent across:
+
+ Micro, Small, Medium, Large, Macro.</code></pre>
+<p>OPEN:</p>
+<pre><code> Determine whether:
+
+ A(x)=αx
+
+ remains valid across scales or requires nonlinear correction.</code></pre></li>
+<li><p>CONSTRAINTS Local Stability requires:</p>
+<pre><code> 1. Defined Ground / Zero reference.
+
+ 2. Defined restoring response.
+
+ 3. Correct response direction.
+
+ 4. Separation between local stability and global confinement.</code></pre>
+<p>OPEN:</p>
+<pre><code> Nonlinear response behavior.
+
+ Scale-dependent stability behavior.</code></pre></li>
+<li><p>DEPENDENCIES INPUT:</p>
+<pre><code>Ground reference from A-101.
+
+Restoring response from A-105.</code></pre>
+<p>UPSTREAM:</p>
+<pre><code>A-101 Ground / Zero.
+A-105 Restoring Response.</code></pre>
+<p>DOWNSTREAM:</p>
+<pre><code>A-107 Bounded Motion.
+C-310 Resistance Field (checked directly, confirmed distinct, not redundant).</code></pre></li>
+<li><p>VALIDATION TEST:</p>
+<pre><code>Apply small displacement x.</code></pre>
+<p>MEASURE:</p>
+<pre><code>Direction of response A(x).</code></pre>
+<p>CONFIRM:</p>
+<pre><code>Restoring response returns state toward Ground / Zero.</code></pre></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN:</p>
+<pre><code>1. Nonlinear behavior of A(x) is characterized.
+
+2. Stability condition is validated across required scales.
+
+3. Connection to A-107 Bounded Motion is confirmed.</code></pre>
+<p>CURRENT:</p>
+<pre><code>Definition ✅
+
+Linear Mathematics ✅
+
+Ground Dependency ✅
+
+Restoring Response Dependency ✅
+
+Nonlinear A(x) ❌
+
+Scale Validation ❌</code></pre>
+<p>GATE:</p>
+<pre><code>GREEN = Defined.
+
+YELLOW = Constrained/Testable.
+
+BRONZE = Validated.
+
+SILVER = Integrated.
+
+GOLD = Confirmed.</code></pre></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE:</p>
+<pre><code>A-108 Local Stability.</code></pre>
+<p>DEFINITION:</p>
+<pre><code>Local Stability tests whether small displacement returns toward Ground / Zero under Restoring Response.</code></pre>
+<p>FUNCTION:</p>
+<pre><code>Provides the stability condition required for Bounded Motion.</code></pre>
+<p>BOUNDARY:</p>
+<pre><code>Does not define global confine.iel</code></pre></li>
+</ol>
+</div><div class="clear"></div></div></body></html>

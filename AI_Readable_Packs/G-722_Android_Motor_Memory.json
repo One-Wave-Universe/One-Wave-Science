@@ -1,0 +1,15 @@
+{
+  "node_id": "G-722",
+  "title": "Android Subconscious Motor Memory Architecture",
+  "canonical_source": "Nodes/G-722_Android_Subconscious_Motor_Memory_Architecture.md",
+  "stack": [
+    "sequence scheduling",
+    "Boltzmann candidate reconstruction",
+    "Hopfield attractor settling",
+    "local -1(0)+1 choice",
+    "binary safety oversight"
+  ],
+  "gate": "GREEN",
+  "lifecycle": "PROPOSED_BUILD",
+  "claim_gate_detail": "YELLOW (build architecture) / GREEN (role separation)"
+}

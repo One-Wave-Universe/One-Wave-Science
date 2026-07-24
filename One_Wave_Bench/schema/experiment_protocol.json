@@ -1,0 +1,70 @@
+{
+  "protocol": "ONE_WAVE_EXPERIMENT_PROTOCOL",
+  "version": "0.1",
+  "governed_by": ["D-412", "A-117", "I-06"],
+  "purpose": "Structured request/receipt contract so a human OR an AI can propose, run, and interpret One-Wave lattice experiments seamlessly and reproducibly. Enforces the D-412 rule: simulation state -> measured fields -> visualization; never a desired picture pretending to be evidence.",
+  "experiment_request": {
+    "type": "object",
+    "required": ["request_id", "author", "engine", "cases"],
+    "properties": {
+      "request_id": {"type": "string", "description": "Unique id, e.g. EXP-2026-07-23-001"},
+      "author": {"type": "string", "enum": ["human", "ai"], "description": "Who proposed this experiment"},
+      "author_label": {"type": "string", "description": "Free-text name, e.g. 'Mark' or 'Computer'"},
+      "hypothesis": {"type": "string", "description": "What the run is expected to show, stated BEFORE running (D-412 discipline)."},
+      "engine": {"type": "string", "enum": ["D-413"], "description": "Which governed engine to run. Only D-413 is runnable at Stage 01."},
+      "native_dimension": {"type": "string", "enum": ["2D", "3D", "4D"], "description": "A-117 dimensional declaration for the run. D-413 is native 2D."},
+      "cases": {
+        "type": "array",
+        "description": "One or more parameter sets to evolve. Each becomes one evolved state + receipt.",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": {"type": "string"},
+            "parameters": {"type": "object", "description": "Overrides to the D-413 P dataclass (spring, well_depth, asymmetry, spin_coupling, pressure, ...). Omitted keys use canonical defaults."},
+            "initial": {"type": "object", "description": "Shell initial condition Q (x, y, vx, vy, theta, omega). If omitted, an auto orbit condition is derived."}
+          }
+        }
+      },
+      "falsifiers": {"type": "array", "items": {"type": "string"}, "description": "Conditions that would make the hypothesis WRONG. Required by D-412."}
+    }
+  },
+  "experiment_receipt": {
+    "type": "object",
+    "required": ["receipt_id", "request_id", "engine", "status", "cases", "checks", "provenance"],
+    "properties": {
+      "receipt_id": {"type": "string"},
+      "request_id": {"type": "string"},
+      "engine": {"type": "string"},
+      "native_dimension": {"type": "string"},
+      "status": {"type": "string", "enum": ["YELLOW", "GREEN", "BRONZE"], "description": "Claim gate. D-413 stays YELLOW: imposed well, collective-coordinate shell."},
+      "hypothesis": {"type": "string"},
+      "cases": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "description": "Per-case D-412 Required Measurements computed from the evolved state.",
+          "properties": {
+            "name": {"type": "string"},
+            "measurements": {"type": "object"},
+            "csv": {"type": "string", "description": "Relative path to raw per-step results"},
+            "csv_sha256": {"type": "string"}
+          }
+        }
+      },
+      "checks": {"type": "object", "description": "D-412 Required Failure/Control tests as boolean results."},
+      "all_checks_pass": {"type": "boolean"},
+      "interpretation": {"type": "string", "description": "Human/AI reading of the result, kept SEPARATE from raw output per D-412."},
+      "limitations": {"type": "array", "items": {"type": "string"}},
+      "provenance": {
+        "type": "object",
+        "properties": {
+          "generated_utc": {"type": "string"},
+          "engine_source": {"type": "string"},
+          "engine_sha256": {"type": "string"},
+          "code_version": {"type": "string"}
+        }
+      }
+    }
+  }
+}

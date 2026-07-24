@@ -1,0 +1,49 @@
+{
+  "convention": {
+    "W0": "0",
+    "W1": "01",
+    "recurrence": "Wk=W(k-1)W(k-2)"
+  },
+  "phi": 1.618033988749895,
+  "route_length": 26,
+  "expected_prefix": "01001010010010100101001001",
+  "positive_trace": "01001010010010100101001001",
+  "negative_mirror_trace": "01001010010010100101001001",
+  "reverse_trace": "10010010100101001001010010",
+  "expected_reverse": "10010010100101001001010010",
+  "positive_mismatch": 0.0,
+  "negative_mirror_mismatch": 0.0,
+  "reverse_mismatch": 0.0,
+  "all_generation_recursions_pass": true,
+  "prefix_is_balanced": true,
+  "factor_complexity": {
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "4": 5,
+    "5": 6,
+    "6": 7,
+    "7": 8,
+    "8": 9,
+    "9": 10,
+    "10": 11,
+    "11": 12,
+    "12": 13
+  },
+  "factor_complexity_expected": {
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "4": 5,
+    "5": 6,
+    "6": 7,
+    "7": 8,
+    "8": 9,
+    "9": 10,
+    "10": 11,
+    "11": 12,
+    "12": 13
+  },
+  "classification": "exact_fibonacci_word_route",
+  "factor_complexity_pass": true
+}

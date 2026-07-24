@@ -1,0 +1,45 @@
+{
+  "node": "D-407",
+  "inputs": {
+    "R_plus_fm": 0.7331,
+    "R_minus_fm": 0.8409,
+    "sigma_fm": 0.21,
+    "provenance": "internal_fit_parameters_source_uncertainties_missing"
+  },
+  "role_resolution": {
+    "R_plus": "profile_center",
+    "R_minus": "profile_center",
+    "sigma": "profile_width_not_spacing"
+  },
+  "adjacent_shell_hypothesis": {
+    "n_estimate": 6.800556586270871,
+    "n_plus": 7,
+    "n_minus": 8,
+    "lambda_from_R_plus_fm": 0.6580290212419078,
+    "lambda_from_R_minus_fm": 0.6604413156009142,
+    "lambda_estimate_disagreement_percent": 0.36592319016943464,
+    "lambda_least_squares_fm": 0.6593952764540885,
+    "predicted_R7_fm": 0.7346221238938054,
+    "predicted_R8_fm": 0.8395681415929204,
+    "residual_R_plus_fm": -0.0015221238938054604,
+    "residual_R_minus_fm": 0.0013318584070796113,
+    "relative_residual_R_plus_percent": 0.20762841274116223,
+    "relative_residual_R_minus_percent": 0.15838487419189098,
+    "assumption": "profile_centers_are_adjacent_harmonic_shells_not_derived"
+  },
+  "energy_mapping_result": {
+    "geometry": "R_n=n*lambda/(2*pi)",
+    "angular_wavenumber": "k_n=n/R_n=2*pi/lambda",
+    "consequence": "k_n_independent_of_n_so_dispersion_alone_gives_no_shell_energy_spacing"
+  },
+  "carbon_status": "blocked",
+  "open_requirements": [
+    "recover_fit_and_covariance",
+    "derive_adjacency",
+    "derive_shell_energy_map",
+    "derive_carbon_collective_mode"
+  ],
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW — PARTIAL RESOLUTION"
+}

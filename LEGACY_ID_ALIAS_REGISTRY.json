@@ -1,0 +1,539 @@
+{
+  "metadata_standard": "I-06",
+  "aliases": [
+    {
+      "legacy_id": "A-01",
+      "resolution": "ALIAS",
+      "canonical_target": "A-101",
+      "note": "Ground / Zero"
+    },
+    {
+      "legacy_id": "A-02",
+      "resolution": "ALIAS",
+      "canonical_target": "A-102",
+      "note": "Displacement"
+    },
+    {
+      "legacy_id": "A-03",
+      "resolution": "ALIAS",
+      "canonical_target": "A-103",
+      "note": "Differential"
+    },
+    {
+      "legacy_id": "A-04",
+      "resolution": "ALIAS",
+      "canonical_target": "A-104",
+      "note": "Gradient"
+    },
+    {
+      "legacy_id": "A-05",
+      "resolution": "ALIAS",
+      "canonical_target": "A-105",
+      "note": "Restoring Response"
+    },
+    {
+      "legacy_id": "A-05b",
+      "resolution": "ALIAS",
+      "canonical_target": "A-106",
+      "note": "Pressure Response"
+    },
+    {
+      "legacy_id": "A-05c",
+      "resolution": "ALIAS",
+      "canonical_target": "B-201",
+      "note": "Equilibrium Balance; title-based legacy mapping"
+    },
+    {
+      "legacy_id": "A-06",
+      "resolution": "ALIAS",
+      "canonical_target": "A-107",
+      "note": "Bounded Motion"
+    },
+    {
+      "legacy_id": "A-07",
+      "resolution": "ALIAS",
+      "canonical_target": "A-109",
+      "note": "Inertial Memory"
+    },
+    {
+      "legacy_id": "A-08",
+      "resolution": "ALIAS",
+      "canonical_target": "A-110",
+      "note": "Oscillation"
+    },
+    {
+      "legacy_id": "A-09",
+      "resolution": "ALIAS",
+      "canonical_target": "A-111",
+      "note": "Recursion"
+    },
+    {
+      "legacy_id": "A-10",
+      "resolution": "ALIAS",
+      "canonical_target": "A-112",
+      "note": "Persistent Mode"
+    },
+    {
+      "legacy_id": "A-11",
+      "resolution": "ALIAS",
+      "canonical_target": "A-113",
+      "note": "Projection"
+    },
+    {
+      "legacy_id": "B-01",
+      "resolution": "ALIAS",
+      "canonical_target": "B-201",
+      "note": "Equilibrium Balance"
+    },
+    {
+      "legacy_id": "B-02",
+      "resolution": "ALIAS",
+      "canonical_target": "B-202",
+      "note": "Pressure"
+    },
+    {
+      "legacy_id": "B-03",
+      "resolution": "ALIAS",
+      "canonical_target": "B-203",
+      "note": "Expression"
+    },
+    {
+      "legacy_id": "B-04",
+      "resolution": "ALIAS",
+      "canonical_target": "B-204",
+      "note": "Compression"
+    },
+    {
+      "legacy_id": "B-05",
+      "resolution": "ALIAS",
+      "canonical_target": "B-205",
+      "note": "Mirror"
+    },
+    {
+      "legacy_id": "B-06",
+      "resolution": "ALIAS",
+      "canonical_target": "B-206",
+      "note": "Paired Loop"
+    },
+    {
+      "legacy_id": "B-06a",
+      "resolution": "ALIAS",
+      "canonical_target": "B-206a",
+      "note": "Shared Boundary"
+    },
+    {
+      "legacy_id": "B-06b",
+      "resolution": "ALIAS",
+      "canonical_target": "B-206b",
+      "note": "Four Views"
+    },
+    {
+      "legacy_id": "B-07",
+      "resolution": "ALIAS",
+      "canonical_target": "B-207",
+      "note": "Threshold State"
+    },
+    {
+      "legacy_id": "B-08",
+      "resolution": "ALIAS",
+      "canonical_target": "B-208",
+      "note": "Threshold Windows"
+    },
+    {
+      "legacy_id": "B-09",
+      "resolution": "ALIAS",
+      "canonical_target": "B-209",
+      "note": "Break Condition"
+    },
+    {
+      "legacy_id": "B-10",
+      "resolution": "ALIAS",
+      "canonical_target": "B-210",
+      "note": "Return"
+    },
+    {
+      "legacy_id": "B-11",
+      "resolution": "ALIAS",
+      "canonical_target": "B-211",
+      "note": "Loop Break"
+    },
+    {
+      "legacy_id": "B-12",
+      "resolution": "ALIAS",
+      "canonical_target": "B-212",
+      "note": "Loop Counter"
+    },
+    {
+      "legacy_id": "B-13",
+      "resolution": "ALIAS",
+      "canonical_target": "B-213",
+      "note": "Access Line"
+    },
+    {
+      "legacy_id": "B-14",
+      "resolution": "ALIAS",
+      "canonical_target": "B-214",
+      "note": "Recursive Access Growth"
+    },
+    {
+      "legacy_id": "B-15",
+      "resolution": "ALIAS",
+      "canonical_target": "B-215",
+      "note": "Hyperloop"
+    },
+    {
+      "legacy_id": "B-16",
+      "resolution": "ALIAS",
+      "canonical_target": "B-216",
+      "note": "Threshold Mathematics"
+    },
+    {
+      "legacy_id": "C-01",
+      "resolution": "ALIAS",
+      "canonical_target": "C-301",
+      "note": "Mirror Gate"
+    },
+    {
+      "legacy_id": "C-02",
+      "resolution": "ALIAS",
+      "canonical_target": "C-302",
+      "note": "Momentum"
+    },
+    {
+      "legacy_id": "C-03",
+      "resolution": "ALIAS",
+      "canonical_target": "C-303",
+      "note": "Kinetic Energy"
+    },
+    {
+      "legacy_id": "C-04",
+      "resolution": "ALIAS",
+      "canonical_target": "C-304",
+      "note": "Potential"
+    },
+    {
+      "legacy_id": "C-05",
+      "resolution": "ALIAS",
+      "canonical_target": "C-305",
+      "note": "Work"
+    },
+    {
+      "legacy_id": "C-06",
+      "resolution": "ALIAS",
+      "canonical_target": "C-306",
+      "note": "Torque"
+    },
+    {
+      "legacy_id": "C-07",
+      "resolution": "ALIAS",
+      "canonical_target": "C-307",
+      "note": "Angular Momentum"
+    },
+    {
+      "legacy_id": "C-08",
+      "resolution": "ALIAS",
+      "canonical_target": "C-308",
+      "note": "Spin-half"
+    },
+    {
+      "legacy_id": "C-3113",
+      "resolution": "ALIAS",
+      "canonical_target": "C-311",
+      "note": "Electric-Magnetic Duality"
+    },
+    {
+      "legacy_id": "C-3114",
+      "resolution": "ALIAS",
+      "canonical_target": "C-310",
+      "note": "Resistance Field"
+    },
+    {
+      "legacy_id": "C-3118",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "UNBUILT_PHASE_LOCKING_PROPOSAL"
+    },
+    {
+      "legacy_id": "C-3119",
+      "resolution": "ALIAS",
+      "canonical_target": "F-604",
+      "note": "Resonance"
+    },
+    {
+      "legacy_id": "D-01",
+      "resolution": "ALIAS",
+      "canonical_target": "D-401",
+      "note": "Flux"
+    },
+    {
+      "legacy_id": "D-02",
+      "resolution": "ALIAS",
+      "canonical_target": "D-402",
+      "note": "Resonant Mode"
+    },
+    {
+      "legacy_id": "D-02b",
+      "resolution": "ALIAS",
+      "canonical_target": "E-508",
+      "note": "Real Persistence Under Loss"
+    },
+    {
+      "legacy_id": "D-03",
+      "resolution": "ALIAS",
+      "canonical_target": "D-403",
+      "note": "Spherical Modes"
+    },
+    {
+      "legacy_id": "D-04",
+      "resolution": "ALIAS",
+      "canonical_target": "D-404",
+      "note": "Nested Resonance"
+    },
+    {
+      "legacy_id": "D-05",
+      "resolution": "ALIAS",
+      "canonical_target": "D-405",
+      "note": "Harmonic Shell"
+    },
+    {
+      "legacy_id": "E-01",
+      "resolution": "ALIAS",
+      "canonical_target": "E-501",
+      "note": "Zero Compression"
+    },
+    {
+      "legacy_id": "E-02",
+      "resolution": "ALIAS",
+      "canonical_target": "E-503",
+      "note": "Pressure (Gradient Form)"
+    },
+    {
+      "legacy_id": "E-03",
+      "resolution": "ALIAS",
+      "canonical_target": "E-504",
+      "note": "Surface"
+    },
+    {
+      "legacy_id": "E-04",
+      "resolution": "ALIAS",
+      "canonical_target": "E-505",
+      "note": "Coupling"
+    },
+    {
+      "legacy_id": "E-05",
+      "resolution": "ALIAS",
+      "canonical_target": "E-506",
+      "note": "Stability"
+    },
+    {
+      "legacy_id": "E-06",
+      "resolution": "ALIAS",
+      "canonical_target": "E-507",
+      "note": "Scale-Invariant Loop"
+    },
+    {
+      "legacy_id": "F-01",
+      "resolution": "ALIAS",
+      "canonical_target": "F-601",
+      "note": "Influence"
+    },
+    {
+      "legacy_id": "F-02",
+      "resolution": "ALIAS",
+      "canonical_target": "F-602",
+      "note": "Interaction Differential"
+    },
+    {
+      "legacy_id": "F-03",
+      "resolution": "ALIAS",
+      "canonical_target": "F-603",
+      "note": "Transfer"
+    },
+    {
+      "legacy_id": "F-04",
+      "resolution": "ALIAS",
+      "canonical_target": "F-604",
+      "note": "Resonance"
+    },
+    {
+      "legacy_id": "F-05",
+      "resolution": "ALIAS",
+      "canonical_target": "F-605",
+      "note": "Interference"
+    },
+    {
+      "legacy_id": "F-06",
+      "resolution": "ALIAS",
+      "canonical_target": "F-606",
+      "note": "Reflection"
+    },
+    {
+      "legacy_id": "F-07",
+      "resolution": "ALIAS",
+      "canonical_target": "F-607",
+      "note": "Transmission"
+    },
+    {
+      "legacy_id": "F-08",
+      "resolution": "ALIAS",
+      "canonical_target": "F-608",
+      "note": "Attenuation"
+    },
+    {
+      "legacy_id": "F-609",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "RETIRED_FORWARD_REFERENCE_NO_NODE"
+    },
+    {
+      "legacy_id": "F-610",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "RETIRED_FORWARD_REFERENCE_NO_NODE"
+    },
+    {
+      "legacy_id": "G-01",
+      "resolution": "ALIAS",
+      "canonical_target": "G-701",
+      "note": "Evaluation Differential"
+    },
+    {
+      "legacy_id": "G-02",
+      "resolution": "ALIAS",
+      "canonical_target": "G-702",
+      "note": "Evaluation"
+    },
+    {
+      "legacy_id": "G-03",
+      "resolution": "ALIAS",
+      "canonical_target": "G-703",
+      "note": "Modulation"
+    },
+    {
+      "legacy_id": "G-04",
+      "resolution": "ALIAS",
+      "canonical_target": "G-704",
+      "note": "Kabeuchi"
+    },
+    {
+      "legacy_id": "G-05",
+      "resolution": "ALIAS",
+      "canonical_target": "G-705",
+      "note": "Correction"
+    },
+    {
+      "legacy_id": "G-06",
+      "resolution": "ALIAS",
+      "canonical_target": "G-706",
+      "note": "Validation"
+    },
+    {
+      "legacy_id": "H-01",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "SUPERSEDED_HYPOTHESIS_NAMESPACE"
+    },
+    {
+      "legacy_id": "H-02",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "SUPERSEDED_HYPOTHESIS_NAMESPACE"
+    },
+    {
+      "legacy_id": "H-100",
+      "resolution": "ALIAS",
+      "canonical_target": "A+101;A-101",
+      "note": "Field and Void split into root field and reference condition"
+    },
+    {
+      "legacy_id": "H-101",
+      "resolution": "ALIAS",
+      "canonical_target": "B-204;B-203",
+      "note": "Compression / Expression"
+    },
+    {
+      "legacy_id": "H-102",
+      "resolution": "ALIAS",
+      "canonical_target": "B-205;C-301",
+      "note": "Mirror / Mirror Gate"
+    },
+    {
+      "legacy_id": "H-105",
+      "resolution": "ALIAS",
+      "canonical_target": "E-517",
+      "note": "Negative Space"
+    },
+    {
+      "legacy_id": "H-106",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "UNBUILT_GENERAL_BOUNDARY_CONDITIONS"
+    },
+    {
+      "legacy_id": "H-108",
+      "resolution": "ALIAS",
+      "canonical_target": "B-222",
+      "note": "Oscillation Center"
+    },
+    {
+      "legacy_id": "I-08",
+      "resolution": "ALIAS",
+      "canonical_target": "E-528",
+      "note": "Static Redshift Transport"
+    },
+    {
+      "legacy_id": "I-09",
+      "resolution": "ALIAS",
+      "canonical_target": "A-115",
+      "note": "Unified Compression Field"
+    },
+    {
+      "legacy_id": "I-10",
+      "resolution": "ALIAS",
+      "canonical_target": "C-311",
+      "note": "Electric-Magnetic Duality"
+    },
+    {
+      "legacy_id": "I-110",
+      "resolution": "ALIAS",
+      "canonical_target": "F-603",
+      "note": "Transfer"
+    },
+    {
+      "legacy_id": "J-101",
+      "resolution": "ALIAS",
+      "canonical_target": "C-309",
+      "note": "Propagation Limit"
+    },
+    {
+      "legacy_id": "J-103",
+      "resolution": "ALIAS",
+      "canonical_target": "A-105",
+      "note": "Restoring Response"
+    },
+    {
+      "legacy_id": "J-106",
+      "resolution": "ALIAS",
+      "canonical_target": "C-314",
+      "note": "Three Frames of Reference"
+    },
+    {
+      "legacy_id": "K-103",
+      "resolution": "ALIAS",
+      "canonical_target": "A-112",
+      "note": "Persistent Mode"
+    },
+    {
+      "legacy_id": "K-104",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "ROUTED_TO_BOOKS"
+    },
+    {
+      "legacy_id": "L-100",
+      "resolution": "DISPOSITION",
+      "canonical_target": "",
+      "note": "ROUTED_TO_BOOKS"
+    }
+  ]
+}

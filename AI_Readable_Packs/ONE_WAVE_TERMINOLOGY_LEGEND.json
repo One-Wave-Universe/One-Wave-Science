@@ -1,0 +1,30 @@
+{
+  "purpose": "Standard-to-One-Wave naming map; rename is not proof",
+  "locked": {
+    "mass": "Mass Effect",
+    "dark energy": "White Energy",
+    "gluon field": "Boundary-Tension Weave",
+    "gluon": "Tension-Link excitation",
+    "quark": "Vortex Phase",
+    "proton": "Three-Vortex Knot",
+    "confinement": "Knot Lock",
+    "neutrino": "Low-Coupling Return Mode",
+    "photon": "Propagating Light Mode",
+    "rest mass": "rest Mass Effect"
+  },
+  "geometry": "3D volumetric and sphere-like by default; 2D only cross-section, projection, or explicit negative-space layer",
+  "notation": {
+    "standard_mass": "m_SM or M_SM",
+    "mass_effect": "m_eff or M_eff",
+    "white_energy": "E_W, u_W, J_W",
+    "compression": "chi",
+    "displacement": "u"
+  },
+  "symbolic_architecture": {
+    "mirrored_alphabet_packet": "C\u00b1(n)=\u00b1(n,2n,2n+1)",
+    "rabbit_hop_branch": "b=|r|-2|n| in {0,1}",
+    "fibonacci_word_convention": "W0=0, W1=01, Wk=W(k-1)W(k-2)",
+    "golden_ratio_scope": "ordered Fibonacci-word length and branch-count convergence only",
+    "live_choice": "-1(0)+1 remains foundational"
+  }
+}

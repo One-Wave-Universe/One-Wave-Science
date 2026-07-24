@@ -1,0 +1,123 @@
+{
+  "receipt": "CONSOLIDATED_INTEGRITY_RECEIPT",
+  "repository": "FINAL_ONE_WAVE_REPO (One_Wave_Repo_Updated_33)",
+  "generated_utc": "2026-07-24T06:14:53.827931+00:00",
+  "overall_pass": true,
+  "summary": {
+    "builtin_validators_passed": true,
+    "supplementary_hard_issues": 0,
+    "supplementary_benign_flags": 1,
+    "total_files": 597,
+    "file_type_counts": {
+      "md": 265,
+      "json": 50,
+      "html": 173,
+      "pdf": 37,
+      "csv": 34,
+      "py": 11,
+      "png": 26,
+      "css": 1
+    },
+    "manifest_fingerprint_sha256_16": "306ae57039d82ad4"
+  },
+  "builtin_validators": {
+    "validate_repository_integrity": {
+      "script": "validate_repository_integrity.py",
+      "exit_code": 0,
+      "report": {
+        "pass": true,
+        "node_file_count": 150,
+        "unique_node_ids": 150,
+        "gate_counts": {
+          "YELLOW": 92,
+          "GREEN": 56,
+          "BRONZE": 2
+        },
+        "lifecycle_counts": {
+          "ACTIVE": 138,
+          "PROPOSED_BUILD": 1,
+          "ACTIVE_HYPOTHESIS": 7,
+          "HELD": 3,
+          "BLOCKED": 1
+        },
+        "unresolved_ids": {},
+        "errors": []
+      }
+    },
+    "validate_updated_32_artifacts": {
+      "script": "validate_updated_32_artifacts.py",
+      "exit_code": 0,
+      "report": {
+        "pass": true,
+        "errors": [],
+        "node_files": 150,
+        "appendix_packs_verified": 7,
+        "wiki_pages_checked": 147,
+        "json_packs_checked": 23,
+        "book1_chapters": 17,
+        "book1_sequence": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "local_markdown_links_checked": 8,
+        "pdf_count": 37,
+        "pdf_source_pairs": 23,
+        "book1_pdf_count": 17,
+        "stale_pdf_pairs": []
+      }
+    }
+  },
+  "supplementary_checks": {
+    "canonical_start_refs": {
+      "checked": 38,
+      "missing": []
+    },
+    "backtick_path_refs": {
+      "checked": 213,
+      "missing": {
+        "History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md": [
+          "Apendix_G.md"
+        ]
+      },
+      "note": "Flagged items in History/ are quarantined drafts quoting stale spellings; not live links."
+    },
+    "html_local_links": {
+      "checked": 67,
+      "broken": {}
+    },
+    "nodeid_filename_agreement": {
+      "checked": 150,
+      "mismatches": []
+    },
+    "orphan_wiki_pages": {
+      "checked": 151,
+      "orphans": []
+    },
+    "orphan_json_packs": {
+      "checked": 26,
+      "orphans": []
+    },
+    "tiny_or_empty_files": {
+      "checked": "all md/json/html",
+      "files": []
+    }
+  },
+  "benign_flag_explanations": [
+    "History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md references `Apendix_G.md` (misspelled): quarantined historical draft deliberately quoting a stale filename to document a past defect. Correct Appendix_G.md exists and is valid. Not a live link."
+  ]
+}

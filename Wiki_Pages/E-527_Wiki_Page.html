@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>E-527: Threshold-Triggered Relaxation Oscillator Model</title>
+<style>
+body{font-family:Georgia,'Times New Roman',serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:980px;margin:0 auto;background:white;padding:32px 48px;box-shadow:0 0 0 1px #e0e0e0}.status{background:#ead8bd;border:1px solid #a66b2a;padding:10px 16px;font-family:sans-serif;font-size:13px;border-radius:3px}.subtitle{font-family:sans-serif;color:#54595d;font-size:13px;margin-bottom:20px}h1{font-size:27px;border-bottom:3px solid #a2a9b1;padding-bottom:8px;margin-bottom:4px}h2{font-size:19px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:28px}.math{font-family:'Courier New',monospace;background:#f5f5f5;padding:10px 14px;white-space:pre-wrap}.result{background:#eefbe8;border-left:4px solid #16a34a;padding:12px 16px}.failure{background:#fce8e8;border-left:4px solid #dc2626;padding:12px 16px}.scope{background:#eef6ff;border-left:4px solid #2563eb;padding:12px 16px}.figure{text-align:center;margin:24px 0}.figure img{max-width:100%;border:1px solid #a2a9b1}.caption{font-family:sans-serif;font-size:12px;color:#54595d;margin-top:6px}table{border-collapse:collapse;width:100%;font-family:sans-serif;font-size:13px}th,td{border:1px solid #a2a9b1;padding:7px;text-align:left}th{background:#eaecf0}code{background:#f5f5f5;padding:1px 4px}</style>
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="E-527"><h1>E-527: Threshold-Triggered Relaxation Oscillator Model</h1><p><strong>Gate:</strong> BRONZE &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page">
+<div class="status"><strong>Legacy claim detail: BRONZE</strong> — reproducible validation of the reduced hybrid model only.</div>
+<h1>E-527: Threshold-Triggered Relaxation Oscillator Model</h1>
+<div class="subtitle">Appendix E · energy-gated synchronization and resource cycling</div>
+
+<h2>The correction</h2>
+<div class="failure"><strong>Disproved as sufficient:</strong> <code>C(t)=R(t)U(t)</code> does not create a cycle by itself. Under constant supply it approaches a plateau. Finite substrate without recharge creates one pulse, not a repeating oscillator.</div>
+<p>The product is a readout of coordinated available response. A genuine repeating relaxation cycle requires recharge, state-dependent depletion, and separate on/off thresholds.</p>
+
+<h2>Reduced model</h2>
+<div class="math">C(t) = R* U(t)
+
+dU/dt = P - λU - D h U
+
+h: 0 → 1 when C ≥ C_on
+h: 1 → 0 when C ≤ C_off
+
+0 &lt; C_off &lt; C_on</div>
+<p><em>R*</em> is the settled synchronization level supplied by the E-524 layer. <em>U</em> is stored resource and <em>h</em> is the release state.</p>
+
+<h2>Exact cycle conditions</h2>
+<div class="math">U_charge = P/λ
+U_release = P/(λ+D)
+U_on = C_on/R*
+U_off = C_off/R*
+
+Cycle iff:
+P/λ &gt; C_on/R*
+and
+P/(λ+D) &lt; C_off/R*</div>
+
+<h2>Exact predicted period</h2>
+<div class="math">T_charge = (1/λ) ln[(U_charge-U_off)/(U_charge-U_on)]
+
+T_release = (1/(λ+D)) ln[(U_on-U_release)/(U_off-U_release)]
+
+T_period = T_charge + T_release</div>
+
+<h2>Simulation cases</h2>
+<div class="figure"><img src="../Nodes/E-527_Simulation/case_1_constant_supply_plateau.png" alt="Constant supply plateau"><div class="caption">Case 1. Constant supply: the resource and C=R*U approach fixed plateaus. No cycle.</div></div>
+<div class="figure"><img src="../Nodes/E-527_Simulation/case_2_finite_substrate_single_pulse.png" alt="Finite substrate single pulse"><div class="caption">Case 2. A finite unrecharged substrate creates one rise and fall. This is a pulse, not an oscillator.</div></div>
+<div class="figure"><img src="../Nodes/E-527_Simulation/case_3_hybrid_relaxation_cycle.png" alt="Hybrid relaxation cycle"><div class="caption">Case 3. Recharge, release-dependent depletion, and hysteresis produce repeated cycles.</div></div>
+<div class="figure"><img src="../Nodes/E-527_Simulation/parameter_sweep_cycle_region.png" alt="Analytic cycle region"><div class="caption">Analytic parameter map. A cycle exists only where both charging and discharging inequalities are satisfied.</div></div>
+
+<h2>Validated run</h2>
+<table><tr><th>Parameter</th><th>Value</th></tr>
+<tr><td>R*</td><td>0.85</td></tr><tr><td>P</td><td>0.08</td></tr><tr><td>λ</td><td>0.10</td></tr><tr><td>D</td><td>0.60</td></tr><tr><td>C_on / C_off</td><td>0.55 / 0.25</td></tr><tr><td>dt</td><td>0.001</td></tr></table>
+<div class="result"><strong>Analytic period:</strong> 13.5140403529<br><strong>Numerical mean period:</strong> 13.516<br><strong>Error:</strong> 0.0145%<br><strong>Repeated release events:</strong> 6<br>All validation assertions passed.</div>
+
+<h2>Artifacts</h2>
+<p>The code, CSV outputs, event log, parameter sweep, figures, and metadata live in <code>Nodes/E-527_Simulation/</code>. The metadata includes software versions and a SHA-256 hash of the simulation script.</p>
+
+<h2>Scope boundary</h2>
+<div class="scope">This simulation does not run the full E-524 degree-6 Kuramoto lattice. R* is a settled input. It validates internal dynamics, not a named biological event, consciousness claim, or Android body. The parameter values are normalized test values, not measured constants.</div>
+</div></body></html>

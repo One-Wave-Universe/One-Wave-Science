@@ -1,0 +1,10 @@
+{
+  "node_id": "G-721d",
+  "title": "Arnoux-Rauzy Strict Multi-Route Validation",
+  "canonical_source": "Nodes/G-721d_Arnoux_Rauzy_Strict_Multi_Route_Validation.md",
+  "complexity": "p(m)=(k-1)m+1",
+  "guardrail": "Balance and torus realization are separate tests, not universal guarantees.",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (external word mathematics) / YELLOW (android movement validation)"
+}

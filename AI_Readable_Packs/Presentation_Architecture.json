@@ -1,0 +1,19 @@
+{
+  "canonical_base": "Updated_13 physics/governance rebased with Updated_20 presentation work",
+  "architecture": [
+    "Appendix A-G wiki",
+    "Micro-Macro textbooks",
+    "Android anime/manga proposed build",
+    "Engineer the Future steampunk manuals",
+    "One-Wave Times investigative papers",
+    "Musical Universe format unresolved"
+  ],
+  "canonical_source": "Nodes and Markdown book chapters",
+  "generated_views": [
+    "Wiki_Pages",
+    "AI_Readable_Packs",
+    "PDF textbook copies",
+    "HTML/PDF applied books and papers"
+  ],
+  "history_policy": "No automatic pre-edit snapshots; cumulative CHANGELOG only"
+}

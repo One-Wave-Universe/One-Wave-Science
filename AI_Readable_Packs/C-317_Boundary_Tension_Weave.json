@@ -1,0 +1,26 @@
+{
+  "id": "C-317",
+  "name": "Boundary-Tension Weave",
+  "mapping": {
+    "gluon": "Tension-Link excitation",
+    "quark": "Vortex Phase",
+    "confinement": "Knot Lock",
+    "proton": "Three-Vortex Knot"
+  },
+  "equations": [
+    "E_weave=E_skin+E_phase+E_twist",
+    "A_neck=2*pi*a*L",
+    "E_neck=2*pi*a*sigma_T*L=tau_T*L",
+    "F_lock=tau_T"
+  ],
+  "open": [
+    "coefficients",
+    "QCD spectrum",
+    "running behavior",
+    "3D simulation"
+  ],
+  "dimensional_check": "sigma_T:J/m^2; tau_T:J/m=N",
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (geometry and energy forms) / GREEN (full QCD replacement claim)"
+}

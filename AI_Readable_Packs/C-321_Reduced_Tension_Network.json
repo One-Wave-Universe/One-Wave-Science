@@ -1,0 +1,12 @@
+{
+  "id": "C-321",
+  "name": "Reduced Multi-Center Tension Network",
+  "scope": "Conditional slender-neck reduction of C-317, not literal intact proton geometry and not yet a nuclear force law.",
+  "energy": "E(J)=sum_i tau_i |J-q_i| + E_J",
+  "equilibrium": "sum_i tau_i ehat_i + grad_J E_J = 0",
+  "equal_tension_result": "Three equal tensions meet at 120 degrees when an interior junction exists.",
+  "nuclear_warning": "Inter-nucleon coupling bridge must be derived before carbon or isotope use.",
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (N=3 reduced geometry) / GREEN (N>3 and nuclear application)"
+}
