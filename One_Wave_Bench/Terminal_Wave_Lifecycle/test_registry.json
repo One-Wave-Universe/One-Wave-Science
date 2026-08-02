@@ -1,0 +1,18 @@
+{
+  "claims": [
+    "TW-001",
+    "TW-002",
+    "TW-003",
+    "TW-004",
+    "TW-005",
+    "TW-006",
+    "TW-007",
+    "TW-008"
+  ],
+  "models": [
+    "M0_independent",
+    "M1_single_lifecycle",
+    "M2_shared_environment"
+  ],
+  "status": "registered_not_run"
+}

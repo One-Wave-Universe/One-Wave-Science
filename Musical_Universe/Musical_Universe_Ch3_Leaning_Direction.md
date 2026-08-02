@@ -1,113 +1,85 @@
-Musical Universe, Chapter 3: Leaning Direction
+Musical Universe, Chapter 3: Boundary Questions and Interference Tests
 
-Version: 1.0
-
-Wiki Page (with embedded chart): Wiki_Pages/Musical_Universe_Ch3_Wiki_Page.html
-Date: July 19, 2026
-Class: E-Series Application
+Former title: Leaning Direction
+Version: 2.0 Canonical Correction
+Date: July 27, 2026
+Class: E-Series Application — Open Research Register
 Status: YELLOW
 
-Dependencies: E-512 Oscillation Window, E-513 Chord Leaning Direction
+Dependencies: E-510 Mirrored Music Clock, E-511 Chord Rotation, E-512 Chord Coordinate Set, E-513 Musical Boundary Hypothesis Register, F-604 Resonance, F-605 Interference
 
 ---
 
-## Gray — Standard Music Theory Reference
+## Why the Former Lean Claim Was Retired
 
-Major and minor chords are often described, informally, as having
-different "character" — major commonly described as brighter, minor
-as darker or more melancholic. This is a real, widely-shared musical
-intuition, though not itself a rigorous physical claim in standard
-theory — it's a perceptual/cultural description, not a formula.
+The previous chapter treated negative coordinates as compression, positive coordinates as expression, and unequal magnitudes as a directional lean. That conclusion did not follow from the coordinate system.
 
----
+The formula
 
-## Chord Leaning Direction
+the former signed-magnitude lean formula
 
-E-513's real definition: a chord's Oscillation Window (P_compress,
-P_expr) has a directional lean when |P_compress| != |P_expr| — one
-side pulls harder than the other.
+is retired. It measured coordinate asymmetry, then mislabeled that asymmetry as physical operation.
 
-Real, checked values:
-A Major: (P_compress=-5, P_expr=+4). |-5| > |4|. Compression dominates,
-  by a gap of 1.
-A Minor: (P_compress=-5, P_expr=+3). |-5| > |3|. Compression dominates,
-  by a gap of 2 — MORE strongly than Major, not less.
+## Canonical Coordinate Facts
 
-This is a real, checkable, somewhat counter-intuitive finding: both
-Major and Minor lean toward Compression in this system, not opposite
-directions — Minor leans harder, not oppositely. This does NOT match
-a naive "major=Expression/bright, minor=Compression/dark" binary that
-might be assumed from the informal "bright vs. dark" description above
-— the real computed values show both leaning the same direction, with
-Minor's lean simply stronger.
+- `0` is the selected root.
+- `±5` are mirrored fifth/fourth route positions.
+- `±6` is the shared Mirror position.
+- a power chord can be represented as `{0,-5}` under the chosen orientation.
+- paired fifth/fourth positions can be represented as `{0,-5,+5}`.
 
-Power chords (root + fifth only, no third): explicitly UNDEFINED under
-this formula — with no third, there is no asymmetry to measure, and
-the leaning-direction concept doesn't apply.
+Nothing further is automatically established.
 
-## Expansion: Diminished and Augmented (computed this session)
+## Yellow Question 1 — Reinforced Boundary
 
-Using the same formula, extended to two more real chord types:
+Does sounding the root with a fifth strengthen or stabilize the root relation in a way that deserves the One-Wave name “reinforced boundary”?
 
-Diminished (root, minor third +3, diminished fifth +6): positions
-(3, 6) — BOTH POSITIVE. Neither tone falls on the Compression side at
-all under this convention. This means the "Compression-side/
-Expression-side" labeling genuinely breaks down for this chord — the
-arithmetic still works, but calling either position "the compression
-side" would be misleading. Flagged honestly rather than forced to fit.
+This is plausible as a musical description, especially because power chords strongly emphasize root and fifth, but it has not been derived as a physical One-Wave boundary mechanism.
 
-Augmented (root, major third +4, augmented fifth +8, converts to
-clock position -4): positions (-4, 4) — perfectly symmetric, L=0.
-This has a real, independent correlate worth noting: augmented triads
-are well-known in standard music theory for their ambiguous, centerless
-quality, built from two stacked major thirds dividing the octave
-symmetrically. The computed L=0 and this real, independent musical
-property point the same direction — a genuine, if modest, piece of
-supporting evidence that this measure tracks something real, not
-just an artifact of the formula.
+Required tests:
 
-Full table:
-Major:      (-5, +4), L=1
-Minor:      (-5, +3), L=2
-Diminished: (+3, +6), L=3 (labels break down — both positive)
-Augmented:  (-4, +4), L=0 (perfectly symmetric)
+- measured spectra and phase relationships
+- comparison with other dyads at matched amplitude
+- listener judgments separated from distortion and instrument timbre
 
-## Mathematics
+## Yellow Question 2 — Boundary Promotion and Field Extension
 
-Leaning magnitude: L = | |P_compress| - |P_expr| |
-A Major: L = |5-4| = 1
-A Minor: L = |5-3| = 2
+When the fifth becomes the next root, standard pitch arithmetic produces a new local coordinate system. Repeated fifths traverse the circle of fifths.
 
-## Predictions
+The arithmetic is exact. Calling that change “boundary promotion” or “Field extension” is an open One-Wave interpretation.
 
-If this framework's leaning measure tracks anything real about
-perceived musical character, chords with larger L (like minor, L=2)
-should be independently describable as having a more pronounced
-directional quality than chords with smaller L (like major, L=1) —
-a real, testable claim against listener perception studies, not yet
-tested here.
+## Yellow Question 3 — Paired-Boundary Interference
 
-## Yellow Audit
+Open question:
 
-- This node's own real finding directly contradicts a naive "major
-  leans one way, minor leans the other" assumption — flagged
-  explicitly rather than smoothed over, since it's a genuine surprise
-  worth keeping visible
-- No listener-perception data has been checked against these L values
-  — the mathematical result is real; whether it corresponds to
-  anything perceptually meaningful is untested
-- Power chords are explicitly outside this formula's domain, not a
-  silent gap
+> Does the counterclockwise route associated with one boundary interact with the clockwise route associated with the mirrored boundary, and if so, does it reinforce, balance, redirect, or cancel anything?
 
-## Future Work
+No answer is canonical yet.
 
-Test whether L (leaning magnitude) correlates with any independent,
-real measure of perceived chord brightness/darkness — this would be a
-genuine, falsifiable prediction if pursued.
-Determine whether diminished and augmented chords (not yet computed)
-show even larger or smaller L values than major/minor.
+Literal destructive interference requires compatible frequency, amplitude, timing, and opposite phase. Different notes do not vanish merely because their signed coordinates are opposite. Harmonic, perceptual, or directional interaction may still occur, but it must be measured rather than declared.
+
+## Yellow Question 4 — Diminished Resolution at the Mirror
+
+The diminished coordinate set is:
+
+`{0,+3,±6}`
+
+Because `±6` belongs to both shortest-route descriptions, diminished harmony may expose more than one resolution choice. Standard harmonic context already allows diminished structures to lead toward multiple tonal destinations.
+
+The One-Wave description “Mirror-position bifurcation” remains a candidate interpretation. The active musical Field must determine which resolution is realized.
+
+## Canonical Status Summary
+
+```text
+LOCKED:
+route coordinates, shared ±6 Mirror, full chord coordinate sets
+
+YELLOW:
+boundary reinforcement, Field extension, paired interference,
+directional balance, diminished bifurcation
+```
 
 ---
 
 END OF MUSICAL UNIVERSE, CHAPTER 3
-One wave. Mirror builds.
+A question stays a question until the signal answers it.

@@ -9,7 +9,8 @@
     "proton": "Three-Vortex Knot",
     "confinement": "Knot Lock",
     "neutrino": "Low-Coupling Return Mode",
-    "photon": "Propagating Light Mode",
+    "photon (as traveling object/carrier)": "Propagating Light Mode",
+    "photon (as detection/count/measurement)": "photon (retained — focal-point measurement)",
     "rest mass": "rest Mass Effect"
   },
   "geometry": "3D volumetric and sphere-like by default; 2D only cross-section, projection, or explicit negative-space layer",

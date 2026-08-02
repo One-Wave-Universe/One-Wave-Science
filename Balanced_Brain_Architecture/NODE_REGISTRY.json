@@ -1,0 +1,60 @@
+{
+  "nodes": [
+    {
+      "node_id": "G-724",
+      "canonical_name": "Balanced Jetson Choice-Base Architecture",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-724_Balanced_Jetson_Choice_Base_Architecture.md"
+    },
+    {
+      "node_id": "G-725",
+      "canonical_name": "Five-Line Dream Cube",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-725_Five_Line_Dream_Cube.md"
+    },
+    {
+      "node_id": "G-726",
+      "canonical_name": "M4 Fast Subconscious Sphere",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-726_M4_Fast_Subconscious_Sphere.md"
+    },
+    {
+      "node_id": "G-727",
+      "canonical_name": "Six-Gate Administrator Double-Pyramid",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-727_Six_Gate_Administrator_Double_Pyramid.md"
+    },
+    {
+      "node_id": "G-728",
+      "canonical_name": "Gate 5-to-6 Oversight, Override, and Speech Commit Boundary",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-728_Gate_5_6_Oversight_Override_and_Speech_Commit.md"
+    },
+    {
+      "node_id": "G-729",
+      "canonical_name": "M4 Virtual Switch Bank",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-729_M4_Virtual_Switch_Bank.md"
+    },
+    {
+      "node_id": "G-730",
+      "canonical_name": "Algorithm-First Neural Substitution and Weight Governance",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-730_Algorithm_First_Neural_Substitution_and_Weight_Governance.md"
+    },
+    {
+      "node_id": "G-731",
+      "canonical_name": "Internal Dialogue and Reserved Expressive Channels",
+      "gate": "YELLOW",
+      "lifecycle": "PROPOSED_BUILD",
+      "path": "Nodes/G-731_Internal_Dialogue_and_Reserved_Expressive_Channels.md"
+    }
+  ]
+}

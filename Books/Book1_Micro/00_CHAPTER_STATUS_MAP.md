@@ -4,6 +4,7 @@
 
 | Chapter | Status | Canonical file |
 |---:|---|---|
+| 00 | ACTIVE | `Book1_Ch00_Ground_Zero_2D_Mirror_Gate_3D.md` |
 | 01 | ACTIVE | `Book1_Ch01_What_Is_A_Particle.md` |
 | 02 | ACTIVE | `Book1_Ch02_The_Proton.md` |
 | 03 | ACTIVE | `Book1_Ch03_Scale_Invariance.md` |

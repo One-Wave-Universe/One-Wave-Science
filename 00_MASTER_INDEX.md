@@ -1,12 +1,14 @@
 # ONE-WAVE FRAMEWORK — MASTER DEFINITIONS LIST
 ### Micro Subatomic Structure → Galactic Macro Scale
-Compiled from the current consolidated node repository; updated July 23, 2026.
+Compiled from the current consolidated node repository; updated July 27, 2026.
 Gate values are read from each node's I-06 YAML metadata. Lifecycle and claim-specific detail remain in the source node and are not collapsed into this table.
 Updated 24 mass/Mirror-Gate handoff: `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
 Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
 Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
 Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 41 OG recursive-emergence handoff: `UPDATED_41_OG_RECURSIVE_EMERGENCE_NODE_SYSTEM.md`.
+Updated 41 audit: `AUDIT_UPDATED_41_OG_RECURSIVE_EMERGENCE_NODE_SYSTEM.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -16,8 +18,43 @@ Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
 Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in Gray reference sections; One-Wave names control the interpretation layer.
 
+## TIER -1 — OG UNIVERSAL RECURSIVE EMERGENCE SPINE (22 fixed nodes)
+*The universal origin-to-beyond trace. Subject nodes expand; these stages remain fixed.*
+
+Count discipline: `22 OG stages`; `6 active gates (OG-13..OG-18)`; `21 positions per Field/Void side`; `42 bidirectional positions`; shared `0` Mirror reference.
+
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| OG-00 | Null / Original Ground | Original undivided condition | GREEN |
+| OG-01 | Difference / Disturbance | First detectable imbalance | GREEN |
+| OG-02 | Response | Reaction to difference | GREEN |
+| OG-03 | Return | Response returning toward its source or boundary | GREEN |
+| OG-04 | Feedback | Returned movement altering the next movement | GREEN |
+| OG-05 | Recurrence / Repeated Feedback | Feedback occurring more than once | GREEN |
+| OG-06 | Coupled / Nested Loops | Feedback loops affecting other feedback loops | GREEN |
+| OG-07 | Retained Pattern | Relationship that survives repeated cycling | GREEN |
+| OG-08 | Memory | Retained pattern available to a later cycle | GREEN |
+| OG-09 | Reference | Retained state used as Ground for comparison | GREEN |
+| OG-10 | Comparison | Current state measured against reference state | GREEN |
+| OG-11 | Primitive Awareness | A system registering a difference in its own state | GREEN |
+| OG-12 | Presence | Awareness held as the current condition | GREEN |
+| OG-13 | Field | Complete current condition | GREEN |
+| OG-14 | Choice | Selection among available differentials | GREEN |
+| OG-15 | Move | Choice expressed as action | GREEN |
+| OG-16 | Mirror Gate / Interaction | Boundary, null crossing, interaction, return and polarity flip | GREEN |
+| OG-17 | State | Resulting condition after interaction | GREEN |
+| OG-18 | Commit | Result stabilized as the next accepted condition | GREEN |
+| OG-19 | Emergence | Stable higher-order behavior created by repeated committed loops | GREEN |
+| OG-20 | Larger Recursive Organization | Emergent units becoming parts of a larger loop | GREEN |
+| OG-21 | Beyond / New Scale | Transition into a new level of Presence and possibility | GREEN |
+
+**Canonical forward trace:** `OG-00 → OG-01 → ... → OG-21 → OG-00 at the next scale`  
+**Canonical reverse trace:** every relation is traversable backward to its source and prior Ground.
+
+---
+
 ## TIER 0 — FOUNDATION PRIMITIVES (A-Series)
-*The core recursive chain. Every other node and every book chapter is downstream of this sequence.*
+*The physical foundation chain. Scale-specific physics nodes and books are downstream of these primitives; the OG universal trace remains the higher-level origin-to-beyond architecture.*
 
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -128,11 +165,11 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | E-507 | Scale-Invariant Loop | The Paired Loop structure (B-206) operates identically at every scale s — only participants/frequency change. | GREEN |
 | E-508 | Real Persistence Under Loss | Parked node; resolution depends on stability mechanisms established elsewhere. | YELLOW |
 | E-509 | Propagation Limit / Local-Transport Partition | c_L = Δx/Δt is the structural one-cell-per-step ceiling; local/transport bookkeeping cannot be converted into inertia or Mass Effect. | GREEN |
-| E-510 | Music Clock / Harmonic Oscillation | Rotational coordinate system for harmonic relationships, built on A-111's 12-tone relation. | YELLOW |
-| E-511 | Chord Rotation | Re-centers a chord onto its own instance of the E-510 clock. | YELLOW |
-| E-512 | Oscillation Window | Signed position-pair produced once Chord Rotation re-centers a chord. | YELLOW |
-| E-513 | Chord Leaning Direction | Directional lean when a chord's Oscillation Window is asymmetric. | YELLOW |
-| E-514 | Circle of Fifths / Functional Leaning | 12-position fifths clock; clockwise = brighter/sharper, counter = darker/flatter. | YELLOW |
+| E-510 | Mirrored Music Clock | Root-relative twelve-tone coordinate system with two mirrored routes and one shared `±6` Mirror position; sign is route only. | YELLOW |
+| E-511 | Chord Rotation | Re-centers a chord on its root and preserves the complete signed coordinate set. | YELLOW |
+| E-512 | Chord Coordinate Set | Complete root-relative chord coordinates; the former compression/expression Oscillation Window pair is retired. | YELLOW |
+| E-513 | Musical Boundary Hypothesis Register | Open tests for reinforcement, Field extension, paired-boundary interaction, and diminished Mirror resolution; no mechanism committed. | YELLOW |
+| E-514 | Circle of Fifths Route Traversal | Exact repeated `±5` root re-centering; One-Wave boundary and Field interpretations remain Yellow. | YELLOW |
 | E-515 | Observation Windows | Every observer samples a finite window of the same recursive field — not different mechanisms or universes. | YELLOW |
 | E-516 | Pink Noise Scaling Example | Equal energy per octave, applied as a scaling worked example. | YELLOW |
 | E-517 | Negative Space | The unexcited portion of the field where no Persistent Mode is currently expressed. | YELLOW |
@@ -160,7 +197,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
 | F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
 | F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
-### Appendix G — Evaluation, Modulation & Governance (30 nodes)
+### Appendix G — Evaluation, Modulation & Governance (38 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
@@ -193,6 +230,14 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
 | G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
 | G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+| G-724 | Balanced Jetson Choice-Base Architecture | One persistent Jetson choice base: GPU expressive slow brain, M4 fast subconscious boundary, CPU compressive Administrator; no transformer dependency required. | YELLOW |
+| G-725 | Five-Line Dream Cube | Expressive possibility workspace runs Gates 1–5 and permanently reserves audio, visual, internal-world, dream, imagination, and dialogue capacity. | YELLOW |
+| G-726 | M4 Fast Subconscious Sphere | Hidden instinct, habit, cached recall, timing, attention, virtual switches, and automatic routes; no separate processor required for the first build. | YELLOW |
+| G-727 | Six-Gate Administrator Double-Pyramid | One six-vertex bidirectional control geometry for Field through Commit, with tip-to-tip and base-to-base recursion inside one Administrator. | YELLOW |
+| G-728 | Gate 5-to-6 Oversight, Override, and Speech Commit Boundary | Think-before-speech/action boundary; Gate 5 may hold, reverse, reopen, break, or pass to Gate 6 Commit. | YELLOW |
+| G-729 | M4 Virtual Switch Bank | Signed -1/0/+1 subconscious permission, attention, dream, habit, interrupt, learning, and commitment switches with reserved slots. | YELLOW |
+| G-730 | Algorithm-First Neural Substitution and Weight Governance | Exact rules, graph traversal, state machines, solvers, and constraints replace neural work before Hopfield reconstruction or Boltzmann exploration. | YELLOW |
+| G-731 | Internal Dialogue and Reserved Expressive Channels | Preserves distinct audio, visual, internal-world, dream, imagination, and internal-dialogue workspaces and blocks imagined content from automatic Commit. | YELLOW |
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
@@ -352,3 +397,26 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 
 - I-01 Rule 16: no expansion of space in canonical One-Wave math.
 - I-01 Rule 17: use the terminology legend and 3D sphere-like default in One-Wave interpretation layers.
+
+
+## Updated 44 Terminal Wave Lifecycle
+- E-531 Terminal Optical Wave Lifecycle
+- E-532 Interference, Coherence, and Terminal Convergence
+- E-533 Neutrino Terminal Flattening Lifecycle
+- E-534 Stellar Neutrino Release within the Wave Lifecycle
+- E-535 Redshift-Neutrino Peak-Trough Comparison Protocol
+- E-536 Terminal Wave Truth Computer Test Register
+- Book 5 Chapter 6
+- One-Wave Times Issues 007-008
+
+## Updated 45 Ground Zero Dimensional Canon
+- A-118 Mirror Gate Dimensional Ground
+- E-537 Compressed Negative 2D Space
+- E-538 Nonmetric Time and Distance in Negative Space
+- E-539 Dreamscape Awareness and Rapid Relational Access
+- C-323 Electricity-Magnetism Mirror-Gate Conversion
+- E-540 Particle as Excitation or Measurement
+- E-541 Ocular Focal Collapse and Peak-Trough Mapping
+- E-542 Local Peak-Trough Back-Mapping — No Spooky Action
+- E-543 Mandatory 2D-Gate-3D Chapter Schema
+- Book 1 Chapter 0: Ground Zero — Negative 2D, Mirror Gate, Positive 3D

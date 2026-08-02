@@ -35,18 +35,21 @@ from a deeper principle. The photon mass being exactly zero is assumed, not deri
 
 ## 2D One-Wave Interpretation
 
-In 2D, the photon is a traveling pressure wave in the lattice field.
+In 2D, the light wave is a traveling pressure wave in the lattice field.
 
 It is not a particle.
 It is not a wave-particle.
 It is a lattice pressure oscillation propagating at the friction limit.
+A photon is not this traveling wave — a photon is the discrete measurement
+registered when the wave converges at a detector boundary (see "No observer
+effect" below).
 
 In 2D: imagine a ripple moving across a surface at the maximum speed
 the surface can support. Not faster. Not slower.
 The ripple is self-sustaining — it neither amplifies nor dissipates
 as long as the lattice is uniform.
 
-The photon in 2D is the simplest candidate propagating mode:
+The light wave in 2D is the simplest candidate propagating mode:
 one oscillation on a gapless branch traveling at the lattice signal speed.
 Its zero rest Mass Effect requires the electromagnetic branch to remain gapless under the same fixed update law,
 \[
@@ -58,63 +61,74 @@ and has no finite-energy localized rest solution.
 
 ## 3D One-Wave Interpretation
 
-In 3D, the photon is a transverse lattice pressure oscillation
+In 3D, the light wave is a transverse lattice pressure oscillation
 propagating at the friction limit c.
 
-The photon is not a Persistent Mode in the usual sense.
+The light wave is not a Persistent Mode in the usual sense.
 A Persistent Mode is stationary or slowly moving.
-The photon is a traveling mode — a propagating pressure wave
+The light wave is a traveling mode — a propagating pressure wave
 that moves at v_max = sqrt(beta_max) * Delta_x / Delta_t.
 
-The photon has two components (C-311 Electric-Magnetic Duality):
+The light wave has two components (C-311 Electric-Magnetic Duality):
 Radial component:    E_vec ~ nabla P_psi   (the electric field of the wave)
 Rotational component: B_vec ~ nabla x P_psi (the magnetic field of the wave)
 
 These are not two separate fields traveling together.
 They are the two projection angles of the same lattice pressure oscillation.
 
-The photon travels at c because:
+The light wave travels at c because:
 c = v_max = friction limit of the lattice (C-309).
 Any disturbance in the lattice propagates at most at v_max.
-The photon is a disturbance that propagates at exactly v_max —
+The light wave is a disturbance that propagates at exactly v_max —
 it is the lattice's own propagation mode.
 
-Photon energy:
+Light wave energy:
 E = hbar * omega
-In One-Wave: E_photon = energy of the pressure oscillation at frequency omega.
+In One-Wave: this is the energy of the pressure oscillation at frequency omega.
+A photon is the discrete registration of this energy at a focal-point
+measurement — "photon energy" names the quantized amount transferred per
+registration, not a property of a traveling particle.
 The lattice quantizes this in units of hbar * omega
 because the harmonic shell condition (D-05) sets discrete allowed frequencies.
 
-Photon spin-1:
-The photon has spin-1, not spin-1/2.
-In One-Wave: the photon is a traveling mode, not a boundary mode.
+Spin-1 (light wave):
+The light wave has spin-1, not spin-1/2.
+In One-Wave: the light wave is a traveling mode, not a boundary mode.
 It does not undergo the boundary roll-off (B-06b) that produces 4*pi closure.
-Instead, the photon undergoes a 2*pi rotation to return to itself.
-This is because the photon's oscillation is the lattice field itself —
+Instead, the wave undergoes a 2*pi rotation to return to itself.
+This is because the wave's oscillation is the lattice field itself —
 it does not have an interior/exterior distinction like a bounded mode.
 
 No observer effect:
-When the photon reaches a focal point (eye, detector), it couples with
-the restoring loop of that focal point (B-06 Paired Loop).
-The coupling samples the current phase of the photon oscillation — peak or trough.
-That sample is the measurement.
+When the continuing light wave reaches a focal point (eye, detector) and
+couples with the restoring loop of that focal point (B-06 Paired Loop)
+strongly enough to cross the measurement threshold, that coupling event
+is the photon — a discrete focal-point registration, not a traveling object.
+The coupling samples the current phase of the light wave's oscillation —
+peak or trough. That sample is the measurement.
 There is no collapse. There is no observer effect.
-The Propagating Light Mode is a wave. Measurement is a focal-point phase sample; cosmological redshift is assigned to E-528 static transport, not expansion.
+The light wave itself never stops being a wave; the photon count is simply
+the number of times it has been registered. Cosmological redshift is
+assigned to E-528 static transport, not expansion.
 
 The photoelectric effect:
-When a photon couples with an electron shell mode,
-the photon's pressure oscillation either has enough energy to
+When the continuing light wave couples with an electron shell mode,
+the wave's pressure oscillation either carries enough energy to
 knock the electron into a higher harmonic shell
 or it does not.
-If E_photon >= DeltaE_shell: the electron transitions. The photon is absorbed.
-If E_photon < DeltaE_shell: no transition. The photon reflects or passes through.
-This is the photoelectric threshold — not a particle effect, a resonance condition.
+If E_photon >= DeltaE_shell: the electron transitions, and that transition
+is registered as a photon absorption.
+If E_photon < DeltaE_shell: no transition, no registration — the wave
+reflects or passes through.
+This is the photoelectric threshold — not a particle effect, a resonance
+condition. "Photon" here names the registered transition event, not an
+object that was absorbed.
 
 ---
 
 ## Mathematics
 
-Photon speed (C-309):
+Light wave speed (C-309):
 c = v_max = sqrt(beta_max) * Delta_x / Delta_t
 
 Photon energy:
@@ -142,7 +156,8 @@ psi(theta + 2*pi) = psi(theta)  (returns to itself after one rotation)
 Compare to spin-1/2: psi(theta + 2*pi) = -psi(theta)
 
 Compton scattering (sketch — Yellow):
-Photon couples with electron shell mode.
+The light wave couples with an electron shell mode; the registered
+transfer is what "photon" names here.
 Momentum transfer: Delta_p = hbar * (k_i - k_f)
 Energy transfer: DeltaE = hbar * (omega_i - omega_f)
 Wavelength shift: Delta_lambda = (h / m_e * c) * (1 - cos theta)
@@ -153,17 +168,18 @@ traveling mode and shell mode. Formal derivation deferred.
 
 ## Predictions
 
-1. The photon is a transverse lattice pressure oscillation — not a particle, not a wave-particle.
-Prediction: all photon behavior (interference, diffraction, photoelectric effect, Compton scattering)
+1. The light wave is a transverse lattice pressure oscillation — not a particle, not a wave-particle.
+The photon is the discrete measurement event this wave produces at a detector boundary.
+Prediction: all photon-detection behavior (interference, diffraction, photoelectric effect, Compton scattering)
 follows from the traveling pressure oscillation model without invoking wave-particle duality.
 
-2. Photon speed is the lattice friction limit, not a fundamental constant.
+2. Light wave speed is the lattice friction limit, not a fundamental constant.
 Prediction: c varies slightly in regions of non-uniform lattice density
 (near extreme mass concentrations / high pressure gradients).
 This is the One-Wave basis of gravitational lensing.
 
-3. Photon energy quantization E = hbar*omega comes from harmonic shell resonance (D-05).
-Prediction: photons interact with matter only at discrete frequencies
+3. Photon-registration energy quantization E = hbar*omega comes from harmonic shell resonance (D-05).
+Prediction: the light wave is registered (detected) only at discrete frequencies
 because the harmonic shell condition allows only discrete energy transitions.
 
 4. The photoelectric effect is a resonance condition, not a particle effect.
@@ -183,13 +199,13 @@ A reduced group speed in matter or in a nonuniform field does not, by itself, im
 
 ## Yellow Audit
 
-- Full photon derivation from a gapless lattice branch is not yet complete
+- Full light-wave derivation from a gapless lattice branch is not yet complete
 - |E_vec| = c * |B_vec| derivation from lattice geometry deferred
 - Compton scattering derivation sketch level only
 - Spin-1 derivation from traveling mode geometry needs formalization
 - Photon energy quantization from harmonic shell condition not yet derived
 - Gravitational lensing from non-uniform lattice density not yet quantified
-- The separation between photon branch gaplessness and massive localized branches must be derived jointly with C-318
+- The separation between light-wave branch gaplessness and massive localized branches must be derived jointly with C-318
 
 ---
 
@@ -216,12 +232,13 @@ It is not a wave or a particle. It is a mode of the field.
 When it travels undisturbed: it behaves like a wave — it interferes, it diffracts.
 When it couples with a shell mode: it transfers energy in discrete amounts — it looks like a particle.
 
-The discreteness is not because the photon is a particle.
+The discreteness is not because light is made of particles.
 The discreteness is because the shell modes it couples with
 only accept discrete energy inputs (D-05 harmonic shell condition).
 
-The photon is a wave that knocks on discrete doors.
-The discreteness is in the doors, not the photon.
+The light wave knocks on discrete doors. Each successful knock —
+each registration — is a photon.
+The discreteness is in the doors, not the wave.
 
 ---
 

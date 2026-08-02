@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-511: Chord Rotation</title><style>
+body{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#0b1020;color:#e8edf7;max-width:980px;margin:auto;padding:32px;line-height:1.55}
+a{color:#8fd3ff}h1,h2,h3{color:#fff}h1{border-bottom:1px solid #34405a;padding-bottom:.35em}pre,code{background:#151d31;color:#dce8ff;border-radius:6px}code{padding:.12em .32em}pre{padding:16px;overflow:auto}blockquote{border-left:4px solid #8fd3ff;padding-left:16px;color:#cbd6ea}hr{border:0;border-top:1px solid #34405a}table{border-collapse:collapse;width:100%}th,td{border:1px solid #34405a;padding:8px}strong{color:#fff}.canon{background:#121a2d;border:1px solid #34405a;border-radius:10px;padding:12px 16px;margin-bottom:20px}
+</style></head><body><div class="canon"><strong>Name:</strong> Chord Rotation<br><strong>Gate:</strong> YELLOW<br><strong>Lifecycle:</strong> ACTIVE_HYPOTHESIS</div><div class="canon"><strong>Canonical source:</strong> Updated 40 Musical Mirror Correction. Coordinate facts are separated from Yellow hypotheses.</div><h1 id="node-e-511-chord-rotation">Node E-511: Chord Rotation</h1>
+<p>Class: FUNCTION</p>
+<p>Dependencies: Upstream: E-510 Mirrored Music Clock Downstream: E-512
+Chord Coordinate Set</p>
+<p>Definition: Chord Rotation re-centers a chord on a selected root and
+assigns every chord tone an E-510 mirrored coordinate.</p>
+<p>Procedure: 1. Select root <code>R</code>. 2. Set <code>R = 0</code>.
+3. For every tone <code>T</code>, calculate
+<code>k = (T-R) mod 12</code>. 4. Convert <code>k</code> to
+<code>0..+5</code>, <code>-5..-1</code>, or shared <code>±6</code>. 5.
+Preserve every tone coordinate. 6. Preserve voicing, inversion, octave,
+amplitude, phase, and timing separately when available.</p>
+<p>Canonical correction: The output is a complete coordinate set, not
+automatically a compression-side / expression-side pair. Sign is route
+direction, not operation.</p>
+<p>Examples: - Major triad: <code>{0,+4,-5}</code> - Minor triad:
+<code>{0,+3,-5}</code> - Power chord: <code>{0,-5}</code> - Augmented
+triad: <code>{0,+4,-4}</code> - Diminished triad:
+<code>{0,+3,±6}</code></p>
+<p>Operational Chain: E-510 Reference Frame =&gt; Re-center Root =&gt;
+Assign All Tone Coordinates =&gt; E-512 Coordinate Set</p>
+<p>Yellow Audit: - Root selection must be explicit for ambiguous chords.
+- Pitch-class coordinates do not capture voicing or acoustic phase. -
+Coordinate patterns alone do not establish force, direction, or
+stability.</p>
+<p>Future Work: Add progression traces and measured signal data without
+collapsing them into pitch-class position alone.</p>
+<hr />
+</body></html>

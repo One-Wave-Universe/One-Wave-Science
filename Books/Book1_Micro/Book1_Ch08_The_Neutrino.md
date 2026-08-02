@@ -233,3 +233,13 @@ One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
 ## Cosmic Return Role
 
 E-529 extends this micro-scale release mechanism into the static cosmic loop. That extension is Green: ordinary neutrino observations do not by themselves prove that neutrinos carry the universe-wide return current. The transfer coefficient and deposition pathway must be derived.
+
+
+---
+## Updated 44 Addendum — Terminal Flattening and Multiple Entry Routes
+
+E-533 now registers the hypothesis that measured neutrino configurations are late low-coupling states of a wave lifecycle. "Flatter" means reduced residual contrast, curvature, and ordinary-matter coupling relative to the field baseline. Flavor order is not declared; it must be derived from oscillation data.
+
+E-534 records two possible entry routes into the low-coupling state space: direct stellar/internal boundary release and long optical propagation through the terminal redshift boundary. These routes may join one state space without producing identical populations.
+
+See E-531 through E-536 and Book 5 Chapter 6.

@@ -2609,6 +2609,10 @@ Resolve the Balance/Balance naming question before citing B-201 as the
 
 ---
 
+## Updated 41 OG Relationship
+
+B-221 remains an operational six-step cycle. It is not the complete universal origin-to-beyond spine. The canonical OG architecture is OG-00 through OG-21. B-221 operates downstream within repeated Field/Choice/Move/Mirror/State/Commit activity and may be used as one cycle instantiation inside OG-13 through OG-18.
+
 ---
 
 ## SOURCE: B-222_Oscillation_Center.md
@@ -3078,6 +3082,10 @@ Future Work:
    at every scale.
 
 ---
+
+## Updated 41 OG Relationship
+
+B-225 remains a field-transformation cycle. It does not replace OG-00 through OG-21. In the universal trace, B-225 belongs after Presence and within the active Field-to-Commit region; its output can contribute to repeated commitment and therefore to OG-19 Emergence.
 
 ---
 

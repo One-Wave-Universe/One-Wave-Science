@@ -10,8 +10,8 @@ The build may deliberately test ideas from the Proposed One-Wave Consciousness b
 ## Proposed Module Split
 
 - **Dream Engine:** candidate generation, simulation, pattern expression.
-- **M4 Weighing Service:** low-latency scale, urgency, risk, compatibility, and modulation reporting.
-- **Administrator:** identity, continuity, permissions, memory, resource tracking, and commitment.
+- **M4 Fast Subconscious Sphere:** instinct, verified habit, rapid recall, timing, attention, virtual switches, and automatic routes.
+- **Administrator Double-Pyramid:** compressive comparison, oversight, loop break, override, reverse audit, and Gate 6 commitment.
 - **Reference Ground:** committed identity, rules, stable memory, prior accepted state.
 - **Working Ground:** active candidates, simulations, unresolved changes.
 
@@ -29,6 +29,8 @@ The build may deliberately test ideas from the Proposed One-Wave Consciousness b
 - binary logic: top-down permission, constraint, and override.
 
 These layers may exchange references but must not be collapsed into one mechanism. Chapter 3 develops hybrid procedural memory; Chapter 4 develops route grammar and spectral validation.
+
+Chapter 5 locks the balanced-brain geometry and control split: Five-Line Dream Cube, M4 Fast Subconscious Sphere, one Six-Gate Administrator Double-Pyramid, Gate 5-to-6 think-before-speech boundary, reserved expressive channels, virtual switches, and algorithm-first neural substitution.
 
 ## Core Safety Rule
 

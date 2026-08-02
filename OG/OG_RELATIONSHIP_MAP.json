@@ -1,0 +1,140 @@
+[
+  {
+    "source": "OG-00",
+    "relation": "ALLOWS_DIFFERENCE",
+    "target": "OG-01",
+    "reverse_relation": "IS_DIFFERENCE_ALLOWED_BY"
+  },
+  {
+    "source": "OG-01",
+    "relation": "PRODUCES_RESPONSE",
+    "target": "OG-02",
+    "reverse_relation": "RESPONDS_TO"
+  },
+  {
+    "source": "OG-02",
+    "relation": "MOVES_TOWARD_RETURN",
+    "target": "OG-03",
+    "reverse_relation": "RETURNS_FROM"
+  },
+  {
+    "source": "OG-03",
+    "relation": "CREATES_FEEDBACK",
+    "target": "OG-04",
+    "reverse_relation": "IS_FEEDBACK_FROM"
+  },
+  {
+    "source": "OG-04",
+    "relation": "REPEATS_AS",
+    "target": "OG-05",
+    "reverse_relation": "RECURS_FROM"
+  },
+  {
+    "source": "OG-05",
+    "relation": "COUPLES_INTO",
+    "target": "OG-06",
+    "reverse_relation": "CONTAINS_COUPLED_LOOP"
+  },
+  {
+    "source": "OG-06",
+    "relation": "RETAINS_PATTERN",
+    "target": "OG-07",
+    "reverse_relation": "IS_PATTERN_RETAINED_BY"
+  },
+  {
+    "source": "OG-07",
+    "relation": "BECOMES_MEMORY",
+    "target": "OG-08",
+    "reverse_relation": "WAS_RETAINED_AS_PATTERN"
+  },
+  {
+    "source": "OG-08",
+    "relation": "BECOMES_REFERENCE",
+    "target": "OG-09",
+    "reverse_relation": "WAS_RETAINED_AS_MEMORY"
+  },
+  {
+    "source": "OG-09",
+    "relation": "ENABLES_COMPARISON",
+    "target": "OG-10",
+    "reverse_relation": "COMPARES_AGAINST"
+  },
+  {
+    "source": "OG-10",
+    "relation": "PRODUCES_AWARENESS",
+    "target": "OG-11",
+    "reverse_relation": "IS_AWARENESS_OF"
+  },
+  {
+    "source": "OG-11",
+    "relation": "STABILIZES_AS_PRESENCE",
+    "target": "OG-12",
+    "reverse_relation": "EMERGES_FROM_AWARENESS"
+  },
+  {
+    "source": "OG-12",
+    "relation": "FORMS_FIELD",
+    "target": "OG-13",
+    "reverse_relation": "IS_FORMED_BY_PRESENCE"
+  },
+  {
+    "source": "OG-13",
+    "relation": "DEFINES_CHOICES",
+    "target": "OG-14",
+    "reverse_relation": "IS_AVAILABLE_WITHIN_FIELD"
+  },
+  {
+    "source": "OG-14",
+    "relation": "SELECTS_MOVE",
+    "target": "OG-15",
+    "reverse_relation": "WAS_SELECTED_BY_CHOICE"
+  },
+  {
+    "source": "OG-15",
+    "relation": "CROSSES_MIRROR_GATE",
+    "target": "OG-16",
+    "reverse_relation": "IS_CROSSED_BY_MOVE"
+  },
+  {
+    "source": "OG-16",
+    "relation": "PRODUCES_STATE",
+    "target": "OG-17",
+    "reverse_relation": "WAS_PRODUCED_BY_INTERACTION"
+  },
+  {
+    "source": "OG-17",
+    "relation": "MAY_COMMIT_AS",
+    "target": "OG-18",
+    "reverse_relation": "CAN_BE_REVERSED_TO_STATE"
+  },
+  {
+    "source": "OG-18",
+    "relation": "BECOMES_NEW_PRESENCE",
+    "target": "OG-12",
+    "reverse_relation": "WAS_CREATED_BY_COMMIT"
+  },
+  {
+    "source": "OG-18",
+    "relation": "REPEATEDLY_STABILIZES_AS",
+    "target": "OG-19",
+    "reverse_relation": "EMERGES_FROM_COMMITTED_LOOPS"
+  },
+  {
+    "source": "OG-19",
+    "relation": "ORGANIZES_INTO",
+    "target": "OG-20",
+    "reverse_relation": "IS_ORGANIZED_FROM_EMERGENCE"
+  },
+  {
+    "source": "OG-20",
+    "relation": "OPENS_BEYOND",
+    "target": "OG-21",
+    "reverse_relation": "IS_OPENED_BY_LARGER_ORGANIZATION"
+  },
+  {
+    "source": "OG-21",
+    "relation": "BECOMES_NEW_GROUND",
+    "target": "OG-00",
+    "reverse_relation": "WAS_OPENED_AS_BEYOND"
+  }
+]

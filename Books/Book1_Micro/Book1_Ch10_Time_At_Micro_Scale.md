@@ -203,3 +203,6 @@ Those quantities may interact, but they are not interchangeable.
 ---
 
 END OF BOOK 1 CHAPTER 10
+
+## Updated 45 Negative-Space Time and Distance Lock
+Negative 2D space has sequence, recursion, dependency, and state change but no native metric travel time or distance. Metric duration and separation enter when the relational state is expressed physically in 3D. Dream duration and represented distance therefore need not equal the sleeping brain's measured runtime. See E-538.

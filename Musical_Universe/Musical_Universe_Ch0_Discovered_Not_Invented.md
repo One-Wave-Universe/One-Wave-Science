@@ -1,115 +1,46 @@
 Musical Universe, Chapter 0: Discovered, Not Invented
 
-Version: 1.0
-Date: July 19, 2026
+Version: 2.0 Canonical Correction
+Date: July 27, 2026
 Class: E-Series Application — Historical Foundation
-Status: YELLOW (framing) / GRAY (historical content, real and independently verifiable)
+Status: YELLOW (One-Wave framing) / GRAY (standard acoustics and music theory)
 
-Dependencies: A-111 Recursion, A-112 Persistent Mode, Musical Universe Ch1-4
-
-Framing, stated precisely: humans invented musical systems, but
-discovered underlying relationships. Humans created instruments,
-notation, tuning conventions, and cultural styles — human inventions.
-Humans discovered harmonic ratios, resonance, interference patterns,
-and repeating oscillatory structure — these are real physical facts
-about vibrating media, independent of any culture's notation.
-
-Core statement: music is a discovered pattern language for describing
-resonance in nature — not a claim that the universe follows a guitar
-tuning system. The guitar is the map humans built; the resonance
-itself is the terrain.
+Dependencies: A-110 Oscillation, A-111 Recursion, A-112 Persistent Mode, F-604 Resonance, F-605 Interference, Musical Universe Chapters 1-4
 
 ---
 
-## Gray — Real Historical and Scientific Content
+## Discovered and Invented
 
-**Musica Universalis**: Pythagoras found that dividing a vibrating
-string by simple whole-number ratios (2:1, 3:2, 4:3) produces the
-octave, perfect fifth, and perfect fourth — a real, discoverable
-physical fact about string vibration, not a cultural convention.
-Kepler's Harmonices Mundi (1619) mapped planetary angular velocities
-to musical intervals — real history, though the specific astronomical
-claim (planets literally "singing" in tune) was not itself confirmed
-science, even in Kepler's own era.
+Humans invented instruments, notation, temperaments, chord names, and musical cultures. Humans did not invent resonance, interference, harmonic recurrence, or the fact that bounded vibrating systems support repeatable modes.
 
-**Baryon Acoustic Oscillations**: real, observationally confirmed
-astrophysics. In the early universe's hot plasma, pressure
-differentials propagated as genuine acoustic waves. The Cosmic
-Microwave Background's power spectrum shows real, measured harmonic
-peaks from this — not a metaphor, an actual measured phenomenon.
+Music is useful to One-Wave as a discovered pattern language for oscillation. Instruments and tuning systems are maps made by people. The measurable wave relationships are the terrain.
 
-**String Theory**: a real, actively-researched (though unconfirmed)
-theoretical framework proposing vibrating one-dimensional filaments as
-the fundamental constituent of matter, with particle identity
-determined by vibrational mode — real physics vocabulary, not
-invented for this repo.
+## Gray — Standard Physical Ground
 
----
+Twelve-tone equal temperament divides an octave into twelve equal logarithmic steps:
 
-## What Is Discovered vs. What Is Invented
+`f_n = f_0 * 2^(n/12)`
 
-Discovered (real, independent of human culture):
-- Harmonic ratios (octave=2:1, fifth=3:2) — physical facts about
-  vibrating strings and air columns
-- Resonance and standing-wave formation — physical facts about bounded
-  oscillating media
-- Interference patterns (constructive/destructive) — physical facts
-  about wave superposition
+Standard chord spellings, interval names, the circle of fifths, resonance, beating, and phase-dependent interference belong to established music theory and acoustics. They are not One-Wave discoveries.
 
-Invented (human convention, for practical reasons):
-- 12-tone equal temperament specifically — a compromise tuning
-  allowing modulation between keys, adopted historically because
-  Pythagorean/just intonation don't permit this cleanly
-- Staff notation, instrument design, cultural musical styles
+## Canonical Correction
 
-This chapter's own E-510 (Music Clock) explicitly uses equal
-temperament as a borrowed coordinate CONVENTION for mapping — verified
-against A-111's real text, which introduces the 12-tone relation
-"for guitar/frequency systems," not as a claim about the lattice's
-natural eigenmodes. No contradiction between this framing and Ch1-4.
+The earlier Musical Universe draft assigned permanent physical meaning to clock direction:
 
----
+- positive / clockwise = expression
+- negative / counterclockwise = compression
 
-## Corrections to Prior Material (checked and fixed, not imported as-is)
+That assignment is retired.
 
-**42.5**: a real, verified number from B-208's ORIGINAL structure —
-explicitly marked SUPERSEDED in B-222 after B-208 was substantially
-revised this session. Any future reference to 42.5 as a "resolution
-region" must carry this caveat; it does not refer to anything in the
-current B-208.
+A sign records which mirrored route reaches a pitch class from the current anchor. Compression and expression, if applied, must be determined from actual movement relative to the active anchor, not from which side of a drawing the note occupies.
 
-**Letter collision**: an earlier draft proposed an "A through G
-recursive architecture" for musical states. This directly collides
-with this repo's real, load-bearing Appendix lettering (A=Core Field
-Axioms, B=Relational Primitives, C=Motion/Spin/Force, D=Resonance,
-E=Field Applications, F=Wave Interaction, G=Evaluation/Gates). Not
-adopted under those letters — if a musical recursion-cycle concept is
-wanted, it needs its own distinct labeling.
+The same caution applies to boundary ideas. Power-chord reinforcement, field extension, paired-boundary interference, and diminished two-direction resolution remain Yellow questions until signal or perceptual tests support them.
 
-**"Syntropy"**: not a standard, mainstream physics term — used in some
-fringe theoretical-biology and philosophy contexts. Not adopted here
-as though it carries the same establishment as "entropy."
+## Rule of Use
 
----
-
-## Yellow Audit
-
-- The discovered/invented distinction is a real, defensible
-  philosophical position, not a mathematically provable claim — stated
-  as a framing choice, not a derived result
-- The connection between BAO's real acoustic peaks and this
-  framework's own resonance concepts (A-111, E-510) is a structural
-  resemblance, not a claimed identity — not yet checked term-by-term
-
-## Future Work
-
-If a genuine recursive-cycle concept for musical states is wanted,
-build it under its own distinct label, not reusing the Appendix
-letters. Check BAO's real power spectrum data against this
-framework's resonance math for any genuine, checkable correspondence
-beyond structural resemblance.
+Music may reveal a reusable oscillation grammar. It does not prove that every physical system literally follows twelve-tone Western tuning. Coordinates organize questions; they do not answer them by decorative enthusiasm.
 
 ---
 
 END OF MUSICAL UNIVERSE, CHAPTER 0
-One wave. Mirror builds.
+One wave. Mirror returns.

@@ -603,120 +603,58 @@ The partition proposal fails if no conserved norm supports it or if it merely re
 
 ---
 node_id: "E-510"
-canonical_name: "Music Clock Harmonic Oscillation"
+canonical_name: "Mirrored Music Clock"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "YELLOW (proposed — new node, elaborates existing A-111 content)"
+claim_gate_detail: "GRAY twelve-tone coordinate arithmetic / YELLOW One-Wave interpretation"
 metadata_standard: "I-06"
 ---
 
-# Node E-510: Music Clock Harmonic Oscillation
+# Node E-510: Mirrored Music Clock
 
-Class: FUNCTION
-
-Not a book chapter. Not a book node.
-This is a reusable function node within Appendix E, in the same class as
-other Appendix E functions (E-501 through E-509).
-
-Term disambiguation:
-"Chord" in this node refers exclusively to a musical chord (e.g., A Major).
-It is unrelated to "Operational Chain" (the standard per-node dependency
-field used throughout the repo) and unrelated to "Chapter" (a Book
-document-structure unit). No cross-meaning is intended anywhere in this node.
+Class: REFERENCE FRAME
 
 Dependencies:
-Upstream: A-111 Recursion (Harmonic Mapping / Four Harmonic Behavior Axes sections)
-Lateral: G-721 Mirrored Alphabet Rabbit-Hop Coordinate Algorithm (separate symbolic coordinate system)
-Downstream: E-511 Chord Rotation
+Upstream: A-101 Ground / Zero, A-110 Oscillation, A-111 Recursion, B-205 Mirror, B-222 Oscillation Center
+Lateral: G-721 Mirrored Alphabet Rabbit-Hop Coordinate Algorithm
+Downstream: E-511 Chord Rotation, E-512 Chord Coordinate Set, E-513 Musical Boundary Hypothesis Register, E-514 Circle of Fifths Route Traversal
 
 Separation rule:
-The Music Clock and G-721 must not be collapsed. The Music Clock supplies a 12-position harmonic/movement relation. G-721 supplies A-to-Z symbolic identity and mirrored recursive coordinates. A later compiler may connect them, but neither one is the other.
+E-510 and G-721 are separate coordinate systems. E-510 addresses twelve-tone pitch classes. G-721 addresses symbolic alphabet identity and recursive route packets.
 
 Definition:
-The Music Clock is a rotational coordinate system for harmonic relationships,
-built on the 12-tone equal-temperament relation already stated in A-111:
+The Mirrored Music Clock is a twelve-tone pitch-class coordinate frame re-centered on a selected root at `0`.
 
-f_n = f_0(2^(n/12))
+Coordinate structure:
+- `0` = local anchor
+- `±1` through `±4` = interior route positions
+- `±5` = fifth/fourth route positions, provisionally called boundaries
+- `±6` = one shared Mirror position
 
-A-111 established root distance, octave position, interval ratio, and
-oscillation width as the quantities to track, and named the Major/Minor,
-Forward/Backward axes. This node formalizes those into a signed 12-position
-clock centered on a chosen root.
+Signed coordinate rule:
+For upward semitone distance `k = (T-R) mod 12`:
+- `k in {0,1,2,3,4,5}` => `p = +k`
+- `k in {7,8,9,10,11}` => `p = k-12`
+- `k = 6` => `p = ±6`
 
-CLOCK REFERENCE:
-Root position (12 o'clock) = (0), the harmonic zero reference —
-this is a root-relative instance of the same Ground/Zero pattern used
-throughout the repo (Δψ = ψ − ψ₀, from A-101), applied to pitch instead
-of field displacement.
+Canonical correction:
+Positive and negative identify mirrored route directions only. Clockwise and counterclockwise do not permanently mean expression and compression. Compression and expression, when used, must be determined from motion relative to the active anchor or Field.
 
-Clockwise rotation = positive displacement (Expression direction, per B-203/B-204 convention)
-Counter-clockwise rotation = negative displacement (Compression direction)
-
-SIGNED POSITIONS (example, root = A):
-Clockwise:  A(0) -> A#(+1) -> B(+2) -> C(+3) -> C#(+4) -> D(+5)
-Counter-clockwise: A(0) -> G#(-1) -> G(-2) -> F#(-3) -> F(-4) -> E(-5)
-Opposite pole (6 o'clock) = (-0-), the mirror/inversion reference —
-this is the same Mirror operation as B-205, applied to the harmonic clock.
-
-VERTICAL DIAGRAM CONVENTION (added, consistent with the confirmed
-values above — this is a display convention, not a new claim):
-For a given chord, its Expression-side tone (positive position) is
-drawn on top, its root at center, and its Compression-side tone
-(negative position) on the bottom:
-
-        C# (+4)
-          |
-        A  (0)
-          |
-        E  (-5)
-
-Positive/Expression = up. Root = center. Negative/Compression = down.
-This matches the earlier cross-style diagrams used for the worked
-Major/Minor examples, now stated as an explicit convention rather than
-left implicit in each individual diagram.
-
-OCTAVE BOUNDARY / WRAPAROUND (added — closes a real gap: this clock
-was previously only defined for positions 0 through ±5, meeting at
-the shared 6 o'clock mirror point, with no stated behavior beyond that
-boundary):
-
-Octave transition:
-f(n+1) = 2 * f(n)
-
-When clock position would extend past +5 or -5 (i.e., past the G#/A
-boundary in either direction), the position wraps: the coordinate
-repeats (A is A again), but the scale has changed by one octave
-(frequency doubled or halved). This is the same "same recursive
-structure, different scale" principle already established for A-111/
-E-507 — applied here specifically to the clock's own boundary rather
-than left unstated.
-
-Consequence: the Music Clock is not a single fixed 12-position ring.
-It is one ring repeated at every octave, with position 0 (root)
-recurring at every doubling of frequency. A chord tone that would
-"fall off" the ±5 boundary does not leave the system — it re-enters
-at the corresponding position one octave up or down.
-
-Mathematics:
-No independent mathematics beyond the clock positions above. The operation
-that uses this coordinate system — re-centering an arbitrary chord onto it —
-is defined separately in E-511 Chord Rotation, since a reference system and
-the function that operates on it are distinct (same split as A-101 Ground/Zero
-vs A-102 Displacement, or C-301 Mirror Gate vs B-205 Mirror).
+Octave recurrence:
+`f(n+12) = 2f(n)`
 
 Operational Chain:
-A-111 Harmonic Mapping => Music Clock (reference frame) => E-511 Chord Rotation (function)
+Select Root => Set Anchor 0 => Assign Mirrored Route Coordinates => Preserve Mirror ±6
 
 Yellow Audit:
-- Relationship between clock position and actual perceived consonance/dissonance not derived, only positional
-- Connection to the guitar-signal physical validation goal (waveform/frequency measurement) not yet built — this node is currently music-theory-level, not signal-level
-- Relationship to B-206b's Four Views (Inward/Outward/Across/Over) not yet mapped, despite conceptual similarity to Compression/Expression framing
+- Coordinate arithmetic is exact within twelve-tone equal temperament.
+- Anchor, Field, boundary, and Mirror are One-Wave interpretations.
+- No physical polarity, reinforcement, or cancellation is inferred from sign alone.
 
 Future Work:
-Connect clock positions to actual measured guitar frequencies (bridge to the Wave Reader hardware work).
-Determine whether this node should formally cite B-203 Expression / B-204 Compression as upstream, given the shared directional convention.
+Measure real instrument frequency, phase, amplitude, and time behavior. Test whether the provisional structural labels predict anything beyond standard interval coordinates.
 
 ---
 
@@ -731,7 +669,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "YELLOW (proposed — new node, split out from E-510)"
+claim_gate_detail: "GRAY root-relative coordinate operation / YELLOW One-Wave use"
 metadata_standard: "I-06"
 ---
 
@@ -739,56 +677,41 @@ metadata_standard: "I-06"
 
 Class: FUNCTION
 
-Not a book chapter. Not a book node.
-This is a reusable function node within Appendix E. It is the operator
-that acts on the E-510 Music Clock reference frame — the same relationship
-as A-102 Displacement acting on A-101 Ground/Zero, or B-205 Mirror acting
-at C-301 Mirror Gate.
-
 Dependencies:
-Upstream: E-510 Music Clock Harmonic Oscillation
-Downstream: E-512 Oscillation Window
+Upstream: E-510 Mirrored Music Clock
+Downstream: E-512 Chord Coordinate Set
 
 Definition:
-Chord Rotation is the function that re-centers any chord onto its own
-local instance of the E-510 clock, converting a fixed set of pitches into
-a signed-position relationship around a chosen root.
+Chord Rotation re-centers a chord on a selected root and assigns every chord tone an E-510 mirrored coordinate.
 
-Any chord can become its own local coordinate system.
+Procedure:
+1. Select root `R`.
+2. Set `R = 0`.
+3. For every tone `T`, calculate `k = (T-R) mod 12`.
+4. Convert `k` to `0..+5`, `-5..-1`, or shared `±6`.
+5. Preserve every tone coordinate.
+6. Preserve voicing, inversion, octave, amplitude, phase, and timing separately when available.
 
-Mathematics:
-Chord Rotation Rule:
-1. Select chord.
-2. Move root to (0).
-3. Rotate the clock so root = 0.
-4. Measure harmonic distances of remaining chord tones as signed positions.
-5. Identify the oscillation window (compression pull vs expression pull).
+Canonical correction:
+The output is a complete coordinate set, not automatically a compression-side / expression-side pair. Sign is route direction, not operation.
 
-Output of this function is an Oscillation Window: a signed pair
-(compression-side position, expression-side position) describing where
-the chord's other tones fall relative to its root. The Oscillation
-Window is now its own node — see E-512 — since it is consumed
-independently of this function.
-
-Worked examples (full values and analysis now live in E-512):
-CORRECTION (this turn — the values below were wrong in the original
-build, checked against E-510's own real clock and fixed):
-A Major -> Window: Compression side (fifth, E) = -5, Expression side (third, C#) = +4
-A Minor -> Window: Compression side (fifth, E) = -5, Expression side (third, C) = +3
-Previously stated as (-4,+5) and (-3,+5) — both the sign and the
-compression/expression assignment were backwards. E-510's clock places
-E at -5 (counter-clockwise/Compression) and C#/C at +4/+3
-(clockwise/Expression), not the reverse.
+Examples:
+- Major triad: `{0,+4,-5}`
+- Minor triad: `{0,+3,-5}`
+- Power chord: `{0,-5}`
+- Augmented triad: `{0,+4,-4}`
+- Diminished triad: `{0,+3,±6}`
 
 Operational Chain:
-E-510 Music Clock => Chord Rotation => E-512 Oscillation Window
+E-510 Reference Frame => Re-center Root => Assign All Tone Coordinates => E-512 Coordinate Set
 
 Yellow Audit:
-- Only tested informally on A Major / A Minor; not yet checked against other roots or chord qualities (diminished, augmented, seventh chords, etc.)
-- Whether this rule generalizes is now tracked in E-512, since that's where the pattern claim actually lives
+- Root selection must be explicit for ambiguous chords.
+- Pitch-class coordinates do not capture voicing or acoustic phase.
+- Coordinate patterns alone do not establish force, direction, or stability.
 
 Future Work:
-Test the chord rotation rule against a full set of chord qualities, not just Major/Minor on one root.
+Add progression traces and measured signal data without collapsing them into pitch-class position alone.
 
 ---
 
@@ -798,80 +721,55 @@ Test the chord rotation rule against a full set of chord qualities, not just Maj
 
 ---
 node_id: "E-512"
-canonical_name: "Oscillation Window"
+canonical_name: "Chord Coordinate Set"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "YELLOW (proposed — new node, split out from E-511)"
+claim_gate_detail: "GRAY coordinate set / YELLOW shape interpretation"
 metadata_standard: "I-06"
 ---
 
-# Node E-512: Oscillation Window
+# Node E-512: Chord Coordinate Set
 
-Class: FUNCTION (output/result type — not an operator itself)
+Former canonical name: Oscillation Window
 
-Not a book chapter. Not a book node.
-This is the result state produced by E-511 Chord Rotation, given its own
-node because it is consumed downstream independently of the function that
-produces it — the same relationship as A-104 Gradient's output feeding
-A-105 Restoring Response as a distinct stage, rather than staying folded
-inside Gradient itself.
+Class: RESULT / DATA TYPE
 
 Dependencies:
 Upstream: E-511 Chord Rotation
-Downstream: E-513 Chord Leaning Direction
+Downstream: E-513 Musical Boundary Hypothesis Register
 
 Definition:
-An Oscillation Window is the signed pair of positions that a chord
-produces once Chord Rotation (E-511) has re-centered it on the Music
-Clock (E-510):
+A Chord Coordinate Set is the complete root-relative signed coordinate set produced by E-511.
 
-Oscillation Window = (Compression-side position, Expression-side position)
+Examples:
+- Major: `{0,+4,-5}`
+- Minor: `{0,+3,-5}`
+- Power: `{0,-5}`
+- Augmented: `{0,+4,-4}`
+- Diminished: `{0,+3,±6}`
 
-It is a per-chord result, not a coordinate system and not a function. It
-is what a chord looks like after being run through Chord Rotation, held
-as its own value so it can be compared across chords, tracked over time,
-or fed into whatever consumes it next — none of which is yet defined.
+Canonical correction:
+The former definition of Oscillation Window as a compression-side / expression-side pair is retired.
 
-Mathematics:
-For a given chord with root at (0):
+Reasons:
+- sign does not equal compression or expression
+- `±6` is shared between mirrored routes
+- dyads do not require one tone on each side
+- seventh and extended chords lose information when reduced to two extrema
 
-Window = (P_compress, P_expr)
-
-where P_compress and P_expr are signed clock positions from E-510,
-produced by E-511's rotation procedure.
-
-Worked values, corrected this turn (checked against E-510's real clock;
-the original build had both the sign and the compression/expression
-assignment backwards):
-A Major: Window = (P_compress=-5, P_expr=+4)
-A Minor: Window = (P_compress=-5, P_expr=+3)
-
-Observed pattern (corrected — the fixed and shifting sides are swapped
-from the original claim, still unconfirmed beyond two data points):
-Compression-side position (the fifth, E) appears to stay fixed at -5
-across Major/Minor. Expression-side position (the third) shifts: C#
-at +4 for Major, C at +3 for Minor. The underlying discovery is the
-same as before — one side holds, the other moves by one semitone
-between Major and Minor — but which side is fixed and which shifts
-was previously reported backwards. Whether this holds as a general
-rule or is specific to this one root and these two chord qualities is
-still not known — see Yellow Audit.
+The phrase “oscillation window” may still be used later for a measured time-dependent window, but it is not the canonical name for a static chord coordinate pair.
 
 Operational Chain:
-E-511 Chord Rotation => Oscillation Window (per chord) => [not yet defined downstream use]
+Chord Rotation => Complete Coordinate Set => Candidate Structural Questions
 
 Yellow Audit:
-- Only two data points exist (A Major, A Minor on root A) — nowhere near enough to call the "expression side fixed at +5" pattern a rule
-- No downstream consumer defined yet — this node currently terminates the chain
-- Whether Oscillation Window should be tracked over time (e.g., across a chord progression) or only evaluated per-chord in isolation is unresolved
-- No connection yet to B-208 Threshold Windows despite the shared "Window" terminology — these are NOT the same concept and should not be assumed related without checking; flagging explicitly to avoid a repeat of the earlier Mirror/Mirror Gate and Balance/Balance naming confusion
+- Coordinates are exact under the selected tuning and root.
+- Labels such as symmetric Field, boundary dyad, or Mirror shape are interpretive and require tests.
 
 Future Work:
-Gather more chord-quality data points (diminished, augmented, seventh chords, other roots) before treating the +5/-4/-3 pattern as anything more than a two-point observation.
-Define what, if anything, consumes an Oscillation Window downstream.
-Explicitly confirm or rule out any relationship to B-208 Threshold Windows given the name overlap.
+Add measured phase, amplitude, duration, and transition data to determine whether genuine oscillation windows exist.
 
 ---
 
@@ -881,109 +779,57 @@ Explicitly confirm or rule out any relationship to B-208 Threshold Windows given
 
 ---
 node_id: "E-513"
-canonical_name: "Chord Leaning Direction"
+canonical_name: "Musical Boundary Hypothesis Register"
 namespace: "NODE"
 gate: "YELLOW"
-lifecycle: "ACTIVE"
-classification: "Resolution / Formalization Node"
-claim_gate_detail: "None"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Applied Dynamics and Stability"
+claim_gate_detail: "Open questions only; no boundary-interference mechanism committed"
 metadata_standard: "I-06"
 ---
 
-# Node E-513: Chord Leaning Direction
+# Node E-513: Musical Boundary Hypothesis Register
 
-Reason:
-New claim, checked against real corrected E-512 values, partially
-confirmed. The mechanism for the power-chord "flip" is stated but not
-fully derived — flagged honestly below.
-
-Term disambiguation (read first): "Leaning" here means the directional
-asymmetry of a single chord's Oscillation Window (E-512) — whether its
-compression side or expression side dominates. This is UNRELATED to a
-separate "leaning" concept describing chord function within a key
-(Tonic/Subdominant/Dominant roles) — see E-514 Circle of Fifths, which
-uses "leaning" for that different, key-level concept. Do not merge
-these two uses of the word.
+Former canonical name: Chord Leaning Direction
 
 Dependencies:
-Upstream: E-512 Oscillation Window
-Downstream: none yet (proposed)
+Upstream: E-510 Mirrored Music Clock, E-511 Chord Rotation, E-512 Chord Coordinate Set, F-604 Resonance, F-605 Interference
+Downstream: E-514 Circle of Fifths Route Traversal, future signal experiments
 
-Definition:
-A chord's Oscillation Window (P_compress, P_expr) has a directional
-lean when |P_compress| != |P_expr| — one side pulls harder than the
-other.
+Retired claim:
+The former chord-lean rule assigned negative coordinates to compression, positive coordinates to expression, and used signed magnitude imbalance as a physical pull. That rule is noncanonical.
 
-Checked against corrected real values:
-A Major: (P_compress=-5, P_expr=+4). |−5| > |4|. Compression dominates.
-A Minor: (P_compress=-5, P_expr=+3). |−5| > |3|. Compression dominates,
-  more strongly than Major (gap of 2 instead of 1).
+Retired formula:
+`L = sum(abs(negative positions)) - sum(abs(positive positions))`
 
-Both tested chords lean backward (toward compression) — this matches
-the claim that standard triads have "natural movement built in" toward
-resolution/compression. Confirmed for these two data points, not yet
-tested beyond them.
+Reason:
+The formula measures coordinate asymmetry but does not derive physical operation, perceived resolution, or wave interaction.
 
-Power chord claim (stated, NOT fully derived — this is the honest gap):
-A power chord (root + fifth, no third) is proposed to become
-forward-leaning (toward expression) when the sign convention is
-flipped. The mechanism for WHY removing the third and flipping the
-convention produces this is not mathematically derived here — it is
-asserted based on the absence of the third's compression pull, not
-shown to necessarily follow from E-510/E-511's actual math. Flagged
-as the primary open item.
+Open Yellow Questions:
 
-Mathematics:
-Generalized lean formula (replaces the earlier two-point-only version,
-verified against both real data points — extends beyond triads without
-needing a new rule per chord type):
+1. Reinforced boundary:
+Does a root-plus-fifth dyad behave as a reinforced anchor/boundary relation in a measurable way?
 
-L = Σ|negative positions| - Σ|positive positions|
+2. Boundary promotion:
+When the fifth becomes the next root, does the exact coordinate re-centering correspond to a useful One-Wave Field-extension operation?
 
-L > 0: backward lean (compression dominates)
-L < 0: forward lean (expression dominates)
-L = 0: balanced, no lean
+3. Paired-boundary interaction:
+Do mirrored `-5` and `+5` routes reinforce, balance, redirect, or cancel any measurable quantity?
 
-A Major: L = |-5| - |4| = 1 (mild backward lean) [verified]
-A Minor: L = |-5| - |3| = 2 (stronger backward lean) [verified]
+4. Diminished Mirror resolution:
+Does `{0,+3,±6}` function as a Mirror-position choice with more than one available resolution direction?
 
-This sums ALL negative and ALL positive chord-tone positions, not just
-a single compression/expression pair — so it generalizes cleanly to
-seventh chords, extended chords, or anything with more than one tone
-on each side, without inventing a special case per chord type.
+Interference constraint:
+Literal acoustic cancellation requires compatible frequency, amplitude, timing, and opposite phase. Opposite signed coordinates alone do not establish destructive interference.
 
-Power chord applicability (reframed — this is a real Yellow-node gap,
-not a failure to derive):
-Current applicability:
-  Triads: Verified (2 data points, A Major/A Minor)
-  Power chords (root + fifth, no third): UNDEFINED, not undetermined.
-    Reason: the Oscillation Window / lean formula requires at least
-    one tone on each side of the root to produce a meaningful sum.
-    A power chord has only one non-root tone (the fifth), so there is
-    nothing to sum against. This is a genuine scope boundary of the
-    current definition, not a problem to force an answer to.
+Canonical status:
+These are questions to test. None is accepted as a completed One-Wave mechanism.
 
 Operational Chain:
-E-512 Oscillation Window => E-513 Chord Leaning Direction (this node) => [songwriting application, not yet built]
-
-Yellow Audit:
-- Only 2 data points (A Major, A Minor) — same limitation E-512 already
-  flagged, inherited here
-- Power chords are UNDEFINED under the current lean formula (not a
-  failed derivation) — a genuine scope boundary, since the formula
-  needs at least one tone per side to produce a sum. The original
-  "flip -/+ for forward-leaning power chord" claim is not evaluable
-  as stated until power chords get their own applicable definition
-- Whether minor chords always lean more backward than major (L=2 vs
-  L=1 in this one data point) is a real, testable, currently
-  unconfirmed pattern
+Coordinate Set => State the Hypothesis => Define Observable => Measure => Accept, Revise, or Reject
 
 Future Work:
-Define what an Oscillation Window means for a chord with no third
-(power chords, and by extension any two-note structure) before the
-power-chord claim can be tested at all.
-Test the L formula against more chord qualities and roots.
-Check whether minor-leans-more-backward-than-major holds generally.
+Build signal experiments and blinded listener comparisons for power chords, paired fifth/fourth structures, and diminished resolutions.
 
 ---
 
@@ -993,133 +839,57 @@ Check whether minor-leans-more-backward-than-major holds generally.
 
 ---
 node_id: "E-514"
-canonical_name: "Circle of Fifths Clock and Functional Leaning"
+canonical_name: "Circle of Fifths Route Traversal"
 namespace: "NODE"
 gate: "YELLOW"
-lifecycle: "ACTIVE"
-classification: "Resolution / Formalization Node"
-claim_gate_detail: "None"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Applied Dynamics and Stability"
+claim_gate_detail: "GRAY modulo-twelve traversal / YELLOW One-Wave interpretation"
 metadata_standard: "I-06"
 ---
 
-# Node E-514: Circle of Fifths Clock and Functional Leaning
+# Node E-514: Circle of Fifths Route Traversal
 
-Reason:
-A complete, internally coherent system, distinct from E-510's clock.
-Genuinely new content, well-organized, but entirely unvalidated against
-anything upstream — this is music theory convention formalized into
-this repo's vocabulary, not derived from the field equations the way
-A-105/A-109 were checked against Book 1's claims.
-
-CRITICAL DISAMBIGUATION (read first — this is a real, active naming
-collision, resolved by keeping both, not merging):
-
-"Clock" — E-510 is a CHROMATIC clock (12 semitones: A,A#,B,C...),
-used PER-CHORD (rotates one chord's root to zero, reads where that
-chord's other notes land). This node's clock is a FIFTHS clock (12
-positions ordered by perfect fifths: C,G,D,A,E...), used PER-KEY
-(tracks how far a whole progression wanders from a tonic across a
-song). Different ordering, different scope. Not the same clock
-wearing two names — genuinely two different tools.
-
-"Leaning" — E-513 uses "leaning" for a single chord's internal
-compression/expression asymmetry. This node uses "leaning" for a
-chord's FUNCTIONAL ROLE within a key (Tonic/Subdominant/Dominant).
-Different concept, same word. Do not merge.
-
-Real correspondence (checked, not just shared vocabulary): E-510's
-"6 o'clock = mirror/inversion point" and this node's "6 o'clock =
-tritone = maximum instability" occupy the SAME structural role
-(maximum distance from root) on two DIFFERENT underlying clocks. This
-is a genuine structural parallel, not a coincidence of both using
-"6 o'clock" — worth noting, not worth merging the clocks over.
+Former canonical name: Circle of Fifths Clock and Functional Leaning
 
 Dependencies:
-Upstream: none (independent music-theory formalization, not derived from field equations)
-Downstream: none yet (proposed)
+Upstream: E-510 Mirrored Music Clock, E-511 Chord Rotation, E-513 Musical Boundary Hypothesis Register
+Downstream: Musical progression and modulation tests
 
 Definition:
+The circle of fifths can be generated by repeatedly selecting a `±5` route from the current root and re-centering on the selected pitch class.
 
-PART 1 — The Fifths Clock:
-12 positions ordered by ascending perfect fifths, not chromatic
-semitones: C(12)-G(1)-D(2)-A(3)-E(4)-B(5)-F#/Gb(6)-Db(7)-Ab(8)-Eb(9)-Bb(10)-F(11)-back to C(12).
-Clockwise (+1 per step) = add a sharp, move up a fifth: brighter,
-forward momentum.
-Counter-clockwise (-1 per step) = add a flat, move down a fifth (up a
-fourth): heavier, grounding pull.
-6 o'clock = the tritone position, maximum distance from home, maximum
-instability — the point furthest from any tonic before the system
-must fall back.
+Fifthward recurrence:
+`R_(n+1) = R_n - 5 mod 12`
 
-PART 2 — Functional Leaning (within a key, distinct from E-513):
-Tonic (I) — the ground state, 12 o'clock, zero stored tension.
-Subdominant (IV) — outward lean, one step counter-clockwise (11
-o'clock), departs from home without urgency.
-Dominant (V) — inward gravitational pull, one step clockwise (1
-o'clock), maximum functional tension wanting to collapse back to I.
+Because `-5 mod 12 = +7`, this is repeated ascending perfect-fifth movement.
 
-PART 3 — The Recursive Songwriting Pipeline:
-Stability (hit I) => Triadic Modulation (move to IV) => Peak Stored
-Tension (hit V, or pivot through vi) => Recursive Reset (turnaround
-chord sharing overtones with both peak and ground) => back to Stability.
+Reverse recurrence:
+`R_(n+1) = R_n + 5 mod 12`
 
-This is explicitly framed (correctly, and worth keeping) as a
-practical bridge from the abstract recursive-cycle math (B-221's six
-steps) into actual songwriting: tension and release as the audible
-form of build-and-break.
+This is the mirrored fifth / ascending-fourth traversal.
 
-Mathematics:
-No independent field-equation mathematics. This is music theory
-(functional harmony, circle of fifths) restated in this repo's
-vocabulary (tension, ground state, recursive reset). It is NOT derived
-from A-105/A-109/etc. the way E-510 at least attempts to connect to
-A-111's harmonic mapping. This is a real difference in grounding level,
-not a criticism of the content's internal coherence — it's genuinely
-well-organized, just not connected upstream to anything yet.
+Canonical correction:
+The traversal is exact coordinate arithmetic. The following are not yet canonical mechanisms:
+- fifth as a physically reinforced boundary
+- re-centering as literal Field extension
+- fixed expressive/compressive meaning for clock direction
+- automatic cancellation or reinforcement between mirrored routes
+- derivation of tonic, dominant, or subdominant function from One-Wave rules
 
-Candidate structural parallel to B-221 (reframed — "may instantiate,"
-not "equals" or "is caused by"; this replaces an earlier, tighter
-mapping that overstated the connection):
-
-Songwriting may instantiate the same recursive structure B-221
-describes, not be evidence that one causes the other. A more general,
-defensible mapping than the earlier I-IV-V-turnaround-specific version:
-
-BEGIN — establish tonal center
-MOVE — introduce contrast
-HOLD — maintain motif
-BUILD — increase harmonic complexity
-BREAK — maximum tension
-LOOP — resolve or modulate into the next cycle
-
-This is looser than the original Tonic/Subdominant/Dominant-specific
-mapping (Stability~BEGIN, Triadic Modulation~MOVE, etc.) and
-deliberately so — it describes a structural correspondence without
-claiming the six-step math derives songwriting practice, or that
-following I-IV-V is the only way to instantiate the pattern. Still
-unverified term-by-term, same as before; the claim itself is just
-stated more carefully now.
+Mirror position:
+`±6` is the tritone position where the two shortest chromatic routes meet. Multiple standard harmonic resolutions exist, but a One-Wave Mirror-bifurcation mechanism remains Yellow.
 
 Operational Chain:
-Tonic (I) => Subdominant (IV) => Dominant (V) => Recursive Reset => Tonic (next cycle)
+Current Root => Select ±5 Route => Re-center => Repeat
 
 Yellow Audit:
-- Entirely disconnected from the field-equation layer (A-series,
-  B-221 update rule) — this is formalized music theory, not derived
-  physics-analog math, and should not be cited as if it were
-- The candidate B-221 correspondence (Stability~BEGIN etc.) is
-  unverified — real work needed before treating it as confirmed
-- No connection yet to E-510/E-511/E-512/E-513's chromatic, per-chord
-  system despite both existing in the same appendix — by design, per
-  the disambiguation above, but worth flagging that a reader could
-  still expect them to connect and currently won't find that link
+- Circle order and modulo arithmetic are exact.
+- Field, boundary, and Mirror interpretations require independent prediction and measurement.
+- Standard harmony must not be relabeled as a new derivation.
 
 Future Work:
-Check the candidate B-221 correspondence term-by-term, the same rigor
-used for B-207.
-Determine whether any real connection between the fifths-clock system
-and the chromatic per-chord system (E-510-513) exists, or whether they
-should remain fully independent by design.
+Trace real progressions with full voicing and timing data. Test whether the model predicts anything beyond the standard circle of fifths.
 
 ---
 
@@ -2935,3 +2705,400 @@ Run a closed-domain simulation with photon transport loss, field storage, Return
 
 ---
 
+
+
+# Updated 44 Additions
+
+
+---
+
+---
+node_id: "E-531"
+canonical_name: "Terminal Optical Wave Lifecycle"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE"
+classification: "Static Propagation / Optical End-State Hypothesis"
+claim_gate_detail: "YELLOW (measurable lifecycle scaffold) / GREEN (light-to-return-mode interpretation)"
+metadata_standard: "I-06"
+---
+# Node E-531: Terminal Optical Wave Lifecycle
+
+**Dependencies**
+Upstream: E-509 Propagation Limit, E-528 Static Redshift Transport, E-529 Low-Coupling Return Mode, C-311 Electric-Magnetic Duality
+Downstream: E-532, E-533, Book 1 Ch7, Book 1 Ch8, Book 5 cosmic transport, One-Wave Times Issues 007-008
+
+## Canonical Claim
+One-Wave does not treat redshift as expanding distance. A propagating light wave remains a light wave while it retains sufficient oscillatory contrast, curvature, coherence, and matter-coupling to register electromagnetically. Redshift marks progressive movement through that optical lifecycle. The terminal optical boundary is reached when the surviving wave no longer produces an optical interaction above the declared detector and coupling thresholds.
+
+The source does not vanish and space does not stretch. The received mode changes.
+
+## Lifecycle State
+Represent the propagating mode by
+
+\[
+\Psi_\gamma(\ell,t)=A_\gamma(\ell)\cos(k(\ell)x-\omega(\ell)t+\phi(\ell)).
+\]
+
+Track four separate quantities rather than calling all weakening "energy loss":
+
+- amplitude contrast \(A_\gamma\),
+- wavelength \(\lambda=2\pi/k\),
+- phase/coherence retention \(C_\gamma\),
+- electromagnetic coupling availability \(g_\gamma\).
+
+A candidate terminal optical coordinate is
+
+\[
+L_\gamma(\ell)=1-\frac{A_\gamma C_\gamma g_\gamma}{A_0C_0g_0},
+\qquad 0\le L_\gamma\le1.
+\]
+
+This is a scaffold, not a derived law. It prevents the theory from pretending that wavelength alone fully defines wave death.
+
+## Redshift Connection
+E-528 supplies
+
+\[
+1+z=\exp\left(\int_0^D\kappa_\gamma(\ell)d\ell\right).
+\]
+
+E-531 adds the requirement that \(\kappa_\gamma\) be linked to observable changes in amplitude, coherence, line width, polarization, and detector coupling. A fit to redshift alone is insufficient.
+
+## Optical Range
+The One-Wave optical range \(R_\gamma\) is not the age of the universe. It is the path length at which
+
+\[
+A_\gamma C_\gamma g_\gamma\le \Theta_{\rm optical},
+\]
+
+for a declared source class and detector threshold. The current farthest optical detections provide only a lower bound on \(R_\gamma\), not the terminal value.
+
+## Predictions
+1. Extreme redshift should correlate with reduced optical contrast after source luminosity, lensing, and detector processing are controlled.
+2. A terminal optical population should show increasing reliance on narrow surviving coherence channels rather than arbitrary blurring.
+3. The optical boundary should connect continuously to a low-coupling return-mode population if E-529 is correct.
+4. No observed galaxy needs to be carried out of existence by expanding space.
+
+## Failure Conditions
+This node fails if a single static transport law cannot reproduce redshift, image sharpness, transient timing, surface brightness, spectral-line behavior, and energy accounting without contradictory parameter changes.
+
+## Related Work
+Related Nodes: E-528, E-529, E-532, E-533
+Related Chapters: Book 1 Ch7-Ch8; Book 5 Ch1-Ch2
+Related Simulations: Terminal Wave Lifecycle Workbench
+Related Newspaper Articles: Issues 007 and 008
+Truth Computer Test: compare expansion and static-lifecycle models against the same source-normalized observations.
+
+
+---
+
+---
+node_id: "E-532"
+canonical_name: "Interference Coherence and Terminal Convergence"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE"
+classification: "Wave Population / Coherence-Filter Hypothesis"
+claim_gate_detail: "GREEN hypothesis with explicit statistical tests"
+metadata_standard: "I-06"
+---
+# Node E-532: Interference, Coherence, and Terminal Convergence
+
+**Dependencies**
+Upstream: D-404 Nested Resonance, E-505 Coupling, E-528, E-531
+Downstream: E-533, E-535, terminal-wave simulation
+
+## Canonical Claim
+Waves from many stellar and galactic sources overlap. Their field values superpose. Long propagation does not guarantee perfect laser coherence, but One-Wave proposes that repeated interference, boundary recurrence, and selective survival can act as a coherence filter. Unstable differences cancel or decohere; persistent relationships remain detectable.
+
+The resulting distant signal may therefore become more uniform in its terminal state even when the sources were not identical.
+
+## Field Sum
+
+\[
+\Psi_{\rm received}=\sum_{i=1}^{N}A_i\cos(k_ix-\omega_it+\phi_i).
+\]
+
+The intensity contains cross terms. Stable phase relationships reinforce; rapidly varying relationships average toward zero. The proposed terminal envelope is
+
+\[
+\Psi_{\rm terminal}\approx A_r\cos(k_rx-\omega_rt+\phi_r),
+\]
+
+where \(A_r\) is small but the retained structure is statistically stable enough to register.
+
+## Terminal Convergence Prediction
+Let \(S_\nu\) be a vector of measured terminal-mode properties: energy, flavor likelihood, directionality, interaction topology, timing, and any recoverable coherence proxy. After controlling source class and detector response, One-Wave predicts
+
+\[
+\frac{d\,\mathrm{Var}(S_\nu)}{dD}<0
+\]
+
+across the terminal population over a regime where coherence filtering dominates source diversity.
+
+This does not predict that all neutrino energies become identical. It predicts convergence in a properly normalized terminal-state coordinate.
+
+## Galaxy Signal Consequence
+A galaxy is treated as a bounded recurrent wave network, not a bag of unrelated emitters. Its far-field signature may retain structured coherence through shared rotation, plasma, magnetic organization, repeated frequency families, and boundary feedback. Apparent brightness or compactness alone does not prove this claim. The test requires phase, polarization, linewidth, correlation, and baseline measurements.
+
+## Failure Conditions
+- terminal-state variance does not decrease after source and detector controls;
+- required coherence would violate measured incoherence or image statistics;
+- the model only restates telescope stacking without a physical propagation term.
+
+## Related Work
+Related Nodes: D-404, E-528, E-531, E-533, E-535
+Related Chapters: Book 5 Ch1-Ch2; Book 1 Ch8
+Related Simulations: population convergence and interference workbench
+Related Newspaper Articles: Issues 007-008
+Truth Computer Test: fit independent-source and coherence-filter models to the same catalog.
+
+
+---
+
+---
+node_id: "E-533"
+canonical_name: "Neutrino Terminal Flattening Lifecycle"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE"
+classification: "Low-Coupling Return / Terminal Wave-State Hypothesis"
+claim_gate_detail: "GREEN interpretation; measured neutrino oscillation remains external anchor"
+metadata_standard: "I-06"
+---
+# Node E-533: Neutrino Terminal Flattening Lifecycle
+
+**Dependencies**
+Upstream: E-529 Low-Coupling Return Mode, E-531, E-532, Book 1 Ch8
+Downstream: E-534, E-535, E-536
+
+## Canonical Claim
+In One-Wave, neutrinos are not independent little objects added after light disappears. They are measured low-coupling excitation states interpreted as late stages of a wave lifecycle. The wave becomes progressively flatter relative to the local field baseline: lower residual contrast, shallower curvature, weaker ordinary-matter coupling, and longer effective recurrence scale.
+
+"Flatter" is geometric language and must be tied to measurable proxies. It does not mean literally drawing a shallow sine wave and declaring victory, a method already overrepresented in human history.
+
+## Residual-State Variables
+Let
+
+\[
+\Delta\Psi=\Psi-\Psi_0,
+\]
+
+and define candidate residual measures
+
+\[
+A_r=\max|\Delta\Psi|,
+\qquad
+K_r=\left|\frac{\partial^2\Psi}{\partial x^2}\right|,
+\qquad
+G_r=g_{\nu m}.
+\]
+
+The terminal limit approaches
+
+\[
+A_r\to0,\qquad K_r\to0,\qquad G_r\to0,
+\]
+
+without claiming that measured energy alone determines lifecycle age.
+
+## Flavor and Oscillation
+Electron-, muon-, and tau-neutrino measurements are treated as accessible configurations of the same low-coupling lifecycle. One-Wave must derive any ordering from oscillation data; it may not simply assign electron→muon→tau as a death sequence because the names look conveniently enumerable.
+
+A candidate lifecycle coordinate must use measured transition probabilities, baseline, energy, source class, and interaction channel. Flavor oscillation becomes a test of recurring terminal configurations, not permission to invent a flavor hierarchy.
+
+## Detection Difficulty
+The proposed reason for weak detectability is small residual boundary contrast. Detection occurs when a near-flat return mode encounters a boundary capable of converting that small difference into a registered event. The interaction probability must still match measured cross sections and energy dependence.
+
+## Failure Conditions
+- no mapping from lifecycle variables to oscillation and interaction measurements;
+- flavor behavior requires arbitrary relabeling;
+- flatness predicts the wrong energy dependence or baseline dependence;
+- the proposed transition violates energy accounting.
+
+## Related Work
+Related Nodes: E-529, E-531, E-532, E-534, E-535
+Related Chapters: Book 1 Ch8; Book 5 Ch2-Ch3
+Related Simulations: terminal-state oscillator and detector boundary model
+Related Newspaper Articles: Issue 008
+Truth Computer Test: compare lifecycle-coordinate predictions against standard oscillation probability fits.
+
+
+---
+
+---
+node_id: "E-534"
+canonical_name: "Stellar Neutrino Release within the Wave Lifecycle"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE"
+classification: "Stellar Boundary Release / Neutrino Source Mapping"
+claim_gate_detail: "GRAY measured stellar neutrino production; GREEN One-Wave lifecycle interpretation"
+metadata_standard: "I-06"
+---
+# Node E-534: Stellar Neutrino Release within the Wave Lifecycle
+
+**Dependencies**
+Upstream: Book 5 Ch2 Stars, Book 5 Ch3 Supernovae, E-529, E-533
+Downstream: E-535, E-536
+
+## Observation Layer
+Stars produce neutrino signals associated with internal nuclear and boundary-change processes. Solar neutrinos and supernova neutrino bursts are measured source-linked populations. This observation is retained without rewriting the measurements.
+
+## One-Wave Interpretation
+A star can drive part of its internal wave activity directly into low-coupling terminal configurations. This means a neutrino lifecycle state does not require billions of years of prior optical propagation. Extreme local pressure, recurrent boundary change, fusion-linked transitions, and collapse can move a wave into the same low-coupling region by a shorter path.
+
+The lifecycle therefore has at least two entry routes:
+
+```text
+long optical propagation -> terminal optical boundary -> low-coupling return state
+stellar/internal boundary event -> direct low-coupling release state
+```
+
+They join the same state space but need not enter at the same coordinate.
+
+## Source/Propagation Separation
+A valid model must distinguish populations using:
+- source direction and counterpart,
+- timing correlation,
+- energy spectrum,
+- flavor likelihood,
+- baseline,
+- event topology,
+- opacity of the source environment.
+
+The phrase "stars make neutrinos" does not by itself prove the terminal-wave interpretation. It supplies a known physical route into the measured low-coupling population that One-Wave must model.
+
+## Prediction
+After source-linked neutrinos are separated, the unresolved extragalactic population should still show any terminal-convergence signature predicted by E-532 if propagation-return modes exist.
+
+## Related Work
+Related Nodes: E-529, E-533, E-535
+Related Chapters: Book 5 Ch2-Ch3; Book 1 Ch8
+Related Simulations: source-versus-propagation classifier
+Related Newspaper Articles: Issue 008
+Truth Computer Test: test whether one state-space model can fit solar, supernova, atmospheric, and diffuse populations without erasing source differences.
+
+
+---
+
+---
+node_id: "E-535"
+canonical_name: "Redshift-Neutrino Peak-Trough Comparison Protocol"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Measurement Protocol / Cross-Domain Test"
+claim_gate_detail: "YELLOW protocol; no successful fit yet"
+metadata_standard: "I-06"
+---
+# Node E-535: Redshift-Neutrino Peak-Trough Comparison Protocol
+
+**Dependencies**
+Upstream: E-528, E-531, E-532, E-533, E-534
+Downstream: E-536, Truth Computer, data workbench
+
+## Purpose
+Test whether redshifted optical waves and measured neutrino oscillation populations occupy adjacent regions of one continuous flattening lifecycle.
+
+## Measurement Discipline
+A galaxy spectrum is not one visible sine wave whose crest can be compared directly with a neutrino trough. The protocol must compare normalized observables:
+
+### Optical vector
+\[
+S_\gamma=(z,\,A_{\rm line},\,W_{\rm line},\,P_{\rm pol},\,C_{\rm image},\,T_{\rm transient}).
+\]
+
+### Neutrino vector
+\[
+S_\nu=(E_\nu,\,L,\,P_e,\,P_\mu,\,P_\tau,\,\Gamma_{\rm int},\,C_{\rm dir}).
+\]
+
+Build normalized lifecycle coordinates \(L_\gamma\) and \(L_\nu\) with detector response and source class included explicitly.
+
+## Peak-to-Trough Quantity
+For a controlled neutrino population,
+
+\[
+\Delta_\nu=P_{\max}-P_{\min}.
+\]
+
+For an optical spectral line tracked across sources,
+
+\[
+\Delta_\gamma=F(z,A_{\rm line},W_{\rm line},P_{\rm pol},C_{\rm image}),
+\]
+
+where \(F\) must be registered before fitting. The protocol then tests whether the terminal optical region joins the initial low-coupling region smoothly.
+
+## Competing Models
+- M0: optical redshift and neutrino oscillation are independent processes.
+- M1: both are adjacent stages in one flattening lifecycle.
+- M2: shared source/environment creates correlation without lifecycle continuity.
+
+No majority vote among AIs decides the winner. Use out-of-sample predictive fit, parameter burden, residual structure, and failure tests.
+
+## Required Data
+redshift catalogs; calibrated line profiles; polarization; transient timing; neutrino energy/direction/flavor likelihood; source associations; detector efficiencies; source-class labels.
+
+## Related Work
+Related Nodes: E-528, E-531-E-534, E-536
+Related Chapters: new Book 5 terminal-wave chapter; Book 1 Ch8
+Related Simulations: redshift-neutrino comparison notebook
+Related Newspaper Articles: Issues 007-008
+Truth Computer Test: the protocol itself.
+
+
+---
+
+---
+node_id: "E-536"
+canonical_name: "Terminal Wave Truth Computer Test Register"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Prediction Register / Falsification Queue"
+claim_gate_detail: "YELLOW registered tests; no validation claimed"
+metadata_standard: "I-06"
+---
+# Node E-536: Terminal Wave Truth Computer Test Register
+
+**Dependencies**
+Upstream: E-531 through E-535, G-724 through G-731 Balanced Brain architecture
+Downstream: Nexus Reality Database, simulation queue, future evidence ledger
+
+## Registered Claims
+TW-001: Static propagation can reproduce redshift without spatial expansion.
+TW-002: Optical lifecycle variables predict more than redshift alone.
+TW-003: Terminal optical detections approach a measurable coupling boundary.
+TW-004: A low-coupling return population joins the terminal optical lifecycle.
+TW-005: Controlled terminal-state variance decreases with propagation distance.
+TW-006: Stellar events provide direct entry into the low-coupling state space.
+TW-007: One lifecycle-coordinate model can distinguish source-produced and propagation-return populations.
+TW-008: The Andromeda-Milky Way approach requires no local expansion exemption in a static field model.
+
+## Required Truth Computer Record
+For every claim store:
+- raw measurement,
+- processing steps,
+- source and date,
+- One-Wave interpretation,
+- strongest competing interpretation,
+- assumptions,
+- predictions,
+- falsifiers,
+- confidence dimensions,
+- next discriminating test.
+
+## Balanced Brain Use
+The Jetson CPU/GPU paired slow brains must run independent candidate analysis before synthesis. M4 carries fast boundary/state signaling. Hopfield memory retrieves prior claim patterns; Boltzmann reconstruction proposes alternatives. Neither memory system may overwrite exact source records.
+
+## Promotion Rule
+No claim moves beyond Yellow until at least one preregistered prediction survives out-of-sample data and the alternative model comparison.
+
+## Related Work
+Related Nodes: E-531-E-535; G-724-G-731
+Related Chapters: terminal-wave chapter; Proposed Android Brain Ch5
+Related Simulations: all terminal-wave workbenches
+Related Newspaper Articles: Issues 007-008

@@ -5,3 +5,8 @@ Investigative public-facing articles. These are presentation documents, not cano
 ## Fake Mustache Math Desk
 
 Issues labeled **SATIRE / FAKE MUSTACHE MATH** expose category errors, post-hoc pattern matching, imported mechanisms, and equations reused outside their domain. Satire may quote or parody bad reasoning, but the cited canonical nodes remain authoritative. A joke is not a proof node, mercifully.
+
+
+## Updated 44 Issues
+- Issue 007: Redshift Refuses to Confirm Expansion
+- Issue 008: Local Star Admits to Making Neutrinos

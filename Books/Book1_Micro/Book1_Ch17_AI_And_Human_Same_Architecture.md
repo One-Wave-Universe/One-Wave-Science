@@ -260,3 +260,6 @@ One wave.
 
 END OF BOOK 1 CHAPTER 17
 One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
+
+## Updated 45 Internal World Lock
+Human and artificial internal worlds require a compressed negative 2D relational field, a Mirror-Gate comparison and conversion layer, and 3D expression channels. Cameras and microphones are external transducers, not vision, hearing, awareness, or dreamscape. A controlled hallucination display is the first inspectable internal-world milestone. See E-539, E-541, and E-543.

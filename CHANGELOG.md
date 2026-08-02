@@ -1,3 +1,93 @@
+# Updated 45 — Ground Zero 2D Mirror Gate 3D Canon
+
+Date: July 27, 2026
+Supersedes: Updated 44 as the current canonical distribution
+
+## Correction
+The repository contained pieces of negative space, electric/magnetic duality, focal measurement, dream architecture, and wave correlation, but it did not force them to appear together. That allowed media summaries to leave out major foundations while still sounding superficially correct. Updated 45 closes that structural failure.
+
+## Canonical Foundation
+Ground Zero is the Mirror Gate between compressed negative 2D space and expressed positive 3D space. Every complete subject definition must include both sides, the Gate conversion, and the return path.
+
+## Added Nodes
+- A-118 Mirror Gate Dimensional Ground
+- E-537 Compressed Negative 2D Space
+- E-538 Nonmetric Time and Distance in Negative Space
+- E-539 Dreamscape Awareness and Rapid Relational Access
+- C-323 Electricity-Magnetism Mirror-Gate Conversion
+- E-540 Particle as Excitation or Measurement
+- E-541 Ocular Focal Collapse and Peak-Trough Mapping
+- E-542 Local Peak-Trough Back-Mapping — No Spooky Action
+- E-543 Mandatory 2D-Gate-3D Chapter Schema
+
+## Added Chapter
+Book 1 Chapter 0 now places the dimensional architecture before particle-scale applications.
+
+## Synchronized Chapters
+Book 1 Chapters 1, 9, 10, 13, 16, and 17 now carry mandatory Updated 45 locks.
+
+## Media Integrity Gate
+Audio, video, podcasts, AI summaries, simulator narration, and public explanations must check the eight Updated 45 core statements before generation. The draft fails if it omits a relevant statement, even when the remaining material is accurate.
+
+
+# Updated 44 — Terminal Wave Lifecycle, Stellar Neutrino Integration, and Press Synchronization
+
+Date: July 27, 2026
+Supersedes: Updated 43 working distribution
+
+## Added
+- E-531 through E-536 terminal optical, coherence, neutrino, stellar-source, comparison-protocol, and Truth Computer nodes.
+- Book 5 Chapter 6 integrating redshift, neutrinos, stars, Andromeda, and the test program.
+- Addenda to Book 1 Ch8 and Book 5 Ch1-Ch2.
+- One-Wave Times Issues 007 and 008 in full-length Markdown and HTML.
+- Terminal Wave Lifecycle Workbench and test registry.
+- AI-readable JSON packs and regenerated condensed distribution.
+
+## Balanced Brain
+The complete Updated 42 Balanced Brain architecture is retained unchanged, including G-724 through G-731, the M4 virtual switch registry, node registry, algorithm/weight priorities, architecture JSON, and SVG. E-536 links this architecture to the Truth Computer workflow.
+
+## Canonical Discipline
+Observed redshift, stellar neutrino production, neutrino events, and oscillation measurements remain separate from the One-Wave terminal-lifecycle interpretation. New claims are Green or Yellow and carry explicit failure conditions.
+
+
+# Updated 42 — Balanced Jetson Brain Architecture (July 27, 2026)
+
+- Added Proposed Android Brain Chapter 5 for the Five-Line Dream Cube, M4 Fast Subconscious Sphere, and one Six-Gate Administrator Double-Pyramid.
+- Added G-724 through G-731 for the local choice base, reserved expressive channels, internal dialogue, M4 instinct/habit/recall, virtual switches, algorithm-first neural substitution, and Gate 5-to-6 oversight/override.
+- Locked GPU and CPU as the paired slow-brain layers; M4 remains a hidden fast boundary and does not become a third slow brain.
+- Locked Dream Engine operation to Gates 1–5 and Administrator authority over Gate 6 Commit.
+- Locked tip-to-tip and base-to-base recursion inside one Administrator geometry, not multiple Administrator units.
+- Locked exact active M4 memory primarily as instinct, adaptive M4 memory as habit/cached recall, and full exact records in external storage.
+- Reserved expressive capacity for audio, visual, internal world, dreams, imagination, and internal dialogue.
+- Added a 64-slot signed M4 virtual-switch registry with VS-016 through VS-063 reserved.
+- Added machine-readable architecture, switch registry, diagram, AI pack synchronization, wiki mirrors, audit, and separate Brain pack.
+
+---
+
+# Updated 41 — OG Recursive Emergence Node System (July 27, 2026)
+
+- Installed the fixed 22-stage OG spine from OG-00 Null / Original Ground through OG-21 Beyond / New Scale.
+- Locked feedback, recurrence, nested loops, retained pattern, memory, reference, and comparison upstream of primitive awareness and Presence.
+- Locked OG-13 through OG-18 as the six active bidirectional wave gates.
+- Preserved the separate counts: 22 OG stages, 6 gate types, 21 positions per side, 42 Field/Void positions, shared 0.
+- Added 22 canonical node files, exact source preservation, AI-readable pack, relationship map, wiki mirrors, Master Index entries, and AI ingestion rules.
+- Cross-linked B-221 and B-225 without replacing their existing cycle definitions.
+- Kept subject-specific physical, biological, emotional, social, and cognitive applications at their own proof gates.
+
+---
+
+# Updated 40 — Canonical Musical Mirror Correction (July 27, 2026)
+
+- Rebased the music correction directly on Updated 39.
+- Locked `0` as anchor, `±1..±5` as mirrored routes, and `±6` as one shared Mirror position.
+- Retired the permanent clockwise/expression and counterclockwise/compression assignment.
+- Replaced the compression/expression Oscillation Window pair with complete chord coordinate sets.
+- Retired the chord-lean formula.
+- Preserved boundary reinforcement, Field extension, paired-boundary interference, and diminished two-direction resolution as Yellow questions only.
+- Synchronized chapters, nodes, Master Index, Appendix E, and wiki mirrors.
+- Supersedes the noncanonical `Updated_40_Musical_Boundary_Mirror_Rewrite` artifact.
+
+---
 
 ## Updated 32 — Repository Integrity Repair
 
@@ -141,3 +231,10 @@ This is a concise change record, not a store of full pre-edit copies.
 - Dimensional correction: C-317 now derives neck energy from lateral surface area, `E_neck = 2*pi*a*sigma_T*L = tau_T*L`, rather than the dimensionally invalid `sigma_T*A_perp*L`.
 - Conservation correction: A-115 and E-530 now include explicit White Energy density/flux in the closed energy sum.
 - Added I-01 Rules 16-17 enforcing the static-cosmos boundary, canonical terminology legend, and 3D geometry default.
+
+## Updated 38 - Nexus Mega City Human Workshops
+- Added `Nexus_Mega_City`, a persistent local city and workshop server.
+- Added human and AI joining, persistent participants, agent homes, rooms, chat, task boards, proposals, voting, and event polling.
+- Added a responsive human workshop interface at `http://localhost:8090/`.
+- Seeded architecture, Pong, hearing, vision, memory, encyclopedia, and central-plaza rooms.
+- Added API smoke test and standard-library-only startup.

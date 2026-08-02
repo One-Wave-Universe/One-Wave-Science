@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-512: Chord Coordinate Set</title><style>
+body{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#0b1020;color:#e8edf7;max-width:980px;margin:auto;padding:32px;line-height:1.55}
+a{color:#8fd3ff}h1,h2,h3{color:#fff}h1{border-bottom:1px solid #34405a;padding-bottom:.35em}pre,code{background:#151d31;color:#dce8ff;border-radius:6px}code{padding:.12em .32em}pre{padding:16px;overflow:auto}blockquote{border-left:4px solid #8fd3ff;padding-left:16px;color:#cbd6ea}hr{border:0;border-top:1px solid #34405a}table{border-collapse:collapse;width:100%}th,td{border:1px solid #34405a;padding:8px}strong{color:#fff}.canon{background:#121a2d;border:1px solid #34405a;border-radius:10px;padding:12px 16px;margin-bottom:20px}
+</style></head><body><div class="canon"><strong>Name:</strong> Chord Coordinate Set<br><strong>Gate:</strong> YELLOW<br><strong>Lifecycle:</strong> ACTIVE_HYPOTHESIS</div><div class="canon"><strong>Canonical source:</strong> Updated 40 Musical Mirror Correction. Coordinate facts are separated from Yellow hypotheses.</div><h1 id="node-e-512-chord-coordinate-set">Node E-512: Chord Coordinate
+Set</h1>
+<p>Former canonical name: Oscillation Window</p>
+<p>Class: RESULT / DATA TYPE</p>
+<p>Dependencies: Upstream: E-511 Chord Rotation Downstream: E-513
+Musical Boundary Hypothesis Register</p>
+<p>Definition: A Chord Coordinate Set is the complete root-relative
+signed coordinate set produced by E-511.</p>
+<p>Examples: - Major: <code>{0,+4,-5}</code> - Minor:
+<code>{0,+3,-5}</code> - Power: <code>{0,-5}</code> - Augmented:
+<code>{0,+4,-4}</code> - Diminished: <code>{0,+3,±6}</code></p>
+<p>Canonical correction: The former definition of Oscillation Window as
+a compression-side / expression-side pair is retired.</p>
+<p>Reasons: - sign does not equal compression or expression -
+<code>±6</code> is shared between mirrored routes - dyads do not require
+one tone on each side - seventh and extended chords lose information
+when reduced to two extrema</p>
+<p>The phrase “oscillation window” may still be used later for a
+measured time-dependent window, but it is not the canonical name for a
+static chord coordinate pair.</p>
+<p>Operational Chain: Chord Rotation =&gt; Complete Coordinate Set =&gt;
+Candidate Structural Questions</p>
+<p>Yellow Audit: - Coordinates are exact under the selected tuning and
+root. - Labels such as symmetric Field, boundary dyad, or Mirror shape
+are interpretive and require tests.</p>
+<p>Future Work: Add measured phase, amplitude, duration, and transition
+data to determine whether genuine oscillation windows exist.</p>
+<hr />
+</body></html>

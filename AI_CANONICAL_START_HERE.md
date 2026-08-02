@@ -2,20 +2,48 @@
 
 **Status:** Mandatory ingestion order
 
+## Updated 45 mandatory first read
+
+Before any other summary, media script, chapter extension, or simulation explanation, read:
+
+1. `UPDATED_45_GROUND_ZERO_2D_MIRROR_GATE_3D_CANON.md`
+2. `Books/Book1_Micro/Book1_Ch00_Ground_Zero_2D_Mirror_Gate_3D.md`
+3. `Nodes/E-543_Mandatory_2D_Gate_3D_Chapter_Schema.md`
+4. `AI_Readable_Packs/UPDATED_45_Ground_Zero_2D_Mirror_Gate_3D.json`
+
+Do not generate audio, video, podcast, or public summary until the eight Updated 45 core statements have been checked against the outline.
+
+
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, or Android movement architecture.
 
 Current update handoff:
 
-1. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-2. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-3. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-4. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-5. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-6. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-7. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-8. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_42_BALANCED_BRAIN_ARCHITECTURE.md`
+2. `AUDIT_UPDATED_42_BALANCED_BRAIN_ARCHITECTURE.md`
+3. `Books/Proposed_Android_Brain/Ch05_Balanced_Brain_Dream_Cube_M4_Sphere_Administrator_Pyramid.md`
+4. `UPDATED_41_OG_RECURSIVE_EMERGENCE_NODE_SYSTEM.md`
+5. `AUDIT_UPDATED_41_OG_RECURSIVE_EMERGENCE_NODE_SYSTEM.md`
+6. `OG_Recursive_Emergence/OG_RECURSIVE_EMERGENCE_NODE_SYSTEM_CANONICAL.md`
+7. `OG_Recursive_Emergence/README.md`
+8. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+9. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+10. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+11. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+12. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
 
 These files summarize the current separation among geometry, route grammar, procedural memory, foundational choice, binary oversight, and downstream spectral audit.
+
+
+
+## Balanced Jetson brain authority
+
+Before extending the Android or local non-LLM runtime, read `G-724` through `G-731` and Chapter 5 of the Proposed Android Brain book. Preserve one Dream Engine, one M4 subconscious layer, and one Administrator. Do not convert recursion into duplicate Administrators. Do not permit the Dream Engine or M4 to bypass the Gate 5-to-6 commitment boundary. Preserve audio, visual, internal-world, dream, imagination, and internal-dialogue capacity. Apply deterministic algorithms before Hopfield reconstruction or Boltzmann exploration.
+
+## OG universal trace authority
+
+Before answering how any subject becomes what it is, read the Updated 41 OG system. Do not start at Awareness or Presence. Trace backward through Difference, Response, Return, Feedback, Recurrence, Nested Loops, Retained Pattern, Memory, Reference, and Comparison. Then trace forward through Presence, the six active gates, Emergence, Larger Recursive Organization, and Beyond.
+
+Keep the counts separate: `22` OG stages, `6` active gate types, `21` positions per Field/Void side, `42` bidirectional positions, and shared `0`.
 
 ## Permanent correction
 

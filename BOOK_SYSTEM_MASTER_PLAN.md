@@ -85,3 +85,8 @@ Format remains intentionally undecided.
 ## Status inheritance
 
 A chapter cannot carry a stronger claim than its strongest unresolved dependency. Visual polish does not promote proof status. The universe remains stubbornly unimpressed by typography.
+
+
+## Book 0 / Universal Trace — OG Recursive Emergence
+
+Canonical source: `OG_Recursive_Emergence/OG_RECURSIVE_EMERGENCE_NODE_SYSTEM_CANONICAL.md`. This universal trace precedes scale-specific books and supplies the fixed OG-00 through OG-21 origin-to-beyond spine. It does not replace A-series physics or the scale books; it gives each subject a common trace architecture.

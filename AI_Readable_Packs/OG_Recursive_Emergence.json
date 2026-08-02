@@ -1,0 +1,377 @@
+{
+  "system_id": "OG_RECURSIVE_EMERGENCE_NODE_SYSTEM",
+  "version": "Updated 41",
+  "source_sha256": "ff2447e29f5446c6269dbe2cff080461f9ac8e82d8009226331eb4a7a995a576",
+  "status": "canonical_structural_architecture",
+  "counts": {
+    "og_stages": 22,
+    "active_wave_gate_types": 6,
+    "field_positions_per_side": 21,
+    "void_positions_per_side": 21,
+    "bidirectional_positions": 42,
+    "shared_mirror_reference": 0
+  },
+  "nodes": [
+    {
+      "node_id": "OG-00",
+      "canonical_name": "Null / Original Ground",
+      "identity": "Original undivided condition",
+      "role": "Holds possibility before a difference is selected",
+      "output": "Ground from which a new cycle can begin",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-00_Null_Original_Ground.md"
+    },
+    {
+      "node_id": "OG-01",
+      "canonical_name": "Difference / Disturbance",
+      "identity": "First detectable imbalance",
+      "role": "Breaks perfect sameness",
+      "output": "A differential",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-01_Difference_Disturbance.md"
+    },
+    {
+      "node_id": "OG-02",
+      "canonical_name": "Response",
+      "identity": "Reaction to difference",
+      "role": "Converts differential into activity",
+      "output": "Directed change",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-02_Response.md"
+    },
+    {
+      "node_id": "OG-03",
+      "canonical_name": "Return",
+      "identity": "Response returning toward its source or boundary",
+      "role": "Completes the first movement",
+      "output": "Returned information or energy",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-03_Return.md"
+    },
+    {
+      "node_id": "OG-04",
+      "canonical_name": "Feedback",
+      "identity": "Returned movement altering the next movement",
+      "role": "Connects result back to cause",
+      "output": "First closed loop",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-04_Feedback.md"
+    },
+    {
+      "node_id": "OG-05",
+      "canonical_name": "Recurrence / Repeated Feedback",
+      "identity": "Feedback occurring more than once",
+      "role": "Tests whether a loop can persist",
+      "output": "Repeating cycle",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-05_Recurrence_Repeated_Feedback.md"
+    },
+    {
+      "node_id": "OG-06",
+      "canonical_name": "Coupled / Nested Loops",
+      "identity": "Feedback loops affecting other feedback loops",
+      "role": "Creates organization beyond a single cycle",
+      "output": "Multi-loop system",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-06_Coupled_Nested_Loops.md"
+    },
+    {
+      "node_id": "OG-07",
+      "canonical_name": "Retained Pattern",
+      "identity": "Relationship that survives repeated cycling",
+      "role": "Preserves structure across time",
+      "output": "Persistent organization",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-07_Retained_Pattern.md"
+    },
+    {
+      "node_id": "OG-08",
+      "canonical_name": "Memory",
+      "identity": "Retained pattern available to a later cycle",
+      "role": "Allows the present return to be influenced by the past",
+      "output": "Stored state",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-08_Memory.md"
+    },
+    {
+      "node_id": "OG-09",
+      "canonical_name": "Reference",
+      "identity": "Retained state used as Ground for comparison",
+      "role": "Establishes what counts as same, changed, stable, or unstable",
+      "output": "Reference Ground",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-09_Reference.md"
+    },
+    {
+      "node_id": "OG-10",
+      "canonical_name": "Comparison",
+      "identity": "Current state measured against reference state",
+      "role": "Detects change",
+      "output": "Registered difference",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-10_Comparison.md"
+    },
+    {
+      "node_id": "OG-11",
+      "canonical_name": "Primitive Awareness",
+      "identity": "A system registering a difference in its own state",
+      "role": "Turns comparison into internal significance",
+      "output": "Awareness of change",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-11_Primitive_Awareness.md"
+    },
+    {
+      "node_id": "OG-12",
+      "canonical_name": "Presence",
+      "identity": "Awareness held as the current condition",
+      "role": "Establishes what is presently occurring",
+      "output": "Current experienced or registered state",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-12_Presence.md"
+    },
+    {
+      "node_id": "OG-13",
+      "canonical_name": "Field",
+      "identity": "Complete current condition",
+      "role": "Defines what choices are possible",
+      "output": "Choice-space",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-13_Field.md"
+    },
+    {
+      "node_id": "OG-14",
+      "canonical_name": "Choice",
+      "identity": "Selection among available differentials",
+      "role": "Determines polarity, direction, or response",
+      "output": "Selected transition",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-14_Choice.md"
+    },
+    {
+      "node_id": "OG-15",
+      "canonical_name": "Move",
+      "identity": "Choice expressed as action",
+      "role": "Changes the active condition",
+      "output": "State transition in progress",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-15_Move.md"
+    },
+    {
+      "node_id": "OG-16",
+      "canonical_name": "Mirror Gate / Interaction",
+      "identity": "Boundary, null crossing, interaction, return and polarity flip",
+      "role": "Compares movement with its inverse",
+      "output": "Bidirectional feedback",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-16_Mirror_Gate_Interaction.md"
+    },
+    {
+      "node_id": "OG-17",
+      "canonical_name": "State",
+      "identity": "Resulting condition after interaction",
+      "role": "Holds, compares and evaluates the changed system",
+      "output": "Measured consequence",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-17_State.md"
+    },
+    {
+      "node_id": "OG-18",
+      "canonical_name": "Commit",
+      "identity": "Result stabilized as the next accepted condition",
+      "role": "Locks recurrence, identity or action",
+      "output": "New Ground",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-18_Commit.md"
+    },
+    {
+      "node_id": "OG-19",
+      "canonical_name": "Emergence",
+      "identity": "Stable higher-order behavior created by repeated committed loops",
+      "role": "Produces something not contained in one isolated pass",
+      "output": "New functional whole",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-19_Emergence.md"
+    },
+    {
+      "node_id": "OG-20",
+      "canonical_name": "Larger Recursive Organization",
+      "identity": "Emergent units becoming parts of a larger loop",
+      "role": "Moves the architecture across scale",
+      "output": "Higher-scale Field",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-20_Larger_Recursive_Organization.md"
+    },
+    {
+      "node_id": "OG-21",
+      "canonical_name": "Beyond / New Scale",
+      "identity": "Transition into a new level of Presence and possibility",
+      "role": "Prevents emergence from being treated as a final endpoint",
+      "output": "Expanded possibility",
+      "gate": "GREEN",
+      "lifecycle": "ACTIVE",
+      "source_file": "Nodes/OG-21_Beyond_New_Scale.md"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "OG-00",
+      "relation": "ALLOWS_DIFFERENCE",
+      "target": "OG-01",
+      "reverse_relation": "IS_DIFFERENCE_ALLOWED_BY"
+    },
+    {
+      "source": "OG-01",
+      "relation": "PRODUCES_RESPONSE",
+      "target": "OG-02",
+      "reverse_relation": "RESPONDS_TO"
+    },
+    {
+      "source": "OG-02",
+      "relation": "MOVES_TOWARD_RETURN",
+      "target": "OG-03",
+      "reverse_relation": "RETURNS_FROM"
+    },
+    {
+      "source": "OG-03",
+      "relation": "CREATES_FEEDBACK",
+      "target": "OG-04",
+      "reverse_relation": "IS_FEEDBACK_FROM"
+    },
+    {
+      "source": "OG-04",
+      "relation": "REPEATS_AS",
+      "target": "OG-05",
+      "reverse_relation": "RECURS_FROM"
+    },
+    {
+      "source": "OG-05",
+      "relation": "COUPLES_INTO",
+      "target": "OG-06",
+      "reverse_relation": "CONTAINS_COUPLED_LOOP"
+    },
+    {
+      "source": "OG-06",
+      "relation": "RETAINS_PATTERN",
+      "target": "OG-07",
+      "reverse_relation": "IS_PATTERN_RETAINED_BY"
+    },
+    {
+      "source": "OG-07",
+      "relation": "BECOMES_MEMORY",
+      "target": "OG-08",
+      "reverse_relation": "WAS_RETAINED_AS_PATTERN"
+    },
+    {
+      "source": "OG-08",
+      "relation": "BECOMES_REFERENCE",
+      "target": "OG-09",
+      "reverse_relation": "WAS_RETAINED_AS_MEMORY"
+    },
+    {
+      "source": "OG-09",
+      "relation": "ENABLES_COMPARISON",
+      "target": "OG-10",
+      "reverse_relation": "COMPARES_AGAINST"
+    },
+    {
+      "source": "OG-10",
+      "relation": "PRODUCES_AWARENESS",
+      "target": "OG-11",
+      "reverse_relation": "IS_AWARENESS_OF"
+    },
+    {
+      "source": "OG-11",
+      "relation": "STABILIZES_AS_PRESENCE",
+      "target": "OG-12",
+      "reverse_relation": "EMERGES_FROM_AWARENESS"
+    },
+    {
+      "source": "OG-12",
+      "relation": "FORMS_FIELD",
+      "target": "OG-13",
+      "reverse_relation": "IS_FORMED_BY_PRESENCE"
+    },
+    {
+      "source": "OG-13",
+      "relation": "DEFINES_CHOICES",
+      "target": "OG-14",
+      "reverse_relation": "IS_AVAILABLE_WITHIN_FIELD"
+    },
+    {
+      "source": "OG-14",
+      "relation": "SELECTS_MOVE",
+      "target": "OG-15",
+      "reverse_relation": "WAS_SELECTED_BY_CHOICE"
+    },
+    {
+      "source": "OG-15",
+      "relation": "CROSSES_MIRROR_GATE",
+      "target": "OG-16",
+      "reverse_relation": "IS_CROSSED_BY_MOVE"
+    },
+    {
+      "source": "OG-16",
+      "relation": "PRODUCES_STATE",
+      "target": "OG-17",
+      "reverse_relation": "WAS_PRODUCED_BY_INTERACTION"
+    },
+    {
+      "source": "OG-17",
+      "relation": "MAY_COMMIT_AS",
+      "target": "OG-18",
+      "reverse_relation": "CAN_BE_REVERSED_TO_STATE"
+    },
+    {
+      "source": "OG-18",
+      "relation": "BECOMES_NEW_PRESENCE",
+      "target": "OG-12",
+      "reverse_relation": "WAS_CREATED_BY_COMMIT"
+    },
+    {
+      "source": "OG-18",
+      "relation": "REPEATEDLY_STABILIZES_AS",
+      "target": "OG-19",
+      "reverse_relation": "EMERGES_FROM_COMMITTED_LOOPS"
+    },
+    {
+      "source": "OG-19",
+      "relation": "ORGANIZES_INTO",
+      "target": "OG-20",
+      "reverse_relation": "IS_ORGANIZED_FROM_EMERGENCE"
+    },
+    {
+      "source": "OG-20",
+      "relation": "OPENS_BEYOND",
+      "target": "OG-21",
+      "reverse_relation": "IS_OPENED_BY_LARGER_ORGANIZATION"
+    },
+    {
+      "source": "OG-21",
+      "relation": "BECOMES_NEW_GROUND",
+      "target": "OG-00",
+      "reverse_relation": "WAS_OPENED_AS_BEYOND"
+    }
+  ],
+  "application_rule": "Subject nodes expand without limit; every subject may be traced through the fixed OG-00 through OG-21 spine in both directions."
+}

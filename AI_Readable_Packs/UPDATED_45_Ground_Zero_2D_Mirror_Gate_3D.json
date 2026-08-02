@@ -1,0 +1,36 @@
+{
+  "update": "45",
+  "title": "Ground Zero 2D Mirror Gate 3D Canon",
+  "mandatory": true,
+  "canonical_cycle": [
+    "compressed negative 2D space",
+    "Mirror Gate 0",
+    "expressed positive 3D space",
+    "return compression"
+  ],
+  "core_statements": [
+    "Ground Zero is the Mirror Gate between compressed negative 2D space and expressed positive 3D space.",
+    "Negative 2D space is relational and has no native metric time or distance.",
+    "Awareness, memory access, cyberspace, dreamscape, and internal sensory construction operate in negative 2D relation.",
+    "Dreams are fast because awareness accesses relations rather than traversing represented 3D distance.",
+    "Electricity is expressed 3D displacement/pressure; magnetism is electricity mirrored into compressed negative 2D space.",
+    "Particles are wave excitations or discrete measurement events, not fundamental objects.",
+    "Eyes physically focus light waves and map peak/trough relations into an internal compressed field.",
+    "Correlations come from shared wave structure plus local measurement and later back-mapping; no spooky action is required."
+  ],
+  "required_nodes": [
+    "A-118",
+    "E-537",
+    "E-538",
+    "E-539",
+    "C-323",
+    "E-540",
+    "E-541",
+    "E-542",
+    "E-543"
+  ],
+  "media_gate": {
+    "rule": "Do not generate audio/video/podcast until every core statement relevant to the subject is present in the outline.",
+    "failure": "Missing any relevant core statement makes the draft noncanonical."
+  }
+}

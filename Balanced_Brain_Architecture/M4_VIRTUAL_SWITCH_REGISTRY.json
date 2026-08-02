@@ -1,0 +1,1290 @@
+{
+  "version": "1.0",
+  "states": {
+    "-1": "inhibit_or_reverse",
+    "0": "hold",
+    "1": "permit_or_forward"
+  },
+  "switches": [
+    {
+      "switch_id": "VS-000",
+      "name": "Master Hold",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": true,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-001",
+      "name": "Speech Permission",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-002",
+      "name": "Audio Attention",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-003",
+      "name": "Visual Attention",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-004",
+      "name": "Internal Dialogue",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-005",
+      "name": "Imagination",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-006",
+      "name": "Dream Mode",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-007",
+      "name": "Memory Recall",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-008",
+      "name": "Habit Execution",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-009",
+      "name": "Danger Interrupt",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": true,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-010",
+      "name": "Oversight Escalation",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-011",
+      "name": "Override",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": true,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-012",
+      "name": "External Communication",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-013",
+      "name": "Motor Output",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-014",
+      "name": "Learning Permission",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-015",
+      "name": "Commit Permission",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": true,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-016",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-017",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-018",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-019",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-020",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-021",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-022",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-023",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-024",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-025",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-026",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-027",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-028",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-029",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-030",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-031",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-032",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-033",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-034",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-035",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-036",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-037",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-038",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-039",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-040",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-041",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-042",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-043",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-044",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-045",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-046",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-047",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-048",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-049",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-050",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-051",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-052",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-053",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-054",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-055",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-056",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-057",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-058",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-059",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-060",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-061",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-062",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    },
+    {
+      "switch_id": "VS-063",
+      "name": "RESERVED",
+      "allowed_states": [
+        -1,
+        0,
+        1
+      ],
+      "default_state": 0,
+      "protected": false,
+      "required_fields": [
+        "source",
+        "reason",
+        "priority",
+        "timestamp",
+        "expiration",
+        "inverse_route",
+        "override_authority"
+      ]
+    }
+  ]
+}

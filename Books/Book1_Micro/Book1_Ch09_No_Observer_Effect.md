@@ -272,3 +272,6 @@ and start treating it as a real field that does real things.
 
 END OF BOOK 1 CHAPTER 9 — UPDATED WITH FOCAL POINT COUPLING
 One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
+
+## Updated 45 Ocular Mapping and No-Spooky-Action Lock
+The eye physically focuses and absorbs distributed light-wave structure, producing bounded receptor events. The visual system maps peaks, troughs, phase, gradients, contrast, direction, and binocular differences into compressed negative 2D space; awareness compares that map and returns a 3D response. Correlated distant records are local measurements of shared wave structure, later back-mapped to their common preparation. No conscious creation of reality and no spooky signal are required. See E-541 and E-542.

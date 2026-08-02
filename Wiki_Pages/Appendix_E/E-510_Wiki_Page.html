@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>E-510: Mirrored Music Clock</title><style>
+body{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#0b1020;color:#e8edf7;max-width:980px;margin:auto;padding:32px;line-height:1.55}
+a{color:#8fd3ff}h1,h2,h3{color:#fff}h1{border-bottom:1px solid #34405a;padding-bottom:.35em}pre,code{background:#151d31;color:#dce8ff;border-radius:6px}code{padding:.12em .32em}pre{padding:16px;overflow:auto}blockquote{border-left:4px solid #8fd3ff;padding-left:16px;color:#cbd6ea}hr{border:0;border-top:1px solid #34405a}table{border-collapse:collapse;width:100%}th,td{border:1px solid #34405a;padding:8px}strong{color:#fff}.canon{background:#121a2d;border:1px solid #34405a;border-radius:10px;padding:12px 16px;margin-bottom:20px}
+</style></head><body><div class="canon"><strong>Name:</strong> Mirrored Music Clock<br><strong>Gate:</strong> YELLOW<br><strong>Lifecycle:</strong> ACTIVE_HYPOTHESIS</div><div class="canon"><strong>Canonical source:</strong> Updated 40 Musical Mirror Correction. Coordinate facts are separated from Yellow hypotheses.</div><h1 id="node-e-510-mirrored-music-clock">Node E-510: Mirrored Music
+Clock</h1>
+<p>Class: REFERENCE FRAME</p>
+<p>Dependencies: Upstream: A-101 Ground / Zero, A-110 Oscillation, A-111
+Recursion, B-205 Mirror, B-222 Oscillation Center Lateral: G-721
+Mirrored Alphabet Rabbit-Hop Coordinate Algorithm Downstream: E-511
+Chord Rotation, E-512 Chord Coordinate Set, E-513 Musical Boundary
+Hypothesis Register, E-514 Circle of Fifths Route Traversal</p>
+<p>Separation rule: E-510 and G-721 are separate coordinate systems.
+E-510 addresses twelve-tone pitch classes. G-721 addresses symbolic
+alphabet identity and recursive route packets.</p>
+<p>Definition: The Mirrored Music Clock is a twelve-tone pitch-class
+coordinate frame re-centered on a selected root at <code>0</code>.</p>
+<p>Coordinate structure: - <code>0</code> = local anchor -
+<code>±1</code> through <code>±4</code> = interior route positions -
+<code>±5</code> = fifth/fourth route positions, provisionally called
+boundaries - <code>±6</code> = one shared Mirror position</p>
+<p>Signed coordinate rule: For upward semitone distance
+<code>k = (T-R) mod 12</code>: - <code>k in {0,1,2,3,4,5}</code> =&gt;
+<code>p = +k</code> - <code>k in {7,8,9,10,11}</code> =&gt;
+<code>p = k-12</code> - <code>k = 6</code> =&gt; <code>p = ±6</code></p>
+<p>Canonical correction: Positive and negative identify mirrored route
+directions only. Clockwise and counterclockwise do not permanently mean
+expression and compression. Compression and expression, when used, must
+be determined from motion relative to the active anchor or Field.</p>
+<p>Octave recurrence: <code>f(n+12) = 2f(n)</code></p>
+<p>Operational Chain: Select Root =&gt; Set Anchor 0 =&gt; Assign
+Mirrored Route Coordinates =&gt; Preserve Mirror ±6</p>
+<p>Yellow Audit: - Coordinate arithmetic is exact within twelve-tone
+equal temperament. - Anchor, Field, boundary, and Mirror are One-Wave
+interpretations. - No physical polarity, reinforcement, or cancellation
+is inferred from sign alone.</p>
+<p>Future Work: Measure real instrument frequency, phase, amplitude, and
+time behavior. Test whether the provisional structural labels predict
+anything beyond standard interval coordinates.</p>
+<hr />
+</body></html>

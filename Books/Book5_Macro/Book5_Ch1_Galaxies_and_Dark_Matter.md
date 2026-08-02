@@ -218,3 +218,11 @@ those things are true at once, and neither cancels the other out.
 
 END OF BOOK 5 CHAPTER 1 (DRAFT)
 One wave. Mirror builds.
+
+
+---
+## Updated 44 Addendum — Galactic Coherence and the Andromeda Boundary Case
+
+E-532 treats a galaxy as a bounded recurrent wave network whose stellar, plasma, magnetic, and rotational activity may preserve a structured far-field signal through partial coherence and selective interference. Bright or compact images alone are not proof; phase, polarization, linewidth, correlation, and interferometric tests are required.
+
+The Milky Way-Andromeda approach is registered in E-536 as a clean non-expanding system test case. One-Wave requires no local suspension of expansion because it contains no expanding space. The burden remains on E-528 and E-531 to reproduce the broader redshift observations quantitatively.

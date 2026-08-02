@@ -78,10 +78,13 @@ than treating it as settled.
 
 Stellar light and the friction limit:
 A star's light is a traveling lattice pressure oscillation (matching
-Book 1 Ch7's photon definition directly) propagating outward at
+Book 1 Ch7's light-wave definition directly) propagating outward at
 c = v_max (C-309, the friction limit). Nothing new is claimed about
-starlight itself beyond what Ch8 already established for photons
-generally — a star is simply a massive, sustained source of them.
+starlight itself beyond what Ch7 already established generally — a star
+is simply a massive, sustained source of this traveling wave. Photons are
+not emitted objects that travel from the star; they are the discrete
+measurement events registered wherever and whenever that wave later
+crosses a detector threshold (an eye, a telescope sensor, a spectrometer).
 
 ---
 
@@ -171,3 +174,11 @@ Those are real gaps, not glossed over here.
 
 END OF BOOK 5 CHAPTER 2 (DRAFT)
 One wave. Mirror builds.
+
+
+---
+## Updated 44 Addendum — Stars as Direct Low-Coupling Wave Sources
+
+Stars are measured neutrino sources. E-534 integrates that observation without treating neutrinos as separate ghost objects. Stellar fusion-linked transitions, pressure, recurrent boundaries, and collapse are candidate short routes into the same low-coupling wave state space that long-propagating optical waves may approach more gradually.
+
+This does not prove the terminal-wave interpretation. It creates a source-linked calibration population required by E-535. See Book 5 Chapter 6 and One-Wave Times Issue 008.

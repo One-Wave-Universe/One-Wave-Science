@@ -1,0 +1,119 @@
+{
+  "version": "Updated 42 / Brain v1",
+  "status": "YELLOW_PROPOSED_BUILD",
+  "single_system": true,
+  "layers": [
+    {
+      "id": "dream_cube",
+      "hardware": "Jetson GPU",
+      "role": "expressive_slow_brain",
+      "gates": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "commit_authority": false,
+      "reserved_channels": [
+        "audio",
+        "visual",
+        "internal_world",
+        "imagination",
+        "dreams",
+        "internal_dialogue"
+      ],
+      "dominant_network": "Boltzmann-style candidate exploration"
+    },
+    {
+      "id": "m4_sphere",
+      "hardware": "reserved low-latency Jetson CPU lane initially",
+      "role": "fast_subconscious",
+      "commit_authority": false,
+      "functions": [
+        "instinct",
+        "habit",
+        "cached_recall",
+        "attention",
+        "timing",
+        "urgency",
+        "automatic_routes",
+        "virtual_switches",
+        "interrupts"
+      ]
+    },
+    {
+      "id": "administrator_double_pyramid",
+      "hardware": "Jetson CPU",
+      "role": "compressive_slow_brain",
+      "gates": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "commit_authority": true,
+      "dominant_network": "Hopfield-style reconstruction and stabilization"
+    }
+  ],
+  "gate_cycle": {
+    "forward": [
+      "Field",
+      "Choice",
+      "Move",
+      "Mirror_4_0",
+      "State",
+      "Commit"
+    ],
+    "reverse": [
+      "Commit",
+      "State",
+      "Mirror_4_0",
+      "Move",
+      "Choice",
+      "Field"
+    ]
+  },
+  "commit_boundary": {
+    "from_gate": 5,
+    "to_gate": 6,
+    "actions": [
+      "commit",
+      "hold",
+      "return_to_mirror",
+      "reverse_move",
+      "reopen_choice",
+      "rebuild_field",
+      "break_without_commit"
+    ]
+  },
+  "geometry": {
+    "dream": "five-line cube possibility volume",
+    "m4": "sphere centered subconscious boundary",
+    "administrator": "one six-vertex base-to-base double pyramid",
+    "tip_to_tip": "focused crossing/handoff",
+    "base_to_base": "shared Field comparison"
+  },
+  "algorithm_priority": [
+    "fixed_rule",
+    "lookup_or_graph",
+    "state_machine",
+    "mathematical_solver",
+    "constraint_search",
+    "hopfield_reconstruction",
+    "boltzmann_exploration"
+  ],
+  "memory_split": {
+    "m4_exact": "instinct",
+    "m4_adaptive": "habit and cached associations",
+    "external_exact": "repository, evidence, snapshots, rollback"
+  },
+  "non_claims": [
+    "not validated neuroscience",
+    "not consciousness proof",
+    "not a physical geometry theorem",
+    "not multiple Administrators"
+  ]
+}

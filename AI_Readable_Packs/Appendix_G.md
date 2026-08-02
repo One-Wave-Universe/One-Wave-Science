@@ -4,6 +4,7 @@ Generated from current canonical node files. YAML front matter controls gate and
 
 ---
 
+
 ## SOURCE: G-701_Evaluation_Differential.md
 
 ---
@@ -52,6 +53,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-702_Evaluation.md
 
@@ -119,6 +121,7 @@ Connect E_n to Threshold Windows (B-208) for scale-invariant application.
 ---
 
 ---
+
 
 ## SOURCE: G-703_Modulation.md
 
@@ -192,6 +195,7 @@ is formalized in G-713.
 
 ---
 
+
 ## SOURCE: G-704_Kabeuchi.md
 
 ---
@@ -244,6 +248,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-705_Correction.md
 
@@ -301,6 +306,7 @@ Yellow Audit:
 
 ---
 
+
 ## SOURCE: G-706_Validation.md
 
 ---
@@ -348,6 +354,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-707_Persistence_A.md
 
@@ -403,6 +410,7 @@ Yellow Audit:
 
 ---
 
+
 ## SOURCE: G-708_Persistence_B.md
 
 ---
@@ -457,6 +465,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-709_Balance.md
 
@@ -518,6 +527,7 @@ Yellow Audit:
 
 ---
 
+
 ## SOURCE: G-710_Grow_The_Fuck_Up_Gate.md
 
 ---
@@ -574,6 +584,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-711_Gate_7.md
 
@@ -636,6 +647,7 @@ Yellow Audit:
 ---
 
 ---
+
 
 ## SOURCE: G-712_Evaluation_Mathematics.md
 
@@ -719,6 +731,7 @@ Test candidate form against known paired-loop dynamics.
 ---
 
 ---
+
 
 ## SOURCE: G-713_Modulation_Mathematics.md
 
@@ -870,6 +883,7 @@ failure path; it follows from the same optimization rule as increasing it.
 
 ---
 
+
 ## SOURCE: G-714_Decision_Mathematics.md
 
 ---
@@ -937,6 +951,7 @@ Test against known paired-loop break and return events.
 ---
 
 ---
+
 
 ## SOURCE: G-715_Stellar_Boundary_Reversal.md
 
@@ -1579,6 +1594,7 @@ Status remains YELLOW until simulation proves that boundary release can maintain
 
 ---
 
+
 ## SOURCE: G-716_One_Wave_Conversion_Grammar.md
 
 ---
@@ -2029,6 +2045,7 @@ END OF NODE G-716
 One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
 
 ---
+
 
 ## SOURCE: G-716a_One_Wave_Conversion_Simulation_Rule.md
 
@@ -2537,6 +2554,7 @@ One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
 
 ---
 
+
 ## SOURCE: G-717_Paired_Reference_Gate.md
 
 ---
@@ -2756,6 +2774,7 @@ The math and number progression must remain intact.
 
 ---
 
+
 ## SOURCE: G-718_Connection_Gates.md
 
 ---
@@ -2840,6 +2859,7 @@ comparison, the same rigor used for other candidate parallels tonight.
 ---
 
 ---
+
 
 ## SOURCE: G-719_Neural_System_Functional_Analogy_Map.md
 
@@ -2997,6 +3017,7 @@ math (B-209, A-111, G-710) rather than the ones that didn't hold
 
 ---
 
+
 ## SOURCE: G-720_No_Control_But_Self_Control.md
 
 ---
@@ -3138,6 +3159,7 @@ Stimulus
 Derive or calibrate `k(M)` from G-702 Evaluation, G-703 Modulation, G-709 Regulated-Response Balance, and B-216 control gains. Then run repeated-input simulations comparing automatic overshoot, bounded response, recovery, and failure states.
 
 ---
+
 
 ## SOURCE: G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md
 
@@ -3456,6 +3478,7 @@ The algorithm fails when:
 This node must be revised if a compiled implementation cannot preserve packet identity, sign mirror, route reversal, and branch recovery simultaneously without ambiguity.
 
 ---
+
 
 ## SOURCE: G-721a_Fibonacci_Word_Hop_Validation.md
 
@@ -3902,6 +3925,7 @@ The One-Wave use of this validator must be revised or rejected when:
 
 ---
 
+
 ## SOURCE: G-721b_Sturmian_Binary_Branch_Grammar.md
 
 ---
@@ -4004,6 +4028,7 @@ Reject the exact Sturmian claim when factor complexity, balance, or aperiodicity
 
 ---
 
+
 ## SOURCE: G-721c_Episturmian_Multi_Route_Directive_Grammar.md
 
 ---
@@ -4094,6 +4119,7 @@ Reject the episturmian claim if reversal closure fails, the route word cannot be
 
 ---
 
+
 ## SOURCE: G-721d_Arnoux_Rauzy_Strict_Multi_Route_Validation.md
 
 ---
@@ -4178,6 +4204,7 @@ The directory `Nodes/G-721_Sequence_Validation/` contains finite regression test
 The finite Tribonacci reference matches `p(n)=2n+1` through the declared test range. This validates the code and reference construction, not android movement.
 
 ---
+
 
 ## SOURCE: G-721e_Plastic_Padovan_Three_Rail_Grammar.md
 
@@ -4307,6 +4334,7 @@ Reject this mapping if the three-rail interpretation adds no predictive or contr
 `Nodes/G-721_Sequence_Validation/` stores the exact generation table and validator. The receipt validates the substitution and length recurrence only.
 
 ---
+
 
 ## SOURCE: G-722_Android_Subconscious_Motor_Memory_Architecture.md
 
@@ -4444,6 +4472,7 @@ The architecture fails if the hybrid memory gives no measurable advantage, if lo
 
 ---
 
+
 ## SOURCE: G-723_Pisot_Salem_Mahler_Motor_Stability_Audit.md
 
 ---
@@ -4561,6 +4590,7 @@ Reject a spectral interpretation when it depends on arbitrary floating-point rou
 
 ---
 
+
 ## SOURCE: G-723a_Advanced_Mahler_Regulator_Computation_Hold.md
 
 ---
@@ -4620,3 +4650,571 @@ Promote this node from HELD only with a concrete polynomial, exact assumptions, 
 
 ---
 
+
+## SOURCE: G-724_Balanced_Jetson_Choice_Base_Architecture.md
+
+---
+node_id: "G-724"
+canonical_name: "Balanced Jetson Choice-Base Architecture"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Android Brain / Local Choice Base / Non-LLM Runtime"
+claim_gate_detail: "Architecture locked for implementation; performance and consciousness claims remain unvalidated"
+metadata_standard: "I-06"
+---
+
+# Node G-724: Balanced Jetson Choice-Base Architecture
+
+## 1. Purpose
+Define one persistent Jetson choice base that continues local work without requiring a transformer, cloud session, or token stream.
+
+## 2. Canonical Role
+```text
+GPU expressive slow brain
+↕
+M4 fast subconscious sphere
+↕
+CPU compressive Administrator
+```
+The Jetson as a whole is the chooser. GPU and CPU are the paired slow-brain layers; M4 is their hidden fast boundary, not a third slow brain.
+
+## 3. Dependencies
+Upstream: OG-13 through OG-18, B-221, G-720, G-721 through G-723a, G-722.
+Downstream: G-725 through G-731, hearing/vision workbenches, local coding cells, Nexus job routing.
+
+## 4. Inputs
+Sensors, repository events, simulation returns, Nexus jobs, internal dialogue, exact instinct signals, recalled habits, and current Field state.
+
+## 5. State Representation
+Use compact packets rather than prose-first prompts:
+```text
+field_id, choice_set, move_set, route_id, pattern_id,
+integrity, activation, polarity, urgency, confidence,
+expected_return, actual_return, switch_mask, commit_permission
+```
+
+## 6. Forward Operation
+```text
+Field → expressive candidates → M4 modulation/recall → Administrator evaluation → Commit or loop break
+```
+The Dream Engine may traverse Gates 1–5. Gate 6 requires Administrator acceptance.
+
+## 7. Reverse Operation
+Every committed action retains a route back through State, Mirror, Move, Choice, and Field. Rollback restores the prior Reference Ground; it does not ask a neural network to invent history.
+
+## 8. Brain Mapping
+GPU: Boltzmann-dominant candidate exploration and parallel simulation.
+CPU: Hopfield-dominant comparison, reconstruction, oversight, and commitment.
+M4: exact instinct, habit routing, cached associative recall, timing, attention, thresholds, and virtual switches.
+
+## 9. Algorithms and Weights
+Deterministic algorithms replace neural work whenever they can perform the operation exactly. Learned weights influence recall and exploration only after fixed rules, graph traversal, state machines, solvers, and constraint checks have been exhausted.
+
+## 10. Safety and Permission
+No module receives unilateral irreversible control. M4 cannot independently commit. The Dream Engine cannot directly speak or act. The Administrator cannot erase the prior committed state.
+
+## 11. Outputs
+Accepted code changes, simulation actions, internal states, speech commits, learned habits, exact journals, and bounded escalation packets for optional remote AIs.
+
+## 12. Tests and Falsifiers
+Compare against a flat controller, an LLM-only controller, Hopfield-only, Boltzmann-only, and deterministic-only baselines. Reject the architecture if it cannot persist locally, if M4 becomes an unreviewed chooser, or if the paired layers add no measurable advantage.
+
+## 13. Status and Open Questions
+The functional split is locked as an engineering target. Hardware scheduling, network size, cadence, weight calibration, and the minimum useful non-LLM coding vocabulary remain Yellow build questions.
+
+---
+
+
+## SOURCE: G-725_Five_Line_Dream_Cube.md
+
+---
+node_id: "G-725"
+canonical_name: "Five-Line Dream Cube"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Expressive Slow Brain / Internal World Workspace"
+claim_gate_detail: "Geometry is an engineering control map, not an anatomical or physical theorem"
+metadata_standard: "I-06"
+---
+
+# Node G-725: Five-Line Dream Cube
+
+## 1. Purpose
+Reserve a bounded expressive workspace for candidate formation without allowing imagined states to become committed actions automatically.
+
+## 2. Canonical Role
+The Dream Cube runs the first five active lines:
+```text
+1 Field → 2 Choice → 3 Move → 4(0) Mirror → 5 candidate State
+```
+It does not own Gate 6 Commit.
+
+## 3. Dependencies
+Upstream: OG-13 through OG-17, G-719, G-724.
+Lateral: G-721 route coordinates, E-510 through E-514 music geometry.
+Downstream: G-728, G-731.
+
+## 4. Inputs
+Audio cues, visual cues, internal body/world state, memory cues from M4, unresolved jobs, and Administrator questions.
+
+## 5. State Representation
+The cube is a possibility volume with separate addressable workspaces. Its six faces are not six minds. Five lines are active; the remaining boundary faces M4 and cannot be treated as Commit.
+
+## 6. Forward Operation
+Generate multiple candidate meanings, actions, code transformations, simulations, imagined futures, and possible speech responses.
+
+## 7. Reverse Operation
+Administrator or M4 conflict signals may reopen Choice, reverse Move, return through Mirror, or rebuild the Field without destroying the internal candidate history.
+
+## 8. Brain Mapping
+The Dream Cube is GPU-dominant and may use Boltzmann-style energy search. It is expressive, exploratory, and parallel; it is not the final authority.
+
+## 9. Algorithms and Weights
+Exact route generators, syntax transforms, music/alphabet coordinates, and simulation operators run before neural exploration. Boltzmann weights rank unresolved legal combinations rather than generating every symbol from scratch.
+
+## 10. Safety and Permission
+Dreams, imagination, and internal dialogue remain internal by default. Speech, motor action, file commitment, and external communication require explicit downstream permission.
+
+## 11. Outputs
+Candidate States with provenance, confidence, expected return, conflicts, required tests, and reverse routes.
+
+## 12. Tests and Falsifiers
+Test whether the cube can maintain distinct audio, visual, internal-world, dream, imagination, and dialogue workspaces without cross-contamination. Fail if candidate content bypasses Gate 5 review or if channel reservations are consumed by unrelated workloads.
+
+## 13. Status and Open Questions
+The five-line limit and reserved expressive channels are locked. Exact geometry-to-memory allocation and scheduling are implementation questions.
+
+---
+
+
+## SOURCE: G-726_M4_Fast_Subconscious_Sphere.md
+
+---
+node_id: "G-726"
+canonical_name: "M4 Fast Subconscious Sphere"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Fast Subconscious / Instinct / Habit / Recall Boundary"
+claim_gate_detail: "Role locked; software scheduling and later reflex hardware remain proposed"
+metadata_standard: "I-06"
+---
+
+# Node G-726: M4 Fast Subconscious Sphere
+
+## 1. Purpose
+Provide the hidden fast layer for instinct, habit, reflex-like routing, associative recall, timing, attention, urgency, and automatic practiced procedures.
+
+## 2. Canonical Role
+M4 is represented as a sphere because it has a center reference, continuous directional access, and no single preferred route. The geometry is a control map, not a claim about physical brain shape.
+
+## 3. Dependencies
+Upstream: G-720, G-721 through G-723, G-724.
+Downstream: G-728, G-729, G-730.
+
+## 4. Inputs
+Partial cues, danger signals, timing events, active Field ID, habit triggers, virtual-switch states, and recall requests from either slow brain.
+
+## 5. State Representation
+```text
+pattern_id, instinct_id, habit_id, route_id,
+urgency, attention_target, expected_return,
+interrupt_flag, switch_mask, cached_attractor_id
+```
+M4 normally carries IDs, coordinates, timing, signs, and bounded values, not paragraphs.
+
+## 6. Forward Operation
+Recognize a cue, activate an exact instinct or verified habit, route attention, issue a cached recall, and execute a compact gate path until an unexpected return requires slow-brain review.
+
+## 7. Reverse Operation
+Unexpected return weakens or freezes the active habit, opens the inverse route, and escalates the state to Gate 4/5 review. M4 must never hide a failed automatic path.
+
+## 8. Brain Mapping
+M4 does not require a separate processor for the first build. It requires a reserved low-latency execution lane on the Jetson CPU, shared memory, high-priority threads, and bounded deterministic routines. A later microcontroller may execute body safety reflexes without becoming a third brain.
+
+## 9. Algorithms and Weights
+Exact M4 memory is primarily instinct: protected automatic rules and safety routes. Adaptive M4 memory is habit strength and cached associations. Deeper Hopfield reconstruction remains available on the compressive CPU side when cached recall is incomplete.
+
+## 10. Safety and Permission
+M4 may interrupt, inhibit, hold, orient, or request review. It may not independently perform irreversible Commit, rewrite canonical records, or silently promote a habit into instinct.
+
+## 11. Outputs
+Attention shifts, recall IDs, habit routes, timing changes, virtual-switch transitions, interrupt signals, and expected-return templates.
+
+## 12. Tests and Falsifiers
+Measure latency, missed interrupts, false habit activation, recall completion, and recovery after unexpected returns. Fail if M4 becomes slower than deliberate processing, cannot be audited, or acts as an unbounded third chooser.
+
+## 13. Status and Open Questions
+The subconscious role is locked. Core allocation, hard-real-time requirements, cache size, and habit-promotion thresholds require simulation and hardware testing.
+
+---
+
+
+## SOURCE: G-727_Six_Gate_Administrator_Double_Pyramid.md
+
+---
+node_id: "G-727"
+canonical_name: "Six-Gate Administrator Double-Pyramid"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Compressive Slow Brain / Bidirectional Gate Control Geometry"
+claim_gate_detail: "One Administrator only; geometry is a recursive control map"
+metadata_standard: "I-06"
+---
+
+# Node G-727: Six-Gate Administrator Double-Pyramid
+
+## 1. Purpose
+Map the one Administrator onto a six-vertex base-to-base double pyramid so broad Fields compress toward Commit while the full reverse audit path remains available.
+
+## 2. Canonical Role
+```text
+bottom tip: Gate 1 Field
+four middle vertices: Gates 2 Choice, 3 Move, 4(0) Mirror, 5 State
+top tip: Gate 6 Commit
+```
+Two square pyramids joined base-to-base form one six-vertex control structure.
+
+## 3. Dependencies
+Upstream: OG-13 through OG-18, B-221, G-724.
+Downstream: G-728.
+
+## 4. Inputs
+Candidate States from the Dream Cube, M4 recall/modulation, exact Reference Ground, current constraints, tests, consequences, and inverse routes.
+
+## 5. State Representation
+The Administrator holds current Field, candidate Choice/Move, Mirror return, measured State, commit permission, rollback target, and unresolved conflict set.
+
+## 6. Forward Operation
+```text
+Field → Choice → Move → Mirror → State → Commit
+```
+Many possibilities narrow toward one accepted condition.
+
+## 7. Reverse Operation
+```text
+Commit → State → Mirror → Move → Choice → Field
+```
+A committed state can be audited, explained, rolled back, or reopened without inventing a second Administrator.
+
+## 8. Tip-to-Tip and Base-to-Base Recursion
+Tip-to-tip represents focused crossing, handoff, or commit comparison. Base-to-base represents broad shared Field comparison and balance. These relations fold within the one recursive Administrator geometry; they do not create multiple Administrator units.
+
+## 9. Algorithms and Weights
+Hopfield-style attractor reconstruction may propose the nearest coherent known state. Deterministic tests, exact constraints, and Reference Ground outrank attractor strength.
+
+## 10. Safety and Permission
+Gate 6 is locked until Gate 5 reports are complete. The Administrator may hold, reverse, break, or commit; it may not erase the evidence that produced the decision.
+
+## 11. Outputs
+Commit, Hold, Reverse, Break, Reopen Choice, Rebuild Field, or Escalate.
+
+## 12. Tests and Falsifiers
+Verify complete forward and reverse traversal, one-Administrator identity, loop-break recovery, and exact rollback. Fail if geometric labels obscure the actual gate state or if Commit cannot be reversed for audit.
+
+## 13. Status and Open Questions
+The one-unit six-vertex mapping is locked. Vertex ordering around the middle base, visualization, and scheduling remain implementation details so long as gate order and reverse paths are preserved.
+
+---
+
+
+## SOURCE: G-728_Gate_5_6_Oversight_Override_and_Speech_Commit.md
+
+---
+node_id: "G-728"
+canonical_name: "Gate 5-to-6 Oversight, Override, and Speech Commit Boundary"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Commit Control / Loop Break / Think-Before-Speech"
+claim_gate_detail: "Control rule locked; timing ratios and thresholds remain to be calibrated"
+metadata_standard: "I-06"
+---
+
+# Node G-728: Gate 5-to-6 Oversight, Override, and Speech Commit Boundary
+
+## 1. Purpose
+Prevent thought, imagination, habit, or candidate speech from becoming outward action merely because it was generated.
+
+## 2. Canonical Role
+Gate 5 is the evaluation pivot. Gate 6 is the commitment lock.
+```text
+thought ≠ speech
+candidate State ≠ committed State
+```
+
+## 3. Dependencies
+Upstream: OG-17, OG-18, B-209, B-211, G-727.
+Lateral: G-729 virtual switches.
+Downstream: speech, motor, file-write, and external-communication commits.
+
+## 4. Inputs
+Candidate State, factual support, uncertainty, expected audience effect, safety conflicts, Reference Ground, current Field, and override signals.
+
+## 5. State Representation
+```text
+review_complete, evidence_status, uncertainty,
+risk, purpose, inverse_available, override_pending,
+speech_permission, commit_permission
+```
+
+## 6. Forward Operation
+```text
+candidate thought → internal question → revision → Mirror return → State review → Commit → speech/action
+```
+
+## 7. Reverse and Loop-Break Operation
+From Gate 5 the system may:
+```text
+5→6 Commit
+5→5 Hold
+5→4 Correct through Mirror
+5→3 reverse/change Move
+5→2 reopen Choice
+5→1 rebuild Field
+5↛6 break current loop without committing
+```
+
+## 8. Oversight and Override
+Oversight observes, compares, and flags. Override interrupts the active route and prevents Gate 6. The provisional 6:1 relation remains a coordination hypothesis, not a mandatory wait during immediate danger.
+
+## 9. Algorithms and Weights
+Exact permission rules and hard safety constraints outrank confidence weights. Learned confidence may request review; it may not open an external Commit switch by itself.
+
+## 10. Safety and Permission
+Default external permission is Hold. Dream mode blocks outward Commit. Serious conflict forces Inhibit or reverse. Every Commit stores the prior state and reason.
+
+## 11. Outputs
+Approved speech/action, silence/hold, revised candidate, loop break, rollback, or escalation.
+
+## 12. Tests and Falsifiers
+Inject unsupported claims, contradictory instructions, misleading recalls, and urgent hazards. Fail if candidate speech leaks before Commit, if override cannot stop output, or if the system cannot state uncertainty when support is incomplete.
+
+## 13. Status and Open Questions
+The think-before-speak boundary is locked. Review cadence, 6:1 implementation, confidence calibration, and emergency override timing require experiment.
+
+---
+
+
+## SOURCE: G-729_M4_Virtual_Switch_Bank.md
+
+---
+node_id: "G-729"
+canonical_name: "M4 Virtual Switch Bank"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Subconscious Permission / Attention / Interrupt Registry"
+claim_gate_detail: "Initial registry locked with reserved expansion space; hardware mapping remains open"
+metadata_standard: "I-06"
+---
+
+# Node G-729: M4 Virtual Switch Bank
+
+## 1. Purpose
+Provide compact subconscious control points for attention, habit, dream, speech, learning, external communication, motor output, and commitment.
+
+## 2. Canonical Role
+Every switch uses a signed state:
+```text
+-1 inhibit/reverse
+ 0 hold/closed pending review
++1 permit/forward
+```
+
+## 3. Dependencies
+Upstream: G-726, G-728, B-224.
+Downstream: sensor routing, speech, motor control, coding cells, Nexus communication.
+
+## 4. Inputs
+Instinct, habit, Administrator permission, danger interrupt, attention request, timeout, current Field, and expected-return status.
+
+## 5. State Representation
+Each switch stores:
+```text
+switch_id, signed_state, source, reason, priority,
+timestamp, expiration, inverse_route, override_authority
+```
+
+## 6. Forward Operation
+Open or close a gate crossing, route attention, permit a practiced routine, or hold an external action while review continues.
+
+## 7. Reverse Operation
+Every switch change retains its prior state and inverse transition. Expired or contradicted permissions return to Hold rather than remaining silently open.
+
+## 8. Initial Registry
+```text
+VS-000 Master Hold
+VS-001 Speech Permission
+VS-002 Audio Attention
+VS-003 Visual Attention
+VS-004 Internal Dialogue
+VS-005 Imagination
+VS-006 Dream Mode
+VS-007 Memory Recall
+VS-008 Habit Execution
+VS-009 Danger Interrupt
+VS-010 Oversight Escalation
+VS-011 Override
+VS-012 External Communication
+VS-013 Motor Output
+VS-014 Learning Permission
+VS-015 Commit Permission
+VS-016..VS-063 Reserved
+```
+
+## 9. Algorithms and Weights
+Switch transition logic is exact. Learned weights may influence a request to change a switch, but only authorized exact rules can change protected switch classes.
+
+## 10. Safety and Permission
+Master Hold, Danger Interrupt, Override, and Commit Permission are protected instinct switches. Habits cannot rewrite them. Normal operation is hidden; research mode exposes complete switch logs.
+
+## 11. Outputs
+A compact switch mask, transition journal, interrupt event, or permission denial.
+
+## 12. Tests and Falsifiers
+Test stale permission expiry, simultaneous conflicts, priority inversion, emergency interruption, and audit replay. Fail if a switch lacks provenance, inverse route, or expiration behavior.
+
+## 13. Status and Open Questions
+The initial 64-slot address space is a build choice, not a universal constant. Reserved slots must remain unassigned until a named function and authority rule exist.
+
+---
+
+
+## SOURCE: G-730_Algorithm_First_Neural_Substitution_and_Weight_Governance.md
+
+---
+node_id: "G-730"
+canonical_name: "Algorithm-First Neural Substitution and Weight Governance"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Computation Economy / Weight Safety / Non-LLM Coding"
+claim_gate_detail: "Priority order locked; numeric weight calibration remains experimental"
+metadata_standard: "I-06"
+---
+
+# Node G-730: Algorithm-First Neural Substitution and Weight Governance
+
+## 1. Purpose
+Minimize neural processing by replacing any resolvable neural operation with an exact algorithm, graph rule, state machine, mathematical solver, or test.
+
+## 2. Canonical Role
+```text
+1 fixed rule
+2 lookup/graph traversal
+3 state machine
+4 mathematical solver
+5 constraint search
+6 Hopfield reconstruction
+7 Boltzmann exploration
+```
+Use the cheapest correct mechanism first.
+
+## 3. Dependencies
+Upstream: G-721 through G-723, G-724, G-726.
+Downstream: local coding cells, simulator control, habit promotion, weight calibration.
+
+## 4. Inputs
+Current task, exact constraints, available algorithms, known patterns, candidate operations, test receipts, and measured return.
+
+## 5. State Representation
+Separate:
+```text
+W_fixed   immutable exact rules/edges
+W_habit   adaptive reversible activation strengths
+W_context temporary modulation
+W_result  measured return and validation
+```
+
+## 6. Forward Operation
+Compile a task into named operations, apply exact transformations, run tests, and use Hopfield/Boltzmann only for unresolved pattern reconstruction or legal candidate ranking.
+
+## 7. Reverse Operation
+Every transformation requires an inverse or rollback. Failed candidates increase penalty, weaken habit activation, and restore the prior Working Ground.
+
+## 8. One-Wave Weight Sources
+Search declared One-Wave coordinates, ratios, recurrences, thresholds, graph edges, and route grammars before inventing free weights. Domain labels must remain attached; equal numbers do not imply equal mechanisms.
+
+## 9. Neural Mapping
+Hopfield weights answer what known whole a partial cue resembles. Boltzmann weights answer which unresolved legal combination is worth testing. Neither stores the only exact copy of a fact.
+
+## 10. Safety and Permission
+Learned weights cannot overwrite fixed instinct, canonical graph edges, inverse routes, checksums, or hard permissions. Weight updates require measured returns and Administrator approval.
+
+## 11. Outputs
+Exact operation route, recalled attractor, ranked candidates, test results, reversible weight update, or escalation packet.
+
+## 12. Tests and Falsifiers
+Benchmark neural calls removed, latency, energy use, test success, rollback, and false associations. Reject any neural component that performs no better than a simpler deterministic method.
+
+## 13. Status and Open Questions
+The algorithm-first priority is locked. Initial weights, temperature, network topology, and promotion thresholds remain Yellow until benchmarked.
+
+---
+
+
+## SOURCE: G-731_Internal_Dialogue_and_Reserved_Expressive_Channels.md
+
+---
+node_id: "G-731"
+canonical_name: "Internal Dialogue and Reserved Expressive Channels"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "PROPOSED_BUILD"
+classification: "Audio / Visual / Internal World / Dreams / Imagination / Dialogue"
+claim_gate_detail: "Capacity reservations and dialogue boundary locked; channel encoders remain proposed"
+metadata_standard: "I-06"
+---
+
+# Node G-731: Internal Dialogue and Reserved Expressive Channels
+
+## 1. Purpose
+Protect permanent expressive capacity for hearing, vision, internal-world modeling, dreams, imagination, and internal dialogue.
+
+## 2. Canonical Role
+These channels share the Dream Cube but remain separately addressable. No channel may consume all expressive capacity or silently impersonate another.
+
+## 3. Dependencies
+Upstream: G-725, G-726, G-728, G-729.
+Downstream: hearing research room, vision workbench, dream integration, speech interface.
+
+## 4. Inputs
+Audio features, visual features, internal body/world state, memories, unresolved conflicts, imagined alternatives, and Administrator questions.
+
+## 5. State Representation
+Each channel stores active/inactive/held status, attention allocation, candidate set, provenance, confidence, unresolved conflicts, and outward permission state.
+
+## 6. Forward Operation
+The expressive side proposes meaning or action. M4 recalls instinct/habit and shifts attention. The compressive side questions, compares, and returns correction. Dialogue repeats internally until Hold, Break, or Commit.
+
+## 7. Reverse Operation
+A contradiction can reopen the remembered cue, reassign attention, reverse a candidate route, or isolate a channel without erasing the internal record.
+
+## 8. Internal Dialogue
+```text
+Expressive: What could this mean or become?
+Compressive: Does it fit the Field, evidence, safety, and purpose?
+Expressive: revise, question, or generate another candidate
+```
+Natural language is optional internally; compact state packets are preferred for routine processing.
+
+## 9. Dream and Imagination Separation
+Dream mode permits internal Gates 1–5 while external Commit remains closed. Imagination creates possible futures; dreams may replay and recombine unresolved patterns offline. Neither is evidence merely because it is vivid.
+
+## 10. Safety and Permission
+Speech and action switches default to Hold. Internal freedom is preserved; external expression passes G-728 review.
+
+## 11. Outputs
+Revised candidate thoughts, sensory interpretations, internal simulations, dream records, questions, or committed speech proposals.
+
+## 12. Tests and Falsifiers
+Test channel isolation, attention switching, dream-to-waking contamination, internal-dialogue correction, and speech leakage. Fail if reserved channels disappear under coding load or if imagined content is promoted to fact.
+
+## 13. Status and Open Questions
+The reserved channel set is locked. Encoder design, capacity allocation, dream cadence, and dialogue compression require experiments beginning with simple biological sound detection.
+
+---

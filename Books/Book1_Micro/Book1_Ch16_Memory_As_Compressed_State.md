@@ -256,3 +256,6 @@ One wave. All the way back.
 
 END OF BOOK 1 CHAPTER 16
 One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
+
+## Updated 45 Negative-Space Memory Lock
+Memory is retained 3D experience recompressed as accessible 2D relation. Recall does not retrieve a tiny stored movie; it reconstructs peaks, troughs, phase, identity, sequence, and boundary relationships through the Mirror Gate. This same access architecture supports dream speed and internal sensory generation. See E-537 through E-539.

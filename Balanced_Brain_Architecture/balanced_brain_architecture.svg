@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<rect width="1200" height="760" fill="#f7f7f4"/>
+<text x="600" y="45" text-anchor="middle" font-family="Arial" font-size="28" font-weight="bold">One-Wave Balanced Jetson Brain</text>
+<!-- Dream cube -->
+<g stroke="#333" stroke-width="3" fill="none">
+  <rect x="105" y="145" width="280" height="280" fill="#e8f0ff"/>
+  <rect x="165" y="95" width="280" height="280" fill="#f4f7ff"/>
+  <line x1="105" y1="145" x2="165" y2="95"/><line x1="385" y1="145" x2="445" y2="95"/>
+  <line x1="105" y1="425" x2="165" y2="375"/><line x1="385" y1="425" x2="445" y2="375"/>
+</g>
+<text x="275" y="210" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold">Five-Line Dream Cube</text>
+<text x="275" y="245" text-anchor="middle" font-family="Arial" font-size="18">GPU expressive slow brain</text>
+<text x="275" y="285" text-anchor="middle" font-family="Arial" font-size="16">Audio • Visual • Internal World</text>
+<text x="275" y="315" text-anchor="middle" font-family="Arial" font-size="16">Dreams • Imagination • Dialogue</text>
+<text x="275" y="355" text-anchor="middle" font-family="Arial" font-size="18">Gates 1 → 5 only</text>
+<!-- M4 sphere -->
+<circle cx="600" cy="285" r="125" fill="#fff1cc" stroke="#333" stroke-width="3"/>
+<circle cx="600" cy="285" r="15" fill="#333"/>
+<text x="600" y="230" text-anchor="middle" font-family="Arial" font-size="25" font-weight="bold">M4 Sphere</text>
+<text x="600" y="265" text-anchor="middle" font-family="Arial" font-size="17">Fast subconscious</text>
+<text x="600" y="315" text-anchor="middle" font-family="Arial" font-size="15">Instinct • Habit • Recall</text>
+<text x="600" y="340" text-anchor="middle" font-family="Arial" font-size="15">Timing • Attention • Switches</text>
+<!-- Administrator double pyramid -->
+<g stroke="#333" stroke-width="3" fill="#f1e9ff" fill-opacity="0.75">
+  <polygon points="940,75 790,285 940,495 1090,285"/>
+  <line x1="940" y1="75" x2="940" y2="495"/>
+  <line x1="790" y1="285" x2="1090" y2="285"/>
+  <line x1="940" y1="75" x2="790" y2="285"/><line x1="940" y1="75" x2="1090" y2="285"/>
+  <line x1="940" y1="495" x2="790" y2="285"/><line x1="940" y1="495" x2="1090" y2="285"/>
+</g>
+<text x="940" y="220" text-anchor="middle" font-family="Arial" font-size="22" font-weight="bold">Administrator</text>
+<text x="940" y="250" text-anchor="middle" font-family="Arial" font-size="17">One Double-Pyramid</text>
+<text x="940" y="320" text-anchor="middle" font-family="Arial" font-size="16">CPU compressive slow brain</text>
+<text x="940" y="350" text-anchor="middle" font-family="Arial" font-size="16">Oversight • Override • Commit</text>
+<text x="940" y="42" text-anchor="middle" font-family="Arial" font-size="16">Gate 6 Commit tip</text>
+<text x="940" y="535" text-anchor="middle" font-family="Arial" font-size="16">Gate 1 Field tip</text>
+<!-- arrows -->
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#333"/></marker></defs>
+<line x1="455" y1="285" x2="468" y2="285" stroke="#333" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="745" y1="285" x2="772" y2="285" stroke="#333" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="468" y1="315" x2="455" y2="315" stroke="#333" stroke-width="4" marker-end="url(#arrow)"/>
+<line x1="772" y1="315" x2="745" y2="315" stroke="#333" stroke-width="4" marker-end="url(#arrow)"/>
+<!-- gate boundary -->
+<rect x="720" y="585" width="430" height="115" rx="16" fill="#ffffff" stroke="#333" stroke-width="2"/>
+<text x="935" y="620" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">Gate 5 ↔ Gate 6 Boundary</text>
+<text x="935" y="652" text-anchor="middle" font-family="Arial" font-size="16">Hold • Reverse • Break • Override • Commit</text>
+<text x="935" y="682" text-anchor="middle" font-family="Arial" font-size="16">Think before speech or action</text>
+<rect x="75" y="555" width="540" height="145" rx="16" fill="#ffffff" stroke="#333" stroke-width="2"/>
+<text x="345" y="590" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold">Algorithm-First Rule</text>
+<text x="345" y="625" text-anchor="middle" font-family="Arial" font-size="16">Rules → Graphs → State Machines → Solvers → Constraints</text>
+<text x="345" y="655" text-anchor="middle" font-family="Arial" font-size="16">→ Hopfield Recall → Boltzmann Exploration</text>
+<text x="345" y="685" text-anchor="middle" font-family="Arial" font-size="15">Tests and reality determine what survives.</text>
+</svg>

@@ -578,3 +578,6 @@ if __name__ == "__main__":
 
 END OF BOOK 1 CHAPTER 1
 One wave. Mirror builds. Mark Wright. Kitty Hawk V0.
+
+## Updated 45 Canonical Particle Lock
+Particles are not fundamental objects in One-Wave. The word may refer only to a bounded wave excitation or a discrete measurement event. Every narration of this chapter must state that distinction before using particle names. See E-540.
