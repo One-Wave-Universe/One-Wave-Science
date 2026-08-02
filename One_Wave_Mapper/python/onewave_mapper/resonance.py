@@ -10,12 +10,15 @@ tell a body resonance from a room resonance (Section 15.1).
 from __future__ import annotations
 
 from dataclasses import dataclass, asdict
+from typing import Callable
 
 import numpy as np
 from scipy.signal import butter, filtfilt, hilbert
 
 from onewave_mapper.spectrogram import Spectrogram, compute_spectrogram
 from onewave_mapper.envelope import fit_exponential_decay
+
+ResonanceClassifier = Callable[["ResonanceEvent"], "str | None"]
 
 
 @dataclass
@@ -86,7 +89,13 @@ def _phase_stability(spectrogram: Spectrogram, bin_index: int, present_frames: n
 def detect_resonances(signal: np.ndarray, sample_rate: float, fft_size: int = 4096,
                        hop_size: int = 1024, min_prominence_db: float = 6.0,
                        persistence_threshold_db: float = -6.0,
-                       max_candidates: int = 20) -> list[ResonanceEvent]:
+                       max_candidates: int = 20,
+                       classifier: ResonanceClassifier | None = None) -> list[ResonanceEvent]:
+    """classifier, if given, is called with each ResonanceEvent (classification
+    still "unknown" at that point) and may return one of the Section 15.1
+    resonance types -- this is the caller's domain knowledge, not something
+    this detector infers on its own. See make_frequency_band_classifier for
+    a simple example built from known frequency ranges."""
     spectrogram = compute_spectrogram(signal, sample_rate, fft_size=fft_size, hop_size=hop_size)
     if spectrogram.magnitude.shape[1] == 0:
         return []
@@ -125,7 +134,7 @@ def detect_resonances(signal: np.ndarray, sample_rate: float, fft_size: int = 40
         end_sample = int(present_frames[-1] * spectrogram.hop_size + spectrogram.fft_size) if present_frames.size else len(signal)
         end_sample = min(end_sample, len(signal))
 
-        events.append(ResonanceEvent(
+        event = ResonanceEvent(
             center_frequency_hz=float(spectrogram.freqs_hz[bin_index]),
             bandwidth_hz=bandwidth_hz,
             quality_factor=quality_factor,
@@ -138,10 +147,26 @@ def detect_resonances(signal: np.ndarray, sample_rate: float, fft_size: int = 40
             coherence_score=None,
             classification="unknown",
             confidence=confidence,
-        ))
+        )
+        if classifier is not None:
+            event.classification = classifier(event) or "unknown"
+        events.append(event)
 
     events.sort(key=lambda e: e.peak_level_dbfs, reverse=True)
     return events
+
+
+def make_frequency_band_classifier(bands: list[tuple[str, float, float]]) -> ResonanceClassifier:
+    """Build a classifier from caller-supplied (label, low_hz, high_hz) bands,
+    e.g. from a specific instrument/room setup the caller has characterized
+    separately -- this is illustrative glue, not a claim that frequency
+    range alone determines resonance type in general (Section 15.1)."""
+    def classify(event: ResonanceEvent) -> str | None:
+        for label, low_hz, high_hz in bands:
+            if low_hz <= event.center_frequency_hz < high_hz:
+                return label
+        return None
+    return classify
 
 
 def ring_down_analysis(signal: np.ndarray, sample_rate: float, center_frequency_hz: float,

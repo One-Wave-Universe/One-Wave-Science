@@ -50,3 +50,29 @@ def test_ring_down_analysis_low_frequency_drift_for_stable_tone():
     result = resonance.ring_down_analysis(signal, sr, center_frequency_hz=500, bandwidth_hz=100,
                                            excitation_end_sample=0)
     assert abs(result["frequency_drift_hz"]) < 10.0
+
+
+def test_detect_resonances_defaults_to_unknown_classification():
+    sr = 48000
+    signal = signal_generator.exponential_decay(500, 2.0, sr, decay_tau_seconds=0.5, amplitude=1.0)
+    events = resonance.detect_resonances(signal, sr, fft_size=4096, hop_size=1024)
+    assert events[0].classification == "unknown"
+
+
+def test_detect_resonances_applies_caller_supplied_classifier():
+    sr = 48000
+    signal = signal_generator.exponential_decay(500, 2.0, sr, decay_tau_seconds=0.5, amplitude=1.0)
+    classifier = resonance.make_frequency_band_classifier([
+        ("string_resonance", 400.0, 600.0),
+        ("body_resonance", 100.0, 400.0),
+    ])
+    events = resonance.detect_resonances(signal, sr, fft_size=4096, hop_size=1024, classifier=classifier)
+    assert events[0].classification == "string_resonance"
+
+
+def test_make_frequency_band_classifier_falls_back_to_unknown_outside_bands():
+    sr = 48000
+    signal = signal_generator.exponential_decay(2000, 2.0, sr, decay_tau_seconds=0.5, amplitude=1.0)
+    classifier = resonance.make_frequency_band_classifier([("string_resonance", 400.0, 600.0)])
+    events = resonance.detect_resonances(signal, sr, fft_size=4096, hop_size=1024, classifier=classifier)
+    assert events[0].classification == "unknown"

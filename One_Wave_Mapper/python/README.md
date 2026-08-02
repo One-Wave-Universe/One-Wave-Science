@@ -14,9 +14,17 @@ is implemented and tested here:
 
 - Ring buffer, trigger engine, FFT/pitch/harmonic/envelope/phase analysis
 - Spectrogram (STFT tiling, linear/log/note axes, fundamental/harmonic
-  track overlays), resonance detection and ring-down analysis, and
-  chord/interval analysis (two-pitch harmonic-sieve detection, shared
-  harmonics, beat/intermodulation candidates, roughness)
+  track overlays), resonance detection with ring-down analysis and a
+  caller-supplied classification hook, and chord/interval analysis
+  (N-note harmonic-sieve detection, shared harmonics, beat/
+  intermodulation candidates, roughness)
+- Interference analysis (Section 14): sum/difference, frequency-dependent
+  cancellation/reinforcement, beat detection, constructive/destructive
+  scoring, and the isolated-vs-combined residual comparison workflow
+- Cycle objects with Point/Path/Field tagging and modulation-spectrum
+  detection (Section 16), and the four One-Wave interpretive views —
+  Inward/Outward/Across/Over — as a configurable, evidence-linked rule
+  engine kept strictly separate from objective measurement (Section 17)
 - Calibration profiles (Section 4.2) — dBFS is always available; volts/SPL
   conversion refuses to run without an active `CalibrationProfile`
 - WAV read/write (including the 32-bit float format the stdlib `wave`
@@ -68,10 +76,16 @@ onewave_mapper/
 ├── spectrogram.py         Section 9 — STFT tiling, axis scales, track overlays
 ├── pitch.py              Section 8.3 — multi-method fundamental detection
 ├── harmonics.py          Section 12 — harmonic tracking / peak classification
-├── resonance.py           Section 15 — resonance detection, ring-down analysis
+├── resonance.py           Section 15 — resonance detection, ring-down analysis,
+│                          classification hook
 ├── phase_analysis.py     Section 13 — delay, phase difference, coherence
 ├── envelope.py           Section 11 — envelopes, attack/decay, decay fitting
-├── chord.py               Section 18 — intervals, two-pitch detection, ChordEvent
+├── interference.py        Section 14 — sum/difference, beats, interference
+│                          scores, isolated-vs-combined residual comparison
+├── cycles.py               Section 16 — Cycle objects, Point/Path/Field,
+│                          modulation spectrum
+├── one_wave_views.py       Section 17 — Inward/Outward/Across/Over rule engine
+├── chord.py               Section 18 — intervals, N-note pitch detection, ChordEvent
 ├── wav_io.py             Section 2.1/21.1 — RIFF/WAV read/write (PCM16/24/32, float32/64)
 ├── session.py            Section 7.2/7.3, 21.3 — session + note-event schema
 ├── recorder.py           Section 7 — ties the above together, hardware-independent
@@ -91,7 +105,7 @@ list here, not something this engine fills in automatically.
 
 ## Testing
 
-77 tests in `tests/`, including direct implementations of every Section
+109 tests in `tests/`, including direct implementations of every Section
 24.3 acceptance test:
 
 - `test_acceptance_frequency_accuracy_440hz_within_0p1hz` — autocorrelation
@@ -118,24 +132,26 @@ Run `pytest -q` from this directory.
   C++ audio callback (Section 2.4) must use a real lock-free structure.
 - **No SQLite session store, only JSON.** Section 7.2's `session.sqlite`
   is not implemented; `session.json` covers the same metadata for now.
-- **Resonance classification is always `"unknown"`.** `resonance.py`
-  detects and scores candidates (prominence, persistence, decay, Q,
-  phase stability) but has no basis to label one "body" vs. "room" vs.
-  "pickup" (Section 15.1) without domain input from a real caller.
-  `coherence_score` is likewise `None` until a second channel is wired in.
-- **`detect_two_pitches` is a two-note estimator only.** Section 18.3's
-  three/four-note and six-string chord estimation is not implemented;
-  the harmonic-sieve/peeling approach generalizes but hasn't been built
-  past two simultaneous fundamentals.
-- **Interference isolated-vs-combined residual comparison (Section
-  14.4) is not implemented** — the building blocks (WAV I/O, alignment
-  via `phase_analysis.cross_correlation_delay`, spectral analysis) are
-  there, but the record-A / record-B / record-A+B / diff-against-predicted-
-  sum workflow itself isn't wired up yet.
-- **One-Wave interpretive rule engine (Sections 16-17) is not
-  implemented.** Cycle objects, Point/Path/Field tagging, and the
-  Inward/Outward/Across/Over classifiers don't exist yet; `one_wave_tags`
-  stays an empty, user-editable list everywhere.
+- **Resonance classification is `"unknown"` by default.** `resonance.py`
+  scores candidates (prominence, persistence, decay, Q, phase stability)
+  and now accepts a `classifier` callback (Section 15.1) — but ships no
+  built-in guitar/room classifier, since frequency range alone isn't a
+  reliable basis for "body" vs. "room" vs. "pickup" without a
+  characterized setup. `coherence_score` is likewise `None` until a
+  second channel is wired in.
+- **`chord.detect_pitches` degrades on closely-spaced or highly
+  harmonically-overlapping notes.** The iterative-peeling approach
+  recovers a clean triad (tested), but hasn't been stress-tested against
+  dense six-string voicings or notes a semitone apart, where peeled
+  harmonics from one note can eat a real peak belonging to another.
+- **One-Wave rule engine implements one indicator per view, not every
+  one Section 17 lists.** `inward_rule`/`outward_rule` use envelope
+  slope only (not e.g. explicit phase-convergence or harmonic-generation
+  indicators); `across_rule` is zero-crossing only (not phase/frequency-
+  track intersection); `over_rule` is modulation-spectrum only (not
+  explicit phase-wrap detection). All four are ordinary Python callables
+  matching the `OneWaveRule` signature, so adding more indicators as
+  additional or replacement rules doesn't require touching the engine.
 - **`pink_noise()` is a Voss-McCartney approximation**, adequate as a test
   signal but not a calibrated 1/f reference.
 
@@ -146,17 +162,23 @@ Run `pytest -q` from this directory.
    the first real test of `device_manager.py` against live hardware, and
    the first place `calibration.py`'s dBFS-only-by-default rule needs to
    actually be enforced on an axis label.
-2. Interference isolated-vs-combined comparison (Section 14.4): record
-   A, record B, record A+B, time/level-align via
-   `phase_analysis.cross_correlation_delay`, and compute the residual
-   against the predicted linear sum.
-3. Cycle object and Point/Path/Field tagging (Section 16): a common
-   `Cycle` schema with parent/child relationships, built on top of
-   `envelope.py` and `spectrogram.fundamental_track` for modulation-rate
-   detection.
-4. One-Wave interpretive views (Section 17): configurable, evidence-linked
-   Inward/Outward/Across/Over rules over the `Cycle` objects from task 3 —
-   kept strictly separate from objective measurement per Section 2.3.
-5. Extend `chord.detect_two_pitches` toward three/four simultaneous notes
-   (Section 18.3), and add a resonance-classification hook so callers can
-   supply the domain knowledge `resonance.py` deliberately doesn't invent.
+2. A spectrogram/interference/resonance/cycle panel layer on top of the
+   oscilloscope UI from task 1, wired to `spectrogram.py`,
+   `interference.py`, `resonance.py`, and `cycles.py` — turning the
+   tested-but-headless analysis modules into Section 20's actual
+   dockable-panel workspace.
+3. Multichannel `coherence_score` wiring in `resonance.py`, using
+   `phase_analysis.magnitude_squared_coherence` across two channels of
+   the same resonance candidate, and a first real (non-illustrative)
+   frequency-band-plus-coherence resonance classifier for a
+   characterized guitar/room setup.
+4. Stress-test and harden `chord.detect_pitches` against dense/close
+   voicings (Section 18.3's four-note and six-string cases): tighter
+   peeling (partial harmonic removal instead of full zeroing, weighted
+   by expected amplitude rolloff) and a documented failure mode when
+   `min_separation_hz` can't be met.
+5. SQLite session store (Section 7.2's `session.sqlite`) alongside the
+   existing `session.json`, plus persisting `Cycle`/`OneWaveTag`/
+   `ResonanceEvent`/`ChordEvent` objects into a session's `analysis/`
+   subdirectories so a full session round-trips everything computed
+   about it, not just the note-event JSON `cli.py` currently exports.

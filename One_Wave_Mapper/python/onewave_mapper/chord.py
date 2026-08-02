@@ -134,50 +134,65 @@ def _harmonic_sieve_score(freqs_hz: np.ndarray, magnitude: np.ndarray, f0: float
     return score
 
 
+def detect_pitches(signal: np.ndarray, sample_rate: float, n_notes: int = 2, fmin: float = 80.0,
+                    fmax: float = 1000.0, resolution_hz: float = 2.0, max_harmonics: int = 10,
+                    min_separation_hz: float = 20.0, fft_size: int = 16384) -> dict:
+    """N-note polyphonic pitch estimate via iterative harmonic-sieve scoring
+    and spectral peeling (Section 18.3): find the strongest candidate
+    fundamental, zero out its harmonics from a residual spectrum, then
+    repeat against the residual for each remaining note. Confidence is
+    scored against the *original* spectrum's total energy, since the
+    residual shrinks with each peel and isn't a fair common denominator.
+    """
+    if n_notes < 1:
+        raise ValueError("n_notes must be at least 1")
+
+    spectrum = fft_analyzer.compute_spectrum(signal, sample_rate, window="hann", fft_size=fft_size)
+    tolerance_hz = max(spectrum.bin_spacing_hz * 2, 3.0)
+    total_energy = float(np.sum(spectrum.magnitude))
+
+    candidate_f0s = np.arange(fmin, fmax, resolution_hz)
+    residual_magnitude = spectrum.magnitude.copy()
+
+    found_freqs: list[float] = []
+    found_scores: list[float] = []
+
+    for _ in range(n_notes):
+        scores = np.array([
+            _harmonic_sieve_score(spectrum.freqs_hz, residual_magnitude, f0, max_harmonics, tolerance_hz)
+            if all(abs(f0 - f) >= min_separation_hz for f in found_freqs) else -np.inf
+            for f0 in candidate_f0s
+        ])
+
+        best_index = int(np.argmax(scores))
+        f0 = float(candidate_f0s[best_index])
+        score = float(scores[best_index])
+        found_freqs.append(f0)
+        found_scores.append(score)
+
+        for n in range(1, max_harmonics + 1):
+            expected = n * f0
+            mask = np.abs(spectrum.freqs_hz - expected) <= tolerance_hz
+            residual_magnitude[mask] = 0.0
+
+    confidences = [float(np.clip(s / (total_energy + 1e-9), 0.0, 1.0)) for s in found_scores]
+
+    return {
+        "fundamentals_hz": found_freqs,
+        "confidences": confidences,
+        "scores": found_scores,
+    }
+
+
 def detect_two_pitches(signal: np.ndarray, sample_rate: float, fmin: float = 80.0,
                         fmax: float = 1000.0, resolution_hz: float = 2.0,
                         max_harmonics: int = 10, min_separation_hz: float = 20.0,
                         fft_size: int = 16384) -> dict:
-    """Simplified two-note polyphonic pitch estimate via harmonic-sieve
-    scoring and spectral peeling (Section 18.3)."""
-    spectrum = fft_analyzer.compute_spectrum(signal, sample_rate, window="hann", fft_size=fft_size)
-    tolerance_hz = max(spectrum.bin_spacing_hz * 2, 3.0)
-
-    candidate_f0s = np.arange(fmin, fmax, resolution_hz)
-    scores = np.array([
-        _harmonic_sieve_score(spectrum.freqs_hz, spectrum.magnitude, f0, max_harmonics, tolerance_hz)
-        for f0 in candidate_f0s
-    ])
-
-    best1_index = int(np.argmax(scores))
-    f1 = float(candidate_f0s[best1_index])
-    score1 = float(scores[best1_index])
-
-    residual_magnitude = spectrum.magnitude.copy()
-    for n in range(1, max_harmonics + 1):
-        expected = n * f1
-        mask = np.abs(spectrum.freqs_hz - expected) <= tolerance_hz
-        residual_magnitude[mask] = 0.0
-
-    scores2 = np.array([
-        _harmonic_sieve_score(spectrum.freqs_hz, residual_magnitude, f0, max_harmonics, tolerance_hz)
-        if abs(f0 - f1) >= min_separation_hz else -np.inf
-        for f0 in candidate_f0s
-    ])
-
-    best2_index = int(np.argmax(scores2))
-    f2 = float(candidate_f0s[best2_index])
-    score2 = float(scores2[best2_index])
-
-    total_energy = float(np.sum(spectrum.magnitude))
-    confidence1 = float(np.clip(score1 / (total_energy + 1e-9), 0.0, 1.0))
-    confidence2 = float(np.clip(score2 / (total_energy + 1e-9), 0.0, 1.0))
-
-    return {
-        "fundamentals_hz": [f1, f2],
-        "confidences": [confidence1, confidence2],
-        "scores": [score1, score2],
-    }
+    """Two-note case of detect_pitches, kept as a named entry point since
+    Section 18.3 introduces two-note detection before generalizing further."""
+    return detect_pitches(signal, sample_rate, n_notes=2, fmin=fmin, fmax=fmax,
+                           resolution_hz=resolution_hz, max_harmonics=max_harmonics,
+                           min_separation_hz=min_separation_hz, fft_size=fft_size)
 
 
 def build_chord_event(fundamentals_hz: list[float], confidences: list[float],

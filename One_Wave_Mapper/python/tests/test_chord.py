@@ -58,3 +58,37 @@ def test_build_chord_event_matches_schema_fields():
     assert len(event.pairwise_intervals) == 1
     assert len(event.frequency_ratios) == 1
     assert len(event.beat_components) == 1
+
+
+def test_detect_pitches_single_note_matches_pitch_detector():
+    sr = 48000
+    signal = signal_generator.harmonic_series(220.0, 1.0, sr, harmonic_amplitudes=[1.0, 0.5, 0.25])
+    result = chord.detect_pitches(signal, sr, n_notes=1, fmin=100, fmax=500, resolution_hz=1.0)
+    assert len(result["fundamentals_hz"]) == 1
+    assert abs(result["fundamentals_hz"][0] - 220.0) < 3.0
+
+
+def test_detect_pitches_recovers_known_triad():
+    sr = 48000
+    f1, f2, f3 = 261.63, 329.63, 392.00  # C4 major triad
+    signal = (
+        signal_generator.harmonic_series(f1, 1.5, sr, harmonic_amplitudes=[1.0, 0.5, 0.25]) +
+        signal_generator.harmonic_series(f2, 1.5, sr, harmonic_amplitudes=[1.0, 0.5, 0.25]) +
+        signal_generator.harmonic_series(f3, 1.5, sr, harmonic_amplitudes=[1.0, 0.5, 0.25])
+    )
+    result = chord.detect_pitches(signal, sr, n_notes=3, fmin=200, fmax=450, resolution_hz=1.0)
+    detected = sorted(result["fundamentals_hz"])
+    for expected, found in zip([f1, f2, f3], detected):
+        assert abs(expected - found) < 3.0
+    assert len(result["confidences"]) == 3
+
+
+def test_detect_two_pitches_still_works_as_named_wrapper():
+    sr = 48000
+    f1, f2 = 220.0, 330.0
+    signal = (
+        signal_generator.harmonic_series(f1, 1.5, sr, harmonic_amplitudes=[1.0, 0.5]) +
+        signal_generator.harmonic_series(f2, 1.5, sr, harmonic_amplitudes=[1.0, 0.5])
+    )
+    result = chord.detect_two_pitches(signal, sr, fmin=100, fmax=500, resolution_hz=1.0)
+    assert len(result["fundamentals_hz"]) == 2
