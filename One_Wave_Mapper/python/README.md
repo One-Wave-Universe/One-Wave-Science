@@ -13,6 +13,12 @@ display. Everything that can be verified without a microphone or a screen
 is implemented and tested here:
 
 - Ring buffer, trigger engine, FFT/pitch/harmonic/envelope/phase analysis
+- Spectrogram (STFT tiling, linear/log/note axes, fundamental/harmonic
+  track overlays), resonance detection and ring-down analysis, and
+  chord/interval analysis (two-pitch harmonic-sieve detection, shared
+  harmonics, beat/intermodulation candidates, roughness)
+- Calibration profiles (Section 4.2) — dBFS is always available; volts/SPL
+  conversion refuses to run without an active `CalibrationProfile`
 - WAV read/write (including the 32-bit float format the stdlib `wave`
   module can't write)
 - Session and note-event JSON schema, directory layout
@@ -56,12 +62,16 @@ onewave_mapper/
 ├── ring_buffer.py       Section 5.4/5.5 — timestamped multichannel ring buffer
 ├── signal_generator.py  Section 24.2 — synthetic test signals
 ├── metering.py           Section 6.6 — objective scope measurements
+├── calibration.py        Section 4.2 — calibration profiles, dBFS/volts/SPL
 ├── trigger.py            Section 6.2/6.3 — trigger engine
 ├── fft_analyzer.py       Section 8 — windowed FFT spectrum
+├── spectrogram.py         Section 9 — STFT tiling, axis scales, track overlays
 ├── pitch.py              Section 8.3 — multi-method fundamental detection
 ├── harmonics.py          Section 12 — harmonic tracking / peak classification
+├── resonance.py           Section 15 — resonance detection, ring-down analysis
 ├── phase_analysis.py     Section 13 — delay, phase difference, coherence
 ├── envelope.py           Section 11 — envelopes, attack/decay, decay fitting
+├── chord.py               Section 18 — intervals, two-pitch detection, ChordEvent
 ├── wav_io.py             Section 2.1/21.1 — RIFF/WAV read/write (PCM16/24/32, float32/64)
 ├── session.py            Section 7.2/7.3, 21.3 — session + note-event schema
 ├── recorder.py           Section 7 — ties the above together, hardware-independent
@@ -81,7 +91,7 @@ list here, not something this engine fills in automatically.
 
 ## Testing
 
-54 tests in `tests/`, including direct implementations of every Section
+77 tests in `tests/`, including direct implementations of every Section
 24.3 acceptance test:
 
 - `test_acceptance_frequency_accuracy_440hz_within_0p1hz` — autocorrelation
@@ -108,28 +118,45 @@ Run `pytest -q` from this directory.
   C++ audio callback (Section 2.4) must use a real lock-free structure.
 - **No SQLite session store, only JSON.** Section 7.2's `session.sqlite`
   is not implemented; `session.json` covers the same metadata for now.
-- **Spectrogram, resonance analyzer, interference/beat visualizer UI,
-  chord/polyphonic pitch, and One-Wave interpretive rule engine (Sections
-  9, 14-19) are not implemented.** The measurement primitives they'd be
-  built on (FFT, envelope, phase, harmonics) are done and tested.
+- **Resonance classification is always `"unknown"`.** `resonance.py`
+  detects and scores candidates (prominence, persistence, decay, Q,
+  phase stability) but has no basis to label one "body" vs. "room" vs.
+  "pickup" (Section 15.1) without domain input from a real caller.
+  `coherence_score` is likewise `None` until a second channel is wired in.
+- **`detect_two_pitches` is a two-note estimator only.** Section 18.3's
+  three/four-note and six-string chord estimation is not implemented;
+  the harmonic-sieve/peeling approach generalizes but hasn't been built
+  past two simultaneous fundamentals.
+- **Interference isolated-vs-combined residual comparison (Section
+  14.4) is not implemented** — the building blocks (WAV I/O, alignment
+  via `phase_analysis.cross_correlation_delay`, spectral analysis) are
+  there, but the record-A / record-B / record-A+B / diff-against-predicted-
+  sum workflow itself isn't wired up yet.
+- **One-Wave interpretive rule engine (Sections 16-17) is not
+  implemented.** Cycle objects, Point/Path/Field tagging, and the
+  Inward/Outward/Across/Over classifiers don't exist yet; `one_wave_tags`
+  stays an empty, user-editable list everywhere.
 - **`pink_noise()` is a Voss-McCartney approximation**, adequate as a test
   signal but not a calibrated 1/f reference.
-- **Calibration profiles (Section 4.2) are not implemented** — there is no
-  dBFS-to-volts/SPL conversion yet; everything is dBFS/normalized, which
-  is the spec's required default in the absence of calibration.
 
 ## Next five implementation tasks
 
-1. Calibration profile storage (Section 4.2) and dBFS-only display
-   enforcement in whatever UI comes next.
-2. A minimal PySide6 + pyqtgraph oscilloscope UI wired to `TriggerEngine`
+1. A minimal PySide6 + pyqtgraph oscilloscope UI wired to `TriggerEngine`
    and `RingBuffer`, run and screenshotted on a machine with a display —
-   the first real test of `device_manager.py` against live hardware.
-3. Spectrogram engine (Section 9): STFT tiling with linear/log/note
-   frequency axes, backed by `fft_analyzer.compute_spectrum`.
-4. Resonance analyzer (Section 15): prominence/persistence/decay-based
-   candidate detection and Q-factor estimation, reusing `envelope.py`'s
-   exponential-decay fit.
-5. Chord/interval analysis (Section 18): two-fundamental polyphonic
-   detection on top of the existing single-pitch `pitch.py`, plus the
-   isolated-vs-combined residual comparison from Section 14.4.
+   the first real test of `device_manager.py` against live hardware, and
+   the first place `calibration.py`'s dBFS-only-by-default rule needs to
+   actually be enforced on an axis label.
+2. Interference isolated-vs-combined comparison (Section 14.4): record
+   A, record B, record A+B, time/level-align via
+   `phase_analysis.cross_correlation_delay`, and compute the residual
+   against the predicted linear sum.
+3. Cycle object and Point/Path/Field tagging (Section 16): a common
+   `Cycle` schema with parent/child relationships, built on top of
+   `envelope.py` and `spectrogram.fundamental_track` for modulation-rate
+   detection.
+4. One-Wave interpretive views (Section 17): configurable, evidence-linked
+   Inward/Outward/Across/Over rules over the `Cycle` objects from task 3 —
+   kept strictly separate from objective measurement per Section 2.3.
+5. Extend `chord.detect_two_pitches` toward three/four simultaneous notes
+   (Section 18.3), and add a resonance-classification hook so callers can
+   supply the domain knowledge `resonance.py` deliberately doesn't invent.
