@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from council_chamber.context import ContextPolicy
 from council_chamber.models import CouncilChat, Message, Seat
 from council_chamber.seats.ai_seat import AISeat
 from council_chamber.workers.patch_worker import PatchWorker, ProposedChange, PatchResult
@@ -30,11 +31,15 @@ class PendingChange:
 
 
 class Council:
-    def __init__(self, chat: CouncilChat, patch_worker: PatchWorker):
+    def __init__(self, chat: CouncilChat, patch_worker: PatchWorker, context_policy: ContextPolicy | None = None):
         self.chat = chat
         self.patch_worker = patch_worker
         self.ai_seats: dict[str, AISeat] = {}
         self.pending_changes: dict[str, PendingChange] = {}  # keyed by change file_path
+        # Default policy sends full visible history, matching prior behavior;
+        # pass a ContextPolicy(max_messages=...) to actually curate what a
+        # seat sees.
+        self.context_policy = context_policy or ContextPolicy()
 
     def register_ai_seat(self, ai_seat: AISeat) -> None:
         seat = ai_seat.seat
@@ -53,7 +58,7 @@ class Council:
         responses = []
         for seat_id in seat_ids:
             ai_seat = self.ai_seats[seat_id]
-            context = self.chat.messages_visible_to(seat_id)
+            context = self.context_policy.curate(self.chat.messages_visible_to(seat_id))
             reply_text = ai_seat.respond(context)
             reply_message = self.chat.post(seat_id, reply_text, in_response_to=user_message.message_id)
             responses.append(reply_message)

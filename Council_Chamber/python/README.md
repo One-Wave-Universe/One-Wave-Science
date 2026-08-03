@@ -71,10 +71,15 @@ council_chamber/
 │   ├── git_worker.py     status / diff / checkpoint / log
 │   └── patch_worker.py   preview_diff (no write) / apply (writes,
 │                         rejects paths escaping the project root)
+├── context.py            ContextPolicy: what subset of a seat's visible
+│                         history actually gets sent on each ask() call
+│                         -- a recency window plus explicit pinning
 ├── orchestrator.py       Council: ask() routes one round to named seats
 │                         only; propose_change()/approve_and_apply()/
 │                         reject() gate every file write behind an
 │                         explicit approval step
+├── storage.py            save/load a CouncilChat or a full Council
+│                         session (including pending changes) as JSON
 └── cli.py                the end-to-end demo above
 ```
 
@@ -92,10 +97,16 @@ council_chamber/
   to `..`  its way out.
 - **Message visibility is per-message, not per-seat-pair.** `visible_to`
   defaults to everyone; a restricted list still always includes the
-  sender. There's no context-curation logic yet beyond that — the spec's
-  "an AI seat receives only the information relevant to its current
-  task" is currently just "everything visible to it," which is honest
-  but not yet curated down.
+  sender.
+- **`ContextPolicy` curates what a seat actually receives.** By default
+  a `Council` sends the seat's full visible history (unchanged prior
+  behavior). Passing `Council(chat, patch_worker, context_policy=
+  ContextPolicy(max_messages=N))` caps each seat to its N most recent
+  visible messages; `context_policy.pin(message_id)` keeps a specific
+  message (e.g. a requirement) in every seat's context regardless of
+  age. There's no AI-driven relevance ranking or summarization — that
+  would itself cost an AI call, contradicting the spec's local-first
+  principle — so curation is deliberately just recency + explicit pins.
 
 ## Known limitations
 
@@ -109,24 +120,30 @@ council_chamber/
 - **No context curation.** Every seat currently sees the full chat
   history visible to it; there's no summarization or relevance-ranking
   to keep long sessions cheap, despite the spec calling for it.
-- **No persistent storage.** `CouncilChat` and `Council` are in-memory
-  only — closing the process loses the transcript, pinned requirements,
-  decisions, and task list the spec describes as belonging to local
-  memory.
 - **`GitWorker` has no branch/checkpoint-rollback support**, just
   status/diff/commit/log.
+- **No real provider credentials exist in this environment**, so task 2
+  below (wiring a real `RemoteAPISeat`) is blocked until an API key for
+  some provider is actually supplied — it is not something more code
+  here can unblock.
 
 ## Next five implementation tasks
 
-1. Persist `CouncilChat` (messages, seats, pending changes) to disk —
-   JSON or SQLite, matching the "local memory" section of the spec —
-   so a session survives a restart.
+1. ~~Persist `CouncilChat` (messages, seats, pending changes) to disk.~~
+   **Done.** See `storage.py` — `save_chat`/`load_chat` round-trip a
+   bare chat; `save_session`/`load_session` round-trip a full `Council`
+   including unapproved pending changes. Live `AISeat` connections
+   aren't serializable and are never fabricated on load — the caller
+   re-registers whichever seats it wants against the restored seat
+   identities, same honest-placeholder pattern as `RemoteAPISeat`.
 2. Wire one real `RemoteAPISeat` client (start with whichever provider
    has a key available) and confirm the full demo workflow still holds
-   with a genuine API call in place of a `MockSeat`.
-3. Context curation: give the orchestrator a policy for what subset of
-   the visible transcript actually gets sent to a seat, instead of the
-   full visible history every time.
+   with a genuine API call in place of a `MockSeat`. **Blocked:** no
+   provider API key is available in this environment yet.
+3. ~~Context curation: give the orchestrator a policy for what subset
+   of the visible transcript actually gets sent to a seat.~~ **Done.**
+   See `context.py` — `ContextPolicy(max_messages=N)` plus explicit
+   `pin()`/`unpin()`, wired into `Council.ask()`.
 4. A minimal terminal or web UI over the existing `Council`/workers —
    the file tree, diff viewer, and approve/reject controls the spec
    describes — before anything about rooms or multiple projects.
