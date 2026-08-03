@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from onewave_mapper import signal_generator, interference
 
@@ -111,3 +112,80 @@ def test_compare_isolated_vs_combined_recovers_known_delay():
     # i.e. +100, to correctly align b forward -- see the near-zero-residual
     # and clipping-residual tests above, which confirm alignment works).
     assert abs(result.delay_b_samples - (-100)) < 2
+
+
+def test_compare_isolated_vs_combined_n_recovers_a_triad():
+    # Simulates the real workflow: three isolated fretted notes, one real
+    # combined recording (here just their exact linear sum, since this only
+    # tests the N-way alignment/gain-fit machinery itself). Each note gets a
+    # short broadband noise burst added at its true onset, standing in for a
+    # real pick attack's transient content -- that's what a 20ms
+    # alignment_window_samples locks cross-correlation onto instead of the
+    # much longer, highly self-similar harmonic tail.
+    sr = 48000
+    freqs = [220.0, 261.63, 329.63]  # A minor triad
+    rng = np.random.default_rng(0)
+    burst_samples = int(0.005 * sr)
+    burst_envelope = np.exp(-np.arange(burst_samples) / (burst_samples / 4))
+
+    notes = []
+    for f in freqs:
+        note = signal_generator.guitar_note(f, 1.0, sr, amplitude=0.3)
+        burst = 0.3 * rng.uniform(-1, 1, burst_samples) * burst_envelope
+        note[:burst_samples] += burst
+        notes.append(note)
+    combined = np.sum(notes, axis=0)
+
+    result, residual = interference.compare_isolated_vs_combined_n(
+        notes, combined, sr, alignment_window_samples=int(0.02 * sr))
+
+    assert result.n_sources == 3
+    assert len(result.gains) == 3
+    assert all(abs(d) < 2 for d in result.delays_samples)
+    assert result.residual_to_combined_db < -60
+
+
+def test_compare_isolated_vs_combined_n_dense_chord_is_a_documented_hard_case():
+    # A full open-E six-string chord is close to a worst case for blind
+    # broadband delay estimation: its strings are almost entirely octave/
+    # fifth-related (246.94 Hz sits right on the 3rd harmonic of the
+    # 82.41 Hz low E, etc.), so multiple lags can explain the correlation
+    # nearly as well as the true one -- exactly the ambiguity Section 14.4
+    # has in mind by calling this comparison an experiment, not a
+    # measurement. This only asserts the machinery runs and produces
+    # correctly-shaped output; see test_compare_isolated_vs_combined_n_
+    # recovers_a_triad for a case where alignment is verified precise.
+    sr = 48000
+    open_e_chord_freqs = [82.41, 123.47, 164.81, 207.65, 246.94, 329.63]
+    notes = [signal_generator.guitar_note(f, 1.0, sr, amplitude=0.3) for f in open_e_chord_freqs]
+    combined = np.sum(notes, axis=0)
+
+    result, residual = interference.compare_isolated_vs_combined_n(notes, combined, sr)
+
+    assert result.n_sources == 6
+    assert len(result.gains) == 6
+    assert len(result.delays_samples) == 6
+    assert residual.shape[0] > 0
+
+
+def test_compare_isolated_vs_combined_n_single_source():
+    sr = 48000
+    a = signal_generator.sine(300, 0.5, sr, amplitude=0.5)
+    result, residual = interference.compare_isolated_vs_combined_n([a], a, sr)
+    assert result.n_sources == 1
+    assert abs(result.gains[0] - 1.0) < 1e-6
+    assert result.residual_to_combined_db < -100
+
+
+def test_compare_isolated_vs_combined_two_note_matches_n_way_result():
+    sr = 48000
+    a = signal_generator.sine(300, 1.0, sr, amplitude=0.4)
+    b = signal_generator.sine(500, 1.0, sr, amplitude=0.3)
+    combined = a + b
+
+    result_2, _ = interference.compare_isolated_vs_combined(a, b, combined, sr)
+    result_n, _ = interference.compare_isolated_vs_combined_n([a, b], combined, sr)
+
+    assert result_2.gain_a == pytest.approx(result_n.gains[0])
+    assert result_2.gain_b == pytest.approx(result_n.gains[1])
+    assert result_2.residual_to_combined_db == pytest.approx(result_n.residual_to_combined_db)

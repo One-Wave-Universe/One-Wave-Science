@@ -199,38 +199,94 @@ class IsolatedVsCombinedResult:
         return asdict(self)
 
 
-def compare_isolated_vs_combined(x_a: np.ndarray, x_b: np.ndarray, x_combined: np.ndarray,
-                                  sample_rate: float) -> tuple[IsolatedVsCombinedResult, np.ndarray]:
-    """Time-align, level-align, and residual-compare two isolated recordings
-    against a real combined recording (Section 14.4). Returns
-    (result, residual_signal)."""
-    delay_a = cross_correlation_delay(x_combined, x_a, sample_rate)
-    delay_b = cross_correlation_delay(x_combined, x_b, sample_rate)
+@dataclass
+class IsolatedVsCombinedResultN:
+    """N-source generalization of IsolatedVsCombinedResult (Section 14.4) --
+    e.g. all six strings of a chord compared against one real strum,
+    not just a two-note dyad."""
+    n_sources: int
+    delays_samples: list
+    gains: list
+    residual_rms: float
+    combined_rms: float
+    residual_to_combined_db: float
+    is_experiment: bool = True
+    notes: str = (
+        "Comparison against the real combined recording, not a physical measurement -- "
+        "exact repeatability of human picking is limited (Section 14.4)."
+    )
 
-    a_aligned = _shift(x_a, -int(round(delay_a.delay_samples)))
-    b_aligned = _shift(x_b, -int(round(delay_b.delay_samples)))
+    def to_dict(self) -> dict:
+        return asdict(self)
 
-    n = min(len(a_aligned), len(b_aligned), len(x_combined))
-    a_aligned, b_aligned, combined = a_aligned[:n], b_aligned[:n], x_combined[:n]
 
-    design = np.stack([a_aligned, b_aligned], axis=1)
-    (gain_a, gain_b), *_ = np.linalg.lstsq(design, combined, rcond=None)
+def compare_isolated_vs_combined_n(isolated_signals: list[np.ndarray], x_combined: np.ndarray,
+                                    sample_rate: float,
+                                    alignment_window_samples: int | None = None
+                                    ) -> tuple[IsolatedVsCombinedResultN, np.ndarray]:
+    """Time-align, level-fit, and residual-compare N isolated recordings
+    (e.g. one per fretted note) against one real combined recording (e.g.
+    the strummed chord) (Section 14.4). Returns (result, residual_signal).
 
-    predicted_sum = gain_a * a_aligned + gain_b * b_aligned
+    alignment_window_samples, if given, restricts cross-correlation delay
+    estimation to each signal's first N samples (e.g. the attack transient)
+    instead of the full recording. For notes that share a lot of overlapping
+    harmonic content -- exactly what makes a chord consonant -- correlating
+    the full sustained tail can lock onto the wrong periodic lag, since a
+    short broadband attack's alignment information gets diluted across a
+    much longer, highly self-similar harmonic tail. Restricting to the
+    attack window is both more realistic (that's where real timing
+    information lives) and resolves that ambiguity.
+    """
+    if len(isolated_signals) < 1:
+        raise ValueError("compare_isolated_vs_combined_n requires at least one isolated signal")
+
+    if alignment_window_samples is not None:
+        combined_for_alignment = x_combined[:alignment_window_samples]
+        delays = [cross_correlation_delay(combined_for_alignment, s[:alignment_window_samples], sample_rate)
+                  for s in isolated_signals]
+    else:
+        delays = [cross_correlation_delay(x_combined, s, sample_rate) for s in isolated_signals]
+    aligned = [_shift(s, -int(round(d.delay_samples))) for s, d in zip(isolated_signals, delays)]
+
+    n = min([len(a) for a in aligned] + [len(x_combined)])
+    aligned = [a[:n] for a in aligned]
+    combined = x_combined[:n]
+
+    design = np.stack(aligned, axis=1)
+    gains, *_ = np.linalg.lstsq(design, combined, rcond=None)
+
+    predicted_sum = design @ gains
     residual = combined - predicted_sum
 
     residual_rms = float(np.sqrt(np.mean(residual ** 2)))
     combined_rms = float(np.sqrt(np.mean(combined ** 2)))
     residual_to_combined_db = float(20 * np.log10((residual_rms + 1e-12) / (combined_rms + 1e-12)))
 
-    result = IsolatedVsCombinedResult(
-        delay_a_samples=delay_a.delay_samples,
-        delay_b_samples=delay_b.delay_samples,
-        gain_a=float(gain_a),
-        gain_b=float(gain_b),
+    result = IsolatedVsCombinedResultN(
+        n_sources=len(isolated_signals),
+        delays_samples=[float(d.delay_samples) for d in delays],
+        gains=[float(g) for g in gains],
         residual_rms=residual_rms,
         combined_rms=combined_rms,
         residual_to_combined_db=residual_to_combined_db,
+    )
+    return result, residual
+
+
+def compare_isolated_vs_combined(x_a: np.ndarray, x_b: np.ndarray, x_combined: np.ndarray,
+                                  sample_rate: float) -> tuple[IsolatedVsCombinedResult, np.ndarray]:
+    """Two-source case of compare_isolated_vs_combined_n, kept as a named
+    entry point matching Section 14.4's own two-note worked example."""
+    result_n, residual = compare_isolated_vs_combined_n([x_a, x_b], x_combined, sample_rate)
+    result = IsolatedVsCombinedResult(
+        delay_a_samples=result_n.delays_samples[0],
+        delay_b_samples=result_n.delays_samples[1],
+        gain_a=result_n.gains[0],
+        gain_b=result_n.gains[1],
+        residual_rms=result_n.residual_rms,
+        combined_rms=result_n.combined_rms,
+        residual_to_combined_db=result_n.residual_to_combined_db,
     )
     return result, residual
 
