@@ -38,6 +38,24 @@ pytest -q
 python -m council_chamber.cli
 ```
 
+## Run the interactive terminal UI
+
+```bash
+cd Council_Chamber/python
+python3 -m council_chamber.tui [project_dir]   # defaults to the current directory
+```
+
+Opens a real `council>` prompt over a real `Council` (ChatGPT and Codex as
+`MockSeat` placeholders, same honest caveat as the demo) against the
+given project directory. Type `help` for the full command list:
+`seats`, `ask <seat[,seat...]> <prompt>`, `propose <seat> <file>
+<content> [--desc "..."]`, `pending`, `diff <file>`, `approve <file>`,
+`reject <file> [reason]`, `usage <seat>`, `usage-summary <seat>`,
+`transcript`, `quit`. Every command runs against the real `Council`,
+`PatchWorker`, and chat log — nothing here is simulated for display
+only. `CouncilTUI.execute(line)` is the same entry point the tests use,
+so the whole interface is exercised without a real terminal.
+
 The demo reproduces the spec's own example workflow end to end, against
 a real temporary project directory:
 
@@ -84,6 +102,9 @@ council_chamber/
 │                         approval step
 ├── storage.py            save/load a CouncilChat or a full Council
 │                         session (including pending changes) as JSON
+├── tui.py                CouncilTUI: a real command interpreter (seats/
+│                         ask/propose/diff/approve/reject/usage/
+│                         transcript) plus repl() for interactive use
 └── cli.py                the end-to-end demo above
 ```
 
@@ -128,9 +149,10 @@ council_chamber/
   models are all unconnected in this environment. `RemoteAPISeat` is
   ready to wire up given an API client callable, but none has been
   tested against a real API.
-- **No GUI.** Everything here is a library plus one CLI demo. The
-  spec's "file tree / code editor / diff viewer / approve and reject
-  controls" panel layout doesn't exist yet.
+- **No graphical UI.** `tui.py` covers the spec's diff-viewer /
+  approve-reject loop as a real terminal command interpreter, but there
+  is no file tree, code editor pane, or windowed layout — those would
+  need an actual GUI or web frontend.
 - **No context curation.** Every seat currently sees the full chat
   history visible to it; there's no summarization or relevance-ranking
   to keep long sessions cheap, despite the spec calling for it.
@@ -158,9 +180,11 @@ council_chamber/
    of the visible transcript actually gets sent to a seat.~~ **Done.**
    See `context.py` — `ContextPolicy(max_messages=N)` plus explicit
    `pin()`/`unpin()`, wired into `Council.ask()`.
-4. A minimal terminal or web UI over the existing `Council`/workers —
-   the file tree, diff viewer, and approve/reject controls the spec
-   describes — before anything about rooms or multiple projects.
+4. ~~A minimal terminal or web UI over the existing `Council`/workers.~~
+   **Done (terminal).** See `tui.py`'s `CouncilTUI` and `python -m
+   council_chamber.tui`. Still no file tree / code editor pane / windowed
+   layout — a graphical or web frontend is a separate, larger step, not
+   attempted here.
 5. ~~Token/resource tracking per seat.~~ **Done.** See `usage.py` and
    `Council.usage_log`/`usage_for()` — real numbers when a
    `RemoteAPISeat` client reports them, `UsageReport.unavailable()`

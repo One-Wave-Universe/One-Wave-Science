@@ -1,0 +1,134 @@
+import pytest
+
+from council_chamber.models import CouncilChat, Seat, SeatKind
+from council_chamber.seats.ai_seat import MockSeat
+from council_chamber.workers.patch_worker import PatchWorker
+from council_chamber.orchestrator import Council
+from council_chamber.tui import CouncilTUI, UnknownCommandError, SeatNotFoundError, demo_council
+
+
+@pytest.fixture
+def project(tmp_path):
+    (tmp_path / "main.py").write_text("def add(a, b):\n    return a + b\n")
+    return tmp_path
+
+
+@pytest.fixture
+def tui(project):
+    chat = CouncilChat()
+    council = Council(chat, PatchWorker(project))
+    council.register_ai_seat(MockSeat(Seat.create("Codex", SeatKind.AI), reply="proposing a fix"))
+    return CouncilTUI(council)
+
+
+def test_seats_lists_open_seats(tui):
+    output = tui.execute("seats")
+    assert "Codex" in output
+    assert "[open]" in output
+
+
+def test_seats_with_no_seats_open_says_so():
+    council_tui = CouncilTUI(Council(CouncilChat(), PatchWorker("/tmp")))
+    assert council_tui.execute("seats") == "(no seats open)"
+
+
+def test_ask_resolves_seat_by_name_and_labels_reply(tui):
+    output = tui.execute("ask Codex look at main.py")
+    assert output == "[Codex] proposing a fix"
+
+
+def test_ask_unknown_seat_raises(tui):
+    with pytest.raises(SeatNotFoundError):
+        tui.execute("ask Gemini hello")
+
+
+def test_unknown_command_raises(tui):
+    with pytest.raises(UnknownCommandError):
+        tui.execute("levitate")
+
+
+def test_empty_line_returns_empty_string(tui):
+    assert tui.execute("   ") == ""
+
+
+def test_propose_diff_approve_workflow(tui, project):
+    propose_output = tui.execute(
+        r'propose Codex main.py "def add(a, b):\n    return a + b + 1\n" --desc "fix off-by-one"'
+    )
+    assert "proposed change to main.py" in propose_output
+    assert "+    return a + b + 1" in propose_output
+
+    assert tui.execute("pending") == "main.py"
+    assert "+    return a + b + 1" in tui.execute("diff main.py")
+
+    approve_output = tui.execute("approve main.py")
+    assert "applied" in approve_output
+    assert (project / "main.py").read_text() == "def add(a, b):\n    return a + b + 1\n"
+    assert tui.execute("pending") == "(no pending changes)"
+
+
+def test_reject_discards_pending_change_without_writing(tui, project):
+    tui.execute(r'propose Codex main.py "def add(a, b):\n    return a + b + 1\n"')
+    output = tui.execute("reject main.py not needed")
+    assert output == "rejected main.py"
+    assert (project / "main.py").read_text() == "def add(a, b):\n    return a + b\n"
+
+
+def test_diff_for_nonexistent_pending_change(tui):
+    assert tui.execute("diff nope.py") == "no pending change for nope.py"
+
+
+def test_transcript_shows_labeled_messages(tui):
+    tui.execute("ask Codex hello there")
+    output = tui.execute("transcript")
+    assert "[user] hello there" in output
+    assert "[Codex] proposing a fix" in output
+
+
+def test_transcript_empty_says_so():
+    council_tui = CouncilTUI(Council(CouncilChat(), PatchWorker("/tmp")))
+    assert council_tui.execute("transcript") == "(empty)"
+
+
+def test_usage_and_usage_summary_report_unavailable_for_mock_seat(tui):
+    tui.execute("ask Codex hello")
+    usage_output = tui.execute("usage Codex")
+    assert "mock seat -- no real provider connection" in usage_output
+
+    summary_output = tui.execute("usage-summary Codex")
+    assert "'input_tokens': None" in summary_output
+    assert "'reports_without_data': 1" in summary_output
+
+
+def test_usage_with_no_history_says_so(tui):
+    assert tui.execute("usage Codex") == "(no usage recorded)"
+
+
+def test_help_lists_commands(tui):
+    output = tui.execute("help")
+    assert "propose" in output
+    assert "approve" in output
+
+
+def test_quit_returns_goodbye(tui):
+    assert tui.execute("quit") == "goodbye"
+
+
+def test_demo_council_opens_chatgpt_and_codex_against_real_project_dir(tmp_path):
+    project_dir = tmp_path / "demo_project"
+
+    council = demo_council(project_dir)
+
+    assert project_dir.is_dir()
+    names = {s.name for s in council.chat.open_seats()}
+    assert names == {"ChatGPT", "Codex"}
+
+
+def test_demo_council_seats_are_usable_through_the_tui(tmp_path):
+    council = demo_council(tmp_path / "demo_project")
+    council_tui = CouncilTUI(council)
+
+    output = council_tui.execute("ask ChatGPT what should we build")
+
+    assert "[ChatGPT]" in output
+    assert "no real provider connected" in output
