@@ -17,12 +17,34 @@ from pathlib import Path
 from council_chamber.models import CouncilChat, Seat, SeatKind
 from council_chamber.orchestrator import Council
 from council_chamber.seats.ai_seat import MockSeat
+from council_chamber.storage import save_session, load_session
 from council_chamber.usage import summarize
 from council_chamber.workers.patch_worker import PatchWorker
+
+# Every seat kind the spec names as a possible council-table seat. Any of
+# these can be opened on demand with `open <key>` -- there is nothing
+# ChatGPT- or Codex-specific in propose_change/approve_and_apply/ask;
+# whichever seat is registered can supply code the same way. All of them
+# are MockSeat placeholders until a real client is wired into a
+# RemoteAPISeat for that seat, since this environment has no provider
+# API keys.
+SEAT_CATALOG: dict[str, str] = {
+    "chatgpt": "ChatGPT",
+    "codex": "Codex",
+    "claude": "Claude",
+    "gemini": "Gemini",
+    "deepseek": "DeepSeek",
+    "grok": "Grok",
+    "local": "Local Model",
+}
+
+_PLACEHOLDER_REPLY = "(demo seat -- no real provider connected; see RemoteAPISeat in seats/ai_seat.py)"
 
 HELP_TEXT = """\
 Commands:
   seats                                  list open seats
+  open <{catalog}>
+                                          open a new seat from the catalog
   ask <seat[,seat...]> <prompt...>       ask one or more seats (by name or seat_id)
   propose <seat> <file> <content> [--desc "..."]
                                           propose a change (use \\n for newlines in content)
@@ -33,9 +55,24 @@ Commands:
   usage <seat>                           show raw usage reports for a seat
   usage-summary <seat>                   show totals (None where nothing was reported)
   transcript                             print the full chat log
+  save <path>                            save the chat + pending changes to disk
+  load <path>                            load a saved session (re-attaches AI seats as placeholders)
   help                                   show this text
   quit / exit                            leave the council chamber
-"""
+""".format(catalog="|".join(SEAT_CATALOG))
+
+
+def open_catalog_seat(council: Council, key: str) -> Seat:
+    """Open a new seat of the given catalog kind as a MockSeat placeholder
+    and register it with `council`. Any seat opened this way can ask/be
+    asked and propose_change exactly like every other -- there is no
+    special-cased "only Codex can write code" path."""
+    key = key.lower()
+    if key not in SEAT_CATALOG:
+        raise ValueError(f"unknown seat {key!r} -- catalog: {', '.join(SEAT_CATALOG)}")
+    seat = Seat.create(SEAT_CATALOG[key], SeatKind.AI)
+    council.register_ai_seat(MockSeat(seat, reply=_PLACEHOLDER_REPLY))
+    return seat
 
 
 class UnknownCommandError(ValueError):
@@ -68,6 +105,7 @@ class CouncilTUI:
         handlers = {
             "help": lambda: HELP_TEXT,
             "seats": self._cmd_seats,
+            "open": lambda: self._cmd_open(args),
             "ask": lambda: self._cmd_ask(args),
             "propose": lambda: self._cmd_propose(args),
             "pending": self._cmd_pending,
@@ -77,6 +115,8 @@ class CouncilTUI:
             "usage": lambda: self._cmd_usage(args),
             "usage-summary": lambda: self._cmd_usage_summary(args),
             "transcript": self._cmd_transcript,
+            "save": lambda: self._cmd_save(args),
+            "load": lambda: self._cmd_load(args),
             "quit": lambda: "goodbye",
             "exit": lambda: "goodbye",
         }
@@ -89,6 +129,12 @@ class CouncilTUI:
         if not seats:
             return "(no seats open)"
         return "\n".join(f"{s.name} ({s.seat_id}) [{s.status.value}]" for s in seats)
+
+    def _cmd_open(self, args: list[str]) -> str:
+        if not args:
+            raise ValueError(f"usage: open <{'|'.join(SEAT_CATALOG)}>")
+        seat = open_catalog_seat(self.council, args[0])
+        return f"opened {seat.name} ({seat.seat_id})"
 
     def _cmd_ask(self, args: list[str]) -> str:
         if len(args) < 2:
@@ -164,6 +210,32 @@ class CouncilTUI:
             lines.append(f"[{who}] {m['content']}")
         return "\n".join(lines)
 
+    def _cmd_save(self, args: list[str]) -> str:
+        if not args:
+            raise ValueError("usage: save <path>")
+        save_session(self.council, args[0])
+        return f"saved session to {args[0]}"
+
+    def _cmd_load(self, args: list[str]) -> str:
+        """Restore a saved session's seats and transcript. Live AI
+        connections are never persisted (see storage.py), so every AI-kind
+        seat that comes back is re-attached as a MockSeat placeholder here
+        -- presence and conversation survive the restart; a real provider
+        connection still has to be wired in again via RemoteAPISeat."""
+        if not args:
+            raise ValueError("usage: load <path>")
+        self.council = load_session(args[0], self.council.patch_worker)
+        reattached = 0
+        for seat in self.council.chat.seats.values():
+            if seat.kind == SeatKind.AI:
+                self.council.register_ai_seat(MockSeat(seat, reply=_PLACEHOLDER_REPLY))
+                reattached += 1
+        return (
+            f"loaded session from {args[0]} -- {len(self.council.chat.seats)} seat(s), "
+            f"{len(self.council.chat.messages)} message(s), {reattached} AI seat(s) reattached "
+            "as placeholders (swap in a real RemoteAPISeat client to reconnect for real)"
+        )
+
 
 def repl(council: Council) -> None:
     tui = CouncilTUI(council)
@@ -188,20 +260,16 @@ def demo_council(project_dir: Path) -> Council:
     """A Council with two MockSeat placeholders (ChatGPT, Codex) already
     open, against a real project directory -- the same honest setup as
     cli.py's scripted demo, but left for the person at the terminal to
-    drive interactively instead of following a fixed script. Real
-    ChatGPT/Codex responses require registering a RemoteAPISeat with a
-    real client instead; there are no provider API keys in this
-    environment to wire up automatically."""
+    drive interactively instead of following a fixed script. Use `open
+    <key>` at the prompt to add any other seat from SEAT_CATALOG (Claude,
+    Gemini, DeepSeek, Grok, a local model) -- "the user opens only the
+    seats needed for the current job." Real provider responses require
+    registering a RemoteAPISeat with a real client instead; there are no
+    provider API keys in this environment to wire up automatically."""
     project_dir.mkdir(parents=True, exist_ok=True)
     council = Council(CouncilChat(), PatchWorker(project_dir))
-    council.register_ai_seat(MockSeat(
-        Seat.create("ChatGPT", SeatKind.AI, model="gpt-5"),
-        reply="(demo seat -- no real provider connected; see RemoteAPISeat in seats/ai_seat.py)",
-    ))
-    council.register_ai_seat(MockSeat(
-        Seat.create("Codex", SeatKind.AI, model="gpt-5-codex"),
-        reply="(demo seat -- no real provider connected; see RemoteAPISeat in seats/ai_seat.py)",
-    ))
+    open_catalog_seat(council, "chatgpt")
+    open_catalog_seat(council, "codex")
     return council
 
 

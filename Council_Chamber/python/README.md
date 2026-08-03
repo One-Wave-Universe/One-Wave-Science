@@ -45,16 +45,33 @@ cd Council_Chamber/python
 python3 -m council_chamber.tui [project_dir]   # defaults to the current directory
 ```
 
-Opens a real `council>` prompt over a real `Council` (ChatGPT and Codex as
-`MockSeat` placeholders, same honest caveat as the demo) against the
-given project directory. Type `help` for the full command list:
-`seats`, `ask <seat[,seat...]> <prompt>`, `propose <seat> <file>
-<content> [--desc "..."]`, `pending`, `diff <file>`, `approve <file>`,
-`reject <file> [reason]`, `usage <seat>`, `usage-summary <seat>`,
-`transcript`, `quit`. Every command runs against the real `Council`,
-`PatchWorker`, and chat log — nothing here is simulated for display
-only. `CouncilTUI.execute(line)` is the same entry point the tests use,
-so the whole interface is exercised without a real terminal.
+Opens a real `council>` prompt over a real `Council` (ChatGPT and Codex
+already open as `MockSeat` placeholders, same honest caveat as the demo)
+against the given project directory. Type `help` for the full command
+list: `seats`, `open <chatgpt|codex|claude|gemini|deepseek|grok|local>`,
+`ask <seat[,seat...]> <prompt>`, `propose <seat> <file> <content> [--desc
+"..."]`, `pending`, `diff <file>`, `approve <file>`, `reject <file>
+[reason]`, `usage <seat>`, `usage-summary <seat>`, `transcript`, `save
+<path>`, `load <path>`, `quit`. Every command runs against the real
+`Council`, `PatchWorker`, and chat log — nothing here is simulated for
+display only. `CouncilTUI.execute(line)` is the same entry point the
+tests use, so the whole interface is exercised without a real terminal.
+
+- **`open <key>` isn't ChatGPT/Codex-specific.** `SEAT_CATALOG` lists
+  every seat kind the spec names — ChatGPT, Codex, Claude, Gemini,
+  DeepSeek, Grok, a local model — and any of them can be opened,
+  `ask`ed, and used with `propose` the same way. There is nothing in
+  `propose_change`/`approve_and_apply` that special-cases which seat
+  supplied the code.
+- **`save`/`load` persist presence and conversation across restarts.**
+  `save <path>` writes the chat, open seats, and any pending
+  (unapproved) changes to disk via `storage.py`. `load <path>` restores
+  all of that and re-attaches every AI-kind seat as a `MockSeat`
+  placeholder automatically, so seats stay usable immediately after a
+  reload — swap in a real `RemoteAPISeat` client afterward to reconnect
+  a seat for real. Only the transcript, seat identities, and pending
+  changes persist; a live provider connection was never serializable to
+  begin with, so there's nothing fabricated in what comes back.
 
 The demo reproduces the spec's own example workflow end to end, against
 a real temporary project directory:

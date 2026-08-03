@@ -4,7 +4,7 @@ from council_chamber.models import CouncilChat, Seat, SeatKind
 from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.workers.patch_worker import PatchWorker
 from council_chamber.orchestrator import Council
-from council_chamber.tui import CouncilTUI, UnknownCommandError, SeatNotFoundError, demo_council
+from council_chamber.tui import CouncilTUI, UnknownCommandError, SeatNotFoundError, demo_council, SEAT_CATALOG
 
 
 @pytest.fixture
@@ -132,3 +132,59 @@ def test_demo_council_seats_are_usable_through_the_tui(tmp_path):
 
     assert "[ChatGPT]" in output
     assert "no real provider connected" in output
+
+
+def test_seat_catalog_includes_every_spec_named_provider():
+    assert set(SEAT_CATALOG) == {"chatgpt", "codex", "claude", "gemini", "deepseek", "grok", "local"}
+
+
+@pytest.mark.parametrize("key", list(SEAT_CATALOG))
+def test_open_can_open_every_catalog_seat_and_it_can_propose_code(key, tui, project):
+    open_output = tui.execute(f"open {key}")
+    display_name = SEAT_CATALOG[key]
+    assert f"opened {display_name}" in open_output
+    assert display_name in tui.execute("seats")
+
+    # Any opened seat can propose a change exactly like Codex can --
+    # no provider is special-cased.
+    propose_output = tui.execute(f'propose "{display_name}" other.py "x = 1\\n"')
+    assert "proposed change to other.py" in propose_output
+
+
+def test_open_unknown_catalog_key_raises(tui):
+    with pytest.raises(ValueError):
+        tui.execute("open bard")
+
+
+def test_save_and_load_round_trips_transcript_and_reattaches_ai_seats(tmp_path):
+    project_dir = tmp_path / "proj"
+    council = demo_council(project_dir)
+    council_tui = CouncilTUI(council)
+    council_tui.execute("ask ChatGPT hello there")
+
+    session_path = tmp_path / "session.json"
+    save_output = council_tui.execute(f"save {session_path}")
+    assert "saved session" in save_output
+    assert session_path.exists()
+
+    fresh_tui = CouncilTUI(Council(CouncilChat(), PatchWorker(project_dir)))
+    load_output = fresh_tui.execute(f"load {session_path}")
+
+    assert "2 seat(s)" in load_output
+    assert "2 AI seat(s) reattached" in load_output
+    assert "[user] hello there" in fresh_tui.execute("transcript")
+
+    # the reattached seat is immediately usable again, as a placeholder
+    reply = fresh_tui.execute("ask ChatGPT what now")
+    assert "[ChatGPT]" in reply
+    assert "no real provider connected" in reply
+
+
+def test_save_with_no_path_raises(tui):
+    with pytest.raises(ValueError):
+        tui.execute("save")
+
+
+def test_load_with_no_path_raises(tui):
+    with pytest.raises(ValueError):
+        tui.execute("load")
