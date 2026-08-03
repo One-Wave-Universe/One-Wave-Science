@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from council_chamber.context import ContextPolicy
 from council_chamber.models import CouncilChat, Message, Seat
 from council_chamber.seats.ai_seat import AISeat
+from council_chamber.usage import UsageReport
 from council_chamber.workers.patch_worker import PatchWorker, ProposedChange, PatchResult
 
 
@@ -40,6 +41,7 @@ class Council:
         # pass a ContextPolicy(max_messages=...) to actually curate what a
         # seat sees.
         self.context_policy = context_policy or ContextPolicy()
+        self.usage_log: dict[str, list[UsageReport]] = {}  # seat_id -> one report per ask() reply
 
     def register_ai_seat(self, ai_seat: AISeat) -> None:
         seat = ai_seat.seat
@@ -60,9 +62,14 @@ class Council:
             ai_seat = self.ai_seats[seat_id]
             context = self.context_policy.curate(self.chat.messages_visible_to(seat_id))
             reply_text = ai_seat.respond(context)
+            usage = ai_seat.last_usage or UsageReport.unavailable("seat did not report usage")
+            self.usage_log.setdefault(seat_id, []).append(usage)
             reply_message = self.chat.post(seat_id, reply_text, in_response_to=user_message.message_id)
             responses.append(reply_message)
         return responses
+
+    def usage_for(self, seat_id: str) -> list[UsageReport]:
+        return list(self.usage_log.get(seat_id, []))
 
     def propose_change(self, seat_id: str, file_path: str, new_content: str, description: str = "") -> PendingChange:
         if seat_id not in self.ai_seats:

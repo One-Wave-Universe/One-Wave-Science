@@ -20,15 +20,21 @@ from abc import ABC, abstractmethod
 from typing import Callable
 
 from council_chamber.models import Message, Seat
+from council_chamber.usage import UsageReport
 
 
 class AISeat(ABC):
     def __init__(self, seat: Seat):
         self.seat = seat
+        self.last_usage: UsageReport | None = None
 
     @abstractmethod
     def respond(self, context: list[Message]) -> str:
-        """Given a curated list of Messages, return this seat's reply text."""
+        """Given a curated list of Messages, return this seat's reply
+        text. Implementations should set self.last_usage to a real
+        UsageReport if their connection reports one, or
+        UsageReport.unavailable() if it doesn't -- never leave it
+        pointing at a fabricated number."""
         raise NotImplementedError
 
 
@@ -43,6 +49,7 @@ class MockSeat(AISeat):
 
     def respond(self, context: list[Message]) -> str:
         self.received_contexts.append(context)
+        self.last_usage = UsageReport.unavailable("mock seat -- no real provider connection")
         if callable(self.reply):
             return self.reply(context)
         return self.reply
@@ -54,9 +61,10 @@ class SeatNotConfiguredError(RuntimeError):
 
 class RemoteAPISeat(AISeat):
     """Placeholder for a real provider connection (ChatGPT, Codex, Gemini,
-    DeepSeek, ...). Supply `client`, a callable(context) -> str that
-    performs the actual API call, to make this seat real; without one,
-    respond() raises rather than fabricating output."""
+    DeepSeek, ...). Supply `client`, a callable(context) -> str (or
+    callable(context) -> (str, UsageReport) if the provider reports real
+    usage) to make this seat real; without one, respond() raises rather
+    than fabricating output."""
 
     def __init__(self, seat: Seat, client: Callable[[list[Message]], str] | None = None):
         super().__init__(seat)
@@ -68,4 +76,10 @@ class RemoteAPISeat(AISeat):
                 f"seat {self.seat.name!r} ({self.seat.seat_id}) has no API client configured -- "
                 "supply one via RemoteAPISeat(seat, client=...) to connect it to a real provider"
             )
-        return self.client(context)
+        result = self.client(context)
+        if isinstance(result, tuple):
+            reply_text, usage = result
+            self.last_usage = usage
+            return reply_text
+        self.last_usage = UsageReport.unavailable("client did not report usage")
+        return result

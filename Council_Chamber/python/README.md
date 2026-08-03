@@ -74,10 +74,14 @@ council_chamber/
 ├── context.py            ContextPolicy: what subset of a seat's visible
 │                         history actually gets sent on each ask() call
 │                         -- a recency window plus explicit pinning
+├── usage.py              UsageReport + summarize(): per-seat token/price/
+│                         request tracking that reports "unavailable"
+│                         instead of fabricating a number
 ├── orchestrator.py       Council: ask() routes one round to named seats
-│                         only; propose_change()/approve_and_apply()/
-│                         reject() gate every file write behind an
-│                         explicit approval step
+│                         only, recording a UsageReport per reply;
+│                         propose_change()/approve_and_apply()/reject()
+│                         gate every file write behind an explicit
+│                         approval step
 ├── storage.py            save/load a CouncilChat or a full Council
 │                         session (including pending changes) as JSON
 └── cli.py                the end-to-end demo above
@@ -107,6 +111,16 @@ council_chamber/
   age. There's no AI-driven relevance ranking or summarization — that
   would itself cost an AI call, contradicting the spec's local-first
   principle — so curation is deliberately just recency + explicit pins.
+- **Usage is reported, never invented.** Every `AISeat.respond()` call
+  sets `self.last_usage` to a `UsageReport`; `Council.ask()` records one
+  per reply in `council.usage_log[seat_id]`, retrievable via
+  `council.usage_for(seat_id)` and totaled with `usage.summarize()`.
+  `MockSeat` and any `RemoteAPISeat` whose client doesn't return usage
+  both report `UsageReport.unavailable()` — every numeric field stays
+  `None` rather than defaulting to `0`, so "no data" is never
+  indistinguishable from "zero tokens used." A `RemoteAPISeat` client
+  that returns `(reply_text, UsageReport(...))` instead of a bare string
+  gets its real numbers recorded.
 
 ## Known limitations
 
@@ -147,6 +161,9 @@ council_chamber/
 4. A minimal terminal or web UI over the existing `Council`/workers —
    the file tree, diff viewer, and approve/reject controls the spec
    describes — before anything about rooms or multiple projects.
-5. Token/resource tracking per seat (`RemoteAPISeat` reporting real
-   usage from its client's response, `MockSeat`/local workers reporting
-   "usage unavailable" rather than a fabricated number).
+5. ~~Token/resource tracking per seat.~~ **Done.** See `usage.py` and
+   `Council.usage_log`/`usage_for()` — real numbers when a
+   `RemoteAPISeat` client reports them, `UsageReport.unavailable()`
+   otherwise. Not yet persisted by `storage.py` (a session reload starts
+   with an empty usage log) and local workers don't yet post usage into
+   the log at all, since none of them do metered work today.
