@@ -18,13 +18,32 @@ explicitly out of scope until this loop works reliably.
   real and tested.** `FileSearchWorker`, `TestWorker`, `BuildWorker`,
   `GitWorker`, and `PatchWorker` run genuine subprocess/filesystem
   operations against a real project directory.
-- **There are no API keys for any external provider in this
-  environment.** `ChatGPT` and `Codex` seats in the demo are `MockSeat`
-  instances with canned replies — real, working implementations of the
-  `AISeat` interface, just not connected to OpenAI. `RemoteAPISeat` is
-  the honest placeholder for a real connection: it takes an injected
-  `client` callable and raises `SeatNotConfiguredError` rather than
-  fabricating a response if none is supplied.
+- **`ChatGPT` and `Codex` in the demo are still `MockSeat` placeholders**
+  (canned replies, real implementation of the `AISeat` interface, no
+  provider connected). `RemoteAPISeat` is the general honest-placeholder
+  pattern: it takes an injected `client` callable and raises
+  `SeatNotConfiguredError` rather than fabricating a response if none is
+  supplied.
+- **One real provider connection exists: `seats/gemini_client.py`.**
+  `make_gemini_client()` makes a genuine HTTPS call to
+  `generativelanguage.googleapis.com` (stdlib `urllib`, no extra
+  dependency) and returns `(reply_text, UsageReport)` with the real
+  token counts Google reports. Wire it up with:
+  ```python
+  from council_chamber.seats.ai_seat import RemoteAPISeat
+  from council_chamber.seats.gemini_client import make_gemini_client
+  seat = RemoteAPISeat(Seat.create("Gemini", SeatKind.AI), client=make_gemini_client())
+  ```
+  It reads `GEMINI_API_KEY` from the environment (or pass `api_key=`
+  directly) and raises `GeminiNotConfiguredError` if neither is set. A
+  real API error (bad key, quota exhausted, ...) raises `GeminiAPIError`
+  with Google's own message — it is never caught and turned into a fake
+  reply. Verified end to end against the real API: a live key returned a
+  real HTTP 429 (`RESOURCE_EXHAUSTED`, free-tier quota limit 0 on that
+  key's Google Cloud project) which `GeminiAPIError` surfaced correctly;
+  no completion has come back yet because that project's quota is 0
+  until its owner enables billing, but the whole request/response/error
+  path is proven working over the real network.
 
 ## Run the demo
 
@@ -96,9 +115,11 @@ council_chamber/
 ├── models.py            Seat, Message, CouncilChat -- the shared log.
 │                         Posting is inert: nothing auto-responds.
 ├── seats/
-│   └── ai_seat.py        AISeat interface, MockSeat (real, for tests/
-│                         demo), RemoteAPISeat (honest placeholder --
-│                         needs an injected client to do anything)
+│   ├── ai_seat.py        AISeat interface, MockSeat (real, for tests/
+│   │                     demo), RemoteAPISeat (honest placeholder --
+│   │                     needs an injected client to do anything)
+│   └── gemini_client.py  real Gemini REST client for RemoteAPISeat --
+│                         genuine HTTPS calls, real errors, real usage
 ├── workers/
 │   ├── file_search.py    find_files / search_text / find_symbol
 │   ├── test_worker.py    runs a real test command, reports exact failures
