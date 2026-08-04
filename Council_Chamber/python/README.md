@@ -132,6 +132,34 @@ tests use, so the whole interface is exercised without a real terminal.
   changes persist; a live provider connection was never serializable to
   begin with, so there's nothing fabricated in what comes back.
 
+## Checking in with an idle seat (worker_ant.py)
+
+```bash
+cd Council_Chamber/python
+python3 -m council_chamber.worker_ant session.json . Gemini "anything to report?"
+```
+
+Loads `session.json`, asks the named seat(s) once, saves the reply back.
+Add `--every SECONDS --times N` to repeat the same check-in prompt N
+times with a real delay between rounds — the "talk to the AI while it's
+idle" pattern:
+
+```bash
+python3 -m council_chamber.worker_ant session.json . Gemini "anything to report?" --every 60 --times 20
+```
+
+This is still not an autonomous loop: `--times` is a number you choose
+explicitly (no infinite default), the prompt is the same one you gave
+each round, and it's a plain foreground process you can Ctrl+C anytime.
+Every round is still one `Council.ask()` call under the same "only
+named seats respond, only when asked" gate as everything else — see the
+module docstring for why that's a hard line, not a preference.
+
+To get another AI's own real seat attached (not just Gemini), see
+`../ATTACH_A_SEAT.md` — a copy-paste prompt you hand to that AI so it
+writes its own `seats/<x>_client.py`, following the exact contract
+`client_registry.py` documents.
+
 The demo reproduces the spec's own example workflow end to end, against
 a real temporary project directory:
 

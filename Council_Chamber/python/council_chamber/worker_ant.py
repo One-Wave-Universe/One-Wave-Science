@@ -20,7 +20,9 @@ is one deliberate, bounded invocation.
 from __future__ import annotations
 
 import sys
+import time
 from pathlib import Path
+from typing import Callable
 
 from council_chamber.client_registry import build_ai_seat, discover_and_register_clients
 from council_chamber.models import Message, SeatKind
@@ -80,19 +82,74 @@ def run_one_round(
     return replies
 
 
+def run_loop(
+    session_path: str | Path,
+    project_dir: str | Path,
+    seat_tokens: list[str],
+    prompt: str,
+    delay_seconds: float,
+    max_rounds: int,
+    reattach_placeholders: bool = True,
+    sleep_fn: Callable[[float], None] = time.sleep,
+) -> list[list[Message]]:
+    """Check in with the named seats every `delay_seconds`, `max_rounds`
+    times -- the "ant talks to the AI when it's idle" pattern, without
+    becoming an uncontrolled loop: `max_rounds` is a required, explicit
+    number you choose, the prompt each round is the same one you gave,
+    and Ctrl+C (or just not passing --every) stops it. This is still
+    just repeated calls to run_one_round -- same local file, same
+    bounded Council.ask() gate, same "no real client means no real
+    call" honesty. `sleep_fn` is injectable so tests don't have to
+    actually wait."""
+    all_replies = []
+    for round_index in range(max_rounds):
+        replies = run_one_round(session_path, project_dir, seat_tokens, prompt, reattach_placeholders)
+        all_replies.append(replies)
+        if round_index < max_rounds - 1:
+            sleep_fn(delay_seconds)
+    return all_replies
+
+
+def _extract_flag(argv: list[str], flag: str, cast, default):
+    if flag in argv:
+        idx = argv.index(flag)
+        value = cast(argv[idx + 1])
+        del argv[idx : idx + 2]
+        return value
+    return default
+
+
 def main(argv: list[str] | None = None) -> None:
-    argv = sys.argv[1:] if argv is None else argv
+    argv = list(sys.argv[1:] if argv is None else argv)
+    every = _extract_flag(argv, "--every", float, None)
+    times = _extract_flag(argv, "--times", int, 1)
+
     if len(argv) < 4:
         print(
             "usage: python -m council_chamber.worker_ant "
-            "<session.json> <project_dir> <seat[,seat...]> <prompt...>"
+            "<session.json> <project_dir> <seat[,seat...]> <prompt...> "
+            "[--every SECONDS] [--times N]\n"
+            "  --every SECONDS  check in again after this many seconds "
+            "(omit for a single round)\n"
+            "  --times N        how many check-ins to run (default 1; "
+            "only meaningful with --every)"
         )
         raise SystemExit(1)
 
     session_path, project_dir, seat_arg, *prompt_words = argv
-    replies = run_one_round(session_path, project_dir, seat_arg.split(","), " ".join(prompt_words))
-    for reply in replies:
-        print(f"[{reply.sender_seat_id}] {reply.content}")
+    seat_tokens = seat_arg.split(",")
+    prompt = " ".join(prompt_words)
+
+    if every is None:
+        rounds = [run_one_round(session_path, project_dir, seat_tokens, prompt)]
+    else:
+        rounds = run_loop(session_path, project_dir, seat_tokens, prompt, delay_seconds=every, max_rounds=times)
+
+    for round_number, replies in enumerate(rounds, start=1):
+        if len(rounds) > 1:
+            print(f"--- round {round_number}/{len(rounds)} ---")
+        for reply in replies:
+            print(f"[{reply.sender_seat_id}] {reply.content}")
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ from council_chamber.orchestrator import Council
 from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.storage import save_session, load_session
 from council_chamber.workers.patch_worker import PatchWorker
-from council_chamber.worker_ant import run_one_round, reattach_placeholder_seats, main, _PLACEHOLDER_REPLY
+from council_chamber.worker_ant import run_one_round, run_loop, reattach_placeholder_seats, main, _PLACEHOLDER_REPLY
 
 
 @pytest.fixture
@@ -126,3 +126,59 @@ def test_cli_main_prints_labeled_reply(saved_session, capsys):
 def test_cli_main_with_too_few_args_exits_nonzero(capsys):
     with pytest.raises(SystemExit):
         main(["only_one_arg"])
+
+
+def test_run_loop_checks_in_max_rounds_times_with_no_real_sleep(saved_session):
+    session_path, project_dir = saved_session
+    sleeps = []
+
+    rounds = run_loop(
+        session_path, project_dir, ["Codex"], "still there?",
+        delay_seconds=5, max_rounds=3, sleep_fn=sleeps.append,
+    )
+
+    assert len(rounds) == 3
+    assert all(r[0].content == _PLACEHOLDER_REPLY for r in rounds)
+    # slept between rounds but not after the last one
+    assert sleeps == [5, 5]
+
+
+def test_run_loop_persists_every_round_to_the_session_file(saved_session):
+    session_path, project_dir = saved_session
+
+    run_loop(session_path, project_dir, ["Codex"], "check in", delay_seconds=0, max_rounds=2, sleep_fn=lambda s: None)
+
+    reloaded = load_session(session_path, PatchWorker(project_dir))
+    prompts = [m.content for m in reloaded.chat.messages if m.sender_seat_id is None]
+    assert prompts == ["check in", "check in"]
+
+
+def test_run_loop_with_one_round_never_sleeps(saved_session):
+    session_path, project_dir = saved_session
+    sleeps = []
+
+    run_loop(session_path, project_dir, ["Codex"], "hi", delay_seconds=99, max_rounds=1, sleep_fn=sleeps.append)
+
+    assert sleeps == []
+
+
+def test_cli_main_with_every_and_times_runs_multiple_rounds(saved_session, capsys, monkeypatch):
+    session_path, project_dir = saved_session
+    monkeypatch.setattr("council_chamber.worker_ant.time.sleep", lambda s: None)
+
+    main([str(session_path), str(project_dir), "Codex", "--every", "1", "--times", "2", "checking", "in"])
+
+    output = capsys.readouterr().out
+    assert "round 1/2" in output
+    assert "round 2/2" in output
+    assert output.count(_PLACEHOLDER_REPLY) == 2
+
+
+def test_cli_main_without_every_prints_a_single_unlabeled_round(saved_session, capsys):
+    session_path, project_dir = saved_session
+
+    main([str(session_path), str(project_dir), "Codex", "one", "round", "only"])
+
+    output = capsys.readouterr().out
+    assert "round 1/1" not in output
+    assert _PLACEHOLDER_REPLY in output
