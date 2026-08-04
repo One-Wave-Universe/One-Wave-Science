@@ -45,6 +45,46 @@ explicitly out of scope until this loop works reliably.
   until its owner enables billing, but the whole request/response/error
   path is proven working over the real network.
 
+## Attaching your own seat (self-service, zero-cost mechanism)
+
+Anyone — a human, or another AI seat that's writing code through
+`propose_change`/`approve_and_apply` — can attach a new real provider
+without touching `tui.py`, `worker_ant.py`, or any other existing file.
+Drop a new file into `council_chamber/seats/` named `<something>_client.py`
+following the shape `gemini_client.py` already uses:
+
+```python
+# council_chamber/seats/openai_client.py
+def make_openai_client(model="gpt-5", api_key=None):
+    # read api_key or an env var; raise a clear *NotConfigured* error
+    # if neither is set -- never fabricate a reply
+    def client(context):
+        # make a real API call; raise a clear *APIError* with the
+        # provider's own message on failure
+        return reply_text, usage_report   # or just reply_text
+    return client
+
+from council_chamber.client_registry import register_client
+register_client("chatgpt", "ChatGPT", make_openai_client)
+```
+
+That's the entire interface — exactly what `RemoteAPISeat(seat,
+client=...)` already accepts (a callable returning either a bare string
+or `(text, UsageReport)`). `client_registry.discover_and_register_clients()`
+imports every `seats/*_client.py` file on startup so the
+`register_client(...)` call actually runs, and both `tui.py`'s `open
+<key>` and `worker_ant.py`'s session-reload path check this registry
+first — using the real client if its factory can configure itself (e.g.
+an API key env var is set), and falling back to an honestly-labeled
+"not configured" placeholder otherwise, never a fabricated reply.
+
+**This costs nothing by itself.** The registry, the file discovery, and
+the fallback are all local file I/O — the only thing that ever costs
+money is whichever specific provider a client file actually calls, and
+that's opt-in per file. Verified live: a throwaway `zzdemo_client.py`
+was dropped in with no edits anywhere else, and `open zzdemo` picked it
+up and answered for real on the first try.
+
 ## Run the demo
 
 ```bash
@@ -140,9 +180,16 @@ council_chamber/
 │                         approval step
 ├── storage.py            save/load a CouncilChat or a full Council
 │                         session (including pending changes) as JSON
+├── client_registry.py    self-service seat registry -- drop in a new
+│                         seats/<x>_client.py, no other file changes,
+│                         and it's usable via `open <key>`
+├── worker_ant.py         one bounded, local, file-driven relay round
+│                         over a saved session -- never an autonomous
+│                         loop, always one deliberate invocation
 ├── tui.py                CouncilTUI: a real command interpreter (seats/
-│                         ask/propose/diff/approve/reject/usage/
-│                         transcript) plus repl() for interactive use
+│                         open/ask/propose/diff/approve/reject/usage/
+│                         transcript/save/load) plus repl() for
+│                         interactive use
 └── cli.py                the end-to-end demo above
 ```
 

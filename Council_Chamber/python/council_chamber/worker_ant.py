@@ -22,11 +22,13 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from council_chamber.client_registry import build_ai_seat, discover_and_register_clients
 from council_chamber.models import Message, SeatKind
 from council_chamber.orchestrator import Council
-from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.storage import load_session, save_session
 from council_chamber.workers.patch_worker import PatchWorker
+
+discover_and_register_clients()
 
 _PLACEHOLDER_REPLY = "(demo seat -- no real provider connected; see RemoteAPISeat in seats/ai_seat.py)"
 
@@ -43,14 +45,16 @@ def _resolve_seat_id(council: Council, token: str) -> str:
 def reattach_placeholder_seats(council: Council) -> int:
     """After loading a session, every AI-kind seat exists as an identity
     in the chat but has no live client behind it (live connections were
-    never serialized). Re-attach a MockSeat placeholder for any that
-    aren't already registered so they're immediately usable; a caller
-    who wants a *real* connection should register a RemoteAPISeat for
-    that specific seat_id before calling run_one_round instead."""
+    never serialized). Re-attach each one that isn't already registered
+    -- with a real RemoteAPISeat if a matching client is registered in
+    client_registry.py (e.g. GEMINI_API_KEY is set in *this* process),
+    or an honestly-labeled MockSeat placeholder otherwise. A caller who
+    wants to force a specific connection should register it directly
+    before calling run_one_round instead."""
     reattached = 0
     for seat in council.chat.seats.values():
         if seat.kind == SeatKind.AI and seat.seat_id not in council.ai_seats:
-            council.register_ai_seat(MockSeat(seat, reply=_PLACEHOLDER_REPLY))
+            council.register_ai_seat(build_ai_seat(seat, _PLACEHOLDER_REPLY))
             reattached += 1
     return reattached
 

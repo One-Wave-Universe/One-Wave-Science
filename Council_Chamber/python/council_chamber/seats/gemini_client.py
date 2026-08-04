@@ -74,3 +74,8 @@ def make_gemini_client(
         return reply_text, usage
 
     return client
+
+
+from council_chamber.client_registry import register_client  # noqa: E402
+
+register_client("gemini", "Gemini", make_gemini_client)

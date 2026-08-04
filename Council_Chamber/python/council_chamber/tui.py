@@ -14,12 +14,19 @@ import shlex
 import sys
 from pathlib import Path
 
+from council_chamber.client_registry import build_ai_seat, discover_and_register_clients, get_client
 from council_chamber.models import CouncilChat, Seat, SeatKind
 from council_chamber.orchestrator import Council
 from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.storage import save_session, load_session
 from council_chamber.usage import summarize
 from council_chamber.workers.patch_worker import PatchWorker
+
+# Pick up every seats/*_client.py that's been dropped in -- this is what
+# makes "someone else builds and attaches their own seat" work: add a
+# file following client_registry.py's documented shape, no other file
+# needs to change, and `open <key>` below will find it.
+discover_and_register_clients()
 
 # Every seat kind the spec names as a possible council-table seat. Any of
 # these can be opened on demand with `open <key>` -- there is nothing
@@ -63,13 +70,25 @@ Commands:
 
 
 def open_catalog_seat(council: Council, key: str) -> Seat:
-    """Open a new seat of the given catalog kind as a MockSeat placeholder
-    and register it with `council`. Any seat opened this way can ask/be
-    asked and propose_change exactly like every other -- there is no
-    special-cased "only Codex can write code" path."""
+    """Open a new seat and register it with `council`. If a real client
+    has been registered for this key (client_registry.py -- someone
+    dropped in a seats/<x>_client.py file), try to use it via
+    RemoteAPISeat; if it can't configure itself (e.g. no API key set)
+    the seat still opens, but with a placeholder that says exactly why
+    it isn't real, rather than crashing or silently faking a reply.
+    Otherwise falls back to the generic MockSeat catalog placeholder.
+    Any seat opened this way can ask/be asked and propose_change exactly
+    like every other -- there is no special-cased "only Codex can write
+    code" path."""
     key = key.lower()
+    registered = get_client(key)
+    if registered is not None:
+        seat = Seat.create(registered.display_name, SeatKind.AI)
+        council.register_ai_seat(build_ai_seat(seat, _PLACEHOLDER_REPLY))
+        return seat
+
     if key not in SEAT_CATALOG:
-        raise ValueError(f"unknown seat {key!r} -- catalog: {', '.join(SEAT_CATALOG)}")
+        raise ValueError(f"unknown seat {key!r} -- catalog: {', '.join(sorted(SEAT_CATALOG))}")
     seat = Seat.create(SEAT_CATALOG[key], SeatKind.AI)
     council.register_ai_seat(MockSeat(seat, reply=_PLACEHOLDER_REPLY))
     return seat

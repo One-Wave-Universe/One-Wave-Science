@@ -17,7 +17,7 @@ def saved_session(tmp_path):
     project_dir = tmp_path / "project"
     project_dir.mkdir()
     council = Council(CouncilChat(), PatchWorker(project_dir))
-    council.register_ai_seat(MockSeat(Seat.create("Gemini", SeatKind.AI), reply="ready to help"))
+    council.register_ai_seat(MockSeat(Seat.create("Codex", SeatKind.AI), reply="ready to help"))
     session_path = tmp_path / "session.json"
     save_session(council, session_path)
     return session_path, project_dir
@@ -26,7 +26,7 @@ def saved_session(tmp_path):
 def test_run_one_round_asks_seat_and_persists_the_reply(saved_session):
     session_path, project_dir = saved_session
 
-    replies = run_one_round(session_path, project_dir, ["Gemini"], "how should we route the buses")
+    replies = run_one_round(session_path, project_dir, ["Codex"], "how should we route the buses")
 
     # a fresh load_session never restores the original "ready to help"
     # MockSeat.reply -- live client behavior is never serialized, only
@@ -46,15 +46,15 @@ def test_run_one_round_does_not_touch_the_network_for_placeholder_seats(saved_se
     """The ant itself performs no I/O beyond the local session file --
     a placeholder reply proves no network call happened for this round."""
     session_path, project_dir = saved_session
-    replies = run_one_round(session_path, project_dir, ["Gemini"], "ping")
+    replies = run_one_round(session_path, project_dir, ["Codex"], "ping")
     assert replies[0].content == _PLACEHOLDER_REPLY
 
 
 def test_two_rounds_accumulate_in_the_same_session(saved_session):
     session_path, project_dir = saved_session
 
-    run_one_round(session_path, project_dir, ["Gemini"], "round one")
-    run_one_round(session_path, project_dir, ["Gemini"], "round two")
+    run_one_round(session_path, project_dir, ["Codex"], "round one")
+    run_one_round(session_path, project_dir, ["Codex"], "round two")
 
     reloaded = load_session(session_path, PatchWorker(project_dir))
     contents = [m.content for m in reloaded.chat.messages]
@@ -64,9 +64,9 @@ def test_two_rounds_accumulate_in_the_same_session(saved_session):
 def test_run_one_round_resolves_seat_id_directly_too(saved_session):
     session_path, project_dir = saved_session
     council = load_session(session_path, PatchWorker(project_dir))
-    gemini_seat_id = next(iter(council.chat.seats))
+    codex_seat_id = next(iter(council.chat.seats))
 
-    replies = run_one_round(session_path, project_dir, [gemini_seat_id], "direct id lookup")
+    replies = run_one_round(session_path, project_dir, [codex_seat_id], "direct id lookup")
 
     assert replies[0].content == _PLACEHOLDER_REPLY
 
@@ -82,7 +82,7 @@ def test_reattach_placeholders_false_and_unregistered_seat_raises(saved_session)
 
     session_path, project_dir = saved_session
     with pytest.raises(SeatNotRegisteredError):
-        run_one_round(session_path, project_dir, ["Gemini"], "hello?", reattach_placeholders=False)
+        run_one_round(session_path, project_dir, ["Codex"], "hello?", reattach_placeholders=False)
 
 
 def test_reattach_placeholder_seats_only_touches_unregistered_ai_seats(saved_session):
@@ -117,7 +117,7 @@ def test_a_real_client_registered_before_run_one_round_is_not_overwritten(saved_
 def test_cli_main_prints_labeled_reply(saved_session, capsys):
     session_path, project_dir = saved_session
 
-    main([str(session_path), str(project_dir), "Gemini", "hello", "from", "the", "cli"])
+    main([str(session_path), str(project_dir), "Codex", "hello", "from", "the", "cli"])
 
     output = capsys.readouterr().out
     assert _PLACEHOLDER_REPLY in output
