@@ -165,6 +165,36 @@ subprocess against that side room's copy (it passed), then switched
 back to the parent room and confirmed its `main.py` was completely
 untouched.
 
+## Run the local web UI (web_ui.py)
+
+```bash
+cd Council_Chamber/python
+python3 -m council_chamber.web_ui [project_dir] [port]   # defaults to cwd, port 8765
+```
+
+On Windows, double-click/run `RUN_ME.ps1` at the repo root instead —
+same thing, launches a browser to `http://127.0.0.1:8765/`.
+
+A real local web server (Python's standard library `http.server` only
+— nothing to `pip install`) serving a chat box wired to the exact same
+`CouncilTUI.execute(line)` the terminal uses, plus a **Providers**
+panel: click a provider to see whether it has a real client wired up,
+its real signup URL, and the exact PowerShell command to set its API
+key and relaunch the server with it active — e.g. for Groq (free, no
+billing required):
+
+```powershell
+$env:GROQ_API_KEY = "paste-your-key-here"
+cd "C:\path\to\Council_Chamber\python"
+python -m council_chamber.web_ui
+```
+
+No key is ever embedded in this file or sent anywhere except into your
+own shell's environment variable. Verified live: ran `web_ui.py` as a
+real subprocess, hit it with real HTTP requests (`GET /`, `GET
+/api/providers`, `POST /api/execute`), got real responses back from the
+real `Council` underneath — not a mockup of the page.
+
 ## Checking in with an idle seat (worker_ant.py)
 
 ```bash
@@ -219,8 +249,9 @@ council_chamber/
 │   ├── ai_seat.py        AISeat interface, MockSeat (real, for tests/
 │   │                     demo), RemoteAPISeat (honest placeholder --
 │   │                     needs an injected client to do anything)
-│   └── gemini_client.py  real Gemini REST client for RemoteAPISeat --
-│                         genuine HTTPS calls, real errors, real usage
+│   ├── gemini_client.py  real Gemini REST client for RemoteAPISeat --
+│   │                     genuine HTTPS calls, real errors, real usage
+│   └── groq_client.py    real Groq REST client (free tier, no billing)
 ├── workers/
 │   ├── file_search.py    find_files / search_text / find_symbol
 │   ├── test_worker.py    runs a real test command, reports exact failures
@@ -254,6 +285,9 @@ council_chamber/
 │                         room/branch/files/cat/seats/open/ask/propose/
 │                         diff/approve/reject/usage/transcript/save/load)
 │                         plus repl() for interactive use
+├── web_ui.py             stdlib-only local browser UI over the same
+│                         CouncilTUI -- chat box + a Providers panel
+│                         with real signup links and PowerShell snippets
 └── cli.py                the end-to-end demo above
 ```
 
