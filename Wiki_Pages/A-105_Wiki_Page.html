@@ -1,0 +1,101 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-105: RESTORING RESPONSE</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-105"><h1>A-105: RESTORING RESPONSE</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-105</h3><p><b>Classification</b><br>Field Response Primitive</p><p><b>Canonical source</b><br>Nodes/A-105_Restoring_Response.md</p></div><div class="content"><p>NODE A-105: RESTORING RESPONSE STATUS: YELLOW CLASSIFICATION: Field
+Response Primitive LAYER: Response Layer</p>
+<p>TERMINOLOGY CORRECTION (this session): the symbol was previously F_OW
+(“Force, One-Wave”), inherited across A-106, A-107, B-201, B-221, C-305,
+C-310, and Book 1 Ch12. This was a real inconsistency, not a style
+choice — Book 1 Ch12 explicitly and repeatedly denies force-carrier
+mechanisms as fundamental, while this node’s own symbol called its
+output a “Force.” Renamed to R_OW (“Response, One-Wave”), which now
+matches this node’s actual title. The mechanism itself is unchanged —
+only the symbol and the word “Force” as a category name were corrected,
+everywhere they appeared as an affirmed One-Wave mechanism. Standard
+Model “force” and “force-carrier” language in Book 1’s Gray sections and
+explicit rejection passages (e.g. Ch1, Ch2, Ch7 — “no force-carrier
+needed”) was left untouched, since that usage is either accurately
+describing the comparison framework or correctly naming the thing being
+denied, not affirming a One-Wave force.</p>
+<p>DEPENDENCIES: UPSTREAM: A-104 Gradient DOWNSTREAM: A-106 Pressure
+Response, E-501 Flowback</p>
+<ol type="1">
+<li><p>PURPOSE Converts gradient structure into field response.</p>
+<p>INPUT: ∇ψ = Field Gradient</p>
+<p>OUTPUT: R_OW = Restoring Response</p>
+<p>TRANSFORMATION: ∇ψ → R_OW = -A(∇ψ)</p></li>
+<li><p>DEFINITION Restoring Response is the field reaction to gradient
+imbalance.</p>
+<p>A-104 defines: ∇ψ = Field difference structure.</p>
+<p>A-105 defines: Resulting opposing response.</p>
+<p>GENERAL FORM: R_OW = -A(∇ψ)</p>
+<p>SPECIAL CASE: R_OW = -α∇ψ</p>
+<p>WHERE: R_OW = One-Wave restoring response. A = Response operator. α =
+Constant response coefficient.</p>
+<p>LIMIT: α assumes fixed response. A allows variable response
+behavior.</p></li>
+<li><p>STATE VARIABLES INPUT: ∇ψ</p>
+<p>RESPONSE: R_OW</p>
+<p>OPERATOR: A</p>
+<p>CHANNEL EXTENSIONS: Compression/Density. Expression/Phase.
+Projection.</p>
+<p>STATUS: Open.</p></li>
+<li><p>MATHEMATICS GENERAL: R_OW = -A(∇ψ)</p>
+<p>LINEAR CASE: A(∇ψ)=α∇ψ</p>
+<p>THEREFORE: R_OW=-α∇ψ</p>
+<p>ZERO: ∇ψ=0 → R_OW=0</p>
+<p>NONZERO: ∇ψ≠0 → R_OW≠0 if A(∇ψ)≠0</p>
+<p>SIGN: Negative represents opposing response direction.</p></li>
+<li><p>RELATIONSHIP CHAIN: A-104 Gradient → A-105 Restoring Response →
+A-106 Pressure Response → A-107 Bounded Motion</p>
+<p>SECONDARY: A-105 → E-501 Flowback</p>
+<p>ROLE: Gradient identifies imbalance. Restoring Response defines
+reaction. Motion defines outcome.</p>
+<p>BOUNDARY: Does not define bounded motion.</p></li>
+<li><p>OPERATIONAL RULE NO GRADIENT: ∇ψ=0 → R_OW=0</p>
+<p>GRADIENT EXISTS: ∇ψ≠0 → R_OW=-A(∇ψ)</p>
+<p>A transforms gradient structure into response. A does not create the
+gradient.</p></li>
+<li><p>RECURSIVE POSITION CHAIN: Differential → Gradient → Restoring
+Response → Pressure Response → Motion</p>
+<p>FUNCTION: Converts measured spatial structure into active
+response.</p>
+<p>BOUNDARY: Does not define final motion outcome.</p></li>
+<li><p>RECURSIVE SCALING REQUIREMENT: Preserve restoring response
+meaning across: Micro, Small, Medium, Large, Macro.</p>
+<p>OPEN: Does A maintain the same restoring principle at all
+scales?</p></li>
+<li><p>CONSTRAINTS Restoring Response requires:</p>
+<pre><code> 1. Defined gradient input.
+ 2. Defined response operator.
+ 3. Opposing direction maintained.
+ 4. Response channels remain separated.</code></pre>
+<p>OPEN: Operator derivation. Channel behavior. Scale
+validation.</p></li>
+<li><p>DEPENDENCIES UPSTREAM: A-104 Gradient.</p>
+<p>INPUT: ∇ψ</p>
+<p>DOWNSTREAM: A-106 Pressure Response. E-501 Flowback.</p></li>
+<li><p>FAILURE MODES Restoring Response fails when:</p>
+<pre><code>1. Operator is undefined.
+2. Response direction is incorrect.
+3. Scale behavior drifts.
+4. Response channels mix.
+5. False stability is produced.</code></pre></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN:</p>
+<pre><code>1. Operator A is defined.
+2. Response direction is validated.
+3. Recursive scaling is preserved.
+4. Channel separation is maintained.</code></pre>
+<p>CURRENT: Definition ✅ Mathematics ✅ Dependencies ✅ Operator form
+✅ Experimental validation ❌</p>
+<p>GATE: GREEN = Defined. YELLOW = Constrained/Testable. BRONZE =
+Validated. SILVER = Integrated. GOLD = Confirmed.</p></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE: A-105 Restoring Response</p>
+<p>DEFINITION: Field reaction generated by gradient imbalance.</p>
+<p>FORM: R_OW=-A(∇ψ)</p>
+<p>FUNCTION: Converts gradient structure into active opposing
+response.</p>
+<p>BOUNDARY: Defines response to gradient, not final motion outcome.</p>
+<p>STATUS: YELLOW.</p></li>
+</ol>
+</div><div class="clear"></div></div></body></html>

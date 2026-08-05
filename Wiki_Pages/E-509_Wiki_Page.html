@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>E-509: Propagation Limit / Local-Transport Partition</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="E-509"><h1>E-509: Propagation Limit / Local-Transport Partition</h1><p><strong>Gate:</strong> GREEN &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> GREEN (one-cell-per-step ceiling) / YELLOW (partition norm)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">E-509_Propagation_Limit</h1>
+</header>
+<h1 id="node-e-509-propagation-limit-local-transport-partition">Node
+E-509: Propagation Limit / Local-Transport Partition</h1>
+<p><strong>Legacy claim detail:</strong> GREEN (one-cell-per-step ceiling) / YELLOW
+(partition norm)</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A+101 Ground, A-109 Inertial Memory, A-114 Dispersion
+Relation, core update rule<br />
+Downstream: C-309 Friction Limit / Propagation Ceiling, E-528 Static
+Redshift Transport</p>
+<h2 id="definition">Definition</h2>
+<p>The update rule is strictly nearest-neighbor:</p>
+<p>[ _i^{n+1} = _i^n +F(_i^n,_i^{n-1}) +(_j^n-_i^n). ]</p>
+<p>A site’s next state depends only on itself and its immediate
+neighbors. A disturbance therefore cannot advance farther than one
+lattice spacing in one update. This is a structural propagation bound,
+not a Mass-Effect mechanism.</p>
+<p>The update contains two bookkeeping contributions:</p>
+<ul>
+<li><strong>local update</strong>: (L_i=F(_i^n,_i^{n-1}));</li>
+<li><strong>neighbor transport</strong>: (T_i=(_j^n-_i^n)).</li>
+</ul>
+<p>These labels describe where one update contribution comes from. They
+do not classify energy as matter, inertia, or rest Mass Effect.</p>
+<h2 id="mathematics">Mathematics</h2>
+<h3 id="propagation-ceiling---green">Propagation ceiling - GREEN</h3>
+<p>[ c_L=. ]</p>
+<p>This is the strict one-cell-per-step upper bound. The physical group
+velocity must be derived from A-114:</p>
+<p>[ v_g(k)=. ]</p>
+<h3 id="local-transport-partition---yellow">Local-transport partition -
+YELLOW</h3>
+<p>After a conserved update norm (||_U) is derived, define the
+provisional bookkeeping shares</p>
+<p>[ _i = , _i = , _i+_i=1. ]</p>
+<p>Until that norm is derived, (_i) and (_i) are placeholders only.</p>
+<p>They are bookkeeping shares only. They do not determine group
+velocity and they do not determine any Mass-Effect quantity. Group
+velocity comes from the dispersion relation. Mass Effect comes from the
+second velocity response of the complete four-interaction
+recurrence.</p>
+<h2 id="canonical-separation">Canonical Separation</h2>
+<pre class="text"><code>E-509 -&gt; how a local update is partitioned
+A-114 -&gt; dispersion and group velocity
+C-309 -&gt; propagation ceiling and damping constraints
+C-318 -&gt; Mass Effect from all four interactions together</code></pre>
+<p>No algebraic conversion from (/), (/), or either share alone into
+Mass Effect is permitted.</p>
+<h2 id="yellow-audit">Yellow Audit</h2>
+<ul>
+<li>derive the local operator (F) from the accepted update
+architecture;</li>
+<li>identify a conserved norm for the complete update;</li>
+<li>calculate (v_g(k)) from A-114 rather than from partition
+shares;</li>
+<li>test whether the partition has any independent predictive use in
+transport;</li>
+<li>keep every transport quantity mechanically separated from C-318’s
+response tensor.</li>
+</ul>
+<h2 id="failure-condition">Failure Condition</h2>
+<p>The partition proposal fails if no conserved norm supports it or if
+it merely repackages the update terms without producing an independent
+transport prediction. Failure does not authorize reinterpretation as
+inertia.</p>
+</body>
+</html>

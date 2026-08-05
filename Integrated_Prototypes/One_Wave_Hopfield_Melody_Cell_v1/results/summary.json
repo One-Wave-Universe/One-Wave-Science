@@ -1,0 +1,20 @@
+{
+  "engine": "One_Wave_Hopfield_Melody_Cell_v1",
+  "memory_type": "Hopfield only",
+  "melodies_stored": 3,
+  "trials": 9,
+  "exact_sequence_recall": 9,
+  "exact_sequence_rate": 1.0,
+  "correct_attractor_recall": 9,
+  "correct_attractor_rate": 1.0,
+  "wrong_attractor_count": 0,
+  "energy_nonincreasing_trials": 9,
+  "energy_nonincreasing_rate": 1.0,
+  "mean_sweeps": 2.0,
+  "vector_size": 352,
+  "stored_patterns": [
+    "C_FIFTH_RETURN",
+    "E_FIFTH_RETURN",
+    "F_FIFTH_RETURN"
+  ]
+}

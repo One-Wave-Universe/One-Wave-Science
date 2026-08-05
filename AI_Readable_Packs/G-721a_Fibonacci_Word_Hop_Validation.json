@@ -1,0 +1,32 @@
+{
+  "node_id": "G-721a",
+  "name": "Fibonacci Word Hop Validation",
+  "parent": "G-721",
+  "convention": {
+    "W0": "0",
+    "W1": "01",
+    "recurrence": "Wk=W(k-1)W(k-2)"
+  },
+  "input": "ordered b trace recovered from G-721 recursive coordinates",
+  "metrics": [
+    "packet legality",
+    "prefix mismatch",
+    "recursive block identity",
+    "length/count recurrence",
+    "golden-ratio convergence",
+    "balance",
+    "factor complexity"
+  ],
+  "golden_ratio_scope": "Fibonacci-word generation lengths and symbol counts only",
+  "exclusions": [
+    "Mirror Gate",
+    "live choice",
+    "2D/3D/4D geometry",
+    "6:1/12:1/24:1",
+    "quark/proton/Mass Effect physics"
+  ],
+  "reference_receipt": "Nodes/G-721a_Validation/reference_validation.json",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (Fibonacci-word mathematics and validator) / YELLOW (One-Wave route relevance)"
+}

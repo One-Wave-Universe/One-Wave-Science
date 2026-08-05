@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>G-721c: Episturmian Multi-Route Directive Grammar</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-721c"><h1>G-721c: Episturmian Multi-Route Directive Grammar</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (external word mathematics) / YELLOW (multi-route movement relevance)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-g-721c-episturmian-multi-route-directive-grammar">Node
+G-721c: Episturmian Multi-Route Directive Grammar</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (external word mathematics) / YELLOW
+(multi-route movement relevance)</p>
+<p><strong>Classification:</strong> Multi-Symbol Route Scheduler /
+Mirror-Aware Directive Grammar</p>
+<p><strong>Dependencies</strong><br />
+Upstream: G-721, G-721b, D-411<br />
+Lateral: B-205 Mirror, G-720 No Control But Self-Control<br />
+Downstream: G-721d Arnoux-Rauzy Validator, G-722 Android Motor Memory
+Architecture</p>
+<h2 id="purpose">Purpose</h2>
+<p>Sturmian words use two symbols. Episturmian words extend
+reversal-aware recurrent word structure to a finite alphabet of route
+symbols.</p>
+<p>An episturmian word has a factor language closed under reversal and
+at most one left-special factor of each length. Standard episturmian
+words may be directed through iterated palindromic closure.</p>
+<p>This node uses that mathematics as a candidate scheduler for
+movement-route families, not as a claim about physical lattice
+construction.</p>
+<h2 id="route-alphabet">Route Alphabet</h2>
+<p>Let</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒜</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>a</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
+\mathcal A=\{a_1,a_2,\ldots,a_k\}
+</annotation></semantics></math></p>
+<p>label <code>k</code> undirected route families. A directive sequence
+provides the ordered route-family symbols</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub><mo>∈</mo><mi>𝒜</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+x_t\in\mathcal A.
+</annotation></semantics></math></p>
+<p>Foundational choice supplies</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>+</mi><mn>1</mn><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+c_t\in\{-1,0,+1\}.
+</annotation></semantics></math></p>
+<p>The local proposed movement is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>Δ</mi><msub><mi>q</mi><mi>t</mi></msub><mo>=</mo><msub><mi>c</mi><mi>t</mi></msub><mspace width="0.167em"></mspace><msub><mi>𝐝</mi><msub><mi>x</mi><mi>t</mi></msub></msub></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{\Delta q_t=c_t\,\mathbf d_{x_t}}.
+</annotation></semantics></math></p>
+<p>The word chooses the route family. Choice selects its negative
+direction, hold state, or positive direction.</p>
+<h2 id="centered-state-count">Centered State Count</h2>
+<p>For <code>k</code> mirrored route families,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>k</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> route families</mtext></mrow><mo>→</mo><mn>2</mn><mi>k</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> directed routes</mtext></mrow><mo>+</mo><mn>1</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> center</mtext></mrow></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{k\text{ route families}\rightarrow2k\text{ directed routes}+1\text{ center}}.
+</annotation></semantics></math></p>
+<p>This is D-411 counting, not a theorem that every episturmian alphabet
+physically creates a lattice shell.</p>
+<h2 id="palindromic-closure">Palindromic Closure</h2>
+<p>For a finite word <code>w</code>, let <code>w^(+)</code> denote its
+shortest palindromic right-closure. A standard directive process
+repeatedly appends a directive symbol and closes the result
+palindromically.</p>
+<p>One-Wave may test this as a symbolic forward/mirror closure rule. It
+is not physical proof of the Mirror Gate.</p>
+<h2 id="required-tests">Required Tests</h2>
+<ul>
+<li>reversal closure of the observed factor language;</li>
+<li>recurrence of route symbols;</li>
+<li>directive-word traceability;</li>
+<li>palindromic-prefix receipts when standard construction is
+claimed;</li>
+<li>route coverage and recurrence gaps;</li>
+<li>live-choice independence;</li>
+<li>comparison with periodic and random schedulers.</li>
+</ul>
+<p>General episturmian words do not all have one fixed complexity
+formula. Exact complexity claims require a stricter subclass such as
+G-721d.</p>
+<h2 id="falsifiers">Falsifiers</h2>
+<p>Reject the episturmian claim if reversal closure fails, the route
+word cannot be traced to its declared directive construction, symbols
+disappear contrary to the claim, or the scheduler overrides live sensory
+Hold/correction.</p>
+</body>
+</html>

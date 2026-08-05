@@ -1,0 +1,37 @@
+{
+  "id": "C-318",
+  "name": "Four-Interaction Mass-Effect Response",
+  "rejected": [
+    "false transport-to-mass shortcut introduced by misunderstanding C-309",
+    "scalar potential curvature as canonical mechanism",
+    "E=mc^2 as causal derivation"
+  ],
+  "interactions": [
+    "internal Three-Vortex knot",
+    "electrical shell",
+    "Mirror-Gate pressure/orientation resistance",
+    "Boundary-Tension Weave",
+    "cross-couplings"
+  ],
+  "energy": "E4_cycle = <E_K+E_E+E_M+E_T+E_cross>",
+  "mass_effect_tensor": "M_ij = d^2 E4 / (dv_i dv_j) at v=0",
+  "isotropic_mass_effect": "m_eff = Tr(M)/3",
+  "force_test": "F_i approximately M_ij a_j",
+  "separation": "Mass Effect is local velocity response; 125 GeV is finite work to the Mirror threshold.",
+  "blocker": "derive W_i and one independent microscopic energy calibration",
+  "failure_conditions": [
+    "omit any interaction without consequence",
+    "fit response matrix from measured masses",
+    "use unrelated rules per object"
+  ],
+  "discrete_shift": "delta_v Z_i = -Delta t * v_j * D_j Z_0,i + O(v^2)",
+  "discrete_mass_tensor": "M_jk = sum_i DeltaV (D_j Z_0,i)^T W_i (D_k Z_0,i)",
+  "work_metric": "W_i is a four-interaction, positive-semidefinite work metric with diagonal and cross-interaction blocks; it must be derived from the update rules.",
+  "force_separation": "F_i = M_ij*a_j + C_ij*v_j + ...; C*v is drag/attenuation, not Mass Effect.",
+  "frame_constraint": "Any constant-velocity drag relative to Ground must pass C-313 preferred-frame audit.",
+  "scale_free_test": "R_G = E_MG/(m_eff*v_lat^2) = DeltaE_G_dimensionless/m_tilde",
+  "canonical_guard": "Never derive Mass Effect from propagation speed, damping, localization share, or any local/transport ratio. Use the complete four-interaction response tensor only.",
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "GREEN (One-Wave mechanism identity) / YELLOW (profiles, response coefficients, and numerical spectrum)"
+}

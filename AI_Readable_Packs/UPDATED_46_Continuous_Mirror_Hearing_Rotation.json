@@ -1,0 +1,26 @@
+{
+  "canonical_update": 46,
+  "date": "2026-08-04",
+  "supersedes": 45,
+  "no_tritone_primitive": true,
+  "mirror": {
+    "carrier": "Sigma",
+    "lower": "Sigma-1 mod 12",
+    "upper": "Sigma+1 mod 12",
+    "invariant_width": 2
+  },
+  "harmonic_algorithm": {
+    "carrier": "2(n+1)",
+    "lower": "2(n+1)-1",
+    "upper": "2(n+1)+1",
+    "shared_boundary": "H+(n)=H-(n+1)"
+  },
+  "alphabet": {
+    "minus": "(2n-1,2n,2n-1)",
+    "plus": "(2n-1,2n,2n+1)",
+    "forward_backward_sum": 27
+  },
+  "four_wheels": ["-5ths", "Root", "+4ths", "+3rds"],
+  "rotations": ["Point", "Path", "Field"],
+  "hearing_slot": ["pitch_identity", "rhythm", "cycle_state", "mirrored_direction", "ground_displacement", "phase"]
+}

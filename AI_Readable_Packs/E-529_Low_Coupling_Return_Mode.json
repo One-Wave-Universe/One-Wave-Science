@@ -1,0 +1,19 @@
+{
+  "id": "E-529",
+  "name": "Low-Coupling Return Mode",
+  "standard_mapping": "neutrino",
+  "equations": [
+    "du_nu/dt+div J_nu=Q_chi_to_nu-Q_nu_to_C-Q_nu_to_m",
+    "lambda_nu_m=1/(n_m sigma_nu_m)",
+    "E_nu=eta_nu DeltaE_b"
+  ],
+  "open": [
+    "coupling",
+    "return role",
+    "flavor mixing",
+    "deposition"
+  ],
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (transport scaffold) / GREEN (cosmic-return role)"
+}

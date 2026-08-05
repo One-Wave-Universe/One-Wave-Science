@@ -1,0 +1,10 @@
+{
+  "node_id": "D-411",
+  "title": "Mirrored Axis Pairs and Directed Route Counts",
+  "canonical_source": "Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md",
+  "rule": "N mirrored axis pairs -> 2N directed routes -> 2N+1 centered states",
+  "guardrail": "Ratios with the same number do not merge across geometry, neural control, scale, or recurrence domains.",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (counting distinction) / YELLOW (cross-dimensional physical bridge)"
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>C-309: Friction Limit / Propagation Ceiling</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="C-309"><h1>C-309: Friction Limit / Propagation Ceiling</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">C-309_Friction_Limit</h1>
+</header>
+<h1 id="node-c-309-friction-limit-propagation-ceiling">Node C-309:
+Friction Limit / Propagation Ceiling</h1>
+<p><strong>Legacy claim detail:</strong> YELLOW</p>
+<p><strong>Classification:</strong> Propagation Constraint / Damping
+Formalization</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A-109 Inertial Memory, A-114 Dispersion Relation, C-303
+Kinetic Energy<br />
+Downstream: C-310 Resistance Field, C-318 Four-Interaction Mass-Effect
+Response, Book 1 Ch7 Photon, E-509 Propagation Limit / Local-Transport
+Partition</p>
+<h2 id="purpose">Purpose</h2>
+<p>C-309 separates two kinematic quantities:</p>
+<ol type="1">
+<li><strong>memory damping</strong>, controlled by A-109’s coefficient
+(); and</li>
+<li><strong>maximum propagation speed</strong>, controlled by the real
+branch of the lattice dispersion relation.</li>
+</ol>
+<p>A previous draft misread these propagation constraints as a mechanism
+for the Mass Effect. That was a false assumption introduced by
+misunderstanding what C-309 actually describes. It is permanently
+removed. Neither damping nor propagation status generates inertia.</p>
+<h2 id="memory-damping">Memory Damping</h2>
+<p>A-109 supplies</p>
+<p>[ M_i=(1-)_i^n. ]</p>
+<ul>
+<li>(): complete carry-forward,</li>
+<li>(): no carry-forward,</li>
+<li>(0&lt;&lt;1): partial damping.</li>
+</ul>
+<p>The scale dependence ((s)) and any useful upper/lower stability
+bounds remain open.</p>
+<h2 id="propagation-ceiling">Propagation Ceiling</h2>
+<p>For the current discrete lattice candidate, the maximum supported
+signal speed is written</p>
+<p>[ c_{}=v_{} =,. ]</p>
+<p>This equation constrains travel on the real dispersion branch. It
+supplies no nonzero rest response and no term in the C-318 Mass-Effect
+tensor. Whether a mode travels below, at, or near the ceiling cannot be
+used to infer its Mass Effect.</p>
+<p>For the current candidate,</p>
+<p>[ (0)=0, ]</p>
+<p>so the propagation branch remains smooth at (k=0). Any nonzero Mass
+Effect must instead be calculated from the work required to carry and
+rebuild the complete four-interaction recurrence.</p>
+<h2 id="operational-separation">Operational Separation</h2>
+<pre class="text"><code>C-309: propagation and damping constraints
+E-509: local-versus-transport bookkeeping
+C-318: four-interaction carried-pattern Mass-Effect response
+A-115: unified field and local boundary-resistance view
+C-322: 125 GeV Mirror-Gate pressure-work threshold</code></pre>
+<p>The propagation ceiling can constrain transport predictions after the
+Mass-Effect mechanism is derived. It is not part of that mechanism’s
+origin.</p>
+<h2 id="canonical-prohibition">Canonical Prohibition</h2>
+<p>No active One-Wave node, chapter, wiki page, AI-readable pack,
+simulation, or diagram may derive Mass Effect from:</p>
+<ul>
+<li>propagation speed,</li>
+<li>failure to propagate,</li>
+<li>damping alone,</li>
+<li>localization share,</li>
+<li>a local/transport ratio,</li>
+<li>or the friction limit.</li>
+</ul>
+<p>Any future merge that does so fails the canonical audit
+automatically.</p>
+<h2 id="yellow-audit">Yellow Audit</h2>
+<ul>
+<li>derive the complete dispersion relation from accepted lattice
+variables;</li>
+<li>determine whether () and () are independent or coupled;</li>
+<li>derive any scale dependence ((s)) or ((s));</li>
+<li>identify the parameter regime in which the long-wave signal speed
+matches measured (c);</li>
+<li>verify that transport calculations remain separate from the C-318
+response tensor.</li>
+</ul>
+<h2 id="failure-condition">Failure Condition</h2>
+<p>C-309 fails as a universal propagation constraint if one fixed
+lattice law cannot support the required signal-speed behavior across the
+claimed regimes. It does not receive a second role as a mass mechanism
+if that happens.</p>
+</body>
+</html>

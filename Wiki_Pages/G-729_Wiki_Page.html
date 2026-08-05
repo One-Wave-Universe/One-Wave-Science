@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>.tmp_node</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#fff8db;border:2px solid #b7791f;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-729"><h1>G-729: M4 Virtual Switch Bank</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> PROPOSED_BUILD</p><p><strong>Claim detail:</strong> Initial registry locked with reserved expansion space; hardware mapping remains open</p><p class="ow-note">Canonical metadata from I-06.</p></section>
+<h1 id="node-g-729-m4-virtual-switch-bank">Node G-729: M4 Virtual Switch
+Bank</h1>
+<h2 id="purpose">1. Purpose</h2>
+<p>Provide compact subconscious control points for attention, habit,
+dream, speech, learning, external communication, motor output, and
+commitment.</p>
+<h2 id="canonical-role">2. Canonical Role</h2>
+<p>Every switch uses a signed state:</p>
+<pre class="text"><code>-1 inhibit/reverse
+ 0 hold/closed pending review
++1 permit/forward</code></pre>
+<h2 id="dependencies">3. Dependencies</h2>
+<p>Upstream: G-726, G-728, B-224. Downstream: sensor routing, speech,
+motor control, coding cells, Nexus communication.</p>
+<h2 id="inputs">4. Inputs</h2>
+<p>Instinct, habit, Administrator permission, danger interrupt,
+attention request, timeout, current Field, and expected-return
+status.</p>
+<h2 id="state-representation">5. State Representation</h2>
+<p>Each switch stores:</p>
+<pre class="text"><code>switch_id, signed_state, source, reason, priority,
+timestamp, expiration, inverse_route, override_authority</code></pre>
+<h2 id="forward-operation">6. Forward Operation</h2>
+<p>Open or close a gate crossing, route attention, permit a practiced
+routine, or hold an external action while review continues.</p>
+<h2 id="reverse-operation">7. Reverse Operation</h2>
+<p>Every switch change retains its prior state and inverse transition.
+Expired or contradicted permissions return to Hold rather than remaining
+silently open.</p>
+<h2 id="initial-registry">8. Initial Registry</h2>
+<pre class="text"><code>VS-000 Master Hold
+VS-001 Speech Permission
+VS-002 Audio Attention
+VS-003 Visual Attention
+VS-004 Internal Dialogue
+VS-005 Imagination
+VS-006 Dream Mode
+VS-007 Memory Recall
+VS-008 Habit Execution
+VS-009 Danger Interrupt
+VS-010 Oversight Escalation
+VS-011 Override
+VS-012 External Communication
+VS-013 Motor Output
+VS-014 Learning Permission
+VS-015 Commit Permission
+VS-016..VS-063 Reserved</code></pre>
+<h2 id="algorithms-and-weights">9. Algorithms and Weights</h2>
+<p>Switch transition logic is exact. Learned weights may influence a
+request to change a switch, but only authorized exact rules can change
+protected switch classes.</p>
+<h2 id="safety-and-permission">10. Safety and Permission</h2>
+<p>Master Hold, Danger Interrupt, Override, and Commit Permission are
+protected instinct switches. Habits cannot rewrite them. Normal
+operation is hidden; research mode exposes complete switch logs.</p>
+<h2 id="outputs">11. Outputs</h2>
+<p>A compact switch mask, transition journal, interrupt event, or
+permission denial.</p>
+<h2 id="tests-and-falsifiers">12. Tests and Falsifiers</h2>
+<p>Test stale permission expiry, simultaneous conflicts, priority
+inversion, emergency interruption, and audit replay. Fail if a switch
+lacks provenance, inverse route, or expiration behavior.</p>
+<h2 id="status-and-open-questions">13. Status and Open Questions</h2>
+<p>The initial 64-slot address space is a build choice, not a universal
+constant. Reserved slots must remain unassigned until a named function
+and authority rule exist.</p>
+</body>
+</html>

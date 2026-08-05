@@ -1,0 +1,16 @@
+{
+  "node_id": "G-723",
+  "title": "Pisot-Salem-Mahler Motor Stability Audit",
+  "canonical_source": "Nodes/G-723_Pisot_Salem_Mahler_Motor_Stability_Audit.md",
+  "role": "spectral validation, not movement generation",
+  "metrics": [
+    "eigenvalues",
+    "spectral radius",
+    "Mahler measure",
+    "Lyapunov estimates",
+    "transient amplification"
+  ],
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (external algebraic definitions) / YELLOW (motor-controller relevance)"
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>G-721e: Plastic-Padovan Three-Rail Grammar</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-721e"><h1>G-721e: Plastic-Padovan Three-Rail Grammar</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (algebraic recurrence) / YELLOW (alphabet and motor relevance)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-g-721e-plastic-padovan-three-rail-grammar">Node G-721e:
+Plastic-Padovan Three-Rail Grammar</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (algebraic recurrence) / YELLOW
+(alphabet and motor relevance)</p>
+<p><strong>Classification:</strong> Three-Rail Substitution Candidate /
+Padovan Validation</p>
+<p><strong>Dependencies</strong><br />
+Upstream: G-721 Mirrored Alphabet Packet, G-721b Sturmian Branch
+Grammar<br />
+Lateral: G-723 Spectral Audit<br />
+Downstream: three-rail rabbit tests, Android procedural-route
+experiments</p>
+<h2 id="three-alphabet-rails">Three Alphabet Rails</h2>
+<p>For letter index <code>n</code>, define the retained packet rails</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>n</mi></msub><mo>=</mo><mi>n</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>E</mi><mi>n</mi></msub><mo>=</mo><mn>2</mn><mi>n</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>O</mi><mi>n</mi></msub><mo>=</mo><mn>2</mn><mi>n</mi><mo>+</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+I_n=n,\qquad E_n=2n,\qquad O_n=2n+1.
+</annotation></semantics></math></p>
+<p>Here <code>I</code>, <code>E</code>, and <code>O</code> mean
+identity/reference, even recursive rail, and odd recursive rail. They
+are not physical particles or binary truth values.</p>
+<h2 id="plastic-substitution-candidate">Plastic Substitution
+Candidate</h2>
+<p>Use the ternary substitution</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>I</mi><mo>↦</mo><mi>E</mi><mi>O</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>E</mi><mo>↦</mo><mi>I</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>O</mi><mo>↦</mo><mi>E</mi></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{I\mapsto EO,\qquad E\mapsto I,\qquad O\mapsto E}.
+</annotation></semantics></math></p>
+<p>With columns ordered <code>I,E,O</code>, its incidence matrix is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>P</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+M_P=
+\begin{pmatrix}
+0&amp;1&amp;0\\
+1&amp;0&amp;1\\
+1&amp;0&amp;0
+\end{pmatrix},
+</annotation></semantics></math></p>
+<p>with characteristic polynomial</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msup><mi>x</mi><mn>3</mn></msup><mo>−</mo><mi>x</mi><mo>−</mo><mn>1</mn></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{x^3-x-1}.
+</annotation></semantics></math></p>
+<p>The dominant real root is the plastic number</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>≈</mo><mn>1.324717957</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\rho\approx1.324717957.
+</annotation></semantics></math></p>
+<p>Its other two conjugates lie inside the unit circle, making
+<code>rho</code> a Pisot number.</p>
+<h2 id="padovan-length-recurrence">Padovan Length Recurrence</h2>
+<p>Let <code>W_m</code> be the <code>m</code>th substitution word and
+<code>L_m=|W_m|</code>. After seed convention is declared, the lengths
+obey the Padovan-type recurrence</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>L</mi><mrow><mi>m</mi><mo>+</mo><mn>3</mn></mrow></msub><mo>=</mo><msub><mi>L</mi><mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>L</mi><mi>m</mi></msub></mrow></menclose><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\boxed{L_{m+3}=L_{m+1}+L_m},
+</annotation></semantics></math></p>
+<p>and successive ratios converge to <code>rho</code>.</p>
+<p>The exact initial terms depend on seed and indexing and must be
+stored with every receipt.</p>
+<h2 id="candidate-one-wave-interpretation">Candidate One-Wave
+Interpretation</h2>
+<p>The substitution may test an ordered three-rail return grammar:</p>
+<pre class="text"><code>identity opens recursive availability
+odd returns through even
+even returns to identity</code></pre>
+<p>This is a proposed mapping, not a theorem of plastic-number
+dynamics.</p>
+<p>For active rail symbol <code>s_t</code>, map</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>n</mi><mi>t</mi></msub><mo>,</mo><msub><mi>s</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>n</mi><mi>t</mi></msub><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mi>I</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>2</mn><msub><mi>n</mi><mi>t</mi></msub><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mi>E</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>2</mn><msub><mi>n</mi><mi>t</mi></msub><mo>+</mo><mn>1</mn><mo>,</mo></mtd><mtd columnalign="left" style="text-align: left"><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mi>O</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">
+R(n_t,s_t)=
+\begin{cases}
+n_t,&amp;s_t=I,\\
+2n_t,&amp;s_t=E,\\
+2n_t+1,&amp;s_t=O.
+\end{cases}
+</annotation></semantics></math></p>
+<p>Foundational choice then gives negative movement, hold, or positive
+movement along the selected route.</p>
+<h2 id="relationship-to-sturmianfibonacci">Relationship to
+Sturmian/Fibonacci</h2>
+<ul>
+<li>the plastic substitution schedules all three retained rails
+<code>I/E/O</code>;</li>
+<li>Sturmian/Fibonacci structure may separately validate the binary
+<code>E/O</code> branch when that subproblem is active;</li>
+<li>neither validator replaces live choice.</li>
+</ul>
+<h2 id="required-tests">Required Tests</h2>
+<ul>
+<li>exact substitution receipts;</li>
+<li>characteristic polynomial and eigenvalues;</li>
+<li>Padovan length recurrence;</li>
+<li>route-symbol frequencies;</li>
+<li>recurrence gaps;</li>
+<li>forward/reverse and sign-mirror consistency;</li>
+<li>comparison with Tribonacci, periodic, random, and learned
+schedules;</li>
+<li>motor-task performance when used downstream.</li>
+</ul>
+<h2 id="falsifiers">Falsifiers</h2>
+<p>Reject this mapping if the three-rail interpretation adds no
+predictive or control value, if it cannot preserve all packet rails
+without ambiguity, or if the claimed Padovan recurrence depends on
+undeclared seed manipulation.</p>
+<h2 id="reference-receipts">Reference Receipts</h2>
+<figure>
+<img
+src="../Nodes/G-721_Sequence_Validation/plastic_padovan_convergence.png"
+alt="Plastic-Padovan generation-length ratios converging toward the plastic number." />
+<figcaption aria-hidden="true">Plastic-Padovan generation-length ratios
+converging toward the plastic number.</figcaption>
+</figure>
+<p><code>Nodes/G-721_Sequence_Validation/</code> stores the exact
+generation table and validator. The receipt validates the substitution
+and length recurrence only.</p>
+</body>
+</html>

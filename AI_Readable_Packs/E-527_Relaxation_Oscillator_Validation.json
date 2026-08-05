@@ -1,0 +1,78 @@
+{
+  "node": "E-527",
+  "status_result": "BRONZE validation of reduced hybrid model",
+  "timestamp_note": "Generated during repository update; no external data used.",
+  "software": {
+    "python": "3.13.5 (main, May  5 2026, 21:05:52) [GCC 14.2.0]",
+    "platform": "Linux-6.12.13-x86_64-with-glibc2.41",
+    "numpy": "2.3.5",
+    "matplotlib": "3.10.8"
+  },
+  "script_sha256": "b35259ddf60a67ed8070fd101baae780ef1b055f5fdaf26ae5e9fe3691a4ed0d",
+  "parameters": {
+    "R_star": 0.85,
+    "P": 0.08,
+    "loss": 0.1,
+    "depletion": 0.6,
+    "C_on": 0.55,
+    "C_off": 0.25,
+    "U0": 0.3,
+    "dt": 0.001,
+    "t_end": 90.0
+  },
+  "case_1": {
+    "claim": "C=R*U with constant supply approaches a plateau and does not cycle.",
+    "plateau_monotonic": true,
+    "U_equilibrium": 0.7999999999999999,
+    "U_final": 0.7987606239116668,
+    "absolute_equilibrium_error": 0.0012393760883331328
+  },
+  "case_2": {
+    "claim": "Finite substrate without recharge creates one transient pulse, not repeated oscillation.",
+    "substrate_decay_rate": 0.25,
+    "pulse_count": 1,
+    "peak_time": 6.029,
+    "peak_C": 0.47071688173281845
+  },
+  "case_3": {
+    "claim": "Recharge plus state-dependent depletion and hysteresis creates a stable relaxation cycle.",
+    "analytic": {
+      "cycles": true,
+      "U_on": 0.6470588235294118,
+      "U_off": 0.29411764705882354,
+      "U_charge_eq": 0.7999999999999999,
+      "U_release_eq": 0.1142857142857143,
+      "T_charge": 11.962507582320264,
+      "T_release": 1.5515327705933921,
+      "T_period": 13.514040352913655
+    },
+    "release_on_events": [
+      11.846,
+      25.362000000000002,
+      38.878,
+      52.394,
+      65.91,
+      79.426
+    ],
+    "release_off_events": [
+      13.398,
+      26.914,
+      40.43,
+      53.946,
+      67.462,
+      80.97800000000001
+    ],
+    "cycle_count": 6,
+    "numerical_period": 13.516,
+    "period_error_percent": 0.01450082310818518,
+    "validation_period_error_below_0_5_percent": true
+  },
+  "scope_limits": [
+    "R* is a settled synchronization input, not a full simulated Kuramoto lattice.",
+    "The model validates internal dynamics only, not a specific biological event.",
+    "Thresholds and parameter values are normalized test values, not measured constants."
+  ],
+  "gate": "BRONZE",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "None"
+}

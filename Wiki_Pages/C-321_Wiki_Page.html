@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>C-321: Reduced Multi-Center Tension Network</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="C-321"><h1>C-321: Reduced Multi-Center Tension Network</h1><p><strong>Gate:</strong> GREEN &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (N=3 reduced geometry) / GREEN (N&gt;3 and nuclear application)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-c-321-reduced-multi-center-tension-network">Node C-321:
+Reduced Multi-Center Tension Network</h1>
+<p><strong>Legacy claim detail:</strong> YELLOW (N=3 reduced geometry) / GREEN
+(N&gt;3 and nuclear application)</p>
+<p><strong>Classification:</strong> Boundary-Tension Reduction /
+Junction Geometry</p>
+<p><strong>Dependencies</strong><br />
+Upstream: C-317 Boundary-Tension Weave, A-112 Persistent Mode, A-116
+Three-Dimensional Spherical Default, A-117 Dimensional Integrity, D-409
+Twelvefold 3D Close-Packed Coordination<br />
+Downstream: future separated-center simulations; possible nuclear bridge
+only after an inter-nucleon coupling law is derived</p>
+<h2 id="scope-correction">Scope Correction</h2>
+<p>C-317 now describes an intact Three-Vortex Knot as a continuous 3D
+Boundary-Tension Weave. C-321 does not replace that spherical/volumetric
+geometry with literal strings.</p>
+<p>C-321 applies only in a <strong>reduced neck regime</strong> where
+several spatially separated centers are connected by slender
+high-tension regions. The connection to C-317 survives if</p>
+<p>[ , ]</p>
+<p>where (a_i) is neck radius and (L_i) is segment length, and if
+junction-core energy is small compared with the line contribution.</p>
+<p>For an intact proton-sized knot, the continuous 3D weave remains
+primary.</p>
+<h2 id="reduced-energy">Reduced Energy</h2>
+<p>C-317 supplies the line-tension limit</p>
+<p>[ E_i_iL_i. ]</p>
+<p>For a junction at (J) connected to centers (q_i), use</p>
+<p>[ E(J) = _{i=1}^{N}_i|J-q_i|+E_J, ]</p>
+<p>where (E_J) is the unresolved finite junction-core energy.</p>
+<p>The stationarity condition is</p>
+<p>[ _{J}E = _i_i<em>i + </em>{J}E_J =0, ]</p>
+<p>with</p>
+<p>[ _i = . ]</p>
+<p>If (E_J) is locally position-independent, force balance reduces
+to</p>
+<p>[ _i_i_i=0. ]</p>
+<h2 id="three-equal-tensions">Three Equal Tensions</h2>
+<p>For (N=3) and (_1=_2=_3=_T), force balance yields</p>
+<p>[ _1+ _2+ _3=0. ]</p>
+<p>Squaring the vector relation gives</p>
+<p>[ _i_j=-, ]</p>
+<p>so the three necks meet at (120^). This is the Fermat/Torricelli
+geometry when all triangle angles permit an interior junction.</p>
+<p>For unequal tensions,</p>
+<p>[ _{ij} = . ]</p>
+<p>Thus the junction angles are predictions of derived tensions, not
+always 120 degrees.</p>
+<h2 id="delta-versus-y-reduction">Delta Versus Y Reduction</h2>
+<p>For three separated centers,</p>
+<p>[ E_ = <em>T(r</em>{12}+r_{23}+r_{31}), ]</p>
+<p>while</p>
+<p>[ E_Y = <em>T</em>{J} ( |J-q_1| +|J-q_2| +|J-q_3| )+E_J. ]</p>
+<p>The previous numerical example remains a valid geometry check for the
+length minimization, but it does not calibrate (_T), derive (E_J), or
+prove literal tube geometry inside an intact knot.</p>
+<h2 id="nuclear-scale-warning">Nuclear-Scale Warning</h2>
+<p>C-317 describes confinement among Vortex Phases inside a proton-like
+knot. That does not automatically provide the force between separate
+protons and neutrons.</p>
+<p>Therefore C-321 must not be used as a carbon-12 binding law until a
+distinct bridge derives how intact nucleon knots couple to one another.
+An N=12 Steiner tree of nucleon centers would otherwise be a geometrical
+exercise attached to the wrong physical interaction.</p>
+<h2 id="yellow-audit">Yellow Audit</h2>
+<ul>
+<li>derive the neck-regime reduction from the full C-317 field
+energy;</li>
+<li>derive (_i), neck radii, and junction-core energy;</li>
+<li>test when an interior junction is favored over boundary
+attachment;</li>
+<li>simulate the transition between continuous spherical weave and
+reduced neck network;</li>
+<li>derive an inter-nucleon coupling law before any nuclear or carbon
+application;</li>
+<li>treat N&gt;3 topology as open, not as a routine extension of the N=3
+result.</li>
+</ul>
+<h2 id="resolution">Resolution</h2>
+<p>The C-317 geometry change does <strong>not</strong> break C-321. It
+narrows it:</p>
+<pre class="text"><code>continuous 3D weave -&gt; slender-neck limit -&gt; reduced line-tension network</code></pre>
+<p>The N=3 Fermat result survives inside that limit. The former claim
+that it already extends directly to multi-nucleon nuclear binding does
+not.</p>
+</body>
+</html>

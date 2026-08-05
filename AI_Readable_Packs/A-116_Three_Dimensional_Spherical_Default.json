@@ -1,0 +1,17 @@
+{
+  "id": "A-116",
+  "name": "Three-Dimensional Spherical Default",
+  "claim": "physical bounded modes are 3D and sphere-like at minimum energy; 2D is cross-section, projection, or explicit layer",
+  "equations": [
+    "E_s=sigma A",
+    "A^3>=36 pi V^2",
+    "r=R0+sum a_lm Y_lm"
+  ],
+  "open": [
+    "node-specific deformations",
+    "literal status of negative-space 2D layer"
+  ],
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (minimum-surface geometry) / GREEN (universal application)"
+}

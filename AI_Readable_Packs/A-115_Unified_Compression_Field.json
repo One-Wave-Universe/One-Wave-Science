@@ -1,0 +1,42 @@
+{
+  "id": "A-115",
+  "name": "Unified Compression Field",
+  "locked_claims": [
+    "gravity, extended compression, local Mass Effect, and Mirror-Gate boundary response are views of one field",
+    "Mass Effect and the 125 GeV gate are different responses of the same four-interaction architecture",
+    "no cosmic expansion in One-Wave",
+    "White Energy is outward reinjection, not space expansion"
+  ],
+  "equations": [
+    "chi=-div(u)",
+    "g_OW=-alpha_g grad(chi)",
+    "M_ij=d^2 E4/(dv_i dv_j) at v=0",
+    "M_jk=sum_i DeltaV (D_j Z_0,i)^T W_i (D_k Z_0,i)",
+    "E_MG=E4(q_G)-E4(q_0) approximately 125 GeV",
+    "closed static accounting includes photon, compression, return-mode, compact-reservoir, and White-Energy densities",
+    "R_G=E_MG/(m_eff*v_lat^2)=DeltaE_G_dimensionless/m_tilde",
+    "F=M*a+C*v with drag separated from Mass Effect",
+    "W_drive=E_MG+E_diss for lossy gate crossing"
+  ],
+  "dependencies": [
+    "A-116",
+    "C-318",
+    "C-322",
+    "E-528",
+    "E-529",
+    "E-530"
+  ],
+  "open": [
+    "derive four-interaction response matrix",
+    "derive four-interaction work metric W",
+    "choose independent-calibration or 125-GeV-calibration route",
+    "derive 125 GeV pressure-work barrier",
+    "derive redshift coefficient",
+    "derive neutrino return",
+    "simulate static energy balance"
+  ],
+  "conservation": "d/dt integral(u_gamma+u_chi+u_nu+u_C+u_W)dV = boundary flux only",
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (field decomposition and static-loop equations) / GREEN (physical identity claims and coefficients)"
+}

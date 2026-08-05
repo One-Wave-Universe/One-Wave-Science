@@ -1,0 +1,9 @@
+{
+  "node_id": "D-412",
+  "title": "Lattice Simulation and State-Driven Visualization Standard",
+  "canonical_source": "Nodes/D-412_Lattice_Simulation_and_State_Driven_Visualization_Standard.md",
+  "rule": "Render only quantities calculated from the simulation state; require raw receipts, graphs, failure cases, and dimensional declarations.",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (simulation standard) / YELLOW (physical implementations pending)"
+}

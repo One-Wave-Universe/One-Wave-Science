@@ -1,0 +1,135 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-109: INERTIAL MEMORY</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-109"><h1>A-109: INERTIAL MEMORY</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-109</h3><p><b>Classification</b><br>Recursive State Persistence Primitive</p><p><b>Canonical source</b><br>Nodes/A-109_Inertial_Memory.md</p></div><div class="content"><p>NODE A-109: INERTIAL MEMORY STATUS: YELLOW CLASSIFICATION: Recursive
+State Persistence Primitive LAYER: A-Series Core</p>
+<p>DEPENDENCIES: UPSTREAM: A-107 Bounded Motion. DOWNSTREAM: A-110
+Oscillation, A-111 Recursion, C-309 Friction Limit (γ as the friction
+mechanism), C-313 Lorentz Invariance Conflict (γ is the source of the
+conflict).</p>
+<ol type="1">
+<li>PURPOSE FUNCTION: Defines the field property that carries previous
+state information into future updates.</li>
+</ol>
+<p>INPUT: Previous state transition.</p>
+<p>OUTPUT: Memory contribution to next recursive update.</p>
+<p>ROLE: Converts prior state information into temporal continuity.</p>
+<ol start="2" type="1">
+<li>DEFINITION Inertial Memory is the persistence of previous state
+information through recursive change.</li>
+</ol>
+<p>EQUATION:</p>
+<p>Δψₙ = ψₙ - ψₙ₋₁</p>
+<p>MEMORY CONTRIBUTION:</p>
+<p>Mₙ=(1-γ)Δψₙ</p>
+<p>NO MEMORY: Previous state does not influence future update.</p>
+<p>MEMORY PRESENT: Previous state contributes to future update.</p>
+<ol start="3" type="1">
+<li>STATE VARIABLES ψₙ = Current field state. ψₙ₋₁ = Previous field
+state. Δψₙ = State transition difference. γ = Memory damping parameter.
+Mₙ = Inertial memory contribution.</li>
+</ol>
+<p>CONDITIONS:</p>
+<p>γ=0 → Complete carry-forward.</p>
+<p>γ=1 → No carry-forward.</p>
+<p>0&lt;γ&lt;1 → Partial memory with damping.</p>
+<ol start="4" type="1">
+<li>MATHEMATICS FULL UPDATE RULE:</li>
+</ol>
+<p>ψᵢⁿ⁺¹ = ψᵢⁿ + (1-γ)(ψᵢⁿ-ψᵢⁿ⁻¹) + βᵢ(<ψⱼⁿ>-ψᵢⁿ)</p>
+<p>TERMS:</p>
+<p>Current State: ψᵢⁿ</p>
+<p>Memory Contribution: (1-γ)(ψᵢⁿ-ψᵢⁿ⁻¹)</p>
+<p>Neighbor Interaction: βᵢ(<ψⱼⁿ>-ψᵢⁿ)</p>
+<p>LIMITS:</p>
+<p>γ=0 → Maximum persistence.</p>
+<p>γ=1 → No inertial contribution.</p>
+<ol start="5" type="1">
+<li>RELATIONSHIP CHAIN:</li>
+</ol>
+<p>A-102 Displacement → A-106 Pressure Response → A-107 Bounded Motion →
+A-109 Inertial Memory → A-110 Oscillation → A-111 Recursion.</p>
+<p>ROLE:</p>
+<p>Displacement creates state change.</p>
+<p>Pressure Response organizes field behavior.</p>
+<p>Bounded Motion restricts escape.</p>
+<p>Inertial Memory preserves transition history.</p>
+<p>BOUNDARY:</p>
+<p>Inertial Memory preserves continuity. It does not independently
+define Oscillation or Recursion.</p>
+<ol start="6" type="1">
+<li>OPERATIONAL RULE NO MEMORY:</li>
+</ol>
+<p>ψₙ₋₁ has no influence on ψₙ₊₁.</p>
+<p>MEMORY EXISTS:</p>
+<p>ψₙ₋₁ contributes to ψₙ₊₁.</p>
+<p>RULE:</p>
+<p>Previous state + Current transition → Future state update.</p>
+<ol start="7" type="1">
+<li>RECURSIVE POSITION FUNCTION:</li>
+</ol>
+<p>Provides temporal continuity required for recursive behavior.</p>
+<p>BOUNDARY:</p>
+<p>Does not define the recursion operator itself.</p>
+<ol start="8" type="1">
+<li>RECURSIVE SCALING REQUIREMENT:</li>
+</ol>
+<p>Preserve memory behavior across Micro, Small, Medium, Large,
+Macro.</p>
+<p>OPEN:</p>
+<p>Does the same memory rule remain invariant across scales?</p>
+<ol start="9" type="1">
+<li>CONSTRAINTS C-301: Shared ground assumption requires
+validation.</li>
+</ol>
+<p>C-302: Memory depth beyond two states unresolved.</p>
+<p>C-303: Field memory represents motion history, not static storage
+only.</p>
+<p>C-304: γ promotion to operator Γ unresolved.</p>
+<p>C-305: Coupling range beyond nearest-neighbor unresolved.</p>
+<ol start="10" type="1">
+<li>DEPENDENCIES UPSTREAM:</li>
+</ol>
+<p>A-107 Bounded Motion.</p>
+<p>DOWNSTREAM:</p>
+<p>A-110 Oscillation.</p>
+<p>A-111 Recursion.</p>
+<p>ROLE:</p>
+<p>Recursive persistence layer.</p>
+<ol start="11" type="1">
+<li>FAILURE MODES F-601: No memory retention.</li>
+</ol>
+<p>F-602: Excessive damping.</p>
+<p>F-603: Unbounded memory amplification.</p>
+<p>F-604: Incorrect memory depth assumption.</p>
+<p>F-605: Coupling instability.</p>
+<ol start="12" type="1">
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN:</p></li>
+<li><p>γ is experimentally constrained.</p></li>
+<li><p>Memory depth requirement is established.</p></li>
+<li><p>Recursive behavior is reproduced.</p></li>
+<li><p>Oscillation coupling is validated.</p></li>
+</ol>
+<p>CURRENT:</p>
+<p>Definition ✅ Update Rule ✅ Memory Parameter Defined ✅ Dependency
+Chain ✅ Memory Depth ❌ Experimental Validation ❌</p>
+<p>GATE:</p>
+<p>GREEN = Defined. YELLOW = Constrained/Testable. BRONZE = Validated.
+SILVER = Integrated. GOLD = Confirmed.</p>
+<ol start="13" type="1">
+<li>FINAL DEFINITION / CLOSURE NODE:</li>
+</ol>
+<p>A-109 Inertial Memory.</p>
+<p>DEFINITION:</p>
+<p>Inertial Memory is the field property that carries previous state
+information into the next recursive update.</p>
+<p>EQUATION:</p>
+<p>Δψₙ = ψₙ - ψₙ₋₁</p>
+<p>FUNCTION:</p>
+<p>Provides continuity between states and enables recursive
+evolution.</p>
+<p>BOUNDARY:</p>
+<p>No Memory → No Recursion.</p>
+<p>STATUS:</p>
+<p>YELLOW.</p>
+</div><div class="clear"></div></div></body></html>

@@ -1,0 +1,15 @@
+{
+  "node_id": "G-721e",
+  "title": "Plastic-Padovan Three-Rail Grammar",
+  "canonical_source": "Nodes/G-721e_Plastic_Padovan_Three_Rail_Grammar.md",
+  "substitution": {
+    "I": "EO",
+    "E": "I",
+    "O": "E"
+  },
+  "polynomial": "x^3-x-1",
+  "role": "candidate scheduler for n,2n,2n+1 rails",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (algebraic recurrence) / YELLOW (alphabet and motor relevance)"
+}

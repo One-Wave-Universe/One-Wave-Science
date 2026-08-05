@@ -1,0 +1,106 @@
+{
+  "version": "1.1-multimodal",
+  "reserved_memory_percent": {
+    "dialogue": 20.0,
+    "sound": 20.0,
+    "image": 20.0,
+    "body_pressure": 20.0,
+    "movement_gaze": 20.0
+  },
+  "storage_total_percent": 100.0,
+  "profile": "dialogue_sound_pressure_heavy_with_faint_image_access",
+  "recall_cases": [
+    {
+      "expected_memory": "COMPRESS_RELEASE",
+      "selected_memory": "COMPRESS_RELEASE",
+      "correct_attractor": true,
+      "converged": true,
+      "sweeps": 2,
+      "initial_energy": -76.71249999999998,
+      "final_energy": -118.87499999999997,
+      "weighted_overlap": 0.9962752778635382,
+      "modality_overlap": {
+        "dialogue": 1.0,
+        "sound": 1.0,
+        "image": 0.9375,
+        "body_pressure": 1.0,
+        "movement_gaze": 1.0
+      },
+      "live_attention_percent": {
+        "dialogue": 33.23186168570546,
+        "sound": 22.32824384630498,
+        "image": 5.959555418338994,
+        "body_pressure": 21.653793258300826,
+        "movement_gaze": 16.826545791349744
+      },
+      "missing_modalities": [
+        "image"
+      ]
+    },
+    {
+      "expected_memory": "CAUTION_HOLD",
+      "selected_memory": "CAUTION_HOLD",
+      "correct_attractor": true,
+      "converged": true,
+      "sweeps": 2,
+      "initial_energy": -16.012500000000003,
+      "final_energy": -102.81249999999999,
+      "weighted_overlap": 1.0,
+      "modality_overlap": {
+        "dialogue": 1.0,
+        "sound": 1.0,
+        "image": 1.0,
+        "body_pressure": 1.0,
+        "movement_gaze": 1.0
+      },
+      "live_attention_percent": {
+        "dialogue": 34.56323591831602,
+        "sound": 22.686280674726067,
+        "image": 6.669003788652906,
+        "body_pressure": 20.4635519014007,
+        "movement_gaze": 15.617927716904308
+      },
+      "missing_modalities": [
+        "sound",
+        "image",
+        "movement_gaze"
+      ]
+    },
+    {
+      "expected_memory": "DRIVE_APPROACH",
+      "selected_memory": "DRIVE_APPROACH",
+      "correct_attractor": true,
+      "converged": true,
+      "sweeps": 2,
+      "initial_energy": -36.5125,
+      "final_energy": -108.81249999999999,
+      "weighted_overlap": 1.0,
+      "modality_overlap": {
+        "dialogue": 1.0,
+        "sound": 1.0,
+        "image": 1.0,
+        "body_pressure": 1.0,
+        "movement_gaze": 1.0
+      },
+      "live_attention_percent": {
+        "dialogue": 28.92259267231751,
+        "sound": 27.016956587075626,
+        "image": 7.227096423073955,
+        "body_pressure": 21.305409455886476,
+        "movement_gaze": 15.527944861646432
+      },
+      "missing_modalities": [
+        "dialogue",
+        "image"
+      ]
+    }
+  ],
+  "correct_recalls": 3,
+  "total_recalls": 3,
+  "hopfield_preservation": {
+    "copied_source_sha256": "8e0864dbfae51850bb9abcdd14e1f8b67f08ff9ac37ec4312dca14d7b940eb47",
+    "source_sha256": "8e0864dbfae51850bb9abcdd14e1f8b67f08ff9ac37ec4312dca14d7b940eb47",
+    "exact_source_preserved": true
+  },
+  "architectural_note": "Five equal memory banks are not automatically the same as the five M4 pathways. M4 will later mix and route these representations into the transmission lanes."
+}

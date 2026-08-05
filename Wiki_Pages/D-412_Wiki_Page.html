@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>D-412: Lattice Simulation and State-Driven Visualization Standard</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="D-412"><h1>D-412: Lattice Simulation and State-Driven Visualization Standard</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (simulation standard) / YELLOW (physical implementations pending)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">D-412 Wiki Page</h1>
+</header>
+<h1
+id="node-d-412-lattice-simulation-and-state-driven-visualization-standard">Node
+D-412: Lattice Simulation and State-Driven Visualization Standard</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (simulation standard) / YELLOW
+(physical implementations pending)</p>
+<p><strong>Classification:</strong> Simulation Governance / Wiki
+Laboratory Standard / Dimensional Visualization</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A-102 Displacement, A-103 Differential, A-105 Restoring
+Response, A-117 Dimensional Integrity, C-317 Boundary-Tension Weave,
+D-408, D-409, D-410, D-411<br />
+Lateral: I-02 proof lifecycle, G-706 Validation<br />
+Downstream: D-413 Ground-lattice orbital-restoring lab,
+circulation-emergence, Vortex-Phase, Three-Vortex-Knot,
+electrical-shell, Mirror-Gate, and Mass-Effect simulations</p>
+<h2 id="purpose">Purpose</h2>
+<p>A moving picture is not automatically a simulation. A valid One-Wave
+simulation must evolve declared state variables under a reproducible
+update law, calculate measurements from those states, expose failure
+conditions, and render only quantities actually present in the run.</p>
+<p>[ ]</p>
+<p>The prohibited reversal is</p>
+<p>[ . ]</p>
+<h2 id="native-geometry">Native Geometry</h2>
+<ul>
+<li>native 2D tests use the D-408 triangular connection lattice and
+hexagonal cell/neighborhood view;</li>
+<li>native 3D physical tests use the D-409 volumetric twelve-neighbor
+candidate;</li>
+<li>D-410 supplies recurrence/state-history requirements and is not
+silently rendered as ordinary 3D space;</li>
+<li>every view declares whether it is native, sliced, projected, or
+derived.</li>
+</ul>
+<h2 id="stationary-ground">Stationary Ground</h2>
+<p>Stationary means zero net motion at equilibrium, not frozen
+nodes:</p>
+<p>[ u_i=0,v_i=0,X_i=0. ]</p>
+<p>Every site must remain capable of displacement, transfer, restoring
+response, and return.</p>
+<h2 id="minimum-state-interface">Minimum State Interface</h2>
+<p>A physical lattice run should declare at least:</p>
+<p>[ X_i(t)=(u_i,v_i,_i,_i,q_i,B_i), ]</p>
+<p>where candidate meanings are:</p>
+<ul>
+<li>displacement <code>u</code>;</li>
+<li>local motion <code>v</code>;</li>
+<li>recurrence phase <code>phi</code>;</li>
+<li>compression state <code>chi</code>;</li>
+<li>circulation/rotation state <code>q</code>;</li>
+<li>boundary/weave state <code>B</code>.</li>
+</ul>
+<p>The exact update law remains a separate derivation. The interface
+does not prove the physics.</p>
+<h2 id="required-state-driven-views">Required State-Driven Views</h2>
+<p>A serious wiki laboratory page should be able to display synchronized
+views of one run:</p>
+<ol type="1">
+<li><strong>deformed lattice:</strong> actual displaced site positions
+and connections;</li>
+<li><strong>triangle-edge view:</strong> relative strain, shear, and
+transfer along edges;</li>
+<li><strong>hexagonal-cell view:</strong> area change, pressure,
+circulation, leakage, and center drift;</li>
+<li><strong>velocity/vector view:</strong> local flow and directional
+reconstruction;</li>
+<li><strong>vorticity view:</strong> circulation calculated from the
+velocity field;</li>
+<li><strong>resistance/restoring view:</strong> calculated local
+pushback, not generic damping color;</li>
+<li><strong>Boundary-Tension Weave view:</strong> strain and confinement
+derived from the boundary model;</li>
+<li><strong>internal/external electrical view:</strong> shown only if
+the update produces a derived differential shell response;</li>
+<li><strong>Mirror-Gate view:</strong> hold, approach, crossing, and
+return conditions calculated from the declared gate variable;</li>
+<li><strong>graph panel:</strong> live measurements from the same
+arrays.</li>
+</ol>
+<p>Flower-of-Life and Metatron-style overlays may visualize overlap
+radius or declared connection maps. They may not add couplings absent
+from the update law.</p>
+<h2 id="required-measurements">Required Measurements</h2>
+<p>At minimum, record:</p>
+<ul>
+<li>total numerical energy/work balance;</li>
+<li>maximum and RMS displacement;</li>
+<li>compression ahead and release behind a moving recurrence;</li>
+<li>edge strain and cell-area change;</li>
+<li>circulation and vorticity concentration;</li>
+<li>boundary leakage;</li>
+<li>recurrence error;</li>
+<li>recovery time after perturbation;</li>
+<li>center drift and residual wake;</li>
+<li>applied work, velocity-dependent drag, and acceleration-dependent
+response;</li>
+<li>parameter values, grid spacing, time step, seed, and code
+version.</li>
+</ul>
+<h2 id="required-failure-tests">Required Failure Tests</h2>
+<p>Every model must be capable of failing. Required tests include:</p>
+<ol type="1">
+<li>zero-input drift;</li>
+<li>time-step and spatial-refinement convergence;</li>
+<li>energy injection from numerical error;</li>
+<li>perturbation recovery versus collapse;</li>
+<li>parameter sweeps that produce stable and unstable regions;</li>
+<li>interaction ablations;</li>
+<li>dimensional projection-loss measurement;</li>
+<li>comparison against periodic, random, or simpler control models where
+relevant.</li>
+</ol>
+<h2 id="physical-simulation-ladder">Physical Simulation Ladder</h2>
+<p>The canonical dependency order is</p>
+<pre class="text"><code>stationary responsive Ground
+-&gt; displacement and recovery
+-&gt; compression / shear / rotational input
+-&gt; bounded excitation
+-&gt; circulation emergence
+-&gt; persistent confined Vortex Phase candidate
+-&gt; three-phase coupling
+-&gt; Three-Vortex Knot / proton candidate
+-&gt; electrical-shell and Mirror-Gate response
+-&gt; controlled translation
+-&gt; four-interaction Mass-Effect measurement</code></pre>
+<p>The Mass Effect is measured after a complete stable recurrence
+exists. It is not inserted as an initial parameter.</p>
+<h2 id="first-runnable-implementation">First Runnable
+Implementation</h2>
+<p>D-413 is the first implementation governed by this standard. It
+supplies a triangular Ground background, synchronized Ground-fixed and
+displacement-fixed cameras, an imposed curvature depression, off-axis
+restoring/orbital tests, torque-based axial spin, a symmetric-shell
+ablation, a no-well control, zero-input drift checks, CSV receipts, and
+batch graphs.</p>
+<p>D-413 remains Yellow because the well is imposed and the bounded
+displacement shell is a reduced collective coordinate.</p>
+<h2 id="wiki-laboratory-requirement">Wiki Laboratory Requirement</h2>
+<p>A Silver-candidate physical wiki page requires:</p>
+<ul>
+<li>runnable code or an exact executable reference;</li>
+<li>declared native dimension and projection;</li>
+<li>parameter table;</li>
+<li>raw machine-readable results;</li>
+<li>graphs;</li>
+<li>stable and failed examples;</li>
+<li>interpretation separated from output;</li>
+<li>explicit falsifiers.</li>
+</ul>
+<p>An illustration or artistic reconstruction is welcome only when
+labeled as art and grounded in a specific simulation receipt.</p>
+<h2 id="failure-revision-conditions">Failure / Revision Conditions</h2>
+<p>This standard fails if it permits an animation to be promoted without
+state equations, raw results, failure cases, or reproducibility; or if
+it forces a renderer to display a theoretical feature that the
+underlying update never calculated.</p>
+</body>
+</html>

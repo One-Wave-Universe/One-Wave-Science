@@ -1,0 +1,10 @@
+melody_name,cue_tone,cue_slot,recalled_notes,expected_notes,exact_notes,exact_sequence,attractor_name,correct_attractor,sweeps,converged,initial_energy,final_energy,energy_nonincreasing,overlap_with_expected,damaged_slots
+C_FIFTH_RETURN,C,0,"[""C"", ""G"", ""D"", ""G"", ""C""]","[""C"", ""G"", ""D"", ""G"", ""C""]",5,True,C_FIFTH_RETURN,True,2,True,-16.068181818181206,-254.21022727313022,True,1.0,"[1, 2, 3, 4]"
+E_FIFTH_RETURN,E,0,"[""E"", ""B"", ""F#"", ""B"", ""E""]","[""E"", ""B"", ""F#"", ""B"", ""E""]",5,True,E_FIFTH_RETURN,True,2,True,-16.068181818181237,-241.66477272759926,True,1.0,"[1, 2, 3, 4]"
+F_FIFTH_RETURN,F,0,"[""F"", ""C"", ""G"", ""C"", ""F""]","[""F"", ""C"", ""G"", ""C"", ""F""]",5,True,F_FIFTH_RETURN,True,2,True,-14.909090909090105,-229.3295454548105,True,1.0,"[1, 2, 3, 4]"
+C_FIFTH_RETURN,C,0,"[""C"", ""G"", ""D"", ""G"", ""C""]","[""C"", ""G"", ""D"", ""G"", ""C""]",5,True,C_FIFTH_RETURN,True,2,True,-48.664772727277956,-254.21022727313022,True,1.0,[2]
+E_FIFTH_RETURN,E,0,"[""E"", ""B"", ""F#"", ""B"", ""E""]","[""E"", ""B"", ""F#"", ""B"", ""E""]",5,True,E_FIFTH_RETURN,True,2,True,-48.664772727277914,-241.66477272759926,True,1.0,[2]
+F_FIFTH_RETURN,F,0,"[""F"", ""C"", ""G"", ""C"", ""F""]","[""F"", ""C"", ""G"", ""C"", ""F""]",5,True,F_FIFTH_RETURN,True,2,True,-45.23863636364232,-229.3295454548105,True,1.0,[2]
+C_FIFTH_RETURN,C,0,"[""C"", ""G"", ""D"", ""G"", ""C""]","[""C"", ""G"", ""D"", ""G"", ""C""]",5,True,C_FIFTH_RETURN,True,2,True,-98.3920454545246,-254.21022727313022,True,1.0,"[1, 2]"
+E_FIFTH_RETURN,E,0,"[""E"", ""B"", ""F#"", ""B"", ""E""]","[""E"", ""B"", ""F#"", ""B"", ""E""]",5,True,E_FIFTH_RETURN,True,2,True,-95.52840909089417,-241.66477272759926,True,1.0,"[1, 2]"
+F_FIFTH_RETURN,F,0,"[""F"", ""C"", ""G"", ""C"", ""F""]","[""F"", ""C"", ""G"", ""C"", ""F""]",5,True,F_FIFTH_RETURN,True,2,True,-90.46590909090108,-229.3295454548105,True,1.0,"[1, 2]"

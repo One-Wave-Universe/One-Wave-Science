@@ -1,0 +1,6 @@
+ONE-WAVE VIRTUAL LENS v1.0
+ticks: 90
+events: 911
+visual recall: 4/4 damaged cues
+occlusion prediction mean error: 1.80px
+tracked RAM: 2001408 bytes

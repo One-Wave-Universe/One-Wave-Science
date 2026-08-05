@@ -1,0 +1,172 @@
+{
+  "engine": "One_Wave_Boltzmann_Administrator_v1_0",
+  "memory_type": "Joint Restricted Boltzmann Machine",
+  "canonical_scope": "Compressive six-line Administrator only",
+  "visible_bits": 236,
+  "state_bits": 230,
+  "hidden_units": 72,
+  "training_examples": 6000,
+  "heldout_examples": 1600,
+  "heldout_accuracy": 0.835625,
+  "heldout_correct": 1337,
+  "mean_confidence": 0.9030198225356323,
+  "persistence_ok": true,
+  "codec_roundtrip_mean_abs_error": 0.0,
+  "warm_entropy_greater_than_cold": true,
+  "cold_entropy": 5.3059417930192916e-05,
+  "warm_entropy": 0.13024164654729975,
+  "six_gate_order_ok": true,
+  "gate6_broadcast_ok": true,
+  "dream_modes_external_inhibited": true,
+  "constant_loop_1200_ticks_ok": true,
+  "stress_action_counts": {
+    "HOLD": 90,
+    "CONSERVE": 50,
+    "GATHER": 147,
+    "MOVE_TO_MEMORY": 123,
+    "EXPLORE": 790,
+    "SHARE": 0
+  },
+  "mode_results": {
+    "waking": {
+      "action": "EXPLORE",
+      "confidence": 0.9782017405787841,
+      "external_release": true,
+      "gate_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "gate_messages": [
+        "Received five NEW-up and five OLD-down reference pathways.",
+        "Generated stochastic candidate actions from joint free energies.",
+        "Held multiple candidates and compared them with the previous resolved action.",
+        "4 tells 5: rebuilt candidates at lower temperature using old reference oversight.",
+        "5 tells 6: candidate accepted for closure.",
+        "6 tells everybody: broadcast resolved state and returned the next OLD reference downward."
+      ],
+      "broadcast_rule": "6 tells everybody",
+      "loop_exists": true
+    },
+    "daydream": {
+      "action": "EXPLORE",
+      "confidence": 0.9508055272967901,
+      "external_release": false,
+      "gate_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "gate_messages": [
+        "Received five NEW-up and five OLD-down reference pathways.",
+        "Generated stochastic candidate actions from joint free energies.",
+        "Held multiple candidates and compared them with the previous resolved action.",
+        "4 tells 5: rebuilt candidates at lower temperature using old reference oversight.",
+        "5 tells 6: candidate accepted for closure.",
+        "6 tells everybody: broadcast resolved state and returned the next OLD reference downward."
+      ],
+      "broadcast_rule": "6 tells everybody",
+      "loop_exists": true
+    },
+    "dream_sleep": {
+      "action": "EXPLORE",
+      "confidence": 0.9136743738384588,
+      "external_release": false,
+      "gate_order": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "gate_messages": [
+        "Received five NEW-up and five OLD-down reference pathways.",
+        "Generated stochastic candidate actions from joint free energies.",
+        "Held multiple candidates and compared them with the previous resolved action.",
+        "4 tells 5: rebuilt candidates at lower temperature using old reference oversight.",
+        "5 tells 6: candidate accepted for closure.",
+        "6 tells everybody: broadcast resolved state and returned the next OLD reference downward."
+      ],
+      "broadcast_rule": "6 tells everybody",
+      "loop_exists": true
+    }
+  },
+  "arena_boltzmann": {
+    "policy": "boltzmann",
+    "seeds": 40,
+    "ticks": 160,
+    "survived_runs": 40,
+    "mean_final_energy": 98.00465926027461,
+    "mean_food_gathered": 308.0417957072674,
+    "mean_bad_actions": 37.725,
+    "mean_gate6_broadcasts": 160.0
+  },
+  "arena_random": {
+    "policy": "random",
+    "seeds": 40,
+    "ticks": 160,
+    "survived_runs": 20,
+    "mean_final_energy": 19.885854720607576,
+    "mean_food_gathered": 84.06743006963323,
+    "mean_bad_actions": 109.05,
+    "mean_gate6_broadcasts": 0.0
+  },
+  "training_final_reconstruction_mse": 0.03016276323034697,
+  "confusion": {
+    "HOLD": {
+      "HOLD": 235,
+      "CONSERVE": 4,
+      "GATHER": 2,
+      "MOVE_TO_MEMORY": 1,
+      "EXPLORE": 21,
+      "SHARE": 0
+    },
+    "CONSERVE": {
+      "HOLD": 6,
+      "CONSERVE": 100,
+      "GATHER": 0,
+      "MOVE_TO_MEMORY": 13,
+      "EXPLORE": 37,
+      "SHARE": 0
+    },
+    "GATHER": {
+      "HOLD": 1,
+      "CONSERVE": 2,
+      "GATHER": 270,
+      "MOVE_TO_MEMORY": 8,
+      "EXPLORE": 27,
+      "SHARE": 0
+    },
+    "MOVE_TO_MEMORY": {
+      "HOLD": 0,
+      "CONSERVE": 1,
+      "GATHER": 9,
+      "MOVE_TO_MEMORY": 145,
+      "EXPLORE": 26,
+      "SHARE": 0
+    },
+    "EXPLORE": {
+      "HOLD": 30,
+      "CONSERVE": 11,
+      "GATHER": 25,
+      "MOVE_TO_MEMORY": 22,
+      "EXPLORE": 587,
+      "SHARE": 0
+    },
+    "SHARE": {
+      "HOLD": 1,
+      "CONSERVE": 0,
+      "GATHER": 2,
+      "MOVE_TO_MEMORY": 2,
+      "EXPLORE": 12,
+      "SHARE": 0
+    }
+  }
+}

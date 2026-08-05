@@ -1,0 +1,11 @@
+test_demo_and_recall (test_virtual_lens.VirtualLensTests.test_demo_and_recall) ... ok
+test_event_encoder_reports_on_and_off (test_virtual_lens.VirtualLensTests.test_event_encoder_reports_on_and_off) ... ok
+test_lens_is_partial (test_virtual_lens.VirtualLensTests.test_lens_is_partial) ... ok
+test_original_hopfield_source_hash_is_preserved (test_virtual_lens.VirtualLensTests.test_original_hopfield_source_hash_is_preserved) ... ok
+test_pattern_shape (test_virtual_lens.VirtualLensTests.test_pattern_shape) ... ok
+test_persistent_field_keeps_static_wall (test_virtual_lens.VirtualLensTests.test_persistent_field_keeps_static_wall) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.075s
+
+OK

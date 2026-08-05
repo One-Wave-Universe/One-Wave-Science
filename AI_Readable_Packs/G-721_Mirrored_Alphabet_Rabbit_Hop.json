@@ -1,0 +1,38 @@
+{
+  "node_id": "G-721",
+  "name": "Mirrored Alphabet Rabbit-Hop Coordinate Algorithm",
+  "purpose": "Symbolic identity, coordinate, and route compiler for alphabet-based rabbit hops.",
+  "packet": {
+    "positive": "(n,2n,2n+1)",
+    "negative": "(-n,-2n,-(2n+1))",
+    "n_range": [
+      1,
+      26
+    ]
+  },
+  "axes": {
+    "direction_location": "alphabet order plus Mirror-Gate side",
+    "recursive_state": "n, 2n, 2n+1 rails"
+  },
+  "branch_decode": "b=abs(r)-2*abs(n), b in {0,1}",
+  "mirror_rules": {
+    "sign_mirror": "(n,r)->(-n,-r), b unchanged",
+    "reverse": "reverse token order, do not complement"
+  },
+  "separation": {
+    "memory": "Hopfield/Boltzmann",
+    "coordinates": "mirrored alphabet",
+    "movement_geometry": "wheel system",
+    "live_choice": "-1(0)+1"
+  },
+  "validator_family": [
+    "G-721a",
+    "G-721b",
+    "G-721c",
+    "G-721d",
+    "G-721e"
+  ],
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "BRONZE (coordinate packet and mirror grammar) / YELLOW (embodied-motion implementation)"
+}

@@ -1,0 +1,89 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-114: Dispersion Relation from the Core Update Rule</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-114"><h1>A-114: Dispersion Relation from the Core Update Rule</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (derived and numerically verified — real result, real remaining gaps)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW (derived and numerically verified — real result, real remaining gaps)</div><div class="meta"><h3>A-114</h3><p><b>Classification</b><br>Foundation Extension</p><p><b>Canonical source</b><br>Nodes/A-114_Dispersion_Relation.md</p></div><div class="content"><h2 id="node-a-114-dispersion-relation-from-the-core-update-rule">Node
+A-114: Dispersion Relation from the Core Update Rule</h2>
+<p>Status: YELLOW (derived and numerically verified — real result, real
+remaining gaps)</p>
+<p>Classification: Foundation Extension</p>
+<p>Dependencies: Upstream: Core update rule (psi_i^{n+1} = psi_i^n +
+(1-gamma)(psi_i^n - psi_i^{n-1}) + beta*(&lt;psi_j^n&gt; - psi_i^n)),
+E-509 Propagation Limit (c_L = dx/dt) Downstream: D-405 Harmonic Shell
+and D-407 calibration reanalysis (provides omega(k), but does not by
+itself generate a shell-energy ladder)</p>
+<p>Purpose: D-405’s own audit states “Energy spacing DeltaE ~ hbar*omega
+— proportional, constant of proportionality not yet derived.” This node
+derives omega(k) directly from the core update rule itself — the one
+piece of math every node already inherits — rather than introducing a
+new free parameter.</p>
+<p>Derivation: Plane-wave ansatz on the core update rule: psi_i^n = A *
+z^n * e^{i<em>k</em>i<em>dx}, z = e^{-i</em>omega<em>dt}
+Nearest-neighbor average (1D case): &lt;psi_j^n&gt; - psi_i^n =
+[cos(k*dx) - 1] </em> psi_i^n (call this C)</p>
+<p>Substituting into the update rule and dividing through by psi_i^n
+gives the exact characteristic equation (verified symbolically): z^2 -
+(2 - gamma + C) z + (1 - gamma) = 0 where C = beta<em>(cos(k</em>dx) -
+1)</p>
+<p>Expanding near z=1 (slow oscillation/decay) for SMALL k and SMALL
+gamma (long wavelength, weak damping — NOT the general case) gives, to
+leading order: omega^2 ≈ -C = beta<em>(k</em>dx)^2 / 2 =&gt; omega(k) ≈
+(dx/dt) * k * sqrt(beta/2) = c_L * k * sqrt(beta/2)</p>
+<p>VERIFIED NUMERICALLY: for beta=0.5, k=0.01, dx=dt=1, gamma=0, the
+exact characteristic equation’s root gives omega = 0.0049999844…,
+matching the leading-order formula’s prediction of 0.005 to 4 decimal
+places.</p>
+<p>What this resolves: The core update rule supplies a candidate
+dispersion relation omega(k), so frequency is no longer an arbitrary
+symbol. In the small-k, small-gamma regime it depends on existing
+framework parameters beta and c_L rather than a new free constant.</p>
+<p>What it does not automatically resolve is shell energy. D-405 must
+first supply a shell-dependent k, action count, radial eigenvalue, or
+nonlinear energy functional. Without that bridge, hbar*omega(k) is a
+mode-energy form, not an adjacent-shell spacing formula.</p>
+<p>D-405 shell-number mapping result (resolved negatively for the
+current geometry): D-405 defines R_n=n<em>lambda/(2</em>pi). For an
+angular mode k_n=n/R_n, so k_n=2*pi/lambda, independent of n. Therefore
+this dispersion relation gives the same omega for every member of
+D-405’s variable-radius/fixed-lambda family. The old generic request to
+“map n to k” is no longer merely unanswered: under the current shell
+geometry it yields a constant k and cannot produce nonzero DeltaE by
+itself. D-405 must adopt a different energy model (fixed-R variable-k,
+radial eigenmodes, per-wavelength action, or nonlinear shell
+energy).</p>
+<p>What this does NOT resolve (honest limits): - beta itself has never
+been measured or independently fixed at nuclear scale — this derivation
+shows HOW omega depends on beta, not what beta IS. D-407’s calibration
+attempt (lambda_nuclear) is a separate, still- unresolved question; this
+node does not touch it. - This result is leading-order in SMALL k and
+SMALL gamma only. It says nothing about the general, non-perturbative
+case — most real bound states (including anything as tightly confined as
+a nucleon) may NOT be in this small-k regime, and this formula should
+not be assumed to hold there without separately checking. - The
+shell-number-to-wavenumber question has now been evaluated for D-405’s
+current geometry and gives k_n=2*pi/lambda, independent of n. That is a
+negative but useful result: the present geometry cannot obtain an energy
+ladder from omega(k) alone. The unresolved task is to derive a
+physically different shell-energy map, not to keep searching for an
+unspecified n-&gt;k substitution. - The damped, general-gamma case
+(gamma not small) was not solved here, only set aside — the exact
+quadratic exists and could be solved in that regime, but the resulting
+omega would in general be complex (a damped, not purely oscillatory,
+mode), and interpreting that physically is separate future work.</p>
+<p>Yellow Audit: - Small-k, small-gamma leading-order result only —
+verified within that regime, not shown to extend beyond it - beta
+remains unmeasured; this node narrows the D-405 gap, does not close it -
+For D-405’s current variable-radius geometry, n-&gt;k has been evaluated
+and is constant; a separate shell-energy model is the critical next
+connection - General (non-small) gamma case not solved</p>
+<p>Future Work: Solve the exact quadratic for general gamma (not just
+small-gamma limit) to get the full damped dispersion relation — needed
+before this applies to any real Persistent Mode, since A-112 Persistent
+Modes are specifically the STABLE, non-decaying case, which may sit
+outside the small-gamma regime this node covers. Replace D-405’s mixed
+geometry/energy assumption with a derived shell-energy model:
+fixed-radius variable-k, radial eigenmodes, per-wavelength action, or a
+nonlinear curvature/pressure/coupling energy. Revisit D-407 only after
+neutron-fit provenance and shell adjacency are established. Do not
+approach the carbon-12 Hoyle-state question until the collective-mode
+mapping is derived rather than reverse-fit.</p>
+</div><div class="clear"></div></div></body></html>

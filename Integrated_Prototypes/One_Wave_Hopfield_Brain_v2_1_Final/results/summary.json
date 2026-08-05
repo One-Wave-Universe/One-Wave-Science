@@ -1,0 +1,104 @@
+{
+  "engine": "One_Wave_Hopfield_Brain_v2_1_Final",
+  "memory_type": "Hopfield only",
+  "songs_stored": 6,
+  "vector_size": 656,
+  "recall_trials": 12,
+  "correct_attractors": 11,
+  "raw_full_exact_patterns": 1,
+  "committed_full_exact_patterns": 11,
+  "false_attractors": 1,
+  "energy_nonincreasing_trials": 12,
+  "ambiguous_single_tone_correct": 1,
+  "ambiguous_single_tone_trials": 2,
+  "context_resolved_correct": 2,
+  "context_resolved_trials": 2,
+  "damaged_pattern_correct": 6,
+  "damaged_pattern_trials": 6,
+  "persistence_ok": true,
+  "forgetting_ok": true,
+  "weight_damage": [
+    {
+      "fraction": 0.01,
+      "correct_attractor": true,
+      "raw_full_exact": false,
+      "committed_full_exact": true,
+      "exact_notes": 6,
+      "expected_overlap": 0.8262195121951219
+    },
+    {
+      "fraction": 0.03,
+      "correct_attractor": true,
+      "raw_full_exact": false,
+      "committed_full_exact": true,
+      "exact_notes": 6,
+      "expected_overlap": 0.8384146341463414
+    },
+    {
+      "fraction": 0.05,
+      "correct_attractor": true,
+      "raw_full_exact": false,
+      "committed_full_exact": true,
+      "exact_notes": 6,
+      "expected_overlap": 0.8262195121951219
+    },
+    {
+      "fraction": 0.1,
+      "correct_attractor": true,
+      "raw_full_exact": false,
+      "committed_full_exact": true,
+      "exact_notes": 6,
+      "expected_overlap": 0.8353658536585366
+    }
+  ],
+  "capacity_sweep": [
+    {
+      "stored_patterns": 2,
+      "correct_attractors": 2,
+      "exact_patterns": 2,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 1.0
+    },
+    {
+      "stored_patterns": 4,
+      "correct_attractors": 4,
+      "exact_patterns": 0,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 0.0
+    },
+    {
+      "stored_patterns": 6,
+      "correct_attractors": 6,
+      "exact_patterns": 0,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 0.0
+    },
+    {
+      "stored_patterns": 8,
+      "correct_attractors": 8,
+      "exact_patterns": 0,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 0.0
+    },
+    {
+      "stored_patterns": 10,
+      "correct_attractors": 10,
+      "exact_patterns": 0,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 0.0
+    },
+    {
+      "stored_patterns": 12,
+      "correct_attractors": 12,
+      "exact_patterns": 0,
+      "false_attractors": 0,
+      "correct_rate": 1.0,
+      "exact_rate": 0.0
+    }
+  ]
+}

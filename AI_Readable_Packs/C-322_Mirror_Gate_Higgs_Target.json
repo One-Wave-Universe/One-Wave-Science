@@ -1,0 +1,31 @@
+{
+  "node_id": "C-322",
+  "name": "Mirror-Gate 125 GeV Boundary-Response Threshold",
+  "former_name": "Mirror-Gate Higgs-Scale Resonance Target",
+  "locked_interpretation": "The approximately 125 GeV measurement is valid and is interpreted as Mirror-Gate boundary-response energy.",
+  "nominal_target": {
+    "energy_GeV": 125.0,
+    "energy_J": 2.0027207925e-08
+  },
+  "canonical_equation": "E_MG = E4(q_G)-E4(q_0) = integral_Gamma grad(E4) dot dq",
+  "pressure_reduction": "E_MG = integral_0^xi_G P_ext(xi) dxi; P_ext = P_K+P_E+P_M+P_T+P_cross, with signed contributions",
+  "gate_condition": "q_G is the first minimum-work state whose forward update crosses from the original orientation basin into the mirrored basin; saddle crossing and lambda_min=0 loss-of-hold are distinct candidates.",
+  "retired_mechanism": "hbar*omega_M = 125 GeV harmonic-oscillator substitution",
+  "mass_relation": "same four-interaction architecture, different observable; m_eff != E_MG/c^2 as mechanism",
+  "blocker": "independent microscopic lattice energy calibration and derived deformation path",
+  "scale_free_test": "R_G = E_MG/(m_eff*v_lat^2) = DeltaE_G_dimensionless/m_tilde",
+  "calibration_routes": [
+    "independent microscopic anchor -> predict 125 GeV",
+    "125 GeV anchor -> predict other masses, thresholds, and release relations"
+  ],
+  "failure_conditions": [
+    "omit one of the four interactions or cross-couplings",
+    "choose gate endpoint from the 125 GeV answer",
+    "use 125 GeV as calibration and also call it a prediction",
+    "retune coefficients for each output"
+  ],
+  "energy_accounting": "W_drive = E_MG + E_diss; current 125 GeV interpretation maps to stored/released E_MG, while E_diss must predict width/timing/loss.",
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "GREEN (One-Wave interpretation and pressure-work form) / YELLOW (first-principles numerical derivation and collider distributions)"
+}

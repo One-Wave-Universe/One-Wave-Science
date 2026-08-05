@@ -238,3 +238,15 @@ This is a concise change record, not a store of full pre-edit copies.
 - Added a responsive human workshop interface at `http://localhost:8090/`.
 - Seeded architecture, Pong, hearing, vision, memory, encyclopedia, and central-plaza rooms.
 - Added API smoke test and standard-library-only startup.
+
+## Update 46 — 2026-08-04
+
+- Preserved the complete Update 45 repository.
+- Added the continuous-mirror harmonic recurrence with one shared driven carrier and fixed two-unit mirror width.
+- Locked `A- = 1,2,1` and `A+ = 1,2,3` alphabet oscillator forms.
+- Added A–G# harmonic packets using `2(n+1)` and `2(n+1) +/- 1`.
+- Added the four synchronized wheels: -5ths, Root, +4ths, +3rds; 6 o'clock is inversion/mirror, not a tritone node.
+- Added rotation-initiation mechanics for Point, Path, and Field.
+- Added electric/magnetic Point–Path–Field coupling.
+- Restored hearing's two grounds, ordered slot fields, raw settled state, and committed attractor distinction.
+- Integrated the uploaded Hopfield Melody Cell, Hopfield Brain, Boltzmann Administrator, and Virtual Lens builds.

@@ -1,0 +1,22 @@
+{
+  "id": "E-528",
+  "name": "Static Redshift Transport",
+  "no_expansion": true,
+  "equations": [
+    "dE_gamma/dl=-kappa_gamma E_gamma",
+    "dnu/dl=-kappa_gamma nu",
+    "dN_gamma/dl=0 for pure redshift",
+    "1+z=exp(integral kappa_gamma dl)",
+    "Q_gamma_to_chi=c_L kappa_gamma u_gamma"
+  ],
+  "open": [
+    "derive kappa",
+    "blurring",
+    "line broadening",
+    "transient timing",
+    "energy destination"
+  ],
+  "gate": "GREEN",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (transport equation) / GREEN (tired-light identification)"
+}

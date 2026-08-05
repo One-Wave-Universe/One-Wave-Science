@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>D-413: Ground Lattice Orbital-Restoring Simulation</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="D-413"><h1>D-413: Ground Lattice Orbital-Restoring Simulation</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (reduced coupled simulation; physical derivation open)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<header id="title-block-header">
+<h1 class="title">D-413 Wiki Page</h1>
+</header>
+<p><strong><a
+href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html">Open
+the live D-413 browser simulation</a></strong> | <a
+href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/results/d413_case_comparison.png">Open
+the batch comparison graph</a></p>
+<h1 id="node-d-413-ground-lattice-orbital-restoring-simulation">Node
+D-413: Ground Lattice Orbital-Restoring Simulation</h1>
+<p><strong>Legacy claim detail:</strong> YELLOW (reduced coupled simulation; physical
+derivation open)</p>
+<p><strong>Classification:</strong> Ground-Lattice Laboratory /
+Orbital-Restoring Candidate / State-Driven Visualization</p>
+<p><strong>Dependencies</strong><br />
+Upstream: A-101 Ground Zero, A-102 Displacement, A-103 Differential,
+A-105 Restoring Response, A-109 Inertial Memory, A-117 Dimensional
+Integrity, C-317 Boundary-Tension Weave, D-408, D-411, D-412<br />
+Lateral: B-202 Pressure, E-502 Flowback, E-503 Pressure, E-506
+Stability<br />
+Downstream: bounded excitation, circulation emergence, Vortex Phase,
+quark, proton knot, electrical shell, Mirror Gate, and Mass Effect
+simulations</p>
+<h2 id="purpose">Purpose</h2>
+<p>D-413 is the first runnable Ground-lattice background for later
+physical simulations. It provides a responsive native-2D triangular
+connection lattice, a derived hexagonal-neighborhood view, an imposed
+curvature depression rendered directly through the deformed triangular
+surface, and a bounded displacement region that moves on and responds to
+that same surface.</p>
+<p>The model is deliberately lower than a quark. It asks whether a
+declared lattice can visibly and measurably:</p>
+<ul>
+<li>remain stationary at zero input without being frozen;</li>
+<li>deform, bunch, resist, and restore;</li>
+<li>carry a bounded displacement region across the Ground;</li>
+<li>display the same physical run in Ground-fixed and displacement-fixed
+camera frames;</li>
+<li>turn an off-center fall through a curvature well into orbital
+motion;</li>
+<li>generate axial torque when unequal restoring forces act across an
+asymmetric bounded shell.</li>
+</ul>
+<p>A camera change must never change the state equations:</p>
+<p>[ ]</p>
+<p>The equivalence is observational only. The physical state remains one
+run.</p>
+<h2 id="native-dimension-and-geometry">Native Dimension and
+Geometry</h2>
+<pre class="text"><code>native dimension: 2D lattice coordinates with a rendered height/depression field
+connection geometry: triangular, six directed nearest-neighbor routes
+cell/neighborhood view: derived hexagonal rings
+axis-pair count: 3 mirrored pairs
+centered local count: 6 directed routes + 1 reference
+projection: oblique 2D rendering of x,y,z state
+omitted: full 3D twelve-neighbor coordination and 4D recurrence shell</code></pre>
+<p>The lattice is not square and does not use four-neighbor Cartesian
+propagation.</p>
+<h2 id="ground-state">Ground State</h2>
+<p>Each site has rest location</p>
+<p>[ X_i<sup>0=(x_i</sup>0,y_i^0,0) ]</p>
+<p>and dynamic state</p>
+<p>[ X_i=X_i^0+u_i, _i=v_i. ]</p>
+<p>Nearest-neighbor edges supply a provisional elastic work law:</p>
+<p>[ F_{ij} = _{ij}. ]</p>
+<p>Each site also has local return and resistance:</p>
+<p>[ F_{i,} =-k_0u_i-c_0v_i. ]</p>
+<p>These are numerical candidate work laws. They do not assert that the
+physical One-Wave Ground is literally made of mechanical springs.</p>
+<h2 id="imposed-curvature-depression">Imposed Curvature Depression</h2>
+<p>The first gravitational-well test uses a declared Gaussian target
+depression:</p>
+<p>[ z_G(x,y) =-D. ]</p>
+<p>Lattice sites are initialized on this target depression when the well
+is enabled, then continue evolving under lattice coupling, restoring
+response, resistance, and well-follow forces. The well is therefore
+visible from the first frame rather than existing only as an invisible
+force calculation.</p>
+<p>The browser renderer triangulates the actual displaced lattice sites
+and shades those calculated faces. Curved contour rings sample the same
+interpolated height field used by the moving bounded region. A
+Ground-to-bottom depth marker reports the current sampled depression.
+Vertical exaggeration changes only the projection and never the state
+equations.</p>
+<p>The bounded displacement centroid and its shell samples use the same
+surface interpolation for displayed height and restoring-gradient
+calculation:</p>
+<p>[ ]</p>
+<p>If the visible depression and the sampled restoring surface disagree,
+the renderer fails.</p>
+<p>The curvature well is <strong>imposed</strong>, not derived. D-413
+therefore tests the consequences of a curvature/restoring field but does
+not claim to derive gravity.</p>
+<h2 id="bounded-displacement-region">Bounded Displacement Region</h2>
+<p>The moving structure is represented as a collective bounded shell,
+not a particle. Its reduced state is</p>
+<p>[ Q(t)=(q,,,), ]</p>
+<p>where (q) is the displacement centroid, () is shell orientation, and
+() is axial spin.</p>
+<p>The shell is sampled at points (r_a) around an ellipse. Each sample
+feels the local restoring field:</p>
+<p>[ f_a=-g_Rz(q+r_a). ]</p>
+<p>The translational restoring response is</p>
+<p>[ F_Q=_af_a-c_Q. ]</p>
+<p>The axial torque is</p>
+<p>[ ]</p>
+<p>and</p>
+<p>[ I_Q=_Q. ]</p>
+<p>For a perfectly symmetric shell in a symmetric central well, the
+finite reference ablation produces approximately zero axial torque. With
+shell asymmetry or off-axis loading, unequal restoring forces can
+produce nonzero torque.</p>
+<p>This is the precise simulation version of:</p>
+<pre class="text"><code>displacement falls across the depression
+-&gt; restoring force is unequal across the shell
+-&gt; different shell regions correct by different amounts
+-&gt; torque appears
+-&gt; orbit and axial spin may emerge</code></pre>
+<p>Spin is not inserted as an animation command.</p>
+<h2 id="lattice-coupling">Lattice Coupling</h2>
+<p>The bounded region deforms the actual lattice through a localized
+pressure field. The pressure is biased toward the direction of travel so
+the renderer can measure:</p>
+<ul>
+<li>bunching ahead;</li>
+<li>side strain;</li>
+<li>depression beneath the region;</li>
+<li>release and wake behind.</li>
+</ul>
+<p>The lattice reaction is included only as a weak reduced feedback in
+this first version. A later promotion must derive a complete
+action-reaction work ledger.</p>
+<h2 id="camera-modes">Camera Modes</h2>
+<p>The browser laboratory provides:</p>
+<ol type="1">
+<li><strong>Ground fixed:</strong> the lattice remains visually fixed
+while the displacement crosses it;</li>
+<li><strong>Displacement fixed:</strong> the displacement stays centered
+and the lattice scrolls beneath it;</li>
+<li><strong>Well fixed:</strong> the curvature center remains
+fixed.</li>
+</ol>
+<p>These are renderer transforms only:</p>
+<p>[ X_i^{} =P(X_i-C_{}). ]</p>
+<p>Changing camera mode must leave every saved metric unchanged.</p>
+<h2 id="runnable-artifacts">Runnable Artifacts</h2>
+<pre class="text"><code>Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html
+Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/simulate_d413.py
+Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/results/</code></pre>
+<p>The browser laboratory includes live controls, camera changes,
+top-down and curved-surface projections, adjustable view-only vertical
+exaggeration, shaded triangular curvature faces, sampled depth contours,
+a visible well-depth marker, lattice-freeze ablation, strain and
+velocity overlays, orbital trail, metrics, and CSV export.</p>
+<p>The batch validator runs five finite cases:</p>
+<ol type="1">
+<li>off-axis drop;</li>
+<li>asymmetric orbital shell;</li>
+<li>symmetric-shell torque ablation;</li>
+<li>no-well travel control;</li>
+<li>zero-input drift.</li>
+</ol>
+<h2 id="current-finite-results">Current Finite Results</h2>
+<p>The reference run reports:</p>
+<ul>
+<li>zero-input drift below numerical tolerance;</li>
+<li>nonzero lattice strain when pressure coupling is active;</li>
+<li>a changed path under the well compared with the no-well
+control;</li>
+<li>nonzero axial spin for the asymmetric shell;</li>
+<li>approximately zero axial spin for the symmetric-shell ablation.</li>
+</ul>
+<p>These results validate the declared reduced code path only. They do
+not validate One-Wave gravity, quark identity, proton structure,
+electrical-shell emergence, or Mass Effect.</p>
+<h2 id="required-next-tests">Required Next Tests</h2>
+<p>Before promotion, D-413 must add:</p>
+<ul>
+<li>time-step refinement;</li>
+<li>lattice-radius refinement;</li>
+<li>boundary-reflection and periodic-boundary comparisons;</li>
+<li>full work accounting for imposed well, damping, and lattice
+reaction;</li>
+<li>a field-only displacement with no collective shell coordinate;</li>
+<li>derived circulation and vorticity from the lattice state;</li>
+<li>stable-orbit windows versus capture, escape, and collapse;</li>
+<li>3D D-409 translation after the 2D mechanism is understood.</li>
+</ul>
+<h2 id="failure-revision-conditions">Failure / Revision Conditions</h2>
+<p>D-413 fails if:</p>
+<ol type="1">
+<li>camera mode changes the physical trajectory or measurements;</li>
+<li>spin remains when the shell is symmetric and all torque sources are
+removed;</li>
+<li>the zero-input lattice drifts or injects energy;</li>
+<li>the renderer displays compression, curvature, orbit, or spin not
+calculated from state;</li>
+<li>the visible well surface, contour geometry, displacement height, and
+restoring gradient do not come from the same lattice state;</li>
+<li>the curvature well is described as derived gravity;</li>
+<li>the bounded shell is mislabeled as a quark or particle;</li>
+<li>a visually attractive orbit is promoted without convergence,
+ablation, and work-ledger tests.</li>
+</ol>
+
+<h2 id="embedded-fixed-simulations">Embedded Fixed Simulations</h2>
+<p>Each viewer below is a <strong>fixed, reproducible run</strong> of the D-413 engine with locked parameters (One-Wave Experiment Protocol, governed by D-412 and A-117). Click a viewer to pause or resume. Camera or projection changes never change the physics. These are reduced Yellow models: the well is imposed and the shell is a collective coordinate.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;max-width:1100px">
+  <figure style="margin:0"><iframe src="../One_Wave_Bench/fixed_sim.html?scenario=orbit_asymmetric" style="width:100%;height:300px;border:1px solid #2d3540;border-radius:10px" title="Orbital shell with induced spin"></iframe><figcaption style="font-size:12px;color:#54595d;margin-top:5px">Orbital shell with induced spin (Ground-fixed camera).</figcaption></figure>
+  <figure style="margin:0"><iframe src="../One_Wave_Bench/fixed_sim.html?scenario=deep_well" style="width:100%;height:300px;border:1px solid #2d3540;border-radius:10px" title="Deep curvature well capture"></iframe><figcaption style="font-size:12px;color:#54595d;margin-top:5px">Deep curvature well capture (well-fixed camera).</figcaption></figure>
+  <figure style="margin:0"><iframe src="../One_Wave_Bench/fixed_sim.html?scenario=travel_across" style="width:100%;height:300px;border:1px solid #2d3540;border-radius:10px" title="Displacement travelling across fixed Ground"></iframe><figcaption style="font-size:12px;color:#54595d;margin-top:5px">Displacement travelling across a fixed lattice (Ground-fixed camera).</figcaption></figure>
+  <figure style="margin:0"><iframe src="../One_Wave_Bench/fixed_sim.html?scenario=lattice_scrolls" style="width:100%;height:300px;border:1px solid #2d3540;border-radius:10px" title="Lattice scrolling with displacement centred"></iframe><figcaption style="font-size:12px;color:#54595d;margin-top:5px">Same run, displacement-fixed camera: the lattice scrolls past.</figcaption></figure>
+</div>
+<p style="font-size:12px;color:#54595d">Live interactive lab: <a href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html">open the full D-413 controls</a>. Shared AI + human workbench: <a href="../One_Wave_Bench/index.html">open the One-Wave Bench</a>.</p>
+</body>
+</html>

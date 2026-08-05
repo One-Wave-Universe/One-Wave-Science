@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>G-721d: Arnoux-Rauzy Strict Multi-Route Validation</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="wiki.css" />
+<style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head>
+<body>
+<section id="ow-canonical-meta" data-node-id="G-721d"><h1>G-721d: Arnoux-Rauzy Strict Multi-Route Validation</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> BRONZE (external word mathematics) / YELLOW (android movement validation)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section>
+<h1 id="node-g-721d-arnoux-rauzy-strict-multi-route-validation">Node
+G-721d: Arnoux-Rauzy Strict Multi-Route Validation</h1>
+<p><strong>Legacy claim detail:</strong> BRONZE (external word mathematics) / YELLOW
+(android movement validation)</p>
+<p><strong>Classification:</strong> Strict Episturmian Validator /
+Multi-Route Complexity Audit</p>
+<p><strong>Dependencies</strong><br />
+Upstream: G-721c Episturmian Grammar, G-706 Validation<br />
+Lateral: D-411 Mirrored Axis-Pair Counts<br />
+Downstream: ternary triangular-route tests, higher-alphabet route
+experiments</p>
+<h2 id="definition">Definition</h2>
+<p>A <code>k</code>-letter Arnoux-Rauzy word is a strict episturmian
+word with exactly one left-special and one right-special factor of each
+length, each extending through the full alphabet under the standard
+definition.</p>
+<p>Its factor complexity is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>k</mi><mo>−</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow><mi>m</mi><mo>+</mo><mn>1</mn></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{p(m)=(k-1)m+1}.
+</annotation></semantics></math></p>
+<p>For <code>k=2</code>, this reduces to the Sturmian value
+<code>m+1</code>. For <code>k=3</code>,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>m</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>2</mn><mi>m</mi><mo>+</mo><mn>1</mn></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{p(m)=2m+1}.
+</annotation></semantics></math></p>
+<h2 id="ternary-route-test">Ternary Route Test</h2>
+<p>The triangular 2D lattice has three undirected route axes. A ternary
+Arnoux-Rauzy scheduler can label those route families while
+<code>-1(0)+1</code> supplies signed direction or hold.</p>
+<p>Two different <code>2n+1</code> forms must remain separate:</p>
+<ul>
+<li><code>p(n)=2n+1</code> counts route-language factors of length
+<code>n</code> in the ternary strict word;</li>
+<li>the alphabet packet value <code>2n+1</code> is the odd recursive
+rail for letter index <code>n</code>.</li>
+</ul>
+<p>Shared form is a comparison target, not variable identity.</p>
+<h2 id="directive-condition">Directive Condition</h2>
+<p>For a strict standard construction, every alphabet symbol must recur
+infinitely often in the directive sequence. Finite simulation reports
+approximate this by recording route coverage and maximum recurrence gap
+over a declared window.</p>
+<h2 id="required-validation">Required Validation</h2>
+<ol type="1">
+<li>factor complexity <code>p(m)=(k-1)m+1</code> over the finite-test
+range;</li>
+<li>unique left-special and right-special factors at each tested
+length;</li>
+<li>full-alphabet extension of the special factors;</li>
+<li>recurrence of every route symbol;</li>
+<li>reversal-language check inherited from episturmian structure;</li>
+<li>separate balance measurement;</li>
+<li>separate frequency and unique-ergodicity measurement.</li>
+</ol>
+<h2 id="guardrails">Guardrails</h2>
+<p>Arnoux-Rauzy structure does not guarantee a universal strong balance
+constant. Some examples are well balanced; others can be highly
+imbalanced. Balance is measured, not assumed.</p>
+<p>A torus rotation or Rauzy-fractal realization is available for
+important substitutive examples such as Tribonacci, but is not an
+automatic property of every Arnoux-Rauzy directive system.</p>
+<h2 id="android-use">Android Use</h2>
+<p>This validator asks whether a multi-route subconscious scheduler
+remains recurrent and minimally organized without falling into a short
+periodic loop. It does not prove that the resulting movement is safe,
+graceful, or physically efficient.</p>
+<h2 id="falsifiers">Falsifiers</h2>
+<p>Any failure of the exact complexity or special-factor conditions
+rejects an exact Arnoux-Rauzy label. A controller may still be useful
+under another classification; useful behavior does not grant a
+mathematical family name by diplomatic immunity.</p>
+<h2 id="reference-receipts">Reference Receipts</h2>
+<p>The directory <code>Nodes/G-721_Sequence_Validation/</code> contains
+finite regression tests for Fibonacci, a generic Sturmian mechanical
+word, the Tribonacci Arnoux-Rauzy reference word, and the
+plastic/Padovan substitution.</p>
+<figure>
+<img src="../Nodes/G-721_Sequence_Validation/factor_complexity.png"
+alt="Finite route-word factor complexity receipts." />
+<figcaption aria-hidden="true">Finite route-word factor complexity
+receipts.</figcaption>
+</figure>
+<p>The finite Tribonacci reference matches <code>p(n)=2n+1</code>
+through the declared test range. This validates the code and reference
+construction, not android movement.</p>
+</body>
+</html>

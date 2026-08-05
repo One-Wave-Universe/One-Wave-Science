@@ -1,0 +1,145 @@
+{
+  "package": "One_Wave_Boltzmann_Administrator_v1_1_Multimodal",
+  "files": [
+    {
+      "path": "BRIDGE_CONTRACT.md",
+      "bytes": 1173,
+      "sha256": "9587427834ff5945915bab5946380b59efd43f76b6ab532783cca6e7901ea34c"
+    },
+    {
+      "path": "MULTIMODAL_INTEGRATION_SPEC.md",
+      "bytes": 2663,
+      "sha256": "a91965ae2fd92921ad9cc1c2b548153d5f42cbe72ad9528a8c915a74b507d376"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2701,
+      "sha256": "97140a9c6fd75df2fbdd569d264a17a28f4e315760795eab48a270b3d2a48fd9"
+    },
+    {
+      "path": "RUN_OUTPUT.txt",
+      "bytes": 4834,
+      "sha256": "a901265de2d3a34d7f068d581eac85310a3d851194eb10d1b8ed61c563192c25"
+    },
+    {
+      "path": "hopfield_original/One_Wave_Hopfield_Brain_v2_1_Final.py",
+      "bytes": 30547,
+      "sha256": "8e0864dbfae51850bb9abcdd14e1f8b67f08ff9ac37ec4312dca14d7b940eb47"
+    },
+    {
+      "path": "hopfield_original/README.md",
+      "bytes": 1320,
+      "sha256": "b8756846c6a6b029cd504cc2059b007dcd341bd616145b65a5ee52759c367426"
+    },
+    {
+      "path": "hopfield_original/RUN_OUTPUT.txt",
+      "bytes": 1841,
+      "sha256": "63bb092abbf33b92ecd635684821f62e0fd83313c33aa4b4c4b33a3c31e81e06"
+    },
+    {
+      "path": "hopfield_original/results/REPORT.md",
+      "bytes": 2407,
+      "sha256": "32fb8f3349102f57a4a9ce51bae14c096d05ac111289086837019acec6bd948c"
+    },
+    {
+      "path": "hopfield_original/results/brain_memory.json",
+      "bytes": 8455953,
+      "sha256": "6e5b1812f7c329b4356598b64a490cf5904c2a1838ad1bb3efca780b95116952"
+    },
+    {
+      "path": "hopfield_original/results/playback_log.json",
+      "bytes": 665,
+      "sha256": "b2d0408436e11477643774df651a201fec19e27164bf3406da4af0d58cdb7808"
+    },
+    {
+      "path": "hopfield_original/results/recall_trials.json",
+      "bytes": 10914,
+      "sha256": "f0df30498e7ab11dfff44d0feae9942e8b48e4fa6fa994206767981cc3192dac"
+    },
+    {
+      "path": "hopfield_original/results/summary.json",
+      "bytes": 2519,
+      "sha256": "3b15c5744e2f852f13916ec752fa28040cc02a84a2fca40da185d46fc65cc763"
+    },
+    {
+      "path": "multimodal_memory.py",
+      "bytes": 20725,
+      "sha256": "615ce34408468f62a8dceeb8385ab0909e60ccc023579cc98e00704286f2d3f8"
+    },
+    {
+      "path": "one_wave_boltzmann_administrator.py",
+      "bytes": 41837,
+      "sha256": "9ed76d98655490400c1b1e5562f85d69e6f26b44bc619d1eaefcf06d200f9d99"
+    },
+    {
+      "path": "results/BOLTZMANN_RUN_OUTPUT.txt",
+      "bytes": 4845,
+      "sha256": "af2a83f23cde03d7ee40b4f08953566b219f101a97d2b3d5caafc4d6a4ee86bc"
+    },
+    {
+      "path": "results/MULTIMODAL_REPORT.md",
+      "bytes": 898,
+      "sha256": "c239577d02dcb1ddd1582737f160965933b6e0aad63ce947fb2d63a7077f59f5"
+    },
+    {
+      "path": "results/MULTIMODAL_RUN_OUTPUT.txt",
+      "bytes": 3136,
+      "sha256": "95d8a9cf644a67321defc039d68b1083c5dcd14587e66e4101fd7f762c284f4c"
+    },
+    {
+      "path": "results/REPORT.md",
+      "bytes": 2057,
+      "sha256": "1fa6c4411dcec99db2ed8eef77d0f720cdd08ace1281d83860d5a150c3613c8d"
+    },
+    {
+      "path": "results/TEST_OUTPUT.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/boltzmann_administrator_weights.npz",
+      "bytes": 133688,
+      "sha256": "c7138449dd2808893978985143bd64bc24a26a9b9fdf4b50fdad22298c753dcf"
+    },
+    {
+      "path": "results/multimodal_hopfield_memory.json",
+      "bytes": 531376,
+      "sha256": "868fceb7ccb90b76aa1935d812e88f8703f41995a9b141e6b329dad6adce7558"
+    },
+    {
+      "path": "results/multimodal_summary.json",
+      "bytes": 3135,
+      "sha256": "ad4f1cea80d9dd11ed707b9d0df03e2efef603d866723e9be447418b26f87ad5"
+    },
+    {
+      "path": "results/sample_gate_trace.json",
+      "bytes": 8024,
+      "sha256": "2b7a1b0afa7af6456bae2bc25ca3f68af551997c52a1755b4b3b877ff67389fa"
+    },
+    {
+      "path": "results/summary.json",
+      "bytes": 4844,
+      "sha256": "f325c0135e6ca85af8e24c1c22680b836d2792baa0108d49b151cf7923b14263"
+    },
+    {
+      "path": "results/training_history.json",
+      "bytes": 6298,
+      "sha256": "fa34af4dcf1c2965fc0a18b3ae6530e2bd6743549474aa0b54d0ea8b132c2fd9"
+    },
+    {
+      "path": "run_multimodal_audit.py",
+      "bytes": 4488,
+      "sha256": "43b1225a78f55338855fb994f35a11dd69dbc04204c2c5ff1cef083b87324263"
+    },
+    {
+      "path": "test_boltzmann_administrator.py",
+      "bytes": 4588,
+      "sha256": "f79ccc435619774e58556e6113e0b32717e152c8e547f11cabd2d3db61985ebb"
+    },
+    {
+      "path": "test_multimodal_memory.py",
+      "bytes": 2309,
+      "sha256": "09e47463a402836369354ac1fe81a8bee98282c4017764e200c5223afed31505"
+    }
+  ]
+}

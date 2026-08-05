@@ -420,3 +420,17 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 - E-542 Local Peak-Trough Back-Mapping — No Spooky Action
 - E-543 Mandatory 2D-Gate-3D Chapter Schema
 - Book 1 Chapter 0: Ground Zero — Negative 2D, Mirror Gate, Positive 3D
+
+## Updated 46 — Continuous Mirror Hearing and Rotation Canon
+
+- `UPDATED_46_CONTINUOUS_MIRROR_HEARING_AND_ROTATION_CANON.md`
+- `Nodes/E-544_Continuous_Mirror_Harmonic_Oscillation.md`
+- `Nodes/E-545_Rotation_Initiation_Point_Path_Field.md`
+- `Nodes/C-324_Electric_Magnetic_Point_Path_Field_Coupling.md`
+- `Nodes/G-722_Alphabet_Harmonic_Four_Wheel_Synchronization.md`
+- `Nodes/H-601_Hearing_Relational_Reconstruction_Primitive.md`
+- `AI_Readable_Packs/UPDATED_46_Continuous_Mirror_Hearing_Rotation.json`
+- `Updates/Update_46/` reference implementation and tests
+- `Integrated_Prototypes/` consolidated uploaded Hopfield, Boltzmann Administrator, and Virtual Lens builds
+
+Hard correction: One-Wave uses a continuous mirror/inversion relation, not a tritone primitive.

@@ -1,0 +1,23 @@
+{
+  "node_id": "D-413",
+  "title": "Ground Lattice Orbital-Restoring Simulation",
+  "canonical_source": "Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md",
+  "native_dimension": "2D triangular lattice with a state-derived rendered curvature surface",
+  "core_rule": "The visible lattice depression, sampled displacement height, and restoring gradient must come from the same evolving triangular-lattice height field; unequal restoring forces across an asymmetric bounded shell may generate orbit and axial torque; camera and projection transforms must not alter physics.",
+  "runnable_browser": "Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html",
+  "batch_validator": "Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/simulate_d413.py",
+  "limitations": [
+    "Curvature well is imposed, not derived.",
+    "Bounded displacement shell is a reduced coordinate, not a quark or particle.",
+    "Reference results validate code behavior only."
+  ],
+  "rendering_invariants": [
+    "Triangular faces are shaded from actual node positions and heights.",
+    "Curved contours and depth marker sample the same interpolated lattice surface.",
+    "Vertical exaggeration and top-down view are projection-only.",
+    "The bounded displacement follows the same surface used for force calculation."
+  ],
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE",
+  "claim_gate_detail": "YELLOW (reduced coupled simulation; physical derivation open)"
+}

@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-104: GRADIENT</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-104"><h1>A-104: GRADIENT</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> None</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW</div><div class="meta"><h3>A-104</h3><p><b>Classification</b><br>Spatial Organization Primitive</p><p><b>Canonical source</b><br>Nodes/A-104_Gradient.md</p></div><div class="content"><p>NODE A-104: GRADIENT STATUS: YELLOW CLASSIFICATION: Spatial
+Organization Primitive LAYER: A-Series Core</p>
+<p>DEPENDENCIES: UPSTREAM: A-103 Differential DOWNSTREAM: A-105
+Restoring Response</p>
+<ol type="1">
+<li><p>PURPOSE Converts spatial Differential relationships into
+directional field structure. INPUT: Spatial differential between
+neighboring field states. OUTPUT: ∇ψ FUNCTION: Defines how field
+difference changes across space.</p></li>
+<li><p>DEFINITION A-103 Differential defines the relationship between
+defined states. A-104 applies Differential across spatial
+relationships.</p>
+<p>SPATIAL DIFFERENTIAL: Δψᵢⱼ = ψⱼ − ψᵢ</p>
+<p>WHERE: ψᵢ = Field state at site i. ψⱼ = Field state at neighboring
+site j.</p>
+<p>Gradient converts local field differences into directional spatial
+change.</p></li>
+<li><p>STATE VARIABLES ψ = Field state. i = Current lattice site. j =
+Neighboring lattice site. N(i) = Neighbor set associated with site i. rᵢ
+= Position of site i. rⱼ = Position of site j. aᵢⱼ = Distance between
+sites. eᵢⱼ = Unit direction from i to j. ∇ψ = Gradient.</p></li>
+<li><p>MATHEMATICS POSITION DIFFERENCE: dᵢⱼ = rⱼ − rᵢ</p>
+<p>DISTANCE: aᵢⱼ = |rⱼ − rᵢ|</p>
+<p>DIRECTION: eᵢⱼ = (rⱼ − rᵢ)/|rⱼ − rᵢ|</p>
+<p>SPATIAL DIFFERENTIAL: Δψᵢⱼ = ψⱼ − ψᵢ</p>
+<p>DISCRETE GRADIENT: ∇ψᵢ ≈ Σⱼ∈N(i) (Δψᵢⱼ/aᵢⱼ)eᵢⱼ</p>
+<p>CONTINUOUS LIMIT: ∇ψ = (∂ψ/∂x, ∂ψ/∂y, ∂ψ/∂z)</p>
+<p>UNIFORM FIELD: ψᵢ = ψⱼ → ∇ψ = 0</p>
+<p>NON-UNIFORM FIELD: ψᵢ ≠ ψⱼ → ∇ψ ≠ 0</p></li>
+<li><p>RELATIONSHIP CHAIN: A-101 Ground / Zero → A-102 Displacement →
+A-103 Differential → A-104 Gradient → A-105 Restoring Response</p>
+<p>ROLE: A-103 identifies difference. A-104 organizes difference across
+spatial structure. A-105 responds to gradient structure.</p>
+<p>BOUNDARY: Gradient does not define restoring behavior.</p></li>
+<li><p>OPERATIONAL RULE NO SPATIAL DIFFERENCE: ψᵢ = ψⱼ → ∇ψ = 0</p>
+<p>SPATIAL DIFFERENCE: ψᵢ ≠ ψⱼ → ∇ψ ≠ 0</p>
+<p>Gradient is the directional measurement of spatial change.</p></li>
+<li><p>RECURSIVE POSITION FUNCTION: Converts local field relationships
+into spatial organization.</p>
+<p>BOUNDARY: Response behavior belongs downstream.</p></li>
+<li><p>RECURSIVE SCALING REQUIREMENT: Preserve gradient meaning across:
+Micro, Small, Medium, Large, Macro.</p>
+<p>OPEN: Verify gradient behavior remains consistent across recursive
+scales.</p></li>
+<li><p>CONSTRAINTS Gradient requires: 1. Defined spatial relationship.
+2. Stable neighbor mapping. 3. Valid directional representation. 4.
+Consistent geometry.</p>
+<p>OPEN: Geometry weighting. Higher-dimensional representation. Scale
+behavior.</p></li>
+<li><p>DEPENDENCIES UPSTREAM: A-103 Differential.</p>
+<p>INPUT: Δψᵢⱼ = ψⱼ − ψᵢ</p>
+<p>DOWNSTREAM: A-105 Restoring Response.</p></li>
+<li><p>FAILURE MODES Gradient fails when: 1. Neighbor relationship is
+undefined. 2. Direction cannot be assigned. 3. Geometry changes
+invalidate comparison. 4. Gradient is confused with curvature. 5.
+Recursive scaling loses spatial meaning.</p></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN: 1. Discrete gradient
+calculation is verified. 2. Geometry dependence is bounded. 3. Direction
+representation is validated. 4. Gradient remains separate from curvature
+and response. 5. Recursive scale behavior is tested.</p>
+<p>CURRENT: Definition ✅ Mathematics ✅ Differential relationship ✅
+Spatial operator defined ✅ Geometry validation ❌ Recursive validation
+❌ Experimental validation ❌</p>
+<p>GATE: GREEN = Defined. YELLOW = Constrained/Testable. BRONZE =
+Validated. SILVER = Integrated. GOLD = Confirmed.</p></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE: A-104 Gradient</p>
+<p>DEFINITION: Gradient is the spatial expression of Differential.</p>
+<p>EQUATION: Δψᵢⱼ → ∇ψᵢ</p>
+<p>FUNCTION: Converts field differences between neighboring states into
+directional spatial structure.</p>
+<p>BOUNDARY: Gradient defines spatial organization only. Restoring
+Response is established by A-105.</p>
+<p>STATUS: YELLOW.</p></li>
+</ol>
+</div><div class="clear"></div></div></body></html>

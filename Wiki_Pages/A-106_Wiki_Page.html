@@ -1,0 +1,137 @@
+<!doctype html><html><head><meta charset="utf-8"><title>A-106: PRESSURE RESPONSE</title><style>
+body{font-family:Georgia,"Times New Roman",serif;background:#f8f9fa;margin:0;color:#202122}.page{max-width:920px;margin:0 auto;background:#fff;padding:30px 46px;box-shadow:0 0 0 1px #ddd}.status{background:#fff4c7;border:1px solid #d5b840;padding:10px 14px;font:13px Arial,sans-serif;margin-bottom:18px}.meta{float:right;width:285px;background:#f8f9fa;border:1px solid #a2a9b1;margin:0 0 18px 24px;font:12px Arial,sans-serif}.meta h3{margin:0;padding:8px;background:#eaecf0;text-align:center}.meta p{padding:0 10px}.content h1{font-size:28px;border-bottom:3px solid #a2a9b1;padding-bottom:7px}.content h2{font-size:20px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin-top:30px}.content h3{font-size:17px}.content pre{white-space:pre-wrap;background:#f5f5f5;border:1px solid #ddd;padding:10px}.content code{background:#f3f3f3;padding:1px 3px}.content table{border-collapse:collapse;width:100%;font-size:13px}.content th,.content td{border:1px solid #bbb;padding:6px;vertical-align:top}.content th{background:#eaecf0}.clear{clear:both}@media(max-width:700px){.meta{float:none;width:auto;margin:0 0 18px}.page{padding:20px}}</style><style id="ow-canonical-meta-style">#ow-canonical-meta{font-family:Arial,sans-serif;background:#eef6ff;border:2px solid #2563eb;padding:14px 18px;margin:16px auto;max-width:920px;box-sizing:border-box}#ow-canonical-meta h1{font-family:Georgia,"Times New Roman",serif;margin:0 0 8px;font-size:26px}#ow-canonical-meta p{margin:4px 0}#ow-canonical-meta .ow-note{font-size:12px;color:#54595d}</style>
+</head><body>
+<section id="ow-canonical-meta" data-node-id="A-106"><h1>A-106: PRESSURE RESPONSE</h1><p><strong>Gate:</strong> YELLOW &nbsp; <strong>Lifecycle:</strong> ACTIVE</p><p><strong>Claim detail:</strong> YELLOW (curvature relationship now derived — was previously the open gap)</p><p class="ow-note">Canonical metadata from I-06. Any older status wording below is retained only as legacy claim detail, not as a second gate field.</p></section><div class="page"><div class="status"><b>Legacy claim detail:</b> YELLOW (curvature relationship now derived — was previously the open gap)</div><div class="meta"><h3>A-106</h3><p><b>Classification</b><br>Field Response Organization Primitive</p><p><b>Canonical source</b><br>Nodes/A-106_Pressure_Response.md</p></div><div class="content"><p>NODE A-106: PRESSURE RESPONSE STATUS: YELLOW (curvature relationship
+now derived — was previously the open gap) CLASSIFICATION: Field
+Response Organization Primitive LAYER: Response Layer</p>
+<p>DEPENDENCIES: UPSTREAM: A-105 Restoring Response DOWNSTREAM: A-107
+Bounded Motion</p>
+<ol type="1">
+<li><p>PURPOSE FUNCTION: Defines how restoring response organizes
+pressure behavior.</p>
+<p>INPUT: R_OW = -A(∇ψ)</p>
+<p>OUTPUT: Pressure Response, now derived directly from curvature rather
+than left as an open operator.</p></li>
+<li><p>DEFINITION Pressure Response describes field organization
+produced by curvature — second-order imbalance — as distinct from
+A-105’s first-order restoring response.</p>
+<p>DERIVATION (closes the previously-open curvature relationship):</p>
+<p>Define the curvature energy density directly from ∇²ψ:</p>
+<pre><code> P_OW := (b/2)(∇²ψ)²</code></pre>
+<p>This is not a free choice — it is the unique lowest-order scalar
+built from ∇²ψ that is (a) non-negative, matching the physical
+requirement that curvature energy cannot be negative, and (b) the term
+that, when added to A-105’s gradient energy in a single energy
+functional, resolves a real structural problem: Derrick’s theorem.</p>
+<p>Derrick’s theorem: a scalar field with only a gradient term (∇ψ)² and
+a potential V(Δψ) in 3D has NO stable static localized solution — under
+uniform rescaling ψ_λ(x) = ψ(λx), the energy E(λ) has no genuine
+minimum; the configuration always either collapses (λ→∞) or disperses
+(λ→0). This means A-107’s bounded-motion criterion (V(x)→∞ as |x|→∞
+alone) cannot actually produce a stable bounded state in 3D — it is
+necessary but not sufficient.</p>
+<p>Adding P_OW’s curvature energy term fixes this. With both terms:</p>
+<pre><code> E[ψ] = ∫ [ (a/2)(∇ψ)² + V(Δψ) + (b/2)(∇²ψ)² ] d³x</code></pre>
+<p>Under rescaling, the three terms scale as λ⁻¹, λ⁻³, and λ¹
+respectively. The curvature term’s positive scaling with λ directly
+opposes the gradient term’s collapse-favoring λ⁻¹ scaling. Solving
+dE/dλ=0 and d²E/dλ²&gt;0 together gives a genuine, non-degenerate
+minimum at finite λ — a real stable bounded state — with the derived
+stability condition I₁ + 6I₂ &gt; 0 (I₁ = gradient energy, I₂ =
+potential energy of the specific solution), equivalently 2I₃ &gt; I₁
+after substituting the stationarity condition, where I₃ is the curvature
+energy.</p>
+<p>GENERAL FORM (unchanged from before, now with P_OW’s origin
+specified): P = R(R_OW)</p>
+<p>WHERE R is now understood to act through the curvature channel
+specifically — R(R_OW) is the pressure-organized readout of the same
+field state that also produces R_OW, not a separate independent
+response.</p></li>
+<li><p>STATE VARIABLES R_OW = Field response (A-105). P_OW =
+Curvature-derived pressure energy density, (b/2)(∇²ψ)². P = Pressure
+state, P = R(R_OW). ∇ψ = Gradient (first-order). ∇²ψ = Curvature
+(second-order). b = Curvature coupling coefficient (new constant; plays
+the same structural role that α plays for A-105’s linear response case —
+a free parameter until derived from a deeper node). I₁, I₂, I₃ =
+Gradient, potential, and curvature energy integrals for a specific
+solution profile (used in the stability condition, not universal
+constants).</p></li>
+<li><p>MATHEMATICS RESPONSE: R_OW = -A(∇ψ)</p>
+<p>CURVATURE PRESSURE DENSITY: P_OW = (b/2)(∇²ψ)²</p>
+<p>DISCRETE CURVATURE (unchanged): ∇²ψ ≈ Σⱼ(ψⱼ−ψᵢ)/a²</p>
+<p>COMBINED ENERGY FUNCTIONAL: E[ψ] = ∫ [ (a/2)(∇ψ)² + V(Δψ) +
+(b/2)(∇²ψ)² ] d³x</p>
+<p>RULE (revised — this replaces the old “∇²ψ=0 → no pressure
+contribution” rule, which is still true but incomplete on its own): ∇²ψ
+= 0 → P_OW = 0 (no curvature-generated pressure), BUT this does NOT by
+itself determine bounded-motion stability — see A-107 for the corrected
+stability criterion, which needs P_OW as an active ingredient, not
+merely a zero/nonzero flag.</p></li>
+<li><p>RELATIONSHIP CHAIN: A-103 Differential → A-104 Gradient → A-105
+Restoring Response → A-106 Pressure Response → A-107 Bounded Motion</p>
+<p>ROLE: A-105 generates first-order response. A-106 generates
+second-order (curvature) response and combines with A-105’s term in a
+single energy functional — this is the actual mechanism connecting the
+two, not two independent outputs feeding forward separately. A-107 must
+use BOTH terms together for its stability criterion (see A-107
+fix).</p></li>
+<li><p>OPERATIONAL RULE NO CURVATURE: ∇²ψ = 0 → P_OW = 0.</p>
+<p>CURVATURE EXISTS: ∇²ψ ≠ 0 → P_OW = (b/2)(∇²ψ)² &gt; 0, always
+non-negative regardless of the sign of ∇²ψ itself (curvature energy cost
+is symmetric).</p></li>
+<li><p>RECURSIVE POSITION FUNCTION: Converts curvature into a pressure
+energy term that structurally stabilizes what A-105’s gradient term
+alone cannot.</p>
+<p>BOUNDARY: Does not itself define the bounded-motion criterion — that
+combination happens in A-107.</p></li>
+<li><p>RECURSIVE SCALING REQUIREMENT: Preserve pressure behavior across
+Micro, Small, Medium, Large, Macro.</p>
+<p>OPEN (unchanged, still real gaps): Whether b is scale-invariant or
+scale-dependent. Whether b can be derived from A-105’s α or is an
+independent constant.</p></li>
+<li><p>CONSTRAINTS Pressure Response requires: 1. Defined curvature (∇²ψ
+well-defined on the active lattice/geometry). 2. b &gt; 0 (required for
+the stability mechanism above to work — if b ≤ 0, the curvature term
+cannot oppose collapse, and Derrick’s theorem is not evaded). 3.
+Consistent scale behavior (still open, per §8).</p>
+<p>OPEN (narrowed from before): Deriving b itself from a more
+fundamental node. Confirming whether b relates to α (A-105’s
+coefficient) or is independent.</p></li>
+<li><p>DEPENDENCIES UPSTREAM: A-105 Restoring Response.</p>
+<p>INPUT: R_OW = -A(∇ψ), and directly, ∇²ψ.</p>
+<p>DOWNSTREAM: A-107 Bounded Motion (must now incorporate P_OW directly
+— see A-107 fix).</p></li>
+<li><p>FAILURE MODES Pressure Response fails when: 1. b ≤ 0 (curvature
+term cannot stabilize; Derrick’s theorem applies in full force, no
+bounded state exists in 3D). 2. Curvature is undefined on the active
+lattice geometry. 3. Scale behavior drifts (still open). 4. P_OW is
+treated as independent of the same field ψ that produces R_OW, rather
+than a second term in the same functional.</p></li>
+<li><p>ADVANCEMENT CRITERIA ADVANCE WHEN: 1. Curvature relationship is
+derived. ✅ (this fix) 2. Pressure operator is defined in terms of a
+specific energy density. ✅ (this fix) 3. b’s relationship to A-105’s α
+is established. ❌ (still open) 4. Scale behavior is validated. ❌
+(still open)</p>
+<p>CURRENT: Definition ✅ Dependencies ✅ Response relationship ✅
+Curvature Derivation ✅ (was ❌ — closed by this fix) Operator
+Definition ✅ (was ❌ — closed by this fix, as P_OW = (b/2)(∇²ψ)²) b vs
+α relationship ❌ Experimental/simulation validation ❌ (has real
+numerical support from today’s rescaling analysis, but not yet promoted
+to Bronze)</p>
+<p>GATE: GREEN = Defined. YELLOW = Constrained/Testable. BRONZE =
+Validated. SILVER = Integrated. GOLD = Confirmed.</p></li>
+<li><p>FINAL DEFINITION / CLOSURE NODE: A-106 Pressure Response</p>
+<p>DEFINITION: Pressure Response is the curvature-generated energy term
+P_OW = (b/2)(∇²ψ)², which combines with A-105’s gradient term in a
+single energy functional to resolve a real structural gap (Derrick’s
+theorem) that the gradient term alone cannot resolve.</p>
+<p>FUNCTION: Provides the second, necessary ingredient for genuine
+bounded motion in 3D — not an optional refinement.</p>
+<p>REFERENCE: E[ψ] = ∫ [ (a/2)(∇ψ)² + V(Δψ) + (b/2)(∇²ψ)² ] d³x</p>
+<p>BOUNDARY: b’s derivation from a deeper node, and its scale behavior,
+remain open. This node no longer treats curvature as an unresolved
+side-relationship — it is now load-bearing for A-107’s stability
+claim.</p>
+<p>STATUS: YELLOW.</p></li>
+</ol>
+</div><div class="clear"></div></div></body></html>
