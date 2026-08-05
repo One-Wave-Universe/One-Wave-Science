@@ -17,9 +17,11 @@ from pathlib import Path
 from council_chamber.client_registry import build_ai_seat, discover_and_register_clients, get_client
 from council_chamber.models import CouncilChat, Seat, SeatKind
 from council_chamber.orchestrator import Council
+from council_chamber.rooms import RoomNotFoundError, World
 from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.storage import save_session, load_session
 from council_chamber.usage import summarize
+from council_chamber.workers.file_search import FileSearchWorker
 from council_chamber.workers.patch_worker import PatchWorker
 
 # Pick up every seats/*_client.py that's been dropped in -- this is what
@@ -49,7 +51,14 @@ _PLACEHOLDER_REPLY = "(demo seat -- no real provider connected; see RemoteAPISea
 
 HELP_TEXT = """\
 Commands:
-  seats                                  list open seats
+  rooms                                  list every room, * marks the current one
+  room <name>                            switch to an existing room
+  create-room <name> [dir]               make a brand new room (dir defaults to ./<name>)
+  branch <parent> <side_name>            make a side room: a copy of parent's files
+                                          + a brand new chat, safe to test in
+  files [glob]                           list files in the current room (default **/*)
+  cat <file>                             print a file's contents from the current room
+  seats                                  list open seats in the current room
   open <{catalog}>
                                           open a new seat from the catalog
   ask <seat[,seat...]> <prompt...>       ask one or more seats (by name or seat_id)
@@ -61,9 +70,9 @@ Commands:
   reject <file> [reason...]              discard a pending change
   usage <seat>                           show raw usage reports for a seat
   usage-summary <seat>                   show totals (None where nothing was reported)
-  transcript                             print the full chat log
-  save <path>                            save the chat + pending changes to disk
-  load <path>                            load a saved session (re-attaches AI seats as placeholders)
+  transcript                             print the full chat log for the current room
+  save <path>                            save the current room's chat + pending changes to disk
+  load <path>                            load a saved session into the current room (re-attaches AI seats)
   help                                   show this text
   quit / exit                            leave the council chamber
 """.format(catalog="|".join(SEAT_CATALOG))
@@ -103,8 +112,20 @@ class SeatNotFoundError(ValueError):
 
 
 class CouncilTUI:
-    def __init__(self, council: Council):
-        self.council = council
+    def __init__(self, council: Council, world: World | None = None, room_name: str = "main"):
+        self.world = world or World()
+        self.current_room_name = room_name
+        if room_name not in self.world.rooms:
+            project_dir = getattr(council.patch_worker, "project_root", Path("."))
+            self.world.create_room(room_name, project_dir, council=council)
+
+    @property
+    def council(self) -> Council:
+        return self.world.get_room(self.current_room_name).council
+
+    @council.setter
+    def council(self, value: Council) -> None:
+        self.world.get_room(self.current_room_name).council = value
 
     def _resolve_seat_id(self, token: str) -> str:
         if token in self.council.chat.seats:
@@ -123,6 +144,12 @@ class CouncilTUI:
 
         handlers = {
             "help": lambda: HELP_TEXT,
+            "rooms": self._cmd_rooms,
+            "room": lambda: self._cmd_room(args),
+            "create-room": lambda: self._cmd_create_room(args),
+            "branch": lambda: self._cmd_branch(args),
+            "files": lambda: self._cmd_files(args),
+            "cat": lambda: self._cmd_cat(args),
             "seats": self._cmd_seats,
             "open": lambda: self._cmd_open(args),
             "ask": lambda: self._cmd_ask(args),
@@ -142,6 +169,53 @@ class CouncilTUI:
         if command not in handlers:
             raise UnknownCommandError(f"unknown command {command!r} -- type 'help' for a list")
         return handlers[command]()
+
+    def _cmd_rooms(self) -> str:
+        names = self.world.room_names()
+        if not names:
+            return "(no rooms)"
+        return "\n".join(f"{'*' if n == self.current_room_name else ' '} {n}" for n in sorted(names))
+
+    def _cmd_room(self, args: list[str]) -> str:
+        if not args:
+            raise ValueError("usage: room <name>")
+        self.world.get_room(args[0])  # raises RoomNotFoundError if it doesn't exist
+        self.current_room_name = args[0]
+        return f"now in room {args[0]!r}"
+
+    def _cmd_create_room(self, args: list[str]) -> str:
+        if not args:
+            raise ValueError("usage: create-room <name> [dir]")
+        name = args[0]
+        project_dir = args[1] if len(args) > 1 else name
+        room = self.world.create_room(name, project_dir)
+        self.current_room_name = room.name
+        return f"created room {room.name!r} at {room.project_dir} -- now in room {room.name!r}"
+
+    def _cmd_branch(self, args: list[str]) -> str:
+        if len(args) < 2:
+            raise ValueError("usage: branch <parent_room> <side_room_name>")
+        room = self.world.branch_room(args[0], args[1])
+        self.current_room_name = room.name
+        return f"branched {args[0]!r} into side room {room.name!r} at {room.project_dir} -- now in room {room.name!r}"
+
+    def _cmd_files(self, args: list[str]) -> str:
+        pattern = args[0] if args else "**/*"
+        files = FileSearchWorker(self.world.get_room(self.current_room_name).project_dir).find_files(pattern)
+        if not files:
+            return "(no files)"
+        return "\n".join(files)
+
+    def _cmd_cat(self, args: list[str]) -> str:
+        if not args:
+            raise ValueError("usage: cat <file>")
+        room_dir = self.world.get_room(self.current_room_name).project_dir.resolve()
+        target = (room_dir / args[0]).resolve()
+        if room_dir not in target.parents and target != room_dir:
+            raise ValueError(f"{args[0]!r} resolves outside the room's directory")
+        if not target.is_file():
+            return f"no such file: {args[0]}"
+        return target.read_text()
 
     def _cmd_seats(self) -> str:
         seats = list(self.council.chat.seats.values())
@@ -266,7 +340,7 @@ def repl(council: Council) -> None:
             break
         try:
             output = tui.execute(line)
-        except (UnknownCommandError, SeatNotFoundError, ValueError) as exc:
+        except (UnknownCommandError, SeatNotFoundError, RoomNotFoundError, ValueError) as exc:
             print(f"error: {exc}")
             continue
         if output:

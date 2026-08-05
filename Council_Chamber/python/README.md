@@ -106,12 +106,14 @@ python3 -m council_chamber.tui [project_dir]   # defaults to the current directo
 
 Opens a real `council>` prompt over a real `Council` (ChatGPT and Codex
 already open as `MockSeat` placeholders, same honest caveat as the demo)
-against the given project directory. Type `help` for the full command
-list: `seats`, `open <chatgpt|codex|claude|gemini|deepseek|grok|local>`,
+in a room called `main`, against the given project directory. Type
+`help` for the full command list: `rooms`, `room <name>`, `create-room
+<name> [dir]`, `branch <parent> <side>`, `files [glob]`, `cat <file>`,
+`seats`, `open <chatgpt|codex|claude|gemini|deepseek|grok|local>`,
 `ask <seat[,seat...]> <prompt>`, `propose <seat> <file> <content> [--desc
 "..."]`, `pending`, `diff <file>`, `approve <file>`, `reject <file>
 [reason]`, `usage <seat>`, `usage-summary <seat>`, `transcript`, `save
-<path>`, `load <path>`, `quit`. Every command runs against the real
+<path>`, `load <path>`, `quit`. Every command runs against a real
 `Council`, `PatchWorker`, and chat log — nothing here is simulated for
 display only. `CouncilTUI.execute(line)` is the same entry point the
 tests use, so the whole interface is exercised without a real terminal.
@@ -131,6 +133,37 @@ tests use, so the whole interface is exercised without a real terminal.
   a seat for real. Only the transcript, seat identities, and pending
   changes persist; a live provider connection was never serializable to
   begin with, so there's nothing fabricated in what comes back.
+
+### Rooms and side rooms (`rooms.py`)
+
+Every `Council` now lives inside a **room** — a name plus its own chat
+and its own project directory. The TUI starts in a room called `main`.
+
+- **`create-room <name> [dir]`** makes a brand new, empty room and
+  switches to it. `dir` defaults to `./<name>`.
+- **`branch <parent> <side_name>`** makes a **side room**: a real copy
+  of the parent room's files, plus a brand new, empty chat (no shared
+  transcript, no shared seats with the parent) — a place to try
+  something risky. `open`, `propose`/`approve`, and a real `TestWorker`
+  run all work inside a side room exactly like anywhere else, against
+  its own copy of the files, so nothing there can touch the parent
+  room's real code until someone redoes the same
+  `propose_change`/`approve_and_apply` against the parent directly —
+  there's no automatic merge, just the same gated flow run twice: once
+  to validate, once for real.
+- **`files [glob]`** and **`cat <file>`** let a seat (or you) see the
+  current room's actual code — `cat` refuses to read outside the
+  room's own directory, the same `PathEscapesProjectRootError`-style
+  guard `PatchWorker` uses for writes.
+- **`room <name>`** switches which room subsequent commands (`seats`,
+  `ask`, `propose`, `transcript`, ...) operate on; `rooms` lists every
+  room with `*` marking the current one.
+
+Verified live end to end: branched a room, had a seat `propose`/`approve`
+a real fix to `main.py` inside the side room only, ran a real `pytest`
+subprocess against that side room's copy (it passed), then switched
+back to the parent room and confirmed its `main.py` was completely
+untouched.
 
 ## Checking in with an idle seat (worker_ant.py)
 
@@ -214,10 +247,13 @@ council_chamber/
 ├── worker_ant.py         one bounded, local, file-driven relay round
 │                         over a saved session -- never an autonomous
 │                         loop, always one deliberate invocation
-├── tui.py                CouncilTUI: a real command interpreter (seats/
-│                         open/ask/propose/diff/approve/reject/usage/
-│                         transcript/save/load) plus repl() for
-│                         interactive use
+├── rooms.py              World/Room: named places, each its own chat +
+│                         project dir; branch_room() makes a side room
+│                         -- a copy to test in, isolated from the parent
+├── tui.py                CouncilTUI: a real command interpreter (rooms/
+│                         room/branch/files/cat/seats/open/ask/propose/
+│                         diff/approve/reject/usage/transcript/save/load)
+│                         plus repl() for interactive use
 └── cli.py                the end-to-end demo above
 ```
 

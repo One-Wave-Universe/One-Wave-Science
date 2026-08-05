@@ -188,3 +188,101 @@ def test_save_with_no_path_raises(tui):
 def test_load_with_no_path_raises(tui):
     with pytest.raises(ValueError):
         tui.execute("load")
+
+
+def test_tui_starts_in_a_main_room_by_default(tui):
+    output = tui.execute("rooms")
+    assert output == "* main"
+
+
+def test_create_room_switches_into_it(tui, tmp_path):
+    lab_dir = tmp_path / "lab_project"
+    output = tui.execute(f"create-room lab {lab_dir}")
+    assert "created room 'lab'" in output
+    assert "now in room 'lab'" in output
+    assert lab_dir.is_dir()
+
+    rooms_output = tui.execute("rooms")
+    assert "* lab" in rooms_output
+    assert "  main" in rooms_output
+
+
+def test_room_switches_back_and_forth_preserving_each_rooms_state(tui, tmp_path):
+    tui.execute(f"create-room lab {tmp_path / 'lab_project'}")
+    tui.execute("open gemini")  # opened only in "lab"
+
+    tui.execute("room main")
+    assert "Codex" in tui.execute("seats")
+    assert "Gemini" not in tui.execute("seats")
+
+    tui.execute("room lab")
+    assert "Gemini" in tui.execute("seats")
+    assert "Codex" not in tui.execute("seats")
+
+
+def test_room_with_unknown_name_raises(tui):
+    with pytest.raises(KeyError):
+        tui.execute("room nope")
+
+
+def test_branch_creates_a_side_room_with_copied_files_and_fresh_chat(tui, project):
+    tui.execute("ask Codex hello")  # main room now has transcript history
+
+    output = tui.execute("branch main side")
+    assert "branched 'main' into side room 'side'" in output
+    assert "now in room 'side'" in output
+
+    # side room's files are a real copy of main's
+    assert tui.execute("cat main.py") == (project / "main.py").read_text()
+    # but the chat is brand new, not shared with main
+    assert tui.execute("transcript") == "(empty)"
+    assert tui.execute("seats") == "(no seats open)"
+
+
+def test_editing_a_side_room_does_not_touch_the_main_room(tui, project):
+    tui.execute("branch main side")
+    tui.execute("open codex")
+    tui.execute(r'propose Codex main.py "x = 1\n"')
+    tui.execute("approve main.py")
+
+    assert tui.execute("cat main.py") == "x = 1\n"
+
+    tui.execute("room main")
+    assert tui.execute("cat main.py") == "def add(a, b):\n    return a + b\n"
+
+
+def test_files_lists_files_in_the_current_room(tui):
+    output = tui.execute("files")
+    assert "main.py" in output
+
+
+def test_files_with_glob_filters_results(tui, project):
+    (project / "notes.md").write_text("hi")
+    output = tui.execute("files *.md")
+    assert "notes.md" in output
+    assert "main.py" not in output
+
+
+def test_cat_prints_file_contents(tui, project):
+    assert tui.execute("cat main.py") == "def add(a, b):\n    return a + b\n"
+
+
+def test_cat_missing_file_says_so(tui):
+    assert tui.execute("cat nope.py") == "no such file: nope.py"
+
+
+def test_cat_rejects_path_escaping_the_room_directory(tui):
+    with pytest.raises(ValueError):
+        tui.execute("cat ../../etc/passwd")
+
+
+def test_load_replaces_the_council_of_the_current_room_only(tui, project, tmp_path):
+    session_path = tmp_path / "session.json"
+    tui.execute(f"save {session_path}")
+
+    tui.execute(f"create-room lab {tmp_path / 'lab_project'}")
+    tui.execute(f"load {session_path}")
+
+    # loading into "lab" must not disturb "main"'s own council/session
+    tui.execute("room main")
+    assert "Codex" in tui.execute("seats")
