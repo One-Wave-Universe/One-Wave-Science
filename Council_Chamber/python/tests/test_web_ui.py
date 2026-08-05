@@ -6,6 +6,8 @@ import pytest
 
 from council_chamber.tui import CouncilTUI, demo_council
 from council_chamber.web_ui import (
+    SESSION_FILENAME,
+    build_tui,
     execute_command,
     list_seat_catalog,
     provider_setup_info,
@@ -98,3 +100,70 @@ def test_live_server_serves_the_page_and_executes_real_commands(tui):
     finally:
         server.shutdown()
         thread.join(timeout=5)
+
+
+def test_build_tui_creates_a_fresh_session_and_saves_it(tmp_path):
+    project_dir = tmp_path / "project"
+
+    tui = build_tui(project_dir)
+
+    assert (project_dir / SESSION_FILENAME).exists()
+    names = {s.name for s in tui.council.chat.open_seats()}
+    assert names == {"ChatGPT", "Codex"}
+
+
+def test_build_tui_restores_a_previous_session_instead_of_starting_fresh(tmp_path):
+    project_dir = tmp_path / "project"
+    session_path = project_dir / SESSION_FILENAME
+
+    first = build_tui(project_dir)
+    execute_command(first, "ask ChatGPT remember this please", session_path)
+
+    second = build_tui(project_dir)
+
+    assert "remember this please" in second.execute("transcript")
+    # still the same two demo seats, not a brand new pair
+    names = {s.name for s in second.council.chat.open_seats()}
+    assert names == {"ChatGPT", "Codex"}
+
+
+def test_build_tui_restores_every_room_not_just_main(tmp_path):
+    project_dir = tmp_path / "project"
+    session_path = project_dir / SESSION_FILENAME
+
+    first = build_tui(project_dir)
+    execute_command(first, f"create-room lab {tmp_path / 'lab_project'}", session_path)
+    execute_command(first, "open gemini", session_path)
+
+    second = build_tui(project_dir)
+
+    assert "lab" in second.execute("rooms")
+    second.execute("room lab")
+    assert "Gemini" in second.execute("seats")
+
+
+def test_execute_command_via_http_persists_across_a_fresh_build_tui(tmp_path):
+    """The actual end-to-end guarantee: use the app through the real
+    HTTP API, "close" it (drop all in-memory references), "reopen" it
+    (call build_tui again), and the conversation is still there."""
+    project_dir = tmp_path / "project"
+    tui = build_tui(project_dir)
+    session_path = project_dir / SESSION_FILENAME
+
+    server = serve(tui, port=0, session_path=session_path)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        host, port = server.server_address
+        body = json.dumps({"line": "ask Codex remember this across a restart"}).encode()
+        req = urllib.request.Request(
+            f"http://{host}:{port}/api/execute", data=body,
+            headers={"Content-Type": "application/json"}, method="POST",
+        )
+        urllib.request.urlopen(req, timeout=5).read()
+    finally:
+        server.shutdown()
+        thread.join(timeout=5)
+
+    reopened = build_tui(project_dir)
+    assert "remember this across a restart" in reopened.execute("transcript")

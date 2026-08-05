@@ -20,7 +20,11 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from council_chamber.client_registry import get_client
+from council_chamber.storage import load_world, save_world
 from council_chamber.tui import SEAT_CATALOG, CouncilTUI, demo_council
+from council_chamber.worker_ant import reattach_placeholder_seats
+
+SESSION_FILENAME = "council_session.json"
 
 # Known real-world signup pages and the environment variable name each
 # provider's client (seats/<x>_client.py) reads. Only the URL and the
@@ -75,11 +79,40 @@ def provider_setup_info(key: str) -> dict:
     }
 
 
-def execute_command(tui: CouncilTUI, line: str) -> dict:
+def execute_command(tui: CouncilTUI, line: str, session_path: Path | None = None) -> dict:
     try:
-        return {"output": tui.execute(line)}
+        result = {"output": tui.execute(line)}
     except Exception as exc:  # the TUI's own commands already raise clear, typed errors
         return {"error": str(exc)}
+    if session_path is not None:
+        save_world(tui.world, session_path)
+    return result
+
+
+def build_tui(project_dir: str | Path) -> CouncilTUI:
+    """Persistent entry point: if a session was already saved in this
+    project directory (from a previous run of this same app), restore
+    every room's chat and seats from it -- rather than starting over
+    with a fresh ChatGPT/Codex every time the app is closed and
+    reopened. Live client connections are never serialized, so every
+    AI-kind seat in every restored room gets reattached via the same
+    registry-aware logic worker_ant.py uses (a real client if one's
+    configured, an honestly-labeled placeholder otherwise)."""
+    project_dir = Path(project_dir)
+    project_dir.mkdir(parents=True, exist_ok=True)
+    session_path = project_dir / SESSION_FILENAME
+
+    world = load_world(session_path) if session_path.exists() else None
+    if world is not None and world.rooms:
+        for room in world.rooms.values():
+            reattach_placeholder_seats(room.council)
+        room_name = "main" if "main" in world.rooms else next(iter(world.rooms))
+        tui = CouncilTUI(world.get_room(room_name).council, world=world, room_name=room_name)
+    else:
+        tui = CouncilTUI(demo_council(project_dir))
+        save_world(tui.world, session_path)
+
+    return tui
 
 
 PAGE_HTML = """<!doctype html>
@@ -171,9 +204,10 @@ run('rooms');
 
 
 class CouncilHTTPServer(ThreadingHTTPServer):
-    def __init__(self, address, handler_cls, tui: CouncilTUI):
+    def __init__(self, address, handler_cls, tui: CouncilTUI, session_path: Path | None = None):
         super().__init__(address, handler_cls)
         self.tui = tui
+        self.session_path = session_path
 
 
 class CouncilRequestHandler(BaseHTTPRequestHandler):
@@ -208,7 +242,8 @@ class CouncilRequestHandler(BaseHTTPRequestHandler):
         if self.path == "/api/execute":
             length = int(self.headers.get("Content-Length", 0))
             body = json.loads(self.rfile.read(length) or b"{}")
-            self._send_json(execute_command(self.server.tui, body.get("line", "")))
+            result = execute_command(self.server.tui, body.get("line", ""), self.server.session_path)
+            self._send_json(result)
         else:
             self.send_error(404)
 
@@ -216,8 +251,10 @@ class CouncilRequestHandler(BaseHTTPRequestHandler):
         pass
 
 
-def serve(tui: CouncilTUI, host: str = "127.0.0.1", port: int = 8765) -> CouncilHTTPServer:
-    server = CouncilHTTPServer((host, port), CouncilRequestHandler, tui)
+def serve(
+    tui: CouncilTUI, host: str = "127.0.0.1", port: int = 8765, session_path: Path | None = None
+) -> CouncilHTTPServer:
+    server = CouncilHTTPServer((host, port), CouncilRequestHandler, tui, session_path)
     return server
 
 
@@ -226,10 +263,12 @@ def main(argv: list[str] | None = None) -> None:
     project_dir = Path(argv[0]) if argv else Path.cwd()
     port = int(argv[1]) if len(argv) > 1 else 8765
 
-    tui = CouncilTUI(demo_council(project_dir))
-    server = serve(tui, port=port)
+    tui = build_tui(project_dir)
+    session_path = project_dir / SESSION_FILENAME
+    server = serve(tui, port=port, session_path=session_path)
     url = f"http://127.0.0.1:{port}/"
     print(f"One-Wave Council Chamber running at {url}")
+    print(f"Session persists in {session_path} -- close and reopen any time, nothing is lost.")
     try:
         webbrowser.open(url)
     except Exception:

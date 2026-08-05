@@ -4,9 +4,11 @@ from council_chamber.models import CouncilChat, Seat, SeatKind, SeatStatus
 from council_chamber.seats.ai_seat import MockSeat
 from council_chamber.workers.patch_worker import PatchWorker
 from council_chamber.orchestrator import Council
+from council_chamber.rooms import World
 from council_chamber.storage import (
     chat_to_dict, chat_from_dict, save_chat, load_chat,
     session_to_dict, save_session, load_session,
+    world_to_dict, world_from_dict, save_world, load_world,
 )
 
 
@@ -110,3 +112,66 @@ def test_session_to_dict_pending_changes_are_json_serializable(tmp_path):
 
     assert "main.py" in data["pending_changes"]
     assert data["pending_changes"]["main.py"]["change"]["new_content"] == "x = 2\n"
+
+
+def test_world_round_trips_multiple_rooms(tmp_path):
+    world = World()
+    main = world.create_room("main", tmp_path / "main_project")
+    lab = world.create_room("lab", tmp_path / "lab_project")
+    main.council.chat.post(None, "hello from main")
+    lab.council.chat.post(None, "hello from lab")
+
+    world_path = tmp_path / "world.json"
+    save_world(world, world_path)
+    restored = load_world(world_path)
+
+    assert set(restored.rooms) == {"main", "lab"}
+    assert [m.content for m in restored.get_room("main").council.chat.messages] == ["hello from main"]
+    assert [m.content for m in restored.get_room("lab").council.chat.messages] == ["hello from lab"]
+
+
+def test_world_round_trip_preserves_each_rooms_project_dir(tmp_path):
+    world = World()
+    world.create_room("main", tmp_path / "main_project")
+    world.create_room("lab", tmp_path / "lab_project")
+
+    restored = world_from_dict(world_to_dict(world))
+
+    assert restored.get_room("main").project_dir == tmp_path / "main_project"
+    assert restored.get_room("lab").project_dir == tmp_path / "lab_project"
+
+
+def test_world_round_trip_preserves_pending_changes_per_room(tmp_path):
+    world = World()
+    main = world.create_room("main", tmp_path / "main_project")
+    (main.project_dir / "app.py").write_text("x = 1\n")
+    codex_seat = Seat.create("Codex", SeatKind.AI)
+    main.council.register_ai_seat(MockSeat(codex_seat, reply="proposing"))
+    main.council.propose_change(codex_seat.seat_id, "app.py", "x = 2\n", description="bump")
+
+    restored = world_from_dict(world_to_dict(world))
+
+    pending = restored.get_room("main").council.pending_changes["app.py"]
+    assert pending.change.new_content == "x = 2\n"
+    assert pending.change.description == "bump"
+
+
+def test_load_world_with_no_rooms_key_gives_empty_world(tmp_path):
+    world_path = tmp_path / "world.json"
+    world_path.write_text("{}")
+    restored = load_world(world_path)
+    assert restored.rooms == {}
+
+
+def test_world_from_dict_does_not_reconstruct_any_ai_seats(tmp_path):
+    """Live client connections are never persisted -- only seat
+    identity is. The caller (web_ui.py's build_tui, for example) is
+    responsible for reattaching real or placeholder clients."""
+    world = World()
+    main = world.create_room("main", tmp_path / "main_project")
+    main.council.register_ai_seat(MockSeat(Seat.create("Codex", SeatKind.AI), reply="hi"))
+
+    restored = world_from_dict(world_to_dict(world))
+
+    assert restored.get_room("main").council.ai_seats == {}
+    assert len(restored.get_room("main").council.chat.seats) == 1
