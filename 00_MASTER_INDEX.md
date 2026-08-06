@@ -77,7 +77,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
 | B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
 | B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
-### Appendix C — Applied Mechanics & Conflict-Resolution (20 active files)
+### Appendix C — Applied Mechanics & Conflict-Resolution (24 active files)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | C-301 | Mirror Gate | The physical location/scale/boundary condition where Mirror (B-205) operates. | GREEN |
@@ -100,6 +100,10 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
+| C-323 | Primitive Continuous Mirrored Chain | Working-notes draft: six-pair mirrored chain (F1/V6…F6/V1) sharing a middle dual reference; precursor vocabulary for the V0/V0-A cell nodes. | GREEN |
+| C-324 | One-Wave V0 Hex Cell — Multicellular Host Architecture | Proposed six-organelle-plus-coordinator hex-ring host cell: dual-rail ternary state, five-level modulation, phase-synchronous reinjection. | YELLOW |
+| C-325 | One-Wave V0-A Intrinsic Cell — Engineering Architecture and Simulation | Proposed intrinsic (no-CPU) single-cell analog architecture with SPICE skeleton and behavioral drive-mode simulation; hardware unproven. | YELLOW |
+| C-326 | One-Wave V0 Intrinsic Cell — First Organelle Build Wiring | Breadboard-buildable single-organelle schematic, BOM, and block diagram refining C-325's wiring plan; untested. | YELLOW |
 ### Appendix D — Resonance, Modal & Dimensional Structure (13 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|

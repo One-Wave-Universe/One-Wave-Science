@@ -1,4 +1,15 @@
 
+## Updated 38 — One-Wave Intrinsic Cell Hardware
+
+- Added C-323 (Primitive Continuous Mirrored Chain, working-notes vocabulary), C-324 (V0 Hex Cell multicellular host architecture), C-325 (V0-A intrinsic cell engineering architecture, SPICE skeleton, and behavioral simulation), and C-326 (V0 first-organelle buildable wiring, schematic, and BOM). All Proposed Build under I-05; no physical hardware has been built or tested yet.
+- Added matching Wiki_Pages entries for C-323 through C-326.
+- Added Books/Engineer_The_Future/Vol1/Ch06 "The Intrinsic Cell", grounded in the four new nodes, with generated PDF.
+- Updated 00_MASTER_INDEX.md Appendix C table and BOOK_SYSTEM_MASTER_PLAN.md's Engineer the Future chapter list.
+- Flagged a stale Raspberry Pi Pico selection-logic note preserved from the imported source material in C-325; the no-processor-in-the-loop core rule remains binding.
+- Repository integrity validator passes with zero errors: 154 node files, 154 unique IDs.
+
+---
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.

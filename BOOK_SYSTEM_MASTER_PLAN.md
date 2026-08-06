@@ -55,6 +55,15 @@ G-722 controls the Hopfield/Boltzmann procedural-memory split. G-721b through G-
 Style: steampunk field manual.  
 Purpose: instruments, experiments, build specifications, procedures, calibration, and failure tests.
 
+Current Volume I chapters:
+
+1. The Wave Reader (grounded in C-315);
+2. Hierarchical Sensor-Control;
+3. Pressure Reversal;
+4. Stellar Boundary Reversal;
+5. Conversion Grammar Engine;
+6. The Intrinsic Cell (grounded in C-323, C-324, C-325, C-326) — Proposed Build under I-05; no physical organelle has yet passed its own test plan.
+
 ### One-Wave Times
 
 Style: investigative newspaper/paper articles.  

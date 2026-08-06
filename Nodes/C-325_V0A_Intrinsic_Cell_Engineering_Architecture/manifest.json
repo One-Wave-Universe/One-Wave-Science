@@ -1,0 +1,32 @@
+{
+  "package": "One_Wave_V0A_Engineering_Package",
+  "version": "0.2-intrinsic-cell",
+  "simulation_type": "behavioral damped resonator",
+  "hardware_voltage": "5 V nominal",
+  "core_states": {
+    "ternary": [
+      -1,
+      0,
+      1
+    ],
+    "five_level": [
+      "Floor",
+      "Low",
+      "Middle",
+      "High",
+      "Ceiling"
+    ]
+  },
+  "not_proven": [
+    "superconducting operation",
+    "MTJ memory",
+    "full six-node field rotation",
+    "energy savings on physical hardware"
+  ],
+  "core_rule": "No external processor in the operating loop",
+  "removed": [
+    "Raspberry Pi Pico",
+    "microcontroller timing",
+    "software refresh control"
+  ]
+}

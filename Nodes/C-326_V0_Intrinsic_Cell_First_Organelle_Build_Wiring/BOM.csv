@@ -1,0 +1,21 @@
+Part,Qty,Purpose
+LM393B DIP-8,1,Mirror Gate window comparator
+CD40106B DIP-14,2,"Autonomous oscillator, local phase shaping"
+MCP6004 DIP-14,1,Reference and signal buffering
+CD4053B DIP-16,1,Optional pass/hold/flip analog routing
+2N7000,4,Low-energy reinjection / switching
+10 mH toroidal or radial inductors,2,Point-loop resonator plus spare
+22 nF film or C0G capacitors,5,Point-loop resonator
+Ferrite toroids,8,Seven-cell path plus spare; first magnetic tests
+Optional mu-metal closed core/sample,1,Low-field comparison experiment
+Optional nanocrystalline toroid,1,Active-field comparison experiment
+Magnet wire assortment,1,"Sense, maintain, rewrite, coupling windings"
+10 kΩ linear trim pots,4,VREL window and target adjustment
+1% resistor assortment,1,"Thresholds, hysteresis, current limits"
+100 nF ceramic capacitors,12,IC decoupling
+10 µF electrolytic capacitors,6,Local bulk decoupling
+1N4148 and Schottky diodes,10,Envelope detector and clamps
+Five-position rotary switch or jumper header,1,Manual five-state target for V0
+Full-size breadboards,2,Single organelle prototype
+5 V current-limited supply,1,Low-voltage test supply
+"Oscilloscope, ideally 2+ channels",1,"Observe phase, envelope, reinjection"

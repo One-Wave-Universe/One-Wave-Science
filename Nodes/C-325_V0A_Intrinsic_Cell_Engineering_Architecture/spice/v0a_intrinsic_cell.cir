@@ -1,0 +1,17 @@
+* Intrinsic analog cell skeleton — no external processor
+VCC VCC 0 5
+VREL VREL 0 2.5
+L1 TANK VREL 10m
+C1 TANK VREL 22n
+RLOSS TANK VREL 5k
+BGAIN DRIVE VREL V=tanh(8*(V(TANK)-V(VREL)))
+RDRIVE DRIVE TANK 470
+D1 TANK ENV DSH
+.model DSH D(Is=1n Rs=1 N=1.05)
+CENV ENV VREL 100n
+RENV ENV VREL 100k
+BCTRL CTRL 0 V=if(V(ENV)<2.9,5,0)
+SREF VCC TANK CTRL 0 SWMOD
+.model SWMOD SW(Ron=22 Roff=1Meg Vt=2.5 Vh=0.2)
+.tran 0.1u 5m
+.end

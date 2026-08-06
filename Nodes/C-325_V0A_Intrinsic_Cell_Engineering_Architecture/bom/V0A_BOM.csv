@@ -1,0 +1,25 @@
+category,part,quantity,purpose,notes
+Virtual ground,TLE2426CLP or equivalent,1,Creates VREL near half of 5 V,Keep load light; buffer if needed
+Comparator,LM393BIP / LM393 DIP-8,1,Window comparator / Mirror Gate,Open-collector outputs require pull-ups
+Op amp,MCP6004-I/P,1,Buffers references and tank sense,"Rail-to-rail, 1.8–5.5 V family"
+Analog switch,74HC4053N,1,Optional pass/invert/route switching,Can be omitted in first phase
+MOSFET,2N7000,2,Low-energy reinjection pulse switches,Through-hole and breadboard-friendly
+Inductor,10 mH radial inductor,2,One resonator plus spare,Measure actual value if possible
+Capacitor,22 nF film or C0G,5,Resonator and spares,Use stable dielectric
+Capacitor,100 nF ceramic,10,IC decoupling,One per IC supply pair
+Capacitor,10 µF electrolytic,5,Local bulk decoupling,Observe polarity
+Resistor kit,1% metal-film assortment,1 kit,"References, pull-ups, sensing, damping",Include 100 Ω to 1 MΩ
+Potentiometer,10 kΩ linear,3,Threshold and test-signal adjustment,Breadboard type
+Diode,1N4148,10,Clamping and pulse shaping,Optional initially
+Schottky diode,1N5817,5,Low-drop clamp/flyback paths,Use around inductive tests as designed
+LED,3 colors,6,State indicators,Use 1 kΩ–4.7 kΩ series resistors
+Breadboard,Full-size solderless breadboard,2,Prototype space,Keep resonant loop physically compact
+Wire,Solid-core jumper kit,1,Interconnect,Use short leads around LC tank
+Power,5 V current-limited USB supply,1,Safe low-voltage source,Begin with 100–200 mA current limit if adjustable
+Optional memory,Small ferrite toroids + magnet wire,1 set,Later magnetic path-memory experiment,Not required for V0-A electrical proof
+Oscillator,CD40106BE,2,Autonomous oscillator and phase shaping,No external clock
+Latch,CD4043BE or discrete cross-coupled latch,1,Intrinsic state retention,Temporary electrical memory
+Envelope detector,Diodes plus RC network,2 sets,Intrinsic amplitude-loss sensing,Tune to resonant envelope
+Phase gate,74HC4053N or discrete bilateral switch,1,Pass / hold / flip,Driven by local phase events
+Pulse stage,2N7000 or complementary MOSFET pair,4,Phase-synchronous reinjection,Current-limit initial tests
+Magnetic memory,Ferrite toroids plus magnet wire,1 set,Maintain/write memory experiment,Separate maintain and rewrite paths
