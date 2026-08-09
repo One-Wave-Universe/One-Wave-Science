@@ -7,11 +7,16 @@ import argparse
 import os
 from typing import Any, Dict, List, Optional
 
-from mcp.server.fastmcp import FastMCP, Image
+from mcp.server.mcpserver import Image, MCPServer
 
-from .bridge_client import BridgeClient
+try:
+    from .bridge_client import BridgeClient
+except ImportError:
+    # Allows `python3 server.py` (no parent package) in addition to
+    # `python3 -m mcp_server.server`.
+    from bridge_client import BridgeClient
 
-mcp = FastMCP("blender-ai-bridge")
+mcp = MCPServer("blender-ai-bridge")
 _client = BridgeClient()
 
 
