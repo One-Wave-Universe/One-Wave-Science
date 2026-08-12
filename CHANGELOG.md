@@ -1,4 +1,15 @@
 
+## Updated 39 — Relational-Mechanics Node Backlog and First Developed Nodes
+
+- Registered the ~100-node relational-mechanics coverage gap (differential/relational motion, moving reference states, point-path-field tracking, orbital wake/resonance dynamics, simulation methodology) as `RELATIONAL_MECHANICS_NODE_BACKLOG.md`, using a MAPPED/DEVELOPED/CANONICAL legend mapped onto existing I-06 gate/lifecycle fields rather than new vocabulary. Most entries remain MAPPED (title + one-line claim only, no invented reasoning).
+- Renumbered the backlog's C-series block from a colliding C-323–C-337 to C-327–C-341 to avoid overwriting the just-committed intrinsic-cell hardware nodes; those hardware IDs (C-323–C-326) are treated as permanent.
+- Added 18 fully developed I-06 nodes with wiki pages for the subset already backed by real reasoning: A-118, A-119, A-120, A-125; C-327 through C-332 (the full relational gravity-assist derivation chain, Gray-equivalent to standard patched-conic mechanics by design); D-420, D-421, D-422 (coherent vs. incoherent resonance accumulation); G-734, G-735, G-736, G-737, G-743 (simulation-methodology governance rules, no physics claim of their own).
+- Added an A-103/A-118 entry to `DUPLICATE_NAME_DISAMBIGUATION.md`.
+- Fixed 34 premature bare-ID citations to still-MAPPED backlog items across the 18 new node files, caught by the repository's own unresolved-ID integrity check.
+- Repository integrity validator passes with zero errors: 172 node files, 172 unique IDs.
+
+---
+
 ## Updated 38 — One-Wave Intrinsic Cell Hardware
 
 - Added C-323 (Primitive Continuous Mirrored Chain, working-notes vocabulary), C-324 (V0 Hex Cell multicellular host architecture), C-325 (V0-A intrinsic cell engineering architecture, SPICE skeleton, and behavioral simulation), and C-326 (V0 first-organelle buildable wiring, schematic, and BOM). All Proposed Build under I-05; no physical hardware has been built or tested yet.

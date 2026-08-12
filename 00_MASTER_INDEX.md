@@ -9,6 +9,7 @@ Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPO
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
+Relational-mechanics coverage map (mostly not-yet-developed backlog, not canon): `RELATIONAL_MECHANICS_NODE_BACKLOG.md`.
 
 ---
 
@@ -39,6 +40,10 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | A-115 | Unified Compression Field | Gravity, Extended Compression, and Boundary Resistance are three views of one compression/displacement field; static energy returns through neutrinos and White Energy ejection. | GREEN |
 | A-116 | Three-Dimensional Spherical Default | Physical bounded modes are volumetric and sphere-like at lowest energy; 2D drawings are cross-sections, projections, or explicit negative-space layers. | GREEN |
 | A-117 | Dimensional Integrity and Projection Declaration | Locks 2D, 3D, and 4D as distinct native layers; requires explicit projection metadata and preserves 6:1, 12:1, and 24:1 as different coordination relations. | YELLOW |
+| A-118 | Relational Differential Primitive | `CHANGE = LOCAL_SLOPE − REFERENCE_SLOPE`; slope-level differencing, distinct from A-103's state-level differential. | GREEN |
+| A-119 | Moving Reference State | The reference itself may carry nonzero slope; a local frame is not assumed stationary relative to its containing scale. | GREEN |
+| A-120 | Point-Path-Field Rotation | Every persistent structure tracked as point/state, path/history, and field rotation, not reduced to a point-particle position. | GREEN |
+| A-125 | Scale-Locality | Distant structure represented through the containing scale's locally inherited boundary state, never a direct global lookup. | GREEN |
 **Core update rule (all tiers inherit this):**
 `ψᵢⁿ⁺¹ = ψᵢⁿ + (1−γ)(ψᵢⁿ−ψᵢⁿ⁻¹) + β(⟨ψⱼⁿ⟩−ψᵢ)`
 
@@ -77,7 +82,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
 | B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
 | B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
-### Appendix C — Applied Mechanics & Conflict-Resolution (24 active files)
+### Appendix C — Applied Mechanics & Conflict-Resolution (30 active files)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | C-301 | Mirror Gate | The physical location/scale/boundary condition where Mirror (B-205) operates. | GREEN |
@@ -104,7 +109,13 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-324 | One-Wave V0 Hex Cell — Multicellular Host Architecture | Proposed six-organelle-plus-coordinator hex-ring host cell: dual-rail ternary state, five-level modulation, phase-synchronous reinjection. | YELLOW |
 | C-325 | One-Wave V0-A Intrinsic Cell — Engineering Architecture and Simulation | Proposed intrinsic (no-CPU) single-cell analog architecture with SPICE skeleton and behavioral drive-mode simulation; hardware unproven. | YELLOW |
 | C-326 | One-Wave V0 Intrinsic Cell — First Organelle Build Wiring | Breadboard-buildable single-organelle schematic, BOM, and block diagram refining C-325's wiring plan; untested. | YELLOW |
-### Appendix D — Resonance, Modal & Dimensional Structure (13 nodes)
+| C-327 | Relational Acceleration Equation | `d̈_ij = S_i − S_j`; reduces to standard tidal/differential-gravity acceleration under a Newtonian potential. | YELLOW |
+| C-328 | Common-Mode Field Cancellation | A shared background acceleration cancels exactly from relative motion; algebraic consequence of C-327. | YELLOW |
+| C-329 | Actual State = Reference + Differential | Bookkeeping identity preventing the reference field from being silently dropped from absolute-state calculations. | GREEN |
+| C-330 | Moving Local Potential Perturbation | Jupiter modeled as a moving localized deformation on the solar background potential; standard patched-conic assumption restated relationally. | YELLOW |
+| C-331 | Relative Encounter Frame Transformation | Encounter state transformed between perturber-centered and Sun-centered frames; elastic in the perturber's frame only. | YELLOW |
+| C-332 | Relational Energy Transfer | `ΔK = V_J·(u_out − u_in)`; the standard gravity-assist energy-change formula, derived from C-331. | YELLOW |
+### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -120,6 +131,9 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-411 | Mirrored Axis Pairs and Directed Route Counts | Separates N axis pairs, 2N directed routes, and 2N+1 centered states; requires ratio-domain declarations. | YELLOW |
 | D-412 | Lattice Simulation and State-Driven Visualization Standard | Requires real state updates, raw receipts, graphs, failure regions, and dimensional declarations; rejects decorative animation as simulation. | YELLOW |
 | D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
+| D-420 | Resonant Phase Correlation | Resonance as recurring correlated encounter phase across repeated close approaches, not identical impulse size; specializes F-604 for orbital mechanics. | GREEN |
+| D-421 | Coherent Differential Accumulation | Phase-recurring perturbations sum ~linearly in N; explicit summation form, not yet evaluated numerically. | YELLOW |
+| D-422 | Incoherent Differential Cancellation | Phase-random perturbations grow ~sqrt(N) as a random walk; the null-hypothesis companion to D-421. | YELLOW |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -164,7 +178,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
 | F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
 | F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
-### Appendix G — Evaluation, Modulation & Governance (30 nodes)
+### Appendix G — Evaluation, Modulation & Governance (35 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
@@ -197,6 +211,11 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
 | G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
 | G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+| G-734 | Standard-Mechanics Control Run | Every relational-mechanics simulation runs an identical-input Newtonian control alongside the One-Wave run; procedural, not a physics claim. | YELLOW |
+| G-735 | Prediction-Difference Gate | A relational mechanism counts as new physics only on a measurable departure or a genuinely simpler equally-accurate derivation. | YELLOW |
+| G-736 | No Hidden Controller Rule | No simulation may steer toward a target orbit/resonance/stability; every reported behavior must arise solely from the declared update rule. | YELLOW |
+| G-737 | No Victory Without Observable Match | Bounded-but-untested is not success; requires a declared quantitative observable and tolerance stated before the run. | YELLOW |
+| G-743 | Claim/Metaphor/Test Separation | Every new physical idea must separate mathematical definition, physical hypothesis, analogy, and falsification test — repository-wide rule. | GREEN |
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)

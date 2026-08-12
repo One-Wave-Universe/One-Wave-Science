@@ -1,18 +1,18 @@
 {
   "pass": true,
-  "node_file_count": 154,
-  "unique_node_ids": 154,
+  "node_file_count": 172,
+  "unique_node_ids": 172,
   "gate_counts": {
-    "YELLOW": 95,
-    "GREEN": 57,
+    "YELLOW": 106,
+    "GREEN": 64,
     "BRONZE": 2
   },
   "lifecycle_counts": {
-    "ACTIVE": 138,
+    "ACTIVE": 143,
     "PROPOSED_BUILD": 4,
     "HELD": 3,
-    "BLOCKED": 1,
-    "ACTIVE_HYPOTHESIS": 8
+    "ACTIVE_HYPOTHESIS": 21,
+    "BLOCKED": 1
   },
   "unresolved_ids": {},
   "errors": []
