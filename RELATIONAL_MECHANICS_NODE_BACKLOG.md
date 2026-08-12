@@ -47,6 +47,68 @@ Frames of Reference, D-404 Nested Resonance, F-602 Interaction
 Differential, F-604 Resonance, G-706 Validation, G-717 Paired
 Reference Gate.
 
+## Chapter-Pass Findings (I-04 disposition audit)
+
+Findings from checking existing `Books/` canon against this backlog
+before promoting anything further, per I-04's required procedure
+(classify before merge or dismiss).
+
+### Finding 1 — A-126 and the F-609–F-614 "wake" family are not a blank slate
+
+**A-115 Unified Compression Field** (Tier-0, GREEN, already canonical)
+already defines a general wake term:
+
+```text
+g_OW = g_local + g_wake
+```
+
+"This does not introduce a second substance. It separates near-source
+response from retained or wake-like compression." **Book 5 Ch1
+(Galaxies and Dark Matter)** already applies this at galactic scale —
+the "Extended Compression Effect," `dark matter = extended/wake
+contribution of that same field` — and A-115's own Yellow-completion
+checklist already lists "derive the extended wake profile without
+fitting it by hand" as an open item.
+
+**I-04 disposition:** A-115's `g_wake` is a **static field-superposition**
+term (no propagation delay, no explicit assimilation dynamic). This
+backlog's A-126 (Finite Wake Assimilation) and the F-609–F-614 wake
+family, as originally drafted, described a **dynamical/propagating**
+wake — the same word, a materially different mechanism claim. Per I-04
+this is not exact duplication, but it is not a fresh concept either:
+
+- **Scale-Specific Instance / already-covered:** the base "wake = field's
+  displaced response to bulk motion" claim. A-115 already owns this;
+  A-126 must not redefine it.
+- **Unproven Delta (the genuinely new part worth keeping MAPPED):**
+  (a) finite propagation speed / time-lag rather than an instantaneous
+  field response (this is what D-429 Wake vs Potential Numerical
+  Equivalence Test and D-430 Finite-Propagation Wake Simulation were
+  already aiming at), and (b) explicit orbital/planetary-scale
+  instantiation (Moon-Earth-Sun nesting, A-127) rather than only the
+  galactic scale Book 5 Ch1 covers.
+
+**Action when A-126 is eventually developed:** it must cite A-115 as
+primary upstream (not just a lateral echo) and state explicitly, per
+G-743, which part is new (the finite-propagation delta) versus which
+part restates A-115's existing static term. The F-609–F-614 rows below
+have been annotated accordingly. No new node file was created for this
+finding — it is a correction to this manifest only.
+
+### Finding 2 — Book 4 (Large / planetary-solar scale) had an "Orbital Dynamics" gap now partially closed
+
+`Books/Book4_Large/00_Scope_and_Status.html` listed "Orbital Dynamics"
+with grounding "none" / "No supporting nodes exist at all." That is no
+longer accurate: C-327–C-332 exist. The scope doc (and its PDF) have
+been updated in place to say so — the row now reads "bridge nodes
+exist but are unvalidated" rather than "no supporting nodes exist,"
+which is a materially different and more honest gap statement. This
+does **not** mean a Book 4 chapter can be written yet: the book
+system's own rule ("no book chapter should introduce a mechanism that
+doesn't already exist as a node") is satisfied, but G-737's "no victory
+without observable match" is not — no solar-system simulation (D-427,
+still MAPPED) has actually been run. The gap moved; it did not close.
+
 ---
 
 ## A-Series — Foundation Primitives (12 entries)
@@ -61,7 +123,7 @@ Reference Gate.
 | A-123 | Active Center Reference | Zero is an active maintained reference, not absence or arbitrary numerical zero. | A-101, A-122 | MAPPED |
 | A-124 | Differential Displacement State | Physical state encoded as displacement around the active center rather than absolute amplitude. | A-102, A-118, A-123 | MAPPED |
 | A-125 | Scale-Locality | Distant structure is represented through the locally inherited state/boundary conditions of the containing scale rather than direct global lookup. | A-118, A-119, B-220 | **DEVELOPED** — see `Nodes/A-125_Scale_Locality.md` |
-| A-126 | Finite Wake Assimilation | Disturbances propagate through the medium, reorganize neighboring structure, and become assimilated into larger-scale field state. | A-125, D-401 | MAPPED |
+| A-126 | Finite Wake Assimilation | Disturbances propagate through the medium, reorganize neighboring structure, and become assimilated into larger-scale field state. | **A-115** (primary — already defines static `g_wake`), A-125, D-401 | MAPPED — see Chapter-Pass Finding 1; new delta is finite propagation, not the wake concept itself |
 | A-127 | Nested Wake Capture | Moon-in-Earth wake, Earth-in-Sun wake, Sun-in-galactic wake as nested relational domains. | A-126 | MAPPED |
 | A-128 | Motion-Generated Background Differential | Continual motion through the proposed lattice supplies a background displacement/pressure term rather than assuming a stationary laboratory frame. | A-119, A-124 | MAPPED |
 | A-129 | No Absolute Initial-State Primitive | Operational updates depend on current relational differences rather than requiring an unknowable absolute beginning-state. | A-118, A-123 | MAPPED |
@@ -122,8 +184,8 @@ Reference Gate.
 | D-426 | Jupiter Resonance / Kirkwood Test | Test clearing near major Jupiter commensurabilities. | D-423 | MAPPED |
 | D-427 | Solar-System All-Body Differential Simulation | Sun + all planets under the same update primitive. | C-327, D-412 | MAPPED |
 | D-428 | Planet–Moon Nested Differential Simulation | Add moons as nested local references rather than flattening everything into one undifferentiated list. | D-427, A-127 | MAPPED |
-| D-429 | Wake vs Potential Numerical Equivalence Test | Determine whether the wake language predicts anything different from the corresponding conventional field calculation. | A-126, D-427 | MAPPED |
-| D-430 | Finite-Propagation Wake Simulation | Introduce finite propagation/assimilation explicitly rather than using instantaneous potentials. | A-126, D-429 | MAPPED |
+| D-429 | Wake vs Potential Numerical Equivalence Test | Determine whether the wake language predicts anything different from the corresponding conventional field calculation. | A-115, A-126, D-427 | MAPPED — this is the actual G-735 test for A-115's existing `g_wake` term, not a new mechanism; see Finding 1 |
+| D-430 | Finite-Propagation Wake Simulation | Introduce finite propagation/assimilation explicitly rather than using instantaneous potentials. | A-115, A-126, D-429 | MAPPED — this is the real Unproven Delta from Finding 1: A-115's `g_wake` is currently instantaneous |
 | D-431 | Wake Reinforcement and Cancellation | Overlapping disturbances can add, oppose, phase-lock, or wash out. | D-420, D-430 | MAPPED |
 | D-432 | Jupiter Moving-Wake Benchmark | Use Jupiter as the strongest planetary test case. | D-430, D-426 | MAPPED |
 | D-433 | Sun–Earth–Moon Relational Benchmark | Three-body benchmark before scaling to the complete solar system. | D-427, D-428 | MAPPED |
@@ -146,12 +208,12 @@ Reference Gate.
 
 | ID | Name | Intended claim | Dependencies (proposed) | Status |
 |---|---|---|---|---|
-| F-609 | Moving Wake | Traveling organized field disturbance left by a translating/rotating persistent mode. | A-126, F-604 | MAPPED |
-| F-610 | Leading/Trailing Wake Geometry | Geometry descriptor only; does not hardcode speed-up/slow-down. | F-609 | MAPPED |
-| F-611 | Wake Phase Encounter | Local response depends on encounter phase and relative trajectory. | F-609, D-420 | MAPPED |
-| F-612 | Wake Superposition / Interaction | — | F-609, F-605 | MAPPED |
-| F-613 | Wake Assimilation into Parent Field | — | F-609, A-126 | MAPPED |
-| F-614 | Nested Wake Coupling | — | F-613, A-127 | MAPPED |
+| F-609 | Moving Wake | Traveling organized field disturbance left by a translating/rotating persistent mode. | A-115 (already defines the static form), A-126, F-604 | MAPPED — see Chapter-Pass Finding 1 |
+| F-610 | Leading/Trailing Wake Geometry | Geometry descriptor only; does not hardcode speed-up/slow-down. | F-609 | MAPPED — see Finding 1 |
+| F-611 | Wake Phase Encounter | Local response depends on encounter phase and relative trajectory. | F-609, D-420 | MAPPED — see Finding 1 |
+| F-612 | Wake Superposition / Interaction | — | F-609, F-605 | MAPPED — see Finding 1 |
+| F-613 | Wake Assimilation into Parent Field | — | F-609, A-126 | MAPPED — see Finding 1 |
+| F-614 | Nested Wake Coupling | — | F-613, A-127 | MAPPED — see Finding 1 |
 | F-615 | Phase-Coherent Repeated Interaction | — | D-420, D-421 | MAPPED |
 | F-616 | Phase-Decoherent Repeated Interaction | — | D-420, D-422 | MAPPED |
 | F-617 | Differential Momentum Exchange | — | F-602, C-327 | MAPPED |

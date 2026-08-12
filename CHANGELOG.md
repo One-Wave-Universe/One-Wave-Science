@@ -1,4 +1,12 @@
 
+## Chapter-Pass Audit (I-04 disposition check against existing Books/ canon)
+
+- Found A-115 (already canonical, GREEN) defines a general static `g_wake` term, applied at galactic scale in Book 5 Ch1's Extended Compression Effect — the backlog's A-126 and F-609–F-614 wake family are not a blank slate. Per I-04, the base wake concept is already covered; the genuine Unproven Delta is finite propagation (D-429/D-430 backlog items) and orbital/planetary-scale instantiation, not the wake mechanism itself. Annotated the affected backlog rows accordingly; no new node files created.
+- Found `Books/Book4_Large/00_Scope_and_Status.html`'s "Orbital Dynamics" row was stale ("no supporting nodes exist at all") now that C-327–C-332 exist. Corrected in place (+ regenerated PDF): bridge nodes now exist but remain unvalidated (no D-427 simulation, no G-734/G-737 result) — the gap moved, it did not close, and no chapter was written.
+- Added one cross-reference line to Book 5 Ch1's Future Work section pointing to the backlog's finite-propagation test items, without regenerating that chapter's PDF (no known reproduction of its original generation pipeline; PDF is now slightly stale relative to source, consistent with how this repo already treats PDFs as periodically-resynced presentation copies).
+- Checked the remaining Books/ keyword hits (resonance/orbital in Book 1 Micro chapters) — confirmed false positives (electron orbitals, D-413's lattice "orbital-restoring" simulation, harmonic-shell resonance), no action needed.
+- Repository integrity validator passes with zero errors after this pass.
+
 ## Updated 39 — Relational-Mechanics Node Backlog and First Developed Nodes
 
 - Registered the ~100-node relational-mechanics coverage gap (differential/relational motion, moving reference states, point-path-field tracking, orbital wake/resonance dynamics, simulation methodology) as `RELATIONAL_MECHANICS_NODE_BACKLOG.md`, using a MAPPED/DEVELOPED/CANONICAL legend mapped onto existing I-06 gate/lifecycle fields rather than new vocabulary. Most entries remain MAPPED (title + one-line claim only, no invented reasoning).

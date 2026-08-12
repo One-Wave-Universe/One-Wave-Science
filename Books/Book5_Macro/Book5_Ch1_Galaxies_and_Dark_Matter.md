@@ -192,6 +192,11 @@ Fit the candidate rotation curve form against real observational data.
 Extend to gravitational lensing and large-scale structure formation.
 Attempt a derivation of spiral arm structure from the rotating compression
 ring.
+Test whether g_wake requires finite propagation rather than the
+instantaneous field response assumed above — tracked as the Wake vs
+Potential Numerical Equivalence Test and Finite-Propagation Wake
+Simulation items in `RELATIONAL_MECHANICS_NODE_BACKLOG.md`; both remain
+unbuilt (MAPPED), not results.
 
 ---
 
