@@ -111,6 +111,143 @@ still MAPPED) has actually been run. The gap moved; it did not close.
 
 ---
 
+## Newer Candidate Concepts (Not Yet Source-Documented)
+
+Four items were named in passing during the chapter-pass discussion —
+wake continuation through resonance, the `3>1(0)1<6` dimensional
+sequence, DC/AC/RFC recursion, and measurement-as-capture — with an
+explicit instruction not to let them leak into the chapter audit. That
+audit is now done (clean). Before any of these four gets a permanent
+node ID, gate, or equation, this section forces the same five
+questions G-735/G-743 already require of everything else in this
+backlog:
+
+```text
+1. What exactly is being proposed?
+2. What equation or mechanism actually exists for it?
+3. What part is metaphor, and what part is a physical claim (G-743)?
+4. What observation would falsify it (G-735/G-737)?
+5. Which existing nodes does it modify, extend, or leave untouched?
+```
+
+**No answers are invented below.** Where the conversation so far
+supplies enough to answer honestly, the answer is given. Where it
+doesn't, the question is left open rather than filled with a plausible
+guess — that would be exactly the fabrication this backlog's Promotion
+Rule and G-743 exist to block. None of the four gets a node ID yet;
+they are held here as unassigned candidates pending source material.
+
+### Wake continuation through resonance
+
+1. What's proposed: unstated beyond the name. Plausible reading —
+   whether a wake disturbance (A-115's `g_wake`, Finding 1 above)
+   persists or reinforces via resonant phase-locking (D-420 Resonant
+   Phase Correlation) rather than only decaying/assimilating (A-126) —
+   but this is my inference from the two nearest existing concepts, not
+   a claim the source material has actually made. Flagged as inference,
+   not fact.
+2. Equation/mechanism: none supplied.
+3. Metaphor vs. claim: cannot be separated without (1) being confirmed.
+4. Falsifier: cannot be defined without (1)-(2).
+5. Nodes touched: candidate connection between A-126/F-609 (wake
+   family) and D-420 (resonant phase correlation) — both already
+   MAPPED/DEVELOPED respectively; this item might turn out to be a
+   dependency link between them rather than a new mechanism of its own.
+   **Open question for the source:** is "continuation" decay-resistance
+   (the wake persists longer under resonance) or amplitude growth (the
+   wake strengthens under resonance, i.e. D-421's coherent-accumulation
+   case applied to a wake rather than a discrete encounter)? These are
+   different claims with different falsifiers.
+
+### The `3>1(0)1<6` dimensional sequence
+
+1. What's proposed: unstated beyond the notation itself.
+2. Equation/mechanism: none supplied — not even what the symbols `>`,
+   `(0)`, and `<` mean operationally in this string.
+3. Metaphor vs. claim: cannot be assessed without (1)-(2).
+4. Falsifier: cannot be defined without (1)-(2).
+5. Nodes touched — genuine structural resemblance worth flagging, not
+   asserted as the same thing: this notation pattern echoes two already
+   -MAPPED/DEVELOPED items that are themselves not yet connected to
+   each other: (a) the D-415–D-419 coordination ladder (3:1, 1:6,
+   6:1/1:12, 1:24, still MAPPED, explicitly *not yet* strung into one
+   sequence — D-419 Octave-Doubling Coordination Ladder is the closest
+   existing slot for "a sequence" but is itself unbuilt), and (b) the
+   B-226/B-227 six-gate cycle with its `4(0)` center-mirror notation
+   (`1→2→3→4(0)→5→6`, also MAPPED) and A-117's locked 2D/3D/4D
+   dimensional-layer separation (already canonical, YELLOW). **Open
+   question for the source:** is `3>1(0)1<6` a dimensional-reduction
+   claim (3D collapsing through a mirror point to 1D, then re-expanding
+   to a sixfold structure) using D-415/419's ratios, or a gate-sequence
+   claim using B-226's notation, or something not yet represented by
+   either? Until that's answered this cannot even be filed as a
+   disposition candidate under I-04 — there's nothing yet to classify.
+
+### DC/AC/RFC recursion
+
+1. What's proposed: unstated beyond the name, but there is a real,
+   already-developed precedent to check against first (see below).
+2. Equation/mechanism: **C-324 (One-Wave V0 Hex Cell) already states**
+   `DC -> Point Rotation`, `AC -> Path Rotation`, `RC (Rotational
+   Current) -> Field Rotation`. Note the existing term is **RC**, not
+   **RFC** — this may be the same concept restated, a typo carried
+   across the conversation, or a genuinely different third term. This
+   must be resolved before anything else about this item can proceed;
+   guessing which one is meant would risk exactly the kind of silent
+   drift Finding 1 caught for the wake family.
+3. Metaphor vs. claim: C-324's version is stated as a proposed-build
+   engineering mapping (motion regime -> rotation type), not yet tested
+   in hardware — see C-324's own V0 Proof Checklist, item 4 (Rotational
+   circulation), still unpassed.
+4. Falsifier: inherits C-324's own — the V0 Proof Checklist requires a
+   recorded, reproducible measurement, none exists yet.
+5. Nodes touched: if "DC/AC/RFC recursion" means applying C-324's
+   DC/AC/RC triad *recursively* (nested at each scale, echoing A-121
+   Nested Point-Path-Field Recursion, still MAPPED) rather than as
+   three flat categories, that would be a genuine extension of C-324,
+   not a duplicate of it — but that reading is this document's
+   inference, not confirmed. **Open question for the source:** confirm
+   RC vs. RFC, and confirm whether "recursion" means nesting (new
+   content) or is just restating C-324's existing three-way split.
+
+### Measurement-as-capture
+
+1. What's proposed (the one item with real prior discussion in this
+   conversation): a chain of `continuous wave evolution -> chosen
+   local capture -> discrete detector record`, where the discrete
+   click belongs to the capture interaction itself rather than to a
+   discrete thing that was already traveling and simply got found.
+2. Equation/mechanism: none supplied yet. This is exactly the gap
+   already named when this item first came up — "it will need an
+   actual mechanism for what capture physically is."
+3. Metaphor vs. claim: "capture" is doing real argumentative work here
+   and has not yet been separated into its G-743 components. It is not
+   yet clear whether "capture" names a new physical interaction term,
+   or is a redescription of an existing measurement/boundary node.
+4. Falsifier: none supplied yet — this is the actual blocking item
+   before (1) can become anything more than a restated interpretation
+   of ordinary quantum measurement.
+5. Nodes touched: A-122 Field/Void Primitive (still MAPPED) remains the
+   right eventual address per prior discussion — not reassigned here.
+   Also worth checking against once developed: A-101 Ground/Zero
+   (measurement requires a reference state), C-301 Mirror Gate
+   (crossing/resolution events already exist as a general mechanism),
+   and G-706 Validation ("confirmation through successful participation
+   in a cycle" — already close to "capture" in plain language and must
+   be checked for overlap before treating capture as new).
+
+### What this section does not do
+
+It does not assign C-342+, D-435+, or G-744+ IDs to any of these four.
+It does not promote any of them past "named but undocumented." The
+next real step for each is the source material — equations, worked
+notes, or at minimum a fuller statement of the claim — not further
+inference from this document. Continuing to infer plausible content
+for these four without that material would be doing exactly what
+G-743 and the Promotion Rule exist to prevent.
+
+---
+
 ## A-Series — Foundation Primitives (12 entries)
 
 | ID | Name | Intended claim | Dependencies (proposed) | Status |
