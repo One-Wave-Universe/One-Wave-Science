@@ -393,7 +393,7 @@ G-743 and the Promotion Rule exist to prevent.
 |---|---|---|---|---|
 | D-415 | 3:1 Point–Path–Field Coordination | Formalize the 3 relation without prematurely calling it a mass ratio. | A-120 | MAPPED |
 | D-416 | 1:6 Six-Step Linear Coordination | — | B-221, D-415 | MAPPED |
-| D-417 | 6:1 / 1:12 Rotational Closure Relation | — | D-409, D-416 | MAPPED — evidence exhausted against existing canon, see D-417 Evidence Dossier below; still no standalone mechanism, no new node file created |
+| D-417 | 6:1 / 1:12 Rotational Closure Relation | — | D-409, D-416 | **RETIRED** — original counting claim already covered by D-409/D-411 (now cross-referenced directly); no node built. See D-417 Evidence Dossier below for the surviving Twelve-Neighbor Spatial Rotational Closure candidate, held separately and still unassigned. |
 | D-418 | 1:24 Higher-Scale Recurrence | — | D-410, D-417 | MAPPED |
 | D-419 | Octave-Doubling Coordination Ladder | Separate the observed numerical architecture from claims about its physical interpretation. | D-415–D-418 | MAPPED |
 | D-420 | Resonant Phase Correlation | Resonance as recurring correlated phase rather than necessarily identical impulses. | D-402, F-604 | **DEVELOPED** — see `Nodes/D-420_Resonant_Phase_Correlation.md` |
@@ -416,13 +416,18 @@ G-743 and the Promotion Rule exist to prevent.
 
 D-417 was picked as the next development candidate given the
 independent convergence noted in the `3>1(0)1<6` reconciliation above.
-Its backlog row has never carried an intended-claim sentence — the
-column was blank from the start. Rather than invent one, this dossier
-exhausts what the repository already says about "6:1," "12:1," and
-"closure," tests each hit for contradiction or duplication under I-04,
-and reports the result. **No new node file was created.** Everything
-below is quotation or direct citation of existing canon; nothing here
-is a new physical claim.
+Its backlog row never carried an intended-claim sentence — the column
+was blank from the start. Rather than invent one, this dossier
+exhausted what the repository already says about "6:1," "12:1," and
+"closure," tested each hit for contradiction or duplication under
+I-04, and reports the result: **D-417's original 6:1/12:1 meaning is
+retired as already covered** (cross-references added to D-409, D-411,
+and G-716 directly); **no node was built for that original meaning.**
+One genuinely new, non-redundant question surfaced during the
+exhaustion — whether D-409's twelve-neighbor shell has its own
+discrete rotational symmetry — and has since been investigated
+directly against the geometry (see below), independent of D-417's
+retired meaning.
 
 ### What already exists
 
@@ -519,32 +524,105 @@ flag before any equation gets written, not after.
   means the same "6"/"12" G-716 already uses, or a distinct spatial
   sense.
 
-### One candidate reading (flagged as inference, not fact)
+### Disposition — D-417's original meaning is RETIRED
 
-The one genuinely non-redundant physical question this dossier could
-find, that is not already answered by D-409/D-411/G-716/C-301/C-308:
-**does D-409's twelve-neighbor cuboctahedral shell possess its own
-discrete rotational symmetry that closes after a specific number of
-steps** — i.e. a rotation-group closure of the physical lattice shell
-itself, analogous in structure (not derived from) C-301's `M^4=I`
-closure but for the spatial neighbor geometry rather than an internal
-Mirror state. This is a real, well-posed, checkable geometric question
-(the cuboctahedron's rotation group has a known finite order) that
-genuinely is not yet covered by anything cited above. **This is this
-dossier's own candidate reading, explicitly not confirmed as what
-D-417 was meant to claim**, offered because the alternative — silence
-— would leave "make only changes justified by the repository"
-satisfied but "exhaust the evidence" incomplete.
+Per explicit instruction, D-417's original 6:1/12:1 counting claim is
+retired from the backlog as already covered, not developed as a new
+node. The missing cross-references have been added directly to the
+canonical nodes rather than left implicit:
 
-### Recommendation (not acted on unilaterally)
+- `Nodes/G-716_One_Wave_Conversion_Grammar.md` — added D-409 and D-411
+  to its Dependencies (Lateral), and a sentence in its own Dimensional
+  Boundary section stating D-409 governs the 12:1 spatial meaning and
+  D-411 governs the 6:1/12:1 counting distinction, with an explicit
+  "not merged" note.
+- `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — added a
+  reciprocal Lateral cross-reference to G-716.
+- `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md` —
+  added a reciprocal Lateral cross-reference to G-716.
 
-Given how much of D-417's title is already covered by existing
-canonical content, the open question worth deciding — not decided
-here — is whether D-417 should become a real node with the narrow
-rotation-group-closure claim above, or whether it should be retired
-from the backlog in favor of explicit cross-references added to
-D-409, D-411, and G-716 (which would need no new node ID at all). No
-change was made to resolve this either way in this pass.
+No node ID was assigned for the retired counting claim. D-417's row in
+the D-Series table above is marked retired accordingly.
+
+### The surviving question — Twelve-Neighbor Spatial Rotational Closure (verified, still not assigned a node)
+
+This is preserved separately from D-417's retired meaning, per
+instruction, and has now actually been investigated rather than left
+as inference — using D-409's own geometry directly, without borrowing
+C-301's `M^4=I` result and without assuming the 6/12 counts imply
+rotational periodicity.
+
+**Method:** D-409 defines `N_12 = (a/sqrt2){(+-1,+-1,0), (+-1,0,+-1),
+(0,+-1,+-1)}`, twelve explicit points. A numerical script
+(`Integrity_Tools/verify_d409_rotational_closure.py`) constructs this
+exact point set and searches directly for which 3D rotations map it
+onto itself, rather than assuming a textbook answer.
+
+**Operator:** not a single distinguished operator (unlike C-301's one
+`M`). The full set of rotations preserving `N_12` forms a group; three
+rotation-axis families exist — 3 four-fold axes (through opposite
+square faces), 4 three-fold axes (through opposite triangular faces),
+6 two-fold axes (through opposite edges) — matching the point set's
+inherited cube/octahedron symmetry, since `N_12` is exactly the set of
+cube edge-midpoints.
+
+**State space:** `N_12`, the twelve points D-409 already defines, as a
+subset of R^3.
+
+**Order:** the full rotation group has order **24** (verified by
+generating it numerically from a 4-fold and a 3-fold element and
+checking closure), isomorphic to S4. Individual element orders present
+are **only 1, 2, 3, and 4** — confirmed by direct search over all
+z-axis rotation angles from 1 to 359 degrees, of which only 90, 180,
+and 270 preserve the set. **No order-6 or order-12 rotation exists for
+this shell.** The naive reading implied by D-417's original title —
+that 12 neighbors suggests 12-fold rotational closure — is
+numerically false for this specific geometry.
+
+**Invariants:** the full 12-point set is invariant (as a set, not
+pointwise) under all 24 group elements. Under a single 4-fold axis
+rotation, the 12 points split into three orbits of 4; under a 3-fold
+axis, into orbits of 3; under a 2-fold edge axis, two points lie on
+the axis itself (fixed, orbit size 1) and the rest split into orbits
+of 2.
+
+**Failure / what this does NOT show:** (1) this is a property of the
+idealized geometric point set only — it says nothing about whether any
+actual lattice dynamics in this repository respects, uses, or is
+constrained by this symmetry; (2) a physically-motivated departure
+from the idealized cuboctahedral shell (anisotropic coupling, a
+perturbed lattice) could reduce the symmetry group and change these
+numbers; (3) this shows a rotation of order 4 *exists* among the
+shell's symmetries — the same order as C-301's `M^4=I` — but this
+script makes no claim that they are the same rotation, the same
+mechanism, or related at all; that would require an actual proposed
+mapping between the internal `(psi_C, psi_E)` Mirror state and this
+spatial shell, which does not exist. C-301 itself already flags the
+analogous open question for its own mechanism ("whether mirror
+crossing is forced by One-Wave geometry or defined as a boundary rule
+remains open").
+
+**Whether this earns a node:** per instruction, a node is earned if
+the geometry yields a defensible group action and closure derived from
+the geometry itself, not chosen because 6 or 12 looks appealing. That
+condition is met — the derivation above is reproducible
+(`python3 Integrity_Tools/verify_d409_rotational_closure.py`) and does
+not select its answer to match 6 or 12; it found 24, which contradicts
+the appealing reading. Node assignment itself is left open rather than
+done in this pass, consistent with how every other promotion decision
+in this backlog has been handled — this is flagged as ready for that
+decision, not made unilaterally here.
+
+### B-221's rotational-vs-additive LOOP tension — flagged for later reconciliation, not resolved here
+
+Per instruction, this is noted and left open rather than addressed in
+this pass. B-221 already names A-111 (additive) and C-301 (rotational)
+as its two unreconciled LOOP candidates. The rotational-closure work
+above does not resolve that tension — it investigates a different
+rotation (the spatial shell's symmetry group) from C-301's own
+mechanism, and does not bear on which of A-111 or C-301 is the correct
+grounding for B-221's LOOP step. That reconciliation remains B-221's
+own open item, unchanged by this dossier.
 
 ## E-Series — Field Mechanics & Applied Extensions (8 entries)
 

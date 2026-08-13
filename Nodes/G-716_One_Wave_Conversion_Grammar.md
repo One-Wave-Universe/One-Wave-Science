@@ -20,7 +20,7 @@ Appendix G — Evaluation, Modulation, Validation, and Balance
 Dependencies:
 Upstream: A-117 Dimensional Integrity, G-711 Gate 7, G-712 Evaluation Mathematics, G-713 Modulation Mathematics, G-714 Decision Mathematics
 Bidirectional/Lateral: D-410 Twenty-Fourfold 4D Recurrence Shell
-Lateral: Mirror Gate, Paired Exchange, State Changer
+Lateral: Mirror Gate, Paired Exchange, State Changer, D-409 Twelvefold 3D Close-Packed Coordination, D-411 Mirrored Axis Pairs and Directed Route Counts (this grammar's `12`, `6`, and `3` layer labels share numerals with D-409's/D-411's spatial coordination counts; per this node's own Dimensional Boundary section below, that is not automatically the same domain — cross-referenced, not merged)
 Downstream: G-716a One-Wave Conversion Simulation Rule, applied boundary-reversal nodes, biological crossing nodes, stellar boundary nodes, consciousness-state conversion nodes
 
 Definition:
@@ -391,7 +391,7 @@ G-716a remains YELLOW until a first successful validation with reproducible emer
 
 ## Dimensional Boundary
 
-The labels 24, 12, 6, 3, and 1 are recursive conversion layers in this grammar. They are not automatically spatial dimensions or nearest-neighbor counts. Physical or geometric uses must declare their mapping under A-117. D-410 governs the 24:1 recurrence meaning.
+The labels 24, 12, 6, 3, and 1 are recursive conversion layers in this grammar. They are not automatically spatial dimensions or nearest-neighbor counts. Physical or geometric uses must declare their mapping under A-117. D-410 governs the 24:1 recurrence meaning; D-409 governs the 12:1 spatial-neighbor meaning; D-411 governs the 6:1/12:1 axis-pair/directed-route counting distinction. This grammar's `12`/`6`/`3` do not inherit D-409/D-411's spatial meaning by numeral alone (checked directly during a repository audit that found no prior cross-reference here; see `RELATIONAL_MECHANICS_NODE_BACKLOG.md`).
 
 ## Yellow Items Still Attached
 

@@ -1,4 +1,12 @@
 
+## D-417 Retired; Twelve-Neighbor Rotational Closure Verified Numerically
+
+- Retired D-417's original "6:1 / 1:12 Rotational Closure Relation" backlog claim as already covered by D-409/D-411. Added the missing cross-references directly: G-716 now cites D-409/D-411 in its Dependencies and Dimensional Boundary section (with an explicit not-merged note); D-409 and D-411 now cite G-716 reciprocally. No node was built for the retired meaning.
+- Investigated the surviving question separately, per instruction: does D-409's twelve-neighbor shell have its own discrete rotational symmetry, derived from the geometry itself rather than borrowed from C-301's `M^4=I` or assumed from the 6/12 counts. Added `Integrity_Tools/verify_d409_rotational_closure.py`, which numerically constructs D-409's exact 12-point shell and searches directly for its rotation symmetries.
+- Result: the shell's full rotation group has order 24 (chiral octahedral, isomorphic to S4); individual element orders are only 1, 2, 3, or 4. No order-6 or order-12 rotation exists - the naive "12 neighbors implies 12-fold closure" reading is numerically false for this geometry. Documented the operator, state space, order, invariants, and failure cases in the backlog per instruction. Node assignment for this candidate is left open, not decided unilaterally.
+- Flagged B-221's existing additive-vs-rotational LOOP tension (naming A-111 and C-301) explicitly for later reconciliation; not resolved in this pass.
+- Repository integrity validator passes with zero errors.
+
 ## D-417 Evidence Dossier (no new node created)
 
 - Exhausted existing canon against D-417's blank "6:1 / 1:12 Rotational Closure Relation" title before writing anything new. Found the counting relationship it names is already stated in D-409 and D-411 (both canonical). Found G-716 (BRONZE, the highest-proven gate in this area) already uses near-identical `N > 1(0)1 < M` notation across its full 24-12-6-3-1-24 conversion path, with its own explicit warning that these layer labels are not automatically spatial/neighbor counts - the same warning D-417 would need to honor. Found C-301/C-308 already define a real "closure" (4pi, M^4=I) at a different number (4, not 6/12) and different domain - a duplicate-name risk to flag, not a duplicate mechanism. Found B-221 already carries an unresolved additive-vs-rotational LOOP-candidate tension naming C-301 directly.

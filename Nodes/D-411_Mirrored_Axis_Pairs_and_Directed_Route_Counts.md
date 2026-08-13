@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**  
 Upstream: A-103 Differential, A-117 Dimensional Integrity, B-205 Mirror, D-408 Sixfold 2D Lattice, D-409 Twelvefold 3D Coordination, D-410 Twenty-Fourfold 4D Recurrence Shell  
-Lateral: G-719 Neural System Functional Analogy Map, G-720 No Control But Self-Control  
+Lateral: G-719 Neural System Functional Analogy Map, G-720 No Control But Self-Control, G-716 One-Wave Conversion Grammar (its `24/12/6/3/1` layer labels share numerals with this node's ratio ladder; per the Domain Declaration rule below, matching numbers do not merge mechanisms — cross-referenced, not merged)  
 Downstream: lattice simulation headers, Android movement-route declarations, ratio-domain audits
 
 ## Purpose
