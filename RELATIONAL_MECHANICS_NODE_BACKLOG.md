@@ -393,7 +393,7 @@ G-743 and the Promotion Rule exist to prevent.
 |---|---|---|---|---|
 | D-415 | 3:1 Point–Path–Field Coordination | Formalize the 3 relation without prematurely calling it a mass ratio. | A-120 | MAPPED |
 | D-416 | 1:6 Six-Step Linear Coordination | — | B-221, D-415 | MAPPED |
-| D-417 | 6:1 / 1:12 Rotational Closure Relation | — | D-409, D-416 | MAPPED |
+| D-417 | 6:1 / 1:12 Rotational Closure Relation | — | D-409, D-416 | MAPPED — evidence exhausted against existing canon, see D-417 Evidence Dossier below; still no standalone mechanism, no new node file created |
 | D-418 | 1:24 Higher-Scale Recurrence | — | D-410, D-417 | MAPPED |
 | D-419 | Octave-Doubling Coordination Ladder | Separate the observed numerical architecture from claims about its physical interpretation. | D-415–D-418 | MAPPED |
 | D-420 | Resonant Phase Correlation | Resonance as recurring correlated phase rather than necessarily identical impulses. | D-402, F-604 | **DEVELOPED** — see `Nodes/D-420_Resonant_Phase_Correlation.md` |
@@ -411,6 +411,140 @@ G-743 and the Promotion Rule exist to prevent.
 | D-432 | Jupiter Moving-Wake Benchmark | Use Jupiter as the strongest planetary test case. | D-430, D-426 | MAPPED |
 | D-433 | Sun–Earth–Moon Relational Benchmark | Three-body benchmark before scaling to the complete solar system. | D-427, D-428 | MAPPED |
 | D-434 | Long-Horizon Resonance Benchmark | Distinguish close-encounter success from 10⁴–10⁵-orbit secular behavior. | D-427, D-433 | MAPPED |
+
+## D-417 Evidence Dossier
+
+D-417 was picked as the next development candidate given the
+independent convergence noted in the `3>1(0)1<6` reconciliation above.
+Its backlog row has never carried an intended-claim sentence — the
+column was blank from the start. Rather than invent one, this dossier
+exhausts what the repository already says about "6:1," "12:1," and
+"closure," tests each hit for contradiction or duplication under I-04,
+and reports the result. **No new node file was created.** Everything
+below is quotation or direct citation of existing canon; nothing here
+is a new physical claim.
+
+### What already exists
+
+**1. D-409 (already canonical, GREEN) already states the 6:1/12:1
+pairing D-417's title names.** Verbatim: "The twelve directed neighbor
+positions may be organized into six opposite coordinate pairs for a
+declared shell mapping. This gives a `6:1` mirrored-pair view and a
+`12:1` directed-neighbor view, controlled by D-411." D-411's own
+Dimensional Count Ladder table lists the identical pairing for the "3D
+close-packed shell" row. **This is not a new relation to derive — it
+is already derived, in two already-canonical nodes.**
+
+**2. G-716 (already canonical, BRONZE — the highest-proven gate
+anywhere in this backlog's neighborhood) already uses notation nearly
+identical to the `3>1(0)1<6` string this pass has been reconciling.**
+G-716's full core pattern: `24 > 1(0)1 < 12 > 1(0)1 < 6 > 1(0)1 < 3 >
+1(0)1 < 1 > 1(0)1 < 24`. Read one segment in the direction opposite to
+how G-716 states it (`6 > 1(0)1 < 3` reversed is `3 > 1(0)1 < 6`) and
+it is the same gate G-716 already walks between its "6" and "3"
+conversion layers. G-716's own ratio expression line spells out
+`12:1 -> 6:1 -> 3:1 -> 1:1 -> 1:24` — essentially the full D-415–D-418
+ladder, already present in a Bronze node, just never cross-referenced
+to those still-MAPPED D-series IDs.
+
+**3. G-716 places its own explicit guardrail directly on this
+overlap**, under its Dimensional Boundary section: "The labels 24, 12,
+6, 3, and 1 are recursive conversion layers in this grammar. They are
+not automatically spatial dimensions or nearest-neighbor counts.
+Physical or geometric uses must declare their mapping under A-117."
+That is the same warning D-411 gives for its own ratios ("same ratio
+≠ same domain"). **Any D-417 development must therefore state
+explicitly whether it is extending G-716's abstract conversion-layer
+sense of "6" and "12," or D-409/D-411's literal spatial-neighbor
+sense — not assume they are the same because the numbers match.**
+
+**4. "Closure" already has a real, different, already-canonical
+meaning in this repository, at a different number.** C-301 Mirror
+Gate and C-308 Spin-half (both GREEN, both real math) define `M^4 = I`
+as "4π closure" — the Mirror operator returning to identity after four
+applications, giving spin-half's defining property. This is an actual
+derived rotational-closure result already in the repository — but its
+closure number is **4**, not 6 or 12, and its domain is an internal
+two-component `(psi_C, psi_E)` state, not D-409's spatial lattice
+shell. Per I-06's Duplicate-Name Rule, if D-417 is ever built and
+titled with "closure" in it, it will collide in name with C-301/C-308
+without being the same mechanism, and will need a
+`DUPLICATE_NAME_DISAMBIGUATION.md` entry at that time — not now, since
+D-417 has no real node file yet for the registry to reference.
+
+**5. B-221 (Six Recursive Steps, already canonical, YELLOW) already
+flags an unresolved tension directly relevant to "rotational" in
+D-417's title.** B-221's own dependency line names two unreconciled
+candidates for its LOOP step: "A-111 Recursion (LOOP's candidate 1 for
+G — additive, unreconciled with candidate 2), C-301 Mirror Gate
+(LOOP's candidate 2 for G — rotational, unconfirmed, see LOOP
+section)." That is an existing, open, already-flagged
+additive-vs-rotational question sitting inside a canonical node — not
+something D-417 would be introducing for the first time.
+
+### The "six" ambiguity web (why this matters)
+
+D-411 already states "same ratio ≠ same domain" as a hard rule. The
+literal number 6 already carries at least four separate, non-identical
+established meanings in this repository before D-417 exists:
+
+```text
+B-221    6 = abstract recursive-cycle step count (Six Recursive Steps)
+D-408    6 = literal 2D lattice nearest-neighbor count (6:1 coordination)
+D-411    6 = directed-route count derived from 3 axis pairs (6:1 view)
+G-716    6 = a conversion-grammar layer label ("paired structural compression")
+```
+
+D-417 sits precisely at the point most likely to accidentally conflate
+two or more of these. That is the specific risk this dossier exists to
+flag before any equation gets written, not after.
+
+### I-04 disposition, as far as the evidence supports it
+
+- D-417's proposed 6:1/12:1 pairing vs. **D-409/D-411's existing
+  6:1/12:1 pairing**: not yet distinguishable from **Duplicate** —
+  the counting relationship these would state is already fully stated.
+  If D-417 has nothing to add beyond this counting relationship, it
+  does not need a new node; it needs D-409 and D-411 cross-referenced
+  from wherever "Rotational Closure" was going to be cited instead.
+- D-417's "Rotational Closure" vs. **C-301/C-308's 4π closure**: not
+  Duplicate (different number, different domain) and not confirmed as
+  **Architectural Homology** either (no operational mapping shown
+  between an internal 2-component Mirror state and a 12-neighbor
+  spatial shell). Filed as **Analogy Only** at most, pending an actual
+  proposed mapping — and even that is this dossier's inference, not a
+  claim the backlog makes on its own authority.
+- D-417 vs. **G-716's conversion-layer 6 and 12**: same disposition —
+  **Analogy Only** pending an explicit statement of whether D-417
+  means the same "6"/"12" G-716 already uses, or a distinct spatial
+  sense.
+
+### One candidate reading (flagged as inference, not fact)
+
+The one genuinely non-redundant physical question this dossier could
+find, that is not already answered by D-409/D-411/G-716/C-301/C-308:
+**does D-409's twelve-neighbor cuboctahedral shell possess its own
+discrete rotational symmetry that closes after a specific number of
+steps** — i.e. a rotation-group closure of the physical lattice shell
+itself, analogous in structure (not derived from) C-301's `M^4=I`
+closure but for the spatial neighbor geometry rather than an internal
+Mirror state. This is a real, well-posed, checkable geometric question
+(the cuboctahedron's rotation group has a known finite order) that
+genuinely is not yet covered by anything cited above. **This is this
+dossier's own candidate reading, explicitly not confirmed as what
+D-417 was meant to claim**, offered because the alternative — silence
+— would leave "make only changes justified by the repository"
+satisfied but "exhaust the evidence" incomplete.
+
+### Recommendation (not acted on unilaterally)
+
+Given how much of D-417's title is already covered by existing
+canonical content, the open question worth deciding — not decided
+here — is whether D-417 should become a real node with the narrow
+rotation-group-closure claim above, or whether it should be retired
+from the backlog in favor of explicit cross-references added to
+D-409, D-411, and G-716 (which would need no new node ID at all). No
+change was made to resolve this either way in this pass.
 
 ## E-Series — Field Mechanics & Applied Extensions (8 entries)
 

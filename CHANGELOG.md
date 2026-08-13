@@ -1,4 +1,11 @@
 
+## D-417 Evidence Dossier (no new node created)
+
+- Exhausted existing canon against D-417's blank "6:1 / 1:12 Rotational Closure Relation" title before writing anything new. Found the counting relationship it names is already stated in D-409 and D-411 (both canonical). Found G-716 (BRONZE, the highest-proven gate in this area) already uses near-identical `N > 1(0)1 < M` notation across its full 24-12-6-3-1-24 conversion path, with its own explicit warning that these layer labels are not automatically spatial/neighbor counts - the same warning D-417 would need to honor. Found C-301/C-308 already define a real "closure" (4pi, M^4=I) at a different number (4, not 6/12) and different domain - a duplicate-name risk to flag, not a duplicate mechanism. Found B-221 already carries an unresolved additive-vs-rotational LOOP-candidate tension naming C-301 directly.
+- Applied I-04 disposition to each overlap rather than asserting one. Offered one candidate reading (rotational symmetry closure of D-409's twelve-neighbor shell) explicitly flagged as inference, not confirmed content.
+- No Nodes/ file created for D-417. No other MAPPED backlog rows touched. Recommendation (whether D-417 becomes a real node or is retired in favor of cross-references) left open, not decided unilaterally.
+- Repository integrity validator passes with zero errors; only file changed is the backlog manifest.
+
 ## Newer-Concepts Reconciliation (DC/AC/RFC, wake continuation, 3>1(0)1<6, measurement-as-capture)
 
 - Corrected `Nodes/C-324_V0_Hex_Cell_Multicellular_Host_Architecture.md`: its Motion section previously read "RC (Rotational Current)"; RFC (Rotating Field Current) is confirmed intentional, not a typo. Correction stated in the node itself. Added a candidate I-04 Scale-Specific Instance cross-reference to the backlog's Nested Point-Path-Field Recursion item, explicitly not merged.
