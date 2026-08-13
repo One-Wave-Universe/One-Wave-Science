@@ -115,7 +115,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-330 | Moving Local Potential Perturbation | Jupiter modeled as a moving localized deformation on the solar background potential; standard patched-conic assumption restated relationally. | YELLOW |
 | C-331 | Relative Encounter Frame Transformation | Encounter state transformed between perturber-centered and Sun-centered frames; elastic in the perturber's frame only. | YELLOW |
 | C-332 | Relational Energy Transfer | `ΔK = V_J·(u_out − u_in)`; the standard gravity-assist energy-change formula, derived from C-331. | YELLOW |
-### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)
+### Appendix D — Resonance, Modal & Dimensional Structure (17 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -134,6 +134,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-420 | Resonant Phase Correlation | Resonance as recurring correlated encounter phase across repeated close approaches, not identical impulse size; specializes F-604 for orbital mechanics. | GREEN |
 | D-421 | Coherent Differential Accumulation | Phase-recurring perturbations sum ~linearly in N; explicit summation form, not yet evaluated numerically. | YELLOW |
 | D-422 | Incoherent Differential Cancellation | Phase-random perturbations grow ~sqrt(N) as a random walk; the null-hypothesis companion to D-421. | YELLOW |
+| D-435 | Twelvefold-Shell Rotation-Group Closure | D-409's twelve-neighbor shell has rotation-group order 24 with element orders 1/2/3/4 only; no 6-fold or 12-fold closure exists — verified numerically, refuting the naive neighbor-count reading. | BRONZE |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|

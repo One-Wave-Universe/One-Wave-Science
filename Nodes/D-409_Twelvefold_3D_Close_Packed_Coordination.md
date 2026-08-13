@@ -14,7 +14,7 @@ metadata_standard: "I-06"
 **Dependencies**  
 Upstream: A-116 Three-Dimensional Spherical Default, A-117 Dimensional Integrity, D-408 Sixfold 2D Lattice, D-411 Mirrored Axis Pairs, D-412 Lattice Simulation Standard, C-317 Boundary-Tension Weave  
 Lateral: G-716 One-Wave Conversion Grammar (shares the `12` numeral in its abstract conversion-layer sense — not the same domain as this node's spatial coordination; see G-716's own Dimensional Boundary section)  
-Downstream: bounded-excitation simulation, Vortex-Phase simulation, Three-Vortex-Knot simulation, electrical-shell simulation, Mass-Effect response simulation
+Downstream: bounded-excitation simulation, Vortex-Phase simulation, Three-Vortex-Knot simulation, electrical-shell simulation, Mass-Effect response simulation, D-435 Twelvefold-Shell Rotation-Group Closure
 
 ## Definition
 
@@ -140,16 +140,13 @@ The close-packed candidate fails if:
 - twelvefold local coordination cannot preserve bounded modes without imposed hard walls;
 - the claimed 2D/3D correspondence cannot be defined without losing the quantities used by the physical interpretation.
 
-## Candidate Extension (not a claim of this node — tracked in the backlog)
+## Downstream Extension — D-435
 
-`N_12`'s discrete rotational symmetry group has been checked directly by
-numerical construction (`Integrity_Tools/verify_d409_rotational_closure.py`):
-it is the chiral octahedral group, order 24 (isomorphic to S4), acting
-faithfully on these twelve points. Individual rotation orders present are
-only 1, 2, 3, and 4 — there is no order-6 or order-12 rotation that maps
-this shell onto itself. This is stated here as a checked geometric fact
-about the point set this node already defines, not as a new physical claim
-of D-409 itself; it is tracked as an open candidate node in
-`RELATIONAL_MECHANICS_NODE_BACKLOG.md` (twelve-neighbor spatial rotational
-closure), separate from and not derived from C-301's unrelated `M^4=I`
-closure.
+`N_12`'s discrete rotational symmetry group has been derived and
+verified numerically: it is the chiral octahedral group, order 24
+(isomorphic to S4), acting faithfully on these twelve points, with
+individual rotation orders only 1, 2, 3, and 4 — no order-6 or
+order-12 rotation maps this shell onto itself. This is not a claim of
+D-409 itself; it is a separate, promoted node — **D-435 Twelvefold-Shell
+Rotation-Group Closure** — kept distinct from and not derived from
+C-301's unrelated `M^4=I` closure.

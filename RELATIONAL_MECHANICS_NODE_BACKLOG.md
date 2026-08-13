@@ -411,6 +411,7 @@ G-743 and the Promotion Rule exist to prevent.
 | D-432 | Jupiter Moving-Wake Benchmark | Use Jupiter as the strongest planetary test case. | D-430, D-426 | MAPPED |
 | D-433 | Sun–Earth–Moon Relational Benchmark | Three-body benchmark before scaling to the complete solar system. | D-427, D-428 | MAPPED |
 | D-434 | Long-Horizon Resonance Benchmark | Distinguish close-encounter success from 10⁴–10⁵-orbit secular behavior. | D-427, D-433 | MAPPED |
+| D-435 | Twelvefold-Shell Rotation-Group Closure | D-409's twelve-neighbor shell has rotation-group order 24, element orders 1/2/3/4 only, no 6-fold or 12-fold closure — verified numerically, refuting the naive neighbor-count reading. Not part of the original ~100-item list; surfaced by the D-417 exhaustion below. | D-409 | **DEVELOPED** — see `Nodes/D-435_Twelvefold_Shell_Rotation_Group_Closure.md` (BRONZE) |
 
 ## D-417 Evidence Dossier
 
@@ -544,74 +545,20 @@ canonical nodes rather than left implicit:
 No node ID was assigned for the retired counting claim. D-417's row in
 the D-Series table above is marked retired accordingly.
 
-### The surviving question — Twelve-Neighbor Spatial Rotational Closure (verified, still not assigned a node)
+### The surviving question — PROMOTED to D-435
 
-This is preserved separately from D-417's retired meaning, per
-instruction, and has now actually been investigated rather than left
-as inference — using D-409's own geometry directly, without borrowing
-C-301's `M^4=I` result and without assuming the 6/12 counts imply
-rotational periodicity.
-
-**Method:** D-409 defines `N_12 = (a/sqrt2){(+-1,+-1,0), (+-1,0,+-1),
-(0,+-1,+-1)}`, twelve explicit points. A numerical script
-(`Integrity_Tools/verify_d409_rotational_closure.py`) constructs this
-exact point set and searches directly for which 3D rotations map it
-onto itself, rather than assuming a textbook answer.
-
-**Operator:** not a single distinguished operator (unlike C-301's one
-`M`). The full set of rotations preserving `N_12` forms a group; three
-rotation-axis families exist — 3 four-fold axes (through opposite
-square faces), 4 three-fold axes (through opposite triangular faces),
-6 two-fold axes (through opposite edges) — matching the point set's
-inherited cube/octahedron symmetry, since `N_12` is exactly the set of
-cube edge-midpoints.
-
-**State space:** `N_12`, the twelve points D-409 already defines, as a
-subset of R^3.
-
-**Order:** the full rotation group has order **24** (verified by
-generating it numerically from a 4-fold and a 3-fold element and
-checking closure), isomorphic to S4. Individual element orders present
-are **only 1, 2, 3, and 4** — confirmed by direct search over all
-z-axis rotation angles from 1 to 359 degrees, of which only 90, 180,
-and 270 preserve the set. **No order-6 or order-12 rotation exists for
-this shell.** The naive reading implied by D-417's original title —
-that 12 neighbors suggests 12-fold rotational closure — is
-numerically false for this specific geometry.
-
-**Invariants:** the full 12-point set is invariant (as a set, not
-pointwise) under all 24 group elements. Under a single 4-fold axis
-rotation, the 12 points split into three orbits of 4; under a 3-fold
-axis, into orbits of 3; under a 2-fold edge axis, two points lie on
-the axis itself (fixed, orbit size 1) and the rest split into orbits
-of 2.
-
-**Failure / what this does NOT show:** (1) this is a property of the
-idealized geometric point set only — it says nothing about whether any
-actual lattice dynamics in this repository respects, uses, or is
-constrained by this symmetry; (2) a physically-motivated departure
-from the idealized cuboctahedral shell (anisotropic coupling, a
-perturbed lattice) could reduce the symmetry group and change these
-numbers; (3) this shows a rotation of order 4 *exists* among the
-shell's symmetries — the same order as C-301's `M^4=I` — but this
-script makes no claim that they are the same rotation, the same
-mechanism, or related at all; that would require an actual proposed
-mapping between the internal `(psi_C, psi_E)` Mirror state and this
-spatial shell, which does not exist. C-301 itself already flags the
-analogous open question for its own mechanism ("whether mirror
-crossing is forced by One-Wave geometry or defined as a boundary rule
-remains open").
-
-**Whether this earns a node:** per instruction, a node is earned if
-the geometry yields a defensible group action and closure derived from
-the geometry itself, not chosen because 6 or 12 looks appealing. That
-condition is met — the derivation above is reproducible
-(`python3 Integrity_Tools/verify_d409_rotational_closure.py`) and does
-not select its answer to match 6 or 12; it found 24, which contradicts
-the appealing reading. Node assignment itself is left open rather than
-done in this pass, consistent with how every other promotion decision
-in this backlog has been handled — this is flagged as ready for that
-decision, not made unilaterally here.
+Preserved separately from D-417's retired meaning, investigated
+directly against D-409's own geometry (no borrowing from C-301's
+`M^4=I`, no assumption that 6/12 counts imply rotational periodicity),
+and — because the derivation held up under reproducible numerical
+verification and returned a genuine negative result (order 24, not the
+appealing 6 or 12) rather than accommodating the naive reading — now
+promoted to a full node: **D-435 Twelvefold-Shell Rotation-Group
+Closure** (`Nodes/D-435_Twelvefold_Shell_Rotation_Group_Closure.md`,
+BRONZE). See that node for the operator, state space, order,
+invariants, non-claims, and the explicit C-301 non-equivalence
+warning — not duplicated here to avoid two sources of truth for the
+same content.
 
 ### B-221's rotational-vs-additive LOOP tension — flagged for later reconciliation, not resolved here
 

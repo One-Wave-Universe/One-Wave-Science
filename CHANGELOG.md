@@ -1,4 +1,13 @@
 
+## D-435 Promoted — Twelvefold-Shell Rotation-Group Closure
+
+- Promoted the verified twelve-neighbor rotational-closure result to a full node: `Nodes/D-435_Twelvefold_Shell_Rotation_Group_Closure.md`, gate BRONZE, lifecycle ACTIVE. Core claim stated first and treated as first-class content per instruction: D-409's shell has rotation-group order 24, element orders 1/2/3/4 only, no 6-fold or 12-fold closure.
+- Scoped narrowly per instruction: explicit Non-Claims section (idealized geometry only, no single privileged operator, shared order-4 with C-301 is a noted coincidence only) and an explicit Non-Equivalence Warning toward C-301 rather than any implied link.
+- Linked to D-409 as geometric source (reciprocal cross-reference added in both directions), to G-716/D-411 as the corrective boundary on numeral interpretation (already cross-referenced from the prior pass), and to C-301 only through the non-equivalence warning.
+- Updated `00_MASTER_INDEX.md` Appendix D (17 nodes) and added `Wiki_Pages/D-435_Wiki_Page.html`.
+- Left B-221's additive-vs-rotational LOOP tension unresolved, as instructed.
+- Repository integrity validator passes with zero errors: 173 nodes, gate counts include BRONZE 3 (up from 2).
+
 ## D-417 Retired; Twelve-Neighbor Rotational Closure Verified Numerically
 
 - Retired D-417's original "6:1 / 1:12 Rotational Closure Relation" backlog claim as already covered by D-409/D-411. Added the missing cross-references directly: G-716 now cites D-409/D-411 in its Dependencies and Dimensional Boundary section (with an explicit not-merged note); D-409 and D-411 now cite G-716 reciprocally. No node was built for the retired meaning.
