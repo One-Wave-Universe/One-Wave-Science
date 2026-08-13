@@ -1,4 +1,17 @@
 
+## G-721 Corrected — Primitive Is the Triple (n,k,s), Not the Derived (p,r) Pair
+
+The prior pass's generator (`p=n+k, r=2p+s`) reproduced every packet form correctly but was mis-described as "minimal." Challenged directly: `p` is a derived anchor, and dropping `n` after forming it loses information the generator's own decoder still silently needed. Attacked computationally before touching the node text, per instruction not to assume minimality just because the tables came out right, and not to touch the wiki page until the attack was finished.
+
+- **Degeneracy confirmed**: `(n=4,k=1)` and `(n=5,k=0)` both give `p=5`, and at equal `s` produce the identical derived `(m,r)` pair — yet they are different states ("identity 4 looking one ahead" vs. "identity 5 at its own anchor"). `(p,r)` alone cannot recover `n`. Brute-force verified, zero exceptions.
+- **Corrected primitive**: the minimal distinguishable state is the triple `(n,k,s)` — identity, reference displacement, local polarity. `p=n+k`, `m=2p`, `r=m+s` are kept as derived coordinates only; `(n,p,s)` is an equally valid re-expression of the same triple, but `(p,s)`/`(p,r)` alone is not.
+- **No privileged k**: tested `k` over `[-5,+5]`, not just the inherited `{-1,0,1}` — zero decoder failures, zero collisions anywhere in range. `k=0,±1` were simply the values the original packet and the two-family proposal happened to use, not structurally special values.
+- **Operator algebra formalized and verified**: reference-shift `T_a:(n,k,s)->(n,k+a,s)` and polarity-flip `P:(n,k,s)->(n,k,-s)`. Verified `T_aT_b=T_(a+b)` (composition), `PT_a=T_aP` (commutation — reference-shift and polarity-flip are independent, not just independent table columns), and `P(P(x))=x` (involution). The group generated is `Z x Z/2` acting on `(k,s)` with `n` fixed. Domain-specific rules (alphabet boundary, tonal modulus, the two reversal operators) declared explicitly separate from this algebra, not folded into it.
+- Extended `alphabet_tonal_generator_validator.py` with permanent regression tests for the degeneracy counterexample, the extended-k sweep, and the T_a/P composition/commutation/involution checks; receipts regenerated, all checks pass.
+- Updated `Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md` and `AI_Readable_Packs/G-721_Mirrored_Alphabet_Rabbit_Hop.json` to reflect the corrected primitive; "New Predictions" gains the proven algebraic-independence finding.
+- `Wiki_Pages/G-721_Wiki_Page.html` not touched, per explicit instruction — it was already stale after the prior pass and remains so.
+- Repository integrity validator passes with zero errors: 176 nodes, gate/lifecycle counts unchanged (no new node created — this corrects G-721 in place).
+
 ## G-721 Generalized — Minimal Generator Replaces Four-Rail Proposal
 
 A proposed extension to G-721 (Mirrored Alphabet Rabbit-Hop) offered two "independent" arithmetic families plus a tonal correspondence. Brute-force testing found the second family was not independent - it was the first family's formula evaluated one letter ahead and re-anchored - and surfaced three real problems (a branch-decode collision, a reversal-rule contradiction between traversal classes, and a false 13-to-13 cardinality claim). Rather than patch those into the four-rail picture, went looking for the minimal generator that explains all of it and actively tried to falsify it.

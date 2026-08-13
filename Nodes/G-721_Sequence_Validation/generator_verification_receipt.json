@@ -15,5 +15,16 @@
   "alphabet_half_symbol_count": 13,
   "traversal_visit_correspondence_13_to_13": true,
   "state_cardinality_correspondence_13_to_13": false,
+  "p_r_degeneracy_confirmed": true,
+  "degeneracy_note": "(n=4,k=1) and (n=5,k=0) share p=5 and, at equal s, the identical (m,r) pair, yet are different (n,k) states -- (p,r) alone cannot recover n. The primitive must retain (n,k,s), not just (p,s)/(p,r).",
+  "extended_k_range_tested": "-5..5",
+  "extended_k_states_tested": 528,
+  "extended_k_decoder_failures": 0,
+  "extended_k_collisions": 0,
+  "no_privileged_k_confirmed": true,
+  "operator_states_tested": 45,
+  "T_composition_confirmed": true,
+  "P_T_commutation_confirmed": true,
+  "P_involution_confirmed": true,
   "all_checks_pass": true
 }

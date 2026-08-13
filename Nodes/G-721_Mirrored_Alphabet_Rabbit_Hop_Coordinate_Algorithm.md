@@ -19,37 +19,113 @@ brute-force tested against the original single-family packet below,
 rather than accepted on the strength of the formulas alone. The test
 found the second family is not independent: it is the first family's
 own formula evaluated one letter ahead, with the identity coordinate
-re-anchored back to `n`. Chasing that finding down produced a smaller
-generator that reproduces every packet either framing ever used,
-including the original's, as special cases — not a replacement for
-what already worked, an explanation of it.
+re-anchored back to `n`. Chasing that finding down produced a
+generator — which was then itself attacked rather than accepted for
+merely reproducing the tables, and turned out to need one more
+coordinate than first written down.
 
-**The minimal primitive:**
+**The minimal state is the triple `(n,k,s)`, not the pair `(p,s)` or
+`(p,r)`.** The anchor `p=n+k` is a *derived* coordinate, and dropping
+`n` after forming it loses real information: `(n=4,k=1)` and
+`(n=5,k=0)` both give `p=5`, and for equal `s` they generate the exact
+same `(m,r)` pair — yet "identity 4 looking one ahead" and "identity 5
+at its own position" are different states. Verified directly: the
+decoder below has always needed `n` as a separate input for exactly
+this reason; the earlier framing of `p,r` as "the" primitive was
+imprecise about what it was already doing correctly.
 
 \[
-\boxed{p=n+k,\qquad r=2p+s,\qquad s\in\{-1,0,+1\}}
+\boxed{(n,k,s)\ \longrightarrow\ p=n+k,\quad m=2p,\quad r=m+s,\qquad s\in\{-1,0,+1\}}
 \]
 
-`n` is identity — which letter this is. `p` is the anchor — the
-position actually evaluated, displaced from `n` by `k` steps
-("look-ahead" for `k>0`, "look-behind" for `k<0`, `k=0` is the letter's
-own position). `s` is a **ternary** differential, not a binary branch —
-the same `-1(0)+1` foundational choice this node already names below,
-here applied to the anchor's doubled value. This is the same
-displacement/differential language A-102 and A-103 already use;
-`k` is an A-102-style displacement of the evaluation point, `s` is an
-A-103-style differential applied at that point.
+`n` is identity — which letter this is, invariant under every operator
+below. `k` is reference displacement — how far the evaluated anchor
+`p` sits from `n` ("look-ahead" for `k>0`, "look-behind" for `k<0`,
+`k=0` is the letter's own position). `s` is local polarity — a
+**ternary** differential, not a binary branch, applied at the anchor:
+the same `-1(0)+1` foundational choice this node already names below.
+`n`, `k`, and `s` are three independent axes: identity, the
+displacement of the reference from identity, and the displacement from
+that reference. `k` is an A-102-style displacement of the evaluation
+point; `s` is an A-103-style differential applied at that point;
+`(n,p,s)` (anchor stated absolutely instead of relative to `n`) is an
+equally valid, equivalent state — verified to generate identical
+`(n,m,r)` triples — since `k` and `p` carry the same information once
+`n` is retained. What is *not* sufficient, verified by direct
+counterexample, is dropping `n` and keeping only `(p,s)` or `(p,r)`.
 
-This single generator reproduces the original packet
-(`k=0, s\in\{0,+1\}`, see Alphabet Index below), the proposed
-symmetric base rail (`k=0, s\in\{-1,+1\}`), and the proposed second
-family (`k=1, s\in\{-1,+1\}`) — verified by direct computation for all
-26 letters, not asserted. It also predicts states neither prior
-framing used (see New Predictions below), and it does not force the
-alphabet and a 12-tone extension to share one boundary rule (see
-Domain Boundary below) — a linear, bounded system and a cyclic one are
-not the same kind of domain, and treating them as if they were was one
-of the assumptions that did not survive testing.
+This generator reproduces the original packet (`k=0, s\in\{0,+1\}`,
+see Alphabet Index below), the proposed symmetric base rail
+(`k=0, s\in\{-1,+1\}`), and the proposed second family
+(`k=1, s\in\{-1,+1\}`) — verified by direct computation for all 26
+letters, not asserted. It also predicts states neither prior framing
+used (see New Predictions below), and it does not force the alphabet
+and a 12-tone extension to share one boundary rule (see Domain
+Boundary below) — a linear, bounded system and a cyclic one are not
+the same kind of domain, and treating them as if they were was one of
+the assumptions that did not survive testing.
+
+### No privileged values of k
+
+`k=0,\pm1` are not special to the algebra. Tested `k\in\{-5,\ldots,+5\}`
+at a fixed letter: every value decodes correctly with no qualitative
+change anywhere in the range. `k=0` and `k=\pm1` were simply the
+values the original packet and the later two-family proposal happened
+to use — the first visible members of an unbounded translation family,
+not a boundary the algebra itself imposes. (Domain-specific boundaries
+do exist — see Domain Boundary — but they belong to the alphabet's
+linear range and the tonal cycle's modulus, not to the generator.)
+
+### Operator algebra
+
+Two operators act on the state `(n,k,s)`:
+
+\[
+T_a:(n,k,s)\mapsto(n,k+a,s)
+\qquad\text{(reference-shift by $a$)}
+\]
+
+\[
+P:(n,k,s)\mapsto(n,k,-s)
+\qquad\text{(polarity flip)}
+\]
+
+Both preserve `n` — identity is invariant under reference-shift and
+polarity flip alike; only `k` and `s` move. Verified by direct
+computation over `n\in\{1,\ldots,26\}`, `k\in\{-3,\ldots,3\}`,
+`s\in\{-1,0,1\}`, and shift amounts `a,b\in\{-3,\ldots,3\}`:
+
+\[
+\boxed{T_aT_b=T_{a+b}}
+\]
+
+(`T` is a group homomorphism from `(\mathbb Z,+)` — reference-shift
+composes by ordinary addition; `T_0` is the identity operator, `T_{-a}`
+is `T_a`'s inverse.)
+
+\[
+\boxed{PT_a=T_aP}
+\]
+
+(reference-shift and polarity flip commute — they act on genuinely
+independent axes, not merely appear independent in a table.) `P` is
+also verified to be an involution, `P(P(n,k,s))=(n,k,s)`.
+
+The group generated by all `T_a` and `P` is therefore the direct
+product `\mathbb Z\times\mathbb Z/2` acting on `(k,s)`, with `n` fixed
+throughout. This is the smallest algebra found so far that reproduces
+identity, reference displacement, and local `-/0/+` displacement as
+three genuinely independent structures rather than three formulas that
+happen to agree on a table.
+
+**Domain topology is deliberately kept out of this algebra.** The
+alphabet's linear boundary, the tonal cycle's modulus, half-mirror
+sequence-reversal, and round-trip orientation-exchange are all
+declared separately (Domain Boundary and Reversal vs.
+Orientation-Exchange below) rather than folded into `T_a` or `P`. The
+generator is domain-agnostic; where a symbol sequence is bounded,
+where it wraps, and how a traversal reverses are properties of the
+alphabet or the tonal cycle, not of `(n,k,s)` itself.
 
 **Dependencies**
 Upstream: A-101 Ground / Zero, A-102 Displacement (the `k` re-anchor), A-103 Differential (the `s` differential), A-111 Recursion, B-205 Mirror, B-222 Oscillation Center, B-223 Three Moves, G-716 One-Wave Conversion Grammar
@@ -175,13 +251,22 @@ reverse traversal direction.
 
 ## Generator Verification
 
-Brute-force tested across all 26 letters (`n=1..26`), `k\in\{-1,0,1\}`
+Brute-force tested across all 26 letters (`n=1..26`), `k\in\{-5,\ldots,+5\}`
 where the domain permits, `s\in\{-1,0,+1\}`:
 
+- `(p,r)` or `(m,r)` alone is degenerate — `(n=4,k=1)` and `(n=5,k=0)`
+  generate the identical `(m,r)` pair at equal `s`; `n` must be
+  retained as an independent coordinate, not discarded after forming
+  the anchor;
 - the map `(n,k,s) \mapsto (n, 2(n+k), 2(n+k)+s)` is injective for
   fixed `n` — zero collisions found across every tested state;
 - the decoder `k=m/2-n,\ s=r-m` (given triple `(n,m,r)`) inverts the
   generator exactly, for every tested state, with zero failures;
+- no value of `k` is special to the algebra — tested `k\in\{-5,\ldots,+5\}`
+  with no qualitative change anywhere in range;
+- `T_a` and `P` (see Operator Algebra above) compose and commute
+  exactly as their group structure requires, over the full tested
+  range;
 - every packet either the original convention or the proposed
   two-family convention ever produced is reproduced exactly by this
   generator as a special case — confirmed by direct comparison, not
@@ -479,14 +564,20 @@ exchange. It requires a separately declared rule.
    "Hold, `k` positions ahead/behind." E.g. for A at `k=1`:
    `(n=1,k=1,s=0)\to r=4`. Neither the original packet nor the
    proposed two-family packet ever used this state.
-2. **Look-behind (`k<0`) works symmetrically** — verified for
-   `k=-1` across `n=2..26` with zero decoder failures. This predicts
-   the family structure extends in both directions from any letter,
-   not only forward.
+2. **Look-behind (`k<0`) works symmetrically, with no special values
+   anywhere in the range** — verified for `k\in\{-5,\ldots,+5\}`, not
+   only the `k=-1` first checked. The family structure is an unbounded
+   translation, not a forward-only extension stopped at `k=1`.
 3. **The alphabet's hard boundary at Z has no tonal counterpart** — a
    genuine, testable asymmetry between the two domains (see Domain
    Boundary), predicted by the generator rather than assumed going in.
-4. **`s\in\{-1,0,+1\}` is a candidate structural match for G-744's
+4. **Reference-shift and polarity-flip are independent, commuting
+   group operators, not merely independent-looking table columns** —
+   `T_aT_b=T_{a+b}` and `PT_a=T_aP`, verified over the full tested
+   range (see Operator Algebra above). This is a stronger claim than
+   "`k` and `s` look orthogonal in a table"; it is a proven algebraic
+   independence.
+5. **`s\in\{-1,0,+1\}` is a candidate structural match for G-744's
    Field/Mirror/Void ternary states and for B-223's Three Moves** —
    not confirmed here. If it holds under a term-by-term check, this
    node's differential is not a separately invented branch mechanism;

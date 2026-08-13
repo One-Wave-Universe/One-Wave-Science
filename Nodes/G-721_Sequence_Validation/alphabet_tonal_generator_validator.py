@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Brute-force verification for G-721's generator: p = n+k, r = 2p+s,
-s in {-1,0,+1}.
+"""Brute-force verification for G-721's generator. Primitive state is the
+triple (n,k,s) -- identity, reference displacement, local polarity. p=n+k,
+m=2p, r=m+s are DERIVED coordinates only, not the primitive.
 
 Tests, against all 26 alphabet positions and all 12 tonal positions:
 - that the generator reproduces every packet the original single-family
@@ -10,7 +11,14 @@ Tests, against all 26 alphabet positions and all 12 tonal positions:
 - that half-mirror reversal and round-trip orientation-exchange are
   genuinely different operators, not one rule applied twice;
 - the alphabet's linear boundary at Z vs. the tonal cycle's wraparound;
-- the 12-state / 13-visit tonal closure distinction.
+- the 12-state / 13-visit tonal closure distinction;
+- that (n=4,k=1) and (n=5,k=0) collide on (p,r) alone at equal s, proving
+  p is a derived, lossy anchor and n must be retained independently;
+- that no value of k in [-5,+5] is qualitatively special (decoder still
+  inverts exactly, no new collisions appear);
+- that the reference-shift operator T_a and polarity-flip operator P
+  compose (T_aT_b=T_(a+b)), commute (PT_a=T_aP), and that P is an
+  involution (P(P(x))=x).
 
 Writes generator_verification_receipt.json with a pass/fail summary and
 alphabet_tonal_table.csv with the full table for both symbol sets.
@@ -38,6 +46,16 @@ def decode(n: int, m: int, r: int) -> tuple[int, int]:
     k = m // 2 - n
     s = r - m
     return k, s
+
+
+def T(state: tuple[int, int, int], a: int) -> tuple[int, int, int]:
+    n, k, s = state
+    return (n, k + a, s)
+
+
+def P(state: tuple[int, int, int]) -> tuple[int, int, int]:
+    n, k, s = state
+    return (n, k, -s)
 
 
 def half_split(symbols: list[str]) -> tuple[list[str], list[str]]:
@@ -148,6 +166,69 @@ def main() -> None:
     results["traversal_visit_correspondence_13_to_13"] = (len(closure_traversal) == len(ALPHABET) // 2)
     results["state_cardinality_correspondence_13_to_13"] = (len(set(TONES)) == len(ALPHABET) // 2)
 
+    # --- degeneracy: (n=4,k=1) vs (n=5,k=0) collide on (p,r) but not on (n,k) ---
+    degeneracy_holds = True
+    for s in (-1, 0, 1):
+        n1, m1, r1 = coord(4, 1, s)
+        n2, m2, r2 = coord(5, 0, s)
+        p1, p2 = n1 + 1, n2 + 0
+        same_p_r = (p1 == p2) and (m1 == m2) and (r1 == r2)
+        different_state = (4, 1) != (5, 0)
+        degeneracy_holds = degeneracy_holds and same_p_r and different_state
+    results["p_r_degeneracy_confirmed"] = degeneracy_holds
+    results["degeneracy_note"] = (
+        "(n=4,k=1) and (n=5,k=0) share p=5 and, at equal s, the identical "
+        "(m,r) pair, yet are different (n,k) states -- (p,r) alone cannot "
+        "recover n. The primitive must retain (n,k,s), not just (p,s)/(p,r)."
+    )
+
+    # --- no privileged k: extended range k in [-5,+5], identities with room on both sides ---
+    ext_k_range = range(-5, 6)
+    ext_rows = []
+    for n in range(6, 22):  # keeps n+k in [1,26] for all k in [-5,5]
+        for k in ext_k_range:
+            for s in (-1, 0, 1):
+                n_a, m, r = coord(n, k, s)
+                dk, ds = decode(n_a, m, r)
+                ext_rows.append({
+                    "n": n, "k": k, "s": s, "m": m, "r": r,
+                    "decode_ok": (dk, ds) == (k, s),
+                })
+    results["extended_k_range_tested"] = f"{ext_k_range.start}..{ext_k_range.stop - 1}"
+    results["extended_k_states_tested"] = len(ext_rows)
+    results["extended_k_decoder_failures"] = sum(1 for r in ext_rows if not r["decode_ok"])
+    ext_seen = {}
+    ext_collisions = 0
+    for r in ext_rows:
+        key = (r["n"], r["m"], r["r"])
+        if key in ext_seen and ext_seen[key] != (r["k"], r["s"]):
+            ext_collisions += 1
+        ext_seen[key] = (r["k"], r["s"])
+    results["extended_k_collisions"] = ext_collisions
+    results["no_privileged_k_confirmed"] = (
+        results["extended_k_decoder_failures"] == 0 and results["extended_k_collisions"] == 0
+    )
+
+    # --- operator algebra: T_a composition, P/T commutation, P involution ---
+    test_states = [(n, k, s) for n in (1, 10, 26) for k in (-5, -1, 0, 1, 5) for s in (-1, 0, 1)]
+    composition_ok = True
+    commutation_ok = True
+    involution_ok = True
+    for state in test_states:
+        for a in range(-5, 6):
+            for b in range(-5, 6):
+                if T(T(state, a), b) != T(state, a + b):
+                    composition_ok = False
+        for a in range(-5, 6):
+            if P(T(state, a)) != T(P(state), a):
+                commutation_ok = False
+        if P(P(state)) != state:
+            involution_ok = False
+    results["operator_states_tested"] = len(test_states)
+    results["T_composition_confirmed"] = composition_ok
+    results["P_T_commutation_confirmed"] = commutation_ok
+    results["P_involution_confirmed"] = involution_ok
+
     all_pass = (
         results["reproduces_all_prior_packet_forms"]
         and results["alphabet_decoder_failures"] == 0
@@ -160,6 +241,11 @@ def main() -> None:
         and results["tonal_g_sharp_lookahead_wraps_to_A"]
         and results["traversal_visit_correspondence_13_to_13"]
         and not results["state_cardinality_correspondence_13_to_13"]  # this SHOULD be False
+        and results["p_r_degeneracy_confirmed"]
+        and results["no_privileged_k_confirmed"]
+        and results["T_composition_confirmed"]
+        and results["P_T_commutation_confirmed"]
+        and results["P_involution_confirmed"]
     )
     results["all_checks_pass"] = all_pass
 
