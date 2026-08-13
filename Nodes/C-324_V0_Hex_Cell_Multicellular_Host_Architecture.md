@@ -50,10 +50,26 @@ state is maintained.
 ## Motion
 
 ```text
-DC -> Point Rotation
-AC -> Path Rotation
-RC (Rotational Current) -> Field Rotation
+DC  -> Point Rotation
+AC  -> Path/Oscillation Rotation
+RFC (Rotating Field Current) -> Field Rotation
 ```
+
+**Correction:** this section previously read "RC (Rotational Current)."
+RFC is the intended term (Rotating Field Current), confirmed as
+intentional, not a typo for RC.
+
+**Recursion note (not merged):** "recursion" here means the
+Point -> Path -> Field structure can occur again inside, or at, the
+next scale — not a relabeling of this section. That is the same claim
+the backlog's Nested Point-Path-Field Recursion item makes in the
+abstract A-series vocabulary (see RELATIONAL_MECHANICS_NODE_BACKLOG.md).
+Candidate I-04 disposition: **Scale-Specific Instance** — this
+DC/AC/RFC triad would be the physical/circuit-scale instantiation of
+that general recursive structure, not a duplicate of it. This is a
+candidate reading only; the two are not merged here, and remain
+separately addressable until the backlog item is developed enough to
+check the mapping term-by-term.
 
 ## Reinjection
 

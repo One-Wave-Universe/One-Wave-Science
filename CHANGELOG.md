@@ -1,4 +1,12 @@
 
+## Newer-Concepts Reconciliation (DC/AC/RFC, wake continuation, 3>1(0)1<6, measurement-as-capture)
+
+- Corrected `Nodes/C-324_V0_Hex_Cell_Multicellular_Host_Architecture.md`: its Motion section previously read "RC (Rotational Current)"; RFC (Rotating Field Current) is confirmed intentional, not a typo. Correction stated in the node itself. Added a candidate I-04 Scale-Specific Instance cross-reference to the backlog's Nested Point-Path-Field Recursion item, explicitly not merged.
+- Split wake continuation through resonance into two distinct sub-claims with separate falsifiers: decay-rate suppression vs. coherent-reinjection growth. Connected provisionally to A-126/F-609 and D-420/D-421; noted A-115's `g_wake` has no decay term yet, so neither sub-case can be written down until that's added.
+- Reconciled `3>1(0)1<6` against D-411 (already canonical) and the D-415-D-418 backlog items. Found a real convergence: the ladder's `6:1-(0)-1:12` line matches the backlog's independently-filed D-417 "6:1 / 1:12 Rotational Closure Relation" almost verbatim. Flagged an unresolved ambiguity: D-411 pairs 3:1 with 6:1 (doubling), the new notation pairs 3:1 with 1:6 (reciprocal) - not yet shown to be the same mapping. Also flagged D-410's existing 24:1 vs. the notation's 1:24 as not yet shown identical, and B-226's six-gate `(0)` (a step index) vs. this ladder's `(0)` (a ratio reference point) as not yet shown to be the same role.
+- Separated measurement-as-capture into G-743's four components explicitly; flagged the required check against G-706 Validation ("confirmation through successful participation in a cycle") as unresolved rather than assuming novelty from vocabulary alone.
+- No new node IDs assigned. Repository integrity validator passes with zero errors.
+
 ## Chapter-Pass Audit (I-04 disposition check against existing Books/ canon)
 
 - Found A-115 (already canonical, GREEN) defines a general static `g_wake` term, applied at galactic scale in Book 5 Ch1's Extended Compression Effect — the backlog's A-126 and F-609–F-614 wake family are not a blank slate. Per I-04, the base wake concept is already covered; the genuine Unproven Delta is finite propagation (D-429/D-430 backlog items) and orbital/planetary-scale instantiation, not the wake mechanism itself. Annotated the affected backlog rows accordingly; no new node files created.
