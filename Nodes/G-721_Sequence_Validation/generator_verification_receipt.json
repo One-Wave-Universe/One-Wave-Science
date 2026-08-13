@@ -1,0 +1,19 @@
+{
+  "reproduces_all_prior_packet_forms": true,
+  "alphabet_states_tested": 228,
+  "alphabet_decoder_failures": 0,
+  "alphabet_collisions": 0,
+  "tonal_states_tested": 102,
+  "tonal_decoder_failures": 0,
+  "half_mirror_reverse_equals_sequence_reverse": true,
+  "round_trip_is_palindrome_under_sequence_reverse": true,
+  "round_trip_reverse_equals_orientation_exchange": true,
+  "alphabet_z_lookahead_undefined": true,
+  "tonal_g_sharp_lookahead_wraps_to_A": true,
+  "tonal_unique_states": 12,
+  "tonal_closure_traversal_visits": 13,
+  "alphabet_half_symbol_count": 13,
+  "traversal_visit_correspondence_13_to_13": true,
+  "state_cardinality_correspondence_13_to_13": false,
+  "all_checks_pass": true
+}

@@ -2,23 +2,56 @@
   "node_id": "G-721",
   "name": "Mirrored Alphabet Rabbit-Hop Coordinate Algorithm",
   "purpose": "Symbolic identity, coordinate, and route compiler for alphabet-based rabbit hops.",
-  "packet": {
+  "generator": {
+    "primitive": "p = n + k; r = 2p + s",
+    "s_domain": [-1, 0, 1],
+    "k_meaning": "look-ahead (k>0) / look-behind (k<0) / own position (k=0), identity re-anchor",
+    "s_meaning": "ternary differential, same primitive as -1(0)+1 foundational choice",
+    "note": "Replaces the earlier framing of two independent arithmetic families. Brute-force verified: the proposed second family (n,2(n+1),2(n+1)+-1) is exactly this generator at k=1, re-anchored to n, not independent arithmetic."
+  },
+  "legacy_packet": {
     "positive": "(n,2n,2n+1)",
     "negative": "(-n,-2n,-(2n+1))",
-    "n_range": [
-      1,
-      26
-    ]
+    "n_range": [1, 26],
+    "note": "Equals the generator at k=0, s=+1 (positive) / sign-mirrored (negative). Preserved unmodified as a special case."
   },
   "axes": {
     "direction_location": "alphabet order plus Mirror-Gate side",
-    "recursive_state": "n, 2n, 2n+1 rails"
+    "recursive_state": "p=n+k anchor, r=2p+s ternary differential"
   },
-  "branch_decode": "b=abs(r)-2*abs(n), b in {0,1}",
+  "branch_decode": {
+    "legacy_k0_only": "b=abs(r)-2*abs(n), b in {0,1} -- valid only when k=0 is already fixed by context",
+    "general": "k=m/2-n, s=r-m, s in {-1,0,1} -- given full triple (n,m,r); resolves the collision the legacy formula has when k!=0 is possible"
+  },
   "mirror_rules": {
-    "sign_mirror": "(n,r)->(-n,-r), b unchanged",
-    "reverse": "reverse token order, do not complement"
+    "sign_mirror": "(n,r)->(-n,-r), b/s unchanged",
+    "half_mirror_reverse": "reverse(X+[0]+Y) = reverse(Y)+[0]+reverse(X) -- ordinary sequence reversal, for A..M(0)N..Z forms only",
+    "round_trip_orientation_exchange": "exchange(X+[0]+Y) = Y+[0]+X -- arm swap, NOT sequence reversal, for A..Z(0)Z..A forms only",
+    "note": "A round-trip sequence is a palindrome under sequence reversal (reverses to itself); applying reverse() to it is a no-op. These two operators must not be cross-applied."
   },
+  "traversal_forms": {
+    "half_forward": "A -> M (0) N -> Z",
+    "half_reverse": "Z -> N (0) M -> A",
+    "round_trip_forward": "A -> Z (0) Z -> A",
+    "round_trip_reverse": "Z -> A (0) A -> Z"
+  },
+  "domain_boundary": {
+    "alphabet": "linear, bounded [1,26]; look-ahead at Z (n=26,k=+1) is undefined, no letter 27",
+    "tonal": "cyclic, wraps mod 12; look-ahead at G# (n=12,k=+1) wraps to A"
+  },
+  "tonal_extension": {
+    "symbols": ["A","A#","B","C","C#","D","D#","E","F","F#","G","G#"],
+    "n_range": [1, 12],
+    "internal_split_6_6": "A->D (0) D#->G#, verified exact",
+    "cardinality_note": "12 unique states; a closure traversal (A..G#, return to A) gives 13 visits, NOT 13 unique states. Alphabet-half symbol count (13) corresponds to the 13-visit traversal count only, not state cardinality.",
+    "boundary_with_E510": "E-510 Music Clock owns harmonic/chord/rotational-position meaning for the 12-tone system. This tonal extension is identity/coordinate grammar only (same generator as the alphabet, applied to a 12-symbol set) -- explicitly not a harmonic claim, per E-510's own separation rule."
+  },
+  "new_predictions": [
+    "s=0 at k!=0 is a valid, previously-unused coordinate (Hold, k positions ahead/behind)",
+    "look-behind (k<0) works symmetrically, verified for k=-1 across n=2..26",
+    "alphabet Z-boundary has no tonal counterpart (linear vs cyclic domain asymmetry)",
+    "s in {-1,0,+1} is a candidate structural match for G-744's Field/Mirror/Void ternary and B-223's Three Moves -- not confirmed"
+  ],
   "separation": {
     "memory": "Hopfield/Boltzmann",
     "coordinates": "mirrored alphabet",
@@ -34,5 +67,5 @@
   ],
   "gate": "YELLOW",
   "lifecycle": "ACTIVE",
-  "claim_gate_detail": "BRONZE (coordinate packet and mirror grammar) / YELLOW (embodied-motion implementation)"
+  "claim_gate_detail": "BRONZE (coordinate packet, generator, and mirror grammar, brute-force verified) / YELLOW (embodied-motion implementation)"
 }

@@ -204,7 +204,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-718 | Connection Gates | Seven gates describing how two independent systems connect without elimination or domination. | YELLOW |
 | G-719 | Neural System Functional Analogy Map | Receive→Evaluate→Choose→Update, mapped to neurons/circuits vs. software bricks/nodes — explicitly a functional analogy, not an anatomical claim. | YELLOW |
 | G-720 | No Control But Self-Control | Receive → Hold → Commit: external input is not controlled; only the system’s bounded compressive/expressive response and next state are selected. | YELLOW |
-| G-721 | Mirrored Alphabet Rabbit-Hop Coordinate Algorithm | Maps A–Z to signed packets ±(n,2n,2n+1), preserves separate direction/location and recursive/state axes, and compiles words into forward/reverse mirrored hop paths. | YELLOW |
+| G-721 | Mirrored Alphabet Rabbit-Hop Coordinate Algorithm | Generator p=n+k, r=2p+s (s∈{-1,0,+1}) reproduces the original ±(n,2n,2n+1) packet and a later two-family proposal as special cases, brute-force verified collision-free; distinguishes half-mirror reversal from round-trip orientation-exchange; carries a boundary-noted 12-tone coordinate extension separate from E-510. | YELLOW |
 | G-721a | Fibonacci Word Hop Validation | Fixed Fibonacci regression path for the even/odd branch trace; golden-ratio convergence is a consequence metric, not a movement generator. | YELLOW |
 | G-721b | Sturmian Binary Branch Grammar | General binary branch grammar with mechanical-word, balance, aperiodicity, and p(n)=n+1 validation. | YELLOW |
 | G-721c | Episturmian Multi-Route Directive Grammar | Reversal-aware multi-symbol scheduler; sequence selects route family while -1(0)+1 selects direction or hold. | YELLOW |

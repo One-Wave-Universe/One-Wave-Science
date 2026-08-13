@@ -1,4 +1,19 @@
 
+## G-721 Generalized — Minimal Generator Replaces Four-Rail Proposal
+
+A proposed extension to G-721 (Mirrored Alphabet Rabbit-Hop) offered two "independent" arithmetic families plus a tonal correspondence. Brute-force testing found the second family was not independent - it was the first family's formula evaluated one letter ahead and re-anchored - and surfaced three real problems (a branch-decode collision, a reversal-rule contradiction between traversal classes, and a false 13-to-13 cardinality claim). Rather than patch those into the four-rail picture, went looking for the minimal generator that explains all of it and actively tried to falsify it.
+
+- **Found the generator**: `p=n+k, r=2p+s, s in {-1,0,+1}` (anchor + ternary differential - the repo's own `-1(0)+1` foundational choice, applied to the doubled anchor). Verified to reproduce every packet either the original or the proposed extension ever used, as special cases, across all 26 letters.
+- **Resolved the branch-decode collision**: `(n,m,r) -> (k,s)` decoder, verified collision-free across the full ternary range where the original single-rail formula `b=|r|-2|n|` could not distinguish `k=0` from `k=1` states.
+- **Resolved the reversal contradiction**: half-mirror traversals reverse by ordinary sequence-reversal; round-trip traversals are palindromes under sequence-reversal (a no-op) and instead reverse by orientation-exchange (arm swap around the gate). Verified both operators exactly; these must not be cross-applied.
+- **Resolved the tonal cardinality claim**: 12 unique tonal states + 1 closure-return visit gives a 13-position *traversal* count, not a 13-state *cardinality* match with the alphabet's 13-symbol half. Both numbers reported honestly rather than forced to align.
+- **New predictions surfaced by the generator, not put in by hand**: `s=0` at `k!=0` (never used by either prior framing), symmetric look-behind (`k<0`, verified for all n), the alphabet's Z-boundary having no tonal counterpart (linear vs. cyclic domain), and a candidate (unconfirmed) structural match between `s in {-1,0,+1}` and G-744's Field/Mirror/Void ternary / B-223's Three Moves.
+- Added an explicit boundary note against E-510 Music Clock before writing the tonal extension - E-510 already owns 12-tone harmonic/chord content and its own text says "must not be collapsed" with G-721; the new tonal section is coordinate/mirror grammar only, reciprocal note added in E-510.
+- Preserved the original packet, the original `k=0` branch-decode formula (still correct where `k=0` is fixed by context), and G-721a-e's existing single-rail traces unmodified - extended, not replaced.
+- Added `Nodes/G-721_Sequence_Validation/alphabet_tonal_generator_validator.py` plus its JSON/CSV receipts as reproducible evidence.
+- `Wiki_Pages/G-721_Wiki_Page.html` is pandoc-generated MathML and was not hand-edited to match; it is now stale relative to the node source (same handling as the Book 5 Ch1 PDF earlier in this session).
+- Repository integrity validator passes with zero errors.
+
 ## G-744/G-745/G-746 Added — Truth Computer Evaluation Architecture (reconciled, not filed verbatim)
 
 - Added three companion G-series nodes for the Truth Computer's claim-evaluation architecture, preserving the user's three-way content separation (ternary evaluator / provenance trace / commit workbench) as instructed. IDs G-744-746 confirmed free (highest prior real G-series ID was G-743).

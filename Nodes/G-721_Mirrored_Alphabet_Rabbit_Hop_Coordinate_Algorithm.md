@@ -5,20 +5,65 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Symbolic Coordinate System / Route Compiler / Movement Address Grammar"
-claim_gate_detail: "BRONZE (coordinate packet and mirror grammar) / YELLOW (embodied-motion implementation)"
+claim_gate_detail: "BRONZE (coordinate packet, generator, and mirror grammar, brute-force verified) / YELLOW (embodied-motion implementation)"
 metadata_standard: "I-06"
 ---
 
 # Node G-721: Mirrored Alphabet Rabbit-Hop Coordinate Algorithm
 
-**Dependencies**  
-Upstream: A-101 Ground / Zero, A-103 Differential, A-111 Recursion, B-205 Mirror, B-222 Oscillation Center, B-223 Three Moves, G-716 One-Wave Conversion Grammar  
-Lateral: E-510 Music Clock / Harmonic Oscillation, G-719 Neural System Functional Analogy Map, G-720 No Control But Self-Control  
+## Generalization Note (read first)
+
+This node was extended after a proposed "two-family" packet structure
+(`(n,2n,2n\pm1)` and a second `(n,2(n+1),2(n+1)\pm1)` family) was
+brute-force tested against the original single-family packet below,
+rather than accepted on the strength of the formulas alone. The test
+found the second family is not independent: it is the first family's
+own formula evaluated one letter ahead, with the identity coordinate
+re-anchored back to `n`. Chasing that finding down produced a smaller
+generator that reproduces every packet either framing ever used,
+including the original's, as special cases — not a replacement for
+what already worked, an explanation of it.
+
+**The minimal primitive:**
+
+\[
+\boxed{p=n+k,\qquad r=2p+s,\qquad s\in\{-1,0,+1\}}
+\]
+
+`n` is identity — which letter this is. `p` is the anchor — the
+position actually evaluated, displaced from `n` by `k` steps
+("look-ahead" for `k>0`, "look-behind" for `k<0`, `k=0` is the letter's
+own position). `s` is a **ternary** differential, not a binary branch —
+the same `-1(0)+1` foundational choice this node already names below,
+here applied to the anchor's doubled value. This is the same
+displacement/differential language A-102 and A-103 already use;
+`k` is an A-102-style displacement of the evaluation point, `s` is an
+A-103-style differential applied at that point.
+
+This single generator reproduces the original packet
+(`k=0, s\in\{0,+1\}`, see Alphabet Index below), the proposed
+symmetric base rail (`k=0, s\in\{-1,+1\}`), and the proposed second
+family (`k=1, s\in\{-1,+1\}`) — verified by direct computation for all
+26 letters, not asserted. It also predicts states neither prior
+framing used (see New Predictions below), and it does not force the
+alphabet and a 12-tone extension to share one boundary rule (see
+Domain Boundary below) — a linear, bounded system and a cyclic one are
+not the same kind of domain, and treating them as if they were was one
+of the assumptions that did not survive testing.
+
+**Dependencies**
+Upstream: A-101 Ground / Zero, A-102 Displacement (the `k` re-anchor), A-103 Differential (the `s` differential), A-111 Recursion, B-205 Mirror, B-222 Oscillation Center, B-223 Three Moves, G-716 One-Wave Conversion Grammar
+Lateral: E-510 Music Clock / Harmonic Oscillation (12-tone system — separate, see Tonal Extension boundary note below), G-719 Neural System Functional Analogy Map, G-720 No Control But Self-Control, G-744 Field / Mirror / Void Ternary Claim Evaluation (candidate structural match for `s\in\{-1,0,+1\}` — not confirmed, see New Predictions)
 Downstream: G-721a Fibonacci reference validation, G-721b Sturmian branch grammar, G-721c episturmian routing, G-721d Arnoux-Rauzy validation, G-721e plastic/Padovan rail grammar, Wave Computer route compilation, Android procedural movement, Goblin embodied-agent simulation
 
 ## Purpose
 
-The mirrored alphabet algorithm converts letters and words into ordered coordinate paths for Wave Computer and embodied movement routing. It is the coordinate/address layer of the android rabbit-hopping system. It is not the Hopfield/Boltzmann memory system, the wheel-of-fifths movement system, or the foundational live-choice mechanism.
+The mirrored alphabet algorithm converts letters and words into
+ordered coordinate paths for Wave Computer and embodied movement
+routing. It is the coordinate/address layer of the android
+rabbit-hopping system. It is not the Hopfield/Boltzmann memory system,
+the wheel-of-fifths movement system, or the foundational live-choice
+mechanism.
 
 The separation is mandatory:
 
@@ -38,7 +83,8 @@ The separation is mandatory:
 \boxed{-1(0)+1=\text{foundational live choice}}
 \]
 
-Binary or two-symbol route patterns may validate, constrain, or index a compiled path from above. They may not replace foundational choice.
+Binary or two-symbol route patterns may validate, constrain, or index
+a compiled path from above. They may not replace foundational choice.
 
 ## Alphabet Index
 
@@ -76,15 +122,30 @@ C_{+}(A)=(1,2,3),\qquad C_{-}(A)=(-1,-2,-3),
 C_{+}(Z)=(26,52,53),\qquad C_{-}(Z)=(-26,-52,-53).
 \]
 
+This is the generator at `k=0, s=+1`. It is not a separate rule from
+the primitive above; it is the primitive's original, most-used slice,
+preserved exactly.
+
 ## Coordinate Rails
 
 Each packet preserves three related values:
 
 1. **identity/location rail:** \(n\);
-2. **even recursive rail:** \(2n\);
-3. **odd recursive rail:** \(2n+1\).
+2. **even recursive rail:** \(2n\) — the generator at `k=0, s=0`;
+3. **odd recursive rail:** \(2n+1\) — the generator at `k=0, s=+1`.
 
-The packet must remain intact even when one recursive branch is selected for a particular hop. Selecting \(2n\) or \(2n+1\) does not erase the unused coordinate.
+The packet must remain intact even when one recursive branch is
+selected for a particular hop. Selecting \(2n\) or \(2n+1\) does not
+erase the unused coordinate.
+
+**Note on the original two-branch convention:** the original branch
+pair `{2n, 2n+1}` uses `s\in\{0,+1\}` — Hold and Field, never Void.
+A later proposal used the symmetric pair `{2n-1,2n+1}`, i.e.
+`s\in\{-1,+1}` — Void and Field, never Hold. Both are real, valid,
+but *incomplete* slices of the same three-valued primitive; neither
+is wrong, and neither should be read as the complete branch set. The
+complete set is `s\in\{-1,0,+1\}`, all three of which are valid,
+distinguishable coordinates (see Generator Verification below).
 
 ## Two-Axis Structure
 
@@ -92,21 +153,55 @@ The coordinate system has two distinct axes.
 
 ### Direction and location axis
 
-The letter index identifies location in the A-to-Z order. The side of the Mirror Gate determines sign, direction, or mirrored location.
+The letter index identifies location in the A-to-Z order. The side of
+the Mirror Gate determines sign, direction, or mirrored location.
 
 ### Recursive/state axis
 
-The relations
+The relation
 
 \[
-n\rightarrow2n,
-\qquad
-n\rightarrow2n+1
+p=n+k,\qquad r=2p+s
 \]
 
-identify the two recursive branches attached to the letter's identity coordinate.
+identifies the recursive coordinate attached to a letter's identity,
+now parametrized by look-ahead/look-behind depth `k` in addition to
+differential `s`. At `k=0` this reduces to the original two relations
+`n\rightarrow2n` (`s=0`) and `n\rightarrow2n+1` (`s=+1`).
 
-These axes must not be collapsed. A sign change does not alter the letter identity, and a recursive-branch change does not automatically reverse traversal direction.
+These axes must not be collapsed. A sign change does not alter the
+letter identity, and a recursive-branch change does not automatically
+reverse traversal direction.
+
+## Generator Verification
+
+Brute-force tested across all 26 letters (`n=1..26`), `k\in\{-1,0,1\}`
+where the domain permits, `s\in\{-1,0,+1\}`:
+
+- the map `(n,k,s) \mapsto (n, 2(n+k), 2(n+k)+s)` is injective for
+  fixed `n` — zero collisions found across every tested state;
+- the decoder `k=m/2-n,\ s=r-m` (given triple `(n,m,r)`) inverts the
+  generator exactly, for every tested state, with zero failures;
+- every packet either the original convention or the proposed
+  two-family convention ever produced is reproduced exactly by this
+  generator as a special case — confirmed by direct comparison, not
+  assumed.
+
+This replaces the earlier single-rail decoder
+
+\[
+b_t=|r_t|-2|n_t|,\qquad b_t\in\{0,1\}
+\]
+
+which only decodes correctly when `k=0` is already known and `s\neq
+-1`. Applied blindly to the proposed second family, that formula
+returns a false-positive "valid" result for the `k=1,s=-1` case
+(`fam2_minus`), because it cannot see the middle coordinate `m` at
+all — it only looks at `r` and `n`. The `(n,m,r)\to(k,s)` decoder above
+resolves this because it uses the full triple. The old formula remains
+correct and usable wherever `k=0` is already fixed by context (e.g.
+inside G-721a-e's existing single-rail traces); it is not sufficient
+once look-ahead/look-behind is in play.
 
 ## Mirror Gate
 
@@ -116,11 +211,15 @@ The Mirror Gate is the shared zero boundary:
 \boxed{-\;\;(0)\;\;+}.
 \]
 
-Crossing the gate changes side or polarity. It does not delete the coordinate packet.
+Crossing the gate changes side or polarity. It does not delete the
+coordinate packet.
 
-Two valid layout classes are retained:
+Three layout classes are retained. The first two are static sign
+layouts (unchanged from the original node); the third is a traversal
+form added by this extension and is a genuinely different kind of
+object (see Reversal vs. Orientation-Exchange below).
 
-### Recursive mirror layout
+### Recursive mirror layout (static)
 
 The same alphabet order is preserved across opposite signs:
 
@@ -134,7 +233,7 @@ or numerically:
 -26 ... -1 (0) +1 ... +26
 ```
 
-### Direction/location mirror layout
+### Direction/location mirror layout (static)
 
 The alphabet traversal is opposed across the gate:
 
@@ -148,7 +247,126 @@ or numerically:
 -1 ... -26 (0) +26 ... +1
 ```
 
-Every generated path must declare which layout it uses.
+### Half-mirror and round-trip traversal forms (new)
+
+Two additional forms describe an actual traversal sequence through the
+alphabet, not a static signed layout:
+
+```text
+half-mirror forward:   A -> M (0) N -> Z     (13 + 13, split at the M/N boundary)
+half-mirror reverse:   Z -> N (0) M -> A
+full round-trip fwd:   A -> Z (0) Z -> A
+full round-trip rev:   Z -> A (0) A -> Z
+```
+
+Every generated path must declare which of these four layout/traversal
+classes it uses.
+
+## Reversal vs. Orientation-Exchange (new — these are not the same operator)
+
+**Half-mirror reversal is plain sequence reversal.** Reversing the
+half-mirror forward form token-by-token produces exactly the
+half-mirror reverse form:
+
+\[
+\text{reverse}(X+[(0)]+Y)=\text{reverse}(Y)+[(0)]+\text{reverse}(X)
+\]
+
+verified exactly for the `A..M(0)N..Z` split.
+
+**Round-trip reversal is not sequence reversal — it is orientation
+exchange.** The full round-trip form `A..Z(0)Z..A` is, under plain
+token reversal, a **palindrome**: it reverses to itself. Verified
+directly. Sequence-reversing it is therefore a no-op, not a
+transformation — applying the half-mirror reversal rule here silently
+does nothing, which is the exact contradiction that forced this
+distinction. The actual complementary form is produced by swapping
+which arm goes first, keeping each arm's own internal order:
+
+\[
+\text{exchange}(X+[(0)]+Y)=Y+[(0)]+X
+\]
+
+verified to produce exactly `Z..A(0)A..Z` from `A..Z(0)Z..A`.
+
+**Rule:** half-mirror traversals reverse by `reverse()`. Round-trip
+traversals reverse by `exchange()`. A single generic `reverse()` rule
+applied to both is a failure condition (see Failure Conditions).
+
+## Domain Boundary (new — the alphabet and a tonal extension are not the same kind of domain)
+
+The alphabet is **linear and bounded**: `n,p\in[1,26]`. Look-ahead at
+`Z` (`n=26,k=+1`) has no target — there is no letter 27. This is a
+hard edge, not an oversight to smooth over; any implementation must
+declare what happens at this boundary (reject, clamp, or explicitly
+mark undefined) rather than silently wrapping.
+
+A 12-tone extension of the same generator (see Tonal Extension below)
+is **cyclic**: `p` wraps modulo 12, so G#'s look-ahead is A. The two
+domains require different boundary rules under the identical `(k,s)`
+generator. Assuming they behave identically was checked and rejected —
+it does not survive testing.
+
+## Tonal Extension (new)
+
+**Boundary note — read before using this section.** E-510 Music Clock
+already owns the canonical 12-tone harmonic/rotational-position system
+for this repository, and its own text states the separation rule
+directly: "The Music Clock and G-721 must not be collapsed." What
+follows is **not** a harmonic or chord-rotation claim, and does not
+touch E-510's territory. It is this node's own identity/coordinate
+generator (`p=n+k, r=2p+s`) applied to a second, twelve-member symbol
+set (chromatic note names) exactly the way it already applies to the
+26-letter alphabet — coordinates and mirror/traversal grammar only,
+not harmonic relationship, chord quality, or rotational movement
+meaning. If a future node connects the two, it must do so explicitly
+and does not have license from this section.
+
+Twelve chromatic tones, indexed analogously to the alphabet:
+
+\[
+A=1,\ A\#=2,\ B=3,\ C=4,\ C\#=5,\ D=6,\ D\#=7,\ E=8,\ F=9,\ F\#=10,\ G=11,\ G\#=12.
+\]
+
+The same generator applies with a cyclic domain (`p` wraps mod 12
+instead of the alphabet's hard boundary).
+
+### The 6+6 internal split (verified, kept as evidence only)
+
+\[
+A\rightarrow D\ (0)\ D\#\rightarrow G\#
+\]
+
+is an exact 6+6 split (`A,A\#,B,C,C\#,D` / `D\#,E,F,F\#,G,G\#`),
+confirmed token-for-token. This is retained as a clean structural fact
+about the 12-tone cycle. It is not, by itself, evidence for any larger
+interpretation beyond what it directly shows: the same
+mid-split-around-a-gate pattern the alphabet uses at 13+13, here at
+6+6.
+
+### The 13-vs-12 correspondence (do not force this to match numerically)
+
+The alphabet's half-mirror split gives 13 distinct symbols per side
+(`A..M` or `N..Z`). The tonal cycle has 12 distinct states
+(`A` through `G#`). These are **not** the same cardinality, and no
+claim here asserts they are.
+
+What does hold: a **closure traversal** — 12 unique states plus an
+explicit return-to-origin visit (`A,A\#,...,G\#,A`) — produces exactly
+13 **visits**, matching the alphabet half's 13 **symbols** in visit
+count only:
+
+\[
+\boxed{\text{12 unique tonal states}+\text{1 closure-return visit}=\text{13-position traversal}}
+\]
+
+\[
+\boxed{\text{13-position traversal}\neq\text{13-state cardinality}}
+\]
+
+Any future node or implementation citing "13" for the tonal system
+must state which of these two it means. Collapsing them is a failure
+condition (see below).
 
 ## Word-to-Path Compilation
 
@@ -182,11 +400,16 @@ The packet differential between consecutive letters is
 \mathbf C_{t+1}-\mathbf C_t.
 \]
 
-This differential is the machine-readable rabbit hop between symbolic addresses.
+This differential is the machine-readable rabbit hop between symbolic
+addresses. This is the `k=0` slice of the general path; a
+look-ahead/look-behind-aware path would carry `k_t` per letter in
+addition to `\sigma_t` and `s_t`.
 
 ## Recursive-Branch Trace
 
-When a run commits one recursive branch for letter \(n_t\), record the selected coordinate as
+When a run commits one recursive branch for letter \(n_t\) at `k=0`,
+the original single-rail record remains valid and preferred wherever
+`k=0` is already fixed by context:
 
 \[
 r_t=\sigma_t(2n_t+b_t),
@@ -194,30 +417,28 @@ r_t=\sigma_t(2n_t+b_t),
 b_t\in\{0,1\}.
 \]
 
-The branch symbol can be recovered from the signed coordinate without losing mirror information:
-
 \[
 \boxed{b_t=|r_t|-2|n_t|}.
 \]
 
-A valid packet branch must satisfy
+- \(b_t=0\) selects the even recursive rail \(2n_t\) (`s=0`);
+- \(b_t=1\) selects the odd recursive rail \(2n_t+1\) (`s=+1`).
+
+Where look-ahead/look-behind is in play (`k\neq0` possible), use the
+general decoder instead:
 
 \[
-b_t\in\{0,1\}.
+\boxed{k_t=\frac{m_t}{2}-n_t,\qquad s_t=r_t-m_t,\qquad s_t\in\{-1,0,+1\}}
 \]
 
-Thus:
-
-- \(b_t=0\) selects the even recursive rail \(2n_t\);
-- \(b_t=1\) selects the odd recursive rail \(2n_t+1\).
-
-The ordered branch trace
-
-\[
-\mathbf b=(b_0,b_1,\ldots,b_{m-1})
-\]
-
-is available to the declared validator or scheduler family. G-721a is the fixed Fibonacci regression path; G-721b through G-721e test broader branch, route-family, and three-rail grammars.
+given the full triple `(n_t,m_t,r_t)`. The ordered trace
+`\mathbf b=(b_0,\ldots,b_{m-1})` or its general form
+`((k_0,s_0),\ldots,(k_{m-1},s_{m-1}))` is available to the declared
+validator or scheduler family. G-721a is the fixed Fibonacci regression
+path; G-721b through G-721e test broader branch, route-family, and
+three-rail grammars. Those existing validators use the `k=0` single-rail
+trace and are unaffected by this extension unless explicitly updated to
+consume `k`.
 
 ## Forward, Reverse, and Mirror Rules
 
@@ -237,10 +458,10 @@ Sign mirroring acts on the coordinates:
 It does not complement the branch symbol:
 
 \[
-b\mapsto b.
+b\mapsto b,\qquad s\mapsto s.
 \]
 
-Reversing traversal reverses branch order:
+Reversing traversal (half-mirror class) reverses branch order:
 
 \[
 (b_0,b_1,\ldots,b_{m-1})
@@ -248,11 +469,35 @@ Reversing traversal reverses branch order:
 (b_{m-1},\ldots,b_1,b_0).
 \]
 
-A complement operation \(0\leftrightarrow1\) is not implied by either sign mirroring or route reversal. It requires a separately declared rule.
+A complement operation \(0\leftrightarrow1\) (or any permutation of
+`s`) is not implied by sign mirroring, route reversal, or orientation
+exchange. It requires a separately declared rule.
+
+## New Predictions (not present in either prior framing)
+
+1. **`s=0` at `k\neq0` is a valid, previously unused coordinate** —
+   "Hold, `k` positions ahead/behind." E.g. for A at `k=1`:
+   `(n=1,k=1,s=0)\to r=4`. Neither the original packet nor the
+   proposed two-family packet ever used this state.
+2. **Look-behind (`k<0`) works symmetrically** — verified for
+   `k=-1` across `n=2..26` with zero decoder failures. This predicts
+   the family structure extends in both directions from any letter,
+   not only forward.
+3. **The alphabet's hard boundary at Z has no tonal counterpart** — a
+   genuine, testable asymmetry between the two domains (see Domain
+   Boundary), predicted by the generator rather than assumed going in.
+4. **`s\in\{-1,0,+1\}` is a candidate structural match for G-744's
+   Field/Mirror/Void ternary states and for B-223's Three Moves** —
+   not confirmed here. If it holds under a term-by-term check, this
+   node's differential is not a separately invented branch mechanism;
+   it is this recursive-doubling context applying a primitive the
+   repository already names elsewhere. Flagged as a candidate link,
+   not asserted.
 
 ## Relationship to Choice
 
-The alphabet algorithm does not make foundational choice. It provides symbolic coordinates and a compiled route candidate.
+The alphabet algorithm does not make foundational choice. It provides
+symbolic coordinates and a compiled route candidate.
 
 The operating order is
 
@@ -265,11 +510,14 @@ symbolic cue
 -> committed movement
 ```
 
-A stored Fibonacci word may act as a route template or validation target. It may not force the live system to move when the foundational choice, sensory correction, or safety layer selects Hold.
+A stored Fibonacci word may act as a route template or validation
+target. It may not force the live system to move when the foundational
+choice, sensory correction, or safety layer selects Hold.
 
 ## Dimensional Declaration
 
-This node is a symbolic coordinate grammar. It is not itself a claim that alphabet coordinates occupy a specific physical dimension.
+This node is a symbolic coordinate grammar. It is not itself a claim
+that alphabet coordinates occupy a specific physical dimension.
 
 Any physical implementation must declare:
 
@@ -288,26 +536,50 @@ The 2D, 3D, and 4D rules of A-117 remain controlling.
 
 A valid implementation must verify:
 
-1. every letter index lies in \(1\ldots26\);
-2. every packet equals \(\pm(n,2n,2n+1)\);
-3. every selected recursive coordinate gives \(b_t\in\{0,1\}\);
-4. forward and reverse paths are exact reversals;
+1. every letter index lies in \(1\ldots26\) (alphabet) or wraps
+   correctly mod 12 (tonal — see Domain Boundary);
+2. every packet equals the generator `(n,2(n+k)+0\cdot s,2(n+k)+s)`
+   for some declared `k,s`, with `k=0` matching the original
+   `\pm(n,2n,2n+1)` form when `s=+1`;
+3. every selected recursive coordinate gives `s\in\{-1,0,+1\}` (or, for
+   `k=0`-only legacy traces, `b_t\in\{0,1\}`);
+4. half-mirror forward and reverse paths are exact `reverse()` pairs;
+   round-trip forward and reverse paths are exact `exchange()` pairs —
+   never cross-applied (see Reversal vs. Orientation-Exchange);
 5. positive and negative paths are exact sign mirrors;
-6. Mirror-Gate zero is never confused with branch symbol zero;
-7. branch traces are passed to the declared G-721a through G-721e validator or scheduler without post-hoc reordering;
-8. the alphabet, memory, and wheel systems remain separate.
+6. Mirror-Gate zero is never confused with branch symbol zero (`s=0`);
+7. branch traces are passed to the declared G-721a through G-721e
+   validator or scheduler without post-hoc reordering;
+8. the alphabet, memory, and wheel systems remain separate;
+9. any "13" cited for the tonal system states explicitly whether it
+   means traversal-visit count or state cardinality (see Tonal
+   Extension);
+10. the tonal extension is never cited as a harmonic, chord, or
+    rotational-movement claim — that territory belongs to E-510.
 
 ## Failure Conditions
 
 The algorithm fails when:
 
 - a packet value is changed to improve a later ratio;
-- a branch symbol is inferred from sign rather than \(2n\) versus \(2n+1\);
-- branch zero is treated as the Mirror Gate;
-- reversing a path silently complements its branch symbols;
+- a branch symbol is inferred from sign rather than the declared
+  `k,s` (or, at `k=0`, `2n` versus `2n+1`);
+- branch zero (`s=0`) is treated as the Mirror Gate;
+- `reverse()` is applied to a round-trip traversal (or `exchange()` to
+  a half-mirror one) instead of the correct operator for that class;
 - the coordinate grammar is presented as the live movement mechanism;
-- a Fibonacci match is claimed after sorting or deleting inconvenient hops.
+- a Fibonacci match is claimed after sorting or deleting inconvenient
+  hops;
+- the tonal 12-state cycle and the alphabet's 13-symbol half are
+  treated as the same cardinality;
+- this node's tonal coordinates are cited as a harmonic or chord
+  relationship rather than an identity/coordinate grammar (E-510's
+  domain, not this node's).
 
 ## Falsifier
 
-This node must be revised if a compiled implementation cannot preserve packet identity, sign mirror, route reversal, and branch recovery simultaneously without ambiguity.
+This node must be revised if a compiled implementation cannot preserve
+packet identity, sign mirror, route reversal (class-appropriate),
+orientation exchange (class-appropriate), and branch/differential
+recovery simultaneously without ambiguity, across both the linear
+(alphabet) and cyclic (tonal) domains.

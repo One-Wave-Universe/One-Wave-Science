@@ -25,7 +25,7 @@ document-structure unit). No cross-meaning is intended anywhere in this node.
 
 Dependencies:
 Upstream: A-111 Recursion (Harmonic Mapping / Four Harmonic Behavior Axes sections)
-Lateral: G-721 Mirrored Alphabet Rabbit-Hop Coordinate Algorithm (separate symbolic coordinate system)
+Lateral: G-721 Mirrored Alphabet Rabbit-Hop Coordinate Algorithm (separate symbolic coordinate system — G-721 now also carries a 12-tone identity/coordinate extension of its own alphabet generator; that extension is explicitly coordinate/mirror grammar only, not a harmonic or chord claim, and does not modify or extend this node's territory)
 Downstream: E-511 Chord Rotation
 
 Separation rule:
