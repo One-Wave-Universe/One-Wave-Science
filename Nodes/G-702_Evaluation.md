@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 Dependencies:
 Upstream: G-701 Evaluation Differential
-Downstream: G-703 Modulation, G-704 Kabeuchi, B-207 Threshold (downstream consumer), G-708 Persistence B, G-710 Grow The Fuck Up Gate, G-711 Gate 7, G-712 Evaluation Mathematics
+Downstream: G-703 Modulation, G-704 Kabeuchi, B-207 Threshold (downstream consumer), G-708 Persistence B, G-710 Grow The Fuck Up Gate, G-711 Gate 7, G-712 Evaluation Mathematics, G-744 Field / Mirror / Void Ternary Claim Evaluation (answers this node's own "binary or graded" question for claim evaluation specifically — see G-744's Reconciliation Note)
 
 Definition:
 Evaluation examines the differential and determines what it means.

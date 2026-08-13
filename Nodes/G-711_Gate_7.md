@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 Dependencies:
 Upstream: G-706 Validation, G-702 Evaluation, G-703 Modulation
-Downstream: Repository-wide — Gate 7 is the review gate for the entire framework. Also feeds G-716 One-Wave Conversion Grammar and G-719 Neural System Functional Analogy Map (shape-level parallel only).
+Downstream: Repository-wide — Gate 7 is the review gate for the entire framework. Also feeds G-716 One-Wave Conversion Grammar and G-719 Neural System Functional Analogy Map (shape-level parallel only). Lateral to G-744 Field / Mirror / Void Ternary Claim Evaluation — shares Field/Void vocabulary for a different referent (this node's split is evaluate-vs-modulate function; G-744's is a per-claim truth-value outcome) — not merged, see G-744's Reconciliation Note.
 
 Definition:
 Gate 7 is the review gate.

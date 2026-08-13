@@ -1,14 +1,14 @@
 {
   "pass": true,
-  "node_file_count": 173,
-  "unique_node_ids": 173,
+  "node_file_count": 176,
+  "unique_node_ids": 176,
   "gate_counts": {
-    "YELLOW": 106,
+    "YELLOW": 109,
     "GREEN": 64,
     "BRONZE": 3
   },
   "lifecycle_counts": {
-    "ACTIVE": 144,
+    "ACTIVE": 147,
     "PROPOSED_BUILD": 4,
     "HELD": 3,
     "ACTIVE_HYPOTHESIS": 21,

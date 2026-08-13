@@ -38,6 +38,7 @@ rather than leaving "significance threshold" unspecified.
 Dependencies:
 Upstream: G-702 Evaluation
 Downstream: G-713 Modulation Mathematics, B-216 Threshold Mathematics, G-716 One-Wave Conversion Grammar
+Lateral: G-744 Field / Mirror / Void Ternary Claim Evaluation — adjacent open question (claim evaluation vs. this node's general differential-significance evaluation), does not resolve this node's own significance-threshold/signal-classification gaps
 
 Definition:
 Evaluation Mathematics is the formal mathematical framework governing how

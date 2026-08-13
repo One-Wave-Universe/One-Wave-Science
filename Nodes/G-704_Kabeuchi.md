@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 Dependencies:
 Upstream: G-701 Evaluation Differential, G-702 Evaluation, G-703 Modulation
-Downstream: G-705 Correction
+Downstream: G-705 Correction, G-745 Provenance Lens Trace and Evidence Inspector (generalizes this node's single receive/evaluate/modulate cycle into a chain of multiple declared lenses), G-746 Claim Transformation and Commit-State Workbench (generalizes this node's cycle into a database-commit pipeline)
 
 Definition:
 Kabeuchi is constructive differential review.

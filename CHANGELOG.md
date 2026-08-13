@@ -1,4 +1,18 @@
 
+## G-744/G-745/G-746 Added — Truth Computer Evaluation Architecture (reconciled, not filed verbatim)
+
+- Added three companion G-series nodes for the Truth Computer's claim-evaluation architecture, preserving the user's three-way content separation (ternary evaluator / provenance trace / commit workbench) as instructed. IDs G-744-746 confirmed free (highest prior real G-series ID was G-743).
+- Reconciled against existing canon before filing, per instruction not to trust the drafted IDs/dependencies blindly:
+  - G-702 Evaluation already flags "whether Evaluation is binary or graded" as its own open question - G-744 is filed as answering that question for claims specifically, not as an independent new concept; G-702 promoted to primary upstream.
+  - G-712 Evaluation Mathematics' open significance-threshold math is explicitly NOT resolved by G-744 - different question (signal significance vs. claim truth-value), cross-referenced both directions, not conflated.
+  - G-711 Gate 7's existing "Void->Evaluate, Field->Modulate" split uses the same words as G-744's Field/Void ternary outcome for a different referent - explicit non-merge note added in both nodes.
+  - G-704 Kabeuchi identified as the real structural precedent for G-745's lens chain and G-746's commit cycle (both single-cycle generalizations) - added as upstream, reciprocal cross-references added in G-704.
+  - Dropped the drafted G-718 Connection Gates citation from G-744 - no operational overlap found on inspection (different domain: inter-system relational connection, not claim evaluation).
+- Found a significant pre-existing, unreconciled system: `Nexus_Integration/Truth_Computer/` (a working, already-built "Updated 41" implementation with a fixed 22-stage OG-00-OG-21 spine and a 5-way source-status classifier) is prior art in the same "Truth Computer" project, but a materially different mechanism from G-744/745/746 (different classification axis, fixed spine vs. declared lenses). Flagged in both new nodes and in `00_MASTER_INDEX.md` as a known unreconciled item - not resolved in this pass, since it also overlaps substantially with the canonical A-series and B-221/C-301 and would need its own separate reconciliation pass.
+- G-746 (the commit workbench) found to be the most genuinely novel of the three - no normalization/change-ledger/commit-versioning mechanism exists anywhere else in the repository, including in the existing Truth Computer code.
+- Updated `00_MASTER_INDEX.md` Appendix G (38 nodes) and added three wiki pages.
+- Repository integrity validator passes with zero errors: 176 nodes.
+
 ## D-435 Promoted — Twelvefold-Shell Rotation-Group Closure
 
 - Promoted the verified twelve-neighbor rotational-closure result to a full node: `Nodes/D-435_Twelvefold_Shell_Rotation_Group_Closure.md`, gate BRONZE, lifecycle ACTIVE. Core claim stated first and treated as first-class content per instruction: D-409's shell has rotation-group order 24, element orders 1/2/3/4 only, no 6-fold or 12-fold closure.

@@ -10,6 +10,7 @@ Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 Relational-mechanics coverage map (mostly not-yet-developed backlog, not canon): `RELATIONAL_MECHANICS_NODE_BACKLOG.md`.
+Known unreconciled item: `Nexus_Integration/Truth_Computer/` ("Updated 41" OG-00–OG-21 spine) is a working implementation that has never been checked against the canonical A–G node system despite substantial overlap (its OG-00–OG-12 territory parallels the A-series foundation chain; its OG-13–OG-18 six-stage active-gate sequence parallels B-221 Six Recursive Steps and, at OG-16, C-301 Mirror Gate by name). Flagged during the G-744/745/746 reconciliation pass; not resolved.
 
 ---
 
@@ -179,7 +180,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
 | F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
 | F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
-### Appendix G — Evaluation, Modulation & Governance (35 nodes)
+### Appendix G — Evaluation, Modulation & Governance (38 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
@@ -217,6 +218,9 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-736 | No Hidden Controller Rule | No simulation may steer toward a target orbit/resonance/stability; every reported behavior must arise solely from the declared update rule. | YELLOW |
 | G-737 | No Victory Without Observable Match | Bounded-but-untested is not success; requires a declared quantitative observable and tolerance stated before the run. | YELLOW |
 | G-743 | Claim/Metaphor/Test Separation | Every new physical idea must separate mathematical definition, physical hypothesis, analogy, and falsification test — repository-wide rule. | GREEN |
+| G-744 | Field / Mirror / Void Ternary Claim Evaluation | Per-claim evaluation resolves to -1/0/+1 (Void/Mirror-Hold/Field); answers G-702's own "binary or graded" question for claims specifically; Hold is a next-test generator, not a dead end. | YELLOW |
+| G-745 | Provenance Lens Trace and Evidence Inspector | Chains multiple declared lenses (recurrence, causality, symmetry, etc.) into an inspectable claim-to-evidence trace; generalizes G-704 Kabeuchi's single cycle. | YELLOW |
+| G-746 | Claim Transformation and Commit-State Workbench | Source→Normalize→Apply Lens→Cross-reference→Commit State pipeline with a change ledger and no-hidden-rewrite rule; the least redundant of the three against existing content. | YELLOW |
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
