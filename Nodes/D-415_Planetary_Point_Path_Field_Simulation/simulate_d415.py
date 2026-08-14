@@ -74,7 +74,8 @@ class Params:
     dt: float = 1.0 / 2500.0        # yr
     duration: float = 25.0          # yr
     fit_fraction: float = 0.6
-    sample_stride: int = 10
+    sample_stride: int = 50         # CSV/receipt row spacing only -- measurement accuracy
+                                     # depends on integrator dt above, not this stride
     seed: int = 415
     # candidate One-Wave coupling coefficients -- small, bounded, ablatable.
     eps_shear: float = 2.0e-7
