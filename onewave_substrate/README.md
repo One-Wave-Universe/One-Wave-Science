@@ -22,7 +22,7 @@ C++ kernel, no LLM. SQLite, pure functions, and deterministic replay.
 ```bash
 cd onewave_substrate
 python3 -m pip install -e ".[dev]"   # or just: pip install pytest
-python3 -m pytest                    # 54 tests
+python3 -m pytest                    # 68 tests
 python3 -m examples.mixed_fields     # full demo dataset + required demo queries, in-memory
 python3 -m examples.build_database   # writes a real, persistent onewave.db to disk
 ```
@@ -48,6 +48,49 @@ the field entries in `examples/*.py` are the source of truth, and the
 `.db` file is a deterministic build output of them, not something to
 hand-edit.
 
+### The "reality" database: ingesting the repo's own One-Wave corpus
+
+`examples.build_database` above uses a small, hand-authored demo dataset.
+`examples.build_reality_database` is a different, larger thing: it reads
+this repository's own canonical `Nodes/` and `Root_Axioms/` corpus --
+~150 real markdown files, each a numbered claim (Root Axioms A+101-103,
+Nodes A-101 through G-723a) about how the One-Wave framework models
+reality -- and ingests every one of them into the substrate through the
+One-Wave lens:
+
+```bash
+python3 -m examples.build_reality_database onewave_reality.db
+```
+
+This must run from inside a checkout of the full `One-Wave-Science` repo
+(it auto-detects the repo root as the parent of `onewave_substrate/`, or
+takes `--repo-root PATH` explicitly) -- it is reading real files, not
+synthetic demo data.
+
+What it builds: 150 concepts (one per Node/Root-Axiom, keyed by the
+node's own id -- e.g. `A-101`, `C-301`, `G-716` -- so the corpus's own
+`B-201`/`G-709` "these are both called Balance but are NOT the same
+concept" warning is honored automatically, since concept identity is the
+node id, never the display name), grouped into a `one_wave` field tree
+sub-divided by the corpus's own A-G series (`one_wave.a_foundations`
+through `one_wave.g_evaluation`, plus `one_wave.root_axioms`). Every
+concept is stored `EpistemicStatus.CANDIDATE` -- this is the framework's
+own working model, not externally validated science, and the substrate's
+"no interpretation outside a field" rule applies to it exactly like
+everything else. Each node's own internal review-maturity color (its
+`gate`: GREEN/YELLOW/BRONZE/SILVER/GOLD) becomes a numeric `confidence`
+and is recorded verbatim in `source`. Each node's `DEPENDENCIES /
+UPSTREAM` references become `EMERGES_FROM` relations -- 412 of them --
+so e.g. `A-102 Displacement EMERGES_FROM A-101 Ground/Zero` is a real,
+queryable, typed edge, not just prose.
+
+The markdown itself is not uniformly formatted (`examples/reality_corpus.py`
+handles three different section-heading conventions used across the
+corpus, falling back to best-effort paragraph extraction for the ~9% of
+files that use none of them -- see that module's docstring and
+`tests/test_reality_corpus.py` for the exact precedence and what's
+lower-confidence).
+
 ## Layout
 
 ```
@@ -64,10 +107,13 @@ onewave/
   query.py       query_concept() + deterministic template rendering
   ingest.py      add_concept/add_definition/add_relation/add_field + ingest_entry()
   storage/       SQLite connection (sqlite.py) + schema (schema.sql)
-tests/           54 tests across gate truth table, phi, transition, replay,
-                 fields, relations, recursive frames, causality, query, ingest
+tests/           68 tests across gate truth table, phi, transition, replay,
+                 fields, relations, recursive frames, causality, query, ingest,
+                 and the reality-corpus markdown parser
 examples/        emotions.py, science.py, mixed_fields.py (full demo + Section 23 queries)
-                 build_database.py (builds a persistent onewave.db on disk)
+                 build_database.py (builds a persistent demo onewave.db on disk)
+                 reality_corpus.py (parses Nodes/ + Root_Axioms/ markdown)
+                 build_reality_database.py (ingests the real ~150-node corpus)
 ```
 
 Knowledge graph (concepts/fields/definitions/relations) and runtime state
@@ -155,7 +201,12 @@ it's made and is covered by a test:
       relation; the path into RETURN; spawning and independently
       evolving a snapshot child).
 
-Run `python3 -m pytest -v` to see all 54 tests individually; run
+- [x] Beyond the brief's own scope: the repository's real ~150-node
+      One-Wave corpus (`Nodes/` + `Root_Axioms/`) ingests end-to-end
+      through the same substrate with zero special-casing --
+      `python3 -m examples.build_reality_database` (`tests/test_reality_corpus.py`).
+
+Run `python3 -m pytest -v` to see all 68 tests individually; run
 `python3 -m examples.mixed_fields` to see the demo queries' actual output.
 
 ## What's deliberately NOT here yet
