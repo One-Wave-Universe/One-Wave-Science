@@ -23,8 +23,30 @@ C++ kernel, no LLM. SQLite, pure functions, and deterministic replay.
 cd onewave_substrate
 python3 -m pip install -e ".[dev]"   # or just: pip install pytest
 python3 -m pytest                    # 54 tests
-python3 -m examples.mixed_fields     # full demo dataset + required demo queries
+python3 -m examples.mixed_fields     # full demo dataset + required demo queries, in-memory
+python3 -m examples.build_database   # writes a real, persistent onewave.db to disk
 ```
+
+`examples.mixed_fields` runs everything against an ephemeral `:memory:`
+SQLite database -- it exists only for the life of that process, which is
+fine for a query demo. `examples.build_database` is the actual database
+*builder*: it takes the same field entries (emotion, behavior, standard
+physics, One-Wave research, One-Wave mythology -- 24 concepts, 8 fields,
+33 definitions, 20 relations) and writes them into a real `.db` file on
+disk that you can inspect afterward with the `sqlite3` CLI or any SQLite
+browser:
+
+```bash
+python3 -m examples.build_database onewave.db
+sqlite3 onewave.db ".tables"
+sqlite3 onewave.db "SELECT field_id, epistemic_status, text FROM definitions WHERE concept_id='mass';"
+```
+
+It rebuilds from scratch on every run (deletes any existing file at the
+given path first), so re-running it never accumulates duplicate rows --
+the field entries in `examples/*.py` are the source of truth, and the
+`.db` file is a deterministic build output of them, not something to
+hand-edit.
 
 ## Layout
 
@@ -45,6 +67,7 @@ onewave/
 tests/           54 tests across gate truth table, phi, transition, replay,
                  fields, relations, recursive frames, causality, query, ingest
 examples/        emotions.py, science.py, mixed_fields.py (full demo + Section 23 queries)
+                 build_database.py (builds a persistent onewave.db on disk)
 ```
 
 Knowledge graph (concepts/fields/definitions/relations) and runtime state
