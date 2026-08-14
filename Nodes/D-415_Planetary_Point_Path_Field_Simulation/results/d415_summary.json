@@ -1,0 +1,701 @@
+{
+  "model": "D-415 planetary point/path/field: Newtonian control + 1PN control + candidate One-Wave correction",
+  "status": "YELLOW candidate architecture (UPDATED_41 scoped test)",
+  "native_dimension": "3D physical system, integrated as a declared 2D planar projection (A-117)",
+  "code_version": "d415-0.1",
+  "parameters": {
+    "dt": 0.0004,
+    "duration": 25.0,
+    "fit_fraction": 0.6,
+    "sample_stride": 50,
+    "seed": 415,
+    "eps_shear": 2e-07,
+    "eps_em": 2e-07,
+    "weave_coeff": 1.5e-07,
+    "compress_relax": 6.0,
+    "threshold": 0.15,
+    "mercury_asymmetry": 1.6,
+    "use_em_shell": true,
+    "use_boundary_weave": true,
+    "use_core_differential": true,
+    "use_memory": true,
+    "use_1pn": false,
+    "include_jupiter": true,
+    "mercury_asymmetric_coupling": true,
+    "onewave_active": true
+  },
+  "seed": 415,
+  "limitations": [
+    "Planar (2D) projection: real orbital inclinations are not carried.",
+    "Spin/core-differential rates are prescribed constants (real spin periods + an illustrative core-mantle offset), not solved from an internal dynamo model, and are not fed back from the orbital solver.",
+    "The K_eff candidate correction is a small bounded multiplicative stand-in for UPDATED_41 S8's EM-shell law, not a derivation of it.",
+    "EM-alignment is a declared periodic proxy (orbital-phase modulation), not a derived 3D dipole-tilt geometry.",
+    "Perihelion-precession estimates use the instantaneous osculating eccentricity-vector angle (exact given the integrated state, no interpolation), but are still a numerical diagnostic, not an ephemeris-grade propagation; near-circular orbits (Venus, Earth) have a poorly-directed eccentricity vector and noisy precession estimates by physical construction; see the dt-refinement convergence check.",
+    "Cell area, FCC/HCP stacking, imposed-well, and periodic/random-lattice ablations are D-408/D-409/D-413 lattice-scale concepts and are declared out of scope at this point-mass planetary scale.",
+    "Held-out ranging residuals are computed against this engine's own Newtonian control, not against independent spacecraft ranging data; this is a model-separation test, not an external validation.",
+    "Does not derive kilograms, an absolute work metric, or a GR replacement (repository honesty boundary)."
+  ],
+  "measurements": {
+    "perihelion_precession_arcsec_per_century": {
+      "newton_control": {
+        "mercury": 525.6587193524016,
+        "venus": 442.31872475789305,
+        "earth": 843.1403335519146,
+        "mars": 1704.3488498562635,
+        "jupiter": -12345.900807708129
+      },
+      "pn_control": {
+        "mercury": 568.579798273052,
+        "venus": 450.95709949404625,
+        "earth": 847.0770533069924,
+        "mars": 1705.7064902179454,
+        "jupiter": -12345.76562591474
+      },
+      "onewave": {
+        "mercury": 635.0722940966859,
+        "venus": 474.63003758320383,
+        "earth": 856.5063089928099,
+        "mars": 1707.710448560839,
+        "jupiter": -12345.90256448587
+      }
+    },
+    "mercury_1pn_excess_over_newton_arcsec_per_century": 42.921078920650416,
+    "known_GR_mercury_excess_arcsec_per_century": 42.98,
+    "perihelion_precession_dt_refinement": {
+      "newton_control": 525.6587193524016,
+      "pn_control": 568.579798273052,
+      "onewave": 635.0722940966859,
+      "dt_refine_half": 634.4477244415142
+    },
+    "dt_convergence_relative_change": 0.0009834622939426376,
+    "model_separation_onewave_vs_newton_control": {
+      "mercury": {
+        "rms_separation_fit_interval": 0.002095328587833711,
+        "rms_separation_heldout_interval": 0.007900185211677502,
+        "max_separation_heldout_interval": 0.013701631474613084
+      },
+      "venus": {
+        "rms_separation_fit_interval": 5.007576869580668e-05,
+        "rms_separation_heldout_interval": 0.0001181457134833608,
+        "max_separation_heldout_interval": 0.00014630616583659897
+      },
+      "earth": {
+        "rms_separation_fit_interval": 1.6438089483004354e-05,
+        "rms_separation_heldout_interval": 3.906355455141652e-05,
+        "max_separation_heldout_interval": 4.9215715175657155e-05
+      },
+      "mars": {
+        "rms_separation_fit_interval": 4.843462318152044e-06,
+        "rms_separation_heldout_interval": 1.2561519460548825e-05,
+        "max_separation_heldout_interval": 1.6435547404327356e-05
+      },
+      "jupiter": {
+        "rms_separation_fit_interval": 5.419833864289373e-08,
+        "rms_separation_heldout_interval": 1.294156870213317e-07,
+        "max_separation_heldout_interval": 1.4836439973308884e-07
+      }
+    },
+    "model_separation_zero_input_vs_newton_control": {
+      "mercury": {
+        "rms_separation_fit_interval": 0.0,
+        "rms_separation_heldout_interval": 0.0,
+        "max_separation_heldout_interval": 0.0
+      },
+      "venus": {
+        "rms_separation_fit_interval": 0.0,
+        "rms_separation_heldout_interval": 0.0,
+        "max_separation_heldout_interval": 0.0
+      },
+      "earth": {
+        "rms_separation_fit_interval": 0.0,
+        "rms_separation_heldout_interval": 0.0,
+        "max_separation_heldout_interval": 0.0
+      },
+      "mars": {
+        "rms_separation_fit_interval": 0.0,
+        "rms_separation_heldout_interval": 0.0,
+        "max_separation_heldout_interval": 0.0
+      },
+      "jupiter": {
+        "rms_separation_fit_interval": 0.0,
+        "rms_separation_heldout_interval": 0.0,
+        "max_separation_heldout_interval": 0.0
+      }
+    },
+    "kinematic_identity_max_deviation_AU": 3.1401849173675503e-16,
+    "K_eff_bounds_by_body": {
+      "mercury": {
+        "min": 1.000000312000968,
+        "max": 1.0000034498673764
+      },
+      "venus": {
+        "min": 1.0,
+        "max": 1.0000004000710017
+      },
+      "earth": {
+        "min": 0.9999998178413476,
+        "max": 1.0000003547072132
+      },
+      "mars": {
+        "min": 1.0,
+        "max": 1.0000000546650685
+      },
+      "jupiter": {
+        "min": 0.999999800914744,
+        "max": 1.000000201203411
+      }
+    },
+    "applied_work_by_body": {
+      "onewave": {
+        "mercury": -0.002704750730342808,
+        "venus": -3.665336938877301e-07,
+        "earth": -1.613259736294949e-07,
+        "mars": -6.55613793684612e-07,
+        "jupiter": -1.4580781493762378e-10
+      },
+      "ablation_no_em_shell": {
+        "mercury": -0.0026965791015017924,
+        "venus": -3.665336950681452e-07,
+        "earth": -1.6133097183036485e-07,
+        "mars": -6.556137936857771e-07,
+        "jupiter": -1.3951794726607338e-10
+      },
+      "ablation_no_boundary_weave": {
+        "mercury": -8.293246406255819e-06,
+        "venus": 0.0,
+        "earth": 4.996342372159082e-12,
+        "mars": 0.0,
+        "jupiter": -6.30441773097843e-12
+      }
+    },
+    "route_counts_by_body_onewave": {
+      "mercury": {
+        "-1": 0,
+        "0": 2,
+        "1": 62499
+      },
+      "venus": {
+        "-1": 0,
+        "0": 24,
+        "1": 62477
+      },
+      "earth": {
+        "-1": 0,
+        "0": 65,
+        "1": 62436
+      },
+      "mars": {
+        "-1": 0,
+        "0": 212,
+        "1": 62289
+      },
+      "jupiter": {
+        "-1": 0,
+        "0": 62501,
+        "1": 0
+      }
+    },
+    "energy_relative_drift_by_case": {
+      "newton_control": 1.6848260225738687e-11,
+      "pn_control": 6.817076489513403e-10,
+      "onewave": 1.1984353350963243e-07,
+      "ablation_zero_input": 1.6848260225738687e-11,
+      "ablation_no_em_shell": 1.1947988209172703e-07,
+      "ablation_no_boundary_weave": 3.858099776421597e-10,
+      "ablation_no_core_differential": 1.1984352426669345e-07,
+      "ablation_no_memory": 9.348251397860581e-09,
+      "ablation_symmetric_mercury": 1.1966908528349113e-07,
+      "ablation_no_jupiter": 3.1878199694036257e-06,
+      "dt_refine_half": 1.1983603124714494e-07
+    }
+  },
+  "ablations": {
+    "no_em_shell": "use_em_shell=False; zeroes the EM-alignment channel of K_eff for dynamo bodies.",
+    "no_boundary_weave": "use_boundary_weave=False; zeroes the L2D compression-differential channel of K_eff.",
+    "no_core_differential": "use_core_differential=False; zeroes the shear channel (prescribed DeltaOmega_core-mantle).",
+    "no_memory": "use_memory=False; C_i tracks its instantaneous tidal target with no relaxation lag.",
+    "symmetric_mercury": "mercury_asymmetric_coupling=False; removes the UPDATED_41 S9 Sun-Mercury asymmetric EM term.",
+    "no_jupiter": "include_jupiter=False; N-body-count analog of a spatial-refinement test.",
+    "zero_input": "onewave_active=False; must reduce exactly to the Newtonian control (see checks).",
+    "dt_refine_half": "same case at half the timestep; tests numerical convergence of the precession estimate.",
+    "not_applicable": [
+      "no_well (D-413 imposed-curvature-well concept does not apply to point-mass N-body gravity)",
+      "FCC_vs_HCP_stacking (D-409 3D lattice concept)",
+      "periodic/random/simple-control lattices (D-408/D-413 lattice concept; the analog here is the Newtonian control model itself)"
+    ]
+  },
+  "checks": {
+    "zero_input_matches_newton_control": true,
+    "candidate_correction_is_bounded_perturbation": true,
+    "newton_control_energy_conserved": true,
+    "kinematic_identity_holds_to_float_precision": true,
+    "onewave_separation_grows_from_fit_to_heldout": true,
+    "1pn_perihelion_precession_is_prograde_and_nonzero": true,
+    "1pn_mercury_excess_matches_known_GR_value_within_15_arcsec_per_century": true
+  },
+  "all_checks_pass": true,
+  "cases": {
+    "newton_control": {
+      "tag": "newton_control",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.003753618804296527,
+      "energy_relative_drift": 1.6848260225738687e-11,
+      "applied_work_by_body": {
+        "mercury": 0.0,
+        "venus": 0.0,
+        "earth": 0.0,
+        "mars": 0.0,
+        "jupiter": 0.0
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "8f5aaa1da986ac5c5ca852546508205e72a6af6b1cee2492c3aa19465b5493aa"
+    },
+    "pn_control": {
+      "tag": "pn_control",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.0037536188016744146,
+      "energy_relative_drift": 6.817076489513403e-10,
+      "applied_work_by_body": {
+        "mercury": 0.0,
+        "venus": 0.0,
+        "earth": 0.0,
+        "mars": 0.0,
+        "jupiter": 0.0
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "47d97d2a05f124ac5d16dd82d254330d6c2df64b73de3b5dc39a1524fe1157cb"
+    },
+    "onewave": {
+      "tag": "onewave",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.003753619254080226,
+      "energy_relative_drift": 1.1984353350963243e-07,
+      "applied_work_by_body": {
+        "mercury": -0.002704750730342808,
+        "venus": -3.665336938877301e-07,
+        "earth": -1.613259736294949e-07,
+        "mars": -6.55613793684612e-07,
+        "jupiter": -1.4580781493762378e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "4b5dc3b09810d643ee5ccd56b14504685c8e50af3953be4dacde1c620672bfac"
+    },
+    "ablation_zero_input": {
+      "tag": "ablation_zero_input",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.003753618804296527,
+      "energy_relative_drift": 1.6848260225738687e-11,
+      "applied_work_by_body": {
+        "mercury": 0.0,
+        "venus": 0.0,
+        "earth": 0.0,
+        "mars": 0.0,
+        "jupiter": 0.0
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "8f5aaa1da986ac5c5ca852546508205e72a6af6b1cee2492c3aa19465b5493aa"
+    },
+    "ablation_no_em_shell": {
+      "tag": "ablation_no_em_shell",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.0037536192527152174,
+      "energy_relative_drift": 1.1947988209172703e-07,
+      "applied_work_by_body": {
+        "mercury": -0.0026965791015017924,
+        "venus": -3.665336950681452e-07,
+        "earth": -1.6133097183036485e-07,
+        "mars": -6.556137936857771e-07,
+        "jupiter": -1.3951794726607338e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "fd94c4fbe03c3af05836b8882839664cfa0fd79f9394afbc4acef03689db85c6"
+    },
+    "ablation_no_boundary_weave": {
+      "tag": "ablation_no_boundary_weave",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.003753618805681469,
+      "energy_relative_drift": 3.858099776421597e-10,
+      "applied_work_by_body": {
+        "mercury": -8.293246406255819e-06,
+        "venus": 0.0,
+        "earth": 4.996342372159082e-12,
+        "mars": 0.0,
+        "jupiter": -6.30441773097843e-12
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "4d3a27a68bba6008797e846045c7be043c1016929dec0d91daea81c09d643d17"
+    },
+    "ablation_no_core_differential": {
+      "tag": "ablation_no_core_differential",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.0037536192540801915,
+      "energy_relative_drift": 1.1984352426669345e-07,
+      "applied_work_by_body": {
+        "mercury": -0.002704750696327746,
+        "venus": -3.6653369388612335e-07,
+        "earth": -1.6132597341523493e-07,
+        "mars": -6.5561379368377e-07,
+        "jupiter": -1.4579326571419845e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "4b75d9eb9068d3414ab085ae0dae04b0ba6131d8032693a1a172c927fd0f1392"
+    },
+    "ablation_no_memory": {
+      "tag": "ablation_no_memory",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.0037536188393230575,
+      "energy_relative_drift": 9.348251397860581e-09,
+      "applied_work_by_body": {
+        "mercury": -0.00028247994684850344,
+        "venus": -2.8213085089627453e-07,
+        "earth": -2.668006698939981e-09,
+        "mars": -1.553751477013464e-07,
+        "jupiter": -1.1551672563213429e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 0,
+          "1": 62501
+        },
+        "venus": {
+          "-1": 0,
+          "0": 0,
+          "1": 62501
+        },
+        "earth": {
+          "-1": 0,
+          "0": 0,
+          "1": 62501
+        },
+        "mars": {
+          "-1": 0,
+          "0": 0,
+          "1": 62501
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "bc410fa29ca4d23f192e83d09050fcfe5b18ad5c3bbc1a985b6cac6bfc4f0830"
+    },
+    "ablation_symmetric_mercury": {
+      "tag": "ablation_symmetric_mercury",
+      "steps": 62500,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.003753619253425414,
+      "energy_relative_drift": 1.1966908528349113e-07,
+      "applied_work_by_body": {
+        "mercury": -0.002700814354801031,
+        "venus": -3.6653369514833924e-07,
+        "earth": -1.6132597362677257e-07,
+        "mars": -6.556137936821207e-07,
+        "jupiter": -1.4580781493988596e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "7a3e72489dc5ab5f0036d92fc0300bbd5a225d30254c13f6669e17ee45d2e261"
+    },
+    "ablation_no_jupiter": {
+      "tag": "ablation_no_jupiter",
+      "steps": 62500,
+      "energy_initial": -0.00013873093359368516,
+      "energy_final": -0.00013873137584292564,
+      "energy_relative_drift": 3.1878199694036257e-06,
+      "applied_work_by_body": {
+        "mercury": -0.0026610389319710035,
+        "venus": -2.954530614724465e-07,
+        "earth": -1.4123358297168785e-07,
+        "mars": -6.601322501405769e-07,
+        "jupiter": 0.0
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 2,
+          "1": 62499
+        },
+        "venus": {
+          "-1": 0,
+          "0": 24,
+          "1": 62477
+        },
+        "earth": {
+          "-1": 0,
+          "0": 65,
+          "1": 62436
+        },
+        "mars": {
+          "-1": 0,
+          "0": 212,
+          "1": 62289
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 62501,
+          "1": 0
+        }
+      },
+      "csv_sha256": "3f9b1ac7d9543bad47e4fd423157896e4f73afdcb9b3b6471d6b4b307b8d1e2f"
+    },
+    "dt_refine_half": {
+      "tag": "dt_refine_half",
+      "steps": 125000,
+      "energy_initial": -0.0037536188042332852,
+      "energy_final": -0.0037536192540520655,
+      "energy_relative_drift": 1.1983603124714494e-07,
+      "applied_work_by_body": {
+        "mercury": -0.0027020877582341874,
+        "venus": -3.6670272902448674e-07,
+        "earth": -1.6115868185192022e-07,
+        "mars": -6.549108052090275e-07,
+        "jupiter": -1.4401225676920597e-10
+      },
+      "route_counts_by_body": {
+        "mercury": {
+          "-1": 0,
+          "0": 4,
+          "1": 124997
+        },
+        "venus": {
+          "-1": 0,
+          "0": 48,
+          "1": 124953
+        },
+        "earth": {
+          "-1": 0,
+          "0": 129,
+          "1": 124872
+        },
+        "mars": {
+          "-1": 0,
+          "0": 423,
+          "1": 124578
+        },
+        "jupiter": {
+          "-1": 0,
+          "0": 125001,
+          "1": 0
+        }
+      },
+      "csv_sha256": "76c2240c975f6e3d18b5512932deaa537efc134475f575ee78595de1e66cf99f"
+    }
+  }
+}
