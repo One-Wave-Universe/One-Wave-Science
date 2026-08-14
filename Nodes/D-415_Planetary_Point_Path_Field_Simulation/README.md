@@ -58,14 +58,21 @@ forced into a meaningless test:
 
 ## Numerical-precision caveat on the precession measurement
 
-The perihelion-precession diagnostic locates periapsis passages by parabolic
-interpolation around sampled radius minima, not by analytic osculating-
-element propagation. It is a coarse instrument, not an ephemeris-grade one.
+The perihelion-precession diagnostic uses the instantaneous osculating
+eccentricity-vector angle (the Laplace-Runge-Lenz direction), computed
+exactly from the integrated position and velocity at every sample -- no
+periapsis-passage detection or interpolation involved. It is still a
+numerical diagnostic, not an ephemeris-grade propagation, and near-circular
+orbits (Venus, Earth) have a small, poorly-directed eccentricity vector, so
+their precession estimate is noisy by physical construction, not by a bug.
 Every run includes a half-timestep (`dt_refine_half`) case specifically so
 the receipt can report whether the estimate is converging — check
 `measurements.dt_convergence_relative_change` in `results/d415_summary.json`
 before treating any precession number as more than a rough comparison
-between the three models.
+between the three models. As a sanity check, the 1PN control's Mercury
+excess over the Newtonian control is compared against the known measured GR
+value (~42.98 arcsec/century, Clemence 1947) — this validates the 1PN
+implementation itself, not the candidate correction.
 
 ## Why a static viewer
 

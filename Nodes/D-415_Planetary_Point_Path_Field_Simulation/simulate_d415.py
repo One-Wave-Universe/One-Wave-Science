@@ -524,7 +524,7 @@ def main():
             "Spin/core-differential rates are prescribed constants (real spin periods + an illustrative core-mantle offset), not solved from an internal dynamo model, and are not fed back from the orbital solver.",
             "The K_eff candidate correction is a small bounded multiplicative stand-in for UPDATED_41 S8's EM-shell law, not a derivation of it.",
             "EM-alignment is a declared periodic proxy (orbital-phase modulation), not a derived 3D dipole-tilt geometry.",
-            "Perihelion-precession estimates use parabolic interpolation around sampled radius minima, not analytic osculating-element propagation; treat as a coarse diagnostic and see the dt-refinement convergence check.",
+            "Perihelion-precession estimates use the instantaneous osculating eccentricity-vector angle (exact given the integrated state, no interpolation), but are still a numerical diagnostic, not an ephemeris-grade propagation; near-circular orbits (Venus, Earth) have a poorly-directed eccentricity vector and noisy precession estimates by physical construction; see the dt-refinement convergence check.",
             "Cell area, FCC/HCP stacking, imposed-well, and periodic/random-lattice ablations are D-408/D-409/D-413 lattice-scale concepts and are declared out of scope at this point-mass planetary scale.",
             "Held-out ranging residuals are computed against this engine's own Newtonian control, not against independent spacecraft ranging data; this is a model-separation test, not an external validation.",
             "Does not derive kilograms, an absolute work metric, or a GR replacement (repository honesty boundary).",
