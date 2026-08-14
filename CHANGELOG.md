@@ -1,4 +1,13 @@
 
+## D-415 — Planetary Point-Path-Field Simulation (August 14, 2026)
+
+- Added D-415, the first runnable test of a scoped slice of UPDATED_41's Planetary-Scale Displacement Model: a Newtonian N-body control, a textbook 1PN (post-Newtonian) control, and a small bounded candidate correction, run from identical initial conditions and integrator tolerances per D-412/spec layer 8.
+- Implemented the ternary local state machine (`-1/0/+1` on a declared compression differential, one mirrored axis pair, `2N` directed routes + `2N+1` centered states) on the planetary compression state `C_i`.
+- Added the required fit-interval-versus-withheld-prediction-interval model-separation measurement and the `d_ij + d_jk + d_ki = 0` kinematic-identity sanity check, explicitly labeled as not evidence.
+- Added the `no_em_shell`, `no_boundary_weave`, `no_core_differential`, `no_memory`, `symmetric_mercury`, `no_jupiter`, `zero_input`, and half-timestep-refinement ablations; declared `no_well`, FCC/HCP stacking, and periodic/random-lattice ablations explicitly out of scope at point-mass planetary scale.
+- Registered D-415 in the master index (Appendix D, 14 nodes).
+- Scope is honestly bounded: internal dynamo rotation is prescribed, not solved; EM alignment is a declared periodic proxy, not derived dipole geometry; the perihelion-precession diagnostic is numerical and ships with its own convergence check rather than an assumed match to observation. See the node doc and `README.md` for the complete limitations list.
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.
