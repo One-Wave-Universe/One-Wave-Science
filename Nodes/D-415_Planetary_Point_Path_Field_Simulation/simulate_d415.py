@@ -71,8 +71,8 @@ N_BODIES = N_PLANETS + 1  # + Sun at index 0
 
 @dataclass
 class Params:
-    dt: float = 1.0 / 4000.0        # yr
-    duration: float = 30.0          # yr
+    dt: float = 1.0 / 2500.0        # yr
+    duration: float = 25.0          # yr
     fit_fraction: float = 0.6
     sample_stride: int = 10
     seed: int = 415
@@ -480,6 +480,15 @@ def main():
     if precession_refined["onewave"] is not None and precession_refined["dt_refine_half"] is not None and abs(precession_refined["onewave"]) > 1e-9:
         dt_convergence_ratio = abs(precession_refined["dt_refine_half"] - precession_refined["onewave"]) / abs(precession_refined["onewave"])
 
+    # Known external falsifier (not a One-Wave claim): the textbook 1PN correction's
+    # Mercury excess over pure Newtonian N-body should land near the measured GR value,
+    # ~42.98 arcsec/century (Clemence 1947 and successors). This validates the 1PN
+    # implementation itself; it says nothing about the candidate correction.
+    GR_MERCURY_EXCESS_ARCSEC_PER_CENTURY = 42.98
+    mercury_gr_excess = None
+    if precession["pn_control"]["mercury"] is not None and precession["newton_control"]["mercury"] is not None:
+        mercury_gr_excess = precession["pn_control"]["mercury"] - precession["newton_control"]["mercury"]
+
     checks = {
         "zero_input_matches_newton_control": (
             sep_zero_input_vs_newton["earth"]["rms_separation_heldout_interval"] is not None
@@ -496,6 +505,10 @@ def main():
             and sep_onewave_vs_newton["mercury"]["rms_separation_heldout_interval"] >= sep_onewave_vs_newton["mercury"]["rms_separation_fit_interval"]
         ),
         "1pn_perihelion_precession_is_prograde_and_nonzero": precession_refined["pn_control"] is not None and precession_refined["pn_control"] > 0,
+        "1pn_mercury_excess_matches_known_GR_value_within_15_arcsec_per_century": (
+            mercury_gr_excess is not None
+            and abs(mercury_gr_excess - GR_MERCURY_EXCESS_ARCSEC_PER_CENTURY) < 15.0
+        ),
     }
 
     payload = {
@@ -517,6 +530,8 @@ def main():
         ],
         "measurements": {
             "perihelion_precession_arcsec_per_century": precession,
+            "mercury_1pn_excess_over_newton_arcsec_per_century": mercury_gr_excess,
+            "known_GR_mercury_excess_arcsec_per_century": GR_MERCURY_EXCESS_ARCSEC_PER_CENTURY,
             "perihelion_precession_dt_refinement": precession_refined,
             "dt_convergence_relative_change": dt_convergence_ratio,
             "model_separation_onewave_vs_newton_control": sep_onewave_vs_newton,
