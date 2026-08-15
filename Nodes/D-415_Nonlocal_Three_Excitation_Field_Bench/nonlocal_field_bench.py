@@ -29,6 +29,12 @@ class Config:
     nonlocal_response: float = 0.12
     kernel_length: float = 10.0
     window_width: float = 6.0
+    lock_frequency_epsilon: float = 0.12
+    lock_phase_epsilon: float = 0.55
+    break_frequency_epsilon: float = 0.24
+    break_phase_epsilon: float = 1.10
+    lock_rate: float = 0.10
+    break_rate: float = 0.06
     steps: int = 300
 
 
@@ -175,6 +181,128 @@ def minimum_image(delta: np.ndarray, n: int) -> np.ndarray:
     return (delta + n / 2.0) % n - n / 2.0
 
 
+def wrap_phase(value: np.ndarray | float) -> np.ndarray | float:
+    return (value + np.pi) % (2.0 * np.pi) - np.pi
+
+
+def harmonic_branches(harmonic: int) -> tuple[int, int]:
+    """Return the shared-node odd-harmonic graph branches."""
+    return 2 * harmonic + 1, 2 * harmonic + 3
+
+
+def cartesian_gradients(field: np.ndarray, dx: float) -> tuple[np.ndarray, np.ndarray]:
+    """Cartesian gradient reconstructed from two triangular axial directions."""
+    dq = (np.roll(field, -1, axis=0) - np.roll(field, 1, axis=0)) / (2.0 * dx)
+    dr = (np.roll(field, -1, axis=1) - np.roll(field, 1, axis=1)) / (2.0 * dx)
+    grad_x = dq
+    grad_y = (2.0 / np.sqrt(3.0)) * (dr - 0.5 * dq)
+    return grad_x, grad_y
+
+
+def field_descriptors(
+    previous: np.ndarray,
+    current: np.ndarray,
+    cfg: Config,
+) -> dict[str, np.ndarray | float]:
+    """Scalar, vector, tensor-proxy, harmonic, and rotation diagnostics."""
+    grad_x, grad_y = cartesian_gradients(current, cfg.dx)
+    density = np.abs(current) ** 2
+    current_x = np.imag(np.conj(current) * grad_x)
+    current_y = np.imag(np.conj(current) * grad_y)
+    regularized = density + 1e-12
+    velocity_x = current_x / regularized
+    velocity_y = current_y / regularized
+    _, dvx_dy = cartesian_gradients(velocity_x, cfg.dx)
+    dvy_dx, _ = cartesian_gradients(velocity_y, cfg.dx)
+    vorticity = dvy_dx - dvx_dy
+
+    # Candidate gradient-stress diagnostic. It is not a complete physical
+    # stress tensor until a canonical Field Lagrangian is fixed.
+    t_xx = np.real(np.conj(grad_x) * grad_x)
+    t_xy = np.real(np.conj(grad_x) * grad_y)
+    t_yy = np.real(np.conj(grad_y) * grad_y)
+    phase_unit = current / np.maximum(np.abs(current), 1e-12)
+    phase_coherence = float(np.abs(np.sum(density * phase_unit) / np.sum(density)))
+    return {
+        "density": density,
+        "velocity_x": velocity_x,
+        "velocity_y": velocity_y,
+        "vorticity": vorticity,
+        "stress_xx": t_xx,
+        "stress_xy": t_xy,
+        "stress_yy": t_yy,
+        "phase_coherence": phase_coherence,
+        "field_velocity_rms": float(np.sqrt(np.mean(velocity_x**2 + velocity_y**2))),
+        "field_vorticity_rms": float(np.sqrt(np.mean(vorticity**2))),
+        "stress_trace_mean": float(np.mean(t_xx + t_yy)),
+    }
+
+
+def update_phase_locks(
+    lock_strength: np.ndarray,
+    frequencies: np.ndarray,
+    phases: np.ndarray,
+    cfg: Config,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Update three pair locks with separate lock and break thresholds."""
+    pairs = ((0, 1), (1, 2), (2, 0))
+    delta_frequency = np.empty(3)
+    delta_phase = np.empty(3)
+    updated = lock_strength.copy()
+    for pair_index, (a, b) in enumerate(pairs):
+        delta_frequency[pair_index] = abs(frequencies[a] - frequencies[b])
+        delta_phase[pair_index] = abs(float(wrap_phase(phases[a] - phases[b])))
+        inside = (
+            delta_frequency[pair_index] < cfg.lock_frequency_epsilon
+            and delta_phase[pair_index] < cfg.lock_phase_epsilon
+        )
+        outside = (
+            delta_frequency[pair_index] > cfg.break_frequency_epsilon
+            or delta_phase[pair_index] > cfg.break_phase_epsilon
+        )
+        if inside:
+            updated[pair_index] += cfg.lock_rate * (1.0 - updated[pair_index])
+        elif outside:
+            updated[pair_index] -= cfg.break_rate * updated[pair_index]
+        updated[pair_index] = np.clip(updated[pair_index], 0.0, 1.0)
+    return updated, delta_frequency, delta_phase
+
+
+def rotation_receipts(
+    centers: np.ndarray,
+    previous_centers: np.ndarray,
+    weights: np.ndarray,
+    windows: np.ndarray,
+    descriptors: dict[str, np.ndarray | float],
+    cfg: Config,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Measure internal Point, relational Path, and surrounding Field rotation."""
+    density = np.asarray(descriptors["density"])
+    vorticity = np.asarray(descriptors["vorticity"])
+    point_rotation = np.empty(3)
+    field_rotation = np.empty(3)
+    for k in range(3):
+        core = windows[k] ** 2 * density
+        surrounding = windows[k] * (1.0 - windows[k]) * density
+        point_rotation[k] = np.sum(core * vorticity) / max(np.sum(core), 1e-15)
+        field_rotation[k] = np.sum(surrounding * vorticity) / max(
+            np.sum(surrounding), 1e-15
+        )
+
+    def relative_angles(points: np.ndarray) -> np.ndarray:
+        local = np.zeros_like(points)
+        local[1] = minimum_image(points[1] - points[0], cfg.n)
+        local[2] = minimum_image(points[2] - points[0], cfg.n)
+        centroid = np.sum(weights[:, None] * local, axis=0) / weights.sum()
+        relative = local - centroid
+        return np.arctan2(relative[:, 1], relative[:, 0])
+
+    current_angles = relative_angles(centers)
+    previous_angles = relative_angles(previous_centers)
+    path_rotation = np.asarray(wrap_phase(current_angles - previous_angles)) / cfg.dt
+    return point_rotation, path_rotation, field_rotation
+
+
 def relational_observables(
     centers: np.ndarray, weights: np.ndarray, n: int
 ) -> dict[str, float]:
@@ -209,18 +337,51 @@ def run(cfg: Config, output_dir: Path) -> dict[str, object]:
     output_dir.mkdir(parents=True, exist_ok=True)
     kernel, kernel_fft = make_global_kernel(cfg)
     previous, current, centers = seed_three_excitations(cfg)
+    previous_centers = centers.copy()
+    previous_phases = np.zeros(3)
+    lock_strength = np.zeros(3)
+    lock_breaks = np.zeros(3, dtype=np.int64)
+    lock_returns = np.zeros(3, dtype=np.int64)
+    was_locked = np.zeros(3, dtype=bool)
     rows: list[dict[str, float]] = []
 
     for step in range(cfg.steps + 1):
         centers, weights, amplitudes = measure_excitations(previous, current, centers, cfg)
+        phases = np.angle(amplitudes)
+        frequencies = np.asarray(wrap_phase(phases - previous_phases)) / cfg.dt
+        lock_strength, delta_frequency, delta_phase = update_phase_locks(
+            lock_strength, frequencies, phases, cfg
+        )
+        now_locked = lock_strength >= 0.5
+        lock_breaks += was_locked & ~now_locked
+        lock_returns += ~was_locked & now_locked
+        was_locked = now_locked
+        descriptors = field_descriptors(previous, current, cfg)
+        windows = partition_windows(centers, cfg)
+        point_rotation, path_rotation, field_rotation = rotation_receipts(
+            centers, previous_centers, weights, windows, descriptors, cfg
+        )
         relational = relational_observables(centers, weights, cfg.n)
         row: dict[str, float] = {"step": float(step), "time": step * cfg.dt, **relational}
+        row["phase_coherence"] = float(descriptors["phase_coherence"])
+        row["field_velocity_rms"] = float(descriptors["field_velocity_rms"])
+        row["field_vorticity_rms"] = float(descriptors["field_vorticity_rms"])
+        row["stress_trace_mean"] = float(descriptors["stress_trace_mean"])
         for k in range(3):
             row[f"q{k + 1}"] = centers[k, 0]
             row[f"r{k + 1}"] = centers[k, 1]
             row[f"weight{k + 1}"] = weights[k]
-            row[f"phase{k + 1}"] = float(np.angle(amplitudes[k]))
+            row[f"phase{k + 1}"] = float(phases[k])
+            row[f"frequency{k + 1}"] = float(frequencies[k])
+            row[f"point_rotation{k + 1}"] = float(point_rotation[k])
+            row[f"path_rotation{k + 1}"] = float(path_rotation[k])
+            row[f"field_rotation{k + 1}"] = float(field_rotation[k])
+            row[f"lock{k + 1}"] = float(lock_strength[k])
+            row[f"lock_delta_frequency{k + 1}"] = float(delta_frequency[k])
+            row[f"lock_delta_phase{k + 1}"] = float(delta_phase[k])
         rows.append(row)
+        previous_centers = centers.copy()
+        previous_phases = phases.copy()
         if step < cfg.steps:
             following = advance(previous, current, cfg, kernel_fft)
             previous, current = current, following
@@ -231,11 +392,31 @@ def run(cfg: Config, output_dir: Path) -> dict[str, object]:
         writer.writeheader()
         writer.writerows(rows)
 
+    min_edge = min(min(row["edge_12"], row["edge_23"], row["edge_31"]) for row in rows)
+    max_edge = max(max(row["edge_12"], row["edge_23"], row["edge_31"]) for row in rows)
+    accumulated_rotation = max(
+        abs(sum(row[f"path_rotation{k}"] * cfg.dt for row in rows)) for k in (1, 2, 3)
+    )
+    if min_edge < 0.5 * cfg.window_width:
+        outcome = "collision_or_merge_candidate"
+    elif max_edge > 0.70 * cfg.n:
+        outcome = "ejection_candidate"
+    elif accumulated_rotation > 2.0 * np.pi:
+        outcome = "bounded_rotation_candidate"
+    else:
+        outcome = "bounded_or_unresolved"
+
     summary = {
         "status": "YELLOW numerical experiment",
         "config": asdict(cfg),
         "kernel_min": float(kernel.min()),
         "kernel_sum": float(kernel.sum()),
+        "harmonic_graph_seed": {
+            str(h): list(harmonic_branches(h)) for h in (0, 1, 2)
+        },
+        "classification": outcome,
+        "lock_breaks": lock_breaks.tolist(),
+        "lock_returns": lock_returns.tolist(),
         "initial": rows[0],
         "final": rows[-1],
     }
