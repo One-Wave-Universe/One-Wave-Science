@@ -12,6 +12,27 @@ Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
 ---
 
+## GATE LADDER LEGEND (the "Brick" chart)
+
+Every node and book chapter carries exactly one gate value, read from its own I-06 YAML front matter (nodes) or its Gray comparison section (chapters). This is the full ordered lifecycle, formalized in `Governance_I_Series/I-02_Node_Proof_Trust_Lifecycle.md`; I-01 Rule 2 defers to it. Order is strict and does not skip stages.
+
+| Gate | Applies to | Meaning | Advances when |
+|---|---|---|---|
+| BROWN | Nodes | Ground / new idea. A template slot and an ID exist; nothing built yet. | Math is built and internally tested → GREEN |
+| GREEN | Nodes | Growing, ready to go. Defined and internally consistent; room to grow. | Math is built and internally tested → YELLOW |
+| GRAY | Book chapters (parallel to GREEN) | Standard Model comparison stated in full, without omission — the no-drift reference side (I-01 Rule 1: never rewritten to make the One-Wave section look better by contrast). | C(x,r) stated for every r → YELLOW, or a real experiment forces Standard Model negation → RED |
+| YELLOW | Nodes & chapters | The math is worked out — constrained and testable. ("Yellow brick road": the path to validation.) | Simulation run + metadata attached + first successful validation → BRONZE |
+| BRONZE | Nodes & chapters | Validated once. | Validated in a second, independent application → SILVER |
+| SILVER | Nodes & chapters | Validated twice, independently — integrated. | Extraordinary, extensive validation across applications → GOLD |
+| GOLD | Nodes & chapters | Confirmed. Extraordinary, extensive validation across applications. | Terminal — highest rung. |
+| RED | Chapters only, conditional | Reachable only from GRAY, and only when a real, already-run experiment forces the negation of the Standard Model at that comparison point. Never asserted from math alone. | → GOLD |
+
+Strict order: `Brown < Green < Yellow < Bronze < Silver < Gold` for nodes; `Brown < Gray < Yellow < Bronze < Silver < Gold` for chapters, with the one conditional branch `Gray → Red → Gold`. A composite node receives the most conservative gate among its load-bearing claims (I-06); more advanced sub-claims live in `claim_gate_detail` and never silently promote the whole node.
+
+Every node file under `Nodes/` or `Root_Axioms/` must expose this in machine-readable YAML front matter per I-06 (`node_id`, `gate`, `lifecycle`, etc.) — the `Gate` column below is read directly from that field, not asserted separately.
+
+---
+
 ## TERMINOLOGY LEGEND
 
 Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in Gray reference sections; One-Wave names control the interpretation layer.
