@@ -16,6 +16,10 @@ The run produces `three_excitation_trace.csv` and `summary.json` containing
 Field-derived centers, weights, phases, relational edges, hyperradius,
 hyperangle, and shape cosine.
 
+The receipt also includes harmonic phase/frequency, hysteretic pair-lock state,
+Field-current velocity, vorticity, a candidate gradient-stress diagnostic, and
+separate Point, Path, and Field rotation measurements for each excitation.
+
 ## Model
 
 The discrete update is
@@ -53,7 +57,11 @@ relational coordinates use measured Field weights rather than inserted mass.
 ## Next gates
 
 1. Derive the nonlinear potential and nonlocal kernel from canonical nodes.
-2. Add Point, Path, and Field rotation observables and a transfer ledger.
+2. Derive a conserved Point, Path, and Field rotation transfer ledger.
 3. Demonstrate persistent translating excitations without a prescribed path.
 4. Run capture, orbit, ejection, collision, Break, and Loop classifications.
 5. Promote to 3D/12-neighbor geometry and compare against the Gray control.
+
+The rotation observables and phase-lock state are implemented. A complete
+conserved transfer ledger remains open because it depends on deriving the
+canonical Field Lagrangian and nonlocal transfer law.
