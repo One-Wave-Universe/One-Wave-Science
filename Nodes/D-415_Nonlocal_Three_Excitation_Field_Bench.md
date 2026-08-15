@@ -68,6 +68,16 @@ Hyperradius alone is not treated as the full configuration.
 4. Relational edge lengths and hyperradius ignore common translation.
 5. A short numerical run remains finite.
 
+The trace additionally records:
+
+- odd-harmonic shared-node branches `H -> {2H+1, 2H+3}`;
+- per-window phase and instantaneous frequency;
+- three pairwise hysteretic phase-lock strengths;
+- Field-current velocity and vorticity diagnostics;
+- a candidate gradient-stress tensor diagnostic;
+- separate internal Point, relational Path, and surrounding Field rotations;
+- preliminary collision/merge, ejection, bounded-rotation, or unresolved class.
+
 Passing these tests validates the implementation path only.  It does not
 validate the candidate One-Wave law.
 
@@ -81,8 +91,8 @@ motion, timestep/lattice refinement, and an independently specified test.
 Next implementation targets:
 
 1. derive the nonlinear potential and global kernel from canonical nodes;
-2. add Point, Path, and Field rotation measurements;
-3. classify capture, orbit, ejection, collision, Break, and Loop;
+2. derive a conserved Point–Path–Field transfer ledger;
+3. strengthen capture, orbit, ejection, collision, Break, and Loop criteria;
 4. implement native 3D twelve-neighbor geometry;
 5. compare relational receipts with the Gray multipole control without
    inserting its point-mass mechanism into this solver.
