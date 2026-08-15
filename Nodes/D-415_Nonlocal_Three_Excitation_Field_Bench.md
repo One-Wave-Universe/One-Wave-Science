@@ -11,6 +11,11 @@ metadata_standard: "I-06"
 
 # D-415 — Nonlocal Three-Excitation One-Field Bench
 
+**Planetary visual:**
+`Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/planetary_visual.html` —
+cinematic 16:9 Point–Path–Field projection with four planetary scenes and
+direct 20-second 1080p WebM recording.
+
 ## Purpose
 
 D-415 is the first runnable attack on a three-excitation problem using one
