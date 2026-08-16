@@ -9,11 +9,13 @@ from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
     QDockWidget,
     QFileDialog,
+    QInputDialog,
     QMainWindow,
     QMessageBox,
 )
 
 from .canvas_view import SceneCanvas
+from .gif_export import GifExportError, qimages_to_gif
 from .layers_panel import LayersPanel
 from .scene_model import Scene
 
@@ -21,7 +23,10 @@ APP_NAME = "One-Wave Animator"
 SCENE_FILE_FILTER = "One-Wave Animator Scene (*.owascene)"
 BACKGROUND_FILE_FILTER = "Images (*.png *.jpg *.jpeg)"
 CHARACTER_FILE_FILTER = "Transparent PNG (*.png)"
+GIF_FILE_FILTER = "Animated GIF (*.gif)"
 SCENE_EXTENSION = ".owascene"
+GIF_EXTENSION = ".gif"
+DEFAULT_FRAME_DURATION_MS = 150
 
 
 class MainWindow(QMainWindow):
@@ -95,6 +100,11 @@ class MainWindow(QMainWindow):
         move_down_action.triggered.connect(self._move_selected_down)
         layers_menu.addAction(move_down_action)
 
+        animation_menu = self.menuBar().addMenu("&Animation")
+        export_gif_action = QAction("&Export Animation Clip (GIF)...", self, shortcut="Ctrl+E")
+        export_gif_action.triggered.connect(self.export_animation_gif)
+        animation_menu.addAction(export_gif_action)
+
     # ---- File actions --------------------------------------------------
     def new_scene(self) -> None:
         if not self._confirm_discard_unsaved():
@@ -166,6 +176,50 @@ class MainWindow(QMainWindow):
         self._current_file = path
         self.setWindowModified(False)
         self._update_title()
+        return True
+
+    # ---- Animation menu actions -----------------------------------------
+    def export_animation_gif(self) -> bool:
+        if not self.canvas.has_background():
+            QMessageBox.warning(self, APP_NAME, "Import a background first.")
+            return False
+        frame_count = len(self.canvas.character_items())
+        if frame_count < 2:
+            QMessageBox.warning(
+                self,
+                APP_NAME,
+                "Need at least 2 character layers to export an animation - "
+                "each character layer becomes one frame, in the order shown "
+                "in the Layers panel (bottom layer = frame 1).",
+            )
+            return False
+
+        duration_ms, ok = QInputDialog.getInt(
+            self,
+            "Export Animation Clip",
+            f"Milliseconds per frame ({frame_count} frames):",
+            DEFAULT_FRAME_DURATION_MS,
+            20,
+            5000,
+        )
+        if not ok:
+            return False
+
+        path, _ = QFileDialog.getSaveFileName(self, "Export Animation Clip", "", GIF_FILE_FILTER)
+        if not path:
+            return False
+        if not path.lower().endswith(GIF_EXTENSION):
+            path += GIF_EXTENSION
+
+        return self._export_gif_to_path(path, duration_ms)
+
+    def _export_gif_to_path(self, path: str, duration_ms: int) -> bool:
+        try:
+            frames = self.canvas.render_animation_frames()
+            qimages_to_gif(frames, path, duration_ms=duration_ms)
+        except GifExportError as exc:
+            QMessageBox.critical(self, APP_NAME, f"Could not export animation:\n{exc}")
+            return False
         return True
 
     # ---- Layers menu actions -------------------------------------------

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from PySide6.QtCore import Signal
-from PySide6.QtGui import QBrush, QColor, QPainter, QPen, QPixmap
+from PySide6.QtCore import QRectF, Qt, Signal
+from PySide6.QtGui import QBrush, QColor, QImage, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import QGraphicsRectItem, QGraphicsScene, QGraphicsView
 
 from .graphics_items import BackgroundItem, CharacterItem
@@ -161,6 +161,45 @@ class SceneCanvas(QGraphicsView):
     # ---- layer ordering ----------------------------------------------
     def layers_top_to_bottom(self) -> List[CharacterItem]:
         return sorted(self.character_items(), key=lambda it: it.zValue(), reverse=True)
+
+    def characters_by_z_ascending(self) -> List[CharacterItem]:
+        """Bottom-to-top z order - the natural "frame 1, 2, 3..." reading
+        order for animation export, and the reverse of layers_top_to_bottom
+        (which the Layers panel already shows and lets the user reorder)."""
+        return list(reversed(self.layers_top_to_bottom()))
+
+    # ---- animation frame rendering -------------------------------------
+    def render_animation_frames(self) -> List[QImage]:
+        """Render one frame per character layer, bottom-to-top z order:
+        the background plus exactly that one character, with every other
+        character temporarily hidden. Selection is preserved and every
+        item's visibility is restored before returning, even if rendering
+        raises partway through."""
+        canvas_w, canvas_h = self.canvas_size()
+        frame_order = self.characters_by_z_ascending()
+        all_characters = self.character_items()
+        previously_visible = {item: item.isVisible() for item in all_characters}
+        was_selected = self._scene.selectedItems()
+        try:
+            self._scene.clearSelection()
+            frames: List[QImage] = []
+            for frame_item in frame_order:
+                for item in all_characters:
+                    item.setVisible(item is frame_item)
+                image = QImage(int(canvas_w), int(canvas_h), QImage.Format.Format_ARGB32_Premultiplied)
+                image.fill(Qt.GlobalColor.white)
+                painter = QPainter(image)
+                painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+                painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
+                self._scene.render(painter, QRectF(image.rect()), QRectF(0, 0, canvas_w, canvas_h))
+                painter.end()
+                frames.append(image)
+            return frames
+        finally:
+            for item, visible in previously_visible.items():
+                item.setVisible(visible)
+            for item in was_selected:
+                item.setSelected(True)
 
     def move_layer_up(self, item: CharacterItem) -> None:
         self._swap_with_neighbor(item, -1)

@@ -13,13 +13,20 @@ This first milestone is a working scene editor:
 - Reorder characters front-to-back from the **Layers** panel (or `Ctrl+]` / `Ctrl+[`).
 - **Delete** a selected character (`Delete` key, or the Layers panel button).
 - **Save** a scene to a `.owascene` (JSON) file and **reopen** it exactly as saved.
+- **Export an animation clip**: each character layer becomes one frame (bottom
+  layer = frame 1, in the order shown in the Layers panel), composited over
+  the fixed background, and written out as an animated GIF (`Animation` menu,
+  `Ctrl+E`). Import several pose images of the same character at the same
+  spot, order them in the Layers panel, and export — no drawing/tweening yet,
+  this cycles between whole poses.
 
-No drawing tools yet — that comes in a later step.
+No drawing or tweening tools yet — that comes in a later step.
 
 ## Requirements
 
 - Python 3.9+
 - [PySide6](https://pypi.org/project/PySide6/) (Qt for Python)
+- [Pillow](https://pypi.org/project/Pillow/) (GIF animation export)
 
 ```bash
 pip install -r requirements.txt
@@ -46,9 +53,12 @@ pytest tests/
 ```
 
 `tests/test_scene_model.py` covers the JSON scene format (pure Python, no
-display needed). `tests/test_gui_smoke.py` exercises the full import →
-drag → resize → reorder → delete → save → reopen workflow against real
-Qt objects, headlessly, via the `offscreen` Qt platform plugin.
+display needed). `tests/test_gui_smoke.py` and `tests/test_multi_character_workflow.py`
+exercise the import → drag → resize → reorder → delete → save → reopen
+workflow against real Qt objects, headlessly, via the `offscreen` Qt platform
+plugin. `tests/test_gif_export.py` covers the QImage-frames-to-GIF encoding
+in isolation; `tests/test_animation_export.py` covers the full Animation-menu
+export path end to end, verifying real frame order and pixel content.
 
 ## Project layout
 
@@ -59,7 +69,8 @@ app/
   graphics_items.py      QGraphicsItem subclasses: BackgroundItem, CharacterItem
   canvas_view.py          SceneCanvas(QGraphicsView): the editable scene
   layers_panel.py        Layers dock widget (reorder / delete)
-  main_window.py          Menus, dirty-state tracking, open/save dialogs
+  main_window.py          Menus, dirty-state tracking, open/save dialogs, animation export
+  gif_export.py          QImage-list -> animated GIF encoding (Pillow)
 tools/make_sample_assets.py  Generates the placeholder sample images
 assets/sample/            Sample background + character PNGs
 tests/                    Unit + headless GUI smoke tests
