@@ -365,6 +365,10 @@ The architecture fails or must be revised if:
 
 `NO bolt-on magnetic gravity force`
 
+## Base-case closure note
+
+Section 7 lists orbital acceleration among the outputs "derived rather than inserted" from the planetary displacement state, but does not supply the derivation. `Internal_Proofs/08_Keplerian_Limit_Derivation.md` supplies it for the base case implicit in this document's own architecture: strip away rotation, EM-shell modulation, and multi-body overlap (i.e. `P_i`, `Pa_i`'s rotational content, and `EM_i` all inactive, single dominant source), and the remaining `D_planetary,i -> orbital response` reduces to the derived inverse-square response, with Kepler's three laws as the resulting two-body limit (stated there with its equivalence-principle assumption made explicit, not hidden). This closes the base case only. Every coupling this document treats as primary — rotation, EM-shell response, recursive Point-Path-Field structure, neighboring-field overlap beyond the disjoint/far-field regime — remains exactly as open as stated throughout.
+
 ## Claim status
 
 YELLOW / candidate architecture.

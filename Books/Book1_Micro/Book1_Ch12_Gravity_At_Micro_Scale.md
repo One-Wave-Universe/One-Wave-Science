@@ -283,9 +283,21 @@ They only appear to be competing forces because the Standard Model treats them a
 
 ## Mathematics
 
+**Derivation closure (`Internal_Proofs/08_Keplerian_Limit_Derivation.md`):** the
+sketch below is now a derived result, not an assumption. Starting from A-105's
+linear response combined with A-106's own curvature-energy functional, read as
+a flux-conservation field equation in the static exterior (source-free) region,
+the exact spherically-symmetric solution is a Yukawa correction on a 1/r term,
+`psi(r) = (C/kappa^2) e^{-kappa r}/r + c2/r`, `kappa = sqrt(a/b)`. For distances
+much larger than the derived screening length `lambda = 1/kappa = sqrt(b/a)`,
+this reduces exactly to the inverse-square form used below. Below `lambda` it
+predicts a short-range departure from inverse-square — a new, unvalidated
+prediction, not a claim of established physics. Phi_M below is identified with
+this psi.
+
 Gradient field from Persistent Mode (A-04, A-10):
 
-Phi_M(r) ~ A_M / r        (sketch — inverse distance, derivation deferred)
+Phi_M(r) ~ A_M / r        (derived far-field limit, r >> lambda = sqrt(b/a); see closure note above)
 
 nabla_Phi_M ~ A_M / r^2  (inverse square gradient)
 
@@ -301,7 +313,14 @@ F = G * m_1 * m_2 / r^2
 
 => G = alpha / (A_M / m)
 
-where A_M / m is the mode amplitude per unit measured mass.
+where A_M / m is the mode amplitude per unit measured mass. The closed form is
+G_eff = 1/(4*pi*alpha), from matching the exterior solution to the total source
+strength via the divergence theorem (Internal_Proofs/08 §4.1) — this derives
+what the line above only related structurally. The bridge from a body's own
+source strength to its own response coupling (needed to turn this into a true
+two-body m_1*m_2 law) remains the open equivalence-principle assumption in
+Prediction 3 below; it is used explicitly, not silently, in the Kepler-law
+derivation in Internal_Proofs/08 §5.
 
 Mass-Effect source coefficient:
 
@@ -478,9 +497,9 @@ No separate quantization of a graviton is needed.
 
 ## Yellow Audit
 
-- Gravitational field Phi_M(r) derivation from update rule not yet complete
-- Newton's law derivation (inverse square) from gradient field remains sketch level
-- G derivation from alpha and mode amplitude deferred
+- Gravitational field Phi_M(r) derivation from update rule not yet complete — CLOSED for the far-field limit (r >> lambda = sqrt(b/a)) by Internal_Proofs/08_Keplerian_Limit_Derivation.md; the near-field/short-range regime and the general nonlinear operator A remain open.
+- Newton's law derivation (inverse square) from gradient field remains sketch level — CLOSED as a far-field limit, same reference; a genuinely new short-range Yukawa-deviation prediction falls out of the same derivation and is unvalidated.
+- G derivation from alpha and mode amplitude deferred — CLOSED in closed form, G_eff = 1/(4*pi*alpha) (Internal_Proofs/08 §4.1); the separate equivalence-principle bridge (source strength = response coupling, per Prediction 3 below) is NOT closed and is used explicitly, not silently, wherever the closed form is applied to a two-body problem.
 - Gradient update propagation speed not yet derived from lattice friction limit
 - Coupling threshold R_g >= T_measure not yet experimentally parameterized
 - Relationship between gravitational waves and gradient update formalism deferred
@@ -493,11 +512,26 @@ No separate quantization of a graviton is needed.
 
 ## Future Work
 
-Derive Phi_M(r) from the update rule for a stable Persistent Mode.
+Derive Phi_M(r) from the update rule for a stable Persistent Mode. — Far-field
+limit closed (Internal_Proofs/08); a full derivation from the actual discrete
+update rule, rather than from A-106's continuum energy functional, is still
+open.
 
-Show inverse-square law emerges from the gradient field.
+Show inverse-square law emerges from the gradient field. — Closed as a
+far-field limit; run the ablation this implies (does a real solved A-106
+trial profile actually satisfy r >> lambda for realistic b/a? — not yet
+checked against any specific profile, same open item A-107 already flags).
 
-Derive G from alpha and lattice parameters.
+Derive G from alpha and lattice parameters. — Closed in closed form,
+G_eff=1/(4*pi*alpha).
+
+Test whether the derived short-range screening length lambda = sqrt(b/a) is
+consistent with existing sub-millimeter inverse-square-law experiments — new
+item, not previously part of this chapter's Future Work.
+
+Derive Kepler's three laws from R_OW under the stated equivalence-principle
+assumption — done in Internal_Proofs/08 §5; promote into this chapter's body
+once the assumption itself (Prediction 3) is independently addressed.
 
 Derive gradient update propagation from the lattice friction limit.
 

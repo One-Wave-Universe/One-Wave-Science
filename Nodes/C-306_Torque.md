@@ -33,4 +33,9 @@ tau = r x (-A(nabla_psi))
 Yellow Audit:
 - Math form is foundation level only
 - Full derivation of torque from One-Wave field geometry deferred
+- CLOSED for the central-force orbital case specifically: for R_OW=-(αk)/r² r̂
+  (Internal_Proofs/08_Keplerian_Limit_Derivation.md §3), tau = r x F = 0
+  identically since F is parallel to r. This is what makes L conserved in
+  §5.1 of that draft — the general non-central-force derivation this item
+  originally flagged remains open.
 - Parked for refinement — does not block chapter

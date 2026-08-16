@@ -163,3 +163,7 @@ No visual success criterion is sufficient.
 `relational mechanism -> candidate edge equations -> closure attack -> finite-wake law missing -> perturbation tests -> theorem target`
 
 This update promotes the architecture and test program only. It does **not** claim the celestial three-body problem or gravitational non-locality has been solved.
+
+## Base-case closure note
+
+`Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives, from A-105+A-106 rather than assuming it, the leading-order single-source limit that `Delta_ij = grad(Phi_i) - grad(Phi_j)` reduces to when each `Phi` is the far-field exterior solution of a single bounded source: an exact inverse-square response, plus a proof (not previously in the repo) of the shell theorem and linear superposition that justify treating bodies as point sources and summing their contributions at all. This closes the base case only. The finite-wake assimilation criterion, the non-tautological closure invariant, and the Mercury residual this update calls for remain exactly as open as stated above.

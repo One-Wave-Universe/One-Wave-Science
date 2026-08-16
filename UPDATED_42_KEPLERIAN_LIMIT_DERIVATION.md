@@ -1,0 +1,27 @@
+# Updated 42 — Keplerian Limit Derivation
+
+## Purpose
+
+Updated 38 through 41 built four successive layers of planetary-motion architecture — finite-wake three-body relations, moving finite-slope EM-shell coupling, recursive Point-Path-Field rotation, and a full planetary-scale displacement state — all resting on an abstract force placeholder (`F`, `A_OW`, or equivalent) that each document explicitly says "must ultimately be derived from field dynamics rather than fitted independently." None of the four derived it. Separately, Book 1 Ch12's own Yellow Audit had "Newton's law derivation (inverse square)... remains sketch level" outstanding, A-115 §7 listed "recover... the inverse-square limit" as an unmet Yellow-completion requirement, C-306/C-307 marked their orbital math as foundation-level only, and D-413's orbital simulation runs against an admittedly **imposed**, not derived, curvature well.
+
+This update closes that specific, load-bearing gap: it derives the inverse-square exterior force law directly from A-105 (Restoring Response) combined with A-106 (Pressure Response)'s own already-declared energy functional, proves the shell theorem and field superposition this framework had been silently assuming since Updated 38, and derives Kepler's First, Second, and Third Laws as the resulting two-body limit. It also finds and flags one real internal inconsistency between A-115's `Φ_OW=α_g·χ` and the ψ-based potential used everywhere else in the same chain (Book 1 Ch12, A-105, D-413).
+
+The full derivation is `Internal_Proofs/08_Keplerian_Limit_Derivation.md`. This update is the synchronization record; the math lives there.
+
+## What changed
+
+- **`Internal_Proofs/08_Keplerian_Limit_Derivation.md`** (new): the derivation itself — static field equation from A-105+A-106, exact Yukawa-on-`1/r` exterior solution with a derived screening length `λ=√(b/a)`, closed-form `G_eff=1/(4πα)`, shell theorem, superposition, and Kepler's three laws from the Binet equation and the area law.
+- **`Nodes/A-105_Restoring_Response.md`, `Nodes/A-106_Pressure_Response.md`**: cross-referenced with the new far-field closure and the physical meaning now available for `b/a`.
+- **`Nodes/A-115_Unified_Compression_Field.md`**: flagged the `Φ_OW=α_g·χ` vs. ψ-based-potential inconsistency, proposed a resolution, and marked the relevant §7 Yellow-completion item closed at leading order.
+- **`Nodes/C-306_Torque.md`, `Nodes/C-307_Angular_Momentum.md`**: marked their orbital math closed for the central-force case specifically (Kepler's Second Law falls directly out of `τ=r×F=0` for a central force); the general non-central-force derivation each node originally flagged stays open.
+- **`Books/Book1_Micro/Book1_Ch12_Gravity_At_Micro_Scale.md`**: replaced "sketch — derivation deferred" language in the Mathematics section with the actual derivation reference, updated the Yellow Audit and Future Work lists to show what closed and what didn't, and added the short-range Yukawa deviation as a new, unvalidated prediction.
+- **`Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md`**: added a pointer to the derived (non-imposed) exterior profile as a future test target; D-413's own imposed-well status is unchanged since it has not been re-run against it.
+- **`UPDATED_38` through `UPDATED_41`**: each received a short base-case closure note stating exactly what limit of their own abstract force term is now derived, and exactly what (finite-wake law, EM-shell coupling, rotational coupling, Mercury's special channel) is untouched by this update.
+
+## Claim status
+
+YELLOW — math-only closure, no gate promoted past what I-02 permits. No node moves to Bronze here: I-02 requires a run simulation, attached metadata, and a first successful validation for that transition, and none of that has happened. What changed is that several previously-"deferred"/"sketch"/"open" derivation items are now actually derived, with every assumption used to get there stated explicitly (most importantly: `V''(0)=0`, required for long-range gravity to exist in this framework at all but not itself derived from anything deeper, and the equivalence-principle bridge between a body's own source strength and its own response coupling, which Book 1 Ch12 already listed as an open prediction and which this update uses but does not close).
+
+## What is still open
+
+Everything Updated 38-41's own research program is actually about: the finite-wake assimilation boundary, the EM-shell coupling law, Mercury's special Sun-coupling channel, the recursive Point-Path-Field rotation structure, and any numerical implementation or ephemeris comparison. This update closes the base case those documents' placeholder force term reduces to when those corrections are switched off — it does not advance any of them. It also does not validate the derivation against D-413's simulation, against real orbital data, or against any short-range inverse-square-law experiment that could bound the new predicted screening length `λ`.

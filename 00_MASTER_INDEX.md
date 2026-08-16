@@ -7,6 +7,7 @@ Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATIO
 Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
 Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 42 Keplerian-limit derivation handoff (closes the inverse-square/Kepler gap underneath Updated 38-41 and D-413): `UPDATED_42_KEPLERIAN_LIMIT_DERIVATION.md`; full math in `Internal_Proofs/08_Keplerian_Limit_Derivation.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -46,7 +47,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | A-102 | Displacement | The reference-dependent separation between a current field state and Ground/Zero. | YELLOW |
 | A-103 | Differential | Generalized relation Δ(A,B) = A − B; Displacement (A-102) is the specialization against Ground/Zero. | YELLOW |
 | A-104 | Gradient | A-103's Differential applied across spatial relationships. | YELLOW |
-| A-105 | Restoring Response | The field's reaction to gradient imbalance: R_OW = −A(∇ψ). | YELLOW |
+| A-105 | Restoring Response | The field's reaction to gradient imbalance: R_OW = −A(∇ψ); far-field inverse-square limit now derived, not sketched — see Updated 42. | YELLOW |
 | A-106 | Pressure Response | Field organization from curvature (second-order imbalance): P_OW = (b/2)(∇²ψ)² — derived via Derrick's theorem, curvature gap now closed (FIXED version). | YELLOW |
 | A-107 | Bounded Motion | Motion constrained by the restoring/pressure response; corrected stability criterion I₃ > I₁/2 (previously incorrectly stated as V(x)→∞) — FIXED version. | YELLOW |
 | A-108 | Local Stability | The condition where a small displacement from equilibrium produces a restoring response toward Ground/Zero. | YELLOW |
@@ -106,8 +107,8 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-303 | Kinetic Energy | Encodes motion energy from velocity v. | GREEN |
 | C-304 | Potential | Stored imbalance from compressed displacement. | GREEN |
 | C-305 | Work | Force applied over displacement. | GREEN |
-| C-306 | Torque | Rotational preference from off-center displacement. | GREEN |
-| C-307 | Angular Momentum | Product of angular velocity ω and rotational inertia I. | GREEN |
+| C-306 | Torque | Rotational preference from off-center displacement; τ=0 for the derived central-force case (Updated 42), closing that application. | GREEN |
+| C-307 | Angular Momentum | Product of angular velocity ω and rotational inertia I; central-force conservation now derives Kepler's Second Law (Updated 42). | GREEN |
 | C-308 | Spin-½ | Emerges from 4π closure produced by repeated Mirror crossings. | GREEN |
 | C-309 | Friction Limit / Propagation Ceiling | Separates memory damping from maximum signal speed; neither one creates Mass Effect. | YELLOW |
 | C-310 | Resistance Field | The field's tendency to preserve identity against perturbation — distinct from Friction (γ) and Restoring Response (A-105). | YELLOW |
@@ -136,7 +137,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-410 | Twenty-Fourfold 4D Field/Void Recurrence Shell | Completed Field/Void state cycle around one persistent identity; 24:1 is recurrence coordination, not automatically a spatial neighbor count. | YELLOW |
 | D-411 | Mirrored Axis Pairs and Directed Route Counts | Separates N axis pairs, 2N directed routes, and 2N+1 centered states; requires ratio-domain declarations. | YELLOW |
 | D-412 | Lattice Simulation and State-Driven Visualization Standard | Requires real state updates, raw receipts, graphs, failure regions, and dimensional declarations; rejects decorative animation as simulation. | YELLOW |
-| D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
+| D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. Well remains imposed, not derived; a derived exterior profile is now available to test against (Updated 42). | YELLOW |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -232,7 +233,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | 9 | No Observer Effect | Focal Point Coupling (sampling), not wavefunction collapse. | GREEN (claim) / YELLOW (formal model) |
 | 10 | Time at Micro Scale | Resistance and counted update-steps, not a separate dimension. | GREEN (def) / YELLOW (dilation deriv.) |
 | 11 | No Antimatter | Internal pressure phenomenon, not mirror particles. | GREEN (claim) / YELLOW (formal deriv.) |
-| 12 | Gravity at Micro Scale — Ever-Changing Gradient Field | Gradient response (A-105), not force-carrier exchange; null-particle structure. | GREEN (struct.) / YELLOW (full deriv.) |
+| 12 | Gravity at Micro Scale — Ever-Changing Gradient Field | Gradient response (A-105), not force-carrier exchange; null-particle structure; far-field inverse-square limit and Kepler's laws now derived, not sketched (Updated 42) — equivalence-principle bridge and general operator form remain open. | GREEN (struct.) / YELLOW (full deriv.) |
 | 13 | Electricity & Magnetism | Lattice friction and stress-space; E/M as one pressure field (C-311). | GREEN (struct.) / YELLOW (Maxwell deriv.) |
 | 14 | Mass Effect as Four-Interaction Carried-Pattern Resistance | Defines Mass Effect from translation of the complete bounded recurrence; absolute-energy calibration and spectrum remain open. | YELLOW |
 | 15 | The 125 GeV Mirror-Gate Boundary Response / Higgs Comparison | Treats the observed 125 GeV response as the finite pressure-work barrier to a Mirror flip, not as a generic oscillator frequency. | GREEN (interpretation/form) / YELLOW (numerical derivation) |
@@ -286,7 +287,7 @@ Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internal
 Appendix F entire (8/8 nodes), most of B-201–B-215, C-302–C-305, D-402, G-701/706/707/709/710/711.
 
 **GREEN claim / YELLOW math (structure is right, formal derivation still owed):**
-A-106, A-107 (both now closer after the FIXED versions), Higgs (Ch15), Gravity (Ch12), Photon (Ch7), most Book 1 chapters.
+A-106, A-107 (both now closer after the FIXED versions), Higgs (Ch15), Gravity (Ch12) — far-field inverse-square limit and Kepler's three laws now derived (Updated 42); the general nonlinear operator, `b`'s origin, and the equivalence-principle bridge remain owed — Photon (Ch7), most Book 1 chapters.
 
 **Fully open YELLOW (real, named, unresolved gaps):**
 - β_neutrino not yet derived from collapse energy (Ch8)

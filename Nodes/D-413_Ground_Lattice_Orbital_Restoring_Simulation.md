@@ -109,6 +109,8 @@ If the visible depression and the sampled restoring surface disagree, the render
 
 The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity.
 
+`Internal_Proofs/08_Keplerian_Limit_Derivation.md` now derives, from A-105+A-106's own field equation rather than imposing it, a closed-form exterior profile (`psi(r) = (C/kappa^2)e^{-kappa r}/r + c2/r`, reducing to `-G_eff M_eff/r` for `r >> sqrt(b/a)`) that this simulation's Gaussian well could be checked against or replaced by in a later promotion. This is noted here as a pointer only — D-413 has not been re-run against the derived profile, so this does not change D-413's own imposed-well status or its Required Next Tests below.
+
 ## Bounded Displacement Region
 
 The moving structure is represented as a collective bounded shell, not a particle. Its reduced state is
@@ -232,7 +234,8 @@ Before promotion, D-413 must add:
 - a field-only displacement with no collective shell coordinate;
 - derived circulation and vorticity from the lattice state;
 - stable-orbit windows versus capture, escape, and collapse;
-- 3D D-409 translation after the 2D mechanism is understood.
+- 3D D-409 translation after the 2D mechanism is understood;
+- a run using the derived (not imposed) exterior profile from Internal_Proofs/08 in place of the declared Gaussian target, to check whether the resulting orbit reproduces the ellipse/equal-areas/period-radius relations derived analytically in that draft's §5.
 
 ## Failure / Revision Conditions
 

@@ -199,6 +199,10 @@ The candidate model must fail if any of the following occur:
 
 `+ full Solar-System ephemeris comparison`
 
+## Base-case closure note
+
+The orbital response is written abstractly above as `a_i(t) = -F(DeltaS_i(t), K_i_eff(t))` with `F` explicitly left to be derived. `Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives that base case for a single dominant, non-magnetized, non-rotating source: `F` reduces at leading order (far field, `r >> lambda = sqrt(b/a)`, `K_i_eff -> K_i0`) to the exact inverse-square form, with Kepler's three laws following as the two-body limit under the equivalence-principle assumption that draft states explicitly. The EM-shell modulation `K_i_eff(t)`, the emergent finite-range boundary `R_i(t)`, and the falsification requirements below remain exactly as open as stated — this closes only the term `F` reduces to once those corrections vanish.
+
 ## Claim status
 
 YELLOW / candidate architecture.

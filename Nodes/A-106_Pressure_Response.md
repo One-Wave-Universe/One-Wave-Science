@@ -140,6 +140,18 @@ DEPENDENCIES:
 		Whether b is scale-invariant or scale-dependent.
 		Whether b can be derived from A-105's α or is an independent constant.
 
+	NEW PHYSICAL MEANING FOR b/a (Internal_Proofs/08_Keplerian_Limit_Derivation.md):
+		The combined static field equation from this node's own functional
+		(-a∇²ψ + b∇⁴ψ = 0 in the linearized, source-free exterior) has exact
+		spherically-symmetric solutions that are a Yukawa correction on top of a
+		1/r term, with screening length λ = √(b/a). This does not derive b from a
+		deeper node (still open, above) but gives the ratio b/a a concrete,
+		falsifiable physical meaning it did not have before: a short-range
+		length scale below which the exterior response departs from pure
+		inverse-square. Requires a,b>0, consistent with this node's own b>0
+		stability requirement (§9) — an independent cross-check, not assumed in
+		advance.
+
 9. CONSTRAINTS
 	Pressure Response requires:
 		1. Defined curvature (∇²ψ well-defined on the active lattice/geometry).

@@ -12,3 +12,4 @@
 | `06_Choice_Interaction_Terms.md` | Internal draft |
 | `07_Evaluation_Modulation_Validation_and_Balance.md` | Internal draft |
 | `Mass_Effect_Mirror_Gate_Four_Interaction_Audit.md` | Formal audit |
+| `08_Keplerian_Limit_Derivation.md` | Internal draft — closes the inverse-square/Kepler gap flagged across A-115, Book1 Ch12, C-306, C-307, and Updated 38-41 |

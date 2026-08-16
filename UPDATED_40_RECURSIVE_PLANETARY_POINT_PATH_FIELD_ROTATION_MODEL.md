@@ -415,6 +415,10 @@ with simultaneous coupling through:
 
 Mercury has the additional Sun–Mercury EM-shell coupling channel. Earth carries its dynamo/global-field state. Mars and Venus remain global-intrinsic-field controls. Giant-planet EM structure is a required falsification test.
 
+## Base-case closure note
+
+Section 9's unified interaction state defines `a_i(t) = A_OW(DeltaS_i, L2_i, recursive_PPaF_i, EM_i, overlaps_i)` without deriving `A_OW`. `Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives the leading-order reduction of this term for a single dominant source with no rotation/EM coupling active: an exact inverse-square response, with the shell theorem and superposition (§4 of that draft) supplying the previously-unproven justification for §9's additive overlap structure `S_local,i(t) = SUM_j W_ij(t) S_j(r_i,t)` in the regime where sources are compact and their active domains don't substantially overlap. Kepler's three laws are derived as the resulting two-body limit. Every coupled term this section defines beyond that base case — internal rotation, EM-shell response, the recursive Point-Path-Field structure itself — remains exactly as open as stated throughout this document.
+
 ## Claim status
 
 YELLOW — integrated test architecture.

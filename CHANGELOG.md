@@ -1,4 +1,16 @@
 
+# Updated 42 — Keplerian Limit Derivation
+
+- Derived the static, source-free field equation implied by A-105's response law combined with A-106's own already-declared curvature-energy functional.
+- Solved it exactly for a bounded source: a Yukawa correction on a `1/r` term, with a derived screening length `lambda = sqrt(b/a)` — a new, falsifiable short-range prediction.
+- Reduced the far-field limit to Newton's inverse-square law in closed form, `G_eff = 1/(4*pi*alpha)`, closing Book 1 Ch12's own "sketch — derivation deferred" status on that result.
+- Proved the shell theorem and linear field superposition for this framework from first principles — the previously unstated justification underneath Updated 38-41's additive multi-body architecture.
+- Derived Kepler's First, Second, and Third Laws as the two-body limit of the recovered central force, using C-306/C-307's own torque/angular-momentum definitions; stated explicitly (not hidden in a cancellation) that Kepler's Third Law's body-independence requires the still-open equivalence-principle assumption.
+- Flagged and proposed a resolution for a real inconsistency between A-115's `Phi_OW = alpha_g * chi` and the psi-based potential used in A-105/Book 1 Ch12/D-413, which vanish in different regions if taken literally together.
+- Added Internal_Proofs/08 as the canonical derivation; cross-referenced A-105, A-106, A-115, C-306, C-307, Book 1 Ch12, D-413, and Updated 38-41 with what specifically closed and what remains open. No node gate promoted past Yellow — no simulation has been run against this result.
+
+---
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.

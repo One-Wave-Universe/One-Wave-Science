@@ -93,6 +93,12 @@ The Newtonian exterior limit is recovered only if the derived source solution gi
 
 Here \(M_{\rm eff}\) is the measured **Mass Effect** assigned to the bounded source, not an independently defined substance.
 
+**Flagged inconsistency and derivation (`Internal_Proofs/08_Keplerian_Limit_Derivation.md`).** As written, \(\Phi_{\rm OW}=\alpha_g\chi\) with \(\chi=-\nabla\cdot\mathbf u\) conflicts with the ψ-based treatment used in A-105/Book 1 Ch12/D-413 if \(\mathbf u=\nabla\psi\) (the natural identification — both represent displacement from Ground/Zero): under that identification \(\chi=-\nabla^2\psi\), and the derivation below shows \(\nabla^2\psi=0\) throughout the source-free exterior at leading order, which would make \(\Phi_{\rm OW}\) as currently defined vanish exactly in the region where gravity is observed. The two definitions of "the gravitational potential" (this section's \(\Phi_{\rm OW}\), and Book 1 Ch12's \(\Phi_M(r)\sim\psi\)) had never been reconciled. Internal_Proofs/08 derives, from A-105+A-106's own already-declared functional, that the correct exterior solution is
+\[
+\psi(r)=\frac{C}{\kappa^2}\frac{e^{-\kappa r}}{r}+\frac{c_2}{r},\qquad \kappa=\sqrt{a/b},
+\]
+reducing for \(r\gg\lambda\equiv1/\kappa\) to \(\psi(r)\to-G_{\rm eff}M_{\rm eff}/r\) with \(G_{\rm eff}=1/(4\pi\alpha)\) — recovering \(\Phi_{\rm OW}(r)\to-GM_{\rm eff}/r\) and \(|\mathbf g_{\rm OW}(r)|\to GM_{\rm eff}/r^2\) below, closing the item in §7. The proposed resolution (not yet applied as a formal rewrite of this section) is to identify \(\Phi_{\rm OW}\) with \(\psi\) itself rather than with \(\alpha_g\chi\), keeping \(\chi\) as the source-density term (playing the role \(\rho\) plays in \(\nabla^2\Phi=4\pi G\rho\)) satisfying \(\nabla^2\psi\propto\chi\) inside the source and \(\approx0\) outside it.
+
 ## 3. Extended Compression / Dark-Matter View
 
 For bookkeeping,
@@ -278,8 +284,8 @@ Mass Effect / displacement
 
 ### Yellow completion
 
-- derive \(\chi(r)\) from sources,
-- recover or replace the inverse-square limit,
+- derive \(\chi(r)\) from sources, ✅ far-field/leading-order case closed by `Internal_Proofs/08_Keplerian_Limit_Derivation.md` (source-free exterior solution and shell theorem); the χ-vs-ψ conflation this exposed is flagged above and still needs a formal rewrite of this section's notation, not just the derivation,
+- recover or replace the inverse-square limit, ✅ recovered for \(r\gg\lambda=\sqrt{b/a}\); short-range Yukawa deviation below \(\lambda\) is a new, unvalidated prediction, not yet checked against any bound on \(\lambda\),
 - derive the extended wake profile without fitting it by hand,
 - derive the four-interaction work metric, the actual gate-crossing path, the scale-free gate-to-mass ratio, and one explicit energy calibration route,
 - derive the E-528 propagation coefficient from field variables,

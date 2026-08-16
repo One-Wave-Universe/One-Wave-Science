@@ -32,6 +32,15 @@ DEPENDENCIES:
 	UPSTREAM: A-104 Gradient
 	DOWNSTREAM: A-106 Pressure Response, E-501 Flowback
 
+FAR-FIELD CLOSURE (Internal_Proofs/08_Keplerian_Limit_Derivation.md): read as a
+flux-from-gradient constitutive law (structurally the same form as Fourier's or
+Fick's law), R_OW combined with A-106's curvature term and a conservation
+condition yields a solvable static field equation. Its exterior, long-range
+solution reduces exactly to the inverse-square response R_OW ~ -(αk)/r² r̂ used
+informally in Book 1 Ch12. This does not derive the general nonlinear operator
+A — only the already-declared linear special case A(∇ψ)=α∇ψ was used. Operator
+derivation for the general case remains open, per §12 below.
+
 1. PURPOSE
 	Converts gradient structure into field response.
 
