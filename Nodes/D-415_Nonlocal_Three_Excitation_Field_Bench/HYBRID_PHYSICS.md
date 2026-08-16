@@ -6,28 +6,29 @@ The simulator advances one barycentric state. It does not run three competing
 universes. The acceleration used by the integrator is
 
 ```text
-a_total = a_Newton + a_1PN + a_OneWave_closed + a_boundary
+a_control = a_Newton + a_1PN
+OneWave_mechanism -> reconstruct geometry/stress response -> compare with a_1PN
 ```
 
 - `a_Newton` is the Gray bulk N-body control.
 - `a_1PN` is the leading solar relativistic correction. A future precision
   build should replace it with SPICE/Horizons initial states and a full
   Einstein-Infeld-Hoffmann implementation.
-- `a_OneWave_closed` is the candidate internal displacement, rotation, wake,
-  EM, or phase-lock channel after conservation closure.
-- `a_boundary` is reserved for an explicitly declared external Field boundary.
-  It may not be hidden inside an internal interaction.
+- The One Wave mechanism is an explanatory reconstruction channel. It is not
+  added to the relativistic acceleration. Its task is to reproduce the same
+  effective response from Field substance, stress, flow, boundary, wake, EM,
+  and phase structure.
 
-Every timestep emits the norm, force balance, and torque balance of the
+Every timestep emits the norm, net-translation balance, and rotation balance of the
 channels. A visual element may read this state; it may not invent another
 position clock.
 
 ## Conservation gate
 
-The current closure removes the mass-weighted uniform acceleration and rigid
+The diagnostic closure removes the mass-weighted uniform acceleration and rigid
 rotation components of a candidate internal acceleration. Therefore the
-candidate can redistribute motion without creating net linear or angular
-momentum. This is a numerical gate, not the final One Wave derivation.
+  candidate explanation cannot hide invented net translation or rotation.
+This is a numerical audit gate, not the final One Wave derivation.
 
 ## What still needs physics
 
