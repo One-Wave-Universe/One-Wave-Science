@@ -22,6 +22,15 @@ python -m http.server 8000
 
 Open `http://localhost:8000/planetary_visual.html` for the video interface.
 
+For a browser-free Python MP4 render:
+
+```bash
+python render_galaxy_video.py --output galaxy_arm_formation.mp4
+```
+
+The Python renderer streams RGB frames directly into `ffmpeg` and produces a
+20-second 1080p H.264 video by default.
+
 The run produces `three_excitation_trace.csv` and `summary.json` containing
 Field-derived centers, weights, phases, relational edges, hyperradius,
 hyperangle, and shape cosine.
