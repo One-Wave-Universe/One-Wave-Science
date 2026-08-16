@@ -202,6 +202,8 @@ There are two distinct static signatures, and the repository must not pretend th
 
 A collider-driven Mirror event may follow either description depending on the actual discrete dynamics. The simulation must determine which one occurs. The energy equation remains the work accumulated to the first genuine basin crossing; the endpoint may not be chosen merely because it makes 125 GeV.
 
+**Proposed sharpening of this fork, not yet resolved (raised this session, connects to E-517):** the two signatures above are not interchangeable in what they would mean physically. Signature 1 (barrier crossing) stays inside structured, bounded 3D territory — the Mirror operation completes into another basin that is still a genuine Persistent Mode. Signature 2 (driven loss of hold, `λ_min[∇²_q Ē4]=0`) is a different kind of event: it is exactly the point where the structure's own restoring stiffness — the same Hessian object A-106/A-107 already built stability math around this session (`I₃>I₁/2`) — stops being positive. That is not a flip to a new shape; it is the shape failing to hold at all. If signature 2 is what actually occurs at the gate, the natural landing point is not another structured basin but E-517's Negative Space (the unexcited surrounding field, where no Persistent Mode is expressed) — a genuinely different claim from what this node currently has written up, and one this node does not currently make. This is proposed here as a sharp, checkable hypothesis — which signature actually occurs, and whether signature 2's endpoint meets E-517's own (currently unresolved) criterion for Negative Space — not as a settled reinterpretation of the gate. See E-517 for the reciprocal note.
+
 Across that boundary, the Mirror operation completes:
 
 \[
@@ -332,4 +334,5 @@ Open:
 - select an explicit independent-calibration or 125-GeV-calibration route;
 - either predict 125 GeV from an independent calibration or, after calibrating on 125 GeV, predict other observables without refitting;
 - derive the stored-versus-dissipated split and reproduce the measured width, timing, spin/parity response, couplings, and outgoing-channel distributions;
-- identify at least one nontrivial boundary-response relation that differs from the separate-particle interpretation.
+- identify at least one nontrivial boundary-response relation that differs from the separate-particle interpretation;
+- determine which of the two static signatures (barrier crossing vs. driven loss of hold) actually occurs, and — new this session, not yet checked — whether a driven-loss-of-hold endpoint meets E-517's Negative Space criterion, which would make this gate a genuine 3D-structure/Negative-Space boundary rather than a flip between two structured basins.

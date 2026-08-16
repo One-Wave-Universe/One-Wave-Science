@@ -12,7 +12,7 @@ metadata_standard: "I-06"
 # Node E-517: Negative Space
 
 Dependencies:
-Upstream: A+101 One Field Ground, A-112 Persistent Mode
+Upstream: A+101 One Field Ground, A-112 Persistent Mode, A-106/A-107 (bounded-motion stability criterion, now the candidate boundary criterion — see refinement below), C-322 (spinodal/"driven loss of hold" signature, proposed reciprocal crossing point)
 Downstream: none yet (proposed)
 
 Definition:
@@ -65,6 +65,12 @@ degenerate case — the same rigor used for Void=Ground/Zero and
 Resistance-vs-A-108 comparisons earlier this session.
 Check applicability to Book 5's galactic-scale voids as a candidate
 real-world instantiation, once the above is resolved.
+Run C-322's own called-for simulation and check directly which static
+signature (barrier crossing vs. driven loss of hold) actually occurs at
+the Mirror Gate, and whether a driven-loss-of-hold endpoint satisfies
+this node's own Negative Space criterion (§ candidate math above) —
+this is now the shared, concrete next step for both nodes, not two
+separate open questions.
 
 REFINEMENT (checked, genuinely useful — not yet fully resolving the
 open question above, but sharpening it): an external document proposed
@@ -77,6 +83,24 @@ Space from A-112's degenerate case" in the abstract, the sharper
 question becomes "does C-309's gamma behave differently at a Negative
 Space boundary than it does within an active Persistent Mode." That's
 a real, checkable question, not yet checked.
+
+SHARPENED FURTHER this session, still not checked: "field resistance to
+changing local geometry" already has a specific mathematical object in
+this repo — the Hessian of the four-interaction energy, `∇²_q Ē4`
+(C-322), whose positive-definiteness is exactly A-106/A-107's own
+bounded-motion stability criterion (`I₃>I₁/2`, derived earlier this
+session). A structure stays a genuine Persistent Mode — holds its
+shape — exactly as long as that restoring stiffness stays positive;
+"energy uses friction/stiffness to maintain shape" is a plain-language
+statement of A-107's own criterion. C-322 already writes down the exact
+point where that stiffness fails: `λ_min[∇²_q Ē4]=0`, its "driven loss
+of hold" signature — proposed there, reciprocally, as a candidate
+mathematical crossing INTO this node's Negative Space, distinct from
+C-322's other signature (barrier crossing into a new structured basin,
+which would NOT enter Negative Space). Neither this node nor C-322 yet
+states a checkable criterion for "has genuinely entered Negative Space"
+independent of "the stiffness failed" — that gap is still open, but the
+two nodes' open items are now the same open item, not two separate ones.
 
 STRUCTURAL EXTENSION (added — resolves the naming collision with
 A-101 by clean division of labor, see A-101's own CORRECTION note):
