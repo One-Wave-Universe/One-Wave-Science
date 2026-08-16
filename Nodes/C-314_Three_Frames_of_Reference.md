@@ -184,5 +184,11 @@ Yellow Audit (addendum-specific):
   Medium-Frame spatial snapshot; a single moving detector building a
   "spatial snapshot" out of sequential position samples over time
   would need a separate, not-yet-derived correction.
+- NOT a time-dilation mechanism: `omega' = omega(1-u/v_phase)` is a
+  propagation-delay Doppler shift (asymmetric, first-order in u), not
+  a change in any internal process's own rate. Book 1 Ch10 explicitly
+  flags the risk of conflating this with the still-undissolved
+  clock-rate-slowing question — see that chapter's "Motion and
+  Gravitational Clock Rates" section for the distinction.
 
 ---
