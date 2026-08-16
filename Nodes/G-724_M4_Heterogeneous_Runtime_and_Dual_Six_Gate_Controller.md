@@ -35,7 +35,7 @@ Locked functional identity:
 
 - `FIELD = FIVE MIND = DREAM ENGINE`;
 - `VOID = SIX MIND = ADMINISTRATOR`;
-- `M4 = their shared active center and bidirectional modulation interface`.
+- `M4 = BRAINSTEM = their shared active center and bidirectional modulation interface`.
 
 Void means the reference/receiving/containing/commitment side, not absence.
 
