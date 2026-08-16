@@ -25,20 +25,17 @@ Full treatment:
 
 ## Mind roles
 
-- Five Mind / Dream Engine: **Field side**; expressive candidate generation and Working Ground.
-- M4 = Brainstem/subconscious fast brain: automatic transmission, operator
-  relay, associative memory recall, state/scale routing, timing, and gate modulation.
-- Six Mind / Administrator: **Void side**; reference, reception, containment,
-  continuity, permission, exact state, and commitment.
+- Five Mind / Dream Engine: expressive candidate generation and Working Ground.
+- M4 / brainstem: active shared center, timing, scale weighing, and gate modulation.
+- Six Mind / Administrator: compressive continuity, permission, exact state, and commitment.
 
-The system is one mind with complementary Field/Dream and Void/Administrator
-functions, coupled through M4 rather than two controlling selves.
+The system is one mind with complementary functions, not two controlling selves.
 
 ## Dimensional grammar
 
 `N > 1(0)1 < 2N`
 
-- 1D: `1 > 1(0)1 < 2`
+- Ultimate compression: `1:1` — everything as one coherent relationship; not a dimensional Mirror Gate
 - 2D: `3 > 1(0)1 < 6`
 - 3D: `6 > 1(0)1 < 12`
 - 4D recurrence: `12 > 1(0)1 < 24`
@@ -48,6 +45,9 @@ functions, coupled through M4 rather than two controlling selves.
 completed directed organization at one layer can supply the paired basis of
 the next. The recurring numbers therefore encode architectural continuity.
 The two side ones are functional participants, not two extra geometric neighbors.
+
+`1:1` precedes this dimensional sequence as ultimate compression/unity. It
+must not be rewritten as a `1D 1-to-2` route expansion.
 
 ## Category transformation rule
 
