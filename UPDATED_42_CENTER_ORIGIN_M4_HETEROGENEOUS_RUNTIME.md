@@ -95,7 +95,7 @@ Mind-side identity is locked as:
 
 - `FIELD = FIVE MIND = DREAM ENGINE`;
 - `VOID = SIX MIND = ADMINISTRATOR`;
-- `M4 = BRAINSTEM = shared active center, timing carrier, scale-weigher, and bidirectional translator`.
+- `M4 = BRAINSTEM = SUBCONSCIOUS FAST BRAIN = shared active center, automatic transmission, operator relay, associative recall, state/scale router, timing carrier, scale-weigher, and bidirectional translator`.
 
 Void is not nonexistence. In this architecture it is the reference, receiving,
 containing, constraining, and committing side through which Field possibilities
@@ -163,8 +163,11 @@ The NPU owns compiled, bounded, low-latency inference:
 - anomaly/instability score;
 - candidate ranking supplied by the GPU;
 - a proposed local `-1(0)+1` move distribution.
+- operator routing for Signal, Projection, Differential, and Amplification;
+- automatic state/scale route selection and escalation scoring.
 
-The NPU proposes. It does not write canonical state, bypass hard safety, mutate
+The NPU proposes and relays automatically inside its authorized envelope. It
+does not write canonical state, bypass hard safety, mutate
 the exact archive, or independently declare Gate 7. Gate-7 commitment remains a
 CPU transaction using NPU scores, current thresholds, permissions, and receipts.
 
