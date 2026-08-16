@@ -49,11 +49,11 @@ continuity/commitment function of the same mind. If it dominates, the system
 locks and cannot adapt. If it is absent, the system disperses across uncommitted
 possibilities.
 
-### M4 — shared brainstem / scale-and-timing center
+### M4 — Brainstem / scale-and-timing center
 
-M4 sits functionally between the two sides and maintains their fast reciprocal
-relationship. It does not invent the Dream Engine's content and does not own
-the Administrator's final commitment.
+M4 **is the Brainstem layer**. It sits between the two sides and maintains their
+fast reciprocal relationship. It does not invent the Dream Engine's content and
+does not own the Administrator's final commitment.
 
 M4 measures and modulates:
 
@@ -75,8 +75,8 @@ Write the two functional sides around their shared timing/reference center as
 `FIELD / DREAM  1 (0) 1  VOID / ADMINISTRATOR`.
 
 The two `1` terms mean the coherent Field and Void processors retaining their
-functions. `(0)` is M4: their shared active reference, comparison, timing,
-translation, and phase-change region.
+functions. `(0)` is the M4 Brainstem: their shared active reference,
+comparison, timing, translation, and phase-change region.
 
 The minimum loop is:
 
