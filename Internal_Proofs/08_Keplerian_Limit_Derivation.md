@@ -24,14 +24,15 @@ Stated up front, per repo convention (I-01):
 - Its exact spherically-symmetric solution — a Yukawa correction riding on a `1/r` term, not an assumed `1/r` (§2).
 - The far-field reduction to an exact inverse-square response, with `G_eff` expressed in terms of `α` (§3) — this is what Book1_Ch12 asked for and marked deferred.
 - A derived short-range screening length `λ = √(b/a)`, a new falsifiable prediction (§3).
-- The shell theorem and field superposition for this field, from first principles (§4) — this is the unstated assumption every multi-body document since Updated 38 has been relying on without proof.
+- The shell theorem for a single extended source, from first principles (§4.2) — justifies treating one bounded body (e.g. the Sun) as a point source at its own centroid, which Updated 38-41 do throughout without deriving it.
 - Kepler's first, second, and third laws as the two-body limit of the resulting central force (§5).
 
 **Explicitly NOT derived here, and not claimed to be:**
 - The operator `A` in `R_OW=-A(∇ψ)` in its general (nonlinear) form — this derivation only uses A-105's already-declared linear special case.
 - `b`'s value or its relation to `α` (A-106 already lists this open; this draft does not close it, it just gives the ratio `b/a` new physical meaning as `λ²`).
 - The equivalence-principle bridge between a body's own source strength and its own response coupling. This is Book1_Ch12's own Prediction #3 ("Equality of gravitational and inertial response is a derivation target, not an assumption") and it stays open. §5 states exactly where this assumption enters and flags it inline rather than silently using it.
-- Anything about the EM-shell terms, finite-wake assimilation boundary, or rotational coupling in Updated 38-41. Those remain exactly as open as before. This draft only closes the base-case (non-rotating, non-magnetized, single dominant source) limit that those documents' own `F(...)` placeholder must reduce to.
+- **The finite-wake/multi-body architecture in Updated 38-41.** §4.3 shows that naive linear superposition of several derived fields is the plain "summing independent gravitational wells to infinity" picture Updated 38 explicitly built its finite-wake hypothesis to avoid — not a derivation of that hypothesis, and not evidence for it. That architecture (the assimilation boundary, the overlap weight `W_ij`, the emergent active range `R_active,i(t)`) is untouched by this draft and remains exactly as open as before, with a real, unresolved tension now stated explicitly: whether a finite-range cutoff can coexist at all with the long-range inverse-square limit derived here.
+- Anything about the EM-shell terms or rotational coupling in Updated 38-41. Those remain exactly as open as before. This draft only closes the base-case (non-rotating, non-magnetized, single dominant source, two-body) limit that those documents' own `F(...)` placeholder must reduce to.
 
 ---
 
@@ -185,7 +186,7 @@ The divergence-theorem argument above used only that `∇²ψ=0` throughout the 
 
 This is Newton's shell theorem, and the proof above is a complete, three-line proof of it inside this framework — not previously stated anywhere in the repo. It is the mathematical justification (not previously given) for treating the Sun, Jupiter, Earth, etc. as point-like field sources at their centers, which `UPDATED_38` through `UPDATED_41` do throughout without deriving it.
 
-### 4.3 Superposition
+### 4.3 Superposition — and a real tension with the finite-wake hypothesis, not a justification of it
 
 Eq. 3 (and Eq. 1) are **linear** in `ψ` in the regime this derivation uses (source-free, `V''(0)=0` linearization). For `N` bounded sources with disjoint supports, `ψ_total = Σᵢψᵢ` solves the same linear equation with `Q = ΣᵢQᵢ`, by direct substitution. Hence
 
@@ -193,7 +194,11 @@ Eq. 3 (and Eq. 1) are **linear** in `ψ` in the regime this derivation uses (sou
 R_OW,total(x) = Σᵢ R_OW,i(x) = Σᵢ (-α∇ψᵢ)
 ```
 
-This is the derivation, previously absent, behind `UPDATED_38`'s `Delta_SE(t) = Delta_parent(t) + delta_J(t) + delta_other(t)` and `UPDATED_40`'s `S_local,i(t) = SUM_j W_ij(t) S_j(r_i,t)`. Both documents state the additive form as an architectural rule; this section is the reason it is allowed to be additive at leading order, and it also states the limit of that permission: superposition holds only in the linear (`V''(0)≈0`), far-field (`r≫λ` for each contributing source), disjoint-support regime. Once sources' active regions overlap substantially, or the linearization breaks down, the finite-wake assimilation question those documents raise becomes physically real rather than assumed — this derivation does not resolve *that* open question, it only shows exactly where linear superposition is and is not justified.
+**This must not be read as validating `UPDATED_38`'s or `UPDATED_40`'s additive architecture, and an earlier version of this section wrongly said it did — flagged and corrected here.** `UPDATED_38`'s own Purpose section states its finite-wake hypothesis explicitly *against* this move: "enforcing the One-Wave finite-wake hypothesis rather than **summing independent gravitational wells to infinity**." That is exactly what §3's far-field solution is: `ψ(r) → c₂/r` has no cutoff, no assimilation boundary, and no distance-dependent weight — it is a plain `1/r` field that individually extends to infinity, for every source, unconditionally. Summing several of them (this section) is the "summing independent gravitational wells to infinity" picture Updated 38 defines itself against, not an alternative to it.
+
+Concretely: nothing derived in §1-§3 produces, or leaves room for, a term like `UPDATED_40`'s overlap weight `W_ij(t)` going to zero at range, or an assimilation boundary `R_i(t)` at all. The only finite length scale this derivation produces (`λ=√(b/a)`, §2-§3) governs a *short*-range correction near the source, not a large-distance cutoff — it is the wrong end of the field for what "finite-wake" is asking for. A real finite-range cutoff, if the framework wants one, has to come from physics this linear derivation does not capture (a nonzero `V''(0)`, e.g., which reintroduces its own problem: a mass term screens the field at **all** ranges, including the ones where the far-field `1/r²` law is required to match observed Solar-System gravity, per §1's own `V''(0)=0` consistency argument). Whether those two requirements — long-range inverse-square out to Solar-System scale, and a finite-wake assimilation boundary at some other scale — can be reconciled at all is a real open question this draft surfaces but does not answer.
+
+What this section actually establishes, stated narrowly: in the strictly linear, disjoint-support, far-field regime, the total field is the naive sum of individual unbounded `1/r` fields. That is a legitimate closed-form result for the ordinary two-body/few-body Newtonian limit used in §5's Kepler derivation (which needs only a single dominant source, not a sum). It is not a derivation of, and should not be cited as support for, Updated 38-41's finite-wake/assimilation-boundary/overlap-weight architecture — if anything it is evidence that architecture requires physics beyond what A-105+A-106's linearized functional supplies.
 
 ---
 
@@ -285,7 +290,7 @@ This is a real definitional conflict between A-115 §2 and the ψ-based treatmen
 - Book1_Ch12 Future Work: "Derive G from alpha and lattice parameters" — closed (Eq. 8, `G_eff=1/(4πα)`).
 - A-115 §7: "derive χ(r) from sources, recover or replace the inverse-square limit" — closed, with the χ/ψ conflation flagged and a resolution proposed (§6).
 - C-307 Yellow Audit: "Endpoint derivation from field geometry not complete" — closed for the central-force/orbital case specifically (§5.1); general case stays open.
-- The unstated shell-theorem and superposition assumptions running under `UPDATED_38`-`UPDATED_41` — proven (§4), with their exact domain of validity now stated for the first time.
+- The shell theorem (§4.2 only — a single extended body's exterior field equals a point source of the same total strength at its centroid) — proven, and it is legitimate support for treating the Sun/Jupiter/Earth/etc. as point sources individually, exactly as `UPDATED_38`-`UPDATED_41` already do.
 - Kepler's First, Second, and Third Laws — derived as the two-body limit of Eq. 7, closing the actual "explain planetary motion" gap that four architecture documents (Updated 38-41) had built on top of without ever reaching.
 
 **Still open (unchanged by this draft, stated so nothing is silently claimed):**
@@ -293,5 +298,6 @@ This is a real definitional conflict between A-115 §2 and the ψ-based treatmen
 - `b`'s derivation from a deeper node, though it now has physical meaning as `λ²·a` (A-106).
 - The equivalence-principle bridge between source strength and response coupling (used explicitly, not derived, in §5).
 - `V''(0)=0` itself is a new assumption, not a derived fact — it is *required* for long-range gravity to exist in this framework, but nothing here derives it from a deeper principle.
-- Everything specific to Updated 38-41's actual research program: the finite-wake assimilation boundary, EM-shell coupling laws, rotational Point-Path-Field coupling terms, and Mercury's special channel. This draft closes only the base case those documents' placeholder `F(...)` must reduce to when wake/EM/rotation corrections vanish — none of the higher-order physics in those four documents is touched.
+- **§4.3's linear superposition of multiple sources' fields is NOT a justification for `UPDATED_38`/`UPDATED_40`'s finite-wake, assimilation-boundary, or overlap-weight architecture — it is the naive "summing independent gravitational wells to infinity" picture Updated 38 explicitly says its finite-wake hypothesis replaces. An earlier version of this draft (and of the cross-reference notes it added to Updated 38/40/42) wrongly presented superposition as supporting that architecture; corrected in §4.3 and in those documents. Whether a genuine finite-range cutoff can coexist with the long-range `1/r²` limit this draft derives is an open, and possibly hard, question — not one this draft answers.**
+- Everything specific to Updated 38-41's actual research program: the finite-wake assimilation boundary, EM-shell coupling laws, rotational Point-Path-Field coupling terms, and Mercury's special channel. This draft closes only the single-dominant-source, no-rotation, no-EM two-body limit those documents' placeholder `F(...)` must reduce to — none of the higher-order or multi-body physics in those four documents is touched, and §4.3 above should not be read as touching it either.
 - No simulation has been run against this closed-form result. Per I-02, that is required before any node here moves from Yellow to Bronze. This draft is math-only.

@@ -415,9 +415,11 @@ with simultaneous coupling through:
 
 Mercury has the additional Sun–Mercury EM-shell coupling channel. Earth carries its dynamo/global-field state. Mars and Venus remain global-intrinsic-field controls. Giant-planet EM structure is a required falsification test.
 
-## Base-case closure note
+## Base-case closure note (corrected)
 
-Section 9's unified interaction state defines `a_i(t) = A_OW(DeltaS_i, L2_i, recursive_PPaF_i, EM_i, overlaps_i)` without deriving `A_OW`. `Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives the leading-order reduction of this term for a single dominant source with no rotation/EM coupling active: an exact inverse-square response, with the shell theorem and superposition (§4 of that draft) supplying the previously-unproven justification for §9's additive overlap structure `S_local,i(t) = SUM_j W_ij(t) S_j(r_i,t)` in the regime where sources are compact and their active domains don't substantially overlap. Kepler's three laws are derived as the resulting two-body limit. Every coupled term this section defines beyond that base case — internal rotation, EM-shell response, the recursive Point-Path-Field structure itself — remains exactly as open as stated throughout this document.
+Section 9's unified interaction state defines `a_i(t) = A_OW(DeltaS_i, L2_i, recursive_PPaF_i, EM_i, overlaps_i)` without deriving `A_OW`. `Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives the leading-order reduction of this term for a single dominant source with no rotation/EM coupling active: an exact inverse-square response, with Kepler's three laws derived as the resulting two-body limit.
+
+**It does not derive or justify §9's additive overlap structure `S_local,i(t) = SUM_j W_ij(t) S_j(r_i,t)`, and an earlier version of this note wrongly said it did.** The derived field is a plain, uncut `1/r` potential (Internal_Proofs/08 §4.3) — nothing in it produces a distance-dependent weight `W_ij` or a finite active domain `Omega_j(t)`. Naive linear summation of several such unbounded fields is not the same claim as this document's moving-finite-range/overlap architecture, and citing the derivation as support for `W_ij` was an overclaim, now corrected. That architecture, the emergent finite-range boundary `R_active,i(t)`, and every rotational/EM/Point-Path-Field coupling term remain exactly as open as stated throughout this document — this note closes only the plain two-body limit `A_OW` must reduce to when all of that is switched off.
 
 ## Claim status
 
