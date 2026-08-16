@@ -118,4 +118,16 @@ Still open: whether a residual at the 1e-6 level (or any level) would
 actually appear is the experiment itself, not something this topology
 can presuppose. This resolves HOW to look, not WHAT will be found.
 
+Motion correction (added via C-314's Medium/Anchor-Frame addendum): a
+Wave Reader mounted on any moving platform (a spacecraft, a lab bench
+on the rotating/orbiting Earth) reads its own C-314 Anchor-Frame value,
+Doppler-shifted from the Medium-Frame value by its own velocity `u`
+along the propagation direction (`omega' = omega - k*u`). This applies
+to phase/frequency readings this device might extract, not to the
+differential-null residual itself (a same-instant, same-location
+comparison between the two mirrored emitters, which is not a
+frequency-counting measurement) — but any future extension of this
+node toward frequency or phase-velocity readout should apply C-314's
+correction before comparing against a Medium-Frame prediction.
+
 ---

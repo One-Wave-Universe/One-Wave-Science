@@ -24,7 +24,10 @@ Lateral (added by the frequency/wavenumber addendum below): A-114 Dispersion
 Relation (omega(k) consistency check for a counted/estimated omega,k pair),
 C-309 Friction Limit / Propagation Ceiling (v_phase upper bound), C-315 Wave
 Reader V1 (a distinct, complementary hardware measurement principle), D-413
-Ground Lattice Orbital-Restoring Simulation (concrete extraction target)
+Ground Lattice Orbital-Restoring Simulation (concrete extraction target),
+C-314 Three Frames of Reference (Medium-Frame vs. Anchor-Frame correction
+required before any counted/estimated omega,k,v_phase means what A-114
+predicts — see correction note below)
 
 Definition:
 A focal point (a detector, an eye, any measurement apparatus) is a
@@ -170,5 +173,13 @@ Yellow Audit (addendum-specific):
   standing-wave state without further work
 - Neither method has been run against D-413's actual CSV output; doing
   so is a concrete, currently-missing metric D-413 could add
+- CORRECTION: both methods above implicitly assumed the sampling Focal
+  Point sits still in the Medium Frame (A-101/C-314). A real Focal Point
+  is itself a bounded structure moving through the same field (its own
+  C-314 Anchor Frame), so omega and v_phase extracted this way are
+  Anchor-Frame (Doppler-shifted) values by default, not Medium-Frame
+  ones. C-314's addendum derives the leading-order correction
+  (omega = omega' + k*u, v_phase = v_phase' + u) needed before comparing
+  a real measurement against A-114's Medium-Frame dispersion prediction.
 
 ---

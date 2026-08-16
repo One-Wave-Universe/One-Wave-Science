@@ -115,7 +115,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-311 | Electric/Magnetic Duality | Radial and rotational projections of one pressure field P_c. | YELLOW |
 | C-312 | Hierarchical Sensor/Control Architecture | Four-level hierarchical control architecture for a physical body. | YELLOW |
 | C-313 | Lorentz Invariance Conflict | Flagged real conflict: the discrete update rule's continuum limit produces a *damped* wave equation. | YELLOW |
-| C-314 | Three Frames of Reference | Three distinct, overlapping coordinate systems (external "V2" proposal). | YELLOW |
+| C-314 | Three Frames of Reference | Three distinct, overlapping coordinate systems (external "V2" proposal); Medium-Frame/Anchor-Frame Doppler math now derived (leading-order, Wave-Signal Frame still unconnected). | YELLOW |
 | C-315 | Wave Reader V1 | Sensor treating signal/noise as field states via differential nulling between mirrored emitters. | YELLOW |
 | C-316 | Charge Sign and Direction Conflation | Ch11's internal wording conflict is corrected; signed pressure, gradient direction, and whole-mode phase are now separate quantities. | YELLOW |
 | C-317 | Boundary-Tension Weave | Continuous 3D surface/volume coupling binds Vortex Phases; Tension-Link excitations are weave modes and Knot Lock has the line-tension limit `E_neck=tau_T L`, `F_lock=tau_T`. | GREEN |
@@ -165,7 +165,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | E-522 | Cellular/Stellar Scale Invariance | Extension of E-507's same-update-rule claim to cellular and stellar scales specifically. | YELLOW |
 | E-523 | Circle Pit / Vortex Transition | Crowd collective-motion phase transition (Vicsek-style alignment + noise), from real video/simulation data. | YELLOW |
 | E-524 | Kuramoto Lattice Synchronization | N coupled oscillators with phase θᵢ, natural frequency ωᵢ, coupled to neighbors. | YELLOW |
-| E-525 | Focal Point / Measurement Operator | A detector/eye/apparatus is a sampling operator, not a collapse mechanism. | YELLOW |
+| E-525 | Focal Point / Measurement Operator | A detector/eye/apparatus is a sampling operator, not a collapse mechanism; extracting omega/k/v_phase from samples now derived (counting and finite-difference methods), Doppler-corrected via C-314 for a moving detector. | YELLOW |
 | E-526 | Cellular Energy / ATP Kinetics | Standard compartmental model: dU/dt = P_in − P_use − P_loss. | YELLOW |
 | E-527 | Threshold-Triggered Relaxation Oscillator | Product-only cycle disproved; reduced recharge/depletion/hysteresis model validated against its analytic period. | BRONZE |
 | E-528 | Static Redshift Transport | Tired-light energy loss on a static background with explicit field-energy accounting; no expansion variables. | GREEN |

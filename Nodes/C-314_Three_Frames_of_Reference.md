@@ -71,3 +71,118 @@ Resolve pending C-313 before treating these three frames as more than
 a structural proposal.
 
 ---
+
+## Addendum: leading-order math connecting Medium Frame and Anchor Frame
+
+This closes the item above ("no mathematics connects the three frames
+to each other yet") for the Medium Frame / Anchor Frame pair
+specifically. The Wave-Signal Frame is not addressed here and remains
+open.
+
+**Why this matters, concretely:** E-525's measurement addendum (counting
+peaks/troughs, or a local finite-difference stencil, to extract omega
+and k from field samples) implicitly assumed the sampling apparatus
+itself sits still in the Medium Frame. No real Focal Point does — a
+Wave Reader (C-315), an orbiting body, or any detector is itself a
+bounded structure (A-112 Persistent Mode) with its own Anchor-Frame
+motion through the same field the wave is a disturbance of. What such
+a device actually measures is contaminated by its own velocity, and
+that contamination has a name: Doppler shift.
+
+**Scope of what follows, stated up front:** C-313 leaves this
+framework's frame-transformation behavior formally unresolved — no
+exact Lorentz covariance is established, and none is assumed here.
+What is derived below is the leading-order, non-relativistic (Galilean)
+transform between Medium Frame and Anchor Frame, valid to first order
+in u/v_phase where u is the detector's own Medium-Frame speed along the
+propagation direction. This is not a resolution of C-313; it is the
+correct level of rigor to use while C-313 stays open, and — per the
+point that prompted this addendum — it is also the physically relevant
+level: C-309 sets the propagation ceiling c_lat at or near the speed a
+disturbance can move at, and no Persistent Mode this framework
+considers (a planet, a spacecraft, a Wave Reader) moves anywhere near
+that ceiling. u/v_phase << 1 holds generically for every real detector,
+so the second-order (relativistic-scale) corrections this derivation
+drops are safely negligible for anything this framework would actually
+build or observe with — not merely a convenient simplification.
+
+### Derivation
+
+Medium Frame: a plane wave `psi(x,t) = A*cos(k*x - omega*t + phi)`,
+phase velocity `v_phase = omega/k`.
+
+Anchor Frame: a detector holding its own local coordinate fixed while
+moving through the Medium Frame at velocity `u` (component along the
+propagation direction), i.e. its Medium-Frame trajectory is
+`x_A(t) = x_A0 + u*t`. Substituting into the field:
+
+```
+psi(x_A(t), t) = A*cos(k*x_A0 + (k*u - omega)*t + phi)
+```
+
+The rate of phase change the detector's own clock actually measures —
+exactly what E-525's counting method and finite-difference stencil
+extract — defines the Anchor-Frame angular frequency:
+
+```
+omega' = omega - k*u = omega*(1 - u/v_phase)          (Doppler-omega)
+```
+
+For a genuinely simultaneous (same Medium-Frame instant) multi-point
+spatial snapshot, Galilean simultaneity is frame-independent, so the
+counted wavenumber is unchanged:
+
+```
+k' = k
+```
+
+(This is a separate claim from the possibly relativistic case C-313
+leaves open; if C-313 later resolves toward exact Lorentz covariance
+rather than a true preferred frame, this k'=k result would need
+revisiting along with everything else in this node.)
+
+Combining, the Anchor-Frame apparent phase velocity is
+
+```
+v_phase' = omega'/k' = v_phase - u          (Doppler-v)
+```
+
+**Sanity check:** a detector co-moving exactly at the wave's own phase
+velocity (`u = v_phase`) measures `omega' = 0` and `v_phase' = 0` — a
+frozen pattern, the correct textbook limit (a surfer sitting on a wave
+crest sees no oscillation). A detector moving against propagation
+measures a higher `omega'` (blueshift); moving with it, a lower one
+(redshift) — ordinary Doppler behavior, not new physics.
+
+### Practical consequence
+
+To recover the Medium-Frame `omega, k, v_phase` from a real (moving)
+measurement, the detector's own velocity `u` relative to Ground/Zero
+(A-101) must be independently known:
+
+```
+omega = omega' + k*u,      v_phase = v_phase' + u
+```
+
+To leading order in `u/v_phase` (justified above), this is a small,
+computable correction, not a fundamental obstruction — but it is a
+correction E-525's addendum did not previously carry, and any reading
+from a moving Wave Reader (C-315) or from a body's own local field
+sample (as used throughout Updated 38-41's `S_local,i(t)`, if that
+quantity is ever read as an oscillating rather than quasi-static field)
+needs `u` subtracted out before it can be compared against A-114's
+Medium-Frame dispersion prediction.
+
+Yellow Audit (addendum-specific):
+- Wave-Signal Frame (the third of the three) is not connected to
+  either Medium or Anchor Frame here — open.
+- This is a Galilean, first-order-in-u/v_phase treatment only; it
+  explicitly does not resolve C-313's exact frame-transformation
+  question, only supplies the leading-order correction needed for any
+  real, non-relativistic measurement device.
+- The `k'=k` simultaneity claim assumes a genuinely simultaneous
+  Medium-Frame spatial snapshot; a single moving detector building a
+  "spatial snapshot" out of sequential position samples over time
+  would need a separate, not-yet-derived correction.
+
+---
