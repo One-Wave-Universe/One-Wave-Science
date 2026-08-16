@@ -28,8 +28,11 @@ visual pattern alone is not a derivation.
   product graph = 7 edges/diameter 3; center-gated flip = 5 edges/diameter 3;
   movement-only = 4 edges and disconnects YES from NO. Physical law selection
   remains open. Artifacts: `route_transition_graph.py` and its tests.
-- [ ] **A3 — Mirror operator:** determine whether Mirror is a permutation,
-  phase operation, continuous crossing, or coupled discrete/continuous map.
+- [x] **A3 — Mirror operator:** implemented as a continuous phase rotation with
+  a finite six-route projection. The projection preserves YES/NO, reverses
+  DOWN/UP over a half-cycle, fixes projected Hold, and is involutive. A full
+  phase cycle returns to reference. Center crossing and Hold are independent
+  measurements. Artifact: G-729 and `mirror_operator.py` with eight tests.
 - [ ] **A4 — Commitment map:** derive
   `K(route,history,differential,threshold,phase)->{-3,-2,0,+2,+3}`.
 - [ ] **A5 — Ground and Hold proof:** distinguish Ground `(0,0)`, YES/HOLD,
