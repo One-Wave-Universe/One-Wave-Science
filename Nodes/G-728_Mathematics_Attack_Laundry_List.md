@@ -23,8 +23,11 @@ visual pattern alone is not a derivation.
 
 - [x] **A1 — Six-route finite set:** implement `2 choices x 3 moves = 6`.
   Artifact: `One_Wave_Bench/logic_core/six_route_logic.py` and six tests.
-- [ ] **A2 — Six-route transition graph:** enumerate legal transitions,
-  reachability, reversibility, absorbing states, and invalid inputs.
+- [x] **A2 — Six-route transition graph:** candidate laws, reachability,
+  reversibility, absorbing states, and topology are executable. Current result:
+  product graph = 7 edges/diameter 3; center-gated flip = 5 edges/diameter 3;
+  movement-only = 4 edges and disconnects YES from NO. Physical law selection
+  remains open. Artifacts: `route_transition_graph.py` and its tests.
 - [ ] **A3 — Mirror operator:** determine whether Mirror is a permutation,
   phase operation, continuous crossing, or coupled discrete/continuous map.
 - [ ] **A4 — Commitment map:** derive
