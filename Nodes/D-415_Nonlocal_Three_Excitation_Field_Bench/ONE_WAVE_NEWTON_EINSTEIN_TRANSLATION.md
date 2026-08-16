@@ -72,7 +72,8 @@ different Green function from 3D gravity and cannot be silently substituted.
 - Path: the relational history `q_A(t)` and transported wake.
 - Field: the surrounding `Psi`, potential/metric response, stress, and flux.
 
-These are three measurements of one state, not three independent fields.
+These are three measurements of one state, not three independent fields or
+fundamental forces.
 
 ### Four operators
 
@@ -81,7 +82,7 @@ These are three measurements of one state, not three independent fields.
 - Across `/`: transfer through or across a boundary.
 - Amplification `×`: gain from resonance or repeated coherent transfer.
 
-The operators describe transformations. They are not extra fundamental forces.
+The operators describe transformations. They are not forces.
 
 ## 3D One Wave interpretation
 
@@ -124,20 +125,24 @@ Field rotation: curl/circulation of surrounding momentum or phase flow
 Nested Point-PPF, Path-PPF, and Field-PPF descriptors are added only where the
 data resolve them. They do not automatically modify orbital acceleration.
 
-## Combined evolution used by the simulator
+## Effective evolution and underlying explanation
 
 ```text
-a_total = a_Newton + a_1PN + a_OW_internal + a_OW_boundary
+a_control = a_Newton + a_1PN
+OneWave[Psi] -> effective stress and geometry -> a_reconstructed
+required: a_reconstructed approaches a_control in the tested limit
 ```
 
 - `a_Newton` is the weak-field bulk response.
 - `a_1PN` supplies the leading relativistic correction currently implemented.
-- `a_OW_internal` is reserved for derived internal wake, phase, boundary, EM,
-  or rotation exchange. Its net force and torque are closed to zero.
-- `a_OW_boundary` is reserved for a declared external or larger-stratum Field
-  boundary. It cannot be hidden inside the internal channel.
+- One Wave supplies the proposed substance and mechanisms beneath the effective
+  stress-energy and geometry: Field density, pressure, stress, flow, boundary,
+  wake, EM structure, rotation, and phase relation.
+- Its reconstructed response is compared against relativity. It is not added
+  to relativity as a second gravity term.
 
-The One Wave terms default to zero. A description alone cannot activate them.
+The One Wave reconstruction defaults to absent. A description alone cannot
+replace or modify the relativistic control.
 
 ## What Newton and Einstein already account for
 
@@ -148,7 +153,7 @@ The One Wave terms default to zero. A description alone cannot activate them.
 - stress-energy as the source of spacetime curvature in the full theory;
 - gravitational time and geometry effects in the full theory.
 
-These effects must not be added again under the names wake, curvature, or
+These responses must not be added again under the names wake, curvature, or
 displacement.
 
 ## What remains missing from the present simulator
