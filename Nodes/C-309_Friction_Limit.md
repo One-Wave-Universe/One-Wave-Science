@@ -82,9 +82,13 @@ No active One-Wave node, chapter, wiki page, AI-readable pack, simulation, or di
 
 Any future merge that does so fails the canonical audit automatically.
 
+## Companion Bound: Long-Wavelength Cutoff (from C-313's exact general-gamma solution)
+
+C-309 above states the high-k propagation ceiling. C-313 now derives the mirror-image low-k bound: for any damping `γ>0`, sufficiently long-wavelength modes are overdamped, not propagating at all — an exact threshold `x_crit=(2-γ)-2√(1-γ)` on `x=β(1-cos(k·Δx))`, verified numerically. Propagation in this framework is therefore a finite band between a long-wavelength floor and the short-wavelength ceiling above, not simply "below the ceiling propagates." This does not change the ceiling itself; it adds a previously-missing lower bound the framework should carry alongside it.
+
 ## Yellow Audit
 
-- derive the complete dispersion relation from accepted lattice variables;
+- derive the complete dispersion relation from accepted lattice variables; DONE for general gamma, see C-313 (was previously only small-gamma/small-k);
 - determine whether \(\gamma\) and \(\beta\) are independent or coupled;
 - derive any scale dependence \(\gamma(s)\) or \(\beta(s)\);
 - identify the parameter regime in which the long-wave signal speed matches measured \(c\);

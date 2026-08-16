@@ -57,7 +57,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | A-112 | Persistent Mode | A stable, self-sustaining recursive field pattern; persistence is structural recurrence, not the Mass-Effect mechanism. | YELLOW |
 | A-112a | Traveling Lattice Rupture | Conservative relocation model: equal opening ahead and reclosure behind transports a localized defect without automatically accumulating a permanent scar. | YELLOW |
 | A-113 | Projection | The extension/expression of a Persistent Mode's structure outward into the field. | YELLOW |
-| A-114 | Dispersion Relation | Exact lattice characteristic equation and small-k frequency law; does not by itself generate D-405 shell energy spacing. | YELLOW |
+| A-114 | Dispersion Relation | Exact lattice characteristic equation, small-k frequency law, and now the exact general-gamma solution (C-313); does not by itself generate D-405 shell energy spacing. | YELLOW |
 | A-115 | Unified Compression Field | Gravity, Extended Compression, and Boundary Resistance are three views of one compression/displacement field; static energy returns through neutrinos and White Energy ejection. | GREEN |
 | A-116 | Three-Dimensional Spherical Default | Physical bounded modes are volumetric and sphere-like at lowest energy; 2D drawings are cross-sections, projections, or explicit negative-space layers. | GREEN |
 | A-117 | Dimensional Integrity and Projection Declaration | Locks 2D, 3D, and 4D as distinct native layers; requires explicit projection metadata and preserves 6:1, 12:1, and 24:1 as different coordination relations. | YELLOW |
@@ -99,6 +99,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
 | B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
 | B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
+| B-226 | Point-Path-Field Recursion | General recursive P/Pa/F structural primitive (promoted out of Updated 40's planetary-only prose); floor from A-107's bounded-motion test, ceiling from A-115/I-01 Rule 16; cross-scale application classified I-04 Tier 4 (Scale Recurrence) only — vortex/planetary/stellar/galactic rungs tabled, galaxy clusters unaddressed. | YELLOW |
 ### Appendix C — Applied Mechanics & Conflict-Resolution (20 active files)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -110,11 +111,11 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-306 | Torque | Rotational preference from off-center displacement; τ=0 for the derived central-force case (Updated 42), closing that application. | GREEN |
 | C-307 | Angular Momentum | Product of angular velocity ω and rotational inertia I; central-force conservation now derives Kepler's Second Law (Updated 42). | GREEN |
 | C-308 | Spin-½ | Emerges from 4π closure produced by repeated Mirror crossings. | GREEN |
-| C-309 | Friction Limit / Propagation Ceiling | Separates memory damping from maximum signal speed; neither one creates Mass Effect. | YELLOW |
+| C-309 | Friction Limit / Propagation Ceiling | Separates memory damping from maximum signal speed; neither one creates Mass Effect; now paired with a derived long-wavelength cutoff (C-313) — propagation is a finite band, not just below-ceiling. | YELLOW |
 | C-310 | Resistance Field | The field's tendency to preserve identity against perturbation — distinct from Friction (γ) and Restoring Response (A-105). | YELLOW |
 | C-311 | Electric/Magnetic Duality | Radial and rotational projections of one pressure field P_c. | YELLOW |
 | C-312 | Hierarchical Sensor/Control Architecture | Four-level hierarchical control architecture for a physical body. | YELLOW |
-| C-313 | Lorentz Invariance Conflict | Flagged real conflict: the discrete update rule's continuum limit produces a *damped* wave equation. | YELLOW |
+| C-313 | Lorentz Invariance Conflict | Flagged real conflict: the discrete update rule's continuum limit produces a *damped* wave equation; exact general-gamma dispersion now solved (k-independent decay, new long-wavelength cutoff), checked and found NOT to support a gamma-driven time-dilation mechanism. | YELLOW |
 | C-314 | Three Frames of Reference | Three distinct, overlapping coordinate systems (external "V2" proposal); Medium-Frame/Anchor-Frame Doppler math now derived (leading-order, Wave-Signal Frame still unconnected). | YELLOW |
 | C-315 | Wave Reader V1 | Sensor treating signal/noise as field states via differential nulling between mirrored emitters. | YELLOW |
 | C-316 | Charge Sign and Direction Conflation | Ch11's internal wording conflict is corrected; signed pressure, gradient direction, and whole-mode phase are now separate quantities. | YELLOW |

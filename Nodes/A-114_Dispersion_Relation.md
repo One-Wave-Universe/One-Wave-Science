@@ -87,7 +87,10 @@ What this does NOT resolve (honest limits):
   only set aside — the exact quadratic exists and could be solved in that
   regime, but the resulting omega would in general be complex (a damped,
   not purely oscillatory, mode), and interpreting that physically is
-  separate future work.
+  separate future work. SOLVED in `C-313`'s exact-general-gamma section:
+  |z|=sqrt(1-gamma) exactly (k-independent decay in the propagating
+  branch) and a new long-wavelength overdamping cutoff was found. See
+  C-313 for the full result and its honest limits.
 
 Yellow Audit:
 - Small-k, small-gamma leading-order result only — verified within that
@@ -95,14 +98,16 @@ Yellow Audit:
 - beta remains unmeasured; this node narrows the D-405 gap, does not close it
 - For D-405's current variable-radius geometry, n->k has been evaluated and
   is constant; a separate shell-energy model is the critical next connection
-- General (non-small) gamma case not solved
+- General (non-small) gamma case: SOLVED in C-313 — exact |z|=sqrt(1-gamma)
+  (k-independent decay in the propagating branch) and a new long-wavelength
+  overdamping cutoff x_crit=(2-gamma)-2*sqrt(1-gamma); checked and found NOT
+  to support a gamma-driven time-dilation mechanism (see C-313 for why)
 
 Future Work:
-Solve the exact quadratic for general gamma (not just small-gamma limit)
-to get the full damped dispersion relation — needed before this applies to
-any real Persistent Mode, since A-112 Persistent Modes are specifically
-the STABLE, non-decaying case, which may sit outside the small-gamma
-regime this node covers.
+~~Solve the exact quadratic for general gamma~~ DONE, see C-313. Remaining:
+check whether A-112 Persistent Modes (the stable, non-decaying case) sit
+inside the propagating band this exact solution defines, or fall in the
+newly-found overdamped long-wavelength region for realistic gamma, beta.
 Replace D-405's mixed geometry/energy assumption with a derived shell-energy
 model: fixed-radius variable-k, radial eigenmodes, per-wavelength action, or a
 nonlinear curvature/pressure/coupling energy.

@@ -1,5 +1,7 @@
 # Updated 41 — Planetary-Scale Displacement Model
 
+**Note:** see `Nodes/B-226_Point_Path_Field_Recursion.md` for the now-formalized, scale-general version of the Point-Path-Field recursion this document instantiates for planets specifically, including its recursion floor/ceiling and an I-04 cross-scale classification.
+
 ## Purpose
 
 This update supersedes the narrower orbital framing of Updated 39/40. The working One-Wave planetary hypothesis is that a planet is a **planetary-scale displacement structure**, analogous in architecture to the lower-scale displacement structures used elsewhere in the framework. Orbit, gravity-like response, field range, spin behavior, tides, EM-shell behavior, internal stress, and stability are treated as outputs of the same coupled displacement state rather than as separate mechanisms patched together afterward.

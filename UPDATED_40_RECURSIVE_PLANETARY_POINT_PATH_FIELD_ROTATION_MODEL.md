@@ -1,5 +1,7 @@
 # Updated 40 — Recursive Planetary Point–Path–Field Rotation Model
 
+**Note:** the general Point-Path-Field structure this document uses was promoted out of this prose and into a proper node, `Nodes/B-226_Point_Path_Field_Recursion.md` — including a floor/ceiling for the recursion and an I-04 classification of the cross-scale claim (Tier 4, Scale Recurrence — not identity across scales). This document remains the planetary-specific instance; B-226 is now its formal upstream primitive.
+
 ## Purpose
 
 Updated 40 completes the planetary-scale architecture that Updated 39 left flattened. The planetary state is not described by a radial potential plus optional corrections. It is treated as a coupled, recursive displacement structure whose external orbital behavior emerges from the interaction of:
