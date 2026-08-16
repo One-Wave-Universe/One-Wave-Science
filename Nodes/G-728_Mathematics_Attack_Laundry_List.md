@@ -39,8 +39,10 @@ visual pattern alone is not a derivation.
   repeated aligned history can. Choice-oriented versus absolute-axis movement
   semantics remains an explicit comparison task. Artifact: G-730 and
   `commitment_map.py` with nine tests.
-- [ ] **A5 — Ground and Hold proof:** distinguish Ground `(0,0)`, YES/HOLD,
-  NO/HOLD, center residence, and dynamic phase-locked Hold.
+- [x] **A5 — Ground and Hold separation:** logical Ground `(0,0)`, YES/HOLD,
+  NO/HOLD, center residence, center crossing, turning-point Hold, and coherent
+  phase-locked Hold now emit separate receipts. Zero speed alone is not a
+  coherent Hold. Artifact: G-731 and `ground_hold_classifier.py` with nine tests.
 - [ ] **A6 — Hysteresis tests:** prove that partial/full commitment does not
   chatter under noise or collapse distinct histories into one state.
 
