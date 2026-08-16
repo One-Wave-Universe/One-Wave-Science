@@ -17,6 +17,7 @@ video production. It is a state-architecture projection, not validation.
 ```bash
 python nonlocal_field_bench.py --steps 300 --output run_output
 python -m unittest -v test_nonlocal_field_bench.py
+python sweep_math_gaps.py
 python -m http.server 8000
 ```
 
