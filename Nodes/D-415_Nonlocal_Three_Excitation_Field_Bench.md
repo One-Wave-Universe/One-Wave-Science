@@ -17,6 +17,10 @@ cinematic 16:9 Point–Path–Field projection with planetary scenes, nested wak
 and a diffuse-to-spiral galactic arm-formation sequence, with direct 20-second
 1080p WebM recording.
 
+**Python video renderer:**
+`Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/render_galaxy_video.py` —
+browser-free deterministic spiral-arm animation rendered directly to H.264 MP4.
+
 ## Purpose
 
 D-415 is the first runnable attack on a three-excitation problem using one
