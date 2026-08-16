@@ -26,7 +26,8 @@ Full treatment:
 ## Mind roles
 
 - Five Mind / Dream Engine: **Field side**; expressive candidate generation and Working Ground.
-- M4 = Brainstem: active shared center, timing, scale weighing, and gate modulation.
+- M4 = Brainstem/subconscious fast brain: automatic transmission, operator
+  relay, associative memory recall, state/scale routing, timing, and gate modulation.
 - Six Mind / Administrator: **Void side**; reference, reception, containment,
   continuity, permission, exact state, and commitment.
 
