@@ -1,0 +1,19 @@
+{
+  "node_id": "G-726",
+  "canonical_name": "Dual Dream Engine — Ternary Homeworld Mega City",
+  "gate": "GREEN",
+  "lifecycle": "PROPOSED_BUILD",
+  "engines": {
+    "cognitive": "private candidate generation connected to M4 and Administrator",
+    "world_3d_non_cognitive": "persistent external Homeworld and Mega-City simulation"
+  },
+  "ternary_moves": {"-1": "compress", "0": "hold", "+1": "express"},
+  "storage": "NAS-backed content-addressed assets, immutable snapshots, chunks, receipts, and backups",
+  "compute": {
+    "cpu": "database, scheduling, commits, permissions, manifests, rollback",
+    "gpu": "3D rendering, geometry, physics, Field tensors, visual export",
+    "npu": "optional bounded navigation, tagging, animation, and pattern completion",
+    "nas": "persistent world state and assets"
+  },
+  "boundary": "typed request/preview protocol; world engine cannot rewrite cognitive Reference Ground"
+}
