@@ -235,7 +235,8 @@ Before promotion, D-413 must add:
 - derived circulation and vorticity from the lattice state;
 - stable-orbit windows versus capture, escape, and collapse;
 - 3D D-409 translation after the 2D mechanism is understood;
-- a run using the derived (not imposed) exterior profile from Internal_Proofs/08 in place of the declared Gaussian target, to check whether the resulting orbit reproduces the ellipse/equal-areas/period-radius relations derived analytically in that draft's §5.
+- a run using the derived (not imposed) exterior profile from Internal_Proofs/08 in place of the declared Gaussian target, to check whether the resulting orbit reproduces the ellipse/equal-areas/period-radius relations derived analytically in that draft's §5;
+- a frequency/wavenumber extraction metric, per E-525's addendum: count peak/trough crossings at one lattice site across frames to estimate omega, count peaks across one frame to estimate k, and report the resulting v_phase=omega/k alongside the existing CSV metrics — not yet implemented.
 
 ## Failure / Revision Conditions
 

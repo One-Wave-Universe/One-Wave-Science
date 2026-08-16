@@ -15,7 +15,10 @@ Dependencies:
 Upstream: Core update rule (psi_i^{n+1} = psi_i^n + (1-gamma)(psi_i^n - psi_i^{n-1})
           + beta*(<psi_j^n> - psi_i^n)), E-509 Propagation Limit (c_L = dx/dt)
 Downstream: D-405 Harmonic Shell and D-407 calibration reanalysis
-            (provides omega(k), but does not by itself generate a shell-energy ladder)
+            (provides omega(k), but does not by itself generate a shell-energy ladder);
+            E-525 Focal Point Measurement Operator addendum (a measured
+            omega,k pair from counted samples is now checkable against
+            this node's small-k prediction)
 
 Purpose:
 D-405's own audit states "Energy spacing DeltaE ~ hbar*omega — proportional,
