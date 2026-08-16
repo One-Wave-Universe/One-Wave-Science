@@ -19,10 +19,11 @@ class HybridReceipt:
     time: float
     newtonian_norm: float
     relativity_norm: float
-    one_wave_raw_norm: float
-    one_wave_closed_norm: float
-    one_wave_net_force: tuple[float, float, float]
-    one_wave_net_torque: tuple[float, float, float]
+    one_wave_explanation_raw_norm: float
+    one_wave_explanation_closed_norm: float
+    one_wave_explanation_net_translation: tuple[float, float, float]
+    one_wave_explanation_net_torque: tuple[float, float, float]
+    relativity_explanation_mismatch: float
     total_norm: float
 
 
@@ -57,38 +58,36 @@ def hybrid_channels(r: np.ndarray, v: np.ndarray, time: float,
     return {
         "newtonian": gray["newtonian"],
         "relativity_1pn": gray["relativity_1pn"],
-        "one_wave_raw": raw,
-        "one_wave_closed": close_internal_channel(r, raw),
+        "one_wave_explanation_raw": raw,
+        "one_wave_explanation_closed": close_internal_channel(r, raw),
     }
 
 
 def make_receipt(r: np.ndarray, v: np.ndarray, time: float,
                  one_wave_law: OneWaveLaw | None = None) -> HybridReceipt:
     channels = hybrid_channels(r, v, time, one_wave_law)
-    closed = channels["one_wave_closed"]
+    closed = channels["one_wave_explanation_closed"]
     center = np.sum(MASSES[:, None] * r, axis=0) / MASSES.sum()
-    net_force = np.sum(MASSES[:, None] * closed, axis=0)
+    net_translation = np.sum(MASSES[:, None] * closed, axis=0)
     net_torque = np.sum(np.cross(r - center, MASSES[:, None] * closed), axis=0)
-    total = channels["newtonian"] + channels["relativity_1pn"] + closed
+    # The explanation channel is compared with relativity, never added to it.
+    total = channels["newtonian"] + channels["relativity_1pn"]
     return HybridReceipt(
         time=time,
         newtonian_norm=float(np.linalg.norm(channels["newtonian"])),
         relativity_norm=float(np.linalg.norm(channels["relativity_1pn"])),
-        one_wave_raw_norm=float(np.linalg.norm(channels["one_wave_raw"])),
-        one_wave_closed_norm=float(np.linalg.norm(closed)),
-        one_wave_net_force=tuple(float(x) for x in net_force),
-        one_wave_net_torque=tuple(float(x) for x in net_torque),
+        one_wave_explanation_raw_norm=float(np.linalg.norm(channels["one_wave_explanation_raw"])),
+        one_wave_explanation_closed_norm=float(np.linalg.norm(closed)),
+        one_wave_explanation_net_translation=tuple(float(x) for x in net_translation),
+        one_wave_explanation_net_torque=tuple(float(x) for x in net_torque),
+        relativity_explanation_mismatch=float(np.linalg.norm(closed - channels["relativity_1pn"])),
         total_norm=float(np.linalg.norm(total)),
     )
 
 
 def hybrid_step(r: np.ndarray, v: np.ndarray, dt: float, time: float,
                 one_wave_law: OneWaveLaw | None = None) -> tuple[np.ndarray, np.ndarray, HybridReceipt]:
-    """Advance one state with the closed One Wave channel and return its receipt."""
-    def closed_law(x: np.ndarray, u: np.ndarray, t: float) -> np.ndarray:
-        raw = np.zeros_like(x) if one_wave_law is None else one_wave_law(x, u, t)
-        return close_internal_channel(x, raw)
-
+    """Advance the relativistic control; audit One Wave as its explanation."""
     receipt = make_receipt(r, v, time, one_wave_law)
-    r1, v1 = step(r, v, dt, time, candidate_law=closed_law, relativity=True)
+    r1, v1 = step(r, v, dt, time, candidate_law=None, relativity=True)
     return r1, v1, receipt
