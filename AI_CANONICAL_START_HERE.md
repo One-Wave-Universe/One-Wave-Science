@@ -17,6 +17,7 @@ Current update handoff:
 9. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
 10. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
 11. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
+12. `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`
 12. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
 11. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
 12. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
