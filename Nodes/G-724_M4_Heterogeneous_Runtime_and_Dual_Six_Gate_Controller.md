@@ -35,9 +35,16 @@ Locked functional identity:
 
 - `FIELD = FIVE MIND = DREAM ENGINE`;
 - `VOID = SIX MIND = ADMINISTRATOR`;
-- `M4 = BRAINSTEM = their shared active center and bidirectional modulation interface`.
+- `M4 = BRAINSTEM = SUBCONSCIOUS FAST BRAIN = automatic transmission,
+  operator relay, associative recall, state/scale routing, and bidirectional modulation`.
 
 Void means the reference/receiving/containing/commitment side, not absence.
+
+M4 routes the four operators—Signal, Projection, Differential, and
+Amplification—according to current state, scale, phase, integrity, and
+permission. Its Hopfield layer performs fast partial-cue recall. The
+Administrator retains authoritative memory and commitment; M4 recall never
+silently rewrites the archive.
 
 ## Center-origin invariant
 
