@@ -8,6 +8,7 @@ Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_
 Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 42 Keplerian-limit derivation handoff (closes the inverse-square/Kepler gap underneath Updated 38-41 and D-413): `UPDATED_42_KEPLERIAN_LIMIT_DERIVATION.md`; full math in `Internal_Proofs/08_Keplerian_Limit_Derivation.md`.
+Tidal-torque cascade mechanism (Great Attractor through galaxy clusters and galaxies, computed skip-level suppression to planetary scale): `Internal_Proofs/09_Tidal_Torque_Cascade_Mechanism.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -250,7 +251,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 
 | Ch | Title | Core Claim | Status |
 |---|---|---|---|
-| 1 | Galaxies and the Extended Compression Effect / Dark-Matter Comparison | The extended wake contribution of A-115 is the One-Wave mechanism compared against dark-matter observations. | YELLOW / GREEN (identity test) |
+| 1 | Galaxies and the Extended Compression Effect / Dark-Matter Comparison | The extended wake contribution of A-115 is the One-Wave mechanism compared against dark-matter observations; rotation-source mechanism (tidal torque, real Gray reference) now derived and computed, Internal_Proofs/09; spiral arms still unattempted. | YELLOW / GREEN (identity test) |
 | 2 | Stars — Sustained Persistent Modes Under Compression | Stars as long-lived Persistent Modes maintained under continuous compression. | YELLOW / YELLOW |
 | 3 | Supernovae — Break Condition at Stellar Scale | Stellar-scale instance of B-209 Break Condition. | YELLOW / YELLOW |
 | 4 | Black Holes, Quasars, and White Energy / Cosmic Mirror Gate | Compact compression reaches a Mirror-Gate threshold and ejects White Energy for static recirculation. | YELLOW (math scaffold) / GREEN (astrophysical identity) |

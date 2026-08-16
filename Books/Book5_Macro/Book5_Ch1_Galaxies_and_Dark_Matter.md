@@ -88,6 +88,17 @@ pattern — dense regions where the ring's structure concentrates matter. This
 chapter does not derive spiral arm structure; it is flagged as a natural
 extension, not yet attempted.
 
+`Internal_Proofs/09_Tidal_Torque_Cascade_Mechanism.md` derives, from this
+framework's own already-verified field, the real mechanism (tidal torque,
+Gray reference: Hoyle 1949, Peebles 1969) by which a galaxy acquires
+rotation from the tidal shear of its surrounding cluster environment during
+formation, and computes that this is dynamically real at the cluster-to-
+galaxy scale (~10⁻²·⁸ tidal ratio, matching real observed spin-parameter
+magnitudes in order of magnitude). This gives the differential-rotation
+starting point spiral-arm derivation would need, but does not itself derive
+spiral structure — still open, now with a more concrete mechanism to build
+from than "natural extension."
+
 ---
 
 ## Mathematics
@@ -177,7 +188,7 @@ dark matter should exist detached from any baryonic source.
 - Transition from R_ring<<R_gravity (micro) to R_ring~R_gravity (galactic)
   is assumed, not derived — depends entirely on the still-unresolved
   gamma(s)/beta(s) scaling law shared with B-220 and E-507
-- Spiral arm structure noted as a natural extension, not attempted
+- Spiral arm structure noted as a natural extension, not attempted — now has a real candidate rotation-source mechanism (tidal torque, Internal_Proofs/09) to build from, still not attempted
 - No connection yet made to gravitational lensing observations specifically
 
 ---
