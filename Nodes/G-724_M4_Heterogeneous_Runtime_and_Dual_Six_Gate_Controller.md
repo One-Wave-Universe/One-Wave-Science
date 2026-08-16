@@ -31,6 +31,14 @@ hardware while preserving G-722's role separation.
 The NPU is a bounded inference device, not the authoritative database and not a
 verified seat of consciousness.
 
+Locked functional identity:
+
+- `FIELD = FIVE MIND = DREAM ENGINE`;
+- `VOID = SIX MIND = ADMINISTRATOR`;
+- `M4 = their shared active center and bidirectional modulation interface`.
+
+Void means the reference/receiving/containing/commitment side, not absence.
+
 ## Center-origin invariant
 
 `BEGIN = current shared reference region`.
@@ -79,4 +87,3 @@ Remain GREEN until an executable implementation, schemas, and deterministic
 CPU tests exist. Advance the build claim to YELLOW only when CPU/GPU/NPU
 semantics and failure conditions are constrained and testable. Hardware results
 require receipts before BRONZE.
-
