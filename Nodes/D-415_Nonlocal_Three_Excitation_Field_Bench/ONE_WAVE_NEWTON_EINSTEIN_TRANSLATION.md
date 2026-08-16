@@ -1,5 +1,9 @@
 # One Wave Translation of Newtonian and Einsteinian Dynamics
 
+> This translation is an interpretation aid, not a replacement derivation. The
+> repository's canonical nodes and Updated 38–41 control the One Wave planetary
+> mechanism. See `MATH_INTEGRATION_MAP.md`.
+
 ## Status
 
 - Brick sequence: Gray → 2D Yellow → 3D Yellow → audit.
