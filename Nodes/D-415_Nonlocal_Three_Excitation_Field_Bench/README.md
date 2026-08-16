@@ -6,8 +6,10 @@ uses a strictly positive global kernel, and extracts three extended excitation
 measurements without inserting point masses or pairwise force laws.
 
 `planetary_visual.html` is the cinematic 16:9 visual companion. It provides
-Sol–Earth–Moon, Mercury/Sol EM-coupling, Venus rotational-mismatch, and nested
-solar-wake scenes. The canvas records a 20-second 1080p WebM directly for
+Sol–Earth–Moon, Mercury/Sol EM-coupling, Venus rotational-mismatch, nested
+solar-wake, and emergent spiral-arm scenes. The galactic scene starts with a
+diffuse rotating stellar population, builds harmonic trails, thins their outer
+length, and transfers locking toward a next-arm mode. The canvas records a 20-second 1080p WebM directly for
 video production. It is a state-architecture projection, not validation.
 
 ## Run
