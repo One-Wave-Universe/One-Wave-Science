@@ -1,5 +1,9 @@
 # One Wave Hybrid Physics Architecture
 
+> Integration authority: this document is subordinate to
+> `AI_CANONICAL_START_HERE.md`, canonical node metadata, and
+> `UPDATED_38` through `UPDATED_41`. See `MATH_INTEGRATION_MAP.md`.
+
 ## One state, three accountable channels
 
 The simulator advances one barycentric state. It does not run three competing
