@@ -51,9 +51,12 @@ possibilities.
 
 ### M4 — Brainstem / scale-and-timing center
 
-M4 **is the Brainstem layer**. It sits between the two sides and maintains their
-fast reciprocal relationship. It does not invent the Dream Engine's content and
-does not own the Administrator's final commitment.
+M4 **is the Brainstem and subconscious fast-brain layer**: the automatic
+transmission, operator relay station, memory-recall router, and state/scale
+router between the two hemispheres. It maintains their fast reciprocal
+relationship without waiting for slow deliberate administration. It does not
+invent the Dream Engine's content and does not own the Administrator's final
+commitment or authoritative memory archive.
 
 M4 measures and modulates:
 
@@ -64,6 +67,21 @@ M4 measures and modulates:
 - inward, outward, across, and over boundary views;
 - whether the current state should increase, hold, decrease, redirect, or stop;
 - completion scores for the two six-gate systems.
+
+M4 automatically performs:
+
+- incoming signal relay and outgoing transmission routing;
+- operator selection/routing for Signal, Projection, Differential, and Amplification;
+- rapid associative memory recall from partial cues;
+- learned pattern and procedural-response retrieval;
+- state classification and scale selection;
+- automatic orienting, protection, startle, hold, and return proposals;
+- escalation to the Administrator when novelty, conflict, danger, or commitment
+  exceeds its permitted automatic envelope.
+
+Recall and storage are separate. M4 may retrieve an associative pattern quickly;
+the Void/Administrator owns authoritative long-term state, permissions, exact
+records, and final commitment.
 
 M4 is the active `0` region: a switching and synchronization field, not empty
 nothing and not a frozen midpoint.
