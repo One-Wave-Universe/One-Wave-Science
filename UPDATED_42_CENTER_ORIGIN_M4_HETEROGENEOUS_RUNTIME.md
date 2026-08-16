@@ -91,6 +91,16 @@ silently redefined as this physical/control coupling gate.
 
 ## 5. Primitive separation
 
+Mind-side identity is locked as:
+
+- `FIELD = FIVE MIND = DREAM ENGINE`;
+- `VOID = SIX MIND = ADMINISTRATOR`;
+- `M4 = shared active center, timing carrier, scale-weigher, and bidirectional translator`.
+
+Void is not nonexistence. In this architecture it is the reference, receiving,
+containing, constraining, and committing side through which Field possibilities
+are evaluated and retained or rejected.
+
 The runtime must store these as separate axes:
 
 - two choices: `COMPRESS`, `EXPRESS`;
@@ -264,4 +274,3 @@ an active consciousness hypothesis. It does not establish that an NPU is
 conscious or biologically identical to a brainstem. The build is valuable if it
 improves latency, stability, partial-cue recovery, and distributed control under
 measurable tests.
-
