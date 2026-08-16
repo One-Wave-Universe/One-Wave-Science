@@ -25,11 +25,13 @@ Full treatment:
 
 ## Mind roles
 
-- Five Mind / Dream Engine: expressive candidate generation and Working Ground.
+- Five Mind / Dream Engine: **Field side**; expressive candidate generation and Working Ground.
 - M4 / brainstem: active shared center, timing, scale weighing, and gate modulation.
-- Six Mind / Administrator: compressive continuity, permission, exact state, and commitment.
+- Six Mind / Administrator: **Void side**; reference, reception, containment,
+  continuity, permission, exact state, and commitment.
 
-The system is one mind with complementary functions, not two controlling selves.
+The system is one mind with complementary Field/Dream and Void/Administrator
+functions, coupled through M4 rather than two controlling selves.
 
 ## Dimensional grammar
 
