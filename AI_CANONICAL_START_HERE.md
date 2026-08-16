@@ -15,7 +15,9 @@ Current update handoff:
 7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
 8. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
 9. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
-10. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+10. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
+11. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
+12. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
 11. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
 12. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
 13. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
