@@ -97,7 +97,7 @@ Here \(M_{\rm eff}\) is the measured **Mass Effect** assigned to the bounded sou
 \[
 \psi(r)=\frac{C}{\kappa^2}\frac{e^{-\kappa r}}{r}+\frac{c_2}{r},\qquad \kappa=\sqrt{a/b},
 \]
-reducing for \(r\gg\lambda\equiv1/\kappa\) to \(\psi(r)\to-G_{\rm eff}M_{\rm eff}/r\) with \(G_{\rm eff}=1/(4\pi\alpha)\) — recovering \(\Phi_{\rm OW}(r)\to-GM_{\rm eff}/r\) and \(|\mathbf g_{\rm OW}(r)|\to GM_{\rm eff}/r^2\) below, closing the item in §7. The proposed resolution (not yet applied as a formal rewrite of this section) is to identify \(\Phi_{\rm OW}\) with \(\psi\) itself rather than with \(\alpha_g\chi\), keeping \(\chi\) as the source-density term (playing the role \(\rho\) plays in \(\nabla^2\Phi=4\pi G\rho\)) satisfying \(\nabla^2\psi\propto\chi\) inside the source and \(\approx0\) outside it.
+reducing for \(r\gg\lambda\equiv1/\kappa\) to \(\psi(r)\to-G_{\rm eff}M_{\rm eff}/r\) with \(G_{\rm eff}=\alpha/(4\pi a)\) (corrected after external review — an earlier version of this note and of Internal_Proofs/08 mixed two different field equations and stated \(G_{\rm eff}=1/(4\pi\alpha)\), which is wrong; \(a\) is A-106's own field-generation coefficient, distinct from A-105's response coefficient \(\alpha\), and whether the two are related is now a separately open question) — recovering \(\Phi_{\rm OW}(r)\to-GM_{\rm eff}/r\) and \(|\mathbf g_{\rm OW}(r)|\to GM_{\rm eff}/r^2\) below, closing the item in §7. The proposed resolution (not yet applied as a formal rewrite of this section) is to identify \(\Phi_{\rm OW}\) with \(\psi\) itself rather than with \(\alpha_g\chi\), keeping \(\chi\) as the source-density term (playing the role \(\rho\) plays in \(\nabla^2\Phi=4\pi G\rho\)) satisfying \(\nabla^2\psi\propto\chi\) inside the source and \(\approx0\) outside it.
 
 ## 3. Extended Compression / Dark-Matter View
 
@@ -284,7 +284,7 @@ Mass Effect / displacement
 
 ### Yellow completion
 
-- derive \(\chi(r)\) from sources, ✅ far-field/leading-order case closed by `Internal_Proofs/08_Keplerian_Limit_Derivation.md` (source-free exterior solution and shell theorem); the χ-vs-ψ conflation this exposed is flagged above and still needs a formal rewrite of this section's notation, not just the derivation,
+- derive \(\chi(r)\) from sources, ✅ far-field/leading-order case closed by `Internal_Proofs/08_Keplerian_Limit_Derivation.md` (source-free exterior solution and monopole far-field equivalence — corrected from an overstated "shell theorem" claim after external review; exact only under spherical symmetry, exact monopole/vanishing-dipole-about-centroid for any shape, quadrupole-and-higher corrections remain for non-spherical sources); the χ-vs-ψ conflation this exposed is flagged above and still needs a formal rewrite of this section's notation, not just the derivation,
 - recover or replace the inverse-square limit, ✅ recovered for \(r\gg\lambda=\sqrt{b/a}\); short-range Yukawa deviation below \(\lambda\) is a new, unvalidated prediction, not yet checked against any bound on \(\lambda\),
 - derive the extended wake profile without fitting it by hand,
 - derive the four-interaction work metric, the actual gate-crossing path, the scale-free gate-to-mass ratio, and one explicit energy calibration route,

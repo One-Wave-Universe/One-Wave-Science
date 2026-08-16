@@ -7,6 +7,8 @@
 
 It also finds and flags one real internal inconsistency (§6) rather than papering over it.
 
+**Correction notice (external review, applied in full):** an independent review of this draft found two real mathematical errors, both confirmed and fixed here: (1) §4.1 mixed two different field equations when source-matching, producing the wrong formula for `G_eff` — corrected from `1/(4πα)` to the verified `α/(4πa)`; (2) §4.2 overstated Gauss's-law-derived flux conservation as the full Newtonian shell theorem for any bounded shape, when it is only exact under spherical symmetry — corrected to the honest monopole-equivalence statement. Both corrections are worked in place below with the reasoning shown, not just the fixed conclusion. The Kepler-law derivation in §5 is unaffected by either correction. Where this document is cited elsewhere in the repo as "already-verified," that phrasing should be read as **candidate derived field** until independently checked again — a description this draft failed to live up to once already.
+
 ---
 
 ## 0. What is assumed vs. what is derived
@@ -22,9 +24,9 @@ Stated up front, per repo convention (I-01):
 **Newly derived in this draft:**
 - The static, source-free, long-range field equation implied by A-105+A-106's own functional (§1).
 - Its exact spherically-symmetric solution — a Yukawa correction riding on a `1/r` term, not an assumed `1/r` (§2).
-- The far-field reduction to an exact inverse-square response, with `G_eff` expressed in terms of `α` (§3) — this is what Book1_Ch12 asked for and marked deferred.
+- The far-field reduction to an exact inverse-square response, with `G_eff = α/(4πa)` expressed in terms of *both* A-105's response coefficient `α` and A-106's own source-generation coefficient `a` (§3-4.1, corrected during external review — an earlier version of this draft mixed two different field equations and got this formula wrong; see the correction note in §4.1) — this is what Book1_Ch12 asked for and marked deferred.
 - A derived short-range screening length `λ = √(b/a)`, a new falsifiable prediction (§3).
-- The shell theorem for a single extended source, from first principles (§4.2) — justifies treating one bounded body (e.g. the Sun) as a point source at its own centroid, which Updated 38-41 do throughout without deriving it.
+- The *monopole* far-field equivalence for a single extended source, from first principles (§4.2, corrected — an earlier version overstated this as the full shell theorem for any bounded shape; it is exact only under spherical symmetry, see the correction there). Real justification, but weaker than first claimed, for treating one bounded body (e.g. the Sun) as approximately point-like at its own center of mass, which Updated 38-41 do throughout without deriving it.
 - Kepler's first, second, and third laws as the two-body limit of the resulting central force (§5).
 
 **Explicitly NOT derived here, and not claimed to be:**
@@ -144,10 +146,10 @@ Writing `c₂ = -k` (k>0 for an attractive/restoring response, matching A-105's 
 R_OW(r) = -(αk)/r² r̂,        r ≫ λ                          (Eq. 7)
 ```
 
-which is exactly Newton's law `F = -GMm/r² r̂` under the identification `αk ↔ G·M_eff` — closing Book1_Ch12's own stated target ("Derive G from alpha and lattice parameters"). The source-matching integral (§4) below fixes `k` in terms of the total source strength and gives the closed form
+which is exactly Newton's law `F = -GMm/r² r̂` under the identification `αk ↔ G·M_eff` — closing Book1_Ch12's own stated target ("Derive G from alpha and lattice parameters"). The source-matching integral (§4.1 below) fixes `k` in terms of the total source strength; the correct closed form, worked out there (**not** the version originally stated here, corrected during external review — see §4.1), is
 
 ```
-G_eff = 1/(4πα)                                             (Eq. 8)
+G_eff = α/(4πa)                                             (Eq. 8, corrected)
 ```
 
 **New prediction, not previously in the repo:** for `r ≲ λ = √(b/a)`, Eq. 5's Yukawa term is *not* negligible and the exterior response deviates from pure inverse-square. This is the same structural form as the deviations already searched for experimentally in short-range (sub-millimeter) tests of the inverse-square law, and it gives A-106's previously free coefficient `b` (relative to `a`) a concrete physical meaning it did not have before: `b/a = λ²`, a length scale in principle bounded by existing torsion-balance data. This should be added as a new Prediction/Yellow-Audit item downstream (done in §6) — it is not claimed here to be validated, only derived and made falsifiable.
@@ -158,33 +160,61 @@ G_eff = 1/(4πα)                                             (Eq. 8)
 
 ## 4. Source matching, the shell theorem, and superposition
 
-### 4.1 Fixing `k` from the source
+### 4.1 Fixing `k` from the source — corrected during external review
 
-Apply the divergence theorem to Eq. 1 (`∇²ψ = Q(x)/α`, using the far-field/large-`κr` regime where Eq. 3's homogeneous correction is negligible) over a sphere `S_R` of radius `R > R_source`:
+**An earlier version of this section made a real error, caught by outside review and confirmed independently before this correction was written: it applied the divergence theorem to Eq. 1 (`∇²ψ=Q/α`) to fix `k`, while the field `ψ` actually being solved throughout §§2-3 is the solution of the *different* equation, Eq. 3 (`-a∇²ψ+b∇⁴ψ=0`, from A-106's full functional). Eq. 1 is a simpler, separate equation obtained from A-105 alone, before A-106's curvature term is added — using it for source-matching after having already solved Eq. 3 silently switched equations mid-derivation and introduced `α` where `a` belongs. Corrected here using Eq. 3 throughout, consistently.**
 
-```
-∮_{S_R} ∇ψ·d\mathbf A = ∫_{V_R} ∇²ψ \,dV = (1/α)∫_{V_R} Q(x)\,dV = Q_{tot}/α
-```
+Define `φ ≡ b∇²ψ - aψ`. For constant `a,b`, `∇²φ = b∇⁴ψ - a∇²ψ`, which is exactly the left side of Eq. 3 with a source: `∇²φ = Q(x)`. So `φ` obeys an ordinary Poisson equation sourced by the *same* `Q` — this is the correct, single, consistent equation to source-match against, built entirely from Eq. 3.
 
-With `ψ(R) = -k/R` (Eq. 6/7 with `c₂=-k`), `∇ψ·\hat r = k/R²`, so `∮ = 4πR²·(k/R²) = 4πk`. Hence
+Substitute the already-derived exterior solution (Eq. 5, `ψ=(C/κ²)e^{-κr}/r+c₂/r`, `κ²=a/b`) directly:
 
 ```
-4πk = Q_{tot}/α     ⟹     k = Q_{tot}/(4πα)
+∇²ψ = C e^{-κr}/r        (= g(r), from §2)
+φ = b·g(r) - a·ψ(r) = C e^{-κr}/r·[b - a/κ²] - a·c₂/r
 ```
 
-Identifying `Q_{tot} ≡ M_eff` (the total integrated source strength of the bounded Persistent Mode — the same `M_eff` A-115 §2 already uses) gives Eq. 8, `G_eff = 1/(4πα)`, and
+Since `a/κ² = a/(a/b) = b`, the bracket `[b-a/κ²]` is **exactly zero** — the Yukawa piece cancels identically, for all `r`, not just far field (verified numerically to 6+ decimal places across a range of `r`). This leaves the exact result
 
 ```
-ψ(r) = -G_eff M_eff / r,     R_OW(r) = -\frac{G_eff M_eff}{r^2}\hat r,     r≫λ, r>R_source
+φ(r) = -a·c₂/r                                              (exact, all r > R_source)
 ```
 
-### 4.2 Shell theorem
+Now source-match `φ` against the ordinary Poisson solution: for `∇²φ=Q(x)` with `Q` compactly supported, `φ(r) → -Q_tot/(4πr)` in the far field (the standard Green's-function/monopole result — subject to the same multipole caveat detailed in §4.2 below). Matching:
 
-The divergence-theorem argument above used only that `∇²ψ=0` throughout the source-free exterior (far-field limit) and that the enclosed source integral `Q_{tot}` is independent of `R` for any `R>R_source`. **Neither of these facts depends on the source being spherically symmetric or point-like** — only on the enclosing sphere lying entirely outside the source. Therefore:
+```
+-a·c₂ = -Q_tot/(4π)     ⟹     c₂ = Q_tot/(4πa)
+```
 
-> **Any bounded, compactly-supported source produces, at every point outside its own extent, exactly the same exterior field as a point source of equal total `Q_tot` placed at its centroid.**
+Writing `c₂=-k` as before (§3) gives `k = Q_tot/(4πa)` — **using `a`, not `α`**. `α` re-enters only at the *separate*, already-stated step of converting the sourced field into a physical response via A-105's own constitutive law, `R_OW=-α∇ψ` (§3, Eq. 7). Combining both steps correctly:
 
-This is Newton's shell theorem, and the proof above is a complete, three-line proof of it inside this framework — not previously stated anywhere in the repo. It is the mathematical justification (not previously given) for treating the Sun, Jupiter, Earth, etc. as point-like field sources at their centers, which `UPDATED_38` through `UPDATED_41` do throughout without deriving it.
+```
+R_OW(r) = -α∇ψ = -(α k)/r² r̂ = -\frac{α Q_{tot}}{4πa·r^2}\hat r
+```
+
+Identifying `Q_tot ≡ M_eff` (the same `M_eff` A-115 §2 uses) gives the corrected closed form:
+
+```
+G_eff = α/(4πa)                                             (Eq. 8, corrected)
+ψ(r) = -G_eff M_eff · (a/α) / r  =  -\frac{M_eff}{4\pi a}\frac{1}{r},
+R_OW(r) = -G_eff M_eff/r^2 \hat r,     r≫λ, r>R_source
+```
+
+`a` (how strongly a source generates the field `ψ`) and `α` (how strongly the field's gradient converts into physical response) are genuinely distinct roles, both now visible in `G_eff` rather than one silently substituted for the other. Whether `a` and `α` are themselves related or independent physical constants is not established anywhere in A-105/A-106 and is not assumed here — a new, explicit open item (§7).
+
+### 4.2 Monopole far-field equivalence — corrected from an overstated "shell theorem"
+
+**An earlier version of this section claimed the full Newtonian shell theorem — exact field equivalence to a point source, for *any* bounded shape. That is too strong, and was caught by outside review.** Gauss's law (the divergence-theorem argument used throughout this document) fixes only the *total flux* of `∇ψ` through any enclosing sphere — it does not fix the field's value at each point on that sphere, and does not by itself force the field to look like a point source's field in every direction. The exact Newtonian shell theorem additionally requires **spherical symmetry** of the source; that is a stronger, separate geometric fact, not a consequence of Gauss's law alone.
+
+What Gauss's law alone actually establishes, correctly: the **monopole** term of the exterior field's multipole expansion exactly matches a point source of total `Q_tot`, for *any* bounded source shape. Expanding the exact solution `φ(x)=-\frac{1}{4\pi}\int Q(x')/|x-x'|\,d^3x'` for `|x|` large compared to the source's extent gives
+
+```
+φ(x) = -\frac{1}{4\pi}\left[\frac{Q_{tot}}{r} + \frac{\mathbf p\cdot\hat r}{r^2} + O(1/r^3)\right],
+\qquad \mathbf p=\int Q(x')\,\mathbf x'\,d^3x'
+```
+
+If the origin is placed at the source's own centroid (center of mass/charge), the dipole term `\mathbf p` vanishes identically **by definition of centroid** — a real, exact simplification, not approximate. But the **quadrupole** term (`O(1/r^3)`, depending on the source's actual shape — e.g. how oblate or elongated it is) generically does **not** vanish unless the source is spherically symmetric specifically. This is the same structure real celestial mechanics already uses and needs (Earth's own `J2` oblateness term in real satellite orbit calculations is exactly this quadrupole correction) — not a defect newly introduced here, but a real limit on how strong a claim this derivation supports.
+
+**Corrected statement:** for a bounded, compactly-supported source, the exterior field's monopole component exactly matches a point source of total `Q_tot` at the source's centroid. The full field exactly equals a point source's field, at every exterior point, only under spherical symmetry; for a general shape it is the leading far-field term, with quadrupole-and-higher corrections that fall off faster (`1/r³` and beyond) but do not vanish in general. This is real, useful, honest support — matching how the Sun (very nearly spherical) and, to good approximation, the other major bodies are already treated in real orbital mechanics — for treating `UPDATED_38` through `UPDATED_41`'s bodies as approximately point-like at their centers, not the unconditional exact statement an earlier version of this draft claimed.
 
 ### 4.3 Superposition — and a real tension with the finite-wake hypothesis, not a justification of it
 
@@ -284,18 +314,20 @@ This is a real definitional conflict between A-115 §2 and the ψ-based treatmen
 
 ## 7. Summary of what is now closed vs. what remains open
 
-**Closed by this draft (math-only closure; no gate promoted past what I-02 allows without simulation):**
+**Closed by this draft (math-only closure; no gate promoted past what I-02 allows without simulation) — corrected during external review, see §4.1/§4.2 for what changed:**
 - Book1_Ch12 Yellow Audit: "Gravitational field Phi_M(r) derivation... not yet complete" — closed, far-field limit (§2-3).
 - Book1_Ch12 Yellow Audit: "Newton's law derivation (inverse square)... sketch level" — closed (§3, Eq. 7).
-- Book1_Ch12 Future Work: "Derive G from alpha and lattice parameters" — closed (Eq. 8, `G_eff=1/(4πα)`).
+- Book1_Ch12 Future Work: "Derive G from alpha and lattice parameters" — closed, with the corrected form `G_eff=α/(4πa)` (Eq. 8, §4.1) — the originally-stated `1/(4πα)` was wrong, caught by external review, and is not the number to cite.
 - A-115 §7: "derive χ(r) from sources, recover or replace the inverse-square limit" — closed, with the χ/ψ conflation flagged and a resolution proposed (§6).
 - C-307 Yellow Audit: "Endpoint derivation from field geometry not complete" — closed for the central-force/orbital case specifically (§5.1); general case stays open.
-- The shell theorem (§4.2 only — a single extended body's exterior field equals a point source of the same total strength at its centroid) — proven, and it is legitimate support for treating the Sun/Jupiter/Earth/etc. as point sources individually, exactly as `UPDATED_38`-`UPDATED_41` already do.
-- Kepler's First, Second, and Third Laws — derived as the two-body limit of Eq. 7, closing the actual "explain planetary motion" gap that four architecture documents (Updated 38-41) had built on top of without ever reaching.
+- The monopole far-field equivalence (§4.2, corrected — weaker than the "full shell theorem" an earlier version claimed) — exact for the monopole term and for the vanishing dipole about the centroid; exact for the *complete* field only under spherical symmetry. Real, honest support — not an unconditional proof — for treating the Sun/Jupiter/Earth/etc. as approximately point-like at their centers, the way `UPDATED_38`-`UPDATED_41` already do.
+- Kepler's First, Second, and Third Laws — derived as the two-body limit of Eq. 7, closing the actual "explain planetary motion" gap that four architecture documents (Updated 38-41) had built on top of without ever reaching. (Unaffected by the §4.1/§4.2 corrections — the Kepler derivation in §5 uses `G_eff M_eff` symbolically and a single dominant, treated-as-spherical source; it does not depend on the specific numeric formula for `G_eff` or on the general-shape multipole question.)
 
 **Still open (unchanged by this draft, stated so nothing is silently claimed):**
 - `A`'s general nonlinear form (A-105).
 - `b`'s derivation from a deeper node, though it now has physical meaning as `λ²·a` (A-106).
+- **New, from the §4.1 correction: whether `a` (A-106's field-generation coefficient) and `α` (A-105's field-to-response coefficient) are the same constant, related, or genuinely independent is not established anywhere in the source nodes.** `G_eff=α/(4πa)` keeps them as two separate symbols rather than assuming either equality or independence — this is a real, new open question, not a notational nicety.
+- **New, from the §4.2 correction: quadrupole-and-higher corrections for non-spherically-symmetric sources.** Real for any body that isn't a sphere (planetary oblateness, tidal bulges); not derived or estimated here.
 - The equivalence-principle bridge between source strength and response coupling (used explicitly, not derived, in §5).
 - `V''(0)=0` itself is a new assumption, not a derived fact — it is *required* for long-range gravity to exist in this framework, but nothing here derives it from a deeper principle.
 - **§4.3's linear superposition of multiple sources' fields is NOT a justification for `UPDATED_38`/`UPDATED_40`'s finite-wake, assimilation-boundary, or overlap-weight architecture — it is the naive "summing independent gravitational wells to infinity" picture Updated 38 explicitly says its finite-wake hypothesis replaces. An earlier version of this draft (and of the cross-reference notes it added to Updated 38/40/42) wrongly presented superposition as supporting that architecture; corrected in §4.3 and in those documents. Whether a genuine finite-range cutoff can coexist with the long-range `1/r²` limit this draft derives is an open, and possibly hard, question — not one this draft answers.**

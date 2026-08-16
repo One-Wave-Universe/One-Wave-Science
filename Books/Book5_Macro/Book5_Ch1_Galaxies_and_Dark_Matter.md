@@ -89,12 +89,14 @@ chapter does not derive spiral arm structure; it is flagged as a natural
 extension, not yet attempted.
 
 `Internal_Proofs/09_Tidal_Torque_Cascade_Mechanism.md` derives, from this
-framework's own already-verified field, the real mechanism (tidal torque,
+framework's own candidate derived field (corrected after external review —
+see that document's §1), the real mechanism (tidal torque,
 Gray reference: Hoyle 1949, Peebles 1969) by which a galaxy acquires
 rotation from the tidal shear of its surrounding cluster environment during
 formation, and computes that this is dynamically real at the cluster-to-
-galaxy scale (~10⁻²·⁸ tidal ratio, matching real observed spin-parameter
-magnitudes in order of magnitude). This gives the differential-rotation
+galaxy scale (~10⁻²·⁸ tidal ratio — landing near real observed spin-parameter
+magnitudes, a noted coincidental proximity, not a validation: tidal ratio and
+spin parameter are different quantities). This gives the differential-rotation
 starting point spiral-arm derivation would need, but does not itself derive
 spiral structure — still open, now with a more concrete mechanism to build
 from than "natural extension."

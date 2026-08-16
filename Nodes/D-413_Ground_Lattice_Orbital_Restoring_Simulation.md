@@ -109,7 +109,7 @@ If the visible depression and the sampled restoring surface disagree, the render
 
 The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity.
 
-`Internal_Proofs/08_Keplerian_Limit_Derivation.md` now derives, from A-105+A-106's own field equation rather than imposing it, a closed-form exterior profile (`psi(r) = (C/kappa^2)e^{-kappa r}/r + c2/r`, reducing to `-G_eff M_eff/r` for `r >> sqrt(b/a)`) that this simulation's Gaussian well could be checked against or replaced by in a later promotion. This is noted here as a pointer only — D-413 has not been re-run against the derived profile, so this does not change D-413's own imposed-well status or its Required Next Tests below.
+`Internal_Proofs/08_Keplerian_Limit_Derivation.md` derives, from A-105+A-106's own field equation rather than imposing it, a candidate closed-form exterior profile (`psi(r) = (C/kappa^2)e^{-kappa r}/r + c2/r`, reducing to `-G_eff M_eff/r` for `r >> sqrt(b/a)`, `G_eff=alpha/(4*pi*a)` — corrected after external review caught a source-matching error in an earlier version) that this simulation's Gaussian well could be checked against or replaced by in a later promotion. This is noted here as a pointer only — D-413 has not been re-run against the derived profile, so this does not change D-413's own imposed-well status or its Required Next Tests below. Treat the candidate profile as unverified until independently checked again, per Internal_Proofs/08's own correction notice.
 
 ## Bounded Displacement Region
 

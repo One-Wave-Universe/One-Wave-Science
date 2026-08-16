@@ -313,14 +313,20 @@ F = G * m_1 * m_2 / r^2
 
 => G = alpha / (A_M / m)
 
-where A_M / m is the mode amplitude per unit measured mass. The closed form is
-G_eff = 1/(4*pi*alpha), from matching the exterior solution to the total source
-strength via the divergence theorem (Internal_Proofs/08 §4.1) — this derives
-what the line above only related structurally. The bridge from a body's own
-source strength to its own response coupling (needed to turn this into a true
-two-body m_1*m_2 law) remains the open equivalence-principle assumption in
-Prediction 3 below; it is used explicitly, not silently, in the Kepler-law
-derivation in Internal_Proofs/08 §5.
+where A_M / m is the mode amplitude per unit measured mass. The closed form,
+corrected after an external review caught a genuine source-matching error in
+an earlier version, is G_eff = alpha/(4*pi*a) — using BOTH A-105's response
+coefficient alpha (how strongly the field's gradient converts into physical
+response) AND A-106's own field-generation coefficient a (how strongly a
+source generates the field itself), which an earlier version of this result
+wrongly conflated into a single alpha-only formula. See
+Internal_Proofs/08 §4.1 for the corrected derivation. The bridge from a
+body's own source strength to its own response coupling (needed to turn this
+into a true two-body m_1*m_2 law) remains the open equivalence-principle
+assumption in Prediction 3 below; it is used explicitly, not silently, in the
+Kepler-law derivation in Internal_Proofs/08 §5. Whether a and alpha are
+themselves the same constant, related, or independent is a new, separately
+open question (Internal_Proofs/08 §7) — not resolved by this closed form.
 
 Mass-Effect source coefficient:
 
@@ -499,7 +505,7 @@ No separate quantization of a graviton is needed.
 
 - Gravitational field Phi_M(r) derivation from update rule not yet complete — CLOSED for the far-field limit (r >> lambda = sqrt(b/a)) by Internal_Proofs/08_Keplerian_Limit_Derivation.md; the near-field/short-range regime and the general nonlinear operator A remain open.
 - Newton's law derivation (inverse square) from gradient field remains sketch level — CLOSED as a far-field limit, same reference; a genuinely new short-range Yukawa-deviation prediction falls out of the same derivation and is unvalidated.
-- G derivation from alpha and mode amplitude deferred — CLOSED in closed form, G_eff = 1/(4*pi*alpha) (Internal_Proofs/08 §4.1); the separate equivalence-principle bridge (source strength = response coupling, per Prediction 3 below) is NOT closed and is used explicitly, not silently, wherever the closed form is applied to a two-body problem.
+- G derivation from alpha and mode amplitude deferred — CLOSED in closed form, G_eff = alpha/(4*pi*a) (Internal_Proofs/08 §4.1, corrected after external review found the original alpha-only formula mixed two different field equations); the separate equivalence-principle bridge (source strength = response coupling, per Prediction 3 below) is NOT closed and is used explicitly, not silently, wherever the closed form is applied to a two-body problem. Whether a and alpha are related is a new open question, not assumed.
 - Gradient update propagation speed not yet derived from lattice friction limit
 - Coupling threshold R_g >= T_measure not yet experimentally parameterized
 - Relationship between gravitational waves and gradient update formalism deferred
@@ -523,7 +529,8 @@ trial profile actually satisfy r >> lambda for realistic b/a? — not yet
 checked against any specific profile, same open item A-107 already flags).
 
 Derive G from alpha and lattice parameters. — Closed in closed form,
-G_eff=1/(4*pi*alpha).
+G_eff=alpha/(4*pi*a) (corrected after external review; the a-vs-alpha
+relationship itself is now the open item, not the closed-form expression).
 
 Test whether the derived short-range screening length lambda = sqrt(b/a) is
 consistent with existing sub-millimeter inverse-square-law experiments — new
