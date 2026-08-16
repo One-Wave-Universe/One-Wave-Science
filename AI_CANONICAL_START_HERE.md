@@ -31,10 +31,12 @@ Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory,
 
 1. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
 2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
-3. `Nodes/B-222_Oscillation_Center.md`
-4. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
+3. `Books/Proposed_One_Wave_Consciousness/Ch05_Two_Hemispheres_M4_Dream_Administrator_and_Cross_Domain_Coupling.md`
+4. `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`
+5. `Nodes/B-222_Oscillation_Center.md`
+6. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
 
-BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks.
+BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
 
 ## Current Mass-Effect architecture
 
