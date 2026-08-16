@@ -33,8 +33,12 @@ visual pattern alone is not a derivation.
   DOWN/UP over a half-cycle, fixes projected Hold, and is involutive. A full
   phase cycle returns to reference. Center crossing and Hold are independent
   measurements. Artifact: G-729 and `mirror_operator.py` with eight tests.
-- [ ] **A4 — Commitment map:** derive
-  `K(route,history,differential,threshold,phase)->{-3,-2,0,+2,+3}`.
+- [x] **A4 — Commitment map:** implemented a bounded latent coordinate with
+  phase-gated signed drive and Schmitt hysteresis, producing only
+  `{-3,-2,0,+2,+3}`. Single weak receipts cannot create full commitment;
+  repeated aligned history can. Choice-oriented versus absolute-axis movement
+  semantics remains an explicit comparison task. Artifact: G-730 and
+  `commitment_map.py` with nine tests.
 - [ ] **A5 — Ground and Hold proof:** distinguish Ground `(0,0)`, YES/HOLD,
   NO/HOLD, center residence, and dynamic phase-locked Hold.
 - [ ] **A6 — Hysteresis tests:** prove that partial/full commitment does not
