@@ -22,6 +22,7 @@
     <span><strong>Hamiltonian drift</strong> <span id="qvl-drift">0.00%</span></span>
     <span class="viz-badge">topological candidate · Gray point-vortex control</span>
   </div>
+  <div class="text-small qvl-legend">Field colors = phase angle · core colors = identity markers only · connecting lines = pairwise circulation coupling</div>
   <div class="card qvl-stage">
     <canvas id="qvl-canvas" width="704" height="480" aria-label="Three interacting same-sign vortices rotating inside a confined continuous field"></canvas>
   </div>
@@ -34,6 +35,7 @@
 #qvl-root .qvl-stage { padding: 0; overflow: hidden; }
 #qvl-root canvas { display: block; width: 100%; height: auto; background: var(--background); }
 #qvl-root #qvl-detail { color: var(--muted-foreground); margin-top: .4rem; }
+#qvl-root .qvl-legend { color: var(--muted-foreground); margin-bottom: .4rem; }
 @media (max-width: 520px) { #qvl-root .qvl-readout { align-items: flex-start; } }
 </style>
 
@@ -204,6 +206,23 @@
     ctx.beginPath();
     ctx.arc(center[0], center[1], boundaryRadius * canvas.height * 0.39, 0, 2 * Math.PI);
     ctx.stroke();
+    for (let i = 0; i < vortices.length; i += 1) {
+      for (let j = i + 1; j < vortices.length; j += 1) {
+        const left = toCanvas(vortices[i].x, vortices[i].y);
+        const right = toCanvas(vortices[j].x, vortices[j].y);
+        const dx = vortices[i].x - vortices[j].x;
+        const dy = vortices[i].y - vortices[j].y;
+        const strength = Number(couplingInput.value) / (dx * dx + dy * dy + 0.0025);
+        ctx.strokeStyle = foreground;
+        ctx.globalAlpha = Math.min(0.65, 0.16 + 0.12 * strength);
+        ctx.lineWidth = Math.min(3.5, 0.8 + 0.35 * strength);
+        ctx.beginPath();
+        ctx.moveTo(left[0], left[1]);
+        ctx.lineTo(right[0], right[1]);
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
     vortices.forEach((vortex, index) => {
       ctx.strokeStyle = colors[index];
       ctx.globalAlpha = 0.55;
@@ -269,7 +288,7 @@
   });
   resetButton.addEventListener("click", reset);
   viewSelect.addEventListener("change", () => {
-    detail.textContent = viewSelect.value === "flow" ? "Arrows = phase-gradient flow · trails = vortex Paths" : "Point = vortex core · Path = orbital trace · Field = phase circulation";
+    detail.textContent = viewSelect.value === "flow" ? "Arrows = phase-gradient flow · trails = vortex Paths · links = pair interactions" : "Point = vortex core · Path = orbital trace · Field = phase circulation · links = pair interactions";
     render();
   });
   couplingInput.addEventListener("input", () => { couplingValue.textContent = Number(couplingInput.value).toFixed(2); initialHamiltonian = hamiltonian(vortices); });
@@ -278,3 +297,4 @@
   requestAnimationFrame(frame);
 })();
 </script>
+
