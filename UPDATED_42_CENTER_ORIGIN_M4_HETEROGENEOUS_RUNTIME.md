@@ -95,7 +95,7 @@ Mind-side identity is locked as:
 
 - `FIELD = FIVE MIND = DREAM ENGINE`;
 - `VOID = SIX MIND = ADMINISTRATOR`;
-- `M4 = shared active center, timing carrier, scale-weigher, and bidirectional translator`.
+- `M4 = BRAINSTEM = shared active center, timing carrier, scale-weigher, and bidirectional translator`.
 
 Void is not nonexistence. In this architecture it is the reference, receiving,
 containing, constraining, and committing side through which Field possibilities
