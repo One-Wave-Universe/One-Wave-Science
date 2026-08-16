@@ -43,8 +43,11 @@ visual pattern alone is not a derivation.
   NO/HOLD, center residence, center crossing, turning-point Hold, and coherent
   phase-locked Hold now emit separate receipts. Zero speed alone is not a
   coherent Hold. Artifact: G-731 and `ground_hold_classifier.py` with nine tests.
-- [ ] **A6 — Hysteresis tests:** prove that partial/full commitment does not
-  chatter under noise or collapse distinct histories into one state.
+- [x] **A6 — Hysteresis noise audit:** seeded Monte Carlo tests quantify
+  chatter and false full-entry events. Hysteresis sharply reduces partial-state
+  chatter but cannot prevent rare excursions accumulated over long windows;
+  full commitment needs dwell/multi-sample confirmation. Artifact: G-733 and
+  `noise_hysteresis_audit.py` with seven tests.
 
 ## B. Center-origin oscillation and six recursive gates
 
