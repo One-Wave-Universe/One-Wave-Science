@@ -12,7 +12,9 @@ Current update handoff:
 4. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
 5. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
 6. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
-7. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
+8. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
+9. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
 8. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
 9. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
 10. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
