@@ -51,8 +51,10 @@ visual pattern alone is not a derivation.
 
 ## B. Center-origin oscillation and six recursive gates
 
-- [ ] **B1 — Asymmetric oscillator:** solve and sweep
-  `x_ddot+2*zeta*omega0*x_dot+a*x^3-b*x-h=u(t)`.
+- [x] **B1 — Asymmetric oscillator reference:** exact fold, equilibria,
+  stability, barriers, phase response, RK4 dynamics, and energy/work ledger are
+  implemented in G-734. Field-level coefficient derivation remains open and is
+  now subordinate to the Micro simulator freeze.
 - [ ] **B2 — Center geometry:** test whether the shared middle is a point,
   finite band, crossing surface, limit-cycle section, or slow manifold.
 - [ ] **B3 — Six-gate extraction:** derive Begin, coherent Build, Hold/Mass
