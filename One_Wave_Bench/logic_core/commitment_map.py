@@ -92,6 +92,18 @@ def _read_level(latent: float, previous: int, p: CommitmentParameters) -> int:
     return 0
 
 
+def read_commitment_level(
+    latent: float,
+    previous: int = 0,
+    parameters: CommitmentParameters = CommitmentParameters(),
+) -> int:
+    """Public deterministic readout for threshold and noise audits."""
+
+    if previous not in VALID_LEVELS:
+        raise ValueError(f"invalid previous commitment level: {previous}")
+    return _read_level(latent, previous, parameters)
+
+
 def update_commitment(
     state: CommitmentState,
     route: LogicRoute,
@@ -138,4 +150,3 @@ def run_history(
         receipts.append(receipt)
         state = receipt.after
     return tuple(receipts)
-
