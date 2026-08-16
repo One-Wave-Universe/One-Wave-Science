@@ -11,10 +11,9 @@ processing sides. `hemisphere` is a functional engineering name here. It does
 not claim that biological left and right cerebral hemispheres divide exactly
 this way.
 
-### Five Mind — Dream Engine / Field hemisphere
+### Five Mind — Dream Engine / expressive hemisphere
 
-Five Mind is the **Field side** of the mind. It expands the current state into
-possible futures:
+Five Mind expands the current state into possible futures:
 
 - association and imagery;
 - candidate meanings and actions;
@@ -29,12 +28,9 @@ valuable, dangerous, impossible, contradictory, or unfinished. The Dream
 Engine must be allowed to explore without being allowed to silently promote an
 image into fact or irreversible action.
 
-### Six Mind — Administrator / Void hemisphere
+### Six Mind — Administrator / compressive hemisphere
 
-Six Mind is the **Void side** of the mind. Void does not mean absent, empty, or
-inactive. It is the reference, receiving, containing, limiting, and commitment
-side against which Field possibilities become distinguishable. Six Mind
-compresses possibilities against continuity:
+Six Mind compresses possibilities against continuity:
 
 - identity and committed state;
 - exact memory and source authority;
@@ -49,14 +45,11 @@ continuity/commitment function of the same mind. If it dominates, the system
 locks and cannot adapt. If it is absent, the system disperses across uncommitted
 possibilities.
 
-### M4 — Brainstem / scale-and-timing center
+### M4 — shared brainstem / scale-and-timing center
 
-M4 **is the Brainstem and subconscious fast-brain layer**: the automatic
-transmission, operator relay station, memory-recall router, and state/scale
-router between the two hemispheres. It maintains their fast reciprocal
-relationship without waiting for slow deliberate administration. It does not
-invent the Dream Engine's content and does not own the Administrator's final
-commitment or authoritative memory archive.
+M4 sits functionally between the two sides and maintains their fast reciprocal
+relationship. It does not invent the Dream Engine's content and does not own
+the Administrator's final commitment.
 
 M4 measures and modulates:
 
@@ -68,21 +61,6 @@ M4 measures and modulates:
 - whether the current state should increase, hold, decrease, redirect, or stop;
 - completion scores for the two six-gate systems.
 
-M4 automatically performs:
-
-- incoming signal relay and outgoing transmission routing;
-- operator selection/routing for Signal, Projection, Differential, and Amplification;
-- rapid associative memory recall from partial cues;
-- learned pattern and procedural-response retrieval;
-- state classification and scale selection;
-- automatic orienting, protection, startle, hold, and return proposals;
-- escalation to the Administrator when novelty, conflict, danger, or commitment
-  exceeds its permitted automatic envelope.
-
-Recall and storage are separate. M4 may retrieve an associative pattern quickly;
-the Void/Administrator owns authoritative long-term state, permissions, exact
-records, and final commitment.
-
 M4 is the active `0` region: a switching and synchronization field, not empty
 nothing and not a frozen midpoint.
 
@@ -90,11 +68,10 @@ nothing and not a frozen midpoint.
 
 Write the two functional sides around their shared timing/reference center as
 
-`FIELD / DREAM  1 (0) 1  VOID / ADMINISTRATOR`.
+`Dream / Expressive  1 (0) 1  Administrative / Compressive`.
 
-The two `1` terms mean the coherent Field and Void processors retaining their
-functions. `(0)` is the M4 Brainstem: their shared active reference,
-comparison, timing, translation, and phase-change region.
+The two `1` terms mean two coherent processors retaining identity. `(0)` means
+their shared active reference, comparison, timing, and phase-change region.
 
 The minimum loop is:
 
@@ -124,12 +101,16 @@ Its declared interpretation is:
 - `>` and `<`: inward fan-in and reciprocal return toward the shared center,
   not greater-than comparisons.
 
+`1:1` is the ultimate compression relation: everything held together as one
+coherent whole. It is not a one-dimensional Mirror Gate and does not expand to
+an invented `1 > 1(0)1 < 2` row.
+
 | Native layer | Coordination form | Meaning |
 |---|---|---|
-| 1D | `1 > 1(0)1 < 2` | one line-axis pair, two directed routes |
-| 2D | `3 > 1(0)1 < 6` | three planar mirrored axes, six directed neighbors |
-| 3D | `6 > 1(0)1 < 12` | six declared opposite pairs, twelve directed shell relations |
-| 4D recurrence | `12 > 1(0)1 < 24` | twelve paired recurrence families, twenty-four directed recurrence positions |
+| Ultimate compression | `1:1` | everything as one coherent relationship |
+| 2D Mirror Gate | `3 > 1(0)1 < 6` | three planar mirrored axes cross through the shared two-sided center into six directed neighbors |
+| 3D Mirror Gate | `6 > 1(0)1 < 12` | six declared opposite pairs cross into twelve directed shell relations |
+| 4D Mirror Gate | `12 > 1(0)1 < 24` | twelve paired recurrence families cross into twenty-four directed recurrence positions |
 
 The repeated numbers are intentional. They express the same recursive
 compression/expansion architecture changing form as the native category gains
@@ -142,10 +123,12 @@ paired relationships compress toward a coherent center
 -> the completed route shell becomes the paired basis of the next layer
 ```
 
-Therefore the recursion is
+Therefore the dimensional recursion is
 
-`1 pair -> 2 routes`, `3 pairs -> 6 routes`, `6 pairs -> 12 routes`,
-`12 pairs -> 24 routes`.
+`1:1 ultimate compression -> 3/6 2D gate -> 6/12 3D gate -> 12/24 4D gate`.
+
+The directed completion of each dimensional gate supplies the numerical basis
+for the paired input of the next dimensional gate: `6 -> 6`, then `12 -> 12`.
 
 The output route organization of one category can become the compressed axis
 basis of the next category. This is why the numbers match. The architecture is
@@ -401,4 +384,5 @@ not delete their units or replace their established control equations.
 7. Music: detect build, plateau, break/drop, release, and phase-shifted return.
 8. Physiology: test the grammar only against consented, anonymized measured datasets.
 9. Quasar: compare the normalized grammar against Gray accretion/MHD simulations.
-10. Dimensional shells: verify `N`, `2N`, center, and projection metadata separately in 1D–4D.
+10. Compression and dimensional shells: verify `1:1` unity separately from the
+    2D, 3D, and 4D Mirror Gates; then verify `N`, `2N`, center, and projection metadata.
