@@ -11,9 +11,10 @@ processing sides. `hemisphere` is a functional engineering name here. It does
 not claim that biological left and right cerebral hemispheres divide exactly
 this way.
 
-### Five Mind — Dream Engine / expressive hemisphere
+### Five Mind — Dream Engine / Field hemisphere
 
-Five Mind expands the current state into possible futures:
+Five Mind is the **Field side** of the mind. It expands the current state into
+possible futures:
 
 - association and imagery;
 - candidate meanings and actions;
@@ -28,9 +29,12 @@ valuable, dangerous, impossible, contradictory, or unfinished. The Dream
 Engine must be allowed to explore without being allowed to silently promote an
 image into fact or irreversible action.
 
-### Six Mind — Administrator / compressive hemisphere
+### Six Mind — Administrator / Void hemisphere
 
-Six Mind compresses possibilities against continuity:
+Six Mind is the **Void side** of the mind. Void does not mean absent, empty, or
+inactive. It is the reference, receiving, containing, limiting, and commitment
+side against which Field possibilities become distinguishable. Six Mind
+compresses possibilities against continuity:
 
 - identity and committed state;
 - exact memory and source authority;
@@ -68,10 +72,11 @@ nothing and not a frozen midpoint.
 
 Write the two functional sides around their shared timing/reference center as
 
-`Dream / Expressive  1 (0) 1  Administrative / Compressive`.
+`FIELD / DREAM  1 (0) 1  VOID / ADMINISTRATOR`.
 
-The two `1` terms mean two coherent processors retaining identity. `(0)` means
-their shared active reference, comparison, timing, and phase-change region.
+The two `1` terms mean the coherent Field and Void processors retaining their
+functions. `(0)` is M4: their shared active reference, comparison, timing,
+translation, and phase-change region.
 
 The minimum loop is:
 
