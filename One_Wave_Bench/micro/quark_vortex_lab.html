@@ -1,0 +1,280 @@
+<div id="qvl-root">
+  <div class="viz-controls">
+    <button id="qvl-run" class="btn btn-primary" type="button" aria-pressed="true">Pause</button>
+    <button id="qvl-reset" class="btn" type="button">Reset</button>
+    <label class="form-label" for="qvl-view">Field view
+      <select id="qvl-view" class="form-select">
+        <option value="phase">Phase + core</option>
+        <option value="amplitude">Amplitude</option>
+        <option value="flow">Phase flow</option>
+      </select>
+    </label>
+    <label class="form-label" for="qvl-coupling">Vortex coupling <span id="qvl-coupling-value">1.00</span>
+      <input id="qvl-coupling" class="form-range" type="range" min="0.35" max="1.8" value="1" step="0.05">
+    </label>
+    <label class="form-label" for="qvl-core">Core size <span id="qvl-core-value">0.11</span>
+      <input id="qvl-core" class="form-range" type="range" min="0.05" max="0.22" value="0.11" step="0.01">
+    </label>
+  </div>
+  <div class="viz-row qvl-readout" aria-live="polite">
+    <span><strong>Winding</strong> <span id="qvl-winding">+3</span></span>
+    <span><strong>Mean separation</strong> <span id="qvl-separation">0.90</span></span>
+    <span><strong>Hamiltonian drift</strong> <span id="qvl-drift">0.00%</span></span>
+    <span class="viz-badge">topological candidate · Gray point-vortex control</span>
+  </div>
+  <div class="card qvl-stage">
+    <canvas id="qvl-canvas" width="704" height="480" aria-label="Three interacting same-sign vortices rotating inside a confined continuous field"></canvas>
+  </div>
+  <div id="qvl-detail" class="text-small">Point = vortex core · Path = orbital trace · Field = phase circulation</div>
+</div>
+
+<style>
+#qvl-root { color: var(--foreground); width: 100%; }
+#qvl-root .qvl-readout { justify-content: flex-start; gap: 1rem; margin: .5rem 0; }
+#qvl-root .qvl-stage { padding: 0; overflow: hidden; }
+#qvl-root canvas { display: block; width: 100%; height: auto; background: var(--background); }
+#qvl-root #qvl-detail { color: var(--muted-foreground); margin-top: .4rem; }
+@media (max-width: 520px) { #qvl-root .qvl-readout { align-items: flex-start; } }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById("qvl-root");
+  const canvas = document.getElementById("qvl-canvas");
+  const ctx = canvas.getContext("2d", { alpha: false });
+  const runButton = document.getElementById("qvl-run");
+  const resetButton = document.getElementById("qvl-reset");
+  const viewSelect = document.getElementById("qvl-view");
+  const couplingInput = document.getElementById("qvl-coupling");
+  const coreInput = document.getElementById("qvl-core");
+  const couplingValue = document.getElementById("qvl-coupling-value");
+  const coreValue = document.getElementById("qvl-core-value");
+  const windingText = document.getElementById("qvl-winding");
+  const separationText = document.getElementById("qvl-separation");
+  const driftText = document.getElementById("qvl-drift");
+  const detail = document.getElementById("qvl-detail");
+
+  let running = true;
+  let lastTime = performance.now();
+  let accumulator = 0;
+  const fixedDt = 0.0025;
+  const boundaryRadius = 1.04;
+  const trailLimit = 260;
+  let vortices = [];
+  let initialHamiltonian = 0;
+
+  const colorProbe = document.createElement("canvas");
+  colorProbe.width = colorProbe.height = 1;
+  const colorCtx = colorProbe.getContext("2d");
+  function cssRgb(name) {
+    colorCtx.clearRect(0, 0, 1, 1);
+    colorCtx.fillStyle = getComputedStyle(root).getPropertyValue(name).trim();
+    colorCtx.fillRect(0, 0, 1, 1);
+    return Array.from(colorCtx.getImageData(0, 0, 1, 1).data.slice(0, 3));
+  }
+  function palette() {
+    return [1,2,3,4,5,6].map(i => cssRgb("--viz-series-" + i));
+  }
+  function mix(a, b, t) {
+    return [0,1,2].map(i => Math.round(a[i] + (b[i] - a[i]) * t));
+  }
+  function phaseColor(phase, colors) {
+    const turn = ((phase / (2 * Math.PI)) % 1 + 1) % 1;
+    const scaled = turn * colors.length;
+    const index = Math.floor(scaled) % colors.length;
+    return mix(colors[index], colors[(index + 1) % colors.length], scaled - Math.floor(scaled));
+  }
+
+  function reset() {
+    const radius = 0.52;
+    vortices = [0, 1, 2].map(index => {
+      const angle = -Math.PI / 2 + index * 2 * Math.PI / 3;
+      return { x: radius * Math.cos(angle), y: radius * Math.sin(angle), q: 1, trail: [] };
+    });
+    initialHamiltonian = hamiltonian(vortices);
+    lastTime = performance.now();
+    accumulator = 0;
+    render();
+  }
+
+  function derivative(state) {
+    const coupling = Number(couplingInput.value);
+    return state.map((vortex, i) => {
+      let vx = 0;
+      let vy = 0;
+      for (let j = 0; j < state.length; j += 1) {
+        if (i === j) continue;
+        const dx = vortex.x - state[j].x;
+        const dy = vortex.y - state[j].y;
+        const r2 = dx * dx + dy * dy + 0.0025;
+        vx += -coupling * state[j].q * dy / (2 * Math.PI * r2);
+        vy +=  coupling * state[j].q * dx / (2 * Math.PI * r2);
+      }
+      const r2 = vortex.x * vortex.x + vortex.y * vortex.y;
+      const wall = 0.24 / Math.max(0.08, boundaryRadius * boundaryRadius - r2);
+      vx += -wall * vortex.y;
+      vy +=  wall * vortex.x;
+      return { x: vx, y: vy };
+    });
+  }
+
+  function shifted(state, slope, amount) {
+    return state.map((vortex, i) => ({ ...vortex, x: vortex.x + amount * slope[i].x, y: vortex.y + amount * slope[i].y }));
+  }
+  function step(dt) {
+    const k1 = derivative(vortices);
+    const k2 = derivative(shifted(vortices, k1, dt / 2));
+    const k3 = derivative(shifted(vortices, k2, dt / 2));
+    const k4 = derivative(shifted(vortices, k3, dt));
+    vortices.forEach((vortex, i) => {
+      vortex.x += dt * (k1[i].x + 2 * k2[i].x + 2 * k3[i].x + k4[i].x) / 6;
+      vortex.y += dt * (k1[i].y + 2 * k2[i].y + 2 * k3[i].y + k4[i].y) / 6;
+      vortex.trail.push([vortex.x, vortex.y]);
+      if (vortex.trail.length > trailLimit) vortex.trail.shift();
+    });
+  }
+
+  function hamiltonian(state) {
+    const coupling = Number(couplingInput.value);
+    let energy = 0;
+    for (let i = 0; i < state.length; i += 1) {
+      for (let j = i + 1; j < state.length; j += 1) {
+        const dx = state[i].x - state[j].x;
+        const dy = state[i].y - state[j].y;
+        energy -= coupling * state[i].q * state[j].q * Math.log(dx * dx + dy * dy + 0.0025) / (4 * Math.PI);
+      }
+      const r2 = state[i].x * state[i].x + state[i].y * state[i].y;
+      energy -= 0.12 * Math.log(Math.max(0.08, boundaryRadius * boundaryRadius - r2));
+    }
+    return energy;
+  }
+
+  function fieldAt(x, y) {
+    let phase = 0;
+    let amplitude = Math.sqrt(Math.max(0, 1 - Math.pow(Math.hypot(x, y) / boundaryRadius, 8)));
+    const core = Number(coreInput.value);
+    vortices.forEach(vortex => {
+      const dx = x - vortex.x;
+      const dy = y - vortex.y;
+      phase += vortex.q * Math.atan2(dy, dx);
+      amplitude *= Math.tanh(Math.hypot(dx, dy) / core);
+    });
+    return { phase, amplitude };
+  }
+
+  function renderField() {
+    const width = canvas.width;
+    const height = canvas.height;
+    const image = ctx.createImageData(width, height);
+    const colors = palette();
+    const background = cssRgb("--background");
+    const view = viewSelect.value;
+    for (let py = 0; py < height; py += 2) {
+      const y = (height / 2 - py) / (height * 0.39);
+      for (let px = 0; px < width; px += 2) {
+        const x = (px - width / 2) / (height * 0.39);
+        const field = fieldAt(x, y);
+        let rgb;
+        if (view === "amplitude") {
+          rgb = mix(background, colors[0], Math.min(1, field.amplitude));
+        } else {
+          const phaseRgb = phaseColor(field.phase, colors);
+          rgb = mix(background, phaseRgb, Math.min(1, 0.18 + 0.82 * field.amplitude));
+        }
+        for (let oy = 0; oy < 2; oy += 1) for (let ox = 0; ox < 2; ox += 1) {
+          const index = 4 * ((py + oy) * width + px + ox);
+          image.data[index] = rgb[0]; image.data[index + 1] = rgb[1]; image.data[index + 2] = rgb[2]; image.data[index + 3] = 255;
+        }
+      }
+    }
+    ctx.putImageData(image, 0, 0);
+  }
+
+  function toCanvas(x, y) {
+    const scale = canvas.height * 0.39;
+    return [canvas.width / 2 + x * scale, canvas.height / 2 - y * scale];
+  }
+  function renderOverlay() {
+    const foreground = getComputedStyle(root).getPropertyValue("--foreground").trim();
+    const muted = getComputedStyle(root).getPropertyValue("--muted-foreground").trim();
+    const colors = [1,2,3].map(i => getComputedStyle(root).getPropertyValue("--viz-series-" + i).trim());
+    ctx.strokeStyle = muted;
+    ctx.lineWidth = 1.5;
+    const center = toCanvas(0, 0);
+    ctx.beginPath();
+    ctx.arc(center[0], center[1], boundaryRadius * canvas.height * 0.39, 0, 2 * Math.PI);
+    ctx.stroke();
+    vortices.forEach((vortex, index) => {
+      ctx.strokeStyle = colors[index];
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      vortex.trail.forEach((point, pointIndex) => {
+        const mapped = toCanvas(point[0], point[1]);
+        if (pointIndex === 0) ctx.moveTo(mapped[0], mapped[1]); else ctx.lineTo(mapped[0], mapped[1]);
+      });
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      const mapped = toCanvas(vortex.x, vortex.y);
+      ctx.fillStyle = colors[index];
+      ctx.beginPath(); ctx.arc(mapped[0], mapped[1], 6, 0, 2 * Math.PI); ctx.fill();
+      ctx.strokeStyle = foreground; ctx.lineWidth = 1; ctx.stroke();
+    });
+    if (viewSelect.value === "flow") {
+      ctx.strokeStyle = foreground;
+      ctx.fillStyle = foreground;
+      ctx.globalAlpha = 0.55;
+      for (let gy = -4; gy <= 4; gy += 1) for (let gx = -6; gx <= 6; gx += 1) {
+        const x = gx * 0.15, y = gy * 0.15;
+        if (Math.hypot(x, y) > 0.92) continue;
+        let vx = 0, vy = 0;
+        vortices.forEach(vortex => {
+          const dx = x-vortex.x, dy = y-vortex.y, r2 = dx*dx+dy*dy+0.012;
+          vx += -vortex.q*dy/r2; vy += vortex.q*dx/r2;
+        });
+        const magnitude = Math.hypot(vx, vy) || 1;
+        const start = toCanvas(x, y);
+        ctx.beginPath(); ctx.moveTo(start[0], start[1]);
+        ctx.lineTo(start[0] + 10*vx/magnitude, start[1] - 10*vy/magnitude); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function updateReadout() {
+    let separation = 0, pairs = 0;
+    for (let i = 0; i < vortices.length; i += 1) for (let j = i + 1; j < vortices.length; j += 1) {
+      separation += Math.hypot(vortices[i].x-vortices[j].x, vortices[i].y-vortices[j].y); pairs += 1;
+    }
+    const drift = initialHamiltonian === 0 ? 0 : 100 * (hamiltonian(vortices)-initialHamiltonian) / Math.abs(initialHamiltonian);
+    windingText.textContent = "+" + vortices.reduce((sum, vortex) => sum + vortex.q, 0);
+    separationText.textContent = (separation / pairs).toFixed(3);
+    driftText.textContent = drift.toFixed(3) + "%";
+  }
+  function render() { renderField(); renderOverlay(); updateReadout(); }
+  function frame(now) {
+    const elapsed = Math.min(0.04, (now-lastTime)/1000); lastTime = now;
+    if (running) {
+      accumulator += elapsed;
+      while (accumulator >= fixedDt) { step(fixedDt); accumulator -= fixedDt; }
+      render();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  runButton.addEventListener("click", () => {
+    running = !running;
+    runButton.textContent = running ? "Pause" : "Run";
+    runButton.setAttribute("aria-pressed", String(running));
+    lastTime = performance.now();
+  });
+  resetButton.addEventListener("click", reset);
+  viewSelect.addEventListener("change", () => {
+    detail.textContent = viewSelect.value === "flow" ? "Arrows = phase-gradient flow · trails = vortex Paths" : "Point = vortex core · Path = orbital trace · Field = phase circulation";
+    render();
+  });
+  couplingInput.addEventListener("input", () => { couplingValue.textContent = Number(couplingInput.value).toFixed(2); initialHamiltonian = hamiltonian(vortices); });
+  coreInput.addEventListener("input", () => { coreValue.textContent = Number(coreInput.value).toFixed(2); render(); });
+  reset();
+  requestAnimationFrame(frame);
+})();
+</script>
