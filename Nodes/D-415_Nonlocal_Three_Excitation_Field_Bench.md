@@ -13,8 +13,9 @@ metadata_standard: "I-06"
 
 **Planetary visual:**
 `Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/planetary_visual.html` —
-cinematic 16:9 Point–Path–Field projection with four planetary scenes and
-direct 20-second 1080p WebM recording.
+cinematic 16:9 Point–Path–Field projection with planetary scenes, nested wakes,
+and a diffuse-to-spiral galactic arm-formation sequence, with direct 20-second
+1080p WebM recording.
 
 ## Purpose
 
