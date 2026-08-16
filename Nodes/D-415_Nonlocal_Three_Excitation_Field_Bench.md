@@ -21,6 +21,11 @@ and a diffuse-to-spiral galactic arm-formation sequence, with direct 20-second
 `Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/render_galaxy_video.py` —
 browser-free deterministic spiral-arm animation rendered directly to H.264 MP4.
 
+**Math-gap audit:**
+`Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/sweep_math_gaps.py` and
+`MATH_GAPS.md` — reproducible factor sweeps, ablations, refinement receipts,
+and an explicit list of missing mathematical operators.
+
 ## Purpose
 
 D-415 is the first runnable attack on a three-excitation problem using one
