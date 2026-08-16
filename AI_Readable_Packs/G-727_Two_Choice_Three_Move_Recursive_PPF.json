@@ -1,0 +1,38 @@
+{
+  "node_id": "G-727",
+  "title": "Two Choice, Three Move, and Recursive Point-Path-Field",
+  "status": {
+    "finite_logic": "YELLOW",
+    "physical_dynamics": "PROPOSED"
+  },
+  "binary_choice": {
+    "valid": {"yes": [1, 0], "no": [0, 1]},
+    "ground_not_choice": [0, 0],
+    "conflict": [1, 1]
+  },
+  "ternary_movement": [-1, 0, 1],
+  "route_count": 6,
+  "ppf_rotations": {
+    "point": "intrinsic or local orientation about a center",
+    "path": "turning, orbit, or circulation of a transported center",
+    "field": "circulation or curl of the enclosing carrier or boundary",
+    "recursive": true
+  },
+  "dimensional_candidates": {
+    "2d": "3 > 1(0)1 < 6",
+    "3d": "6 > 1(0)1 < 12",
+    "4d_recurrence": "12 > 1(0)1 < 24"
+  },
+  "orbital_guardrail": {
+    "baseline": ["Newtonian barycentric N-body", "appropriate relativistic or post-Newtonian reference"],
+    "extension_form": "a = a_Gray + delta_a_OW",
+    "must_recover_gray_limit": true,
+    "must_use_held_out_tests": true
+  },
+  "open_derivations": [
+    "commitment map",
+    "nested PPF frame connection",
+    "2D-to-3D and 3D-to-4D transforms",
+    "common One-Wave orbital correction law"
+  ]
+}
