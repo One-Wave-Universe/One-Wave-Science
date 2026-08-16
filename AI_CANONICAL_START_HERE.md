@@ -6,14 +6,16 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 Current update handoff:
 
-1. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-2. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-3. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-4. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-5. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-6. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-7. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-8. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
+3. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+4. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+5. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+6. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+7. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+8. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+9. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+10. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 These files summarize the current separation among geometry, route grammar, procedural memory, foundational choice, binary oversight, and downstream spectral audit.
 
@@ -22,6 +24,17 @@ These files summarize the current separation among geometry, route grammar, proc
 A previous draft incorrectly treated a propagation constraint as a source of inertia. That statement entered the repository through a misunderstanding of C-309. It was not derived from One-Wave primitives, it conflicts with the four-interaction architecture, and it is permanently removed.
 
 Do not reconstruct that claim from synonyms. In particular, do not derive Mass Effect from propagation speed, propagation failure, damping, localization, transport share, friction limit, or any ratio between local and transported update terms.
+
+## Center-Origin M4 correction
+
+Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory, or any M4/brainstem build, read:
+
+1. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
+3. `Nodes/B-222_Oscillation_Center.md`
+4. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
+
+BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks.
 
 ## Current Mass-Effect architecture
 
