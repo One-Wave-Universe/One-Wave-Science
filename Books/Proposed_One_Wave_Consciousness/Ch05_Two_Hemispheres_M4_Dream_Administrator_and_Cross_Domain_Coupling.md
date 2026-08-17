@@ -87,6 +87,48 @@ Information always travels both ways. A proposal carries expression forward;
 reference, resistance, limits, and correction travel backward during the same
 exchange.
 
+### Minimal synchronized-mind hypothesis
+
+A compact engineering interpretation treats the mind as two reciprocal state
+machines synchronized through a fast router and corrected through consequence:
+
+1. **Compressive machine** — filters noise, inhibits incompatible responses,
+   compresses experience into patterns, and preserves continuity and boundary.
+2. **Expressive machine** — expands associations, generates possible futures,
+   communicates, acts, and tests patterns against the surrounding world.
+3. **Fast subconscious router** — detects salience, routes sensation and recalled
+   patterns, allocates attention, and initiates learned responses before slower
+   deliberation completes.
+4. **Control-feedback loop** — compares predicted and observed consequence, then
+   changes routing, compression, expression, and stored reference for the next
+   cycle.
+
+One minimal discrete form is
+
+\[
+r_t=R(s_t,m_t,f_{t-1}),
+\]
+
+\[
+c_{t+1}=C(c_t,r_t),\qquad
+e_{t+1}=E(e_t,r_t,c_{t+1}),
+\]
+
+\[
+a_t=G(c_{t+1},e_{t+1}),\qquad
+f_t=o_t-\hat{o}_t.
+\]
+
+Here \(R\) is fast routing, \(C\) is compression, \(E\) is expressive candidate
+generation, \(G\) gates an external or internal action, and \(f_t\) is the
+observed-minus-predicted consequence. The feedback term is descriptive, not a
+license for an external controller to dominate the system.
+
+The architectural claim is synchronization rather than victory by either
+side: **compress without silencing; express without losing coherence; route
+quickly; correct through consequence.** This remains a programmable hypothesis,
+not proof that all biological or artificial minds reduce to four modules.
+
 ## 3. Dimensional coordination grammar
 
 The proposed compression/route notation is
@@ -357,6 +399,10 @@ MindState {
   working_ground,
   dream_candidates,
   administrator_constraints,
+  fast_subconscious_router,
+  predicted_outcome,
+  observed_outcome,
+  consequence_feedback,
   m4_activation_integrity_polarity,
   phase_and_timing,
   stability_gates[6],
@@ -386,3 +432,7 @@ not delete their units or replace their established control equations.
 9. Quasar: compare the normalized grammar against Gray accretion/MHD simulations.
 10. Compression and dimensional shells: verify `1:1` unity separately from the
     2D, 3D, and 4D Mirror Gates; then verify `N`, `2N`, center, and projection metadata.
+11. Router ablation: delay or scramble fast routing and measure attention,
+    reaction-time, and incorrect-gate costs without redefining speed as intelligence.
+12. Feedback ablation: remove observed-minus-predicted correction and measure
+    repeated error, runaway expression, and compressive lock.
