@@ -1,88 +1,73 @@
 ---
 node_id: "B-223"
-canonical_name: "Three Moves (Up / Stay / Down)"
+canonical_name: "Three Moves — Left, Stay, Right"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
-classification: "Directional Motion System"
-claim_gate_detail: "None"
+classification: "Cycle and Relationship Structure"
+claim_gate_detail: "Implementation-canonical signed ternary relation; domain names remain representations"
 metadata_standard: "I-06"
 ---
 
-# Node B-223: Three Moves (Up / Stay / Down)
+# Node B-223: Three Moves — Left, Stay, Right
 
-Reason:
-Correction notice: an earlier version of this node incorrectly defined
-the three moves as {Expression, Compression, Mirror}. That was wrong —
-Mirror (B-205) is a separate flip mechanism, not one of the three moves.
-The correct structure, below, is a three-valued directional vector.
+## Definition
 
-Dependencies:
-Upstream: A-101 Ground / Zero (Void — the reference field the moves act relative to)
-Downstream: B-224 Two Choices (the bias applied to a move), B-221 Six Recursive Steps (Hold step corresponds to Stay)
+The Three Moves are the ternary directional result of a differential around the active reference:
 
-Definition:
-The Three Moves describe HOW a state changes — the three fundamental
-transitions available to any state, given as a signed vector:
+```text
+-1 = LEFT
+ 0 = STAY / HOLD / NON-ACTION
++1 = RIGHT
+```
 
-UP (+): Expansion, increase, expression. Moves away from the current
-  compressed state. More possibility, more degrees of freedom, greater
-  external relationship. Field Action: Expression (B-203).
-  Questions: "What can this become?" / "What new relationship can form?"
+The labels Left and Right are orientation labels, not absolute spatial directions. A domain may rename them Compress/Hold/Expand, CCW/Hold/CW, negative/neutral/positive, or another equivalent signed representation without changing the primitive.
 
-STAY (0): Maintenance, balance, coherence. Preserves the current
-  relationship while monitoring change — stability without freezing.
-  Field Action: Hold. NO DEDICATED NODE EXISTS FOR THIS YET — "Hold"
-  currently only appears as a step inside B-221's six-step cycle, not
-  as its own standalone primitive the way B-203/B-204 are. This is a
-  real gap, not yet filled.
-  Questions: "Is this state still coherent?" / "Does this pattern need adjustment?"
+## Differential Rule
 
-DOWN (-): Compression, return, integration. Moves toward simpler or
-  more concentrated states. Reduction, storage, restoration.
-  Field Action: Compression (B-204).
-  Questions: "What can be conserved?" / "What returns to the center?"
+For a measured relation `Delta` and zero window `epsilon`:
 
-Three Move Cycle: UP -> Expansion, STAY -> Stabilization, DOWN -> Integration.
+```text
+Delta < -epsilon  -> -1
+|Delta| <= epsilon -> 0
+Delta > +epsilon  -> +1
+```
 
-This node describes the MOVE layer specifically — the vector itself
-(+/0/-). It does NOT describe why a move goes up or down; that bias is
-B-224 Two Choices, a separate layer. See Mathematics below for how the
-two layers relate.
+The zero state is a real no-assertion/hold result, not a third actively driven polarity.
 
-Mathematics:
-Move (this node) and Choice (B-224) are related but distinct:
-- Move is a 3-valued vector: {+, 0, -} = {UP, STAY, DOWN}
-- Choice is a 2-valued bias: {Compression, Expression}
-- UP's Field Action IS Expression, and DOWN's Field Action IS
-  Compression — meaning for nonzero moves, Move and Choice are tightly
-  coupled (a + move IS an Expression choice manifesting; a - move IS a
-  Compression choice manifesting).
-- STAY (0) is the case where no directional choice is currently
-  manifesting as motion — not the same as "no choice exists," more
-  like a choice held in reserve or in equilibrium.
-This coupling is stated here as observation, not derived. Whether Move
-and Choice are truly two independent layers, or Move is simply Choice's
-visible output with an added "no active choice" state, is unresolved.
+## DC / AC Separation
 
-Operational Chain:
-Void (A-101) => Move (this node, Up/Stay/Down) => Choice (B-224, Compression/Expression bias) => New State => feedback into Void
+Current hardware architecture separates two levels of choice:
 
-Yellow Audit:
-- No dedicated node exists for STAY/Hold as a standalone primitive —
-  flagged above, not filled here
-- Whether Move and Choice are genuinely two layers or one layer counted
-  twice is unresolved (see Mathematics)
-- The closure claim ("exactly three moves, no fourth") is asserted by
-  the source material's own framing, not derived from anything upstream
-- Relationship to B-221's six-step cycle beyond the Stay<->Hold
-  correspondence is not mapped — where do UP and DOWN fit against
-  Begin/Move/Build/Break/Loop specifically?
+```text
+DC engagement: EVERYTHING / NOTHING
+AC differential: LEFT / STAY / RIGHT
+```
 
-Future Work:
-Determine whether STAY/Hold should become its own dedicated node
-(matching B-203/B-204's status) or remain only a step inside B-221.
-Resolve the Move-vs-Choice layering question in Mathematics above.
-Map UP and DOWN against B-221's six steps term by term.
+DC decides whether the local operation participates. If engaged, the AC/differential relation resolves how it participates.
 
----
+## Important Distinction
+
+The Three Moves are not the Four Actions. The Four Actions are:
+
+```text
+Inward / Outward / Across / Over
+```
+
+The Three Moves give signed direction/hold. The Four Actions specify transformation through a boundary/relation.
+
+## Hardware Interpretation
+
+A balanced physical read can use two opposed signals around a shared reference:
+
+```text
+Delta = side_A - side_B
+```
+
+A mirrored pair `A` and `-A` ideally produces `Delta = 2A`; a balanced relation produces `Delta ~= 0`. Real hardware requires a measured zero window and does not assume perfect cancellation.
+
+## Yellow Audit
+
+- The signed ternary move grammar is implementation-canonical.
+- Exact voltage, phase, flux, or mechanical thresholds must be measured in each physical implementation.
+- Left/Right are orientation labels and must not be mistaken for universal spatial coordinates.
