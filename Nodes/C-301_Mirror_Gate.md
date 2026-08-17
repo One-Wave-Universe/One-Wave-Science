@@ -2,54 +2,96 @@
 node_id: "C-301"
 canonical_name: "Mirror Gate"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "GREEN (function) / YELLOW (origin question, CCD-03)"
+claim_gate_detail: "Implementation crossover is canonical; scale-specific physical origin remains open"
 metadata_standard: "I-06"
 ---
 
 # Node C-301: Mirror Gate
 
-Dependencies:
-Upstream: B-205 Mirror
-Downstream: C-308 Spin-half, C-322 Mirror-Gate 125 GeV Boundary Response, Book 5 Ch4 (Black Holes and Quasars - develops the cosmological application)
+## Definition
 
-Definition:
-Mirror Gate is the physical location, scale, or boundary condition at which the
-Mirror function (B-205) operates.
+The Mirror Gate is the shared-reference crossover event/boundary between two opposed sides of one relational oscillator.
 
-Mirror is the function.
-Mirror Gate is where it happens.
+In the canonical state-machine notation:
 
-The Mirror Gate is scale-invariant. It appears at:
-- Quantum level: spin flip
-- Atomic level: electron shell transition
-- Biological level: nerve signal relay
-- Collider level: 125 GeV Mirror-Gate boundary-response anchor (C-322)
-- Cosmological level: black hole -> white hole transition
+```text
+F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
+```
 
-Mathematics:
-At the Mirror Gate, the two-component state (psi_C, psi_E) undergoes symplectic rotation:
+- `/` means **one simultaneous mirrored pair state**. It is not a serial gate separator.
+- `-` means the **Mirror Gate crossover**: the opposed oscillations return toward their shared reference `(0)`, meet/cross, phase-shift, and emerge in the next alternating orientation.
 
-M(psi_C, psi_E) -> (psi_E, -psi_C)
+The engine begins from the shared middle/reference `-(0)+`, not from an isolated serial `F1` instruction.
 
-If mirror crossing flips compressed <-> expressed, then 4*pi closure follows.
+## Six Logical Pair Positions
 
-S3 Fiber Identification:
-The two-component state (psi_C, psi_E) is identified with the S3 fiber orientation.
-Mirror crossings are therefore fiber rotations.
-The 4*pi closure follows from SU(2) structure.
+The invariant logical sequence is:
 
-M = [[0, 1], [-1, 0]]
-M^2 = -I
-M^4 = I => 4*pi closure
+```text
+F1/V6
+ -
+V5/F2
+ -
+F3/V4
+ -
+V3/F4
+ -
+F5/V2
+ -
+V1/F6
+ -
+F1/V6 ...
+```
 
-Operational Chain:
-Mirror (B-205) => Mirror Gate => Spin-half (C-308)
+Dynamic orientation alternates:
 
-Yellow Audit:
-- Whether mirror crossing is forced by One-Wave geometry or defined as a boundary rule
-  remains open (CCD-03)
-- Resolution requires geometric derivation of S3 fiber from update rule alone
-- This question does not block the chapter but has a named address
+```text
+F/V -> V/F -> F/V -> V/F -> F/V -> V/F
+```
+
+The twelve labels are the two sides of six coupled pair positions, not twelve independent serial instructions.
+
+## Current VTC Physical Interpretation
+
+The current hardware design uses **three physical Mirror Gates**, each traversed in two orientations/phases, to express the six logical pair positions.
+
+```text
+3 physical Mirror Gates x 2 orientations = 6 logical pair positions
+```
+
+This is an engineering interpretation to be validated by the VTC bench program; it is not claimed as a universal physical count at every scale.
+
+## Local Crossover Sequence
+
+```text
+mirrored peak/trough relation
+ -> return toward local reference
+ -> meet at (0)
+ -> cross
+ -> phase shift / handedness update
+ -> next mirrored pair orientation
+```
+
+The new consequence can become the reference/input for the next relation.
+
+## Across and Over
+
+From `B-206c`:
+
+```text
+Across = establish/carry the relation through the shared reference/boundary.
+Over   = complete the crossover/phase shift and emerge in the next orientation.
+```
+
+## Physical-Hardware Boundary
+
+A VTC implementation may use linked opposed switching elements, magnetic coupling, differential sensing, or another physical mechanism. The Mirror Gate node defines the relational crossover; it does not assume one specific material implementation.
+
+## Yellow Audit
+
+- Slash/dash notation and crossover semantics are implementation-canonical.
+- The three-physical-gate VTC realization requires bench validation.
+- Claims that the same physical mechanism explains quantum, atomic, biological, collider, or cosmological behavior remain separate hypotheses and are not established by the compute architecture alone.
