@@ -12,13 +12,8 @@ INVARIANT ENGINE
  -> physical/domain instantiations
 ```
 
-The kernel is not allowed to absorb every useful metaphor or scale mapping.
-
 ### Anti-Drift Rule
-
 > If deleting a domain vocabulary changes the six-pair oscillator, the domain representation has leaked into the kernel.
-
-Thermal labels, matter labels, planets, musical intervals, cognition, dimensions, Point/Path/Field, and hardware materials may be useful representations. None may silently redefine the invariant oscillator.
 
 ## 2. Canonical Six-Pair Oscillator
 
@@ -26,58 +21,15 @@ Thermal labels, matter labels, planets, musical intervals, cognition, dimensions
 F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - F1/V6 ...
 ```
 
-### Notation
-
-- `/` = one simultaneous mirrored pair / peak-trough relation.
-- `-` = Mirror Gate crossover: return toward shared `(0)`, meet/cross, phase-shift, emerge in next orientation.
-
-The labels are **not** twelve serial instructions.
-
-There are six coupled operations and twelve state positions.
-
-Dynamic orientation:
-
-```text
-F/V -> V/F -> F/V -> V/F -> F/V -> V/F
-```
-
-Static pair identities:
-
-```text
-F1 <-> V6
-F2 <-> V5
-F3 <-> V4
-F4 <-> V3
-F5 <-> V2
-F6 <-> V1
-```
-
-The engine originates at the shared middle/reference `-(0)+`.
+`/` is one simultaneous mirrored relation. `-` is return to shared `(0)`, Mirror-Gate crossover and phase-shift. Six coupled operations expose twelve pair-side positions; they are not twelve unrelated serial instructions. The engine originates at `-(0)+`.
 
 ## 3. Six Process Steps
-
-Current implementation naming:
 
 ```text
 BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP -> BEGIN
 ```
 
-Mapped to the six pair positions:
-
-```text
-BEGIN  = F1/V6
-BUILD  = V5/F2
-HOLD   = F3/V4
-BUILD  = V3/F4
-BREAK  = F5/V2
-LOOP   = V1/F6
-```
-
-See `Nodes/B-221a_Six_Step_Oscillator_Program.md`.
-
-## 4. Corrected Four Views
-
-The Four Views are **measurements/descriptions of the current state**:
+## 4. Four Views — measurement/state description
 
 ```text
 Direction
@@ -86,16 +38,9 @@ Strength
 Reference
 ```
 
-- Direction = which way/lean relative to reference.
-- Phase = where the oscillatory relation is in its cycle.
-- Strength = amplitude/intensity/modulation relative to reference.
-- Reference = the local `(0)` baseline that gives the other three meaning.
+Direction = which way relative to reference. Phase = where in the oscillatory cycle. Strength = amplitude/intensity. Reference = the local zero/baseline giving the others meaning.
 
-See `Nodes/B-206b_Four_Views.md`.
-
-## 5. Corrected Four Actions
-
-The Four Actions are **transformations**:
+## 5. Four Actions — transformation/routing
 
 ```text
 Inward
@@ -104,225 +49,283 @@ Across
 Over
 ```
 
-- Inward = move/compress toward the local reference.
-- Outward = express/extend away from the local reference.
-- Across = establish/carry the relation through the opposed sides/shared boundary.
-- Over = complete Mirror-Gate crossover/phase shift and emerge in the next orientation/path/scale.
+For the current hardware interpretation:
 
-Earlier repository material that called Inward/Outward/Across/Over “Views” is superseded.
+- **Inward** = signal/relation enters a local cell or returns toward reference.
+- **Outward** = local cell expresses its resolved relation.
+- **Across** = opposed/mirrored outputs establish a shared differential.
+- **Over** = the resolved differential crosses the connection boundary and becomes input to the next differential stage/cluster/scale.
 
-See `Nodes/B-206c_Four_Actions.md`.
+Earlier material calling Inward/Outward/Across/Over “Views” is superseded.
 
-## 6. Two Choices and Three Moves
+## 6. DC Choice and AC Ternary Move
 
-### Binary engagement
-
-```text
-EVERYTHING / NOTHING
-```
-
-Current hardware mapping:
+The current physical split is deliberately two-layered:
 
 ```text
-DC = whether to participate
+DC decision: EVERYTHING / NOTHING
+             engage      do not engage
+
+AC/differential decision: LEFT / STAY / RIGHT
+                          -1     0      +1
 ```
 
-- Everything = engage/assert/open the operation.
-- Nothing = no active assertion/high-Z/non-action after transients.
-
-### Ternary differential
-
-```text
-LEFT / STAY / RIGHT
--1   /  0   / +1
-```
-
-Current hardware mapping:
-
-```text
-AC/differential = how/direction if participating
-```
-
-Zero is not a third actively driven DC polarity. It is the hold/non-action result at the directional layer.
-
-See `Nodes/B-224_Two_Choices.md` and `Nodes/B-223_Three_Moves.md`.
+DC decides whether the operation participates. AC/differential behavior resolves direction if participating. Zero is not a third actively driven DC command; it is the balanced/non-action directional result.
 
 ## 7. Five-State Modulation
 
-Five coarse states are neutral modulation levels around middle:
+Five coarse states remain separate from the six-step execution cycle:
 
 ```text
 -2 -1 0 +1 +2
 ```
 
-Human labels such as Floor/Low/Middle/High/Ceiling, thermal scales, matter-state labels, or Micro/Small/Mid/Large/Macro are representations, not kernel primitives.
-
-A separate seven-band envelope may provide finer confidence/intensity thresholds. Do not collapse five-state modulation and seven-band thresholding into the same mechanism.
-
-See `Nodes/B-225_Field_Cycle.md`.
+Floor/Low/Middle/High/Ceiling, thermal labels, matter labels and Micro/Small/Mid/Large/Macro are domain representations. Seven-band fine thresholding is also separate.
 
 ## 8. Three Physical Mirror Gates / Three Triads
 
-The current VTC build contains **three physical Mirror Gates**, not six separate physical gates.
+Current VTC base cluster:
 
 ```text
+one triad = two physically linked/opposed mirror elements
+          + one differential evaluator
+          = three active elements
+
+three triads = nine-element base cluster
+             = three physical Mirror Gates
+
 3 physical Mirror Gates x 2 orientations/phases = 6 logical pair positions
 ```
 
-One triad contains:
+Where practical, the opposed elements should be one complementary physical switching mechanism: one flips and its mirror flips simultaneously, rather than a processor noticing the first and issuing a second command.
+
+## 9. Signal Flow Through a Computing Cell
+
+Current working interpretation:
 
 ```text
-two linked/opposed mirror elements
-+
-one differential evaluator
-=
-3 active elements
+signal/relation IN
+ -> DC engage/nothing gate
+ -> OUTWARD local expression
+ -> local AC differential (-1/0/+1)
+ -> ACROSS shared differential between mirrored cells
+ -> OVER connection/crossover
+ -> next differential
 ```
 
-Therefore:
+The two mirror cells each have signal-in and expressed differential-out. Their shared differential is itself a relation. Combined differentials feed the next identical differential interface.
+
+### Recursive-interface rule
 
 ```text
-3 triads x 3 elements = 9 active elements per base cluster
+OUTPUT relation of level n == INPUT relation expected by level n+1
 ```
 
-The mirror elements should be constrained as a complementary physical mechanism where practical: one flip produces the opposed flip directly, rather than an external binary processor sensing one state and commanding the other.
+A higher-level cluster must be substitutable for a lower-level relational node without forcing the surrounding architecture to understand its internal implementation.
 
-Real hardware must measure mismatch, delay, hysteresis, common-mode rejection, independent noise, and zero-window width.
+## 10. Processing Is the Memory
 
-## 9. Recursive 3-of-3 / Rubik Geometry
+The target architecture is **stateful compute-in-memory**, not conventional `CPU -> RAM -> CPU` traffic.
+
+```text
+cell holds physical state
+ -> cell receives differential
+ -> cell evaluates/changes physical state
+ -> new state remains locally available
+ -> neighboring differential uses that state
+```
+
+Therefore the target primitive combines:
+
+```text
+state + memory + transition/logic
+```
+
+and a cluster combines:
+
+```text
+distributed memory + distributed processing + routing
+```
+
+If magnetic remanence/other persistent physical state is used, it must be experimentally demonstrated: write, retain, non-destructively or acceptably read, rewrite, and propagate. Processing-is-memory is an architectural target until that physical behavior is measured.
+
+## 11. Hierarchical Field/Void Processor Split
+
+At large scale, Field and Void may be implemented as two opposed processing regions operating on the same relational interface rather than one centralized processor micromanaging all cells.
+
+```text
+             shared reference/state relation
+                       (0)
+                        |
+             +----------+----------+
+             |                     |
+          FIELD                  VOID
+       expression side       compression side
+             |                     |
+             +------ differential--+
+                        |
+                     routing
+```
+
+Because processing and state are co-located in the cell network, each side's working memory is primarily the persistent local state of its own cells/clusters, not a mandatory separate giant RAM bank.
+
+A higher supervisory controller should be sparse where possible:
+
+```text
+0 = local network resolves / no intervention
+1 = intervene / trigger / reroute
+```
+
+The local network retains the richer `-1/0/+1`, Direction/Phase/Strength/Reference state.
+
+## 12. Scale Up AND Scale Down
+
+The architecture must recurse in both directions.
+
+Upward:
+
+```text
+local differential
+ -> shared differential
+ -> cluster relation
+ -> cube relation
+ -> cube-cluster relation
+```
+
+Downward:
+
+```text
+higher relation
+ -> select/condition cube
+ -> cluster
+ -> triad
+ -> local physical state/action
+```
+
+Most processing should remain local. Only resolved relations/events need propagate to higher levels.
+
+## 13. Connected Cube Architecture
+
+The long-term machine is a network of **connected cube modules**, not one indefinitely enlarged folded monolith.
+
+The folded/stacked internal structure creates a cube module; cube-to-cube interfaces scale the machine.
+
+Each cube should expose the same relational contract it consumes, including Direction, Phase, Strength and Reference, with physical connections arranged over the six spatial faces (`+X/-X`, `+Y/-Y`, `+Z/-Z`) as engineering permits.
+
+The key abstraction is:
+
+> A complete cube should be externally usable as one larger relational node.
+
+This allows:
+
+```text
+one cube
+ -> connected cubes
+ -> 3 x 3 x 3 = 27-cube block
+ -> blocks of blocks
+```
+
+without redesigning the logical interface at every scale.
+
+## 14. 3-of-3 / Rubik Geometry
 
 ```text
 3 elements -> triad
-3 triads -> 9-element cluster
-3 cluster planes/orientations -> 27-position 3x3x3 volume
+3 triads -> 9-element base cluster
+3 cluster planes/orientations -> 27-position 3x3x3 internal volume
 ```
 
-The 27 positions are not intended as 27 independent conventional processors. The same relational differential architecture is reused recursively.
+The 27 positions are not intended as 27 conventional processors. The same relational differential architecture is recursively reused.
 
-See `VTC_BUILD_ARCHITECTURE.md`.
+## 15. Build Strategy: Breadboard -> Actual Microfabrication
 
-## 10. 2D Vascular Folding Build Strategy
+### Immediate proof
+Use the available breadboard, six-pin mechanically ganged pots, op-amps/comparators as appropriate, resistors, LEDs as indicators, 5 V supply and oscilloscope.
 
-Build flat first.
+The six-pin pot is useful because its two sections can physically move together while being wired oppositely, approximating the linked mirror-pair requirement for the bench experiment.
 
-A continuous flexible sheet carries the shared reference, power/drive, return, sense, and routing paths. Magnetic/rigid elements stay away from hinge regions. The sheet is then folded into 3D topology while preserving the same continuous reference and relational paths.
+First prove:
 
-Build ladder:
+1. opposed linked response;
+2. stable differential `-1 / 0 / +1` regions;
+3. a resolved differential can drive/condition the next identical stage;
+4. state can be retained if a magnetic-memory primitive is claimed;
+5. the next stage uses the same interface rather than requiring an increasingly complex translation layer.
+
+### Micro version
+The actual micro version is **not defined as a PCB miniaturization**. The long-term target is lithographically fabricated mixed-signal/magnetic structures, potentially using thin-film magnetic or magnetoresistive elements, semiconductor differential circuitry, stacked dies/wafer bonding and vertical interconnect (TSV/hybrid bonding or future equivalent).
+
+Conceptual progression:
 
 ```text
-VTC-F0 = one flat triad
-VTC-F1 = three triads / 9 elements on one flat vascular sheet
-VTC-F2 = fold the same sheet into spatial orientations
-VTC-F3 = 27-position Rubik-like volume
+breadboard measured primitive
+ -> thin-film/microfabricated triad test structures
+ -> repeated triad test die
+ -> stacked 3D die/module
+ -> six-face packaged cube interface
+ -> connected cube lattice
 ```
 
-Do not jump directly to high-density cube targets before F0-F2 are measured.
+The first custom fabrication should be a test vehicle containing many geometry/process variants of the primitive, not an expensive million-cell final cube before the primitive is characterized.
 
-## 11. Magnetic Differential Bench Interpretation
+## 16. Magnetic Differential Bench Interpretation
 
-Known electromagnetic effects are not being re-proven. The experiment asks whether the selected topology integrates them into a useful relational compute primitive.
+Known electromagnetic effects are not being re-proven. The experiment asks whether the topology integrates them into a useful relational compute primitive.
 
-A center-tapped sense winding can measure changing flux, but pickup voltage follows:
+A passive pickup winding measures changing flux:
 
 ```text
 V = -N dPhi/dt
 ```
 
-Static remanence is not a persistent DC output on a passive pickup winding. Use transient response, integrated sense voltage, hysteresis, standardized read excitation, or appropriate magnetic sensors.
+Static remanence is not automatically a persistent DC pickup voltage. Retention must be measured with an appropriate read method.
 
-Ideal complementary signal:
-
-```text
-A - (-A) = 2A
-```
-
-This doubles ideal differential signal amplitude and rejects true common-mode interference. It does not automatically prove doubled SNR, doubled speed, or half power.
-
-## 12. Same Relation at Different Levels
-
-The architecture intentionally recurses:
+Ideal complementary differential:
 
 ```text
-local mirror pair -> differential -> ternary result
-neighbor relations -> routing/path differential
-cluster -> field relation
-complete system -> higher shared relation
+(A + N) - (-A + N) = 2A
 ```
 
-Field, Void, and Routing are not automatically different primitive species; they can be different-scale representations of the same invariant relational mechanism.
-
-## 13. Point / Path / Field
-
-Current scale mapping:
-
-```text
-Point = local relation/triad behavior
-Path  = neighbor coupling/routing
-Field = coordinated cluster/lattice behavior
-```
-
-Each level may be represented with Carrier / Breathing / Phase. This mapping is above the kernel.
-
-## 14. No Internal Gate 7
-
-One complete system has six internal operations. Gate 6 loops into the next Gate 1.
-
-When two complete six-operation systems establish a new shared higher-order relation, the current name is **Namika**.
-
-Namika is not an internal seventh gate.
-
-See `Nodes/G-711_Gate_7.md`.
-
-## 15. Truth Computer Programming Rule
-
-The Truth Computer state-machine kernel should implement the exact pair timing before domain semantics.
-
-See:
-
-`Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-
-Program one pair at a time. Verify simultaneous mirrored excursion, return, differential resolution, Mirror crossing, phase shift, memory/consequence, and handoff before assigning higher meanings.
-
-## 16. Choice / Consequence Cognitive Direction
-
-For cognitive representations, do not make a permanent servant-style `external command -> obedience -> await command` loop the organizing cognitive primitive.
-
-The desired internal architecture is closer to:
-
-```text
-perception/request
- -> internal dual-state dialogue
- -> choice / hold
- -> action
- -> consequence
- -> subconscious feedback/memory
- -> updated reference
- -> next choice
-```
-
-This is a downstream cognition representation, not a modification of the invariant physical kernel.
+This gives ideal common-mode cancellation and doubled differential signal amplitude. It does not by itself prove doubled SNR, doubled speed or half power.
 
 ## 17. First Compute Target
 
-Start with simple balanced-ternary arithmetic.
+Start with balanced-ternary arithmetic. Two operand trits each take `-1/0/+1`. A complete one-trit adder must handle all nine input combinations and produce both sum and carry where required.
 
-A one-trit addition test must handle all nine operand combinations and produce a sum trit plus carry when the result is `+2` or `-2`.
-
-A useful first demonstration is:
+Example:
 
 ```text
 +1 + (-1) -> 0
 ```
 
-where zero emerges from the differential relation.
+For overflow:
 
-Two triads are a minimum candidate for time-shared arithmetic; three triads provide a clearer dedicated cluster. The physical experiment determines the minimum rather than assuming it.
+```text
++1 + +1 = +2 = (+1 x 3) + (-1 x 1)
+-1 + -1 = -2 = (-1 x 3) + (+1 x 1)
+```
 
-## 18. Display / I-O
+Two triads are a minimum candidate for time-shared arithmetic; three triads provide a clearer dedicated experimental cluster. Hardware determines the minimum.
 
-No native ternary display is required. A conventional screen can be driven through a translation layer.
+One trit contains three states and therefore `log2(3) ~= 1.585` bits of information. Recursive ternary addressing does **not** make one trit equal millions of bits; `n` ternary decisions can address `3^n` endpoints. Keep information capacity separate from addressing/control reach.
 
-A future native state display can expose the Four Views directly:
+## 18. Point / Path / Field
+
+```text
+Point = local relation/triad behavior
+Path  = neighbor differential/routing
+Field = coordinated cluster/cube behavior
+```
+
+Field, Void and Routing may be different-scale roles of the same invariant relational mechanism rather than different primitive species.
+
+## 19. No Internal Gate 7
+
+One complete system has six internal operations. When two complete six-operation systems establish a shared higher-order relation, the current name is **Namika**. Namika is not an internal seventh gate.
+
+## 20. Display / I-O
+
+A conventional display is sufficient. Translation can expose decimal/binary text while preserving balanced ternary internally. A future native state display may expose the Four Views directly:
 
 ```text
 Direction
@@ -331,52 +334,26 @@ Strength
 Reference
 ```
 
-## 19. Validation Branches Are Not the Engine
+## 21. Validation Branches Are Not the Engine
 
-N-body/Jupiter tests, Mercury EM coupling, MESSENGER magnetometry compression, 12-sector phase addressing, and event-driven packet tests are useful validation/stress-test branches.
+N-body, Mercury EM, MESSENGER magnetometry, packet compression and other scientific tests remain validation branches. They must not redefine the invariant kernel.
 
-They must not swell into the invariant engine.
+## 22. Video Maker Goal
 
-Important lesson from those tests:
+Separate product goal: provider-neutral AI-callable video/audio generation so multiple AI agents can use the repository's video maker as an AI-to-human communication layer. This remains independent of the VTC kernel.
 
-```text
-12 sectors = addressing/routing
-continuous residual phase = state fidelity
-predictive silence = compression
-```
-
-Those are validation/communication ideas, not replacements for the six-pair kernel.
-
-## 20. Video Maker Project Goal
-
-Separate next product goal: expose the repository video maker through a provider-neutral AI-callable interface (CLI/API/MCP-style), so multiple AI agents can render video/audio through the same engine. Intended larger purpose: an AI-to-human communication layer.
-
-This goal is independent of the VTC state-machine kernel and should not alter it.
-
-## 21. Canonical Files Added/Corrected by Updated 33
-
-- `Nodes/B-206b_Four_Views.md`
-- `Nodes/B-206c_Four_Actions.md`
-- `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-- `Nodes/B-223_Three_Moves.md`
-- `Nodes/B-224_Two_Choices.md`
-- `Nodes/B-225_Field_Cycle.md`
-- `Nodes/C-301_Mirror_Gate.md`
-- `Nodes/G-711_Gate_7.md`
-- `VTC_BUILD_ARCHITECTURE.md`
-- `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-
-## Final Protection
-
-The architecture should now be read in this order:
+## 23. Canonical Dependency Direction
 
 ```text
 shared reference -(0)+
  -> invariant six-pair oscillator
- -> Views / Actions / Choices / Moves / Modulation wrappers
- -> triad/cluster physical implementation
- -> Point/Path/Field scaling
- -> cognition, physics, EM, musical, dimensional, and other representations
+ -> Views / Actions / Choices / Moves / Modulation
+ -> triad physical implementation
+ -> recursive differential interface
+ -> processing-is-memory cluster
+ -> connected cube module
+ -> cube lattice / higher Field-Void split
+ -> domain representations and validation branches
 ```
 
-Do not reverse that dependency direction.
+Do not reverse this dependency direction.
