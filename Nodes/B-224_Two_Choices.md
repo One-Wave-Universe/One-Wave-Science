@@ -1,81 +1,71 @@
 ---
 node_id: "B-224"
-canonical_name: "Two Choices (Compression / Expression)"
+canonical_name: "Two Choices — Everything or Nothing"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
-classification: "Resolution / Formalization Node"
-claim_gate_detail: "None"
+classification: "Cycle and Relationship Structure"
+claim_gate_detail: "Implementation-canonical engagement choice; physical realization remains open"
 metadata_standard: "I-06"
 ---
 
-# Node B-224: Two Choices (Compression / Expression)
+# Node B-224: Two Choices — Everything or Nothing
 
-Reason:
-The two options already exist as real nodes (B-203, B-204) and were
-already being used, unnamed, inside B-221's Loop step. This node gives
-that usage its own explicit reference point instead of leaving it
-implicit inside another node's math.
+## Definition
 
-Dependencies:
-Upstream: B-203 Expression, B-204 Compression, B-223 Three Moves (Choice is the bias that manifests through Move's UP/DOWN vector)
-Downstream: B-221 Six Recursive Steps (Loop-step decision), B-222 Oscillation Center (the switching zone between the two choices), B-225 Five-Stage Field Transformation Cycle (Choice stage), G-718 Connection Gates (Gate 5 cites this directly)
+The first/binary choice is whether the local operation participates at all:
 
-Definition:
-The Two Choices describe WHY a change occurs — the fundamental bias
-applied to any movement (B-223). At the Loop step of B-221's six-step
-cycle, and within B-223's Move layer, a system's motion is biased
-toward one of exactly two directions:
+```text
+EVERYTHING = engage / assert / open the operation
+NOTHING    = do not engage / high-Z / non-action
+```
 
-1. Compression (B-204) — gathering information inward. Creates
-   structure through reduction. Associated with: memory, stability,
-   integration, restoration, concentration. Question: "What can be unified?"
+This choice is distinct from the ternary directional result in `B-223`.
 
-2. Expression (B-203) — releasing information outward. Creates
-   exploration through expansion. Associated with: growth, movement,
-   creation, exploration, differentiation. Question: "What can emerge?"
+## Two-Level Decision Model
 
-The Two-Choice Balance (real constraint, not decorative):
-Compression without Expression: the system locks — no exploration, no
-adaptation.
-Expression without Compression: the system disperses — no memory, no
-identity.
-Coherent systems alternate between both. Neither choice alone is
-sufficient for a persistent mode (A-112) to remain both stable and
-adaptive.
+```text
+DC choice
+├── NOTHING
+│   └── no active operation; preserve/hold the local relation
+└── EVERYTHING
+    └── AC/differential resolution
+        ├── LEFT  (-1)
+        ├── STAY   (0)
+        └── RIGHT (+1)
+```
 
-This is the SAME closure claim already stated inside B-221 ("Compression
-path: Expression -> Center -> Compression" / "Expression path:
-Compression -> Center -> Expression") and inside B-223's Move layer —
-this node does not add new mechanisms, it names the decision explicitly
-and now carries the real lock/disperse constraint that justifies why
-BOTH choices are necessary, not just why they're the only two options.
+Therefore:
 
-Mathematics:
-No independent mathematics. The decision itself passes through B-222's
-Oscillation Center (the switching zone), whose own nature (point vs.
-region) is still unresolved there. This node inherits that open
-question rather than resolving it a second time.
+```text
+DC = whether to participate
+AC differential = how/direction if participating
+```
 
-Operational Chain:
-B-222 Oscillation Center => Two Choices => {Compression (B-204), Expression (B-203)}
+## Zero Is Not a Third DC Choice
 
-Yellow Audit:
-- "Exactly two, no third option" is asserted by the repeated phrasing
-  across B-221, B-222, B-223, and this node, but has not been derived
-  from anything upstream — same caveat as B-223's closure claim
-- Redundancy question with B-223 partially resolved, not fully: Choice
-  (this node, 2-valued) and Move (B-223, 3-valued: +/0/-) are not
-  simply the same thing counted twice. UP and DOWN are where a Choice
-  manifests as motion; STAY is where no Choice is currently manifesting.
-  So Move is broader than Choice, not identical to it — but whether
-  STAY represents "no choice" or "a held/reserved choice" is still
-  unresolved, and that ambiguity is inherited here, not solved by this
-  node alone.
+`0` belongs to the ternary differential layer. It is a no-assertion/hold outcome around the shared reference. It must not be implemented by inventing a third powered DC direction.
 
-Future Work:
-Resolve the STAY ambiguity (no choice vs. held choice) — this affects
-both B-223 and this node and should be resolved once, not separately.
-Check against B-222's point-vs-region resolution once that's settled.
+In a physical driver, `NOTHING` may be represented by a high-impedance state after transients decay. The exact circuitry is implementation-specific.
 
----
+## Correction of Earlier Wording
+
+Earlier repository text treated **Compression / Expression** as the two fundamental choices. That mixed the engagement layer with the action layer. Compression/expression-like behavior is handled by Actions/representations, especially Inward and Outward, while the binary engagement choice is Everything/Nothing.
+
+## Consequence Loop
+
+```text
+choice
+ -> action / non-action
+ -> consequence
+ -> memory/reference update
+ -> next field of choices
+```
+
+Choice is meaningful only in relation to consequence and the next reference state.
+
+## Yellow Audit
+
+- Everything/Nothing is canonical for the implementation architecture.
+- Exact electrical implementation of `NOTHING` requires validation for leakage, inductive decay, and passive coupling.
+- The relationship to physical systems outside the compute architecture remains a representation claim and must be tested separately.
