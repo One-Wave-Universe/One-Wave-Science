@@ -188,13 +188,109 @@ reference
 
 The machine should be organized around choice and consequence, not around a permanent external command/obedience loop.
 
-## 11. No Internal Gate 7
+## 11. Processing Is Memory
+
+The intended physical architecture does not separate working state from processing into a conventional CPU/RAM fetch cycle.
+
+```text
+physical cell state = stored state
+incoming differential = operation/input
+state transition = computation
+retained next state = result + memory
+```
+
+At cluster scale:
+
+```text
+distributed state = distributed memory
+differential transitions = distributed processing
+neighbor coupling = routing
+```
+
+A software simulation should preserve this semantics even when implemented on ordinary hardware: state belongs to the node that evaluates it, and consequence becomes the node's next locally available state/reference rather than being treated as an unrelated external database write.
+
+Persistent magnetic or other nonvolatile behavior remains an implementation hypothesis until measured experimentally.
+
+## 12. Recursive Scale Contract
+
+Every scale must consume and expose the same relational contract:
+
+```text
+Direction
+Phase
+Strength
+Reference
+```
+
+and permit the same relational actions:
+
+```text
+Inward / Outward / Across / Over
+```
+
+Therefore:
+
+```text
+triad output -> cluster input
+cluster output -> cube input
+cube output -> cube-cluster input
+```
+
+and the relation must also be routable downward from higher scale to the selected cube/cluster/triad.
+
+A higher-level structure is valid only if it can substitute externally for one lower-level relational node without forcing callers to know its internal construction.
+
+## 13. Field/Void as Opposed Processing Regions
+
+At large scale, Field and Void may be implemented as opposed processing regions of the same recursive stateful network:
+
+```text
+             shared reference / state relation
+                       (0)
+                        |
+             +----------+----------+
+             |                     |
+          FIELD                  VOID
+       expressive region      compressive region
+             |                     |
+             +------ differential--+
+                        |
+                     routing
+```
+
+They should not be modeled by default as two conventional CPUs each fetching from giant separate RAM banks. Their working memory is primarily the locally retained state of their own cells/clusters.
+
+A sparse supervisory layer may use a simpler binary intervention choice:
+
+```text
+0 = permit local resolution / no intervention
+1 = intervene / trigger / reroute
+```
+
+while the distributed lower network retains ternary `-1/0/+1` state plus Direction/Phase/Strength/Reference.
+
+## 14. Connected Cube Recursion
+
+The long-term physical machine is a connected cube lattice. A complete cube is intended to act externally as one larger relational node.
+
+```text
+triad
+ -> 9-element cluster
+ -> cube
+ -> face-connected cube lattice
+ -> 3 x 3 x 3 cube block
+ -> blocks of blocks
+```
+
+Cube interfaces may be arranged over `+X/-X`, `+Y/-Y`, `+Z/-Z`, but the logical requirement is the invariant relational contract rather than a particular connector technology.
+
+## 15. No Internal Gate 7
 
 One complete system contains six operations. Gate 6 loops back into Gate 1.
 
 When two complete systems form a new shared higher-order relation, the current architecture calls that relation **Namika**. Namika is inter-system recursion, not an internal seventh gate.
 
-## 12. Programming Rule
+## 16. Programming Rule
 
 Implement one pair at a time and test its outward excursion, return, crossover, phase shift, and handoff without changing the canonical pair order.
 
@@ -208,7 +304,7 @@ for pair in six_pair_order:
     apply Action if engaged
     return to reference
     mirror_cross_and_phase_shift
-    store consequence
+    store consequence locally
 ```
 
 The pair-specific meanings may evolve. The pair timing/order may not drift without an explicit architecture revision.
