@@ -6,25 +6,51 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 ## Current update handoff
 
-1. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-2. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-3. `VTC_BUILD_ARCHITECTURE.md`
-4. `Nodes/B-206b_Four_Views.md`
-5. `Nodes/B-206c_Four_Actions.md`
-6. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-7. `Nodes/B-223_Three_Moves.md`
-8. `Nodes/B-224_Two_Choices.md`
-9. `Nodes/B-225_Field_Cycle.md`
-10. `Nodes/C-301_Mirror_Gate.md`
-11. `Nodes/G-711_Gate_7.md`
-12. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-13. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-14. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-15. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-16. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-17. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-18. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-19. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+2. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+3. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+4. `VTC_BUILD_ARCHITECTURE.md`
+5. `Nodes/B-206b_Four_Views.md`
+6. `Nodes/B-206c_Four_Actions.md`
+7. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+8. `Nodes/B-223_Three_Moves.md`
+9. `Nodes/B-224_Two_Choices.md`
+10. `Nodes/B-225_Field_Cycle.md`
+11. `Nodes/C-301_Mirror_Gate.md`
+12. `Nodes/G-711_Gate_7.md`
+13. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+14. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+15. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+16. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+17. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+18. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+19. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+20. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+
+## Updated 34 processing/memory protection
+
+The target VTC architecture treats local persistent physical state as both working memory and the state being processed. The intended local cycle is:
+
+```text
+state held locally
+ -> differential relation arrives
+ -> state changes locally
+ -> result remains locally available
+ -> neighboring / higher differential uses that state
+```
+
+This is an architectural target until retention/read/rewrite/propagation are experimentally demonstrated.
+
+The large-scale split is:
+
+```text
+local network: -1 / 0 / +1 + Direction / Phase / Strength / Reference
+higher oversight: 0 = no intervention, 1 = intervene / trigger / reroute
+```
+
+Field and Void may be opposed processing regions with persistent local state rather than conventional processors dependent on separate giant RAM banks.
+
+Connected cubes must recurse both upward and downward. A complete cube should expose the same relational interface it consumes and be usable externally as one larger relational node. The mature machine is a connected cube lattice; computational density should primarily increase inside cubes rather than by requiring enormous hand-sized cube counts.
 
 ## Updated 33 state-machine protection
 
@@ -103,7 +129,7 @@ Before extending the Wave Computer or Android movement language, read:
 
 The signed packet is `±(n,2n,2n+1)`. The Fibonacci word validates the ordered choice between the `2n` and `2n+1` recursive branches after a hop is committed. It does not replace live `-1(0)+1` choice, and its symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 33's engagement/differential architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 33/34's engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
