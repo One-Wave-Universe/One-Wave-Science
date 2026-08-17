@@ -236,8 +236,99 @@ Oscilloscopes, function generators, MOSFET drivers, ADCs, conventional microcont
 
 They are **not** the intended cognitive/compute core. The VTC architecture must not depend on an external binary processor to enforce every mirror flip or compute every ternary relation.
 
-## 12. Anti-Drift Rule
+## 12. Processing Is the Memory
+
+The target VTC does not separate processor and RAM in the conventional sense.
+
+```text
+cell physical state = stored state
+incoming differential = operation/input
+state transition = computation
+new retained state = result + memory
+```
+
+The same local structure is therefore intended to provide:
+
+```text
+memory + processing + routing
+```
+
+A cluster is a distributed state machine whose current physical configuration is its working memory. There is no mandatory fetch-compute-writeback loop through a separate main RAM array.
+
+This is an architectural target, not yet a proven magnetic-memory claim. The bench program must demonstrate that the chosen physical element can be written, retain a distinguishable state, be read with acceptable disturbance, be rewritten, and pass its consequence into the next differential stage.
+
+## 13. Four Views and Four Actions at the Hardware Interface
+
+Every scale should expose the same four state views:
+
+```text
+Direction
+Phase
+Strength
+Reference
+```
+
+and the same four relational actions:
+
+```text
+Inward  = receive/return into the local relation
+Outward = express the locally resolved state
+Across  = form the shared differential with the opposed peer
+Over    = cross the connection boundary into the next differential/scale
+```
+
+The interface must remain invariant when a single triad is replaced by a cluster or a cluster is replaced by a cube.
+
+## 14. Connected Cube Scaling
+
+The intended machine scales as connected modules, not as one indefinitely enlarged monolith.
+
+```text
+triad
+ -> 9-element cluster
+ -> folded/stacked cube module
+ -> face-connected cubes
+ -> 3 x 3 x 3 = 27-cube block
+ -> blocks of blocks
+```
+
+A cube should expose matched relational ports on its six spatial faces where engineering permits:
+
+```text
++X / -X
++Y / -Y
++Z / -Z
+shared/local reference
+```
+
+The critical recursion test is:
+
+> A complete cube must be externally usable as one larger relational node.
+
+Scaling must work both upward and downward. Local relations combine into cluster/cube relations; higher relations must be able to condition/select lower cubes, clusters and triads without changing the interface contract.
+
+## 15. Field/Void at Processor Scale
+
+At large scale, Field and Void are not intended to become two conventional CPUs with separate external RAM banks. They may be two opposed regions of the same stateful compute-in-memory network.
+
+```text
+             shared reference / relation
+                       (0)
+                        |
+             +----------+----------+
+             |                     |
+          FIELD                  VOID
+      expressive region      compressive region
+             |                     |
+             +------ differential--+
+                        |
+                     routing
+```
+
+Each side's working memory is primarily the persistent state of its own cells/clusters. A sparse higher controller may only need an intervention decision (`0 = leave local resolution alone`, `1 = intervene/trigger/reroute`) while the local network retains the richer `-1/0/+1` state plus Direction/Phase/Strength/Reference.
+
+## 16. Anti-Drift Rule
 
 The material implementation may change while the relational architecture survives.
 
-If ferrite, nanocrystalline material, flex-PCB geometry, mechanical linkage, or sensing method changes, the invariant six-pair logical timing and relational read architecture should remain independently testable.
+If ferrite, nanocrystalline material, folded substrate geometry, mechanical linkage, sensing method, thin-film magnetic structures, or stacked-die implementation changes, the invariant six-pair logical timing and relational read architecture should remain independently testable.
