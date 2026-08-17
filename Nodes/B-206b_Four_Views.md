@@ -1,100 +1,83 @@
 ---
 node_id: "B-206b"
-canonical_name: "Four Views — Inward, Outward, Across, Over"
+canonical_name: "Four Views — Direction, Phase, Strength, Reference"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "None"
+claim_gate_detail: "Implementation-canonical; physical instantiations remain scale-specific"
 metadata_standard: "I-06"
 ---
 
-# Node B-206b: Four Views — Inward, Outward, Across, Over
+# Node B-206b: Four Views — Direction, Phase, Strength, Reference
 
-Dependencies:
-Upstream: B-203 Expression, B-204 Compression, B-205 Mirror, B-206 Paired Loop, E-503 Surface
-Downstream: C-301 Mirror Gate, C-308 Spin-half, A-115 Pressure Pulse (unresolved naming conflict — see earlier audit), C-311 Electric-Magnetic Duality, G-711 Gate 7, B-207 Threshold, E-515 Observation Windows
+## Correction
 
-Definition:
-The Four Views describe the four directional relationships of a field mode at its boundary.
-They are not separate forces.
-They are four perspectives of the same boundary interaction.
+Earlier repository text incorrectly called **Inward, Outward, Across, Over** the Four Views. Those are Actions, not Views. The canonical separation is now:
 
-Inward  = compression toward center
-Outward = expression away from center
-Across  = motion along the boundary surface
-Over    = boundary roll-off event
+- **Views = what the system reads about a state.**
+- **Actions = what the system does with a state.**
 
-The Over is the boundary release mechanism.
-A field mode presses against the boundary.
-Surface tension holds the mode until the boundary threshold is exceeded.
-The field then rolls off the boundary rather than snapping directly backward.
-The roll-off produces:
-- Spin tendency
-- Pressure cushion
-- Pressure pulse
+See `B-206c_Four_Actions.md`.
 
-Mathematics:
-Boundary:
-r = R
+## The Four Views
 
-Surface hold energy:
-E_s = sigma * A_s
+1. **Direction** — Which way is the resolved relation leaning or moving relative to the active reference. At the ternary routing layer this can be represented as `-1 / 0 / +1` = left / stay / right.
+2. **Phase** — Where the oscillatory relation is in its cycle, including handedness/crossover orientation where the implementation tracks it.
+3. **Strength** — How large or intense the relation is relative to its active reference. Five-state or finer threshold bands may be used as representations of this quantity, but they are not part of the invariant kernel.
+4. **Reference** — The local baseline `(0)` against which Direction, Phase, and Strength are interpreted. Reference is carried at every recursive level; no state is interpreted as an absolute value without an active reference.
 
-Boundary excess energy:
-DeltaE = E_mode - E_s
+## Measurement Packet
 
-Boundary hold:
-DeltaE <= 0
+A minimal view packet can be written as:
 
-Roll-off:
-DeltaE > 0
+```text
+ViewState {
+    direction
+    phase
+    strength
+    reference
+}
+```
 
-Boundary asymmetry:
-S_roll = closed_integral psi(R,theta) * d_psi(R,theta)/d_theta * d_theta
+This packet is descriptive. It does not itself command a transformation.
 
-Spin tendency exists when:
-DeltaE > 0
-AND
-S_roll != 0
+## Domain Independence
 
-Pressure cushion:
-P_c = beta * DeltaE / V_c
+The same Four Views can describe a circuit, a wave packet, a cell, a lattice relation, a cognitive state, or another scale-specific system. Domain labels are wrappers above the invariant engine.
 
-Pressure pulse:
-d^2P/dt^2 - c_w^2 * nabla^2 P = gamma * DeltaE * delta(r - R) * delta(t - t_0)
+The kernel must not encode domain-specific meanings such as temperature, matter phase, planets, musical intervals, or biological labels into these four slots.
 
-Spin-half closure:
-psi(theta + 2*pi) = -psi(theta)
-psi(theta + 4*pi) = psi(theta)
+## Relationship to the Actions
 
-Operational Chain:
-Expression
--> Compression
--> Paired Loop
--> Four Views
--> Inward / Outward / Across / Over
--> Roll-Off
--> Spin Tendency
--> Pressure Cushion
--> Pressure Pulse
--> Mirror Gate
+```text
+VIEW                         ACTION
+what is read                 what is done
 
-Yellow Audit:
-- Boundary threshold defined.
-- Excess-energy condition defined.
-- Roll-off condition defined.
-- Boundary asymmetry defined.
-- Spin tendency mathematically conditioned.
-- Pressure cushion defined.
-- Pressure pulse equation defined.
-- Spin-half closure connected.
+Direction                    Inward
+Phase                        Outward
+Strength                     Across
+Reference                    Over
+```
 
-Still unresolved:
-- First-principles derivation of boundary energy.
-- Exact surface-tension function.
-- Continuous versus discrete roll-off.
-- Formal derivation of orientation inversion.
-- Complete derivation of charge shell.
-- Complete derivation of magnetic curl.
-- Experimental validation across scales.
+The columns are parallel four-part layers, not one-to-one semantic aliases. An Action may operate on all four Views simultaneously.
+
+## Anti-Drift Rule
+
+If replacing or deleting a domain representation changes the definitions of Direction, Phase, Strength, or Reference, that representation has leaked into the core architecture.
+
+## Operational Chain
+
+```text
+state
+ -> read Direction / Phase / Strength / Reference
+ -> choose or resolve an Action
+ -> produce consequence
+ -> consequence becomes input/reference for the next relation
+```
+
+## Yellow Audit
+
+- The four-slot measurement architecture is canonical for implementation.
+- Exact physical sensors and mathematical coordinates remain implementation-specific.
+- The relationship between these Views and any dimensional 1D/2D/3D/4D representation must be derived separately; it is not assumed here.
