@@ -1,57 +1,58 @@
 ---
 node_id: "G-711"
-canonical_name: "Gate 7"
+canonical_name: "Namika — Inter-System Relation (No Internal Gate 7)"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Evaluation, Control, and Route Grammar"
-claim_gate_detail: "None"
+claim_gate_detail: "Implementation-canonical no-7 rule; higher-order inter-system behavior remains to be formalized"
 metadata_standard: "I-06"
 ---
 
-# Node G-711: Gate 7
+# Node G-711: Namika — Inter-System Relation (No Internal Gate 7)
 
-Dependencies:
-Upstream: G-706 Validation, G-702 Evaluation, G-703 Modulation
-Downstream: Repository-wide — Gate 7 is the review gate for the entire framework. Also feeds G-716 One-Wave Conversion Grammar and G-719 Neural System Functional Analogy Map (shape-level parallel only).
+## Correction
 
-Definition:
-Gate 7 is the review gate.
-Gates 1-6 build state. Gate 7 reviews state.
+A complete internal system contains **six** logical pair operations. There is no seventh internal gate appended after Gate 6.
 
-Gate 7 does not build. It reviews.
-Gate 7 asks: Is what was built internally consistent?
-Does it survive interaction? Does it validate?
+Earlier text defined Gate 7 as a review gate inside the same system. That mixed repository review/governance with the compute architecture and is superseded here.
 
-Evaluate + Modulate + Validate
+## No-7 Rule
 
-Root Split:
-Void -> Evaluate
-Field -> Modulate
+```text
+one complete system = six internal pair operations
+```
 
-Validation emerges from successful interaction between the two.
+The invariant sequence is:
 
-Gates 1-6 Build -> Gate 7 Reviews
+```text
+F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - F1/V6 ...
+```
 
-Mathematics:
-Gate 7 applies the full evaluation cycle to the repository itself:
+Gate 6 closes/loops into the next Gate 1 relation. It does not terminate at an internal Gate 7.
 
-Delta_repo = current_state - expected_state
-E_repo = E(Delta_repo)
-M_repo = M(E_repo)
-V_repo = V(M_repo)
+## Namika
 
-If V_repo != 0: the repository survives Gate 7 review.
-If V_repo = 0: the repository requires correction.
+When **two complete six-operation systems** become related through a new shared boundary/reference, the resulting higher-order relation is called **Namika** in the current architecture.
 
-Gate 7 is not a one-time event.
-It is applied recursively as the repository grows.
+```text
+System A (6) \
+              > shared higher-order relation = Namika
+System B (6) /
+```
 
-Operational Chain:
-Gates 1-6 (Build) => Gate 7 (Review) => Validated Repository State
+Namika is not `Gate 7` hidden under a new name. It is an inter-system relation whose participants are already complete systems.
 
-Yellow Audit:
-- Formal specification of what constitutes repository validation not yet derived
-- Whether Gate 7 can be automated or requires human review unresolved
+## Recursive Interpretation
 
----
+A completed system can become one relational unit at the next scale. Two such units may then form a new opposed/shared-reference relation without changing the six-operation kernel inside either participant.
+
+## Repository Review
+
+Repository validation and review remain necessary governance functions, but they are not part of the six-gate physical/state-machine kernel and must be implemented in governance/test infrastructure instead of an internal Gate 7.
+
+## Yellow Audit
+
+- No-internal-Gate-7 rule is canonical for implementation.
+- Namika is the current name for the emergent inter-system relation.
+- Exact mechanics, data packet, and physical realization of Namika remain open.
