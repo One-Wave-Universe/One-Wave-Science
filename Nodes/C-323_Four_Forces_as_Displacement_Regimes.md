@@ -1,131 +1,199 @@
 ---
 node_id: "C-323"
-canonical_name: "Four Forces as Displacement Regimes"
+canonical_name: "Displacement Interaction Regimes of the Unified Compression Field"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
-classification: "Force Unification / Continuum Stress"
-claim_gate_detail: "YELLOW — continuum limits written; lattice discretization and quantitative matching still open"
+classification: "Field Identity / Continuum Interaction Stress"
+claim_gate_detail: "YELLOW — continuum form written from A-115; lattice runs and quantitative wake profiles still open"
 metadata_standard: "I-06"
 ---
 
-# Node C-323: Four Forces as Displacement Regimes
+# Node C-323: Displacement Interaction Regimes of the Unified Compression Field
+
+**Former title:** Four Forces as Displacement Regimes  
+**Reason for rename:** One-Wave has no forces and no force-carriers. Interaction language only.
 
 **Dependencies**  
-Upstream: A-102 Displacement, A-105 Restoring Response, A-106 Pressure Response, C-311 Electric-Magnetic Duality, E-532 Bound/Unbound + Finite Wake, D-408 Sixfold Lattice  
-Lateral: C-318 Mass Mechanism, D-414 Four-Interaction Shell (visualization, not this derivation)  
-Downstream: hexagonal force dynamics, Maxwell closure from pressure, residual spectrum
+Upstream: A-102 Displacement, A-105 Restoring Response, A-106 Pressure Response, A-115 Unified Compression Field, C-311 Electric-Magnetic Duality, C-318 Four-Interaction Mass-Effect Response, C-322 Mirror-Gate 125 GeV Boundary Response, E-532 Bound/Unbound + Finite Wake  
+Lateral: D-408 Sixfold Lattice, D-414 Four-Interaction Shell, D-415 Hexagonal Lattice Force Dynamics (bond *responses*)  
+Downstream: hexagonal interaction runs, wake profile derivation, residual spectrum
 
 ## Purpose
 
-Recover the four classical interactions as geometric and energetic regimes of **one** continuum stress built from a single displacement field. No additional fundamental fields are introduced.
+State the continuum interaction stress of **one** displacement field so that the measurement names already locked in A-115 appear as different views of the same object:
 
-## Continuum stress
+```text
+gravity          = local directional response of the compression field
+dark matter      = extended / wake contribution of that same field
+Mass Effect      = resistance to carrying the full four-interaction recurrence
+Mirror-Gate      = local boundary stiffness / finite work to cross orientation basin
+```
 
-Displacement field \(\mathbf{u}(\mathbf{x},t)\). Strain, compression, and vorticity:
+No second substance. No carrier particles. No Standard Model force list imported as architecture.
+
+## Field variables (from A-115)
+
+Displacement of the One-Wave field away from Ground:
 
 \[
-\varepsilon_{ij} = \tfrac12(\partial_i u_j + \partial_j u_i), \qquad
-\theta = \nabla\cdot\mathbf{u}, \qquad
-\omega_i = (\nabla\times\mathbf{u})_i
+\mathbf{u}(\mathbf{x},t)
 \]
 
-Minimal isotropic stress that already distinguishes bound cores, free wakes, and orientation:
+Scalar compression:
+
+\[
+\chi = -\nabla\cdot\mathbf{u}
+\]
+
+- \(\chi > 0\): compression  
+- \(\chi < 0\): expression / release  
+- \(\chi = 0\): no local volumetric displacement
+
+Restoring response (A-105) is the field pushing back on its own displacement. That push-back is the only interaction content.
+
+## Continuum interaction stress
+
+One stress built from the single displacement field:
 
 \[
 \boxed{
 \sigma_{ij}
 =
-K\,\theta\,\delta_{ij}
+K\,\chi\,\delta_{ij}
 +
 2\mu\bigl(\varepsilon_{ij}-\tfrac13\theta\delta_{ij}\bigr)
 +
-\alpha(\partial_i\theta)(\partial_j\theta)
+\alpha(\partial_i\chi)(\partial_j\chi)
 +
 \beta\,C_i C_j
 -
-\gamma(\nabla^2\theta)\,\delta_{ij}
+\gamma(\nabla^2\chi)\,\delta_{ij}
 }
 \]
 
-- \(K\) bulk modulus (isotropic compression)  
-- \(\mu\) shear modulus  
-- \(\alpha\) gradient energy of compression  
-- \(\beta\) oriented residual stress  
-- \(\gamma\) curvature penalty  
-- \(C_i\) residual orientation density, nonzero **only** on regions that satisfy the bound criterion (E-532)
+where \(\theta = \nabla\cdot\mathbf{u} = -\chi\), \(\varepsilon_{ij}\) is strain, and \(C_i\) is residual orientation density nonzero **only** where the bound criterion of E-532 holds.
 
-Momentum balance:
+Net restoring response:
 
 \[
-\partial_j\sigma_{ij} = \rho\,\ddot u_i
+\mathbf{R}_i = \partial_j\sigma_{ij}
+\qquad\Rightarrow\qquad
+\rho\,\ddot{u}_i = R_i
 \]
 
-## Four regimes
+This is A-105 written in continuum stress form. Nothing is added that is not already a geometric limit of \(\mathbf{u}\) and \(\chi\).
 
-### 1. Gravity — isotropic long-range wake
+## Measurement views of the same field (A-115 identity)
 
-Far from cores, \(C=0\) and shear averages away. Leading term is bulk compression. Static limit:
+### Local compression-gradient response (gravity view)
+
+Define
 
 \[
-K\nabla\theta \approx 0 \quad\Rightarrow\quad \theta \sim \frac{M}{r}
+\Phi_{\rm OW} = \alpha_g\,\chi,
+\qquad
+\mathbf{g}_{\rm OW} = -\nabla\Phi_{\rm OW} = -\alpha_g\nabla\chi.
 \]
 
-Test cores fall down \(-\nabla\theta\). Pure gradient response to stable displacement (consistent with A-105 / gradient-gravity reading). Finite-wake cutoff exists in principle; for ordinary masses it sits at cosmological scales.
+Nearby bound structure responds to this gradient. That response is the gravity view. No carrier. No separate gravity field. The superfluid is displaced; the gradient of that displacement is what is measured as attraction.
 
-### 2. Electromagnetism — oriented free wake
+### Extended / wake compression (dark-matter view)
 
-Bound cores can retain a residual orientation \(C_i\). Outside the core, \(\beta C_i C_j\) sources a free, oriented wake. Longitudinal and transverse projections of the same displacement recover the pressure-field split already in C-311:
+Split for bookkeeping only:
 
 \[
-\mathbf{E} \sim \nabla P_c, \qquad \mathbf{B} \sim \nabla\times P_c
+\mathbf{g}_{\rm OW} = \mathbf{g}_{\rm local} + \mathbf{g}_{\rm wake}.
 \]
 
-Static potential again \(1/r\), now carrying an orientation label (charge). Opposite labels cancel the far wake.
-
-### 3. Strong interaction — curvature-saturated core
-
-When the curvature term \(\gamma\nabla^2\theta\) dominates, the core cannot expand. Balance
+\(\mathbf{g}_{\rm wake}\) is retained or extended compression left by motion and rotation of bound structure through the field — the compression ring of Book 1 Ch12 and Book 5 Ch1. A conventional analysis that does not know the field is continuous would invent an extra density
 
 \[
-K\theta \sim \gamma\nabla^2\theta \quad\Rightarrow\quad \text{range}\sim\sqrt{\gamma/K}
+\rho_{\rm DM,eff} = -\frac{1}{4\pi G_{\rm eff}}\nabla\cdot\mathbf{g}_{\rm wake}.
 \]
 
-yields a short (Yukawa or harder) residual. Discrete orientations of \(C_i\) inside the core must cancel for the core to remain bound; the uncancelled piece is the strong residual. Lattice finite-wake kernels with small \(\sigma\) are the discrete transcription.
+That density is an observational translation, not a second One-Wave substance. Dark-matter behavior is the push-back of the displaced superfluid at extended range.
 
-### 4. Weak interaction — configuration-changing displacement
+### Local boundary stiffness (Mirror-Gate / Higgs-scale view)
 
-A core may sit in more than one local minimum of curvature-plus-orientation energy. The displacement that rotates or tunnels the core between minima is an off-diagonal piece of \(\sigma_{ij}\). The intermediate configuration is only marginally bound, so the associated wake is short-lived and massive. Axial character appears because internal orientation rotation is a pseudovector displacement.
+When the bound recurrence is driven hard enough to approach the first orientation-basin crossing, the finite work required is the Mirror-Gate energy of C-322:
 
-## Summary table
+\[
+E_{\rm MG}
+=
+\overline{E}_4(\mathbf{q}_G) - \overline{E}_4(\mathbf{q}_0)
+\approx 125\,\mathrm{GeV}
+\quad\text{(empirical anchor)}.
+\]
 
-| Regime | Dominant stress content | Range | Orientation |
-|--------|-------------------------|-------|-------------|
-| Gravity | bulk \(K\theta\) | long | none |
-| EM | residual \(\beta C_i C_j\) | long | yes (charge) |
-| Strong | curvature \(\gamma\nabla^2\theta\) | short | discrete internal |
-| Weak | off-diagonal core rotation | short | axial, changes identity |
+This is boundary stiffness of the same compression architecture, not a separate particle excitation. Mass Effect (C-318) is the small-displacement carried-pattern resistance inside the stable basin; Mirror-Gate is the large-deformation work across the basin boundary. Same field, different derivatives.
 
-## Relation to existing nodes
+### Oriented residual response (electrical view)
 
-- **C-311** supplies the EM projection language; this node supplies the stress that sources those projections.  
-- **E-532** supplies the bound flag that turns \(C_i\) on or off.  
-- **E-531** governs free propagation of wakes after they leave the core; it does not set mass.  
-- **D-414** visualizes four *interaction channels* of a bounded wave; this node derives the four *force regimes* from continuum stress. They are complementary, not identical.
+Bound regions may retain residual orientation \(C_i\). Outside the core, the \(\beta C_i C_j\) term sources an oriented free wake. Longitudinal and transverse projections recover the pressure-field split of C-311:
+
+\[
+\mathbf{E}\sim\nabla P_c,
+\qquad
+\mathbf{B}\sim\nabla\times P_c.
+\]
+
+Opposite orientation labels cancel the far wake. No separate electromagnetic substance — oriented residual of the same displacement field.
+
+### Curvature-saturated residual (short-range core view)
+
+When the curvature term \(\gamma\nabla^2\chi\) dominates, the core cannot expand. Balance
+
+\[
+K\chi \sim \gamma\nabla^2\chi
+\quad\Rightarrow\quad
+\text{range}\sim\sqrt{\gamma/K}
+\]
+
+gives a short residual. Discrete orientations of \(C_i\) inside the core must cancel for the core to remain bound under E-532; any uncancelled piece is short-range residual interaction of the same field.
+
+### Configuration-changing residual (orientation-flip residual view)
+
+A core may sit in more than one local minimum of curvature-plus-orientation energy. The displacement that rotates the core between minima is an off-diagonal piece of \(\sigma_{ij}\). The intermediate state is only marginally bound; the associated residual is short-lived. This is still the same field changing its own configuration, not a separate interaction species.
+
+## Summary — one field, many measurements
+
+| Measurement name | Geometric content of the same field |
+|------------------|-------------------------------------|
+| Gravity | local \(\nabla\chi\) response |
+| Dark-matter behavior | extended / wake \(\chi\) response |
+| Mass Effect | carried four-interaction resistance (C-318) |
+| Mirror-Gate (~125 GeV) | finite work across orientation basin (C-322) |
+| Electrical response | oriented residual wake (\(C_i\), C-311) |
+| Short-range core residual | curvature-saturated \(\chi\) |
+| Configuration residual | off-diagonal orientation change |
+
+No row introduces a new substance. Every row is a limit or derivative of \(\mathbf{u}\), \(\chi\), and the bound flag.
+
+## Relation to locked nodes
+
+- **A-115** is the identity claim this node continuum-forms.  
+- **C-318** supplies Mass Effect as carried-pattern resistance.  
+- **C-322** supplies Mirror-Gate as finite boundary work.  
+- **C-311** supplies the oriented pressure projections.  
+- **E-532** supplies the bound flag that turns residual orientation on or off.  
+- **E-531** governs free propagation of wakes after they leave bound regions; it does not organize mass.  
+- **D-414** visualizes interaction channels of a bounded wave; this node states the continuum stress those channels sit inside.
 
 ## Required next work
 
-1. Discretize \(\sigma_{ij}\) on the D-408 hexagonal lattice (bond forces from \(\theta_n\), shear, gradient energy, \(C_n\), curvature).  
-2. Seed tightly bound oriented cores and verify automatic appearance of long-range wake, short-range residual, and core migration.  
-3. Close Maxwell homogeneous + inhomogeneous pair from \(\nabla P_c\), \(\nabla\times P_c\) and continuum momentum (upgrade path for C-311).  
-4. Quantitative matching of effective couplings and ranges remains open — Yellow until then.
+1. Discretize \(\sigma_{ij}\) on D-408 as bond **responses** (D-415 language, not forces).  
+2. Derive \(g_{\rm wake}(r)\) from the field equation with coefficients fixed independently of any galaxy fit.  
+3. Close the A-115 / C-318 bridge from one stable four-interaction profile to both local Mass-Effect tensor and far-field gravity-source amplitude.  
+4. Lattice runs: single bound core, wake profile, opposite-orientation cancellation, high-curvature short residual, rear-compression migration — under D-412 discipline.
 
 ## Failure / falsification
 
-- If no single parameter set of \((K,\mu,\alpha,\beta,\gamma)\) can produce both a long-range isotropic wake and a short-range residual under the same bound flag.  
-- If oriented residuals fail to cancel for opposite labels while preserving energy accounting.  
-- If lattice transcription of the stress spontaneously violates the dual-harmonic free-sector identity (E-531).
+- Any coefficient set that requires a second substance to produce the extended wake.  
+- Spontaneous bound flags on pure free packets.  
+- Failure of opposite orientation labels to cancel the far wake while energy accounting remains closed.  
+- Any re-introduction of force-carrier language or Standard Model interaction list as architectural primitives.
 
 ## Status
 
-YELLOW. Continuum limits written and internally consistent with A-105, C-311, E-531, E-532. Lattice discretization and quantitative recovery of observed ranges still required.
+YELLOW. Continuum interaction stress written to match A-115 identity. Lattice discretization and quantitative wake derivation still required. No Standard Model drift permitted in further development of this node.
