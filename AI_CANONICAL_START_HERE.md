@@ -2,20 +2,55 @@
 
 **Status:** Mandatory ingestion order
 
-An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, or Android movement architecture.
+An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, or VTC architecture.
 
-Current update handoff:
+## Current update handoff
 
-1. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-2. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-3. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-4. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-5. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-6. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-7. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-8. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+2. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+3. `VTC_BUILD_ARCHITECTURE.md`
+4. `Nodes/B-206b_Four_Views.md`
+5. `Nodes/B-206c_Four_Actions.md`
+6. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+7. `Nodes/B-223_Three_Moves.md`
+8. `Nodes/B-224_Two_Choices.md`
+9. `Nodes/B-225_Field_Cycle.md`
+10. `Nodes/C-301_Mirror_Gate.md`
+11. `Nodes/G-711_Gate_7.md`
+12. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+13. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+14. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+15. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+16. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+17. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+18. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+19. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
-These files summarize the current separation among geometry, route grammar, procedural memory, foundational choice, binary oversight, and downstream spectral audit.
+## Updated 33 state-machine protection
+
+For the current compute architecture, the invariant engine is:
+
+```text
+F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
+```
+
+- `/` is one simultaneous mirrored pair.
+- `-` is the Mirror Gate return/crossover through the shared `(0)` reference.
+- There are six coupled logical operations / twelve pair-side positions, not twelve serial instructions.
+- The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.
+- Four Views are **Direction, Phase, Strength, Reference**.
+- Four Actions are **Inward, Outward, Across, Over**.
+- Two engagement choices are **Everything / Nothing**.
+- Three differential moves are **Left / Stay / Right = -1 / 0 / +1**.
+- Five coarse modulation states are represented neutrally as `-2,-1,0,+1,+2`.
+- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**.
+- There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in the current architecture.
+
+### Anti-drift rule
+
+If removing a domain vocabulary changes the six-pair oscillator, that domain representation has leaked into the kernel.
+
+Point/Path/Field, Carrier/Breathing/Phase, dimensions, thermal labels, matter labels, musical mappings, cognition, planetary models, EM validation, and hardware materials are wrappers/instantiations above the invariant engine unless a separate node explicitly derives otherwise.
 
 ## Permanent correction
 
@@ -35,7 +70,6 @@ Mass Effect is the response produced when the complete stable recurrence must be
 The cross-couplings among those four interactions are part of the complete response and may not be omitted.
 
 The approximately 125 GeV collider measurement is a separate observable: the Mirror-Gate boundary-response work required to drive the stable architecture to its first mirrored-basin crossing.
-
 
 ## Dimensional integrity before simulation
 
@@ -69,7 +103,7 @@ Before extending the Wave Computer or Android movement language, read:
 
 The signed packet is `±(n,2n,2n+1)`. The Fibonacci word validates the ordered choice between the `2n` and `2n+1` recursive branches after a hop is committed. It does not replace live `-1(0)+1` choice, and its symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement; binary remains top-down oversight.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 33's engagement/differential architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
