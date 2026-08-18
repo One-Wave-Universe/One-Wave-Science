@@ -11,12 +11,17 @@ from .film_reel import (
 )
 from .film_reel_renderer import make_video
 from .flipbook_animator import make_video as make_legacy_flipbook_video
+from .studio_api import StudioActionError, action_schema, apply_action, apply_actions
 
 __all__ = [
     "AudioTrack",
     "Exposure",
     "FilmProject",
     "PerspectiveGrid",
+    "StudioActionError",
+    "action_schema",
+    "apply_action",
+    "apply_actions",
     "lay_art_sequence",
     "make_project_spec",
     "make_video",
