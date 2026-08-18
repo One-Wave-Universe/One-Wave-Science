@@ -1,0 +1,82 @@
+{
+  "format": "goblin-film-reel-v1",
+  "base_dir": ".",
+  "fps": 24,
+  "output": "goblin-raccoon-shot.mp4",
+  "base_character_height": 0.58,
+  "background": {
+    "path": "art/background.png",
+    "width": 1920,
+    "height": 1080
+  },
+  "grid": {
+    "horizon_y": 0.38,
+    "vanishing_x": 0.50,
+    "horizon_scale": 0.22,
+    "front_scale": 1.00
+  },
+  "assets": {
+    "gr_pose_001": "art/gr_pose_001.png",
+    "gr_pose_002": "art/gr_pose_002.png",
+    "gr_pose_003": "art/gr_pose_003.png"
+  },
+  "audio": [
+    {
+      "kind": "music",
+      "path": "audio/music.wav",
+      "duration_ms": 10000,
+      "gain": 0.35,
+      "start_ms": 0
+    },
+    {
+      "kind": "ambience",
+      "path": "audio/forest-wind-birds.wav",
+      "duration_ms": 10000,
+      "gain": 0.55,
+      "start_ms": 0
+    },
+    {
+      "kind": "dialogue",
+      "path": "audio/dialogue-001.wav",
+      "duration_ms": 2100,
+      "gain": 0.95,
+      "start_ms": 3200
+    },
+    {
+      "kind": "sfx",
+      "path": "audio/button-click.wav",
+      "duration_ms": 500,
+      "gain": 0.80,
+      "start_ms": 6100
+    }
+  ],
+  "exposures": [
+    {
+      "asset_id": "gr_pose_001",
+      "start_frame": 0,
+      "hold_frames": 24,
+      "x": 0.42,
+      "ground_y": 0.83,
+      "rotation_deg": 0,
+      "layer": 0
+    },
+    {
+      "asset_id": "gr_pose_002",
+      "start_frame": 24,
+      "hold_frames": 3,
+      "x": 0.43,
+      "ground_y": 0.82,
+      "rotation_deg": 0,
+      "layer": 0
+    },
+    {
+      "asset_id": "gr_pose_003",
+      "start_frame": 27,
+      "hold_frames": 3,
+      "x": 0.45,
+      "ground_y": 0.80,
+      "rotation_deg": 0,
+      "layer": 0
+    }
+  ]
+}
