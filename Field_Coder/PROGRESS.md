@@ -6,7 +6,7 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/03-task-intake`
 - Current step: 03 — Goal to one narrow task
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
@@ -14,58 +14,52 @@
 - Step 00 — Project control layer: COMPLETE
 - Step 01 — Executable Field shell: COMPLETE
 - Step 02 — Persistent Field state: COMPLETE
+- Step 03 — Goal to one narrow task: COMPLETE
 
-## Current goal
+## Step 03 verified result
 
-Convert one supplied coding goal into exactly one explicit bounded task with scope and success criteria, while rejecting ambiguous, multi-task, or unbounded intake.
-
-## Hard-start evidence
-
-- Step 03 moved to completed Step 02 lineage.
-- Step 02 hard-stop evidence confirmed in progress and diary.
-- Full Field control set and active Step 03 section reread.
-- Step 03 is parser/validator only; no model or repository editing is allowed.
+- Added `Field_Coder/field/task_intake.py` and `Field_Coder/tests/test_task_intake.py` only for Step 03 implementation.
+- Broad narrative goal with exactly one explicit `TASK`, `SCOPE`, and `SUCCESS` declaration resolves to exactly one bounded `TaskSpec`.
+- Multiple `TASK` declarations are rejected as ambiguous.
+- Missing `SCOPE` is rejected as unbounded.
+- Task output carries explicit summary, scope, and success criteria.
+- Step 02 persistent-state regression passes.
+- Step 01 shell regression passes.
+- No repository reader, model, editor, proposal, diff, target-project runner, retry controller, or Void logic was added.
 
 ## Known-good state
 
-- Step 01 shell verified.
-- Step 02 persistent state verified across fresh process restart.
+Steps 01–03 are all verified. Field can start, persist its state, and accept exactly one bounded task contract.
 
-## One allowed change
+## Test evidence
 
-Add only a deterministic one-task intake contract/parser and intake-only tests.
+`python3 Field_Coder/tests/test_task_intake.py`
+- PASS: broad goal resolved to exactly one bounded TaskSpec
+- PASS: multiple tasks rejected
+- PASS: unbounded task rejected
 
-## Intake contract
+`python3 Field_Coder/tests/test_state.py`
+- PASS: exact state restored in fresh process
+- PASS: missing required state rejected
+- PASS: invalid attempt bounds rejected
 
-A broad goal may contain explanatory text, but must declare exactly one bounded task using three explicit lines:
+`python3 Field_Coder/tests/test_shell.py`
+- PASS: initial FIELD_SHELL_READY
+- PASS: deliberate missing component detected
+- PASS: restored FIELD_SHELL_READY
 
-- `TASK: <one task>`
-- `SCOPE: <comma-separated bounded paths/components>`
-- `SUCCESS: <one or more explicit success criteria separated by semicolons>`
+## Current blockers
 
-Exactly one of each declaration is required. Multiple `TASK:` declarations, missing scope, missing success criteria, blank values, or duplicate declarations are rejected.
+- None.
 
-## Exact success test
+## Next branch
 
-1. broad sample goal with narrative + one TASK/SCOPE/SUCCESS set yields exactly one `TaskSpec`;
-2. resulting task has nonempty summary, bounded scope, and success criteria;
-3. two TASK declarations are rejected as ambiguous/multi-task;
-4. missing SCOPE is rejected as unbounded;
-5. prior Step 01 and Step 02 tests remain passing.
+`field-coder/04-repo-reader`
 
-## Must not add in Step 03
+## Step 04 hard start
 
-- repository reading/editing
-- model-driven task generation
-- proposal generation
-- diff/test runner behavior for target projects
-- retry loop behavior
-- Void logic
+Move Step 04 to this completed commit, reread the complete Field control set, confirm Step 03 hard-stop evidence, then implement only read-only repository reconstruction.
 
-## Next allowed action
+## Step 04 hard stop reminder
 
-Create `Field_Coder/field/task_intake.py` and `Field_Coder/tests/test_task_intake.py`, then run Step 03 verification plus Step 01/02 regressions.
-
-## Hard stop
-
-Stop after the one-task contract and rejection cases are proven and recorded.
+Stop after a fixture repository's branch/HEAD/relevant files are read into a context bundle and the fixture is proven unchanged byte-for-byte/working-tree clean, with prior regressions passing and diary/progress updated.
