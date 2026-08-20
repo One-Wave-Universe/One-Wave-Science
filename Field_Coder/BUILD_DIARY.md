@@ -17,16 +17,34 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 - Files expected to change: `Field_Coder/*` control documents only
 - Must remain unchanged: root `AGENTS.md`, existing animator code, science content, existing branches
 - Success test: all required control docs exist, future branches inherit them, every branch has explicit hard start/stop
-- Work completed so far:
-  - created `field-coder/00-control`
-  - added project index
-  - locked Field-only scope
-  - added permanent carry-forward rules
-  - added full branch build map with hard starts/stops
-  - added persistent progress report
-- Result: PASS so far
+- Result: PASS
 - Decision: KEEP
-- Next action: finish diary/control verification, create all named branches from the completed control branch, then close Step 00
+
+---
+
+## Entry 0002 — Step 00 control layer completed
+
+- Date/time: 2026-08-19 America/Los_Angeles
+- Branch: `field-coder/00-control`
+- Step: 00 — Project control layer
+- Goal: finish and verify the complete Field Coder control layer
+- Hard-start check: PASS
+- Known-good state: root `AGENTS.md` unchanged; Field work isolated under `Field_Coder/`
+- Attempt: 1/3
+- Intended change: finish control files, create all planned branches, verify branch set, close Step 00
+- Files expected to change: Field Coder control documents only; Git branch refs
+- Must remain unchanged: existing animator/science implementation and root protocol
+- Exact success test: verify branches `field-coder/00-control` through `field-coder/14-real-repo-trial` exist and each has a documented purpose, hard start, success condition, and hard stop
+- Files actually changed: `Field_Coder/README.md`, `Field_Coder/BUILD_SCOPE.md`, `Field_Coder/CORE_RULES.md`, `Field_Coder/BUILD_STEPS.md`, `Field_Coder/PROGRESS.md`, `Field_Coder/BUILD_DIARY.md`
+- Command/check executed: GitHub branch search for `field-coder/`
+- Exit status/result: PASS — 15 expected branches returned
+- Observed behavior: all implementation branches were created from the Field control lineage; control documents exist; root `AGENTS.md` was not overwritten
+- What worked: isolated Field-only project scope; branch gates; persistent project memory; hard-start/hard-stop definitions
+- What failed: nothing in Step 00
+- What was learned: the Field project now has repository-resident memory and does not need conversation memory to know its build rules
+- Decision: KEEP
+- Next permitted action: open `field-coder/01-shell`, reread the full control set, update progress/diary for Step 01, then make only the minimal executable shell change
+- Hard-stop status: SATISFIED — no implementation code added to control branch
 - Blockers: none
 
 ---
