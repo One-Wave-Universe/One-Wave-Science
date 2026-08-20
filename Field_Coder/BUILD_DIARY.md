@@ -76,6 +76,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0004 — Step 01 executable shell completed
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/01-shell`
+- Step: 01 — Executable Field shell
+- Goal: prove the minimal Field shell starts, detects a missing required component, and recovers after restoration
+- Hard-start check: PASS
+- Known-good state: Step 00 control layer complete
+- Attempt: 1/3
+- Intended change: add only the four declared Step 01 shell files
+- Files expected to change: `Field_Coder/field/__init__.py`, `Field_Coder/field/controller.py`, `Field_Coder/field/shell_component.py`, `Field_Coder/tests/test_shell.py`
+- Must remain unchanged: all later-step behavior and all non-Field project code
+- Exact success test: ready -> deliberate missing component rejected -> restored ready
+- Files actually changed: exactly the four declared shell files plus mandatory progress/diary records
+- Command/check executed: `python3 Field_Coder/tests/test_shell.py` against an exact local mirror of the checked-in Step 01 files
+- Exit status/result: PASS — exit 0
+- Observed behavior: `PASS: initial FIELD_SHELL_READY`; `PASS: deliberate missing component detected`; `PASS: restored FIELD_SHELL_READY`
+- What worked: deterministic controller status; deliberate component-loss detection; guaranteed restoration via `finally`; restored ready state
+- What failed: the first test execution method attempted a shallow GitHub clone, but the execution runtime could not resolve `github.com`; this was an environment transport failure and did not execute/test the code
+- What was learned: Step 01 shell itself passed unchanged; the test method can use an exact local mirror when runtime network resolution is unavailable
+- Decision: KEEP
+- Next permitted action: transition `field-coder/02-state-memory` onto the completed Step 01 lineage, reread the full control set, and begin only Step 02 persistent state work
+- Hard-stop status: SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
