@@ -103,6 +103,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0005 — Step 02 state-memory pre-pass
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/02-state-memory`
+- Step: 02 — Persistent Field state
+- Goal: persist and restore Field's exact working state across restarts while rejecting invalid/incomplete state
+- Hard-start check: PASS — Step 02 moved to completed Step 01 lineage; full Field control set reread; Step 01 hard-stop evidence confirmed
+- Known-good state: Step 01 shell passes all required checks
+- Attempt: 1/3
+- Intended change: add only a validated Field state schema, JSON save/load behavior, and state-only tests
+- Files expected to change: `Field_Coder/field/state.py`, `Field_Coder/tests/test_state.py`
+- Must remain unchanged: Step 01 shell behavior; task intake; repo reading; model/editor/diff/retry/Void behavior
+- Exact success test: valid state save -> reload exact equality; missing required field rejected; invalid attempt bounds rejected; Step 01 shell regression remains passing
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 02 hard-start/read discipline completed
+- What failed: none
+- What was learned: Step 02 is limited to persistence/validation; it stores attempt fields but does not implement retry logic
+- Decision: KEEP
+- Next permitted action: create the two declared state files and run Step 02 state test plus Step 01 shell regression
+- Hard-stop status: NOT YET SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
