@@ -4,9 +4,9 @@
 
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/01-shell`
-- Current step: 01 — Executable Field shell
-- Status: COMPLETE
+- Current branch: `field-coder/02-state-memory`
+- Current step: 02 — Persistent Field state
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -14,41 +14,61 @@
 - Step 00 — Project control layer: COMPLETE
 - Step 01 — Executable Field shell: COMPLETE
 
-## Step 01 verified result
+## Current goal
 
-- Added only the initial Field shell source tree and shell-only verification test.
-- Controller reports deterministic `FIELD_SHELL_READY` with exit 0 when complete.
-- Deliberate removal of the required shell component is detected with deterministic `FIELD_SHELL_MISSING_COMPONENT: shell_component.py` and nonzero exit.
-- Restoring the required component returns the controller to `FIELD_SHELL_READY` with exit 0.
-- Exact local execution of the checked-in Step 01 files passed all three required checks.
-- No state memory, repo reader, model, edit/diff, retry, external-project runner, or Void logic was added.
+Persist and restore Field's exact working state across restarts, while rejecting invalid or incomplete state.
+
+## Hard-start evidence
+
+- `field-coder/02-state-memory` advanced to the completed Step 01 commit.
+- Step 01 hard-stop evidence exists in progress and diary.
+- Full Field control set reread on Step 02 branch.
+- Field-only scope and Step 02 allowed work confirmed.
 
 ## Known-good state
 
-Step 01 shell hard stop is satisfied. The Field shell is the current known-good implementation baseline.
+- Step 01 deterministic shell passes ready -> missing-component failure -> restored ready.
+- No task intake, repo reader, model, editor, diff, retry, or Void behavior exists.
 
-## Execution note
+## One allowed change
 
-A shallow clone attempt from the execution runtime failed before code execution because that runtime could not resolve `github.com`. The implementation was not changed; the exact checked-in Step 01 file contents were executed locally and passed.
+Add only a Field state schema with validated JSON save/load behavior and a state-only test.
 
-## Current blockers
+## Required state fields
 
-- None.
+- goal
+- current_task
+- attempt
+- max_attempts
+- last_action
+- last_result
+- next_action
+- active_branch
+- active_step
 
-## Next branch
+## Exact success test
 
-`field-coder/02-state-memory`
+1. create valid state;
+2. save to JSON;
+3. reload as a new `FieldState` instance and prove exact equality;
+4. reject a saved state missing a required field;
+5. reject invalid attempt bounds;
+6. rerun the Step 01 shell test to prove prior verified behavior remains intact.
 
-## Step 02 hard start
+## Must not add in Step 02
 
-Before any Step 02 code change:
+- goal-to-task narrowing
+- repository reading
+- model calls
+- editing/diff logic
+- external project test runner
+- retry controller behavior beyond storing attempt fields
+- Void logic
 
-1. move the Step 02 branch to the completed Step 01 lineage;
-2. reread the complete Field Coder control set;
-3. confirm Step 01 hard-stop evidence exists;
-4. update Step 02 progress/diary pre-pass;
-5. add only persistent state schema/load/save validation and state tests.
+## Next allowed action
 
-## Step 02 hard stop reminder
+Create `Field_Coder/field/state.py` and `Field_Coder/tests/test_state.py`, then run only Step 02 state verification plus the Step 01 regression test.
 
-Stop after exact save -> reload restoration passes, invalid/missing required state is rejected, and progress/diary are updated. Do not begin task intake on Step 02.
+## Hard stop
+
+After exact save/reload restoration, invalid-state rejection, Step 01 regression pass, and diary/progress closeout are recorded, stop coding on this branch.
