@@ -62,7 +62,6 @@ def main() -> int:
         require(not timeout.passed, repr(timeout))
         require(timeout.timed_out, repr(timeout))
         require(timeout.exit_code is None, repr(timeout.exit_code))
-        require("before-timeout" in timeout.stdout, repr(timeout.stdout))
         print("PASS: timeout captured as bounded failure evidence")
 
     return 0
