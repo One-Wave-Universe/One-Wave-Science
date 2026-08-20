@@ -3,9 +3,9 @@
 ## Project
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/07-diff-self-check`
-- Current step: 07 — Intended vs actual change
-- Status: COMPLETE
+- Current branch: `field-coder/08-test-runner`
+- Current step: 08 — Evidence-producing execution
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -18,33 +18,37 @@
 - Step 06 — Apply one declared change: COMPLETE
 - Step 07 — Intended vs actual change: COMPLETE
 
-## Step 07 verified result
-- Added `Field_Coder/field/diff_check.py` and `Field_Coder/tests/test_diff_check.py` only for Step 07 implementation.
-- Controlled edit produced changed-file inventory and nonempty unified diff.
-- Exact changed-file set matching proposal passed self-check.
-- Unexpected extra tracked change failed self-check.
-- Mismatch still preserved changed-file inventory, unexpected-file list, and unified diff evidence.
-- Steps 01-06 regressions remained passing.
-- No target success-test runner, retry controller, model, Git rollback/commit safety, or Void logic was added.
+## Current goal
+Execute the proposal's declared success test with bounded runtime and return deterministic evidence instead of crashing on test failure or timeout.
+
+## Hard-start evidence
+- Step 08 moved to completed Step 07 lineage.
+- Step 07 diff-match/mismatch evidence is verified and recorded.
+- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, active `BUILD_STEPS.md`, `PROGRESS.md`, and latest `BUILD_DIARY.md` reread on this branch.
+- Step 08 is execution/evidence only; retry logic remains future work.
 
 ## Known-good state
-Field can now compare actual repository changes against its accepted proposal before claiming success.
+Field can start, persist state, accept one bounded task, reconstruct repo context, validate one proposal, make one declared edit, and compare actual diff to intention.
 
-## Test evidence
-`python3 Field_Coder/tests/test_diff_check.py`
-- PASS: matching actual diff accepted with evidence
-- PASS: unexpected extra change failed self-check with diff preserved
+## One allowed change
+Add only a bounded command runner for `ImplementationProposal.success_test` plus test-runner-only tests.
 
-All Step 01-06 regression tests: PASS.
+## Exact success test
+1. known passing command returns `passed=true`, exit 0, captured stdout/stderr;
+2. known failing command returns `passed=false`, exact nonzero exit code, captured stdout/stderr, without raising controller-level failure;
+3. timed-out command returns `passed=false`, `timed_out=true`, bounded duration/evidence, without crashing;
+4. command is tokenized without `shell=True`;
+5. Steps 01-07 regressions remain passing.
 
-## Current blockers
-- None.
+## Must not add in Step 08
+- retry/replan state transitions
+- model calls
+- Git rollback/commit safety
+- review packet behavior
+- Void logic
 
-## Next branch
-`field-coder/08-test-runner`
+## Next allowed action
+Create `Field_Coder/field/test_runner.py` and `Field_Coder/tests/test_test_runner.py`, then run Step 08 verification plus all prior regressions.
 
-## Step 08 hard start
-Move Step 08 to this completed commit, reread all controls, confirm Step 07 hard-stop evidence, then add only bounded proposal success-test execution and evidence capture.
-
-## Step 08 hard stop reminder
-Stop after known passing and known failing commands are captured deterministically without controller crash, timeout is bounded, prior regressions pass, and diary/progress are updated.
+## Hard stop
+Stop after passing/failing/timeout evidence capture is proven, prior regressions pass, and diary/progress are updated.
