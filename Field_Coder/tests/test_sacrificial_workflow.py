@@ -61,6 +61,7 @@ def main() -> int:
         candidate = root / "candidate"
         source.mkdir()
 
+        (source / ".gitignore").write_text("__pycache__/\n*.pyc\n", encoding="utf-8")
         (source / "app.py").write_text(
             'def message():\n    return "old"\n', encoding="utf-8"
         )
@@ -77,7 +78,10 @@ def main() -> int:
         require(run(source, "git", "init", "-b", "main").returncode == 0, "git init failed")
         run(source, "git", "config", "user.email", "field@example.invalid")
         run(source, "git", "config", "user.name", "Field Fixture")
-        require(run(source, "git", "add", "app.py", "test_baseline.py").returncode == 0, "git add failed")
+        require(
+            run(source, "git", "add", ".gitignore", "app.py", "test_baseline.py").returncode == 0,
+            "git add failed",
+        )
         require(run(source, "git", "commit", "-m", "baseline").returncode == 0, "git commit failed")
 
         baseline_test = run(source, "python3", "-m", "unittest", "-q")
