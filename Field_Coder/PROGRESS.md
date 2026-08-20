@@ -5,41 +5,43 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/13-sacrificial-repo`
 - Current step: 13 — End-to-end controlled proof
-- Status: IN PROGRESS
-- Attempt: 1/3
+- Status: COMPLETE
+- Attempt: 1/3 implementation; one fixture correction
 
 ## Completed steps
-- Steps 00-12: COMPLETE
+- Steps 00-13: COMPLETE
 
-## Hard-start evidence
-- Step 12 hard stop satisfied and inherited.
-- Full Field control set and latest diary reread on this branch.
-- All required individual components exist and have prior verification evidence.
+## Step 13 verified result
+- Added `Field_Coder/field/workflow.py` and `Field_Coder/tests/test_sacrificial_workflow.py` only for Step 13 implementation/test orchestration.
+- Disposable Git repo began with a clean committed baseline and passing baseline test.
+- Field parsed exactly one bounded task and read task-scoped source context.
+- Attempt 1 made a declared one-file candidate edit; actual diff matched proposal; declared success test failed.
+- Failure evidence was placed into persistent state and the next model request received attempt 2 plus the failure evidence.
+- Failed candidate worktree was completely rolled back before attempt 2.
+- Attempt 2 made the corrected declared edit; diff matched proposal; success test passed.
+- Original source checkout remained clean at the original HEAD with original `app.py` bytes.
+- Successful candidate remained dirty/inspectable in the isolated worktree.
+- External-review packet was emitted with `PENDING_EXTERNAL_REVIEW`.
+- One initial fixture execution was rejected by the known-good gate because Python produced untracked `__pycache__`; the fixture was corrected by committing `.gitignore`. Workflow implementation remained unchanged.
 
-## Current goal
-Compose the existing Field components into one disposable repo workflow that proves failure -> evidence -> rollback/correction -> success -> review packet while preserving the source baseline.
+## Test evidence
+- PASS: sacrificial repo baseline starts clean and passing
+- PASS: bad candidate produced evidence, rollback, and attempt-2 correction context
+- PASS: source known-good checkout remained unchanged
+- PASS: corrected successful candidate remains inspectable
+- PASS: end-to-end workflow emitted pending-external-review packet
 
-## One allowed change
-Add only orchestration that composes existing components plus a sacrificial end-to-end test. Do not redesign the component contracts.
+## Known-good state
+The Field engine has now been proven as a composed workflow on a disposable repository, including one evidence-driven repair cycle.
 
-## Exact success test
-1. disposable Git repo starts with passing baseline test;
-2. Field parses one bounded task and reads source context read-only;
-3. attempt 1 produces a declared edit whose success test fails;
-4. failure evidence advances state and candidate worktree is rolled back cleanly;
-5. attempt 2 produces a corrected declared edit, diff matches proposal, and success test passes;
-6. source checkout remains clean at original HEAD throughout;
-7. successful candidate remains inspectable;
-8. external-review packet is emitted with `PENDING_EXTERNAL_REVIEW`.
+## Current blockers
+- None.
 
-## Must not add
-- real repo production change
-- Void logic
-- self-approval
-- push/merge/commit automation
+## Next branch
+`field-coder/14-real-repo-trial`
 
-## Next allowed action
-Create `Field_Coder/field/workflow.py` and `Field_Coder/tests/test_sacrificial_workflow.py`, then execute the disposable proof.
+## Step 14 hard start
+Move Step 14 to this completed commit, reread all controls, confirm Step 13 review packet/evidence, then select exactly one tiny real repository task with bounded scope and existing verification.
 
-## Hard stop
-Stop Step 13 only after both bad and good candidate paths are proven and recorded.
+## Step 14 hard stop reminder
+Stop after the first real task produces a review-ready candidate packet. Do not expand into production autonomy or begin Void implementation.
