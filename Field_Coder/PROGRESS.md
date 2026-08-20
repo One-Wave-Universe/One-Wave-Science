@@ -4,55 +4,56 @@
 
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/00-control`
-- Current step: 00 — Project control layer
-- Status: COMPLETE
+- Current branch: `field-coder/01-shell`
+- Current step: 01 — Executable Field shell
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
 
 - Step 00 — Project control layer: COMPLETE
 
-## Step 00 verified result
+## Current goal
 
-- Base repository: `One-Wave-Universe/One-Wave-Science`
-- Base branch: `main`
-- Existing root `AGENTS.md` preserved unchanged.
-- Field Coder work isolated under `Field_Coder/` and `field-coder/*` branches.
-- Permanent scope exists in `BUILD_SCOPE.md`.
-- Carry-forward rules exist in `CORE_RULES.md`.
-- Every build branch has a named purpose, hard start, allowed scope, success condition, and hard stop in `BUILD_STEPS.md`.
-- Persistent progress and diary files exist.
-- All planned branches `field-coder/00-control` through `field-coder/14-real-repo-trial` were created and verified.
+Create the smallest executable Field coding-agent shell that starts deterministically and detects a missing required shell component.
 
-## Current known-good state
+## Hard-start evidence
 
-Step 00 control layer is complete. No Field implementation code has been added.
+- Step 00 hard stop satisfied.
+- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, `BUILD_STEPS.md`, `PROGRESS.md`, and latest `BUILD_DIARY.md` entry reread from this branch.
+- Field-only scope confirmed.
+- Step 01 allowed scope confirmed.
 
-## Current blockers
+## Known-good state
 
-- None.
+- Control layer complete.
+- No Field implementation code exists yet.
+- Existing animator/science files and root `AGENTS.md` remain outside this step.
 
-## Next branch
+## One allowed change
 
-`field-coder/01-shell`
+Add only the initial Field shell source tree, minimal controller entry point, required shell component, and shell-only test.
 
-## Step 01 hard start
+## Exact success test
 
-Before any Step 01 code change:
+1. controller starts and prints deterministic `FIELD_SHELL_READY` with exit 0;
+2. required shell component is temporarily made unavailable and controller exits nonzero with deterministic missing-component status;
+3. component is restored and controller returns to `FIELD_SHELL_READY` with exit 0.
 
-1. read `README.md`;
-2. read `BUILD_SCOPE.md`;
-3. read `CORE_RULES.md`;
-4. read `BUILD_STEPS.md`;
-5. read this progress report;
-6. read the latest `BUILD_DIARY.md` entry;
-7. confirm Step 00 hard stop is satisfied;
-8. update branch/current-step fields for Step 01;
-9. state the one allowed shell change and its exact test.
+## Must not add in Step 01
 
-## Step 01 hard stop reminder
+- state memory
+- repo reading
+- model calls
+- editing/diff logic
+- external project test execution
+- retry logic
+- Void logic
 
-Stop Step 01 immediately after the minimal Field shell passes, a deliberate missing-component failure is detected, the component is restored, the shell passes again, and diary/progress are updated.
+## Next allowed action
 
-Do not add state memory or later-step behavior on Step 01.
+Create the minimal shell files and run the exact Step 01 shell test.
+
+## Hard stop
+
+After pass -> deliberate failure detected -> restored pass are all recorded, update diary/progress to COMPLETE and stop coding on this branch.
