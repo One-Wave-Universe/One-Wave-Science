@@ -3,45 +3,40 @@
 ## Project
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/10-git-safety`
-- Current step: 10 — Known-good workspace protection
-- Status: COMPLETE
+- Current branch: `field-coder/11-review-packet`
+- Current step: 11 — Review-ready Field output
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
 - Steps 00-10: COMPLETE
 
-## Step 10 verified result
-- Added `Field_Coder/field/git_safety.py` and `Field_Coder/tests/test_git_safety.py` only for Step 10 implementation.
-- Clean known-good checkout is required before candidate work begins.
-- Candidate work occurs in a separate Git worktree at exact known-good HEAD.
-- Deliberate tracked bad edit and untracked junk were completely removed by rollback.
-- Candidate returned to clean status at baseline HEAD.
-- Original source checkout HEAD, branch, status, and source bytes remained unchanged.
-- Successful candidate change can remain dirty/inspectable in candidate worktree while original stays clean.
-- Steps 01-09 regressions all pass.
-- No auto commit/push/merge, review packet, model, or Void logic was added.
+## Hard-start evidence
+- Step 10 hard stop is satisfied and inherited on this branch.
+- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, `BUILD_STEPS.md`, this progress report, and latest diary entry were reread.
+- Known-good baseline: shell, state, intake, read-only reconstruction, proposal, controlled edit, diff evidence, test evidence, bounded correction, and Git safety all verified.
 
-## Known-good state
-Field can now isolate and safely discard failed candidate work without damaging the source checkout.
+## Current goal
+Create one deterministic external-review packet from existing Field evidence without giving Field any architecture-approval authority.
 
-## Test evidence
-`python3 Field_Coder/tests/test_git_safety.py`
-- PASS: isolated candidate worktree created at known-good HEAD
-- PASS: deliberate bad candidate completely restored
-- PASS: known-good source checkout remained unchanged
-- PASS: successful candidate remains inspectable while source stays clean
+## One allowed change
+Add only review-packet data/validation and review-packet tests.
 
-All Step 01-09 regression tests: PASS.
+## Exact success test
+1. packet contains goal, task, proposal, changed files/diff, test evidence, attempts, remaining uncertainty, and candidate status;
+2. architecture verdict is always `PENDING_EXTERNAL_REVIEW` and cannot be mutated;
+3. self-approved candidate status is rejected;
+4. prior Step 01-10 regressions remain passing.
 
-## Current blockers
-- None.
+## Must not add
+- model/provider integration
+- autonomous approval
+- Void implementation
+- push/merge behavior
+- end-to-end autonomous production
 
-## Next branch
-`field-coder/11-review-packet`
+## Next allowed action
+Create `Field_Coder/field/review_packet.py` and `Field_Coder/tests/test_review_packet.py`, then execute Step 11 plus prior regression tests.
 
-## Step 11 hard start
-Move Step 11 to this completed commit, reread all controls, confirm Step 10 hard-stop evidence, then add only deterministic external-review packet generation.
-
-## Step 11 hard stop reminder
-Stop after a complete packet contains goal/task/proposal/files/diff/tests/attempts/uncertainty/candidate status, Field cannot self-approve architecture, prior regressions pass, and diary/progress are updated.
+## Hard stop
+When the complete packet and self-approval prohibition are proven, update diary/progress to COMPLETE and stop Step 11.
