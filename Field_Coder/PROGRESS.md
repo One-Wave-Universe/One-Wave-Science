@@ -6,69 +6,54 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/02-state-memory`
 - Current step: 02 — Persistent Field state
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
 
 - Step 00 — Project control layer: COMPLETE
 - Step 01 — Executable Field shell: COMPLETE
+- Step 02 — Persistent Field state: COMPLETE
 
-## Current goal
+## Step 02 verified result
 
-Persist and restore Field's exact working state across restarts, while rejecting invalid or incomplete state.
-
-## Hard-start evidence
-
-- `field-coder/02-state-memory` advanced to the completed Step 01 commit.
-- Step 01 hard-stop evidence exists in progress and diary.
-- Full Field control set reread on Step 02 branch.
-- Field-only scope and Step 02 allowed work confirmed.
+- Added `Field_Coder/field/state.py` and `Field_Coder/tests/test_state.py` only for Step 02 implementation.
+- State schema contains all required fields: goal, current task, attempt, max attempts, last action, last result, next action, active branch, active step.
+- Valid state saves to JSON and reloads exactly.
+- Fresh Python process reload produced byte-equivalent normalized state JSON.
+- Missing required field is rejected.
+- Invalid attempt bounds are rejected.
+- Step 01 shell regression still passes ready -> deliberate missing-component detection -> restored ready.
+- No Step 03+ behavior was added.
 
 ## Known-good state
 
-- Step 01 deterministic shell passes ready -> missing-component failure -> restored ready.
-- No task intake, repo reader, model, editor, diff, retry, or Void behavior exists.
+Step 02 hard stop is satisfied. Field shell + validated persistent state are the current known-good baseline.
 
-## One allowed change
+## Test evidence
 
-Add only a Field state schema with validated JSON save/load behavior and a state-only test.
+`python3 Field_Coder/tests/test_state.py`
+- PASS: exact state restored in fresh process
+- PASS: missing required state rejected
+- PASS: invalid attempt bounds rejected
 
-## Required state fields
+`python3 Field_Coder/tests/test_shell.py`
+- PASS: initial FIELD_SHELL_READY
+- PASS: deliberate missing component detected
+- PASS: restored FIELD_SHELL_READY
 
-- goal
-- current_task
-- attempt
-- max_attempts
-- last_action
-- last_result
-- next_action
-- active_branch
-- active_step
+## Current blockers
 
-## Exact success test
+- None.
 
-1. create valid state;
-2. save to JSON;
-3. reload as a new `FieldState` instance and prove exact equality;
-4. reject a saved state missing a required field;
-5. reject invalid attempt bounds;
-6. rerun the Step 01 shell test to prove prior verified behavior remains intact.
+## Next branch
 
-## Must not add in Step 02
+`field-coder/03-task-intake`
 
-- goal-to-task narrowing
-- repository reading
-- model calls
-- editing/diff logic
-- external project test runner
-- retry controller behavior beyond storing attempt fields
-- Void logic
+## Step 03 hard start
 
-## Next allowed action
+Move Step 03 to this completed commit, reread the complete control set, confirm this hard-stop evidence, then add only bounded goal-to-one-task intake/validation logic and tests.
 
-Create `Field_Coder/field/state.py` and `Field_Coder/tests/test_state.py`, then run only Step 02 state verification plus the Step 01 regression test.
+## Step 03 hard stop reminder
 
-## Hard stop
-
-After exact save/reload restoration, invalid-state rejection, Step 01 regression pass, and diary/progress closeout are recorded, stop coding on this branch.
+Stop after a broad sample coding goal yields exactly one explicit bounded task with success criteria/scope, ambiguous or multi-task intake is rejected, prior regression tests pass, and diary/progress are updated.
