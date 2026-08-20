@@ -7,27 +7,30 @@ This diary is mandatory project memory.
 - All prior hard stops: SATISFIED
 
 ## Entry 0026 — Step 12 model-adapter pre-pass
+- Branch: `field-coder/12-model-adapter`
+- Hard-start check: PASS
+- Attempt: 1/3
+- Intended change: provider-neutral request/response seat + fake/local adapters + tests
+
+## Entry 0027 — Step 12 model adapter completed
 - Date/time: 2026-08-19 America/Los_Angeles
 - Branch: `field-coder/12-model-adapter`
 - Step: 12 — Replaceable coding model seat
-- Goal: add a provider-neutral model seat plus one localhost model transport without engine lock-in
-- Hard-start check: PASS — completed Step 11 lineage inherited; complete control set and latest diary reread
+- Goal: prove Field can swap coding models without rewriting its engine
+- Hard-start check: PASS
 - Known-good state: Steps 01-11 verified
 - Attempt: 1/3
-- Intended change: add only request/response adapter contract, fake adapter, localhost OpenAI-compatible adapter, adapter-independent invocation function, and tests
-- Files expected to change: `Field_Coder/field/model_adapter.py`, `Field_Coder/tests/test_model_adapter.py`
-- Must remain unchanged: prior Field behavior; no Step 13 end-to-end orchestration, Void logic, provider-specific controller branch, or self-approval
-- Exact success test: fake and localhost adapters satisfy identical `ModelResponse`; identical `run_model(adapter, request)` call works for both; malformed local response rejected; adapter swap requires no controller rewrite
-- Files actually changed: pending
-- Command/check executed: pending
-- Exit status/result: pending
-- Observed behavior: pending
-- What worked: Step 12 hard-start/read discipline completed
-- What failed: none
-- What was learned: the model must occupy a replaceable seat rather than becoming the Field engine itself
+- Intended change: `model_adapter.py`, `test_model_adapter.py`
+- Files actually changed: exactly the two declared Step 12 implementation/test files plus mandatory progress/diary records
+- Command/check executed: `python3 Field_Coder/tests/test_model_adapter.py` against an exact local mirror of checked-in Step 12 files
+- Exit status/result: PASS — exit 0
+- Observed behavior: fake and localhost HTTP adapters returned identical structured response type through the same `run_model()` call; malformed response rejected
+- What worked: provider-neutral protocol, fake seat, localhost OpenAI-compatible transport, adapter-independent invocation
+- What failed: nothing in implementation or test
+- What was learned: model identity is now configuration/adapter territory rather than engine architecture
 - Decision: KEEP
-- Next permitted action: create the two declared Step 12 files and execute adapter contract tests
-- Hard-stop status: NOT YET SATISFIED
+- Next permitted action: transition `field-coder/13-sacrificial-repo` to this completed Step 12 lineage, reread controls, then wire existing components into one disposable end-to-end proof only
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
