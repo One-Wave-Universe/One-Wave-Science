@@ -72,3 +72,30 @@ def test_empty_scene_round_trip(tmp_path):
     assert loaded.characters == []
     assert loaded.canvas_width == scene.canvas_width
     assert loaded.canvas_height == scene.canvas_height
+
+
+def test_double_dot_prefixed_filename_inside_scene_stays_portable(tmp_path):
+    asset = tmp_path / "..hero.png"
+    asset.write_bytes(b"fake-png-bytes")
+
+    scene = Scene(background=BackgroundLayer(path=str(asset), width=100, height=100))
+    scene_file = tmp_path / "scene.owascene"
+    scene.save(str(scene_file))
+
+    raw = scene_file.read_text()
+    assert '"path": "..hero.png"' in raw
+    assert str(tmp_path) not in raw
+
+
+def test_true_parent_path_still_stored_absolute(tmp_path):
+    scene_dir = tmp_path / "scene"
+    scene_dir.mkdir()
+    outside_path = tmp_path / "outside.png"
+    outside_path.write_bytes(b"fake-png-bytes")
+
+    scene = Scene(background=BackgroundLayer(path=str(outside_path), width=100, height=100))
+    scene_file = scene_dir / "scene.owascene"
+    scene.save(str(scene_file))
+
+    raw = scene_file.read_text()
+    assert os.path.abspath(str(outside_path)) in raw
