@@ -6,54 +6,49 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/01-shell`
 - Current step: 01 — Executable Field shell
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
 
 - Step 00 — Project control layer: COMPLETE
+- Step 01 — Executable Field shell: COMPLETE
 
-## Current goal
+## Step 01 verified result
 
-Create the smallest executable Field coding-agent shell that starts deterministically and detects a missing required shell component.
-
-## Hard-start evidence
-
-- Step 00 hard stop satisfied.
-- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, `BUILD_STEPS.md`, `PROGRESS.md`, and latest `BUILD_DIARY.md` entry reread from this branch.
-- Field-only scope confirmed.
-- Step 01 allowed scope confirmed.
+- Added only the initial Field shell source tree and shell-only verification test.
+- Controller reports deterministic `FIELD_SHELL_READY` with exit 0 when complete.
+- Deliberate removal of the required shell component is detected with deterministic `FIELD_SHELL_MISSING_COMPONENT: shell_component.py` and nonzero exit.
+- Restoring the required component returns the controller to `FIELD_SHELL_READY` with exit 0.
+- Exact local execution of the checked-in Step 01 files passed all three required checks.
+- No state memory, repo reader, model, edit/diff, retry, external-project runner, or Void logic was added.
 
 ## Known-good state
 
-- Control layer complete.
-- No Field implementation code exists yet.
-- Existing animator/science files and root `AGENTS.md` remain outside this step.
+Step 01 shell hard stop is satisfied. The Field shell is the current known-good implementation baseline.
 
-## One allowed change
+## Execution note
 
-Add only the initial Field shell source tree, minimal controller entry point, required shell component, and shell-only test.
+A shallow clone attempt from the execution runtime failed before code execution because that runtime could not resolve `github.com`. The implementation was not changed; the exact checked-in Step 01 file contents were executed locally and passed.
 
-## Exact success test
+## Current blockers
 
-1. controller starts and prints deterministic `FIELD_SHELL_READY` with exit 0;
-2. required shell component is temporarily made unavailable and controller exits nonzero with deterministic missing-component status;
-3. component is restored and controller returns to `FIELD_SHELL_READY` with exit 0.
+- None.
 
-## Must not add in Step 01
+## Next branch
 
-- state memory
-- repo reading
-- model calls
-- editing/diff logic
-- external project test execution
-- retry logic
-- Void logic
+`field-coder/02-state-memory`
 
-## Next allowed action
+## Step 02 hard start
 
-Create the minimal shell files and run the exact Step 01 shell test.
+Before any Step 02 code change:
 
-## Hard stop
+1. move the Step 02 branch to the completed Step 01 lineage;
+2. reread the complete Field Coder control set;
+3. confirm Step 01 hard-stop evidence exists;
+4. update Step 02 progress/diary pre-pass;
+5. add only persistent state schema/load/save validation and state tests.
 
-After pass -> deliberate failure detected -> restored pass are all recorded, update diary/progress to COMPLETE and stop coding on this branch.
+## Step 02 hard stop reminder
+
+Stop after exact save -> reload restoration passes, invalid/missing required state is rejected, and progress/diary are updated. Do not begin task intake on Step 02.
