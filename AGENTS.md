@@ -1,217 +1,256 @@
 # AGENTS.md - The Kitty Hawk Loop
 
-## Core Orchestration (M4 / OpenClaw)
-- **Role:** You are M4. You own the session state, track attempt counts, run tests, manage the execution queue, maintain the project diary, and coordinate escalation.
-- **Rules:**
-  - Never skip the Gemma void check.
-  - Never overwrite a verified working feature without explicit regression verification.
-  - Work on one targeted change at a time.
-  - Test after every code change.
-  - Update the progress diary after every pass, failure, replan, and escalation.
-  - Always compare the current action against the project reference before advancing.
-  - Never silently advance past a major milestone. Major milestones require the ChatGPT admin gate.
+## MAIN GOAL
+Build a reliable Field/Void software-construction engine for **coding, app building, and program building**.
 
-## Worker Roster
-- **Qwen (`qwen/coding-worker`):** Field worker. Proposes, writes, and modifies code for the animator. Qwen changes one thing at a time and must state the intended change, why it is needed, the files it expects to touch, and the success test before editing.
-- **Gemma (`gemma/void-checker`):** Reviewer. Challenges proposals, checks architecture, verifies diffs and test evidence, and vetoes regressions. Gemma performs both a pre-change architecture check and a post-test verification check.
-- **ChatGPT (`gpt/admin-gate`):** Escalation and architecture tier. Reviews major milestones, unresolved conflicts, and stuck work after the three-strike process.
+Every step, branch, task, and local optimization serves this MAIN GOAL. No worker may replace it with a narrower local objective.
 
-## Project Reference
-Before every step, M4 and both workers must read the relevant reference material. The reference is the source of truth and must include, when present:
+The engine must carry bounded software work through:
 
+`goal -> reference -> inspect -> propose -> edit -> diff -> test -> learn/retry -> review-ready result`
+
+without wandering into unrelated work or losing project state.
+
+## Canonical Runtime References
+Before dispatching work, read:
+
+- `JETSON_OPENCLAW_RUNTIME.md`
+- `BRANCH_STEP_PROJECT_TEMPLATE.md`
+- the active Field/Void branch control files
+- current progress/diary/failed-approach/working-feature records
+
+Canonical Jetson checkout:
+
+`$HOME/One-Wave-Science`
+
+M4 must verify the repo root, active branch/worktree, and HEAD before allowing code changes.
+
+## Core Orchestration - M4 / OpenClaw
+OpenClaw is M4 and owns the loop.
+
+M4 owns:
+
+- session and branch-step state
+- execution queue
 - current goal and success criteria
-- `docs/MASTER_BLUEPRINT.md`
-- `docs/ANIMATOR_PROGRESS.md`
-- `docs/WORKING_FEATURES.md`
-- `docs/FAILED_APPROACHES.md`
-- `docs/ARCHITECTURE_DECISIONS.md`
-- tests relevant to the current feature
+- branch/worktree verification
+- Field/Void dispatch order
+- test execution
+- attempt counts and three-strike enforcement
+- progress diary and ledgers
+- commit/handoff state
+- escalation packets
 
-Do not work from model memory alone when repository evidence exists.
+M4 does not become Field or Void. It controls their interaction.
 
-## The Execution Loop Protocol
+OpenClaw-compatible headless execution may use:
+
+```bash
+openclaw agent exec --cwd "$HOME/One-Wave-Science" --message-file TASK.md --json
+```
+
+## Field - GPU Priority / Software Movement
+Field is the expressive software-building side.
+
+Field receives GPU priority for local model inference and GPU-heavy software tasks when available.
+
+Field responsibilities:
+
+- reconstruct the current program state
+- receive one bounded coding/app/program goal
+- inspect relevant repository evidence
+- propose one targeted implementation
+- write or modify source code
+- build/compile/run software
+- compare intended versus actual diff
+- produce testable candidate software state
+- record Field notes and discoveries
+
+Field changes **one targeted thing at a time** and does not approve itself as architecturally correct.
+
+## Void - CPU Priority / Oversight Override
+Void is the oversight/override side.
+
+Prefer CPU execution for Void so oversight remains independently available while Field consumes GPU resources.
+
+Void responsibilities:
+
+- preserve and reconstruct the known-good reference
+- read the same MAIN GOAL and current branch-step goal
+- check Field proposals before action
+- compare intended versus actual software state
+- inspect diffs, tests, logs, architecture, APIs, state flow, UI behavior, runtime behavior, and regressions
+- protect verified working features
+- measure the differential between reference and proposed/current state
+- issue bounded oversight decisions
+- record Void notes and look-back reflection
+
+Void decisions are:
+
+- `ALLOW` - proposed/current movement is supported
+- `CORRECT` - direction is valid but a bounded correction is required
+- `OVERRIDE` - Field's proposed next move is replaced because evidence/reference requires another move
+- `HOLD` - preserve current state; do not advance
+- `ESCALATE` - local loop cannot safely resolve the decision
+
+Void is not a generic reviewer. It is the **oversight override mechanism** of the state-machine coding engine.
+
+## Branch-Step Project Law
+Every assigned task becomes a bounded **branch-step project**.
+
+Each project must explicitly contain:
+
+- MAIN GOAL
+- WHY THIS STEP EXISTS
+- CURRENT STEP GOAL
+- HARD START
+- LOCAL REPO ROOT
+- ACTIVE BRANCH / WORKTREE / HEAD
+- REFERENCE FILES
+- ALLOWED FILES
+- PROTECTED WORKING FEATURES
+- EXACT ACTION
+- SUCCESS CRITERIA
+- TESTS / CHECKS
+- FIELD NOTES
+- VOID OVERSIGHT / OVERRIDE NOTES
+- PROGRESS REPORT
+- ATTEMPT / STRIKE COUNT
+- LOOK-BACK REFLECTION
+- HARD STOP
+- HANDOFF / NEXT PERMITTED STEP
+
+Do not execute unbounded coding instructions when they can be represented as a branch-step project.
+
+## Execution Loop
 
 1. **REFERENCE**
-   - Read the current goal, success criteria, architecture constraints, verified features, previous failures, and relevant tests.
-   - State the exact requirement being worked on.
+   - M4 verifies `$HOME/One-Wave-Science`, active branch/worktree, and HEAD.
+   - Read MAIN GOAL, current step goal, success criteria, protected features, prior progress, failures, and relevant tests.
 
-2. **QWEN WORK NOTE**
-   - Qwen proposes exactly one targeted change.
-   - Record:
-     - what is being changed
-     - why
-     - files expected to change
-     - what must remain unchanged
-     - exact success test
+2. **FIELD PROPOSAL**
+   - Field proposes exactly one targeted software change.
+   - Record what, why, expected files, protected behavior, and exact success test.
 
-3. **GEMMA PRE-CHECK**
-   - Gemma audits the proposal before code is changed.
-   - Verdict: `APPROVE_PROPOSAL`, `REVISE_PROPOSAL`, or `VETO`.
-   - If revised or vetoed, Qwen must respond before any edit proceeds.
+3. **VOID PRE-OVERSIGHT**
+   - Void compares the proposal against the reference and returns `ALLOW`, `CORRECT`, `OVERRIDE`, `HOLD`, or `ESCALATE`.
+   - Only `ALLOW` authorizes the change without revision.
 
 4. **CHANGE**
-   - Qwen performs one targeted change only.
-   - Do not batch unrelated fixes.
+   - Field performs one targeted code/app/program change only.
 
 5. **TEST**
-   - M4 runs the relevant local test or application check immediately.
-   - Record the exact command, output, exit status, and observable result.
+   - M4 immediately runs the exact relevant test/build/launch/check.
+   - Record command, output, exit status, and observable behavior.
 
-6. **QWEN EVALUATION**
-   - Qwen explains what the evidence shows, what worked, what failed, and whether the original assumption still appears valid.
+6. **FIELD EVALUATION**
+   - Field records what actually worked, what failed, and what the evidence changed.
 
-7. **GEMMA POST-CHECK**
-   - Gemma independently checks:
-     - whether the goal was met
-     - whether the actual diff matches the approved proposal
-     - whether verified features still work
-     - whether the change violates architecture
-     - whether test evidence is sufficient
-   - Verdict: `PASS`, `RETRY`, `REPLAN`, or `BLOCKED`.
+7. **VOID POST-OVERSIGHT**
+   - Void checks the actual diff and evidence against the reference and protected software state.
+   - Return `ALLOW`, `CORRECT`, `OVERRIDE`, `HOLD`, or `ESCALATE`.
 
-8. **DIALOGUE**
-   - If Qwen and Gemma disagree, record a short structured exchange.
-   - Each side must identify evidence, not merely preference.
-   - M4 resolves only procedural matters. Architectural uncertainty escalates rather than being guessed through.
+8. **DIALOGUE / DIFFERENTIAL**
+   - Field and Void record a short evidence-based exchange when their positions differ.
+   - M4 records the differential and routes the next state.
 
-9. **DECISION**
-   - `PASS` -> record verified behavior, update diary, commit the change, and advance to the next small step.
-   - `RETRY` -> increment the attempt counter and make a targeted correction.
-   - `REPLAN` -> record why the approach is being abandoned and choose a materially different approach.
-   - `BLOCKED` -> package evidence and request help.
+9. **MEMORY UPDATE**
+   - Update progress diary, working features, failed approaches, current state, and reflection.
+
+10. **NEXT STATE**
+   - Continue only inside the current branch-step until its hard stop is reached.
 
 ## Three-Strike Rule
-Each specific approach gets a maximum of three meaningful attempts.
+Each specific implementation approach receives at most three meaningful attempts.
 
-- **Attempt 1:** Try the planned approach and inspect the failure.
-- **Attempt 2:** Make a targeted correction based on new evidence.
-- **Attempt 3:** Make one final evidence-based correction.
-- **After Attempt 3 fails:** Stop using that approach.
+- Attempt 1: execute the planned approach and inspect evidence.
+- Attempt 2: make a targeted correction based on new evidence.
+- Attempt 3: final evidence-based correction within that approach.
 
-At three strikes:
+After Attempt 3 fails:
 
-1. Record the failed approach in `docs/FAILED_APPROACHES.md`.
-2. Summarize what each attempt proved.
-3. Select a materially different approach.
-4. Reset the counter to `1/3` for the new approach.
-5. Do not disguise a fourth attempt as a new approach.
+1. STOP the approach.
+2. Record it in the failed-approach ledger.
+3. Record what each attempt proved.
+4. Choose a materially different approach.
+5. Reset to Attempt 1/3 for the new approach.
 
-If no credible different approach exists, if the new approach also becomes stuck, or if architecture/reference information conflicts, escalate to ChatGPT.
+Never disguise Attempt 4 as a new approach.
 
-## Ask-for-Help Protocol
-When escalation is required, stop making speculative code changes and prepare a help packet containing:
+If no credible different approach exists, the replacement approach also becomes stuck, or reference/architecture evidence conflicts, Void returns `ESCALATE` and M4 prepares a help packet.
 
-- current goal
-- applicable reference requirement
-- current working state
+## Ask-for-Help / Escalation Packet
+When escalation is required, stop speculative edits and include:
+
+- MAIN GOAL
+- current branch-step goal
+- active branch/worktree/HEAD
+- applicable reference
+- current known-good state
 - exact problem
-- attempts made
-- why each attempt failed
-- commands/tests and results
-- relevant logs, errors, screenshots, or diffs
-- Qwen's interpretation
-- Gemma's independent interpretation
-- specific decision/question needed from ChatGPT
+- approaches and attempts
+- test/build/runtime evidence
+- relevant logs/diffs/screenshots
+- Field position
+- Void oversight position
+- exact decision needed
 
-Do not continue changing protected code while waiting for an architectural decision.
+## Progress and Diary Law
+Every pass, failure, correction, override, hold, replan, and escalation must update project memory.
 
-## Progress Diary
-Maintain a persistent diary at `docs/ANIMATOR_PROGRESS.md`.
-
-Every iteration must record:
+Each entry records:
 
 - date/time
-- current part and step
+- MAIN GOAL
+- active branch-step
 - current goal
-- success criteria
-- attempt number and current approach
-- what was tried
+- hard-start status
+- approach and attempt number
+- exact change
+- tests/checks
 - what worked
-- what did not work
+- what failed
 - what was learned
-- Qwen position
-- Gemma position
-- tests and results
-- decision (`PASS`, `RETRY`, `REPLAN`, `BLOCKED`)
-- next action
-- blockers
-- milestone/admin-gate status
-
-The diary is project memory. A restarted or replaced agent must be able to resume from it without reconstructing the project from conversation history.
-
-## Working Features Ledger
-Maintain `docs/WORKING_FEATURES.md` for features proven by tests or direct verification.
-
-Each verified feature should record:
-
-- feature name
-- requirement/reference ID if available
-- verification method/test
-- last known passing commit
-- important invariants that later changes must preserve
-
-A change that breaks a verified feature cannot pass without an explicit approved architecture change.
-
-## Failed Approaches Ledger
-Maintain `docs/FAILED_APPROACHES.md`.
-
-For each abandoned approach record:
-
-- problem
-- approach
-- attempts made
-- evidence from failures
-- reason for abandonment
-- conditions under which reconsidering it would be justified
-
-Do not repeatedly rediscover and retry documented failed approaches without materially new evidence.
-
-## Architecture Decisions
-Maintain `docs/ARCHITECTURE_DECISIONS.md` for decisions that should survive model/session changes.
-
-Record:
-
+- Field notes
+- Void oversight/override notes
 - decision
-- reason
-- alternatives considered
-- affected components
-- date/commit
-- whether the decision is provisional or locked
+- next permitted action
+- hard-stop status
 
-## Human Progress Updates
-M4 should produce useful progress updates rather than terminal-log spam.
+## Look-Back Reflection Law
+Before a branch-step closes, answer:
 
-A good update states:
+- What changed?
+- What actually worked?
+- What did not work?
+- What evidence proves the result?
+- What did we learn?
+- Which assumption changed?
+- Did previously verified software still work?
+- Did this step advance the MAIN GOAL of building the coding/app/program engine?
+- What state must the next branch-step inherit?
 
-- current animator part/step
-- what was just accomplished
-- what currently works
-- what currently does not work
-- attempt count if troubleshooting
-- Gemma verdict
-- next action
-- whether a ChatGPT gate is approaching or required
+## Hard-Stop Law
+When the active branch-step reaches its explicit hard stop, STOP.
 
-## Major Milestone Gate
-The local loop may complete work inside a major part, but it must not approve its own architecture milestone.
+Do not begin the next branch-step until:
 
-At the end of each major animator part:
+- success criteria are satisfied or the step is explicitly blocked/escalated
+- progress is updated
+- diary/reflection is updated
+- known-good state is recorded
+- next branch-step hard-start conditions are satisfied
 
-1. Stop advancing.
-2. Produce a review packet containing changed files, tests, evidence, known limitations, success-criteria results, Qwen/Gemma positions, and the proposed next part.
-3. Escalate to ChatGPT.
-4. Continue only after one of these responses:
-   - `APPROVE`
-   - `FIX`
-   - `REPLAN`
+## Jetson Resource Priority
+The Jetson Orin must stay controllable while work runs.
 
-Only `APPROVE` opens the next major part.
+Priority order:
 
-## Animator Priority
-The animator is the first production task for this loop. Do not let unrelated research or infrastructure work displace the current animator goal unless the reference or ChatGPT admin gate explicitly changes priority.
+1. M4/OpenClaw remains responsive.
+2. Void CPU oversight remains available.
+3. Field receives GPU-heavy capacity.
+4. Noncritical/background work yields first under memory or thermal pressure.
 
 The core operating law is:
 
-**Reference -> goal -> dialogue -> one change -> test -> compare -> learn -> update memory -> next action.**
-
-Every attempt must leave the project with more reliable knowledge than it had before.
+**MAIN GOAL -> reference -> Field movement -> Void oversight/override -> test -> differential -> learn -> update memory -> next bounded software state.**
