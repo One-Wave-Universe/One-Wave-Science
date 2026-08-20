@@ -94,10 +94,10 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 - Exit status/result: PASS — exit 0
 - Observed behavior: `PASS: initial FIELD_SHELL_READY`; `PASS: deliberate missing component detected`; `PASS: restored FIELD_SHELL_READY`
 - What worked: deterministic controller status; deliberate component-loss detection; guaranteed restoration via `finally`; restored ready state
-- What failed: the first test execution method attempted a shallow GitHub clone, but the execution runtime could not resolve `github.com`; this was an environment transport failure and did not execute/test the code
-- What was learned: Step 01 shell itself passed unchanged; the test method can use an exact local mirror when runtime network resolution is unavailable
+- What failed: shallow GitHub clone execution path could not resolve `github.com`; code itself was tested unchanged via exact local mirror
+- What was learned: shell behavior passed unchanged
 - Decision: KEEP
-- Next permitted action: transition `field-coder/02-state-memory` onto the completed Step 01 lineage, reread the full control set, and begin only Step 02 persistent state work
+- Next permitted action: transition `field-coder/02-state-memory` onto the completed Step 01 lineage
 - Hard-stop status: SATISFIED
 - Blockers: none
 
@@ -126,6 +126,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 - Decision: KEEP
 - Next permitted action: create the two declared state files and run Step 02 state test plus Step 01 shell regression
 - Hard-stop status: NOT YET SATISFIED
+- Blockers: none
+
+---
+
+## Entry 0006 — Step 02 persistent state completed
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/02-state-memory`
+- Step: 02 — Persistent Field state
+- Goal: prove exact Field state persistence across process restart and reject invalid state
+- Hard-start check: PASS
+- Known-good state: Step 01 shell verified
+- Attempt: 1/3
+- Intended change: add only `state.py` and `test_state.py`
+- Files expected to change: `Field_Coder/field/state.py`, `Field_Coder/tests/test_state.py`
+- Must remain unchanged: Step 01 shell and all Step 03+ behavior
+- Exact success test: fresh-process exact restoration; missing field rejection; invalid attempt rejection; Step 01 regression pass
+- Files actually changed: exactly the two declared Step 02 implementation/test files plus mandatory progress/diary records
+- Command/check executed: `python3 Field_Coder/tests/test_state.py`; `python3 Field_Coder/tests/test_shell.py` against exact local mirror of checked-in lineage
+- Exit status/result: PASS — both commands exit 0
+- Observed behavior: exact state restored in fresh process; missing required state rejected; invalid attempt bounds rejected; Step 01 shell remained fully passing
+- What worked: frozen dataclass schema; strict required/extra field checking; attempt-bound validation; JSON-serializable result validation; save/load persistence
+- What failed: nothing in implementation or tests
+- What was learned: Field now has durable validated working state without implementing task or retry behavior early
+- Decision: KEEP
+- Next permitted action: transition `field-coder/03-task-intake` to this completed Step 02 lineage and begin only Step 03 task-intake work after rereading controls
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
