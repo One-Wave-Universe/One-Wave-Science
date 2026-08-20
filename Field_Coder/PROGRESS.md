@@ -4,9 +4,9 @@
 
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/03-task-intake`
-- Current step: 03 — Goal to one narrow task
-- Status: COMPLETE
+- Current branch: `field-coder/04-repo-reader`
+- Current step: 04 — Read-only repository reconstruction
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -16,50 +16,48 @@
 - Step 02 — Persistent Field state: COMPLETE
 - Step 03 — Goal to one narrow task: COMPLETE
 
-## Step 03 verified result
+## Current goal
 
-- Added `Field_Coder/field/task_intake.py` and `Field_Coder/tests/test_task_intake.py` only for Step 03 implementation.
-- Broad narrative goal with exactly one explicit `TASK`, `SCOPE`, and `SUCCESS` declaration resolves to exactly one bounded `TaskSpec`.
-- Multiple `TASK` declarations are rejected as ambiguous.
-- Missing `SCOPE` is rejected as unbounded.
-- Task output carries explicit summary, scope, and success criteria.
-- Step 02 persistent-state regression passes.
-- Step 01 shell regression passes.
-- No repository reader, model, editor, proposal, diff, target-project runner, retry controller, or Void logic was added.
+Read one task-relevant repository context without modifying the repository in any way.
+
+## Hard-start evidence
+
+- Step 04 moved to completed Step 03 lineage.
+- Step 03 one-task contract is verified and recorded.
+- Complete Field control set and active Step 04 section reread.
+- Read-only invariant confirmed as mandatory.
 
 ## Known-good state
 
-Steps 01–03 are all verified. Field can start, persist its state, and accept exactly one bounded task contract.
+Field can start, persist validated state, and accept exactly one bounded task.
 
-## Test evidence
+## One allowed change
 
-`python3 Field_Coder/tests/test_task_intake.py`
-- PASS: broad goal resolved to exactly one bounded TaskSpec
-- PASS: multiple tasks rejected
-- PASS: unbounded task rejected
+Add only a read-only repository reader/context bundle and repo-reader-only tests.
 
-`python3 Field_Coder/tests/test_state.py`
-- PASS: exact state restored in fresh process
-- PASS: missing required state rejected
-- PASS: invalid attempt bounds rejected
+## Exact success test
 
-`python3 Field_Coder/tests/test_shell.py`
-- PASS: initial FIELD_SHELL_READY
-- PASS: deliberate missing component detected
-- PASS: restored FIELD_SHELL_READY
+1. create a temporary fixture Git repository with committed files;
+2. capture HEAD, branch, working-tree status, and byte hashes before read;
+3. Field reads repository identity and only task-scoped relevant files into a context bundle;
+4. returned context reports exact HEAD, branch, and file contents;
+5. after read, HEAD, branch, status, and byte hashes are identical to before;
+6. prior Step 01-03 regression tests remain passing.
 
-## Current blockers
+## Must not add in Step 04
 
-- None.
+- file editing
+- proposal generation
+- model calls
+- diff generation for changes
+- target-project command execution
+- retry/controller behavior
+- Void logic
 
-## Next branch
+## Next allowed action
 
-`field-coder/04-repo-reader`
+Create `Field_Coder/field/repo_reader.py` and `Field_Coder/tests/test_repo_reader.py`, then run the read-only invariant test plus prior regressions.
 
-## Step 04 hard start
+## Hard stop
 
-Move Step 04 to this completed commit, reread the complete Field control set, confirm Step 03 hard-stop evidence, then implement only read-only repository reconstruction.
-
-## Step 04 hard stop reminder
-
-Stop after a fixture repository's branch/HEAD/relevant files are read into a context bundle and the fixture is proven unchanged byte-for-byte/working-tree clean, with prior regressions passing and diary/progress updated.
+Stop after the context bundle is correct, byte-for-byte/working-tree immutability is proven, prior tests pass, and diary/progress are updated.
