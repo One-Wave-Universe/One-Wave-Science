@@ -7,27 +7,30 @@ This diary is mandatory project memory.
 - All prior hard stops: SATISFIED
 
 ## Entry 0022 — Step 10 Git-safety pre-pass
+- Branch: `field-coder/10-git-safety`
+- Hard-start check: PASS
+- Attempt: 1/3
+- Intended change: known-good capture + isolated worktree + rollback tests
+
+## Entry 0023 — Step 10 Git safety completed
 - Date/time: 2026-08-19 America/Los_Angeles
 - Branch: `field-coder/10-git-safety`
 - Step: 10 — Known-good workspace protection
-- Goal: isolate candidate edits from the known-good checkout and completely restore failed candidate work
-- Hard-start check: PASS — Step 10 moved to completed Step 09 lineage; full controls/latest diary reread; Step 09 hard-stop confirmed
+- Goal: protect original checkout while allowing inspectable/discardable candidate work
+- Hard-start check: PASS
 - Known-good state: Steps 01-09 verified
 - Attempt: 1/3
-- Intended change: add only baseline capture, separate candidate worktree creation/status, rollback, and tests
-- Files expected to change: `Field_Coder/field/git_safety.py`, `Field_Coder/tests/test_git_safety.py`
-- Must remain unchanged: prior behavior; no auto commit/push/merge, review packet, model, or Void behavior
-- Exact success test: bad tracked/untracked candidate edits fully rollback; original checkout remains identical; successful candidate can remain inspectable separately; prior regressions green
-- Files actually changed: pending
-- Command/check executed: pending
-- Exit status/result: pending
-- Observed behavior: pending
-- What worked: hard-start/read discipline completed
-- What failed: none
-- What was learned: known-good protection belongs outside the model/editor; candidates need an isolated disposable workspace
+- Intended change: `git_safety.py`, `test_git_safety.py`
+- Files actually changed: exactly the two declared Step 10 files plus mandatory progress/diary records
+- Command/check executed: Step 10 test plus all Step 01-09 regressions in exact local mirror
+- Exit status/result: PASS — all ten test files exit 0
+- Observed behavior: isolated candidate began at baseline; bad tracked/untracked edits rolled back; source HEAD/branch/status/bytes unchanged; successful candidate remained inspectable separately
+- What worked: clean-baseline gate, Git worktree isolation, reset+clean candidate rollback
+- What failed: nothing in implementation or tests
+- What was learned: known-good source protection is now independent of agent behavior
 - Decision: KEEP
-- Next permitted action: create `git_safety.py` and `test_git_safety.py`, then run Step 10 and prior regressions
-- Hard-stop status: NOT YET SATISFIED
+- Next permitted action: transition `field-coder/11-review-packet` to this completed Step 10 lineage and begin only external-review packet generation after rereading controls
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
