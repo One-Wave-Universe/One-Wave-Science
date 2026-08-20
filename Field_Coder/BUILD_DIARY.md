@@ -157,6 +157,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0007 — Step 03 task-intake pre-pass
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/03-task-intake`
+- Step: 03 — Goal to one narrow task
+- Goal: convert one supplied coding goal into exactly one explicit bounded task with scope and success criteria
+- Hard-start check: PASS — Step 03 moved to completed Step 02 lineage; Step 02 hard-stop evidence confirmed; complete control set and active Step 03 section reread
+- Known-good state: Step 01 shell + Step 02 persistent state verified
+- Attempt: 1/3
+- Intended change: add only deterministic task-intake parsing/validation and intake-only tests
+- Files expected to change: `Field_Coder/field/task_intake.py`, `Field_Coder/tests/test_task_intake.py`
+- Must remain unchanged: shell/state behavior; repository access/editing; model calls; proposal/diff/test-runner/retry/Void logic
+- Exact success test: narrative goal with exactly one TASK/SCOPE/SUCCESS declaration produces one bounded `TaskSpec`; multiple TASK declarations are rejected; missing SCOPE is rejected; Step 01/02 regressions remain passing
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 03 hard-start/read discipline completed
+- What failed: none
+- What was learned: without a model yet, Step 03 defines the deterministic one-task intake contract that later model adapters must satisfy
+- Decision: KEEP
+- Next permitted action: create the two declared Step 03 files and run intake + prior regression tests
+- Hard-stop status: NOT YET SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
