@@ -7,27 +7,30 @@ This diary is mandatory project memory.
 - All prior hard stops: SATISFIED
 
 ## Entry 0020 — Step 09 self-correction pre-pass
+- Branch: `field-coder/09-self-correction`
+- Hard-start check: PASS
+- Attempt: 1/3
+- Intended change: deterministic evidence/attempt state transitions and tests
+
+## Entry 0021 — Step 09 self-correction completed
 - Date/time: 2026-08-19 America/Los_Angeles
 - Branch: `field-coder/09-self-correction`
 - Step: 09 — Three-attempt Field learning loop
-- Goal: make failure evidence drive persistent attempt transitions and prevent any fourth retry
-- Hard-start check: PASS — Step 09 moved to completed Step 08 lineage; full control set/latest diary reread; Step 08 evidence capture confirmed
+- Goal: encode the three-attempt law as persistent state-machine behavior
+- Hard-start check: PASS
 - Known-good state: Steps 01-08 verified
-- Attempt: 1/3
-- Intended change: add only deterministic evidence/attempt transition logic and tests
-- Files expected to change: `Field_Coder/field/correction.py`, `Field_Coder/tests/test_correction.py`
-- Must remain unchanged: prior behavior; no corrective code generation/model/Git-safety/review-packet/Void logic
-- Exact success test: failure transitions 1->2 RETRY, 2->3 REPLAN, 3->BLOCKED; evidence carried; blocked state persists; fourth transition rejected; pass routes review-ready; prior regressions green
-- Files actually changed: pending
-- Command/check executed: pending
-- Exit status/result: pending
-- Observed behavior: pending
-- What worked: hard-start/read discipline completed
-- What failed: none
-- What was learned: the retry ceiling must be encoded as state-machine law rather than prompt advice
+- Attempt: 1/3 implementation
+- Intended change: `correction.py`, `test_correction.py`
+- Files actually changed: exactly the two declared Step 09 files plus mandatory progress/diary records
+- Command/check executed: Step 09 test plus all Step 01-08 regression tests in exact local mirror
+- Exit status/result: PASS — all nine test files exit 0
+- Observed behavior: failure moved 1->2 RETRY, 2->3 REPLAN, 3->BLOCKED; blocked state persisted; fourth transition rejected; pass routed review-ready
+- What worked: bounded state transitions, JSON-safe evidence persistence, hard blocked state
+- What failed: nothing in implementation or tests
+- What was learned: three-strike behavior is now enforceable code, not an instruction the agent can ignore
 - Decision: KEEP
-- Next permitted action: create `correction.py` and `test_correction.py`, then run Step 09 and prior regression tests
-- Hard-stop status: NOT YET SATISFIED
+- Next permitted action: transition `field-coder/10-git-safety` to this completed Step 09 lineage and begin only known-good workspace protection after rereading controls
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
