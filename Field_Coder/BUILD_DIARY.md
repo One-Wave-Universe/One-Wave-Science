@@ -184,6 +184,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0008 — Step 03 task-intake completed
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/03-task-intake`
+- Step: 03 — Goal to one narrow task
+- Goal: prove the deterministic one-task intake contract and reject ambiguous/unbounded intake
+- Hard-start check: PASS
+- Known-good state: Step 01 shell + Step 02 persistent state verified
+- Attempt: 1/3
+- Intended change: add only `task_intake.py` and `test_task_intake.py`
+- Files expected to change: `Field_Coder/field/task_intake.py`, `Field_Coder/tests/test_task_intake.py`
+- Must remain unchanged: prior shell/state behavior and all Step 04+ behavior
+- Exact success test: one narrative goal resolves to exactly one bounded task; multiple TASK rejected; missing SCOPE rejected; Steps 01/02 remain passing
+- Files actually changed: exactly the two declared Step 03 implementation/test files plus mandatory progress/diary records
+- Command/check executed: `python3 Field_Coder/tests/test_task_intake.py`; `python3 Field_Coder/tests/test_state.py`; `python3 Field_Coder/tests/test_shell.py` against exact local mirror of checked-in lineage
+- Exit status/result: PASS — all three commands exit 0
+- Observed behavior: broad goal resolved to one bounded `TaskSpec`; multiple tasks rejected; unbounded task rejected; persistent-state and shell regressions remained green
+- What worked: explicit TASK/SCOPE/SUCCESS contract; duplicate declaration rejection; bounded scope requirement; deterministic parsing without prematurely introducing a model
+- What failed: nothing in implementation or tests
+- What was learned: Step 03 now gives later agents/models a strict one-task output contract instead of allowing vague or multi-task work
+- Decision: KEEP
+- Next permitted action: transition `field-coder/04-repo-reader` to this completed Step 03 lineage, reread controls, and begin only read-only repository reconstruction
+- Hard-stop status: SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
