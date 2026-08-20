@@ -26,15 +26,23 @@ This diary is mandatory project memory.
 - Files expected to change: `Field_Coder/field/test_runner.py`, `Field_Coder/tests/test_test_runner.py`
 - Must remain unchanged: all prior behavior; no retry/model/Git-safety/review-packet/Void behavior
 - Exact success test: known pass captured; known nonzero failure captured without controller crash; timeout captured as bounded failure; no shell execution; prior regressions green
-- Files actually changed: pending
-- Command/check executed: pending
-- Exit status/result: pending
-- Observed behavior: pending
-- What worked: Step 08 hard-start/read discipline completed
-- What failed: none
-- What was learned: test failure must become evidence for later Field learning, not an exception that destroys loop state
 - Decision: KEEP
-- Next permitted action: create `test_runner.py` and `test_test_runner.py`, then run Step 08 and all prior regressions
+- Hard-stop status: NOT YET SATISFIED
+
+## Entry 0018 — Step 08 first execution evidence
+- Date/time: 2026-08-19 America/Los_Angeles
+- Branch: `field-coder/08-test-runner`
+- Step: 08 — Evidence-producing execution
+- Attempt: 1/3
+- Files actually changed: `Field_Coder/field/test_runner.py`, `Field_Coder/tests/test_test_runner.py`
+- Command/check executed: Step 08 test followed by planned prior regressions in exact local mirror
+- Exit status/result: TEST FAILURE during Step 08 timeout assertion; regression suite did not advance past that failure
+- Observed behavior: passing command evidence passed; nonzero command evidence passed; timeout returned `passed=false`, `timed_out=true`, `exit_code=None` without crashing, but `stdout` was empty at the 0.05 second cutoff
+- What worked: the implementation satisfied the actual bounded-timeout evidence contract
+- What failed: test incorrectly required the child process's pre-timeout stdout to be present, which `subprocess.TimeoutExpired` does not guarantee at such a short cutoff
+- What was learned: timeout evidence must require timeout state and bounded failure, but partial stdout/stderr are best-effort evidence rather than mandatory
+- Decision: RETRY — correct the test only; do not change runner implementation
+- Next permitted action: remove only the mandatory pre-timeout-stdout assertion, then rerun Step 08 and all prior regressions
 - Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
