@@ -3,45 +3,35 @@
 ## Project
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/13-sacrificial-repo`
-- Current step: 13 — End-to-end controlled proof
-- Status: COMPLETE
-- Attempt: 1/3 implementation; one fixture correction
+- Current branch: `field-coder/14-real-repo-trial`
+- Current step: 14 — First real controlled task
+- Status: IN PROGRESS
+- Attempt: 1/3
 
 ## Completed steps
 - Steps 00-13: COMPLETE
 
-## Step 13 verified result
-- Added `Field_Coder/field/workflow.py` and `Field_Coder/tests/test_sacrificial_workflow.py` only for Step 13 implementation/test orchestration.
-- Disposable Git repo began with a clean committed baseline and passing baseline test.
-- Field parsed exactly one bounded task and read task-scoped source context.
-- Attempt 1 made a declared one-file candidate edit; actual diff matched proposal; declared success test failed.
-- Failure evidence was placed into persistent state and the next model request received attempt 2 plus the failure evidence.
-- Failed candidate worktree was completely rolled back before attempt 2.
-- Attempt 2 made the corrected declared edit; diff matched proposal; success test passed.
-- Original source checkout remained clean at the original HEAD with original `app.py` bytes.
-- Successful candidate remained dirty/inspectable in the isolated worktree.
-- External-review packet was emitted with `PENDING_EXTERNAL_REVIEW`.
-- One initial fixture execution was rejected by the known-good gate because Python produced untracked `__pycache__`; the fixture was corrected by committing `.gitignore`. Workflow implementation remained unchanged.
+## Hard-start evidence
+- Step 13 hard stop satisfied and inherited.
+- Full Field control set and latest diary reread on this branch.
+- Real target confirmed under `One_Wave_Animator/` with existing scene-model tests.
 
-## Test evidence
-- PASS: sacrificial repo baseline starts clean and passing
-- PASS: bad candidate produced evidence, rollback, and attempt-2 correction context
-- PASS: source known-good checkout remained unchanged
-- PASS: corrected successful candidate remains inspectable
-- PASS: end-to-end workflow emitted pending-external-review packet
+## Selected real task
+Fix `_to_portable_path()` in `One_Wave_Animator/app/scene_model.py` so an in-folder filename beginning with `..` (for example `..hero.png`) remains a relative portable path instead of being falsely classified as a parent-directory path.
 
-## Known-good state
-The Field engine has now been proven as a composed workflow on a disposable repository, including one evidence-driven repair cycle.
+## Why this task is bounded
+Current code uses `rel_path.startswith("..")`, which conflates a basename beginning with two dots with an actual path that traverses to the parent. The fix is limited to the parent-path boundary check.
 
-## Current blockers
-- None.
+## Allowed scope
+- `One_Wave_Animator/app/scene_model.py`
+- narrowly required regression verification for this exact behavior only
 
-## Next branch
-`field-coder/14-real-repo-trial`
+## Exact success test
+1. existing scene-model tests remain passing;
+2. an asset inside the scene directory named `..hero.png` serializes as `..hero.png`, not an absolute path;
+3. a true asset outside the scene directory still serializes as an absolute path;
+4. candidate diff contains only the bounded scene-model fix plus its narrowly required test if added;
+5. review packet remains `PENDING_EXTERNAL_REVIEW`.
 
-## Step 14 hard start
-Move Step 14 to this completed commit, reread all controls, confirm Step 13 review packet/evidence, then select exactly one tiny real repository task with bounded scope and existing verification.
-
-## Step 14 hard stop reminder
-Stop after the first real task produces a review-ready candidate packet. Do not expand into production autonomy or begin Void implementation.
+## Hard stop
+Stop after this first real task produces a review-ready candidate packet. Do not begin another animator task, production autonomy, or Void implementation.
