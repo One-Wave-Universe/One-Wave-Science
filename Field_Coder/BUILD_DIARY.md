@@ -3,41 +3,31 @@
 This diary is mandatory project memory.
 
 ## Prior verified history
-- Steps 00-07: PASS
+- Steps 00-08: PASS
 - All prior hard stops: SATISFIED
 
-## Entry 0017 — Step 08 test-runner pre-pass
-- Branch: `field-coder/08-test-runner`
-- Hard-start check: PASS
-- Attempt: 1/3
-- Intended change: bounded success-test execution and evidence capture
-
-## Entry 0018 — Step 08 first execution evidence
-- Attempt: 1/3
-- Result: TEST ASSERTION FAILURE
-- Observed behavior: pass and nonzero evidence passed; timeout correctly returned `timed_out=true`, `passed=false`, `exit_code=None`; partial stdout was empty
-- What failed: test required partial stdout that timeout does not guarantee
-- Decision: RETRY test assertion only; runner implementation unchanged
-
-## Entry 0019 — Step 08 bounded test runner completed
+## Entry 0020 — Step 09 self-correction pre-pass
 - Date/time: 2026-08-19 America/Los_Angeles
-- Branch: `field-coder/08-test-runner`
-- Step: 08 — Evidence-producing execution
-- Goal: prove pass/fail/timeout results become deterministic evidence instead of controller crashes
-- Hard-start check: PASS
-- Known-good state: Steps 01-07 verified
-- Attempt: 1/3 implementation; one evidence-based test correction
-- Intended change: `test_runner.py`, `test_test_runner.py`
-- Files actually changed: two declared Step 08 files plus mandatory progress/diary records; second pass changed test assertion only
-- Command/check executed: Step 08 test plus all Step 01-07 regression tests in exact local mirror
-- Exit status/result: PASS — all eight test files exit 0
-- Observed behavior: pass captured; exit-3 failure captured; timeout captured; all regressions green
-- What worked: `shell=False`, bounded timeout, structured evidence, nonzero result preservation
-- What failed: initial timeout test overconstrained partial stdout; corrected from evidence
-- What was learned: timeout stdout/stderr are best-effort; timeout state itself is the required evidence
+- Branch: `field-coder/09-self-correction`
+- Step: 09 — Three-attempt Field learning loop
+- Goal: make failure evidence drive persistent attempt transitions and prevent any fourth retry
+- Hard-start check: PASS — Step 09 moved to completed Step 08 lineage; full control set/latest diary reread; Step 08 evidence capture confirmed
+- Known-good state: Steps 01-08 verified
+- Attempt: 1/3
+- Intended change: add only deterministic evidence/attempt transition logic and tests
+- Files expected to change: `Field_Coder/field/correction.py`, `Field_Coder/tests/test_correction.py`
+- Must remain unchanged: prior behavior; no corrective code generation/model/Git-safety/review-packet/Void logic
+- Exact success test: failure transitions 1->2 RETRY, 2->3 REPLAN, 3->BLOCKED; evidence carried; blocked state persists; fourth transition rejected; pass routes review-ready; prior regressions green
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: hard-start/read discipline completed
+- What failed: none
+- What was learned: the retry ceiling must be encoded as state-machine law rather than prompt advice
 - Decision: KEEP
-- Next permitted action: transition `field-coder/09-self-correction` to this completed Step 08 lineage, reread controls, implement only bounded attempt/evidence transitions
-- Hard-stop status: SATISFIED
+- Next permitted action: create `correction.py` and `test_correction.py`, then run Step 09 and prior regression tests
+- Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
 ---
