@@ -7,26 +7,24 @@ This diary is mandatory project memory.
 - All prior hard stops: SATISFIED
 
 ## Entry 0028 — Step 13 sacrificial-repo pre-pass
+- Branch: `field-coder/13-sacrificial-repo`
+- Hard-start check: PASS
+- Attempt: 1/3
+- Intended change: compose existing components plus one disposable end-to-end proof
+
+## Entry 0029 — Step 13 first integration execution
 - Date/time: 2026-08-19 America/Los_Angeles
 - Branch: `field-coder/13-sacrificial-repo`
 - Step: 13 — End-to-end controlled proof
-- Goal: compose the verified Field parts into one disposable failure/recovery/success workflow
-- Hard-start check: PASS — Step 12 lineage inherited; complete control set and latest diary reread
-- Known-good state: Steps 01-12 verified individually
 - Attempt: 1/3
-- Intended change: add only workflow orchestration over existing components plus one disposable end-to-end test
-- Files expected to change: `Field_Coder/field/workflow.py`, `Field_Coder/tests/test_sacrificial_workflow.py`
-- Must remain unchanged: existing component contracts; no real repo production change, Void, self-approval, push/merge/commit automation
-- Exact success test: baseline clean/pass; bad candidate edit -> matching diff -> failing success test -> evidence/correction -> rollback; corrected candidate -> matching diff -> passing test -> review packet; source HEAD/status unchanged throughout
-- Files actually changed: pending
-- Command/check executed: pending
-- Exit status/result: pending
-- Observed behavior: pending
-- What worked: Step 13 hard-start/read discipline completed
-- What failed: none
-- What was learned: Step 13 should prove composition, not redesign components
-- Decision: KEEP
-- Next permitted action: create the two declared Step 13 files and execute the disposable proof
+- Command/check executed: sacrificial workflow test against local mirror of checked-in Step 13 components
+- Exit status/result: FAIL before Field candidate creation
+- Observed behavior: fixture baseline test passed, then `capture_known_good()` rejected the source because Python created untracked `__pycache__` files
+- What worked: clean-known-good safety gate correctly refused a dirty source; workflow implementation had not modified source or candidate
+- What failed: sacrificial fixture did not declare generated Python cache files as ignored
+- What was learned: a realistic Python fixture needs repository ignore policy before it can qualify as a clean known-good checkout
+- Decision: RETRY test fixture only; workflow implementation unchanged
+- Next permitted action: add committed `.gitignore` for `__pycache__/` and `*.pyc` to the sacrificial fixture setup, then rerun Step 13
 - Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
