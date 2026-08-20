@@ -117,7 +117,7 @@ def _to_portable_path(path: str, scene_dir: str) -> str:
     except ValueError:
         # Different drive on Windows: relpath is impossible, fall back to absolute.
         return abs_path
-    if rel_path.startswith(".."):
+    if rel_path == os.pardir or rel_path.startswith(os.pardir + os.sep):
         return abs_path
     return rel_path.replace(os.sep, "/")
 
