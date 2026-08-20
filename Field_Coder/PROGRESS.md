@@ -4,9 +4,9 @@
 
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/04-repo-reader`
-- Current step: 04 — Read-only repository reconstruction
-- Status: COMPLETE
+- Current branch: `field-coder/05-proposal-builder`
+- Current step: 05 — One implementation proposal
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -17,54 +17,61 @@
 - Step 03 — Goal to one narrow task: COMPLETE
 - Step 04 — Read-only repository reconstruction: COMPLETE
 
-## Step 04 verified result
+## Current goal
 
-- Added `Field_Coder/field/repo_reader.py` and `Field_Coder/tests/test_repo_reader.py` only for Step 04 implementation.
-- Reader verifies a Git working tree, captures exact HEAD and current branch, and reads only task-scoped UTF-8 files.
-- Scoped paths are rejected if absolute, escaping the repository, or missing.
-- Fixture context returned exact branch, HEAD, and the two requested files only.
-- Unscoped `README.md` was not read into the task context.
-- Pre/post HEAD, branch, Git status, and all non-`.git` working-tree file hashes were identical.
-- Steps 01-03 regression tests remained passing.
-- No editing, model, proposal, target diff, target command runner, retry controller, or Void behavior was added.
+Validate exactly one structured implementation proposal grounded in the current task and read-only repository context, without editing files.
+
+## Hard-start evidence
+
+- Step 05 moved to completed Step 04 lineage.
+- Step 04 read-only context bundle is verified and recorded.
+- Complete Field control set and active Step 05 section reread.
+- No model seat exists yet; Step 05 therefore proves the deterministic proposal contract using fixture draft input.
 
 ## Known-good state
 
-Field can now start, persist state, accept exactly one bounded task, and reconstruct the relevant repository context read-only.
+Field can start, persist state, accept one bounded task, and reconstruct task-scoped repository context read-only.
 
-## Test evidence
+## One allowed change
 
-`python3 Field_Coder/tests/test_repo_reader.py`
-- PASS: task-scoped repository context reconstructed
-- PASS: repository remained byte-for-byte clean in working tree
+Add only proposal data structures, grounding validation, and proposal-only tests.
 
-`python3 Field_Coder/tests/test_task_intake.py`
-- PASS: broad goal resolved to exactly one bounded TaskSpec
-- PASS: multiple tasks rejected
-- PASS: unbounded task rejected
+## Proposal contract
 
-`python3 Field_Coder/tests/test_state.py`
-- PASS: exact state restored in fresh process
-- PASS: missing required state rejected
-- PASS: invalid attempt bounds rejected
+A candidate proposal must provide:
 
-`python3 Field_Coder/tests/test_shell.py`
-- PASS: initial FIELD_SHELL_READY
-- PASS: deliberate missing component detected
-- PASS: restored FIELD_SHELL_READY
+- exactly one intended change
+- reason
+- exact files expected to change
+- invariants to preserve
+- expected result
+- exact success test
 
-## Current blockers
+Target files must be inside both the task scope and the read-only repo context.
 
-- None.
+## Exact success test
 
-## Next branch
+1. valid single-change proposal is accepted and normalized;
+2. proposal missing target files is rejected;
+3. proposal missing invariants is rejected;
+4. proposal missing success test is rejected;
+5. proposal containing more than one intended change is rejected;
+6. proposal targeting a file outside task/context scope is rejected;
+7. Steps 01-04 regression tests remain passing.
 
-`field-coder/05-proposal-builder`
+## Must not add in Step 05
 
-## Step 05 hard start
+- file editing
+- model calls
+- diff capture
+- target-project command execution
+- retry/controller behavior
+- Void logic
 
-Move Step 05 to this completed commit, reread the complete Field control set, confirm Step 04 hard-stop evidence, then implement only the single-change proposal contract.
+## Next allowed action
 
-## Step 05 hard stop reminder
+Create `Field_Coder/field/proposal.py` and `Field_Coder/tests/test_proposal.py`, then run proposal verification plus prior regressions.
 
-Stop after a valid proposal from task + read-only context is accepted, missing target files/invariants/test is rejected, a multi-change proposal is rejected, prior regressions pass, and diary/progress are updated.
+## Hard stop
+
+Stop after the single-change proposal contract and rejection cases are proven and recorded.
