@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import pathlib
+import sys
 import unittest
 
 
@@ -20,12 +21,18 @@ def load_engine(path: pathlib.Path):
     if not path.is_file():
         raise FileNotFoundError(f"required Field shell component missing: {path}")
 
-    spec = importlib.util.spec_from_file_location("field_engine_step01", path)
+    module_name = "field_engine_step01"
+    spec = importlib.util.spec_from_file_location(module_name, path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load Field shell component: {path}")
 
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        sys.modules.pop(module_name, None)
+        raise
     return module
 
 
