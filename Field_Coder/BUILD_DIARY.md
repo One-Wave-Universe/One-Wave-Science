@@ -3,34 +3,31 @@
 This diary is mandatory project memory.
 
 ## Prior verified history
-- Steps 00-09: PASS
+- Steps 00-10: PASS
 - All prior hard stops: SATISFIED
 
-## Entry 0022 — Step 10 Git-safety pre-pass
-- Branch: `field-coder/10-git-safety`
-- Hard-start check: PASS
-- Attempt: 1/3
-- Intended change: known-good capture + isolated worktree + rollback tests
-
-## Entry 0023 — Step 10 Git safety completed
+## Entry 0024 — Step 11 review-packet pre-pass
 - Date/time: 2026-08-19 America/Los_Angeles
-- Branch: `field-coder/10-git-safety`
-- Step: 10 — Known-good workspace protection
-- Goal: protect original checkout while allowing inspectable/discardable candidate work
-- Hard-start check: PASS
-- Known-good state: Steps 01-09 verified
+- Branch: `field-coder/11-review-packet`
+- Step: 11 — Review-ready Field output
+- Goal: package existing Field evidence for external review without self-approval authority
+- Hard-start check: PASS — Step 10 lineage inherited; complete control set and latest diary reread
+- Known-good state: Steps 01-10 verified
 - Attempt: 1/3
-- Intended change: `git_safety.py`, `test_git_safety.py`
-- Files actually changed: exactly the two declared Step 10 files plus mandatory progress/diary records
-- Command/check executed: Step 10 test plus all Step 01-09 regressions in exact local mirror
-- Exit status/result: PASS — all ten test files exit 0
-- Observed behavior: isolated candidate began at baseline; bad tracked/untracked edits rolled back; source HEAD/branch/status/bytes unchanged; successful candidate remained inspectable separately
-- What worked: clean-baseline gate, Git worktree isolation, reset+clean candidate rollback
-- What failed: nothing in implementation or tests
-- What was learned: known-good source protection is now independent of agent behavior
+- Intended change: add only deterministic review-packet generation/validation and tests
+- Files expected to change: `Field_Coder/field/review_packet.py`, `Field_Coder/tests/test_review_packet.py`
+- Must remain unchanged: all prior behavior; no model/provider, push/merge, Void, or autonomous approval behavior
+- Exact success test: complete packet includes goal/task/proposal/files/diff/tests/attempts/uncertainty/status; architecture verdict fixed to `PENDING_EXTERNAL_REVIEW`; self-approved candidate status rejected; prior regressions green
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 11 hard-start/read discipline completed
+- What failed: none
+- What was learned: review output must expose evidence while structurally withholding architecture authority from Field
 - Decision: KEEP
-- Next permitted action: transition `field-coder/11-review-packet` to this completed Step 10 lineage and begin only external-review packet generation after rereading controls
-- Hard-stop status: SATISFIED
+- Next permitted action: create the two declared Step 11 files and run Step 11 plus all prior regression tests
+- Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
 ---
