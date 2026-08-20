@@ -75,8 +75,45 @@ This diary is mandatory project memory.
 - What was learned: prefix-string testing was too broad for filesystem component semantics; the parent marker must be matched as a complete path component
 - Decision: KEEP — REVIEW_READY_CANDIDATE
 - Architecture verdict: PENDING_EXTERNAL_REVIEW
-- Next permitted action: none inside the Field Coder build list; Step 14 hard stop reached
-- Hard-stop status: SATISFIED — stop after first real review packet; do not start another animator task or Void implementation
+- Next permitted action: none inside the old Field Coder build list; Step 14 hard stop reached
+- Hard-stop status: SATISFIED
+- Blockers: none
+
+## Entry 0033 — Branch 15 field-state-kernel pre-pass
+- Date/time: 2026-08-20 America/Los_Angeles
+- Branch: `field-coder/15-field-state-kernel`
+- Step: 15 — Canonical Field state kernel
+- Goal: begin executable implementation of the corrected Field/Void CPU-GPU state-machine project by defining the Field state primitives as typed program state
+- Hard-start check: PASS
+- Known-good state: Steps 00-14 preserved; corrected `BUILD_SCOPE.md` and `LOOP_DYNAMICS.md` loaded; full project scope and inherited diary copied into `BRANCH_MEMORANDUM.md`
+- Attempt: 1/3
+- Intended change: add only `Field_Coder/field/state_kernel.py` plus its exact Branch 15 regression test
+- Files expected to change: `Field_Coder/field/state_kernel.py`, `Field_Coder/tests/test_state_kernel.py`, Branch 15 memorandum/progress/diary
+- Must remain unchanged: GPU execution, Void logic, M4 scheduling, provider/model logic, prior historical implementation files
+- Exact success test: verify 6/5/4/4/3/2 primitive counts, mirror Gate 4 alias 0, exact bidirectional gate order, ternary differential move, valid state preservation, and rejection of empty active-field identity
+- Workspace cleanup check: active Branch 15 authority files use the corrected master goal; old generic-agent descriptions are historical evidence only
+- Project-effect note: these types become the compatibility surface for later CPU/GPU/M4/Void work, so no speculative behavior is allowed here
+- Decision: KEEP
+
+## Entry 0034 — Branch 15 field-state-kernel post-pass
+- Date/time: 2026-08-20 America/Los_Angeles
+- Branch: `field-coder/15-field-state-kernel`
+- Step: 15 — Canonical Field state kernel
+- Goal: establish one deterministic executable representation of the locked Field state-machine primitives
+- Hard-start check: PASS
+- Attempt: 1/3
+- Intended change: canonical typed state kernel only
+- Files actually changed: `Field_Coder/field/state_kernel.py`, `Field_Coder/tests/test_state_kernel.py`, `Field_Coder/BRANCH_MEMORANDUM.md`, `Field_Coder/BUILD_DIARY.md`, `Field_Coder/PROGRESS.md`
+- Command/check executed: exact checked-in kernel was loaded into an isolated Python test environment; Branch 15 regression assertions were executed against it
+- Exit status/result: PASS — process exit 0
+- Observed behavior: all canonical primitive counts matched; Gate 4 returned boundary alias 0; forward order was 1-2-3-4-5-6; reverse order was 6-5-4-3-2-1; differential selected Compress/Hold/Expand correctly; valid state preserved reference/differential/motion/modulation/history; empty active field was rejected
+- What worked: the architecture primitives translated cleanly into minimal typed deterministic state without pulling in unrelated agent behavior
+- What failed: no Branch 15 implementation assertion failed; an unrelated spreadsheet-runtime warmup message appeared on stderr in the isolated Python environment while the test process still exited 0 and the state-kernel assertions passed
+- What was learned: keeping the kernel independent of orchestration makes the primitive contract testable and gives later CPU/GPU implementations a stable target
+- Architecture effect: later transition engines should consume this kernel rather than redefine cycle/scale/view/operator/move/choice/gate/motion/modulation meanings
+- Workspace cleanup: no stale generic-agent claim was introduced into Branch 15 authority files; historical old-stage evidence remains intact but is not treated as current project scope
+- Decision: KEEP
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
