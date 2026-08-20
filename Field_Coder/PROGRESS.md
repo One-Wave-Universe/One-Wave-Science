@@ -3,42 +3,43 @@
 ## Project
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/12-model-adapter`
-- Current step: 12 — Replaceable coding model seat
-- Status: COMPLETE
+- Current branch: `field-coder/13-sacrificial-repo`
+- Current step: 13 — End-to-end controlled proof
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
 - Steps 00-12: COMPLETE
 
-## Step 12 verified result
-- Added `Field_Coder/field/model_adapter.py` and `Field_Coder/tests/test_model_adapter.py` only for Step 12 implementation.
-- Provider-neutral `ModelRequest`, `ModelResponse`, and `ModelAdapter` contract defined.
-- `FakeModelAdapter` satisfies the contract.
-- `LocalOpenAICompatibleAdapter` satisfies the same contract through localhost HTTP.
-- Both adapters run through the same `run_model(adapter, request)` function with no engine/controller branch.
-- Malformed local-model responses are rejected deterministically.
-- Local transport uses standard-library HTTP and does not bind Field to a model vendor.
-- No end-to-end repo orchestration, Void logic, self-approval, push, or merge behavior was added.
+## Hard-start evidence
+- Step 12 hard stop satisfied and inherited.
+- Full Field control set and latest diary reread on this branch.
+- All required individual components exist and have prior verification evidence.
 
-## Test evidence
-Exact local mirror of checked-in Step 12 files:
-- PASS: fake adapter satisfies ModelResponse contract
-- PASS: localhost adapter satisfies identical ModelResponse contract
-- PASS: adapter swap requires no run_model/controller change
-- PASS: malformed local response rejected
+## Current goal
+Compose the existing Field components into one disposable repo workflow that proves failure -> evidence -> rollback/correction -> success -> review packet while preserving the source baseline.
 
-## Known-good state
-Field now has a replaceable model seat. A local OpenAI-compatible coding model can occupy that seat without changing the Field engine.
+## One allowed change
+Add only orchestration that composes existing components plus a sacrificial end-to-end test. Do not redesign the component contracts.
 
-## Current blockers
-- None.
+## Exact success test
+1. disposable Git repo starts with passing baseline test;
+2. Field parses one bounded task and reads source context read-only;
+3. attempt 1 produces a declared edit whose success test fails;
+4. failure evidence advances state and candidate worktree is rolled back cleanly;
+5. attempt 2 produces a corrected declared edit, diff matches proposal, and success test passes;
+6. source checkout remains clean at original HEAD throughout;
+7. successful candidate remains inspectable;
+8. external-review packet is emitted with `PENDING_EXTERNAL_REVIEW`.
 
-## Next branch
-`field-coder/13-sacrificial-repo`
+## Must not add
+- real repo production change
+- Void logic
+- self-approval
+- push/merge/commit automation
 
-## Step 13 hard start
-Move Step 13 to this completed commit, reread all controls, confirm Step 12 hard-stop evidence, then wire the already-verified components together only for a disposable end-to-end proof.
+## Next allowed action
+Create `Field_Coder/field/workflow.py` and `Field_Coder/tests/test_sacrificial_workflow.py`, then execute the disposable proof.
 
-## Step 13 hard stop reminder
-Stop after one successful tiny task and at least one deliberately bad candidate path are demonstrated end-to-end, known-good baseline is preserved, a review packet is emitted, and diary/progress are updated.
+## Hard stop
+Stop Step 13 only after both bad and good candidate paths are proven and recorded.
