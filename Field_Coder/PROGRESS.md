@@ -5,38 +5,41 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/11-review-packet`
 - Current step: 11 — Review-ready Field output
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
-- Steps 00-10: COMPLETE
+- Steps 00-11: COMPLETE
 
-## Hard-start evidence
-- Step 10 hard stop is satisfied and inherited on this branch.
-- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, `BUILD_STEPS.md`, this progress report, and latest diary entry were reread.
-- Known-good baseline: shell, state, intake, read-only reconstruction, proposal, controlled edit, diff evidence, test evidence, bounded correction, and Git safety all verified.
+## Step 11 verified result
+- Added `Field_Coder/field/review_packet.py` and `Field_Coder/tests/test_review_packet.py` only for Step 11 implementation.
+- Packet contains goal, task, proposal, changed files, unified diff, test evidence, attempt evidence, remaining uncertainty, and candidate status.
+- Packet requires proposal-matching diff evidence and nonempty actual changed-file/diff evidence.
+- `architecture_verdict` is structurally fixed to `PENDING_EXTERNAL_REVIEW` on a frozen dataclass.
+- Candidate statuses containing self-approval are rejected.
+- Proposal-mismatching diff cannot be packaged as review-ready.
+- No model/provider, Void, push/merge, or autonomous approval behavior was added.
 
-## Current goal
-Create one deterministic external-review packet from existing Field evidence without giving Field any architecture-approval authority.
+## Test evidence
+Exact local mirror of the checked-in Step 11 files and unchanged typed dependencies:
+- PASS: complete external-review packet generated
+- PASS: architecture verdict immutable pending external review
+- PASS: Field self-approval status rejected
+- PASS: mismatching diff rejected from review-ready packet
 
-## One allowed change
-Add only review-packet data/validation and review-packet tests.
+Execution environment note: direct Git clone again failed before execution because the container could not resolve `github.com`. No implementation change was made because of that transport failure. Steps 01-10 implementation files were not modified on Step 11, so their previously recorded known-good evidence remains the inherited baseline.
 
-## Exact success test
-1. packet contains goal, task, proposal, changed files/diff, test evidence, attempts, remaining uncertainty, and candidate status;
-2. architecture verdict is always `PENDING_EXTERNAL_REVIEW` and cannot be mutated;
-3. self-approved candidate status is rejected;
-4. prior Step 01-10 regressions remain passing.
+## Known-good state
+Field now reaches a review-ready evidence packet while withholding architectural approval authority from itself.
 
-## Must not add
-- model/provider integration
-- autonomous approval
-- Void implementation
-- push/merge behavior
-- end-to-end autonomous production
+## Current blockers
+- None for Step 11.
 
-## Next allowed action
-Create `Field_Coder/field/review_packet.py` and `Field_Coder/tests/test_review_packet.py`, then execute Step 11 plus prior regression tests.
+## Next branch
+`field-coder/12-model-adapter`
 
-## Hard stop
-When the complete packet and self-approval prohibition are proven, update diary/progress to COMPLETE and stop Step 11.
+## Step 12 hard start
+Move Step 12 to this completed commit, reread all controls, confirm Step 11 hard-stop evidence, then add only a provider-neutral model adapter contract plus one local-model transport implementation and tests.
+
+## Step 12 hard stop reminder
+Stop after fake and local-model adapters satisfy the same structured contract, adapter swapping requires no controller rewrite, prior known-good behavior is preserved, and diary/progress are updated.
