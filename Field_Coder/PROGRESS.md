@@ -5,33 +5,61 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/14-real-repo-trial`
 - Current step: 14 — First real controlled task
-- Status: IN PROGRESS
+- Status: COMPLETE — HARD STOP REACHED
 - Attempt: 1/3
 
 ## Completed steps
-- Steps 00-13: COMPLETE
+- Steps 00-14: COMPLETE
 
-## Hard-start evidence
-- Step 13 hard stop satisfied and inherited.
-- Full Field control set and latest diary reread on this branch.
-- Real target confirmed under `One_Wave_Animator/` with existing scene-model tests.
+## Step 14 real task
+Corrected `_to_portable_path()` in `One_Wave_Animator/app/scene_model.py` so a valid asset inside the scene folder whose basename begins with `..` is not falsely treated as a parent/outside path.
 
-## Selected real task
-Fix `_to_portable_path()` in `One_Wave_Animator/app/scene_model.py` so an in-folder filename beginning with `..` (for example `..hero.png`) remains a relative portable path instead of being falsely classified as a parent-directory path.
+## Evidence before change
+An exact local Git slice of the checked-in animator source was given the narrow regression test.
 
-## Why this task is bounded
-Current code uses `rel_path.startswith("..")`, which conflates a basename beginning with two dots with an actual path that traverses to the parent. The fix is limited to the parent-path boundary check.
+`python3 -m pytest -q tests/test_scene_model.py`
+- 4 existing tests: PASS
+- new `..hero.png` portability regression: FAIL
+- failure showed the current implementation serialized the in-folder asset as an absolute path
 
-## Allowed scope
-- `One_Wave_Animator/app/scene_model.py`
-- narrowly required regression verification for this exact behavior only
+## Candidate change
+Changed only the parent-boundary condition:
 
-## Exact success test
-1. existing scene-model tests remain passing;
-2. an asset inside the scene directory named `..hero.png` serializes as `..hero.png`, not an absolute path;
-3. a true asset outside the scene directory still serializes as an absolute path;
-4. candidate diff contains only the bounded scene-model fix plus its narrowly required test if added;
-5. review packet remains `PENDING_EXTERNAL_REVIEW`.
+`rel_path.startswith("..")`
+
+became:
+
+`rel_path == os.pardir or rel_path.startswith(os.pardir + os.sep)`
+
+This distinguishes a complete `..` path component from a legal filename prefix.
+
+## Evidence after change
+`python3 -m pytest -q tests/test_scene_model.py`
+- 5 passed
+- in-folder `..hero.png` is stored relatively
+- true parent/outside asset is still stored absolutely
+- all three pre-existing scene-model tests remain passing
+
+## Branch diff audit
+Compared with completed Step 13 baseline `4f2843aad4e2cc54fb258713aed093a5ce439902`:
+- `One_Wave_Animator/app/scene_model.py`: 1 addition, 1 deletion
+- `One_Wave_Animator/tests/test_scene_model.py`: 27 additions
+- Field control/progress/diary records only besides those two animator files
+- no unrelated animator files changed
+
+## Candidate status
+- Candidate: `REVIEW_READY_CANDIDATE`
+- Architecture verdict: `PENDING_EXTERNAL_REVIEW`
+- Main branch: untouched by this trial
+- Trial branch: `field-coder/14-real-repo-trial`
 
 ## Hard stop
-Stop after this first real task produces a review-ready candidate packet. Do not begin another animator task, production autonomy, or Void implementation.
+SATISFIED. The Field Coder build list ends here.
+
+Do not:
+- start a second real animator task,
+- merge or push this candidate to `main`,
+- expand into autonomous production,
+- begin Void implementation on this branch.
+
+The next action requires a new explicit project/architecture decision outside the completed Field build list.
