@@ -211,6 +211,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0009 — Step 04 repo-reader pre-pass
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/04-repo-reader`
+- Step: 04 — Read-only repository reconstruction
+- Goal: inspect one task-relevant Git repository and produce a context bundle without modifying any repository state or bytes
+- Hard-start check: PASS — Step 04 moved to completed Step 03 lineage; complete control set and active Step 04 section reread; Step 03 hard-stop evidence confirmed
+- Known-good state: Steps 01-03 verified
+- Attempt: 1/3
+- Intended change: add only read-only repo detection/HEAD/branch/file-reading context logic and a read-only invariant test
+- Files expected to change: `Field_Coder/field/repo_reader.py`, `Field_Coder/tests/test_repo_reader.py`
+- Must remain unchanged: prior shell/state/task-intake behavior; target repository bytes/status; editing/model/proposal/diff/target-runner/retry/Void logic
+- Exact success test: fixture repo context returns exact branch/HEAD/task-scoped file contents; pre/post HEAD, branch, status, and byte hashes are identical; Steps 01-03 regressions pass
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 04 hard-start/read discipline completed
+- What failed: none
+- What was learned: repository reconstruction must be provably observational before any later write capability exists
+- Decision: KEEP
+- Next permitted action: create the two declared Step 04 files and run repo-reader + prior regression tests
+- Hard-stop status: NOT YET SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
