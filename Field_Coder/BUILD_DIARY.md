@@ -238,6 +238,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0010 — Step 04 read-only repo reader completed
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/04-repo-reader`
+- Step: 04 — Read-only repository reconstruction
+- Goal: prove task-scoped Git repository reconstruction without modifying source bytes or visible Git state
+- Hard-start check: PASS
+- Known-good state: Steps 01-03 verified
+- Attempt: 1/3
+- Intended change: add only `repo_reader.py` and `test_repo_reader.py`
+- Files expected to change: `Field_Coder/field/repo_reader.py`, `Field_Coder/tests/test_repo_reader.py`
+- Must remain unchanged: prior behavior, target fixture repository, and all Step 05+ behavior
+- Exact success test: exact task-scoped context; pre/post HEAD/branch/status/file hashes identical; all prior regressions pass
+- Files actually changed: exactly the two declared Step 04 implementation/test files plus mandatory progress/diary records
+- Command/check executed: `python3 Field_Coder/tests/test_repo_reader.py`; `python3 Field_Coder/tests/test_task_intake.py`; `python3 Field_Coder/tests/test_state.py`; `python3 Field_Coder/tests/test_shell.py` against exact local mirror of checked-in lineage
+- Exit status/result: PASS — all four commands exit 0
+- Observed behavior: context contained exact HEAD, branch, and only the two task-scoped files; README stayed outside context; pre/post HEAD, branch, Git status, and all working-tree source hashes were identical; prior tests remained green
+- What worked: read-only Git queries, safe scoped-path enforcement, task-scoped file reading, source-byte invariant proof
+- What failed: nothing in implementation or tests
+- What was learned: Field can now reconstruct relevant repo evidence without possessing any write path
+- Decision: KEEP
+- Next permitted action: transition `field-coder/05-proposal-builder` to this completed Step 04 lineage, reread controls, and begin only structured single-change proposal work
+- Hard-stop status: SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
