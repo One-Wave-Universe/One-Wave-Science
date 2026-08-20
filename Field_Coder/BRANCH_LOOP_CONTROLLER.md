@@ -1,346 +1,624 @@
 # FIELD CODER — BRANCH LOOP CONTROLLER
 
-## ROLE
+## PURPOSE
 
-The Branch Loop Controller is the automatic machine-control mechanism that moves the Field coding project through the pre-created programming branches one stage at a time.
+The Branch Loop Controller is the automatic AI-controlled mechanism that takes a software project from an explicit project goal through a preplanned sequence of coding branches, one coded subsystem at a time.
 
-It does not invent the programming plan while running.
-It does not create a new build order while running.
-It does not skip branches because a later feature looks useful.
-It does not require the human to manually perform routine Git, test, progress, or transition operations.
+The controller must never invent the build sequence while coding.
 
-The programming plan is defined first.
-The branches are created ahead of time.
-The controller executes that plan.
+Before implementation begins, the project must be broken into explicit coding stages. Each stage becomes a pre-created branch. Those branches are the fixed coding roadmap for the project.
+
+The controller executes that roadmap one branch at a time.
+
+Routine repository operations, branch transitions, journal updates, progress updates, test execution, evidence collection, retry accounting, handbook lookup, and branch completion checks are AI-controlled and automatic.
+
+The human supplies or approves the project-level goal and major architecture changes. The human is not required to manually perform routine loop operations.
 
 ---
 
-# MASTER REFERENCE
+# REQUIRED PROJECT REFERENCE
 
-Before doing anything, the controller must load:
+Every project controlled by this mechanism must have a project-level reference file equivalent to:
 
-- `Field_Coder/MASTER_CODE_PLAN.md`
-- `Field_Coder/BUILD_SCOPE.md`
-- `Field_Coder/CORE_RULES.md`
-- `Field_Coder/BUILD_STEPS.md`
-- `Field_Coder/PROGRESS.md`
-- latest `Field_Coder/BUILD_DIARY.md`
-- coding handbook/reference material when needed
+`MASTER_CODE_PLAN.md`
 
-The controller must treat `MASTER_CODE_PLAN.md` as the permanent branch main-goal reference.
+That file must explicitly define:
+
+- project name;
+- project purpose;
+- complete main goal;
+- required final behavior;
+- intended users or calling agents;
+- software/app/program being built;
+- Field responsibilities;
+- Void oversight/override responsibilities;
+- CPU responsibilities;
+- GPU responsibilities where applicable;
+- M4/controller responsibilities where applicable;
+- persistent memory/state requirements;
+- repository/local-project location;
+- required interfaces;
+- required inputs;
+- required outputs;
+- required tests;
+- required safety boundaries;
+- required rollback behavior;
+- required logging/journal behavior;
+- required progress reporting behavior;
+- required architecture-decision recording;
+- final integration criteria;
+- final project hard stop.
+
+No coding branch may begin unless this project reference exists and is readable.
+
+---
+
+# PROJECT PLANNING PHASE — MUST HAPPEN BEFORE CODING
+
+Before any implementation branch is coded, the AI must break the project into an ordered coding plan.
+
+Each coding-plan step becomes one pre-created branch.
+
+Each planned branch must define, before coding starts:
+
+- branch name;
+- branch number/order;
+- exact subsystem assigned to that branch;
+- why that subsystem exists;
+- dependency on previous branches;
+- required inputs from previous branches;
+- outputs that this branch must produce for later branches;
+- files/modules expected to be created or modified;
+- allowed scope;
+- forbidden scope;
+- future work explicitly forbidden on this branch;
+- branch-specific hard start;
+- branch-specific success criteria;
+- branch-specific required tests;
+- branch-specific hard stop;
+- rollback point;
+- required pre-branch journal entry;
+- required post-branch journal entry;
+- required progress update;
+- required architecture notes;
+- next planned branch.
+
+All planned branches must be created before implementation begins unless the master plan explicitly states that a later branch cannot yet be known.
+
+Creating the branches does not mean coding them early.
+
+A branch existing ahead of time is only a reserved work slot in the project roadmap.
+
+---
+
+# PLAN VERSION LOCK
+
+At project start, record a plan version and plan reference.
+
+Every branch must record which plan version it is executing.
+
+The project plan may not be silently rewritten during implementation.
+
+If evidence shows that the architecture or coding plan must change:
+
+1. stop the active branch at a safe state;
+2. write the reason to the architecture-change ledger;
+3. record evidence that caused the proposed change;
+4. identify which future branches are affected;
+5. preserve previous plan version;
+6. create a new plan version;
+7. update affected future branch contracts explicitly;
+8. do not rewrite completed historical branch records.
+
+Completed evidence remains historical truth even when future architecture changes.
 
 ---
 
 # LOCAL PROJECT LOCATION
 
-Primary local working repository:
+Primary local working repository for the current project:
 
 `$HOME/One-Wave-Science`
 
-At the beginning of every branch cycle the controller automatically determines and records:
+The controller must verify the actual local project root automatically before coding.
+
+At every branch hard start it records:
 
 - repository root;
-- active worktree;
+- worktree path;
 - active branch;
 - HEAD;
 - working-tree status;
-- current branch step;
+- known-good commit/reference;
+- current plan version;
+- current branch contract;
 - previous completed branch;
-- current allowed files/subsystem;
-- known-good test state.
+- next planned branch.
 
 If the local repository cannot be verified, the controller must HOLD rather than guess.
 
 ---
 
-# BRANCH LOOP STATE
+# REQUIRED PROJECT MEMORY
 
-The controller maintains an explicit machine-readable state containing at least:
+The controller must maintain durable project memory, not rely on AI conversational memory.
 
-- `project_id`
-- `main_goal_reference`
-- `current_branch`
-- `current_step`
-- `previous_branch`
-- `next_branch`
-- `branch_status`
-- `hard_start_status`
-- `current_task`
-- `allowed_scope`
-- `forbidden_scope`
-- `attempt`
-- `max_attempts`
-- `last_change`
-- `last_test`
-- `last_result`
-- `void_decision`
-- `hard_stop_status`
-- `known_good_head`
-- `candidate_head`
-- `blocker`
-- `escalation_packet`
+Required memory categories:
 
-Allowed `branch_status` values:
+- master project goal;
+- master coding plan;
+- branch contracts;
+- branch order;
+- branch dependencies;
+- current progress;
+- pre-branch journal entries;
+- post-branch journal entries;
+- working features;
+- known-good behavior;
+- failed approaches;
+- attempt history;
+- test evidence;
+- architecture decisions;
+- architecture-change proposals;
+- unresolved blockers;
+- handoff state;
+- final integration state.
 
-- `NOT_STARTED`
-- `HARD_START`
-- `ACTIVE`
-- `TESTING`
-- `CORRECTING`
-- `WAITING_FOR_VOID`
-- `HARD_STOP`
-- `COMPLETE`
+Future AI workers must be able to reconstruct the project from repository memory alone.
+
+---
+
+# PRE-BRANCH JOURNAL — REQUIRED BEFORE EVERY BRANCH
+
+Before coding begins on every branch, automatically write a journal entry containing:
+
+- project name;
+- complete main project goal;
+- plan version;
+- current branch;
+- exact branch goal;
+- why this branch exists;
+- previous branch result;
+- known-good starting state;
+- current HEAD/reference;
+- branch dependencies;
+- inputs available to this branch;
+- outputs this branch must create;
+- allowed files/modules;
+- forbidden files/modules;
+- forbidden future work;
+- branch hard start requirements;
+- confirmation that hard start passed;
+- exact first coding change;
+- exact test for that change;
+- attempt number;
+- known risks;
+- unresolved questions;
+- expected branch hard stop.
+
+No code change may occur before this entry exists.
+
+---
+
+# HARD START — REQUIRED FOR EVERY BRANCH
+
+Every branch has its own explicit hard start.
+
+A branch may not become ACTIVE until the controller verifies all branch-specific requirements plus these global requirements:
+
+1. complete main project goal is loaded;
+2. current plan version is loaded;
+3. correct local project is verified;
+4. correct pre-created branch exists;
+5. previous required branch is complete;
+6. previous branch post-journal exists;
+7. previous progress update exists;
+8. previous required tests passed or an explicit accepted exception exists;
+9. known-good reference is identified;
+10. current branch dependency requirements are satisfied;
+11. current branch inputs exist;
+12. current branch outputs are explicit;
+13. allowed scope is explicit;
+14. forbidden scope is explicit;
+15. forbidden future work is explicit;
+16. exact first coding change is explicit;
+17. exact test for that change is explicit;
+18. pre-branch journal entry exists.
+
+If any required condition fails, do not code.
+
+State becomes HOLD, BLOCKED, or ESCALATE according to the evidence.
+
+---
+
+# ONE-CHANGE CODING LOOP
+
+Within an active branch, execute one controlled code change at a time.
+
+For every change:
+
+1. reload branch goal and master project goal;
+2. inspect current known-good state;
+3. declare exactly one intended code change;
+4. declare files expected to change;
+5. declare expected behavior change;
+6. declare behavior that must remain unchanged;
+7. declare exact verification/test;
+8. make the one code change;
+9. capture actual changed files;
+10. capture actual diff;
+11. run the declared test;
+12. capture stdout/stderr/exit status/runtime evidence;
+13. compare expected result against actual result;
+14. record what worked;
+15. record what did not work;
+16. record what was learned for future architecture or implementation;
+17. send evidence to Void oversight/override;
+18. receive next-state decision;
+19. persist state before another code change begins.
+
+No second code change begins before the first change completes this cycle.
+
+---
+
+# FIELD ROLE
+
+Field is the software-building side of the engine.
+
+Field may:
+
+- inspect project evidence;
+- propose a bounded code change;
+- implement the declared change;
+- run or request required tests;
+- interpret implementation evidence;
+- learn from failed implementation attempts;
+- propose a corrected implementation.
+
+Field may not silently broaden branch scope or approve its own architecture as correct.
+
+---
+
+# VOID OVERSIGHT / OVERRIDE ROLE
+
+Void observes the same project goal, plan version, branch contract, known-good reference, proposal, actual diff, tests, progress evidence, and failure history.
+
+Void controls whether the next software movement is permitted.
+
+Void returns one of:
+
+- `ALLOW`
+- `CORRECT`
+- `OVERRIDE`
 - `HOLD`
-- `BLOCKED`
 - `ESCALATE`
 
----
+`OVERRIDE` means Void may replace Field's proposed next movement with a bounded corrective next action consistent with the project goal and current branch contract.
 
-# AUTOMATIC BRANCH CYCLE
-
-For each pre-created Field branch, execute this sequence exactly:
-
-`LOAD PLAN`
--> `LOCATE LOCAL REPO`
--> `SELECT CURRENT PREPLANNED BRANCH`
--> `ENTER HARD START`
--> `VERIFY PREVIOUS STEP`
--> `LOAD CURRENT STEP CONTRACT`
--> `DECLARE ONE CODE CHANGE`
--> `FIELD IMPLEMENTS ONE CHANGE`
--> `CAPTURE ACTUAL DIFF`
--> `RUN EXACT TEST`
--> `CAPTURE EVIDENCE`
--> `VOID OVERSIGHT/OVERRIDE`
--> `DECIDE NEXT STATE`
--> `UPDATE DIARY/PROGRESS`
--> `CHECK HARD STOP`
--> `COMPLETE BRANCH OR LOOP CURRENT BRANCH`
--> `MOVE TO NEXT PRE-CREATED BRANCH ONLY AFTER COMPLETION`
+Void does not silently turn itself into an unrestricted second implementation agent.
 
 ---
 
-# HARD START GATE
+# THREE-ATTEMPT RULE
 
-A branch may not become `ACTIVE` until all required hard-start conditions in `MASTER_CODE_PLAN.md` and `BUILD_STEPS.md` are satisfied.
+For one failing approach inside the current branch:
 
-The controller must automatically verify:
+- Attempt 1: planned implementation.
+- Attempt 2: targeted correction based on Attempt 1 evidence.
+- Attempt 3: materially different evidence-based correction.
 
-1. correct local repository exists;
-2. correct pre-created branch exists;
-3. previous required branch is complete;
-4. previous success evidence exists;
-5. known-good behavior is still valid;
-6. main goal has been loaded;
-7. current branch assignment has been loaded;
-8. allowed scope is explicit;
-9. forbidden future work is explicit;
-10. exact test for the next code change is explicit.
+There is no hidden Attempt 4.
 
-If any required item fails, branch state becomes `HOLD` or `BLOCKED`.
+After Attempt 3 fails:
 
-No coding occurs before hard start passes.
+- mark that approach failed;
+- write failure evidence to durable memory;
+- write what was learned;
+- search coding handbook/reference material;
+- search previous failed approaches;
+- search repository for related working patterns;
+- Void chooses OVERRIDE, HOLD, or ESCALATE;
+- a genuinely different approach may begin only if explicitly recorded as a new approach.
 
----
-
-# ONE-CHANGE INNER LOOP
-
-Inside one active branch:
-
-1. Field reads the current branch goal and evidence.
-2. Field declares exactly one intended code change.
-3. Controller records files expected to change.
-4. Field applies that one change.
-5. Controller captures actual changed files and diff.
-6. If actual diff exceeds declared scope, stop and send to Void.
-7. Controller runs the exact declared test.
-8. Controller captures stdout, stderr, exit code, timeout and relevant runtime evidence.
-9. Field may interpret the evidence, but cannot self-approve architectural correctness.
-10. Void receives reference + proposal + actual diff + test evidence.
-
-No second code change begins until the first change has completed this loop.
+Repeatedly changing small details of the same failed approach does not reset the counter.
 
 ---
 
-# VOID CONTROL OUTPUT
+# AUTOMATIC REFERENCE LOOKUP WHEN STUCK
 
-Void returns exactly one control decision:
+When an implementation is stuck, the controller automatically searches available project references before escalating.
 
-- `ALLOW` — candidate movement is acceptable; continue toward hard stop or next declared change.
-- `CORRECT` — remain in the current branch and make one evidence-targeted correction.
-- `OVERRIDE` — reject Field's proposed next movement and replace the next action/state with the bounded corrective direction selected by Void.
-- `HOLD` — preserve current state and do not modify code until a required condition/reference becomes available.
-- `ESCALATE` — stop autonomous branch work and produce a complete escalation packet for higher-level review.
+Lookup order:
 
-Void oversight controls the next movement. It does not become an unrestricted second Field coder.
+1. current branch contract;
+2. master code plan;
+3. previous branch journals;
+4. working-features ledger;
+5. failed-approaches ledger;
+6. architecture decisions;
+7. bot coding handbook;
+8. repository code containing related working behavior;
+9. tests and fixtures;
+10. higher-level escalation if still unresolved.
 
----
-
-# THREE-ATTEMPT MECHANISM
-
-For a failing objective within the current branch:
-
-- Attempt 1 = planned approach.
-- Attempt 2 = targeted correction using Attempt 1 evidence.
-- Attempt 3 = materially different evidence-based correction/direction.
-
-After three failures:
-
-- no Attempt 4 is permitted;
-- current approach is marked failed;
-- failure evidence is written to project memory;
-- Void selects `OVERRIDE`, `HOLD`, or `ESCALATE`;
-- if a genuinely different approved approach exists, attempt counter may reset for that new approach only;
-- otherwise autonomous coding stops.
+The AI must not guess when durable project evidence exists.
 
 ---
 
-# HARD STOP GATE
+# PROGRESS REPORT — REQUIRED THROUGHOUT THE PROJECT
 
-The branch cannot become `COMPLETE` until its explicit hard-stop requirements are verified automatically.
+Progress must be updated after every meaningful branch event and at branch close.
 
-The controller must check:
+Progress records must include:
 
-1. this branch's assigned subsystem is implemented;
-2. branch success tests actually passed;
-3. previously verified behavior still passes;
-4. actual diff stayed inside allowed branch scope;
-5. no future branch subsystem was implemented early;
-6. attempt/failure evidence is recorded;
-7. Field notes are recorded;
-8. Void decision is recorded;
-9. progress is updated;
-10. look-back reflection is recorded;
-11. known-good/candidate state is identified;
-12. next branch hard-start requirements are known.
+- current project;
+- complete project goal reference;
+- plan version;
+- current branch;
+- current branch goal;
+- branch status;
+- current attempt;
+- completed branches;
+- verified working behavior;
+- current known-good reference;
+- tests currently passing;
+- tests currently failing;
+- blockers;
+- failed approaches;
+- architecture concerns;
+- next permitted action.
 
-Once all required hard-stop conditions pass:
-
-`branch_status = COMPLETE`
-
-The controller stops coding that branch immediately.
-
----
-
-# NEXT-BRANCH TRANSITION
-
-Only after current branch status is `COMPLETE` may the controller select the next branch listed in the fixed programming plan.
-
-Transition behavior:
-
-1. preserve completed branch evidence;
-2. identify next pre-created branch;
-3. move/prepare the working implementation according to the project's approved Git/worktree strategy;
-4. load the next branch's explicit contract;
-5. set next branch state to `HARD_START`;
-6. do not code until that hard start passes.
-
-The existence of a later branch is not permission to work on it early.
+Progress is evidence for future agents, not conversational commentary.
 
 ---
 
-# LOOP TERMINATION
+# WHAT WORKED / WHAT DID NOT WORK — REQUIRED
 
-The branch loop stops automatically when any of the following occurs:
+Every branch must leave explicit evidence useful to future architecture work.
 
-- final planned branch reaches `COMPLETE`;
-- Void returns `HOLD` with an unmet external requirement;
-- Void returns `ESCALATE`;
-- repository safety cannot be established;
-- project references conflict materially;
-- three-attempt handling produces no approved different approach;
-- an architecture change would alter the preplanned master build.
+Record separately:
 
-Routine failure does not call the human automatically if Field/Void can resolve it inside the existing plan.
+## WHAT WORKED
+
+- implementation patterns that behaved correctly;
+- interfaces that proved stable;
+- tests that provided useful evidence;
+- performance behavior that met requirements;
+- assumptions supported by evidence;
+- reusable code or patterns.
+
+## WHAT DID NOT WORK
+
+- failed approaches;
+- failing assumptions;
+- unstable interfaces;
+- misleading tests;
+- performance failures;
+- platform-specific failures;
+- dead ends;
+- approaches that must not be casually repeated.
+
+## FUTURE ARCHITECTURE EVIDENCE
+
+Record observations that may matter to later architecture changes without automatically changing the current plan.
+
+An observation is evidence, not permission to rewrite architecture.
+
+---
+
+# ARCHITECTURE CHANGE LEDGER
+
+Any possible architecture change must be recorded with:
+
+- current plan version;
+- branch where evidence appeared;
+- exact observed problem;
+- supporting test/diff/runtime evidence;
+- proposed architecture change;
+- expected benefit;
+- affected branches;
+- risk to verified behavior;
+- decision: ACCEPT / REJECT / DEFER / ESCALATE;
+- new plan version if accepted.
+
+Architecture changes must never erase old evidence.
+
+---
+
+# POST-BRANCH JOURNAL — REQUIRED AFTER EVERY BRANCH
+
+Before leaving a branch, automatically write a closing journal entry containing:
+
+- complete main project goal;
+- plan version;
+- branch name;
+- branch goal;
+- starting known-good reference;
+- final candidate/known-good reference;
+- every meaningful change made;
+- files changed;
+- tests run;
+- exact results;
+- attempts used;
+- Void decisions;
+- what worked;
+- what did not work;
+- what was learned;
+- architecture evidence discovered;
+- failed approaches that should not be repeated;
+- branch outputs produced;
+- confirmation that required outputs exist;
+- confirmation previous verified behavior remains intact;
+- confirmation future branch work was not implemented early;
+- branch hard-stop evidence;
+- next branch name;
+- next branch hard-start requirements.
+
+The branch cannot close without this entry.
+
+---
+
+# HARD STOP — REQUIRED FOR EVERY BRANCH
+
+Every branch has its own explicit hard stop.
+
+The controller must verify the branch-specific hard stop plus these global conditions:
+
+1. assigned subsystem is implemented to the branch contract;
+2. required branch outputs exist;
+3. required branch tests pass;
+4. previous verified behavior still passes;
+5. diff stayed inside allowed scope;
+6. forbidden future work was not implemented;
+7. attempts/failures are recorded;
+8. what-worked evidence is recorded;
+9. what-did-not-work evidence is recorded;
+10. future-architecture evidence is recorded;
+11. architecture decisions/changes are recorded if applicable;
+12. progress report is updated;
+13. post-branch journal exists;
+14. known-good reference is identified;
+15. rollback point is preserved;
+16. next branch exists;
+17. next branch hard start is known.
+
+When the hard stop passes, stop coding that branch immediately.
+
+Do not begin the next branch's implementation from the current branch.
+
+---
+
+# BRANCH TRANSITION
+
+After hard stop passes:
+
+1. preserve current branch evidence;
+2. preserve known-good reference;
+3. mark current branch COMPLETE;
+4. load next pre-created branch from the plan;
+5. transfer only approved project state/implementation according to the project's Git strategy;
+6. create next branch pre-journal entry;
+7. enter next branch HARD START;
+8. verify all next-branch hard-start requirements;
+9. only then permit coding.
+
+---
+
+# ROLLBACK / KNOWN-GOOD CONTROL
+
+Before each implementation change, the controller must know how to return to the current known-good state.
+
+Failed changes must not destroy the last verified implementation.
+
+The controller records:
+
+- known-good HEAD/reference;
+- candidate reference;
+- changed files;
+- rollback action;
+- whether rollback was required;
+- whether rollback restored verified behavior.
+
+No branch is allowed to destroy the only known-good state.
+
+---
+
+# MACHINE-READABLE CONTROLLER STATE
+
+The controller maintains at least:
+
+- `project_id`
+- `project_goal_reference`
+- `plan_version`
+- `branch_plan`
+- `current_branch`
+- `previous_branch`
+- `next_branch`
+- `branch_goal`
+- `branch_dependencies`
+- `required_inputs`
+- `required_outputs`
+- `allowed_scope`
+- `forbidden_scope`
+- `forbidden_future_work`
+- `branch_status`
+- `hard_start_status`
+- `hard_stop_status`
+- `attempt`
+- `max_attempts`
+- `approach_id`
+- `known_good_reference`
+- `candidate_reference`
+- `last_change`
+- `last_diff`
+- `last_test`
+- `last_result`
+- `what_worked`
+- `what_failed`
+- `architecture_evidence`
+- `void_decision`
+- `blocker`
+- `rollback_state`
+- `pre_branch_journal_state`
+- `post_branch_journal_state`
+- `progress_state`
+- `escalation_packet`
 
 ---
 
 # ESCALATION PACKET
 
-When escalation is required, automatically produce:
+If autonomous work cannot continue safely, produce evidence containing:
 
-- main goal reference;
-- current branch and step;
-- exact branch assignment;
+- complete project goal reference;
+- plan version;
+- current branch contract;
 - hard-start state;
-- starting known-good reference;
+- current known-good state;
+- current candidate state;
 - current task;
-- Attempt 1 action/evidence;
-- Attempt 2 action/evidence;
-- Attempt 3 action/evidence;
-- actual diffs;
+- branch inputs and required outputs;
+- attempts and approach IDs;
+- diffs;
 - tests and outputs;
 - Void decisions;
+- what worked;
+- what did not work;
+- architecture evidence;
+- references already searched;
 - failed approaches already ruled out;
 - unresolved question;
 - safest preserved repository state.
 
-Higher-level review receives evidence, not a vague request for help.
+---
+
+# PROJECT COMPLETION
+
+The project is not complete merely because the last branch was visited.
+
+The final planned branch must verify the master project's explicit final integration criteria and final project hard stop.
+
+The controller stops the project only when the final hard stop in the master code plan is satisfied or when the project enters HOLD/BLOCKED/ESCALATE.
 
 ---
 
-# CONTROLLER PSEUDOCODE
+# NON-NEGOTIABLE PROJECT LAW
 
-```text
-load_master_plan()
-load_project_state()
+Before every software project:
 
-while project_not_complete:
-    branch = next_planned_branch()
-    enter(branch)
+`DEFINE COMPLETE PROJECT GOAL`
+-> `BREAK CODING WORK INTO EXPLICIT ORDERED STEPS`
+-> `TURN THOSE STEPS INTO PRE-CREATED BRANCHES`
+-> `GIVE EVERY BRANCH ITS OWN CONTRACT + HARD START + HARD STOP`
+-> `CODE ONE BRANCH AT A TIME`
+-> `JOURNAL BEFORE`
+-> `MAKE ONE CONTROLLED CHANGE`
+-> `TEST`
+-> `RECORD WHAT WORKED / WHAT DID NOT`
+-> `VOID OVERSIGHT / OVERRIDE`
+-> `UPDATE PROGRESS`
+-> `JOURNAL AFTER`
+-> `VERIFY HARD STOP`
+-> `ONLY THEN MOVE TO THE NEXT PRE-CREATED BRANCH`
 
-    if not hard_start_passes(branch):
-        hold_or_escalate()
-        break
-
-    while not hard_stop_passes(branch):
-        change = field.propose_one_change(branch, state, evidence)
-        declare(change)
-        apply_one_change(change)
-
-        diff = capture_actual_diff()
-        test = run_declared_test(change)
-        evidence = collect(diff, test, state)
-
-        decision = void.oversight_override(
-            reference=known_good,
-            goal=main_goal,
-            branch_contract=branch.contract,
-            candidate=change,
-            evidence=evidence
-        )
-
-        persist_everything()
-
-        if decision == ALLOW:
-            continue
-        if decision == CORRECT:
-            increment_attempt()
-            continue
-        if decision == OVERRIDE:
-            set_next_action(void.override_action)
-            increment_attempt_or_reset_for_new_approach()
-            continue
-        if decision == HOLD:
-            preserve_state()
-            break
-        if decision == ESCALATE:
-            build_escalation_packet()
-            break
-
-        enforce_three_attempt_limit()
-
-    if hard_stop_passes(branch):
-        close_branch()
-        set_next_planned_branch()
-    else:
-        stop_loop()
-```
-
----
-
-# NON-NEGOTIABLE RULE
-
-The Branch Loop Controller executes the preplanned code project. It does not replace the code project with its own orchestration system.
-
-Its job is to keep the actual Field/Void coding engine moving through the planned implementation stages accurately, automatically, and without branch drift.
+The Branch Loop Controller exists to execute the software project's preplanned coding architecture. It must never replace the actual project with an orchestration project of its own.
