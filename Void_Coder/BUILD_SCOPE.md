@@ -10,30 +10,44 @@ The shared project objective is to carry one narrow software task through:
 
 without wandering into unrelated work or losing project state.
 
-Every Void branch must reread and restate this MAIN GOAL before beginning its local step. No local optimization, checker feature, memory feature, or branch-specific task may replace or outrank the MAIN GOAL.
+Every Void branch must reread and restate this MAIN GOAL before beginning its local step. No local optimization, oversight feature, memory feature, or branch-specific task may replace or outrank the MAIN GOAL.
 
 ## Project identity
 
-This project builds the **Void-side coding/evaluation engine**.
+This project builds the **Void-side oversight/override engine**.
 
-It is the opposite/complementary half of the Field coding engine. Field expresses a candidate change; Void preserves reference, measures the difference between intended and actual state, challenges unsupported movement, detects regression, compresses evidence into a decision state, and determines whether the candidate is ready to return to the shared loop.
+It is the opposite/complementary half of the Field coding engine. Field expresses a candidate movement or change. Void holds the reference, measures the difference between intended and actual state, oversees the movement, protects verified state, and has authority to permit, correct, override, hold, or escalate the next move.
 
-Void does not become the Field worker and does not silently rewrite Field work as its primary behavior.
+Void is not merely a checker and does not become the Field worker. Its defining function is **oversight with override authority**.
 
-## Void role
+## Void role — Oversight / Override
 
-Void reconstructs the known-good reference state, receives the same current goal and bounded task, checks Field's proposed movement against repository evidence and architecture, verifies actual diffs and tests, records disagreement/failure evidence, protects previously verified behavior, and returns a bounded evaluation state such as PASS / RETRY / REPLAN / BLOCKED.
+Void reconstructs the known-good reference state, receives the same current goal and bounded task, compares Field movement against repository evidence and architecture, verifies actual diffs and tests, records disagreement/failure evidence, protects previously verified behavior, and determines the next permitted state.
+
+Void returns one of these bounded oversight states:
+
+- `ALLOW` — evidence supports the Field movement and the loop may advance.
+- `CORRECT` — the direction is valid but a bounded correction is required before advancement.
+- `OVERRIDE` — the proposed movement conflicts with reference, architecture, or verified state; replace the proposed next move with the Void-directed safe next move.
+- `HOLD` — insufficient or conflicting evidence; preserve current known-good state and do not advance.
+- `ESCALATE` — local resolution is unsafe or exhausted; package evidence for the higher admin gate.
+
+An override changes the **next permitted action/state**, not the historical evidence. Void must never erase or rewrite evidence to justify an override.
 
 ## Mirror objective
 
-Produce a reliable Void coding/evaluation engine that can take the Field-side result through:
+Produce a reliable Void oversight/override engine that can take the Field-side result through:
 
-`goal -> reference -> compare -> challenge -> verify -> measure difference -> preserve/reject -> learn -> decision -> handoff`
+`goal -> reference -> compare -> challenge -> verify -> measure differential -> oversee -> allow/correct/override/hold/escalate -> handoff`
 
 while remaining anchored to the same MAIN GOAL and current project state.
 
+The controlling relation is:
+
+`Field movement -> Void oversight -> differential -> permit/override -> next state`
+
 ## Scope lock
 
-This MAIN GOAL and scope carry forward to every `void-coder/*` branch and every Void step.
+This MAIN GOAL, the oversight/override role, and this scope carry forward to every `void-coder/*` branch and every Void step.
 
 A step may extend implementation only inside this scope. Any proposed scope change must be recorded as a blocked architecture decision rather than silently implemented.
