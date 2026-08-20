@@ -49,6 +49,33 @@ This diary is mandatory project memory. Every coding pass, failure, retry, repla
 
 ---
 
+## Entry 0003 — Step 01 shell pre-pass
+
+- Date/time: 2026-08-19 20:03 America/Los_Angeles
+- Branch: `field-coder/01-shell`
+- Step: 01 — Executable Field shell
+- Goal: create the smallest Field coding-agent program that starts successfully and detects a missing required shell component
+- Hard-start check: PASS — Step 00 complete; full Field control set reread on this branch
+- Known-good state: control layer complete; no Field implementation code yet
+- Attempt: 1/3
+- Intended change: add only the initial Field source tree, deterministic controller entry point, one required shell component, and shell-only verification test
+- Files expected to change: `Field_Coder/field/__init__.py`, `Field_Coder/field/controller.py`, `Field_Coder/field/shell_component.py`, `Field_Coder/tests/test_shell.py`
+- Must remain unchanged: all root animator/science code; root `AGENTS.md`; Field state/model/repo/edit/diff/retry/Void behavior
+- Exact success test: initial controller run exits 0 with `FIELD_SHELL_READY`; temporary absence of `shell_component.py` is detected with nonzero exit and deterministic missing-component output; restoration returns exit 0 and `FIELD_SHELL_READY`
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: hard-start/read discipline completed
+- What failed: none
+- What was learned: Step 01 is tightly bounded to shell behavior only
+- Decision: KEEP
+- Next permitted action: create the four declared shell files and run the exact shell test
+- Hard-stop status: NOT YET SATISFIED
+- Blockers: none
+
+---
+
 ## Required template for every later entry
 
 - Date/time:
