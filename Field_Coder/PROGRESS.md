@@ -5,7 +5,7 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/08-test-runner`
 - Current step: 08 — Evidence-producing execution
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
@@ -17,38 +17,36 @@
 - Step 05 — One implementation proposal: COMPLETE
 - Step 06 — Apply one declared change: COMPLETE
 - Step 07 — Intended vs actual change: COMPLETE
+- Step 08 — Evidence-producing execution: COMPLETE
 
-## Current goal
-Execute the proposal's declared success test with bounded runtime and return deterministic evidence instead of crashing on test failure or timeout.
-
-## Hard-start evidence
-- Step 08 moved to completed Step 07 lineage.
-- Step 07 diff-match/mismatch evidence is verified and recorded.
-- `README.md`, `BUILD_SCOPE.md`, `CORE_RULES.md`, active `BUILD_STEPS.md`, `PROGRESS.md`, and latest `BUILD_DIARY.md` reread on this branch.
-- Step 08 is execution/evidence only; retry logic remains future work.
+## Step 08 verified result
+- Added `Field_Coder/field/test_runner.py` and `Field_Coder/tests/test_test_runner.py` only for Step 08 implementation.
+- Success-test command is tokenized with `shlex.split` and executed with `shell=False`.
+- Passing command returns exit 0, stdout/stderr, and `passed=true`.
+- Nonzero command returns exact exit code/output and `passed=false` without controller crash.
+- Timeout returns `timed_out=true`, `exit_code=None`, and `passed=false` without controller crash.
+- One test assertion initially required partial stdout on a 0.05s timeout; runtime correctly timed out but partial stdout was not guaranteed. Only that test assertion was corrected; runner code remained unchanged.
+- Steps 01-07 regressions all pass.
 
 ## Known-good state
-Field can start, persist state, accept one bounded task, reconstruct repo context, validate one proposal, make one declared edit, and compare actual diff to intention.
+Field now has deterministic execution evidence after proposal/diff verification.
 
-## One allowed change
-Add only a bounded command runner for `ImplementationProposal.success_test` plus test-runner-only tests.
+## Test evidence
+`python3 Field_Coder/tests/test_test_runner.py`
+- PASS: successful command captured as passing evidence
+- PASS: nonzero command captured as failure evidence
+- PASS: timeout captured as bounded failure evidence
 
-## Exact success test
-1. known passing command returns `passed=true`, exit 0, captured stdout/stderr;
-2. known failing command returns `passed=false`, exact nonzero exit code, captured stdout/stderr, without raising controller-level failure;
-3. timed-out command returns `passed=false`, `timed_out=true`, bounded duration/evidence, without crashing;
-4. command is tokenized without `shell=True`;
-5. Steps 01-07 regressions remain passing.
+All Step 01-07 regression tests: PASS.
 
-## Must not add in Step 08
-- retry/replan state transitions
-- model calls
-- Git rollback/commit safety
-- review packet behavior
-- Void logic
+## Current blockers
+- None.
 
-## Next allowed action
-Create `Field_Coder/field/test_runner.py` and `Field_Coder/tests/test_test_runner.py`, then run Step 08 verification plus all prior regressions.
+## Next branch
+`field-coder/09-self-correction`
 
-## Hard stop
-Stop after passing/failing/timeout evidence capture is proven, prior regressions pass, and diary/progress are updated.
+## Step 09 hard start
+Move Step 09 to this completed commit, reread the full control set, confirm Step 08 hard-stop evidence, then add only bounded failure-evidence/attempt state transitions.
+
+## Step 09 hard stop reminder
+Stop after attempts transition 1 -> 2 -> 3 -> BLOCKED with no fourth hidden retry, evidence is carried forward, prior regressions pass, and diary/progress are updated.
