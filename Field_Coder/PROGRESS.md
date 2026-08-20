@@ -3,9 +3,9 @@
 ## Project
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/05-proposal-builder`
-- Current step: 05 — One implementation proposal
-- Status: COMPLETE
+- Current branch: `field-coder/06-controlled-editor`
+- Current step: 06 — Apply one declared change
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -16,40 +16,39 @@
 - Step 04 — Read-only repository reconstruction: COMPLETE
 - Step 05 — One implementation proposal: COMPLETE
 
-## Step 05 verified result
-- Added `Field_Coder/field/proposal.py` and `Field_Coder/tests/test_proposal.py` only for Step 05 implementation.
-- Valid grounded single-change proposal accepted.
-- Missing target files rejected.
-- Missing invariants rejected.
-- Missing success test rejected.
-- Multi-change proposal rejected.
-- Out-of-scope target rejected.
-- Proposal target files must exist in both task scope and current read-only repo context.
-- Steps 01-04 regressions remained passing.
-- No file editing, model, diff, target runner, retry controller, or Void logic was added.
+## Current goal
+Allow Field to write only files explicitly declared by the accepted single-change proposal, while blocking any undeclared path before modification.
+
+## Hard-start evidence
+- Step 06 moved to completed Step 05 lineage.
+- Step 05 valid single-change proposal contract is verified.
+- Complete controls and active Step 06 section reread.
+- First write-capable step acknowledged; declared-path boundary is mandatory.
 
 ## Known-good state
-Field can start, persist state, accept one bounded task, reconstruct read-only repo context, and validate exactly one grounded implementation proposal.
+Steps 01-05 verified; no target-repo write capability existed before this branch.
 
-## Test evidence
-`python3 Field_Coder/tests/test_proposal.py`
-- PASS: valid grounded single-change proposal accepted
-- PASS: missing target files rejected
-- PASS: missing invariants rejected
-- PASS: missing success test rejected
-- PASS: multi-change proposal rejected
-- PASS: out-of-scope target rejected
+## One allowed change
+Add only a controlled text-file editor bound to proposal-declared paths and editor-only tests.
 
-All Step 01-04 regression tests: PASS.
+## Exact success test
+1. declared existing file replacement succeeds;
+2. undeclared file edit is rejected before write;
+3. path escaping repository is rejected;
+4. unrelated files retain identical bytes;
+5. declared target content matches requested replacement;
+6. Steps 01-05 regressions remain passing.
 
-## Current blockers
-- None.
+## Must not add in Step 06
+- diff self-check
+- target command/test runner
+- retry controller
+- model calls
+- Git rollback/commit management
+- Void logic
 
-## Next branch
-`field-coder/06-controlled-editor`
+## Next allowed action
+Create `Field_Coder/field/editor.py` and `Field_Coder/tests/test_editor.py`, then run editor verification plus prior regressions.
 
-## Step 06 hard start
-Move Step 06 to this completed commit, reread all controls, confirm Step 05 hard-stop evidence, then add only controlled declared-path editing and tests.
-
-## Step 06 hard stop reminder
-Stop after a declared file edit succeeds, undeclared file edits are blocked/detected, unrelated files remain unchanged, prior regressions pass, and diary/progress are updated.
+## Hard stop
+Stop after declared-path write succeeds, undeclared/escaping writes are blocked, unrelated bytes are unchanged, regressions pass, and diary/progress are updated.
