@@ -10,37 +10,32 @@ This diary is mandatory project memory.
 - Step 04 read-only repo reader: PASS
 - Step 05 proposal contract: PASS
 - Step 06 controlled editor: PASS
+- Step 07 diff self-check: PASS
 - All prior hard stops: SATISFIED
+- All prior implementation attempts: 1/3
 
-## Entry 0015 — Step 07 diff-self-check pre-pass
-- Branch: `field-coder/07-diff-self-check`
-- Hard-start check: PASS
-- Attempt: 1/3
-- Intended change: changed-file inventory + unified diff + proposal comparison
-- Exact success test: matching diff passes; extra change fails with evidence; regressions green
-
-## Entry 0016 — Step 07 diff self-check completed
+## Entry 0017 — Step 08 test-runner pre-pass
 - Date/time: 2026-08-19 America/Los_Angeles
-- Branch: `field-coder/07-diff-self-check`
-- Step: 07 — Intended vs actual change
-- Goal: make actual repository evidence authoritative over intended change
-- Hard-start check: PASS
-- Known-good state: Steps 01-06 verified
+- Branch: `field-coder/08-test-runner`
+- Step: 08 — Evidence-producing execution
+- Goal: execute the proposal's declared success test with bounded runtime and preserve pass/fail/timeout evidence
+- Hard-start check: PASS — Step 08 moved to completed Step 07 lineage; complete control set and latest diary reread; Step 07 hard-stop confirmed
+- Known-good state: Steps 01-07 verified
 - Attempt: 1/3
-- Intended change: add only `diff_check.py` and `test_diff_check.py`
-- Files expected to change: `Field_Coder/field/diff_check.py`, `Field_Coder/tests/test_diff_check.py`
-- Must remain unchanged: prior behavior; no Step 08+ behavior
-- Exact success test: exact changed-file match passes with diff; unexpected extra file fails while preserving evidence; prior regressions green
-- Files actually changed: exactly the two declared Step 07 implementation/test files plus mandatory project-memory records
-- Command/check executed: `python3 Field_Coder/tests/test_diff_check.py` plus all prior tests against exact local mirror of checked-in lineage
-- Exit status/result: PASS — all tests exit 0
-- Observed behavior: matching diff accepted; README extra change flagged; changed-file inventory and unified diff remained available on mismatch
-- What worked: Git status inventory, unified diff capture, expected-vs-actual set comparison
-- What failed: nothing in implementation or tests
-- What was learned: Field cannot hide an unexpected change behind its proposal; actual diff evidence survives failure
+- Intended change: add only bounded success-test execution, stdout/stderr/exit/timeout evidence, and tests
+- Files expected to change: `Field_Coder/field/test_runner.py`, `Field_Coder/tests/test_test_runner.py`
+- Must remain unchanged: all prior behavior; no retry/model/Git-safety/review-packet/Void behavior
+- Exact success test: known pass captured; known nonzero failure captured without controller crash; timeout captured as bounded failure; no shell execution; prior regressions green
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 08 hard-start/read discipline completed
+- What failed: none
+- What was learned: test failure must become evidence for later Field learning, not an exception that destroys loop state
 - Decision: KEEP
-- Next permitted action: transition `field-coder/08-test-runner` to this completed Step 07 lineage and begin only bounded test execution after rereading controls
-- Hard-stop status: SATISFIED
+- Next permitted action: create `test_runner.py` and `test_test_runner.py`, then run Step 08 and all prior regressions
+- Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
 ---
