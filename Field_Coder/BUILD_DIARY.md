@@ -3,34 +3,31 @@
 This diary is mandatory project memory.
 
 ## Prior verified history
-- Steps 00-11: PASS
+- Steps 00-12: PASS
 - All prior hard stops: SATISFIED
 
-## Entry 0026 — Step 12 model-adapter pre-pass
-- Branch: `field-coder/12-model-adapter`
-- Hard-start check: PASS
-- Attempt: 1/3
-- Intended change: provider-neutral request/response seat + fake/local adapters + tests
-
-## Entry 0027 — Step 12 model adapter completed
+## Entry 0028 — Step 13 sacrificial-repo pre-pass
 - Date/time: 2026-08-19 America/Los_Angeles
-- Branch: `field-coder/12-model-adapter`
-- Step: 12 — Replaceable coding model seat
-- Goal: prove Field can swap coding models without rewriting its engine
-- Hard-start check: PASS
-- Known-good state: Steps 01-11 verified
+- Branch: `field-coder/13-sacrificial-repo`
+- Step: 13 — End-to-end controlled proof
+- Goal: compose the verified Field parts into one disposable failure/recovery/success workflow
+- Hard-start check: PASS — Step 12 lineage inherited; complete control set and latest diary reread
+- Known-good state: Steps 01-12 verified individually
 - Attempt: 1/3
-- Intended change: `model_adapter.py`, `test_model_adapter.py`
-- Files actually changed: exactly the two declared Step 12 implementation/test files plus mandatory progress/diary records
-- Command/check executed: `python3 Field_Coder/tests/test_model_adapter.py` against an exact local mirror of checked-in Step 12 files
-- Exit status/result: PASS — exit 0
-- Observed behavior: fake and localhost HTTP adapters returned identical structured response type through the same `run_model()` call; malformed response rejected
-- What worked: provider-neutral protocol, fake seat, localhost OpenAI-compatible transport, adapter-independent invocation
-- What failed: nothing in implementation or test
-- What was learned: model identity is now configuration/adapter territory rather than engine architecture
+- Intended change: add only workflow orchestration over existing components plus one disposable end-to-end test
+- Files expected to change: `Field_Coder/field/workflow.py`, `Field_Coder/tests/test_sacrificial_workflow.py`
+- Must remain unchanged: existing component contracts; no real repo production change, Void, self-approval, push/merge/commit automation
+- Exact success test: baseline clean/pass; bad candidate edit -> matching diff -> failing success test -> evidence/correction -> rollback; corrected candidate -> matching diff -> passing test -> review packet; source HEAD/status unchanged throughout
+- Files actually changed: pending
+- Command/check executed: pending
+- Exit status/result: pending
+- Observed behavior: pending
+- What worked: Step 13 hard-start/read discipline completed
+- What failed: none
+- What was learned: Step 13 should prove composition, not redesign components
 - Decision: KEEP
-- Next permitted action: transition `field-coder/13-sacrificial-repo` to this completed Step 12 lineage, reread controls, then wire existing components into one disposable end-to-end proof only
-- Hard-stop status: SATISFIED
+- Next permitted action: create the two declared Step 13 files and execute the disposable proof
+- Hard-stop status: NOT YET SATISFIED
 - Blockers: none
 
 ---
