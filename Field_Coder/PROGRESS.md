@@ -5,43 +5,43 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/10-git-safety`
 - Current step: 10 — Known-good workspace protection
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
-- Steps 00-09: COMPLETE
+- Steps 00-10: COMPLETE
 
-## Current goal
-Protect the source repository's known-good checkout by performing candidate work in a separate Git worktree and completely restoring failed candidate changes.
-
-## Hard-start evidence
-- Step 10 moved to completed Step 09 lineage.
-- Full control set and latest diary reread.
-- Step 09 persistent three-attempt ceiling is verified.
+## Step 10 verified result
+- Added `Field_Coder/field/git_safety.py` and `Field_Coder/tests/test_git_safety.py` only for Step 10 implementation.
+- Clean known-good checkout is required before candidate work begins.
+- Candidate work occurs in a separate Git worktree at exact known-good HEAD.
+- Deliberate tracked bad edit and untracked junk were completely removed by rollback.
+- Candidate returned to clean status at baseline HEAD.
+- Original source checkout HEAD, branch, status, and source bytes remained unchanged.
+- Successful candidate change can remain dirty/inspectable in candidate worktree while original stays clean.
+- Steps 01-09 regressions all pass.
+- No auto commit/push/merge, review packet, model, or Void logic was added.
 
 ## Known-good state
-Steps 01-09 verified; Field has bounded retries but no workspace rollback layer yet.
+Field can now isolate and safely discard failed candidate work without damaging the source checkout.
 
-## One allowed change
-Add only clean-baseline capture, isolated candidate worktree creation, candidate status inspection, and failed-candidate rollback with tests.
+## Test evidence
+`python3 Field_Coder/tests/test_git_safety.py`
+- PASS: isolated candidate worktree created at known-good HEAD
+- PASS: deliberate bad candidate completely restored
+- PASS: known-good source checkout remained unchanged
+- PASS: successful candidate remains inspectable while source stays clean
 
-## Exact success test
-1. clean fixture repo baseline HEAD captured;
-2. separate candidate worktree created at same baseline commit;
-3. deliberate tracked bad edit plus untracked file in candidate are completely removed by rollback;
-4. candidate HEAD returns/remains at baseline and candidate status is clean;
-5. original checkout HEAD, branch, status, and baseline file bytes remain unchanged;
-6. a later successful candidate edit can remain dirty/inspectable in candidate while original checkout stays clean;
-7. Steps 01-09 regressions remain passing.
+All Step 01-09 regression tests: PASS.
 
-## Must not add in Step 10
-- automatic commit/push/merge
-- review packet generation
-- model calls
-- Void logic
+## Current blockers
+- None.
 
-## Next allowed action
-Create `Field_Coder/field/git_safety.py` and `Field_Coder/tests/test_git_safety.py`, then run Step 10 verification plus prior regressions.
+## Next branch
+`field-coder/11-review-packet`
 
-## Hard stop
-Stop after rollback safety and successful-candidate isolation are proven, regressions pass, and diary/progress are updated.
+## Step 11 hard start
+Move Step 11 to this completed commit, reread all controls, confirm Step 10 hard-stop evidence, then add only deterministic external-review packet generation.
+
+## Step 11 hard stop reminder
+Stop after a complete packet contains goal/task/proposal/files/diff/tests/attempts/uncertainty/candidate status, Field cannot self-approve architecture, prior regressions pass, and diary/progress are updated.
