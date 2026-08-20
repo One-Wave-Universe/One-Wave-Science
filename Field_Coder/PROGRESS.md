@@ -5,39 +5,40 @@
 - Scope: Field-side coding agent only
 - Current branch: `field-coder/12-model-adapter`
 - Current step: 12 — Replaceable coding model seat
-- Status: IN PROGRESS
+- Status: COMPLETE
 - Attempt: 1/3
 
 ## Completed steps
-- Steps 00-11: COMPLETE
+- Steps 00-12: COMPLETE
 
-## Hard-start evidence
-- Step 11 hard stop satisfied and inherited.
-- Full Field control set and latest diary reread on `field-coder/12-model-adapter`.
-- Steps 01-11 work without a real provider dependency.
+## Step 12 verified result
+- Added `Field_Coder/field/model_adapter.py` and `Field_Coder/tests/test_model_adapter.py` only for Step 12 implementation.
+- Provider-neutral `ModelRequest`, `ModelResponse`, and `ModelAdapter` contract defined.
+- `FakeModelAdapter` satisfies the contract.
+- `LocalOpenAICompatibleAdapter` satisfies the same contract through localhost HTTP.
+- Both adapters run through the same `run_model(adapter, request)` function with no engine/controller branch.
+- Malformed local-model responses are rejected deterministically.
+- Local transport uses standard-library HTTP and does not bind Field to a model vendor.
+- No end-to-end repo orchestration, Void logic, self-approval, push, or merge behavior was added.
 
-## Current goal
-Add one provider-neutral model adapter contract and one localhost OpenAI-compatible transport without changing the Field engine when adapters are swapped.
+## Test evidence
+Exact local mirror of checked-in Step 12 files:
+- PASS: fake adapter satisfies ModelResponse contract
+- PASS: localhost adapter satisfies identical ModelResponse contract
+- PASS: adapter swap requires no run_model/controller change
+- PASS: malformed local response rejected
 
-## One allowed change
-Add only model request/response adapter interfaces, fake adapter, localhost adapter, one adapter-independent invocation function, and tests.
+## Known-good state
+Field now has a replaceable model seat. A local OpenAI-compatible coding model can occupy that seat without changing the Field engine.
 
-## Exact success test
-1. fake adapter returns the structured response contract;
-2. localhost OpenAI-compatible adapter returns the same structured response contract against a local fixture server;
-3. the same `run_model(adapter, request)` call works for both adapters;
-4. invalid local response is rejected deterministically;
-5. prior known-good behavior remains untouched.
+## Current blockers
+- None.
 
-## Must not add
-- provider-specific engine logic
-- actual production task orchestration
-- Void logic
-- autonomous approval
-- end-to-end repo work (Step 13)
+## Next branch
+`field-coder/13-sacrificial-repo`
 
-## Next allowed action
-Create `Field_Coder/field/model_adapter.py` and `Field_Coder/tests/test_model_adapter.py`, then execute the Step 12 contract test.
+## Step 13 hard start
+Move Step 13 to this completed commit, reread all controls, confirm Step 12 hard-stop evidence, then wire the already-verified components together only for a disposable end-to-end proof.
 
-## Hard stop
-Stop Step 12 when adapter replacement requires only swapping the adapter object/configuration, not rewriting controller/engine code.
+## Step 13 hard stop reminder
+Stop after one successful tiny task and at least one deliberately bad candidate path are demonstrated end-to-end, known-good baseline is preserved, a review packet is emitted, and diary/progress are updated.
