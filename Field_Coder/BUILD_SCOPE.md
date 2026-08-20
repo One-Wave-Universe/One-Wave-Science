@@ -1,30 +1,73 @@
-# Field Coder — Locked Build Scope
+# FIELD CODER — MASTER PROJECT GOAL
 
-## Project identity
+## MASTER PROJECT GOAL
 
-This project builds the **Field-side coding agent**.
+Build the Field half of the complete **Field/Void CPU-GPU state-machine coding engine** for autonomously building, modifying, testing, debugging, and improving real software, applications, and programs.
 
-It is not the combined Field/Void system.
-It is not the Void agent.
-It is not the animation/story engine itself.
-It is the coding agent that will later be able to work on those programs.
+The complete system has four distinct roles:
 
-## Field role
+- **Field**: expressive/generative software movement. Field creates candidate state transitions and bounded coding actions.
+- **Void**: separate mirrored oversight/override. Void evaluates Field movement and may ALLOW, CORRECT, OVERRIDE, HOLD, or ESCALATE. Void logic is not implemented inside Field branches.
+- **M4 / OpenClaw controller**: fast routing, timing, state selection, branch-loop control, and handoff between Field and Void.
+- **Administrator / ChatGPT escalation**: higher-level architecture decision and help when Field/Void cannot safely resolve a blocked state.
 
-Field reconstructs the current program state, receives a coding goal, narrows it into one targeted task, inspects relevant repository evidence, proposes one implementation, performs one controlled change, compares intended versus actual diff, runs evidence-producing checks, learns from failure, and prepares a review-ready result.
+These Field branches build the actual Field state-machine computation, not a generic chatbot wrapper and not a provider-specific model orchestration system.
 
-Field does not approve itself as architecturally correct. External Void/Admin review comes later.
+## CANONICAL FIELD/VOID MACHINE
 
-## Build objective
+The engine must preserve these primitives as executable state, not metaphor:
 
-Produce a reliable Field coding engine that can take one narrow software task from:
+- **6 Steps**: Begin -> Build -> Hold -> Build -> Break -> Loop.
+- **5 Field states / scale bands**: Micro/Floor, Small/Low, Medium/Mid, Large/High, Macro/Extreme.
+- **4 Views**: Inward, Outward, Across, Over.
+- **4 Operators**: -, +, /, x.
+- **3 Moves**: Compress (-1), Hold (0), Expand (+1).
+- **2 Choices**: mirrored polarity choice; Field choice selects/creates the active field.
+- **1 Field / Mirror / Void reference**: shared reference boundary/zero.
 
-`goal -> reference -> inspect -> propose -> edit -> diff -> test -> learn/retry -> review-ready result`
+Gate order:
 
-without wandering into unrelated work or losing project state.
+`1 -> 2 -> 3 -> 4(0) -> 5 -> 6`
 
-## Scope lock
+and mirrored return:
 
-This scope carries forward to every Field Coder branch and step.
+`6 -> 5 -> 4(0) -> 3 -> 2 -> 1`
 
-A step may extend implementation only inside this scope. Any proposed scope change must be recorded as a blocked architecture decision rather than silently implemented.
+Gate 4 is also Gate 0: mirror/null/flip/boundary.
+
+Canonical mirrored relations:
+
+- F2 Choice <-> V5 Scale
+- F3 Motion <-> V4 Action
+- F4 View <-> V3 Interpretation
+- V2 Choice <-> F5 State
+- outer F1/V6 and V1/F6
+
+Motion contains Point, Path, and Field Rotation. Each motion mode can carry Carrier, Breathing, and Phase behavior.
+
+Field-context law: no state is interpreted outside the currently selected active field.
+
+Recursion law: each 1-6 step may contain the full nested chain.
+
+## FIELD BRANCH OUTPUT
+
+The Field build must eventually provide a provider-neutral, AI-callable software interface that can:
+
+1. receive an explicit coding goal and current program/repository state;
+2. encode that state into the canonical Field machine;
+3. compute deterministic Field transitions on CPU;
+4. compute equivalent batched transitions on GPU where appropriate;
+5. preserve reference, differential, state, scale, motion, view, gate, and history;
+6. emit one bounded candidate software movement/action at a time;
+7. preserve evidence and state across iterations;
+8. hand the candidate and evidence to the separate Void oversight/override side;
+9. accept M4 routing/control without binding the engine to one AI provider;
+10. serve real coding, app-building, and program-building workloads.
+
+## SCOPE LAW
+
+Every Field branch is one preplanned implementation stage of this exact project.
+
+The complete coding plan is defined before implementation. Branches are fixed work slots. A branch may implement only its assigned stage, must preserve prior verified behavior, must test every change, must record what worked and failed, and must stop at its explicit hard stop.
+
+No branch may redefine the master project goal, replace the state-machine engine with generic agent orchestration, merge Void implementation into Field, or implement future branch work early.
