@@ -4,9 +4,9 @@
 
 - Project: Field Coder
 - Scope: Field-side coding agent only
-- Current branch: `field-coder/02-state-memory`
-- Current step: 02 — Persistent Field state
-- Status: COMPLETE
+- Current branch: `field-coder/03-task-intake`
+- Current step: 03 — Goal to one narrow task
+- Status: IN PROGRESS
 - Attempt: 1/3
 
 ## Completed steps
@@ -15,45 +15,57 @@
 - Step 01 — Executable Field shell: COMPLETE
 - Step 02 — Persistent Field state: COMPLETE
 
-## Step 02 verified result
+## Current goal
 
-- Added `Field_Coder/field/state.py` and `Field_Coder/tests/test_state.py` only for Step 02 implementation.
-- State schema contains all required fields: goal, current task, attempt, max attempts, last action, last result, next action, active branch, active step.
-- Valid state saves to JSON and reloads exactly.
-- Fresh Python process reload produced byte-equivalent normalized state JSON.
-- Missing required field is rejected.
-- Invalid attempt bounds are rejected.
-- Step 01 shell regression still passes ready -> deliberate missing-component detection -> restored ready.
-- No Step 03+ behavior was added.
+Convert one supplied coding goal into exactly one explicit bounded task with scope and success criteria, while rejecting ambiguous, multi-task, or unbounded intake.
+
+## Hard-start evidence
+
+- Step 03 moved to completed Step 02 lineage.
+- Step 02 hard-stop evidence confirmed in progress and diary.
+- Full Field control set and active Step 03 section reread.
+- Step 03 is parser/validator only; no model or repository editing is allowed.
 
 ## Known-good state
 
-Step 02 hard stop is satisfied. Field shell + validated persistent state are the current known-good baseline.
+- Step 01 shell verified.
+- Step 02 persistent state verified across fresh process restart.
 
-## Test evidence
+## One allowed change
 
-`python3 Field_Coder/tests/test_state.py`
-- PASS: exact state restored in fresh process
-- PASS: missing required state rejected
-- PASS: invalid attempt bounds rejected
+Add only a deterministic one-task intake contract/parser and intake-only tests.
 
-`python3 Field_Coder/tests/test_shell.py`
-- PASS: initial FIELD_SHELL_READY
-- PASS: deliberate missing component detected
-- PASS: restored FIELD_SHELL_READY
+## Intake contract
 
-## Current blockers
+A broad goal may contain explanatory text, but must declare exactly one bounded task using three explicit lines:
 
-- None.
+- `TASK: <one task>`
+- `SCOPE: <comma-separated bounded paths/components>`
+- `SUCCESS: <one or more explicit success criteria separated by semicolons>`
 
-## Next branch
+Exactly one of each declaration is required. Multiple `TASK:` declarations, missing scope, missing success criteria, blank values, or duplicate declarations are rejected.
 
-`field-coder/03-task-intake`
+## Exact success test
 
-## Step 03 hard start
+1. broad sample goal with narrative + one TASK/SCOPE/SUCCESS set yields exactly one `TaskSpec`;
+2. resulting task has nonempty summary, bounded scope, and success criteria;
+3. two TASK declarations are rejected as ambiguous/multi-task;
+4. missing SCOPE is rejected as unbounded;
+5. prior Step 01 and Step 02 tests remain passing.
 
-Move Step 03 to this completed commit, reread the complete control set, confirm this hard-stop evidence, then add only bounded goal-to-one-task intake/validation logic and tests.
+## Must not add in Step 03
 
-## Step 03 hard stop reminder
+- repository reading/editing
+- model-driven task generation
+- proposal generation
+- diff/test runner behavior for target projects
+- retry loop behavior
+- Void logic
 
-Stop after a broad sample coding goal yields exactly one explicit bounded task with success criteria/scope, ambiguous or multi-task intake is rejected, prior regression tests pass, and diary/progress are updated.
+## Next allowed action
+
+Create `Field_Coder/field/task_intake.py` and `Field_Coder/tests/test_task_intake.py`, then run Step 03 verification plus Step 01/02 regressions.
+
+## Hard stop
+
+Stop after the one-task contract and rejection cases are proven and recorded.
