@@ -13,19 +13,30 @@ This diary is mandatory project memory.
 - Intended change: compose existing components plus one disposable end-to-end proof
 
 ## Entry 0029 — Step 13 first integration execution
+- Attempt: 1/3
+- Result: fixture rejected before candidate creation
+- Evidence: baseline Python test created untracked `__pycache__`; known-good gate correctly refused dirty source
+- Decision: RETRY fixture only; workflow unchanged
+
+## Entry 0030 — Step 13 sacrificial workflow completed
 - Date/time: 2026-08-19 America/Los_Angeles
 - Branch: `field-coder/13-sacrificial-repo`
 - Step: 13 — End-to-end controlled proof
-- Attempt: 1/3
-- Command/check executed: sacrificial workflow test against local mirror of checked-in Step 13 components
-- Exit status/result: FAIL before Field candidate creation
-- Observed behavior: fixture baseline test passed, then `capture_known_good()` rejected the source because Python created untracked `__pycache__` files
-- What worked: clean-known-good safety gate correctly refused a dirty source; workflow implementation had not modified source or candidate
-- What failed: sacrificial fixture did not declare generated Python cache files as ignored
-- What was learned: a realistic Python fixture needs repository ignore policy before it can qualify as a clean known-good checkout
-- Decision: RETRY test fixture only; workflow implementation unchanged
-- Next permitted action: add committed `.gitignore` for `__pycache__/` and `*.pyc` to the sacrificial fixture setup, then rerun Step 13
-- Hard-stop status: NOT YET SATISFIED
+- Goal: prove composed Field behavior from bounded goal through repair and review-ready packet
+- Hard-start check: PASS
+- Known-good state: Steps 01-12 verified
+- Attempt: 1/3 implementation; one evidence-based fixture correction
+- Intended change: `workflow.py`, `test_sacrificial_workflow.py`
+- Files actually changed: the two declared Step 13 files plus mandatory progress/diary records; second pass changed fixture setup only to commit `.gitignore`
+- Command/check executed: sacrificial end-to-end test against local mirror of checked-in Step 13 contracts
+- Exit status/result: PASS — exit 0 after fixture correction
+- Observed behavior: clean baseline; attempt-1 bad edit and matching diff; failing declared test; evidence propagated to attempt 2; rollback; corrected edit; passing test; source unchanged; candidate inspectable; review packet pending external review
+- What worked: all previously built component contracts composed successfully; three-attempt state used correctly; Git safety protected source; review packet withheld self-approval
+- What failed: initial fixture ignored no Python cache files; known-good gate correctly caught it
+- What was learned: repository hygiene is part of the known-good contract and must be explicit
+- Decision: KEEP
+- Next permitted action: transition `field-coder/14-real-repo-trial` to this completed Step 13 lineage, reread controls, select one tiny real repo task, and stop after its review-ready packet
+- Hard-stop status: SATISFIED
 - Blockers: none
 
 ---
