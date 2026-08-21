@@ -1,5 +1,9 @@
 # AGENTS.md - The Kitty Hawk Loop
 
+## FIRST: pick one branch
+
+Before anything else in this file, read `CODING_BRANCH_INDEX.md`. It names the live branch families (`field-coder/*`, `void-coder/*`, `expressive-coder/*`), their status, and the one-branch-at-a-time law. This project has repeatedly failed when a session tries to advance the whole engine, or more than one branch family, at once. Check out exactly one branch before doing anything else below.
+
 ## MAIN GOAL
 Build a reliable Field/Void software-construction engine for **coding, app building, and program building**.
 
@@ -14,6 +18,7 @@ without wandering into unrelated work or losing project state.
 ## Canonical Runtime References
 Before dispatching work, read:
 
+- `CODING_BRANCH_INDEX.md` (which single branch/family to work on)
 - `JETSON_OPENCLAW_RUNTIME.md`
 - `BRANCH_STEP_PROJECT_TEMPLATE.md`
 - the active Field/Void branch control files

@@ -44,6 +44,8 @@ Long explanations do not substitute for working software.
 
 # 2. Mandatory orientation before editing
 
+Before anything else, read `CODING_BRANCH_INDEX.md` at the repo root and check out exactly one branch from exactly one branch family. Working across more than one branch or branch family in a session is the single most common cause of this project stalling — do not do it.
+
 Before touching code:
 
 ```bash
