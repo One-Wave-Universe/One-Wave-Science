@@ -57,8 +57,16 @@ BUILD  V3/F4
 BREAK  F5/V2
 LOOP   V1/F6
         -
-        next BEGIN
+        conditional next BEGIN
 ```
+
+`LOOP` is not an unconditional repetition command. Step 6 evaluates the resolved consequence and grants one of three outcomes:
+
+```text
+CONTINUE | HOLD | BREAK_REROUTE
+```
+
+Only `CONTINUE` hands a bounded consequence into the next recursive `BEGIN`.
 
 ## 4. Minimal State
 
@@ -73,6 +81,7 @@ KernelState {
     handedness
     pair_index          # 0..5
     memory              # previous consequence/reference
+    recursive_depth
 }
 ```
 
@@ -139,10 +148,12 @@ Definitions:
 - **VECTORING** — the active motion/action is being steered, redirected, or oriented by feedback.
 - **RESOLVING** — the consequence is settling into a stable next state/reference.
 
-The lifecycle may close as:
+Step 6 evaluates `RESOLVING` and chooses the next relation:
 
 ```text
-IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING -> IDLE / next PRIMED
+RESOLVING -> IDLE
+RESOLVING -> PRIMED at depth n+1
+RESOLVING -> boundary/reroute
 ```
 
 These behavioral Field states are **not** the same thing as scale or strength.
@@ -177,6 +188,7 @@ Mirror crossover
 ternary direction
 phase/handedness
 memory
+conditional recursive permission
         |
         v
 REPRESENTATIONS
@@ -206,7 +218,46 @@ reference
  -> act
  -> consequence
  -> memory
- -> consequence becomes next reference/input
+ -> Step 6 conditional fold
+ -> CONTINUE | HOLD | BREAK_REROUTE
+```
+
+The recursive fold is deliberately bounded:
+
+```text
+reference[n+1] = bounded_compression(resolved[n])
+```
+
+not:
+
+```text
+input[n+1] = entire accumulated history
+```
+
+This preserves useful consequence and trajectory without blindly accumulating noise, error, saturation, or stale history.
+
+### CONTINUE
+
+Grant another recursive pass only when a meaningful differential remains, the trajectory is coherent, and the result remains inside the permitted state/strength envelope.
+
+```text
+RESOLVING[n] -> PRIMED[n+1]
+```
+
+### HOLD
+
+If the result settles inside the neutral/equilibrium band, preserve the resolved state locally as memory/reference and stop propagation.
+
+```text
+RESOLVING -> IDLE
+```
+
+### BREAK / REROUTE
+
+If the result amplifies without bound, oscillates without useful convergence, contradicts its active reference, saturates, or exceeds the allowed envelope, do not directly reinject it.
+
+```text
+RESOLVING -> shared (0) reference -> reroute / escalate / terminate local recursion
 ```
 
 The machine should be organized around choice and consequence, not around a permanent external command/obedience loop.
@@ -309,7 +360,7 @@ Cube interfaces may be arranged over `+X/-X`, `+Y/-Y`, `+Z/-Z`, but the logical 
 
 ## 15. No Internal Gate 7
 
-One complete system contains six operations. Gate 6 loops back into Gate 1.
+One complete system contains six operations. Gate 6 evaluates whether the result should loop back into Gate 1; it does not force the recurrence.
 
 When two complete systems form a new shared higher-order relation, the current architecture calls that relation **Namika**. Namika is inter-system recursion, not an internal seventh gate.
 
@@ -328,6 +379,38 @@ for pair in six_pair_order:
     return to reference
     mirror_cross_and_phase_shift
     store consequence locally
+
+outcome = evaluate_step_6(
+    direction,
+    consequence_delta,
+    strength,
+    trajectory_coherence,
+    bounds,
+)
+
+if outcome == CONTINUE:
+    reference = bounded_compression(consequence)
+    field_state = PRIMED
+    recursive_depth += 1
+elif outcome == HOLD:
+    field_state = IDLE
+    retain consequence as local memory/reference
+else:
+    return through shared (0)
+    reroute / escalate / terminate local recursion
 ```
 
 The pair-specific meanings may evolve. The pair timing/order may not drift without an explicit architecture revision.
+
+## 17. Required First Validation
+
+Before expanding the full stack, the first software simulation should distinguish four deliberate cases:
+
+```text
+stable convergence              -> HOLD
+bounded useful trajectory       -> CONTINUE
+non-convergent oscillation      -> REROUTE
+runaway gain/envelope violation -> BREAK
+```
+
+Only after those outcomes are cleanly separable in simulation should the same Step-6 control semantics be mapped onto the physical hardware testbench.
