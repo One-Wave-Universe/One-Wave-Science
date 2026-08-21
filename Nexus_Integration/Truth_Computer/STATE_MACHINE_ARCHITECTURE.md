@@ -123,15 +123,37 @@ At the current hardware mapping, this is resolved from the AC/differential relat
 
 `0` is hold/non-action, not a third actively powered direction.
 
-## 7. Five-State Modulation
+## 7. Five Field States and Five Modulation Levels
 
-Coarse strength/modulation is represented neutrally as:
+The five **Field states** are behavioral lifecycle states:
+
+```text
+IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING
+```
+
+Definitions:
+
+- **IDLE** — no committed action; stable/reference condition.
+- **PRIMED** — potential is loaded and conditions are ready, but action has not fired.
+- **EXECUTING** — the selected action is actively being performed.
+- **VECTORING** — the active motion/action is being steered, redirected, or oriented by feedback.
+- **RESOLVING** — the consequence is settling into a stable next state/reference.
+
+The lifecycle may close as:
+
+```text
+IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING -> IDLE / next PRIMED
+```
+
+These behavioral Field states are **not** the same thing as scale or strength.
+
+Five coarse modulation/strength levels remain a separate axis and may be represented neutrally as:
 
 ```text
 -2 -1 0 +1 +2
 ```
 
-Domain names such as Floor/Low/Middle/High/Ceiling are wrappers, not kernel state names.
+Domain scale labels such as Floor/Low/Middle/High/Ceiling or Micro/Small/Medium/Large/Macro are wrappers for modulation/scale. They must not replace the five Field lifecycle states.
 
 ## 8. Three Physical Mirror Gates in VTC
 
@@ -160,7 +182,8 @@ memory
 REPRESENTATIONS
 Point/Path/Field
 Carrier/Breathing/Phase
-five state labels
+five Field lifecycle states
+five modulation/scale levels
 seven threshold bands
 1D/2D/3D/4D mappings
 neural/cognitive roles
