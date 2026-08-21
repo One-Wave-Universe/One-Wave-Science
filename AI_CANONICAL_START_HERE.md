@@ -6,27 +6,50 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 ## Current update handoff
 
-1. `UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md`
-2. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-3. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-4. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-5. `VTC_BUILD_ARCHITECTURE.md`
-6. `Nodes/B-206b_Four_Views.md`
-7. `Nodes/B-206c_Four_Actions.md`
-8. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-9. `Nodes/B-223_Three_Moves.md`
-10. `Nodes/B-224_Two_Choices.md`
-11. `Nodes/B-225_Field_Cycle.md`
-12. `Nodes/C-301_Mirror_Gate.md`
-13. `Nodes/G-711_Gate_7.md`
-14. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-15. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-16. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-17. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-18. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-19. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-20. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-21. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_36_CONDITIONAL_FOLD_AND_RECURSIVE_EXIT_GATE.md`
+2. `UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md`
+3. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+4. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+5. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+6. `VTC_BUILD_ARCHITECTURE.md`
+7. `Nodes/B-206b_Four_Views.md`
+8. `Nodes/B-206c_Four_Actions.md`
+9. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+10. `Nodes/B-223_Three_Moves.md`
+11. `Nodes/B-224_Two_Choices.md`
+12. `Nodes/B-225_Field_Cycle.md`
+13. `Nodes/C-301_Mirror_Gate.md`
+14. `Nodes/G-711_Gate_7.md`
+15. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+16. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+17. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+18. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+19. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+20. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+21. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+22. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+
+## Updated 36 conditional-fold protection
+
+Step 6 is a **conditional recursive evaluation gate**, not an unconditional loop command.
+
+```text
+RESOLVED[n]
+ -> STEP 6 EVALUATION
+ -> CONTINUE | HOLD | BREAK/REROUTE
+```
+
+- **Continue**: meaningful bounded differential remains; carry a compressed consequence forward as the next baseline and re-enter at `PRIMED[n+1]`.
+- **Hold**: the result is inside the neutral/equilibrium band; preserve it locally as memory/reference and return to `IDLE` without further propagation.
+- **Break/Reroute**: runaway gain, non-convergent oscillation, contradiction, saturation, or envelope violation; return through the shared `(0)` reference and reroute/escalate/terminate local recursion rather than reinjecting the unstable result.
+
+The recursive spiral carries consequence and orientation forward but does **not** drag the entire accumulated history into the next layer:
+
+```text
+reference[n+1] = bounded_compression(resolved[n])
+```
+
+`LOOP` therefore means **permission to recurse only when the differential earns another pass**.
 
 ## Updated 35 five Field-state protection
 
@@ -90,6 +113,7 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 - Five Field lifecycle states are **Idle / Primed / Executing / Vectoring / Resolving**.
 - Five coarse modulation/strength levels are a separate axis represented neutrally as `-2,-1,0,+1,+2`.
 - The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**.
+- Step 6 `Loop` is conditional permission to recurse: **Continue / Hold / Break-Reroute**.
 - There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in the current architecture.
 
 ### Anti-drift rule
@@ -149,7 +173,7 @@ Before extending the Wave Computer or Android movement language, read:
 
 The signed packet is `±(n,2n,2n+1)`. The Fibonacci word validates the ordered choice between the `2n` and `2n+1` recursive branches after a hop is committed. It does not replace live `-1(0)+1` choice, and its symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 35/34/33's Field-state, engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 36/35/34/33's recursion gate, Field-state, engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
