@@ -26,7 +26,7 @@ IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING -> IDLE / next PRIMED
 
 ## State is not scale
 
-These five Field states are not the five modulation/scale levels.
+These five Field states are neither the five modulation/strength levels nor the five recursive octave-scale positions.
 
 Five modulation/strength levels remain a separate axis and may still be encoded neutrally as:
 
@@ -34,14 +34,16 @@ Five modulation/strength levels remain a separate axis and may still be encoded 
 -2 -1 0 +1 +2
 ```
 
-Scale labels such as:
+`Floor / Low / Middle / High / Ceiling` may label the five modulation/strength levels.
+
+The five recursive octave-scale positions are separate:
 
 ```text
-Floor / Low / Middle / High / Ceiling
-Micro / Small / Medium / Large / Macro
+Micro -> Small -> Medium -> Large -> Macro
+Macro[n] -> Micro[n+1]
 ```
 
-are modulation/scale representations. They must not be substituted for the Field lifecycle states.
+The fifth scale position of one loop/trunk becomes the first scale position of the next larger loop/trunk. Lifecycle state, modulation level, and octave scale are three distinct axes and must not be substituted for one another.
 
 ## Supersession rule
 
