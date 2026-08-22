@@ -6,28 +6,74 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 ## Current update handoff
 
-1. `UPDATED_36_CONDITIONAL_FOLD_AND_RECURSIVE_EXIT_GATE.md`
-2. `UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md`
-3. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-4. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-5. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-6. `VTC_BUILD_ARCHITECTURE.md`
-7. `Nodes/B-206b_Four_Views.md`
-8. `Nodes/B-206c_Four_Actions.md`
-9. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-10. `Nodes/B-223_Three_Moves.md`
-11. `Nodes/B-224_Two_Choices.md`
-12. `Nodes/B-225_Field_Cycle.md`
-13. `Nodes/C-301_Mirror_Gate.md`
-14. `Nodes/G-711_Gate_7.md`
-15. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-16. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-17. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-18. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-19. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-20. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-21. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-22. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_37_THREE_GATE_LANGUAGE_AND_SIX_STEP_MIRROR.md`
+2. `UPDATED_36_CONDITIONAL_FOLD_AND_RECURSIVE_EXIT_GATE.md`
+3. `UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md`
+4. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+5. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+6. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+7. `VTC_BUILD_ARCHITECTURE.md`
+8. `Nodes/B-206b_Four_Views.md`
+9. `Nodes/B-206c_Four_Actions.md`
+10. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+11. `Nodes/B-223_Three_Moves.md`
+12. `Nodes/B-224_Two_Choices.md`
+13. `Nodes/B-225_Field_Cycle.md`
+14. `Nodes/C-301_Mirror_Gate.md`
+15. `Nodes/G-711_Gate_7.md`
+16. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+17. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+18. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+19. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+20. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+21. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+22. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+23. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+
+## Updated 37 three-gate language protection
+
+The three gate classes are:
+
+```text
+BINARY -> TERNARY -> QUADRATIC
+   2         3           4
+```
+
+The physical shorthand under test is:
+
+```text
+2-BDC -> 3-TAC -> 4-QRC
+```
+
+or compactly:
+
+```text
+2DC -> 3AC -> 4RC
+```
+
+The six logical positions use the three gate classes twice in mirrored order:
+
+```text
+Binary -> Ternary -> Quadratic Actions -> Quadratic Views -> Ternary -> Binary
+2B     -> 3T      -> 4QA               -> 4QV             -> 3T      -> 2B
+```
+
+The central quadratic order is **Actions first, Views second**.
+
+- Four Actions: `Inward / Outward / Across / Over`.
+- Four Views: `Direction / Phase / Strength / Reference`.
+
+Keep physical current notation, logical gate notation, Field lifecycle state, Void octave scale, and recursive routing distinct:
+
+```text
+PHYSICAL:  2-BDC -> 3-TAC -> 4-QRC
+LOGICAL:   2B -> 3T -> 4QA -> 4QV -> 3T -> 2B
+STATE:     FST
+SCALE:     VOS
+RECURSION: FR/VL | VR/FL | FRVL | VRFL
+```
+
+`FST` is the five Field lifecycle transitions. `VOS` is Void octave scaling. `FR/VL` means Field Root / Void Loop; `VR/FL` means Void Root / Field Loop; `FRVL` and `VRFL` name their recursive forms.
 
 ## Updated 36 conditional-fold protection
 
@@ -130,6 +176,7 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 - The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.
 - Four Views are **Direction, Phase, Strength, Reference**.
 - Four Actions are **Inward, Outward, Across, Over**.
+- The quadratic pair is ordered **Actions first, Views second**.
 - Two engagement choices are **Everything / Nothing**.
 - Three differential moves are **Left / Stay / Right = -1 / 0 / +1**.
 - Five Field lifecycle states are **Idle / Primed / Executing / Vectoring / Resolving**.
@@ -195,7 +242,7 @@ Before extending the Wave Computer or Android movement language, read:
 
 The signed packet is `±(n,2n,2n+1)`. The Fibonacci word validates the ordered choice between the `2n` and `2n+1` recursive branches after a hop is committed. It does not replace live `-1(0)+1` choice, and its symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 36/35/34/33's recursion gate, Field-state, engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 37/36/35/34/33's gate-language, recursion-gate, Field-state, engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
