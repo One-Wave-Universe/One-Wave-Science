@@ -293,7 +293,7 @@ neighbor coupling = routing
 
 A software simulation should preserve this semantics even when implemented on ordinary hardware: state belongs to the node that evaluates it, and consequence becomes the node's next locally available state/reference rather than being treated as an unrelated external database write.
 
-Persistent magnetic or other nonvolatile behavior remains an implementation hypothesis until measured experimentally.
+For the first physical primitive, locally retained magnetic memory is required to close the architecture: the resolved consequence must remain distinguishable, readable, rewritable, and usable as the next local reference. The mechanism remains an experimental hypothesis until those behaviors are measured; failed retention means the primitive is incomplete, not that memory is optional.
 
 ## 12. Recursive Scale Contract
 
