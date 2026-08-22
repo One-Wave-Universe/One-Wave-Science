@@ -1,6 +1,6 @@
 ---
 node_id: "B-225"
-canonical_name: "Five-State Modulation Around Reference"
+canonical_name: "Five-Level Modulation Around Reference"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
@@ -9,13 +9,13 @@ claim_gate_detail: "Implementation-canonical coarse state bands; domain labels r
 metadata_standard: "I-06"
 ---
 
-# Node B-225: Five-State Modulation Around Reference
+# Node B-225: Five-Level Modulation Around Reference
 
 ## Correction
 
-Earlier versions mixed a five-step transformation narrative with the five-state modulation layer. The current implementation architecture separates them.
+Earlier versions mixed a five-step transformation narrative with the five-level modulation layer. The current implementation architecture separates them.
 
-The **five states** are a coarse modulation of one relation around its active middle/reference:
+The **five modulation levels** describe coarse strength modulation of one relation around its active middle/reference:
 
 ```text
 +2
@@ -61,7 +61,7 @@ These are representations, not invariant primitives. Matter-state, thermal, biol
 
 ## Distinction from Seven Threshold Bands
 
-The five-state layer is **coarse modulation**. A separate seven-band envelope may be used for finer confidence/intensity/trigger resolution. The two structures must not be collapsed into one.
+The five-level layer is **coarse modulation**. A separate seven-band envelope may be used for finer confidence/intensity/trigger resolution. The two structures must not be collapsed into one.
 
 A currently discussed seven-band representation is:
 
@@ -86,7 +86,7 @@ Phase     = oscillatory position/crossover relation
 Reference = local middle/baseline
 ```
 
-The five states therefore primarily refine **Strength**, while Direction remains ternary.
+The five modulation levels therefore primarily refine **Strength**, while Direction remains ternary. They are distinct from the Field lifecycle states `Idle -> Primed -> Executing -> Vectoring -> Resolving`.
 
 ## Relationship to Six Steps
 
@@ -94,6 +94,6 @@ The six-step oscillator can carry any one of these five modulation levels throug
 
 ## Yellow Audit
 
-- Separation of five-state modulation from six-step execution is resolved.
+- Separation of five-level modulation from the five Field lifecycle states and six-step execution is resolved.
 - Neutral `-2,-1,0,+1,+2` labels are canonical for implementation.
 - Domain-specific labels and numerical thresholds require independent calibration.
