@@ -13,23 +13,26 @@ BINARY -> TERNARY -> QUADRATIC
 
 These are the three gate classes of the primitive.
 
-A compact physical notation is:
+The preferred physical shorthand is:
 
 ```text
-2-BDC -> 3-TAC -> 4-QRC
-```
-
-with the shorter equivalent:
-
-```text
-2DC -> 3AC -> 4RC
+BC-DC -> TC-AC -> QC-RC
 ```
 
 Definitions:
 
-- **2-BDC / 2DC — Binary DC:** two-state directional DC choice / participation state.
-- **3-TAC / 3AC — Ternary AC:** three-state asymmetric oscillating AC relation, including the neutral/hold relation.
-- **4-QRC / 4RC — Quadratic Rotating Current:** four-state quadratic rotating-current relation; the target physical completion is a rotating magnetic-memory field/current state.
+- **BC-DC — Binary Choice / Direct Current:** two-state directional DC choice / participation state.
+- **TC-AC — Ternary Choice / Alternating Current:** three-state asymmetric oscillating AC relation, including the neutral/hold relation.
+- **QC-RC — Quadratic Choice / Rotating Current:** four-state quadratic rotating-current relation; the target physical completion is a rotating magnetic-memory field/current state.
+
+The earlier numeric shorthands remain valid aliases:
+
+```text
+2-BDC -> 3-TAC -> 4-QRC
+2DC   -> 3AC   -> 4RC
+```
+
+Use `BC-DC -> TC-AC -> QC-RC` as the clean human-readable physical language unless a numeric gate count is specifically useful.
 
 The hardware interpretation is experimental. These names define the architecture being tested; they do not by themselves prove that a breadboard implementation has achieved stable oscillation, rotation, or magnetic memory.
 
@@ -116,10 +119,11 @@ Do not merge physical-current notation, logical gate notation, lifecycle state, 
 Use the layers explicitly:
 
 ```text
-PHYSICAL: 2-BDC -> 3-TAC -> 4-QRC
-LOGICAL:  2B -> 3T -> 4QA -> 4QV -> 3T -> 2B
-STATE:    FST
-SCALE:    VOS
+PHYSICAL:  BC-DC -> TC-AC -> QC-RC
+ALIASES:   2-BDC -> 3-TAC -> 4-QRC
+LOGICAL:   2B -> 3T -> 4QA -> 4QV -> 3T -> 2B
+STATE:     FST
+SCALE:     VOS
 RECURSION: FR/VL | VR/FL | FRVL | VRFL
 ```
 
