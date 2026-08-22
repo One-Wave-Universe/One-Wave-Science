@@ -81,7 +81,7 @@ This remains a representation/candidate threshold map until calibrated for a con
 
 ```text
 Direction = Three Moves (-1/0/+1)
-Strength  = may be represented by the Five-State modulation
+Strength  = may be represented by the Five-Level modulation
 Phase     = oscillatory position/crossover relation
 Reference = local middle/baseline
 ```
