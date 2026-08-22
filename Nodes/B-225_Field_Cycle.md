@@ -54,10 +54,20 @@ Different domains may map the same five-band structure into easier human labels,
 ```text
 Spatial: Floor / Low / Middle / High / Ceiling
 Thermal: Frozen / Cold / Middle-Warm / Hot / Fire
-Other scale labels: Micro / Small / Mid / Large / Macro
 ```
 
-These are representations, not invariant primitives. Matter-state, thermal, biological, or other domain mappings must not be hard-coded into the kernel.
+These are strength representations, not invariant primitives. Matter-state, thermal, biological, or other domain mappings must not be hard-coded into the kernel.
+
+## Distinction from Recursive Octave Scale
+
+The recursive five-position octave scale is a separate axis:
+
+```text
+Micro -> Small -> Medium -> Large -> Macro
+Macro[n] -> Micro[n+1]
+```
+
+`Macro` closes the current loop/trunk and becomes `Micro` at the next larger loop/trunk. These octave positions must not be used as aliases for the `-2,-1,0,+1,+2` modulation levels or for the five Field lifecycle states.
 
 ## Distinction from Seven Threshold Bands
 
