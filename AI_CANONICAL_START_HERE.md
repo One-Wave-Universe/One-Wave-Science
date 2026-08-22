@@ -59,7 +59,7 @@ The five **Field lifecycle states** are:
 IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING
 ```
 
-They describe behavioral lifecycle state and are distinct from the five modulation/scale levels.
+They describe behavioral lifecycle state and are distinct from both modulation level and recursive octave scale.
 
 Five coarse modulation/strength levels remain a separate axis and may be represented neutrally as:
 
@@ -67,7 +67,15 @@ Five coarse modulation/strength levels remain a separate axis and may be represe
 -2 -1 0 +1 +2
 ```
 
-Scale labels such as Floor/Low/Middle/High/Ceiling and Micro/Small/Medium/Large/Macro are representations of modulation/scale. They must not replace the five Field lifecycle states.
+`Floor / Low / Middle / High / Ceiling` may label the five modulation/strength levels.
+
+The five recursive octave-scale positions are a third, separate axis:
+
+```text
+Micro -> Small -> Medium -> Large -> Macro
+```
+
+The closure rule is `Macro[n] -> Micro[n+1]`: the fifth position of one loop/trunk becomes the first position of the next larger loop/trunk. Neither octave scale nor modulation level may replace the five Field lifecycle states.
 
 ## Updated 34 processing/memory protection
 
