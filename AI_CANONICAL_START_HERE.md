@@ -89,7 +89,21 @@ state held locally
  -> neighboring / higher differential uses that state
 ```
 
-This is an architectural target until retention/read/rewrite/propagation are experimentally demonstrated.
+Magnetic memory is a required completion criterion for the first physical primitive, not an optional later feature. The primitive remains experimentally unproven until retention, read, rewrite, and propagation are demonstrated on the bench.
+
+At fixed scale `0 / Micro`, the required physical closure is:
+
+```text
+opposed DC choice loops
+ -> AC ternary oscillating loop
+ -> four Actions route the phase-related loops
+ -> rotating magnetic-field current
+ -> four Views read Direction / Phase / Strength / Reference
+ -> magnetic consequence remains locally
+ -> retained consequence becomes the next reference
+```
+
+The first circuit does not implement octave-scale transition; `V5 Scale` remains fixed at `0` while this complete local memory cycle is validated.
 
 The large-scale split is:
 
