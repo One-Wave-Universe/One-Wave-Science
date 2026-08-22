@@ -124,7 +124,7 @@ Measure:
 - differential response;
 - zero/hold window;
 - transition timing;
-- hysteresis/retention where applicable;
+- required magnetic retention after the resolving drive changes or is released;
 - write/read energy;
 - behavior after driver release.
 
@@ -255,9 +255,11 @@ memory + processing + routing
 
 A cluster is a distributed state machine whose current physical configuration is its working memory. There is no mandatory fetch-compute-writeback loop through a separate main RAM array.
 
-This is an architectural target, not yet a proven magnetic-memory claim. The bench program must demonstrate that the chosen physical element can be written, retain a distinguishable state, be read with acceptable disturbance, be rewritten, and pass its consequence into the next differential stage.
+Magnetic memory is required for completion of the first primitive, though it is not yet a proven hardware result. The bench program must demonstrate that the chosen physical element can be written, retain a distinguishable state after the resolving drive changes or is released, be read with acceptable disturbance, be rewritten, and pass its consequence into the next differential stage. If it cannot, the primitive has not closed its cycle.
 
 ## 13. Four Views and Four Actions at the Hardware Interface
+
+At scale `0 / Micro`, the Four Actions route the phase-related loops into the rotating magnetic-field-current relation; the Four Views read that relation as Direction, Phase, Strength, and Reference. The resolved magnetic consequence must remain locally available as the next reference. Octave scaling is not part of this first validation.
 
 Every scale should expose the same four state views:
 
