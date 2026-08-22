@@ -66,9 +66,9 @@ LEFT / STAY / RIGHT = -1 / 0 / +1
 
 Do not replace one structure with the other.
 
-## Relationship to Five States
+## Relationship to Five Modulation Levels
 
-Each process step may carry one of the five coarse modulation states `-2,-1,0,+1,+2`. The five states describe strength/modulation; the six steps describe process position.
+Each process step may carry one of the five coarse modulation levels `-2,-1,0,+1,+2`. These five levels describe strength/modulation; the five Field lifecycle states are `Idle -> Primed -> Executing -> Vectoring -> Resolving`; and the six steps describe process position.
 
 ## Yellow Audit
 
