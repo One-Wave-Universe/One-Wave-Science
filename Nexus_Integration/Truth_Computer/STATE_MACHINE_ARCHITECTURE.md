@@ -164,7 +164,16 @@ Five coarse modulation/strength levels remain a separate axis and may be represe
 -2 -1 0 +1 +2
 ```
 
-Domain scale labels such as Floor/Low/Middle/High/Ceiling or Micro/Small/Medium/Large/Macro are wrappers for modulation/scale. They must not replace the five Field lifecycle states.
+`Floor / Low / Middle / High / Ceiling` may label the five modulation/strength levels.
+
+Recursive octave scale is a third independent axis:
+
+```text
+Micro -> Small -> Medium -> Large -> Macro
+Macro[n] -> Micro[n+1]
+```
+
+The fifth scale position closes one loop/trunk and becomes the first position of the next larger loop/trunk. Lifecycle state, modulation level, and octave scale must not replace one another.
 
 ## 8. Three Physical Mirror Gates in VTC
 
@@ -195,7 +204,8 @@ REPRESENTATIONS
 Point/Path/Field
 Carrier/Breathing/Phase
 five Field lifecycle states
-five modulation/scale levels
+five modulation/strength levels
+five recursive octave-scale positions
 seven threshold bands
 1D/2D/3D/4D mappings
 neural/cognitive roles
