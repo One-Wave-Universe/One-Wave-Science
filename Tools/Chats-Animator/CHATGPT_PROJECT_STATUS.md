@@ -1,119 +1,133 @@
 # CHATGPT PROJECT — ONE-WAVE VIDEO MAKER
 
 ## CURRENT STEP
-**C12 — Voice Lab hardening / preview-export parity**
+**C14 — Five-slot reusable motion-sequence library + true 24 fps acting pipeline**
 
 ## STATUS
-**BROWSER STRESS PASS FOR C10-C12 — real microphone end-to-end production gate still required**
+**BUILT — C14 runtime save/open/insert gate pending**
 
 ## HARD START
-B13 video export runtime PASS plus C1–C5 motion production pipeline and C6–C9 Voice Lab build.
+B13 export runtime PASS, C1–C5 motion production pipeline, and C6–C12 audio hardening remain protected.
 
-## MOTION PIPELINE — PROTECTED
-C1 through C5 remain intact:
-- normalize authored stills before layout;
-- fit feet/base depth to straight or curved paths;
-- calibrated perspective controls size;
-- 24 FPS / 6 pose-beat walk cadence supported;
-- one-click Walk Away / Walk Toward;
-- real forest-path still-frame production output passed.
+## MOTION TIMING CORRECTION — AUTHORITATIVE
+The animator uses a true **24 fps production timeline**.
 
-## C6 — VOICE LAB + SPEECH TIMELINE
-Built.
-- Reusable named character voice recipes.
-- Character pitch, low cut, body EQ, presence EQ, compression, drive, echo, and reverb.
-- Three-layer voice combiner per spoken line.
-- Layer level, pan, pitch offset, and micro-delay.
-- Spoken clips placed at exact timeline seconds.
-- Voice recipes and clips save into `.owav`.
+Do not treat the earlier 24 fps / 6 pose-beat shortcut as the global animation rule.
 
-## C7 — DIALOGUE EDITOR / FINAL MIX
-Built.
-- Non-destructive trim in/out.
-- Fade in/out.
-- Per-clip gain.
-- Music duck amount, attack, release.
-- Export mix applies trim/fades/gain/ducking.
+Use normal animation exposures by action:
+- on 1s = new drawing every frame = 24 drawings/sec;
+- on 2s = new drawing every 2 frames = 12 drawings/sec;
+- on 3s = new drawing every 3 frames = 8 drawings/sec;
+- longer holds whenever acting requires them.
 
-## C8 — SPEECH ↔ VIDEO FRAME SYNC
-Built + deterministic timing tests PASS.
-- Reel frame/hold timing converts to exact seconds.
-- Test: frame 2 at 24 FPS with 4-frame hold = 0.1666667 s.
-- Test: frame 4 after holds 4,4,12 starts at 0.8333333 s.
-- Speech can snap to frame boundaries.
+Pose artwork may hold while position/depth changes every timeline frame. Perspective movement must not stair-step just because a drawing is held.
 
-## C9 — VOICE RECORDER
-Hardened.
-- Browser mic recording into Layer 1/2/3.
-- Raw voice mode can disable browser echo cancellation, noise suppression, and auto gain.
-- Mic stream cleaned up on errors and completion.
-- Empty takes rejected.
-- Old preview object URLs revoked to prevent leaks.
+Baseline walk cycle target:
+1. Contact L
+2. Down L
+3. Passing L
+4. Up L
+5. Contact R
+6. Down R
+7. Passing R
+8. Up R
 
-## C10 — AUDIO MIX HARDENING
-Browser stress PASS.
-- Overlapping dialogue duck windows merge instead of pumping music up between lines.
-- Short speech gaps inside attack/release envelope stay continuously ducked.
-- Long gaps recover normally.
-- Duck window follows the longest audible layer, including per-layer micro-delay.
-- Pitch changes are included in audible-duration calculation.
-- Echo/reverb tails extend ducking so music does not rise under the last tail.
-- Final bus adds headroom + limiter before WebM encoding.
-- Real Chromium synthetic-audio test produced exactly one mixed audio track and zero page errors.
-- Test example: lowered-pitch/effect-tail clip produced 1.00s → 3.55s audible duck window; overlapping following clip extended merged window to 7.35s.
+Normally begin by testing that cycle on 2s at 24 fps, then alter exposures/spacing for character weight and acting.
 
-## C11 — AUDIO SESSION SAFETY
-Browser stress PASS.
-- Extreme/corrupt saved values are clamped on load.
-- Character pitch/EQ/compression/drive/effects constrained to editor ranges.
-- Clip start/trim/fade/gain constrained.
-- Layer gain/pan/detune/delay constrained.
-- Music duck settings constrained.
-- Chromium corruption test completed with zero page errors.
+## C14 — REUSABLE MOTION LIBRARY
+Built and wired into the live animator.
 
-## C12 — PREVIEW / EXPORT PARITY
-Browser stress PASS.
-- Old B7/B11/C6 play-button audio listeners are blocked during final-mix playback to prevent double starts.
-- Preview now uses the same edited/hardened mix path as export.
-- Audio is prepared/decoded before picture playback begins.
-- Start order verified in Chromium: prepare → video start → audio start.
-- Second click stops picture and audio together.
-- No duplicate listener firing and zero page errors.
+File format:
+**`.owmotion`**
 
-## AUDIO SYNC FIX
-Voice Lab export previously scheduled audio before MediaRecorder started, risking clipped first words or early drift.
+Initial visible capacity:
+**5 reusable sequence slots per library file**.
 
-Fixed architecture:
-**prepare/decode audio first → start MediaRecorder → start prepared audio bus → render reel.**
+First GR target library:
+1. Walk
+2. Look / notice
+3. Point
+4. Wave
+5. Flip-off
 
-Normal preview uses the same prepare/start discipline.
+Slots are renameable/replacable and are not hardcoded to those actions.
 
-## CURRENT AUDIO PRODUCTION ORDER
-1. Record/import raw take.
-2. Choose/create character voice recipe.
-3. Combine up to three layers.
-4. Shape voice.
-5. Lay line onto video timeline.
-6. Trim/fade/set clip gain.
-7. Snap speech to frame/hold boundary when useful.
-8. Automatic music ducking.
-9. Preview through the same final-mix path used by export.
-10. Save `.owav`.
-11. Export WebM using prepared synchronized final audio bus.
+### Implemented C14 behavior
+- New Motion Library
+- Open `.owmotion`
+- Save `.owmotion`
+- Five visible sequence slots
+- Capture reel start/end range into a sequence
+- Sequence name
+- Character tag
+- Loop flag
+- Notes
+- Rename sequence
+- Delete sequence
+- Insert sequence at current reel position
+- Embedded reel frames/pose art retained in the sequence file
+- Stored sequence FPS retained
+- Active reel is copied from, not destructively moved
+- Inserted frames become ordinary editable reel frames
 
-## LOAD CHAIN
-**C6 Voice Lab → C7 Dialogue Editor → C8 Frame Sync → C9 Voice Recorder → C10 Audio Hardening → C11 Session Safety → C12 Preview/Export Parity**
+### C14 source files
+- `C14_MOTION_SEQUENCE_LIBRARY.md`
+- `c14-motion-library.js`
+- `index.html` now loads `c14-motion-library.js`
 
-## TESTS COMPLETED THIS PASS
-- Duck-window overlap/short-gap/long-gap deterministic tests: PASS.
-- Multi-layer duration + delay tests: PASS.
-- Frame/hold timing tests: PASS.
-- Hardened final-mix Chromium test: PASS, one audio track, zero page errors.
-- Corrupt-session Chromium clamp test: PASS, zero page errors.
-- Preview sequencing Chromium test: PASS, no double listener firing, zero page errors.
+## C14 REQUIRED RUNTIME GATE
+Do not call C14 PASS until one real browser test succeeds:
+1. create five sequences;
+2. save one `.owmotion` file;
+3. reopen that file;
+4. confirm all five slots restore;
+5. insert each sequence into an active reel;
+6. confirm original active-scene frames/background remain intact;
+7. confirm pose art and frame exposures survive round trip.
 
-## NEXT REQUIRED PRODUCTION GATE
-Use a real microphone and real voice take in the animator:
-record → three-layer combine → character processing → timed placement → trim/fade → frame snap → music duck → save/load → preview against picture → WebM export → listen for sync and clipping.
+## FIRST FULL ACTING TEST AFTER C14
+Build one continuous GR forest performance approximately 8–12 seconds:
+- walk around the path;
+- slow and look at something;
+- head/eyes lead the look;
+- point with anticipation then extension;
+- relax the arm;
+- notice the camera/viewer;
+- wave with multiple hand arcs and follow-through;
+- pause;
+- flip something off with anticipation, extension, hold, and recovery;
+- preserve feet/path registration and perspective depth throughout.
 
-Do not call the full C6–C12 voice workstation production PASS until that real recorded-voice round trip succeeds.
+This shot should be assembled primarily from the reusable motion library, then hand-edited where transitions need character acting.
+
+## VOICE/AUDIO SPLIT
+Voice generation is being separated from the animator.
+
+Standalone program started at:
+`Tools/Voice-Forge/README.md`
+
+The animator should ultimately receive finished dialogue clips + timing metadata rather than own the core voice-generation system.
+
+Voice Forge rule:
+- use authorized/reference human voices or original project voices;
+- blend controllable voice traits non-destructively;
+- do not rely on canned TTS/machine voices as the hidden source;
+- save reusable character voice recipes;
+- render clean WAV + recipe metadata for animator handoff.
+
+## PROTECTED AUDIO WORK
+C6–C12 remain intact:
+- three-layer dialogue combiner;
+- trim/fades/gain;
+- frame sync;
+- mic recording;
+- music ducking;
+- limiter/headroom;
+- session sanitization;
+- preview/export parity;
+- prepare → recorder start → audio start synchronization.
+
+## NEXT PERMITTED STEP
+**Runtime-test C14, then build the five GR core motion sequences correctly on a true 24 fps timeline.**
+
+Do not add another speculative editor subsystem before those five motions can be saved/reopened/inserted and used to assemble the forest acting test.
