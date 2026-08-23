@@ -14,7 +14,7 @@
   panel.className = 'card';
   panel.innerHTML = `
     <strong>Project save / load</strong><br>
-    Save the complete reel, embedded artwork, calibration, placement, holds, FPS, and audio to one project file.
+    Save the complete reel, embedded artwork, calibration, placement, holds, FPS, audio, character voice recipes, and timed speech clips to one project file.
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
       <button id="save-project" type="button">Save Project</button>
       <button id="load-project" type="button">Open Project</button>
@@ -32,7 +32,8 @@
       fps: A.playback?.fps || Number($('fps-control')?.value || 24),
       activeIndex: R.activeIndex,
       frames: A.clone(R.frames),
-      audioTrack: A.audio?.track || null
+      audioTrack: A.audio?.track || null,
+      voiceLab: A.voiceLab?.serialize?.() || null
     };
   }
 
@@ -44,6 +45,9 @@
       if (!Number.isFinite(Number(frame.hold)) || Number(frame.hold) < 1) throw new Error('Invalid frame hold');
     }
     if (data.audioTrack !== undefined && data.audioTrack !== null && (!data.audioTrack.name || !data.audioTrack.src)) throw new Error('Malformed audio track');
+    if (data.voiceLab !== undefined && data.voiceLab !== null) {
+      if (!Array.isArray(data.voiceLab.characters) || !Array.isArray(data.voiceLab.clips)) throw new Error('Malformed Voice Lab data');
+    }
     return data;
   }
 
@@ -73,6 +77,7 @@
       $('fps-control').dispatchEvent(new Event('input', { bubbles: true }));
     }
     if (A.audio?.loadTrack) A.audio.loadTrack(project.audioTrack || null);
+    if (A.voiceLab?.loadState) A.voiceLab.loadState(project.voiceLab || null);
     A.status(`Project loaded — ${frames.length} frame${frames.length === 1 ? '' : 's'}`);
   }
 
