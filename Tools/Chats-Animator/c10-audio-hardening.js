@@ -25,7 +25,6 @@
       Number(recipe.delayMix) > 0 ? 0.35 : 0,
       Number(recipe.reverb) > 0 ? 0.55 : 0
     );
-
     let earliest = Infinity;
     let latest = -Infinity;
     for (let i = 0; i < (clip.layers || []).length; i += 1) {
@@ -82,11 +81,9 @@
     const sources = [];
     await context.resume();
     const base = context.currentTime + 0.05;
-
     const clips = (A.voiceLab.state.clips || []).filter(c => !c.muted);
     const rawWindows = [];
     for (const clip of clips) rawWindows.push(await clipWindow(context, clip));
-
     const attack = Math.max(0.01, Number(A.dialogueEditor.state.attackMs) / 1000 || 0.08);
     const release = Math.max(0.05, Number(A.dialogueEditor.state.releaseMs) / 1000 || 0.3);
     const windows = mergeWindows(rawWindows, attack + release);
@@ -112,10 +109,7 @@
       sources.push(source);
     }
 
-    for (const clip of clips) {
-      sources.push(...await A.dialogueEditor.scheduleEditedClip(context, master, clip, base));
-    }
-
+    for (const clip of clips) sources.push(...await A.dialogueEditor.scheduleEditedClip(context, master, clip, base));
     const audioTrack = destination.stream.getAudioTracks()[0];
     if (audioTrack) stream.addTrack(audioTrack);
     return {
@@ -130,7 +124,16 @@
     };
   }
 
+  function loadSafety() {
+    if (A.audioSessionSafety || document.querySelector('script[data-c11-audio-safety]')) return;
+    const script = document.createElement('script');
+    script.src = './c11-audio-session-safety.js';
+    script.setAttribute('data-c11-audio-safety', 'true');
+    document.body.appendChild(script);
+  }
+
   A.voiceLab.makeCombinedAudioTrack = makeHardenedMix;
   A.audioHardening = { clipWindow, mergeWindows, makeHardenedMix };
   A.status('Audio mix hardening loaded');
+  loadSafety();
 })();
