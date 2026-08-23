@@ -1,0 +1,9 @@
+{
+  "python_compile_exit": 0,
+  "demo_run_exit": 0,
+  "files": [
+    "wave_computing_node.py",
+    "README.md",
+    "sample_output.txt"
+  ]
+}
