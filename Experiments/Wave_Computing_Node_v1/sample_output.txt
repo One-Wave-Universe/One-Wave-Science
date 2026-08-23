@@ -1,0 +1,51 @@
+Running Full Multi-Radix Octave Simulation
+Cycle: BC-DC -> TC-AC -> 4 Actions -> 4 Views -> TC Return -> BC Closure
+
+Step 00 | Scale 0 | Δ:+0.222 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.083 | Out:+0.565
+Step 00 | Scale 1 | Δ:+0.171 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.094 | Out:+0.586
+Step 00 | Scale 2 | Δ:+0.175 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.097 | Out:+0.592
+------------------------------------------------------------------------------------------------------------------------------------
+Step 01 | Scale 0 | Δ:+0.139 | BC:+1 TC:+1 | A2:Across  | V2:Strength  | TCr:+1 | BCc:  +1 | Ref:+0.213 | Out:+0.653
+Step 01 | Scale 1 | Δ:+0.099 | BC:+1 TC:+1 | A2:Across  | V2:Strength  | TCr:+1 | BCc:  +1 | Ref:+0.210 | Out:+0.624
+Step 01 | Scale 2 | Δ:+0.086 | BC:+1 TC:+0 | A1:Outward | V1:Phase     | TCr:+0 | BCc:HOLD | Ref:+0.080 | Out:-0.045
+------------------------------------------------------------------------------------------------------------------------------------
+Step 02 | Scale 0 | Δ:+0.009 | BC:+1 TC:+0 | A2:Across  | V3:Reference | TCr:+1 | BCc:  +1 | Ref:+0.238 | Out:+0.419
+Step 02 | Scale 1 | Δ:-0.088 | BC:-1 TC:+1 | A1:Outward | V2:Strength  | TCr:+0 | BCc:HOLD | Ref:+0.227 | Out:+0.046
+Step 02 | Scale 2 | Δ:-0.070 | BC:-1 TC:+1 | A0:Inward  | V1:Phase     | TCr:-1 | BCc:  +1 | Ref:+0.046 | Out:-0.234
+------------------------------------------------------------------------------------------------------------------------------------
+Step 03 | Scale 0 | Δ:-0.016 | BC:-1 TC:+1 | A1:Outward | V2:Strength  | TCr:-1 | BCc:  +1 | Ref:+0.219 | Out:-0.187
+Step 03 | Scale 1 | Δ:-0.282 | BC:-1 TC:+1 | A0:Inward  | V1:Phase     | TCr:-1 | BCc:  +1 | Ref:+0.124 | Out:-0.437
+Step 03 | Scale 2 | Δ:-0.182 | BC:-1 TC:+1 | A3:Over    | V0:Direction | TCr:-1 | BCc:  +1 | Ref:-0.006 | Out:-0.296
+------------------------------------------------------------------------------------------------------------------------------------
+Step 04 | Scale 0 | Δ:+0.003 | BC:+1 TC:-1 | A0:Inward  | V2:Strength  | TCr:+1 | BCc:  +1 | Ref:+0.249 | Out:+0.431
+Step 04 | Scale 1 | Δ:+0.001 | BC:+1 TC:-1 | A3:Over    | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.232 | Out:+0.605
+Step 04 | Scale 2 | Δ:+0.181 | BC:+1 TC:-1 | A2:Across  | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.114 | Out:+0.636
+------------------------------------------------------------------------------------------------------------------------------------
+Step 05 | Scale 0 | Δ:-0.027 | BC:-1 TC:+1 | A3:Over    | V1:Phase     | TCr:-1 | BCc:  +1 | Ref:+0.161 | Out:-0.382
+Step 05 | Scale 1 | Δ:-0.343 | BC:-1 TC:+1 | A2:Across  | V0:Direction | TCr:-1 | BCc:  +1 | Ref:+0.096 | Out:-0.518
+Step 05 | Scale 2 | Δ:-0.275 | BC:-1 TC:+0 | A2:Across  | V0:Direction | TCr:-1 | BCc:  +1 | Ref:+0.084 | Out:-0.238
+------------------------------------------------------------------------------------------------------------------------------------
+Step 06 | Scale 0 | Δ:+0.062 | BC:+1 TC:+0 | A3:Over    | V2:Strength  | TCr:+1 | BCc:  +1 | Ref:+0.202 | Out:+0.463
+Step 06 | Scale 1 | Δ:+0.040 | BC:+1 TC:+1 | A3:Over    | V2:Strength  | TCr:+0 | BCc:HOLD | Ref:+0.103 | Out:+0.025
+Step 06 | Scale 2 | Δ:-0.076 | BC:-1 TC:-1 | A3:Over    | V2:Strength  | TCr:+1 | BCc:  -1 | Ref:+0.131 | Out:+0.261
+------------------------------------------------------------------------------------------------------------------------------------
+Step 07 | Scale 0 | Δ:+0.020 | BC:+1 TC:+1 | A0:Inward  | V3:Reference | TCr:+0 | BCc:HOLD | Ref:+0.186 | Out:-0.046
+Step 07 | Scale 1 | Δ:-0.116 | BC:-1 TC:-1 | A0:Inward  | V3:Reference | TCr:-1 | BCc:  +1 | Ref:+0.062 | Out:-0.258
+Step 07 | Scale 2 | Δ:-0.210 | BC:-1 TC:-1 | A0:Inward  | V3:Reference | TCr:-1 | BCc:  +1 | Ref:+0.048 | Out:-0.381
+------------------------------------------------------------------------------------------------------------------------------------
+Step 08 | Scale 0 | Δ:+0.036 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.228 | Out:+0.463
+Step 08 | Scale 1 | Δ:+0.073 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.141 | Out:+0.549
+Step 08 | Scale 2 | Δ:+0.113 | BC:+1 TC:+1 | A1:Outward | V1:Phase     | TCr:+1 | BCc:  +1 | Ref:+0.134 | Out:+0.566
+------------------------------------------------------------------------------------------------------------------------------------
+Step 09 | Scale 0 | Δ:-0.006 | BC:-1 TC:-1 | A2:Across  | V2:Strength  | TCr:-1 | BCc:  +1 | Ref:+0.139 | Out:-0.381
+Step 09 | Scale 1 | Δ:-0.252 | BC:-1 TC:-1 | A2:Across  | V2:Strength  | TCr:-1 | BCc:  +1 | Ref:+0.059 | Out:-0.382
+Step 09 | Scale 2 | Δ:-0.253 | BC:-1 TC:+0 | A1:Outward | V1:Phase     | TCr:-1 | BCc:  +1 | Ref:+0.097 | Out:-0.258
+------------------------------------------------------------------------------------------------------------------------------------
+Step 10 | Scale 0 | Δ:+0.083 | BC:+1 TC:+0 | A2:Across  | V3:Reference | TCr:+1 | BCc:  +1 | Ref:+0.181 | Out:+0.464
+Step 10 | Scale 1 | Δ:+0.078 | BC:+1 TC:+0 | A2:Across  | V3:Reference | TCr:+1 | BCc:  +1 | Ref:+0.109 | Out:+0.485
+Step 10 | Scale 2 | Δ:+0.046 | BC:+1 TC:-1 | A0:Inward  | V1:Phase     | TCr:-1 | BCc:  -1 | Ref:+0.049 | Out:-0.473
+------------------------------------------------------------------------------------------------------------------------------------
+Step 11 | Scale 0 | Δ:+0.042 | BC:+1 TC:-1 | A1:Outward | V2:Strength  | TCr:+0 | BCc:HOLD | Ref:+0.174 | Out:-0.016
+Step 11 | Scale 1 | Δ:-0.112 | BC:-1 TC:+1 | A1:Outward | V2:Strength  | TCr:-1 | BCc:  +1 | Ref:+0.072 | Out:-0.247
+Step 11 | Scale 2 | Δ:-0.124 | BC:-1 TC:+1 | A3:Over    | V0:Direction | TCr:-1 | BCc:  +1 | Ref:-0.002 | Out:-0.286
+------------------------------------------------------------------------------------------------------------------------------------
