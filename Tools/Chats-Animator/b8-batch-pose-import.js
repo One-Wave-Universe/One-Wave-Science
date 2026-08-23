@@ -7,11 +7,26 @@
   $('batch-import-poses').addEventListener('click',()=>{if(!A.selectedAsset())return;$('batch-pose-picker').click();}); $('batch-pose-picker').addEventListener('change',async e=>{await importBatch(e.target.files||[]);e.target.value='';});
   window.b8ImportBatch=importBatch;
 
-  // B9 is intentionally isolated in its own feature file and loads only after B8 APIs exist.
+  function loadB10Smoke() {
+    if (document.querySelector('script[data-onewave-b10]')) return;
+    const smoke = document.createElement('script');
+    smoke.src = './b10-browser-smoke-test.js';
+    smoke.dataset.onewaveB10 = 'true';
+    document.body.appendChild(smoke);
+  }
+
+  // B9 is isolated in its own feature file. B10 loads only after B9 is available
+  // so the smoke test can verify the complete B1–B9 runtime chain.
   if (!document.querySelector('script[data-onewave-b9]')) {
     const script = document.createElement('script');
     script.src = './b9-sprite-sheet-slicer.js';
     script.dataset.onewaveB9 = 'true';
+    script.onload = loadB10Smoke;
     document.body.appendChild(script);
+  } else if (window.b9SpriteSheetSlicer) {
+    loadB10Smoke();
+  } else {
+    const existing = document.querySelector('script[data-onewave-b9]');
+    existing.addEventListener('load', loadB10Smoke, { once: true });
   }
 })();
