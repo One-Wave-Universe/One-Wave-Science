@@ -1,0 +1,50 @@
+{
+  "format":"one-wave-animation-rules",
+  "version":1,
+  "projectFps":24,
+  "sceneRules":{
+    "background":"single PNG scene layer",
+    "grid":"visible only during placement/sizing",
+    "characterAndProps":"transparent PNG/WebP stills",
+    "backgroundChangesPerFrame":false
+  },
+  "timingRules":{
+    "trueFps":24,
+    "allowedExposureTicks":[1,2,3,4,6,8,12,24,36,48],
+    "onOnes":1,
+    "onTwos":2,
+    "onThrees":3,
+    "longHold":"allowed and deliberate",
+    "pauseIsAnimation":"holds are intentional timing choices, not missing motion"
+  },
+  "directorBeats":[
+    "establish",
+    "hold",
+    "anticipate",
+    "move",
+    "contact",
+    "settle",
+    "look",
+    "react",
+    "gesture",
+    "pause",
+    "resume",
+    "exit"
+  ],
+  "motionPrinciples":[
+    "pose-to-pose staging",
+    "clear silhouettes",
+    "anticipation before strong actions",
+    "contact and passing poses for walks",
+    "follow-through and settle after actions",
+    "eye/head attention may precede body motion",
+    "holds may be longer for comedy, reaction, or readability",
+    "do not interpolate by default",
+    "do not move baked screenshot panels"
+  ],
+  "walkCycle":{
+    "requiredPoses":["contact-left","down-left","passing-left","up-left","contact-right","down-right","passing-right","up-right"],
+    "timing":"chosen per shot; commonly on 2s at 24 fps, with 1s for fast accents and longer holds for stops/reactions"
+  },
+  "actingShotRule":"look/attention changes, gesture preparation, action, settle, and reaction can each have separate exposures"
+}
