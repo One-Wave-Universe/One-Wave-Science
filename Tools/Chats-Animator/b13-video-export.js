@@ -121,6 +121,7 @@
       $('export-meta').textContent = `Rendering ${R.frames.length} frames…`;
       await drawSnapshot(R.frames[0].snapshot);
       recorder.start(100);
+      await exportAudio?.start?.();
       if (exportAudio?.element) {
         exportAudio.element.currentTime = 0;
         await exportAudio.element.play().catch(() => null);
