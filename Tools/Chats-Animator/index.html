@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Wave Video Maker — B9</title>
+<title>One-Wave Video Maker — B10</title>
 <style>
 :root{font-family:system-ui,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;background:#101114}
 header{padding:18px 22px;border-bottom:1px solid #343741;background:#17191f}h1{margin:0 0 6px;font-size:24px}.sub{margin:0;color:#b8bdc8}
@@ -36,11 +36,11 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <body>
 <header>
 <h1>CHATGPT PROJECT — ONE-WAVE VIDEO MAKER</h1>
-<p class="sub">B9: slice sprite/pose sheets directly into consecutive reel frames.</p>
+<p class="sub">B10: save and reopen the complete animation project without losing reel state.</p>
 <div class="status-row">
 <span class="pill">Phase B — Background / Scene</span>
-<span class="pill">B9 — Sprite-sheet slicer</span>
-<span class="pill pass">STATIC PASS</span>
+<span class="pill">B10 — Project save / load</span>
+<span class="pill pass">RUNTIME PASS</span>
 </div>
 </header>
 <main>
@@ -86,7 +86,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 </div>
 </section>
 <aside>
-<h2>B9 reel + placement + sheet slicing</h2>
+<h2>B10 reel + project persistence</h2>
 <div class="card">The grid appears only while calibration or placement/sizing mode is active. Finishing placement hides it again.</div>
 <div class="section-title">Calibration</div>
 <div class="control"><label><span>Horizon</span><span id="horizon-y-value">0.36</span></label><input id="horizon-y" type="range" min="0.05" max="0.80" step="0.01"></div>
@@ -113,7 +113,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <label>Batch hold <input id="batch-hold" type="range" min="1" max="12" step="1" value="2"></label>
 <input id="batch-pose-picker" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden>
 </div>
-<div class="card">B9 adds sprite-sheet/pose-sheet extraction. Tweening, AI artwork generation, audio, camera animation, and export are still outside this step.</div>
+<div class="card">B10 makes the project durable. Audio, camera animation, and video export are next production-output steps; tweening stays later.</div>
 </aside>
 </main>
 <script src="./app.js"></script>
@@ -123,5 +123,6 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <script src="./b7-playback.js"></script>
 <script src="./b8-batch-pose-import.js"></script>
 <script src="./b9-sprite-sheet-slicer.js"></script>
+<script src="./b10-project-save-load.js"></script>
 </body>
 </html>
