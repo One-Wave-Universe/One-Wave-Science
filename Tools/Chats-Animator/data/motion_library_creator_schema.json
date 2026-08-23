@@ -1,0 +1,17 @@
+{
+  "format": "one-wave-motion-library-creator",
+  "version": 2,
+  "libraryPolicy": {
+    "librarySize": "unbounded",
+    "batchSize": 50,
+    "oneImagePerJob": true,
+    "fileType": "image/png",
+    "transparentBackgroundRequired": true,
+    "spriteSheetsAllowed": false,
+    "compositeBoardsAllowed": false,
+    "checkpointAfterEachFrame": true,
+    "resumeAfterFailure": true
+  },
+  "batchState": ["pending", "generating", "validating", "saved", "failed"],
+  "notes": "A character library may contain hundreds or thousands of individual transparent PNG frames. Fifty is only the generation batch size."
+}

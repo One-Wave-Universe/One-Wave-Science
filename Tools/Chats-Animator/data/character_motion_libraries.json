@@ -1,0 +1,25 @@
+{
+  "format": "one-wave-character-motion-library-registry",
+  "version": 2,
+  "generatorPolicy": {
+    "batchSize": 50,
+    "librarySize": "unbounded",
+    "generationOrder": "sequential",
+    "onePngAtATime": true,
+    "transparentBackgroundRequired": true,
+    "checkpointEveryFrame": true,
+    "resumeAfterFailure": true,
+    "rejectSpriteSheets": true,
+    "rejectCompositeBoards": true,
+    "archiveFormat": "zip",
+    "archivePreservesIndividualPngs": true
+  },
+  "libraries": [
+    {"id":"goblin-raccoon","character":"Goblin Raccoon","bodyVariant":"base","path":"motion-libraries/goblin-raccoon/library.json","framesPath":"motion-libraries/goblin-raccoon/frames/"},
+    {"id":"nexus","character":"Nexus","bodyVariant":"base","path":"motion-libraries/nexus/library.json","framesPath":"motion-libraries/nexus/frames/"},
+    {"id":"scales","character":"Scales","bodyVariant":"base","path":"motion-libraries/scales/library.json","framesPath":"motion-libraries/scales/frames/"},
+    {"id":"noobs","character":"Noobs","bodyVariant":"base","path":"motion-libraries/noobs/library.json","framesPath":"motion-libraries/noobs/frames/"},
+    {"id":"cerberus-giant","character":"Cerberus Giant","bodyVariant":"giant","path":"motion-libraries/cerberus-giant/library.json","framesPath":"motion-libraries/cerberus-giant/frames/"},
+    {"id":"cerberus-modulated-down","character":"Cerberus Modulated-Down","bodyVariant":"modulated-down","path":"motion-libraries/cerberus-modulated-down/library.json","framesPath":"motion-libraries/cerberus-modulated-down/frames/"}
+  ]
+}
