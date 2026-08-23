@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Wave Video Maker — C2</title>
+<title>One-Wave Video Maker — C3</title>
 <style>
 :root{font-family:system-ui,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;background:#101114}
 header{padding:18px 22px;border-bottom:1px solid #343741;background:#17191f}h1{margin:0 0 6px;font-size:24px}.sub{margin:0;color:#b8bdc8}
@@ -36,10 +36,10 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <body>
 <header>
 <h1>CHATGPT PROJECT — ONE-WAVE VIDEO MAKER</h1>
-<p class="sub">C2: clock pose stills consistently after fitting them to a smooth perspective path.</p>
+<p class="sub">C3: one-click walk runs combine normalized path/depth motion with clocked pose cadence.</p>
 <div class="status-row">
 <span class="pill">Phase C — Production Repair</span>
-<span class="pill">C2 — Path + cadence</span>
+<span class="pill">C3 — One-click walk builder</span>
 <span class="pill pass">RUNTIME PASS</span>
 </div>
 </header>
@@ -86,7 +86,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 </div>
 </section>
 <aside>
-<h2>C2 production reel</h2>
+<h2>C3 production reel</h2>
 <div class="card">The grid appears only while calibration or placement/sizing mode is active. Finishing placement hides it again.</div>
 <div class="section-title">Calibration</div>
 <div class="control"><label><span>Horizon</span><span id="horizon-y-value">0.36</span></label><input id="horizon-y" type="range" min="0.05" max="0.80" step="0.01"></div>
@@ -113,7 +113,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <label>Batch hold <input id="batch-hold" type="range" min="1" max="12" step="1" value="2"></label>
 <input id="batch-pose-picker" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden>
 </div>
-<div class="card">C2 production repair: fit stills to a path, then clock the pose run. At 24 FPS and 6 beats/sec each pose holds 4 frames.</div>
+<div class="card">C3 production repair: use the path controls for straight or curved trails, then build away/toward walks with the cadence controls in one click.</div>
 </aside>
 </main>
 <script src="./app.js"></script>
@@ -129,5 +129,6 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <script src="./b13-video-export.js"></script>
 <script src="./c1-path-motion.js"></script>
 <script src="./c2-walk-cadence.js"></script>
+<script src="./c3-walk-builder.js"></script>
 </body>
 </html>
