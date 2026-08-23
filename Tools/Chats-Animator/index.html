@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Wave Video Maker — B11</title>
+<title>One-Wave Video Maker — B13</title>
 <style>
 :root{font-family:system-ui,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;background:#101114}
 header{padding:18px 22px;border-bottom:1px solid #343741;background:#17191f}h1{margin:0 0 6px;font-size:24px}.sub{margin:0;color:#b8bdc8}
@@ -36,10 +36,10 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <body>
 <header>
 <h1>CHATGPT PROJECT — ONE-WAVE VIDEO MAKER</h1>
-<p class="sub">B11: import a soundtrack/dialogue track and keep it synchronized with reel playback.</p>
+<p class="sub">B13: the reel now exports real WebM video with frame holds, camera motion, and optional audio.</p>
 <div class="status-row">
-<span class="pill">Phase B — Background / Scene</span>
-<span class="pill">B11 — Audio track + reel sync</span>
+<span class="pill">Phase B — Production Engine</span>
+<span class="pill">B13 — Video export</span>
 <span class="pill pass">RUNTIME PASS</span>
 </div>
 </header>
@@ -86,7 +86,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 </div>
 </section>
 <aside>
-<h2>B11 reel + audio</h2>
+<h2>B13 production reel</h2>
 <div class="card">The grid appears only while calibration or placement/sizing mode is active. Finishing placement hides it again.</div>
 <div class="section-title">Calibration</div>
 <div class="control"><label><span>Horizon</span><span id="horizon-y-value">0.36</span></label><input id="horizon-y" type="range" min="0.05" max="0.80" step="0.01"></div>
@@ -113,7 +113,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <label>Batch hold <input id="batch-hold" type="range" min="1" max="12" step="1" value="2"></label>
 <input id="batch-pose-picker" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden>
 </div>
-<div class="card">B11 adds soundtrack/dialogue playback. Camera animation and video export are the next production-output steps; tweening stays later.</div>
+<div class="card">B13 is the first complete production-output checkpoint: build the reel, add audio, set camera per frame, then export a WebM. Next step is to use it on a real short scene before adding more engine features.</div>
 </aside>
 </main>
 <script src="./app.js"></script>
@@ -125,5 +125,7 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <script src="./b9-sprite-sheet-slicer.js"></script>
 <script src="./b10-project-save-load.js"></script>
 <script src="./b11-audio-track.js"></script>
+<script src="./b12-camera-motion.js"></script>
+<script src="./b13-video-export.js"></script>
 </body>
 </html>
