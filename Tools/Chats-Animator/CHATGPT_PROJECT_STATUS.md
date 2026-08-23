@@ -1,63 +1,58 @@
 # CHATGPT PROJECT — ONE-WAVE VIDEO MAKER
 
 ## CURRENT STEP
-**B9 — Sprite-sheet slicer / pose-sheet extraction**
+**B10 — Project save / load**
 
 ## STATUS
-**STATIC PASS — syntax verified; browser smoke test still required**
+**RUNTIME PASS**
 
 ## HARD START
-B8 batch PNG pose import PASS.
+B9 sprite-sheet slicer runtime PASS.
 
-## REPAIR COMPLETED BEFORE B9
-The GitHub backup had the B8 HTML shell and branch notes but was missing the JavaScript runtime files referenced by the page.
+## B9 RUNTIME GATE CLEARED
+B9 was exercised inside Chromium through Playwright using the actual slicer logic and a generated 1x4 sprite sheet containing three opaque pose cells and one fully transparent blank cell.
 
-Restored:
-- `app.js`
-- `b4-frame-reel.js`
-- `b5-pose-editing.js`
-- `b6-onion-skin.js`
-- `b7-playback.js`
-- `b8-batch-pose-import.js`
+Runtime result:
+- 3 nonblank cells extracted into 3 consecutive reel frames;
+- blank transparent cell skipped;
+- first extracted pose became active;
+- 2x frame holds preserved;
+- character X, feet/base depth, manual scale, background, and calibration preserved;
+- extracted artwork became PNG data URLs;
+- zero browser page errors.
 
-## B9 WHAT CHANGED
-- Added `b9-sprite-sheet-slicer.js`.
-- Added sprite/pose-sheet file picker.
-- Added configurable sheet rows and columns, 1–16 each.
-- Added selectable default hold length for extracted poses.
-- Sheet cells extract left-to-right, top-to-bottom.
-- Fully transparent/blank cells are skipped.
-- Extracted cells become PNG pose artwork on consecutive reel frames after the current frame.
-- Selected character/prop identity is preserved.
-- Background and calibration are preserved.
-- Character/prop X position is preserved.
-- Feet/base depth is preserved.
-- Manual scale trim is preserved.
-- First extracted pose becomes the active frame.
+## B10 WHAT CHANGED
+- Added `b10-project-save-load.js`.
+- Added Save Project and Open Project controls.
+- Project format is readable JSON stored as `.owav`.
+- Complete reel frames and snapshots are serialized.
+- FPS and active-frame index are serialized.
+- Save uses one downloadable project file.
+- Load validates before replacing the live reel.
+- FPS is restored through the existing playback control.
+- Malformed project files fail safely without modifying the current reel.
 
-## INTEGRITY REPAIR FOUND DURING B9 GATE
-A deterministic B5 frame-reorder bug was found during code-level smoke testing: moving a frame left/right could overwrite the neighboring frame snapshot because `restore()` captured the currently indexed frame after the array swap.
-
-Fixed in `b5-pose-editing.js` by capturing before the swap and then switching the active index through `setFrames()` without a second destructive capture.
-
-This repair protects existing frame data while preserving B5 behavior.
+## B10 RUNTIME VERIFICATION
+Chromium/Playwright bench test passed:
+- serialized frame order, holds, FPS, and active index correctly;
+- restored a 3-frame project at FPS 18 and active frame 3;
+- malformed frame data was rejected;
+- live frame count remained unchanged after malformed rejection;
+- `.owav` download was produced;
+- zero browser page errors.
 
 ## PROTECTED WORKING FEATURES
-B1 through B8 remain separate patch stages, including frame holds, pose editing, onion skin, playback, and batch pose import.
+B1 through B9 remain intact: background/calibration, scene placement/depth sizing, frame reel/holds, pose editing, onion skin, playback, batch pose import, sprite-sheet slicing, and the B5 frame-reorder integrity repair.
 
 ## HARD STOP
-B9 does not yet:
-- tween poses;
-- auto-generate new artwork;
-- auto-detect action names;
+B10 does not yet:
 - add audio;
-- add camera animation;
-- export video.
-
-## VERIFICATION
-All reconstructed B1–B8 JavaScript and B9 pass `node --check` from the reconstructed checkpoint.
-
-A real browser interaction test is still required before B9 can be called fully bench-tested.
+- animate camera;
+- tween poses;
+- export finished video.
 
 ## NEXT PERMITTED STEP
-**Browser smoke-test B9. Do not begin B10 until B9 gets a runtime PASS.**
+**B11 — Audio track import + timeline sync.**
+
+Production-output priority after B11:
+**B12 camera movement → B13 video export.** Tweening stays later so the animator can produce real videos sooner.
