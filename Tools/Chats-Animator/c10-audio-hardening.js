@@ -21,10 +21,7 @@
     const character = A.voiceLab.state.characters.find(c => c.id === clip.characterId);
     const recipe = character?.recipe || {};
     const basePitch = Number(recipe.pitch) || 0;
-    const tail = Math.max(
-      Number(recipe.delayMix) > 0 ? 0.35 : 0,
-      Number(recipe.reverb) > 0 ? 0.55 : 0
-    );
+    const tail = Math.max(Number(recipe.delayMix) > 0 ? 0.35 : 0, Number(recipe.reverb) > 0 ? 0.55 : 0);
     let earliest = Infinity;
     let latest = -Infinity;
     for (let i = 0; i < (clip.layers || []).length; i += 1) {
@@ -52,11 +49,8 @@
     const sorted = windows.filter(Boolean).slice().sort((a, b) => a.start - b.start);
     const merged = [];
     for (const item of sorted) {
-      if (!merged.length || item.start > merged[merged.length - 1].end + bridgeGap) {
-        merged.push({ start: item.start, end: item.end });
-      } else {
-        merged[merged.length - 1].end = Math.max(merged[merged.length - 1].end, item.end);
-      }
+      if (!merged.length || item.start > merged[merged.length - 1].end + bridgeGap) merged.push({ start: item.start, end: item.end });
+      else merged[merged.length - 1].end = Math.max(merged[merged.length - 1].end, item.end);
     }
     return merged;
   }
@@ -74,54 +68,64 @@
     return headroom;
   }
 
-  async function makeHardenedMix(stream) {
+  async function prepareMix({ stream = null, speaker = false } = {}) {
     const context = new AudioContext();
-    const destination = context.createMediaStreamDestination();
+    if (context.state === 'running') {
+      try { await context.suspend(); } catch (_) {}
+    }
+    const destination = speaker ? context.destination : context.createMediaStreamDestination();
     const master = makeMaster(context, destination);
-    const sources = [];
-    await context.resume();
-    const base = context.currentTime + 0.05;
     const clips = (A.voiceLab.state.clips || []).filter(c => !c.muted);
     const rawWindows = [];
     for (const clip of clips) rawWindows.push(await clipWindow(context, clip));
     const attack = Math.max(0.01, Number(A.dialogueEditor.state.attackMs) / 1000 || 0.08);
     const release = Math.max(0.05, Number(A.dialogueEditor.state.releaseMs) / 1000 || 0.3);
     const windows = mergeWindows(rawWindows, attack + release);
+    const musicBuffer = A.audio?.track?.src ? await decode(context, A.audio.track.src) : null;
+    const sources = [];
+    let started = false;
 
-    if (A.audio?.track?.src) {
-      const buffer = await decode(context, A.audio.track.src);
-      const source = context.createBufferSource();
-      source.buffer = buffer;
-      const musicGain = context.createGain();
-      musicGain.gain.setValueAtTime(1, base);
-      const duck = dbToGain(-Math.max(0, Number(A.dialogueEditor.state.duckDb) || 0));
-      for (const win of windows) {
-        const start = base + win.start;
-        const end = base + win.end;
-        const attackStart = Math.max(base, start - attack);
-        musicGain.gain.setValueAtTime(1, attackStart);
-        musicGain.gain.linearRampToValueAtTime(duck, start);
-        musicGain.gain.setValueAtTime(duck, end);
-        musicGain.gain.linearRampToValueAtTime(1, end + release);
-      }
-      source.connect(musicGain).connect(master);
-      source.start(base);
-      sources.push(source);
+    if (!speaker) {
+      const audioTrack = destination.stream.getAudioTracks()[0];
+      if (audioTrack && stream) stream.addTrack(audioTrack);
     }
 
-    for (const clip of clips) sources.push(...await A.dialogueEditor.scheduleEditedClip(context, master, clip, base));
-    const audioTrack = destination.stream.getAudioTracks()[0];
-    if (audioTrack) stream.addTrack(audioTrack);
-    return {
-      context,
-      sources,
-      duckWindows: windows,
-      stop() {
-        for (const source of sources) {
-          try { source.stop(); } catch (_) {}
+    async function start() {
+      if (started) return;
+      started = true;
+      const base = context.currentTime + 0.03;
+
+      if (musicBuffer) {
+        const source = context.createBufferSource();
+        source.buffer = musicBuffer;
+        const musicGain = context.createGain();
+        musicGain.gain.setValueAtTime(1, base);
+        const duck = dbToGain(-Math.max(0, Number(A.dialogueEditor.state.duckDb) || 0));
+        for (const win of windows) {
+          const startAt = base + win.start;
+          const endAt = base + win.end;
+          const attackStart = Math.max(base, startAt - attack);
+          musicGain.gain.setValueAtTime(1, attackStart);
+          musicGain.gain.linearRampToValueAtTime(duck, startAt);
+          musicGain.gain.setValueAtTime(duck, endAt);
+          musicGain.gain.linearRampToValueAtTime(1, endAt + release);
         }
+        source.connect(musicGain).connect(master);
+        source.start(base);
+        sources.push(source);
       }
-    };
+
+      for (const clip of clips) sources.push(...await A.dialogueEditor.scheduleEditedClip(context, master, clip, base));
+      await context.resume();
+    }
+
+    function stop() {
+      for (const source of sources) {
+        try { source.stop(); } catch (_) {}
+      }
+    }
+
+    return { context, sources, duckWindows: windows, start, stop };
   }
 
   function loadSafety() {
@@ -132,8 +136,13 @@
     document.body.appendChild(script);
   }
 
-  A.voiceLab.makeCombinedAudioTrack = makeHardenedMix;
-  A.audioHardening = { clipWindow, mergeWindows, makeHardenedMix };
+  A.voiceLab.makeCombinedAudioTrack = (stream) => prepareMix({ stream, speaker: false });
+  A.audioHardening = {
+    clipWindow,
+    mergeWindows,
+    prepareMix,
+    prepareSpeakerMix: () => prepareMix({ speaker: true })
+  };
   A.status('Audio mix hardening loaded');
   loadSafety();
 })();
