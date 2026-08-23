@@ -18,6 +18,14 @@
   async function clipWindow(context, clip) {
     A.dialogueEditor.ensureClip(clip);
     if (clip.muted) return null;
+    const character = A.voiceLab.state.characters.find(c => c.id === clip.characterId);
+    const recipe = character?.recipe || {};
+    const basePitch = Number(recipe.pitch) || 0;
+    const tail = Math.max(
+      Number(recipe.delayMix) > 0 ? 0.35 : 0,
+      Number(recipe.reverb) > 0 ? 0.55 : 0
+    );
+
     let earliest = Infinity;
     let latest = -Infinity;
     for (let i = 0; i < (clip.layers || []).length; i += 1) {
@@ -30,13 +38,15 @@
       const available = Math.max(0, buffer.duration - trimIn - trimOut);
       if (!available) continue;
       const delay = Math.max(0, Number(setting.delayMs) || 0) / 1000;
+      const cents = Math.max(-2400, Math.min(2400, basePitch + (Number(setting.detune) || 0)));
+      const playbackRate = Math.pow(2, cents / 1200);
+      const wallDuration = available / Math.max(0.25, playbackRate);
       earliest = Math.min(earliest, delay);
-      latest = Math.max(latest, delay + available);
+      latest = Math.max(latest, delay + wallDuration + tail);
     }
     if (!Number.isFinite(earliest) || !Number.isFinite(latest)) return null;
-    const start = Math.max(0, Number(clip.start) || 0) + earliest;
-    const end = Math.max(start, Math.max(0, Number(clip.start) || 0) + latest);
-    return { start, end };
+    const baseStart = Math.max(0, Number(clip.start) || 0);
+    return { start: baseStart + earliest, end: baseStart + Math.max(earliest, latest) };
   }
 
   function mergeWindows(windows, bridgeGap = 0) {
@@ -79,7 +89,6 @@
 
     const attack = Math.max(0.01, Number(A.dialogueEditor.state.attackMs) / 1000 || 0.08);
     const release = Math.max(0.05, Number(A.dialogueEditor.state.releaseMs) / 1000 || 0.3);
-    // If speech gaps are shorter than the recovery envelope, keep music down instead of pumping.
     const windows = mergeWindows(rawWindows, attack + release);
 
     if (A.audio?.track?.src) {
