@@ -1,0 +1,7 @@
+(() => {
+  const reel=window.b4Reel, $=(id)=>document.getElementById(id); if(!reel) throw new Error('B6 requires B4');
+  const stage=$('scene-stage'); let layer=$('onion-layer'); if(!layer){layer=document.createElement('div');layer.id='onion-layer';stage.insertBefore(layer,$('asset-layer'));}
+  function drawFrame(frame, cls){ if(!frame?.snapshot?.assets)return; for(const a of frame.snapshot.assets){ const img=document.createElement('img'); img.className=`onion-asset ${cls}`; img.src=a.dataUrl; img.style.left=`${a.x*100}%`; img.style.bottom=`${(1-a.groundY)*100}%`; const c=frame.snapshot.calibration||{}; const span=Math.max(.0001,(c.groundNearY??.92)-(c.groundFarY??.48)); const t=Math.max(0,Math.min(1,(a.groundY-(c.groundFarY??.48))/span)); const auto=(c.farScale??.35)+((c.nearScale??1)-(c.farScale??.35))*t; img.style.width=`${Math.max(3,22*auto*(a.manualScale||1))}%`; img.style.transform='translate(-50%,0)'; layer.appendChild(img);} }
+  function render(){ layer.innerHTML=''; if($('onion-prev').checked)drawFrame(reel.frames[reel.activeIndex-1],'onion-prev'); if($('onion-next').checked)drawFrame(reel.frames[reel.activeIndex+1],'onion-next'); }
+  $('onion-prev').addEventListener('change',render); $('onion-next').addEventListener('change',render); window.addEventListener('onewave:frame-selected',render); window.addEventListener('onewave:reel-changed',render); window.b6RenderOnion=render; render();
+})();
