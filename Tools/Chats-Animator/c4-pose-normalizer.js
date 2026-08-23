@@ -132,4 +132,12 @@
   });
 
   A.poseNormalizer = { normalizeRun, normalizeSource, alphaBounds };
+
+  // Keep the original B/C load order stable. Voice Lab is additive and loads after C4.
+  if (!window.Animator.voiceLab && !document.querySelector('script[data-c6-voice-lab]')) {
+    const script = document.createElement('script');
+    script.src = './c6-voice-lab.js';
+    script.dataset.c6VoiceLab = 'true';
+    document.body.appendChild(script);
+  }
 })();
