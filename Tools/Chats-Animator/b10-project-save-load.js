@@ -14,7 +14,7 @@
   panel.className = 'card';
   panel.innerHTML = `
     <strong>Project save / load</strong><br>
-    Save the complete reel, embedded artwork, calibration, placement, holds, and FPS to one project file.
+    Save the complete reel, embedded artwork, calibration, placement, holds, FPS, and audio to one project file.
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
       <button id="save-project" type="button">Save Project</button>
       <button id="load-project" type="button">Open Project</button>
@@ -31,7 +31,8 @@
       savedAt: new Date().toISOString(),
       fps: A.playback?.fps || Number($('fps-control')?.value || 24),
       activeIndex: R.activeIndex,
-      frames: A.clone(R.frames)
+      frames: A.clone(R.frames),
+      audioTrack: A.audio?.track || null
     };
   }
 
@@ -42,6 +43,7 @@
       if (!frame || !frame.snapshot || !Array.isArray(frame.snapshot.assets)) throw new Error('Malformed frame data');
       if (!Number.isFinite(Number(frame.hold)) || Number(frame.hold) < 1) throw new Error('Invalid frame hold');
     }
+    if (data.audioTrack !== undefined && data.audioTrack !== null && (!data.audioTrack.name || !data.audioTrack.src)) throw new Error('Malformed audio track');
     return data;
   }
 
@@ -70,6 +72,7 @@
       $('fps-control').value = String(fps);
       $('fps-control').dispatchEvent(new Event('input', { bubbles: true }));
     }
+    if (A.audio?.loadTrack) A.audio.loadTrack(project.audioTrack || null);
     A.status(`Project loaded — ${frames.length} frame${frames.length === 1 ? '' : 's'}`);
   }
 
