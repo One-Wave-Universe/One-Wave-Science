@@ -1,69 +1,66 @@
 # CHATGPT PROJECT — ONE-WAVE VIDEO MAKER
 
 ## CURRENT STEP
-**C4 — Pre-layout pose normalization + production walk pipeline**
+**C5 — Forest-path still-frame production test**
 
 ## STATUS
-**RUNTIME PASS**
+**PASS — real production output created**
 
 ## HARD START
-B13 video export runtime PASS and first forest walk production test.
-
-## PRODUCTION TEST LESSONS
-The forest walk proved the engine could make a real video, but exposed three production problems:
-- manual size stations look jumpy;
-- inconsistent pose timing makes the walk rhythm uneven;
-- mismatched source image canvases/padding can make feet appear to jump even when editor depth is correct.
+B13 video export runtime PASS plus C1–C4 production repair tools.
 
 ## C1 — DETERMINISTIC PATH MOTION
 Runtime PASS.
-- Existing consecutive pose stills can be fitted to start/end X and feet depth.
-- Feet/base depth drives the existing calibrated automatic perspective size.
-- Smoothstep easing removes abrupt near/far depth jumps.
-- Reverse path builds the toward-camera return motion.
-- Midpoint X control now supports a curved trail using a quadratic path.
+- Existing consecutive pose stills fit to start/end X and feet depth.
+- Feet/base depth drives calibrated perspective size.
+- Smoothstep easing supported.
+- Reverse path supported.
+- Curved trail midpoint supported.
 - Pose artwork and manual scale remain untouched.
 
 ## C2 — WALK CADENCE
 Runtime PASS.
-- Project FPS is converted into even pose holds.
-- Default production clock: 24 FPS / 6 pose beats per second = 4-frame holds.
-- Optional turnaround multiplier gives the final pose a longer hold.
-- Verified 7-pose test produced 4,4,4,4,4,4,12 holds without altering pose art.
+- Default clock: 24 FPS / 6 pose beats = 4-frame holds.
+- Optional longer turnaround hold.
 
 ## C3 — ONE-CLICK WALK BUILDER
 Runtime PASS.
-- Synchronizes path pose count with cadence pose count.
-- Build Walk Away calls C1 forward path then C2 cadence.
-- Build Walk Toward calls C1 reverse path then C2 cadence.
-- Designed to start on the first pose frame of an imported run.
+- Walk Away and Walk Toward coordinate path fitting + cadence.
 
 ## C4 — PRE-LAYOUT POSE NORMALIZER
 Runtime PASS.
-- Trims transparent padding from selected pose artwork across a consecutive run.
-- Resizes each pose to one configurable square transparent canvas.
-- Centers visible artwork horizontally.
-- Bottom-anchors visible artwork to one consistent pixel line.
-- Configurable subject height and bottom margin.
-- Deliberately mismatched test images all normalized to 512×512 with the same 15 px visible bottom margin and zero browser errors.
+- Trims transparent padding.
+- Resizes to one consistent canvas.
+- Centers artwork horizontally.
+- Bottom-anchors visible feet before reel layout.
 
-## WORKING PRODUCTION ORDER
-1. Import pose stills / sprite sheet.
-2. **Normalize the pose canvases first.**
-3. Fit the pose run to the straight/curved path and feet-depth range.
-4. Apply cadence, or use the one-click walk builder.
-5. Add audio.
-6. Add per-frame camera movement.
-7. Save `.owav` project.
-8. Export WebM video.
-9. Inspect the real clip and repair only what production exposes.
+## C5 — FOREST PATH PRODUCTION TEST
+PASS.
+- 14 source walk stills normalized to 1024×768 before layout.
+- 72 total clock frames at 24 FPS.
+- 4-frame pose holds at a 6-beat walk clock.
+- 12-frame turnaround hold.
+- Final near pose gets a short settle hold.
+- MP4, WebM, and GIF production outputs created.
+- No optical-flow/synthetic in-between artwork used.
+
+## PRODUCTION DECISION
+The canonical animator motion method remains authored stills + explicit reel timing + calibrated depth/size changes. Synthetic interpolation is optional later, not the default.
 
 ## PROTECTED WORKING FEATURES
-B1 through B13 remain intact: background/calibration, placement/depth sizing, frame reel/holds, pose editing, onion skin, playback, batch pose import, sprite-sheet slicing, project save/load, audio, per-frame camera, and valid WebM video export with optional Opus audio.
+B1 through B13 remain intact: background/calibration, placement/depth sizing, reel/holds, pose editing, onion skin, playback, batch import, sprite-sheet slicing, save/load, audio, per-frame camera, and valid WebM export with optional Opus audio.
 
-C1 through C4 are additive production tools and do not replace the protected B-stage engine.
+C1 through C5 are additive production tools/tests and do not replace the protected B-stage engine.
 
 ## NEXT PERMITTED STEP
-**C5 — Run the improved forest-path production test through the new Normalization → Path → Cadence pipeline and compare it against the first clip.**
+**C6 — First dialogue-scene production test.**
 
-If C5 passes, continue into the first dialogue/episode scene instead of adding speculative engine features.
+Build a real short scene with:
+1. background;
+2. normalized character poses;
+3. reel timing;
+4. dialogue/music;
+5. camera movement only where useful;
+6. saved `.owav` project;
+7. exported video;
+8. repair only what that real scene exposes.
