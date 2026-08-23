@@ -5,96 +5,51 @@
   const button = document.getElementById('play-button');
   if (!button) return;
 
-  let context = null;
-  let sources = [];
+  let prepared = null;
   let wasPlaying = false;
+  let starting = false;
 
-  const dbToGain = (db) => Math.pow(10, Number(db) / 20);
-  const cache = new Map();
-
-  async function decode(ctx, src) {
-    const key = `${ctx.sampleRate}:${src}`;
-    if (cache.has(key)) return cache.get(key);
-    const bytes = await (await fetch(src)).arrayBuffer();
-    const buffer = await ctx.decodeAudioData(bytes.slice(0));
-    cache.set(key, buffer);
-    return buffer;
-  }
-
-  function stopMix() {
-    for (const source of sources) {
-      try { source.stop(); } catch (_) {}
-    }
-    sources = [];
-    if (context) {
-      try { context.close(); } catch (_) {}
-      context = null;
+  async function stopMix() {
+    if (prepared) {
+      prepared.stop?.();
+      try { await prepared.context?.close?.(); } catch (_) {}
+      prepared = null;
     }
   }
 
-  function makeMaster(ctx) {
-    const headroom = ctx.createGain();
-    headroom.gain.value = 0.88;
-    const limiter = ctx.createDynamicsCompressor();
-    limiter.threshold.value = -2;
-    limiter.knee.value = 0;
-    limiter.ratio.value = 20;
-    limiter.attack.value = 0.003;
-    limiter.release.value = 0.08;
-    headroom.connect(limiter).connect(ctx.destination);
-    return headroom;
-  }
-
-  async function startMix() {
-    stopMix();
-    context = new AudioContext();
-    await context.resume();
-    const master = makeMaster(context);
-    const base = context.currentTime + 0.05;
-    const clips = (A.voiceLab.state.clips || []).filter(c => !c.muted);
-    const attack = Math.max(0.01, Number(A.dialogueEditor.state.attackMs) / 1000 || 0.08);
-    const release = Math.max(0.05, Number(A.dialogueEditor.state.releaseMs) / 1000 || 0.3);
-    const rawWindows = [];
-    for (const clip of clips) rawWindows.push(await A.audioHardening.clipWindow(context, clip));
-    const windows = A.audioHardening.mergeWindows(rawWindows, attack + release);
-
-    if (A.audio?.track?.src) {
-      const buffer = await decode(context, A.audio.track.src);
-      const source = context.createBufferSource();
-      source.buffer = buffer;
-      const gain = context.createGain();
-      gain.gain.setValueAtTime(1, base);
-      const duck = dbToGain(-Math.max(0, Number(A.dialogueEditor.state.duckDb) || 0));
-      for (const win of windows) {
-        const start = base + win.start;
-        const end = base + win.end;
-        gain.gain.setValueAtTime(1, Math.max(base, start - attack));
-        gain.gain.linearRampToValueAtTime(duck, start);
-        gain.gain.setValueAtTime(duck, end);
-        gain.gain.linearRampToValueAtTime(1, end + release);
-      }
-      source.connect(gain).connect(master);
-      source.start(base);
-      sources.push(source);
+  async function prepareAndPlay() {
+    if (starting) return;
+    starting = true;
+    const oldText = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Loading Audio…';
+    try {
+      await stopMix();
+      prepared = await A.audioHardening.prepareSpeakerMix();
+      A.playback.play();
+      await prepared.start();
+      A.status('Playback using final-mix audio path');
+    } catch (error) {
+      console.error(error);
+      if (A.playback.playing) A.playback.stop();
+      await stopMix();
+      A.status(`Final-mix preview failed: ${error.message}`);
+    } finally {
+      starting = false;
+      button.disabled = false;
+      if (!A.playback.playing) button.textContent = oldText === 'Stop' ? 'Play' : oldText;
     }
-
-    for (const clip of clips) sources.push(...await A.dialogueEditor.scheduleEditedClip(context, master, clip, base));
-    A.status('Playback using final-mix audio path');
   }
 
   function capturePlayback(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (starting) return;
     if (A.playback.playing) {
       A.playback.stop();
       stopMix();
     } else {
-      A.playback.play();
-      startMix().catch(error => {
-        console.error(error);
-        stopMix();
-        A.status(`Final-mix preview failed: ${error.message}`);
-      });
+      prepareAndPlay();
     }
   }
 
@@ -111,6 +66,6 @@
     stopMix();
   });
 
-  A.previewParity = { startMix, stopMix };
+  A.previewParity = { prepareAndPlay, stopMix };
   A.status('Preview/export audio parity loaded');
 })();
