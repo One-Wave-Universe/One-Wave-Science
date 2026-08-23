@@ -1,44 +1,38 @@
 # CHATGPT PROJECT — ONE-WAVE VIDEO MAKER
 
 ## CURRENT STEP
-**B8 — Batch PNG pose import**
+**B8 — Runnable checkpoint restoration**
 
 ## STATUS
-**PASS — static/syntax verified**
+**PASS — repository runtime restored; static/syntax verified**
+
+## ACTIVE BRANCH
+`animator/b8-runnable-restore`
 
 ## HARD START
-B7 repaired playback PASS.
+The B8 HTML shell and documentation existed in the repository, but the six JavaScript implementation files referenced by `index.html` were missing.
 
 ## WHAT CHANGED
-- Added multi-file PNG/image pose picker.
-- Batch files sort naturally by filename.
-- Selected character/prop identity is used as the batch target.
-- Imported poses become consecutive reel frames after the current frame.
-- Background is preserved.
-- Background calibration is preserved.
-- Character/prop X position is preserved.
-- Feet/base depth is preserved.
-- Manual scale trim is preserved.
-- Each imported frame receives a selectable default hold length.
-- First imported pose becomes the active frame.
+Restored the complete B8 runtime surface:
+- `app.js` — background/calibration/character/prop placement core;
+- `b4-frame-reel.js` — ordered still-frame reel, snapshots, holds;
+- `b5-pose-editing.js` — insert/reorder/replace/copy pose operations;
+- `b6-onion-skin.js` — neighboring-frame onion references;
+- `b7-playback.js` — 1–60 FPS playback with hold expansion;
+- `b8-batch-pose-import.js` — naturally sorted multi-image pose import.
 
-## WHY
-This removes the one-PNG-at-a-time bottleneck and starts the Lazy Human production workflow.
+## VERIFICATION
+All six reconstructed JavaScript files passed `node --check` before repository write.
 
-A folder like:
-`walk_01.png ... walk_12.png`
-can now become an ordered pose sequence in one import action.
+The branch directory was then fetched from GitHub to verify the restored runtime files and branch control record are present.
+
+Full browser click-through remains pending; this is not being mislabeled as browser-runtime verification.
 
 ## PROTECTED WORKING FEATURES
-B1 through B7 remain intact, including playback and frame holds.
+B1 through B8 contracts are preserved. No B9 feature was added during restoration.
 
 ## HARD STOP
-B8 does not yet:
-- slice one sprite sheet into cells;
-- auto-generate new artwork;
-- auto-detect action names;
-- tween poses;
-- add audio/camera/export.
+This branch stops at a complete repository-backed B8 runtime checkpoint.
 
 ## NEXT PERMITTED STEP
-**B9 — Sprite-sheet slicer / pose-sheet extraction**
+Create a new branch for **B9 — Sprite-sheet slicer / pose-sheet extraction**.
