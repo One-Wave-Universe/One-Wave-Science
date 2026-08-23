@@ -89,5 +89,13 @@
   $('c15-category').addEventListener('change',render); $('c15-direction').addEventListener('change',render); $('c15-search').addEventListener('input',render); $('c15-character').addEventListener('change',e=>{atlas.character=e.target.value.trim()||atlas.character;}); $('c15-save').addEventListener('click',save); $('c15-open').addEventListener('click',()=>$('c15-file').click());
   $('c15-file').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{await openFile(file);}catch(err){console.error(err);A.status(`Atlas open failed: ${err.message}`);}finally{e.target.value='';}});
 
-  A.motionAtlas={get atlas(){return A.clone(atlas);},addSequence,captureReelRange,insertSequence,save,openFile,loadData,validate,render}; render();
+  A.motionAtlas={get atlas(){return A.clone(atlas);},addSequence,captureReelRange,insertSequence,save,openFile,loadData,validate,render};
+  render();
+
+  if (!A.motionRoster && !document.querySelector('script[data-c16-motion-roster]')) {
+    const script = document.createElement('script');
+    script.src = './c16-character-motion-roster.js';
+    script.setAttribute('data-c16-motion-roster','true');
+    document.body.appendChild(script);
+  }
 })();
