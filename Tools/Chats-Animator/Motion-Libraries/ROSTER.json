@@ -1,0 +1,20 @@
+{
+  "format": "one-wave-motion-roster",
+  "version": 1,
+  "fps": 24,
+  "characters": [
+    {"id":"gr","name":"Goblin Raccoon","file":"goblin-raccoon.owatlas","variant":"base"},
+    {"id":"nexus","name":"Nexus","file":"nexus.owatlas","variant":"base"},
+    {"id":"scales","name":"Scales","file":"scales.owatlas","variant":"base"},
+    {"id":"noobs","name":"Noobs","file":"noobs.owatlas","variant":"base"},
+    {"id":"cerberus-giant","name":"Cerberus Giant","file":"cerberus-giant.owatlas","variant":"giant"},
+    {"id":"cerberus-modulated-down","name":"Cerberus Modulated-Down","file":"cerberus-modulated-down.owatlas","variant":"modulated-down"}
+  ],
+  "libraryPolicy": {
+    "timelineFps": 24,
+    "drawingsMayHold": [1,2,3,4,6,8,12,24],
+    "separateCharacterFiles": true,
+    "preserveVariantSpecificMotion": true,
+    "reusableLibrarySeparateFromActiveScene": true
+  }
+}
