@@ -62,13 +62,11 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = '#090a0d';
     ctx.fillRect(0, 0, width, height);
-
     const camera = snapshot.camera || { x: 0, y: 0, zoom: 1 };
     ctx.save();
     ctx.translate(width / 2 + (Number(camera.x) || 0) * width / 100, height / 2 + (Number(camera.y) || 0) * height / 100);
     ctx.scale(Number(camera.zoom) || 1, Number(camera.zoom) || 1);
     ctx.translate(-width / 2, -height / 2);
-
     if (snapshot.background?.src) drawContained(await loadImage(snapshot.background.src), width, height);
     const assets = [...(snapshot.assets || [])].sort((a, b) => Number(a.groundY) - Number(b.groundY));
     for (const asset of assets) {
@@ -116,7 +114,6 @@
       exportAudio = A.voiceLab?.makeCombinedAudioTrack
         ? await A.voiceLab.makeCombinedAudioTrack(stream)
         : await makeFallbackAudioTrack(stream);
-
       const chunks = [];
       const recorder = new MediaRecorder(stream, { mimeType });
       recorder.ondataavailable = (event) => { if (event.data?.size) chunks.push(event.data); };
@@ -154,7 +151,7 @@
       console.error(error);
       exportAudio?.stop?.();
       if (exportAudio?.element) exportAudio.element.pause();
-      await exportAudio?.context?.close?.().catch?.(() => null);
+      try { await exportAudio?.context?.close?.(); } catch (_) {}
       $('export-meta').textContent = 'Export failed';
       A.status(`Video export failed: ${error.message}`);
     } finally {
@@ -162,6 +159,24 @@
     }
   }
 
+  function loadScript(src, marker, done) {
+    if (document.querySelector(`script[${marker}]`)) return done?.();
+    const script = document.createElement('script');
+    script.src = src;
+    script.setAttribute(marker, 'true');
+    if (done) script.onload = done;
+    document.body.appendChild(script);
+  }
+
+  function loadVoicePipeline() {
+    const afterC6 = () => loadScript('./c7-dialogue-editor.js', 'data-c7-dialogue-editor', () => {
+      loadScript('./c8-dialogue-frame-sync.js', 'data-c8-dialogue-sync');
+    });
+    if (A.voiceLab) afterC6();
+    else loadScript('./c6-voice-lab.js', 'data-c6-voice-lab', afterC6);
+  }
+
   $('export-webm')?.addEventListener('click', exportVideo);
   A.videoExport = { exportVideo, drawSnapshot, canvas };
+  loadVoicePipeline();
 })();
