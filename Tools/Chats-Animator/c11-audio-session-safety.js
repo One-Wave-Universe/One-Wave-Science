@@ -92,7 +92,16 @@
     };
   }
 
+  function loadParity() {
+    if (A.previewParity || document.querySelector('script[data-c12-preview-parity]')) return;
+    const script = document.createElement('script');
+    script.src = './c12-preview-export-parity.js';
+    script.setAttribute('data-c12-preview-parity', 'true');
+    document.body.appendChild(script);
+  }
+
   sanitizeAll();
   A.audioSessionSafety = { sanitizeAll, sanitizeRecipe, sanitizeClip, sanitizeLayerSetting };
   A.status('Audio session safety loaded');
+  loadParity();
 })();
