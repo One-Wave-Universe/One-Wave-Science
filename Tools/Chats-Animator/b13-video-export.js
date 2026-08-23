@@ -11,7 +11,7 @@
   panel.className = 'card';
   panel.innerHTML = `
     <strong>Video export</strong><br>
-    Render the reel, frame holds, per-frame camera, and optional B11 audio into a downloadable WebM video.
+    Render the reel, frame holds, per-frame camera, soundtrack, and timed Voice Lab dialogue into a downloadable WebM video.
     <div class="control"><label><span>Width</span><span id="export-width-value">1280</span></label><input id="export-width" type="range" min="320" max="1920" step="160" value="1280"></div>
     <button id="export-webm" type="button">Export WebM Video</button>
     <div id="export-meta" style="margin-top:8px">Ready</div>
@@ -70,7 +70,6 @@
     ctx.translate(-width / 2, -height / 2);
 
     if (snapshot.background?.src) drawContained(await loadImage(snapshot.background.src), width, height);
-
     const assets = [...(snapshot.assets || [])].sort((a, b) => Number(a.groundY) - Number(b.groundY));
     for (const asset of assets) {
       const image = await loadImage(asset.src);
@@ -87,7 +86,7 @@
 
   function sleep(ms) { return new Promise((resolve) => setTimeout(resolve, ms)); }
 
-  async function makeAudioTrack(stream) {
+  async function makeFallbackAudioTrack(stream) {
     const track = A.audio?.track;
     if (!track?.src || !window.AudioContext) return null;
     const element = new Audio(track.src);
@@ -99,7 +98,7 @@
     const audioTrack = destination.stream.getAudioTracks()[0];
     if (audioTrack) stream.addTrack(audioTrack);
     await context.resume();
-    return { element, context };
+    return { element, context, stop() { element.pause(); } };
   }
 
   async function exportVideo() {
@@ -114,7 +113,10 @@
     const stream = canvas.captureStream(fps);
     let exportAudio = null;
     try {
-      exportAudio = await makeAudioTrack(stream);
+      exportAudio = A.voiceLab?.makeCombinedAudioTrack
+        ? await A.voiceLab.makeCombinedAudioTrack(stream)
+        : await makeFallbackAudioTrack(stream);
+
       const chunks = [];
       const recorder = new MediaRecorder(stream, { mimeType });
       recorder.ondataavailable = (event) => { if (event.data?.size) chunks.push(event.data); };
@@ -134,8 +136,9 @@
       }
       recorder.stop();
       await stopped;
-      exportAudio?.element?.pause();
-      await exportAudio?.context?.close();
+      exportAudio?.stop?.();
+      if (exportAudio?.element) exportAudio.element.pause();
+      await exportAudio?.context?.close?.();
       const blob = new Blob(chunks, { type: recorder.mimeType || 'video/webm' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -146,11 +149,12 @@
       link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 0);
       $('export-meta').textContent = `Exported ${(blob.size / 1024).toFixed(1)} KB`;
-      A.status('WebM video exported');
+      A.status('WebM video exported with final audio mix');
     } catch (error) {
       console.error(error);
-      exportAudio?.element?.pause();
-      await exportAudio?.context?.close().catch(() => null);
+      exportAudio?.stop?.();
+      if (exportAudio?.element) exportAudio.element.pause();
+      await exportAudio?.context?.close?.().catch?.(() => null);
       $('export-meta').textContent = 'Export failed';
       A.status(`Video export failed: ${error.message}`);
     } finally {
