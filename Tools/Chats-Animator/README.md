@@ -1,12 +1,21 @@
 # Chat's Animator — Repository Backup
 
-This directory is the GitHub backup/home for the current ChatGPT-built One-Wave Animator checkpoint while the standalone `Chats-Animatateo` repository is not writable by the GitHub integration.
+This directory is the GitHub backup/home for the current ChatGPT-built One-Wave Animator checkpoint while the standalone `Chats-Animatateo` repository is empty.
 
 ## Current checkpoint
-B8 — Batch PNG Pose Import.
+B9 — Sprite-Sheet Slicer / Pose-Sheet Extraction.
 
 ## Important state
-The current workspace snapshot contains the B1–B8 branch documentation and `index.html`, but the expected JavaScript implementation files are missing from the saved workspace artifact. Do not treat this backup as a fully runnable build until those implementation files are restored and verified.
+The JavaScript runtime chain referenced by `index.html` has been restored in this backup:
+- `app.js`
+- `b4-frame-reel.js`
+- `b5-pose-editing.js`
+- `b6-onion-skin.js`
+- `b7-playback.js`
+- `b8-batch-pose-import.js`
+- `b9-sprite-sheet-slicer.js`
+
+All seven JavaScript files pass static `node --check` syntax verification. A real browser smoke test is still required before B9 is considered runtime-verified.
 
 ## Protected direction
 - Background first, calibrated perspective/depth grid.
@@ -14,7 +23,8 @@ The current workspace snapshot contains the B1–B8 branch documentation and `in
 - Characters/props live in scene/world coordinates.
 - Stop-motion / frame-reel animation with explicit frame holds.
 - Human + AI co-edit the same project state.
-- Next permitted feature after restoration: B9 sprite-sheet slicer / pose-sheet extraction.
+- B8 supports many separate pose PNGs in one import.
+- B9 supports slicing one sprite/pose sheet into consecutive frames.
 
-## Source checkpoint
-Local artifact name: `one_wave_video_maker_B8_batch_pose_import`.
+## Next gate
+Browser smoke-test B9. Do not begin B10 until B9 receives a runtime PASS.
