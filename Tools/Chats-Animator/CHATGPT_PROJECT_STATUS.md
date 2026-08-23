@@ -35,6 +35,13 @@ Restored:
 - Manual scale trim is preserved.
 - First extracted pose becomes the active frame.
 
+## INTEGRITY REPAIR FOUND DURING B9 GATE
+A deterministic B5 frame-reorder bug was found during code-level smoke testing: moving a frame left/right could overwrite the neighboring frame snapshot because `restore()` captured the currently indexed frame after the array swap.
+
+Fixed in `b5-pose-editing.js` by capturing before the swap and then switching the active index through `setFrames()` without a second destructive capture.
+
+This repair protects existing frame data while preserving B5 behavior.
+
 ## PROTECTED WORKING FEATURES
 B1 through B8 remain separate patch stages, including frame holds, pose editing, onion skin, playback, and batch pose import.
 
@@ -48,7 +55,7 @@ B9 does not yet:
 - export video.
 
 ## VERIFICATION
-All reconstructed B1–B8 JavaScript and B9 pass `node --check`.
+All reconstructed B1–B8 JavaScript and B9 pass `node --check` from the reconstructed checkpoint.
 
 A real browser interaction test is still required before B9 can be called fully bench-tested.
 
