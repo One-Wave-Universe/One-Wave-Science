@@ -1,0 +1,41 @@
+{
+  "format":"one-wave-motion-library-schema",
+  "version":2,
+  "libraryScope":"one persistent corpus per character/body variant",
+  "batchSize":50,
+  "libraryLimit":null,
+  "frameStorage":"single transparent PNG file per frame",
+  "generationMode":"one frame generated and persisted at a time",
+  "batchPackaging":{
+    "zipSupported":true,
+    "unzipSupported":true,
+    "manifestRequired":true,
+    "zipContains":["50 PNG frames","manifest.json"],
+    "mergeRule":"unzipped batches merge into the persistent character corpus without replacing existing unique frames"
+  },
+  "indexFields":[
+    "character",
+    "bodyVariant",
+    "action",
+    "motion",
+    "direction",
+    "emotion",
+    "gesture",
+    "poseRole",
+    "tags",
+    "batchId",
+    "libraryIndex",
+    "filename"
+  ],
+  "hardRules":[
+    "50 frames is a generation batch, never the full library",
+    "no sprite sheets",
+    "no composite boards",
+    "no baked backgrounds",
+    "every generated result is exactly one transparent PNG",
+    "every frame is persisted before the next generation job begins",
+    "completed batches may be zipped for storage or transfer",
+    "zipped batches must be recoverable and mergeable back into the corpus",
+    "character/body variants keep separate motion corpora"
+  ]
+}
