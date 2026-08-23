@@ -81,6 +81,15 @@
     R._c8Wrapped = true;
   }
 
+  function loadRecorder() {
+    if (A.voiceRecorder || document.querySelector('script[data-c9-voice-recorder]')) return;
+    const script = document.createElement('script');
+    script.src = './c9-voice-recorder.js';
+    script.setAttribute('data-c9-voice-recorder', 'true');
+    document.body.appendChild(script);
+  }
+
   A.dialogueSync = { frameStartSeconds, syncRange };
   syncRange();
+  loadRecorder();
 })();
