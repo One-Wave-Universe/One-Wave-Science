@@ -5,12 +5,11 @@
   const aside = document.querySelector('aside');
   const $ = (id) => document.getElementById(id);
   if (!aside) return;
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, Number(v)));
+  const dbToGain = (db) => Math.pow(10, Number(db) / 20);
+  const cache = new Map();
 
-  const state = {
-    duckDb: 9,
-    attackMs: 80,
-    releaseMs: 300
-  };
+  const state = { duckDb: 9, attackMs: 80, releaseMs: 300 };
 
   function ensureClip(clip) {
     if (!Number.isFinite(Number(clip.trimStart))) clip.trimStart = 0;
@@ -25,7 +24,7 @@
   panel.className = 'card';
   panel.innerHTML = `
     <strong>C7 Dialogue Editor</strong><br>
-    Non-destructive speech finishing after Voice Lab: trim, fades, clip gain, and music duck settings stay editable with the project.
+    Non-destructive speech finishing after Voice Lab: trim, fades, clip gain, and music duck settings are applied to the final exported mix.
     <div class="control"><label><span>Music duck</span><span id="c7-duck-v">9 dB</span></label><input id="c7-duck" type="range" min="0" max="24" step="1" value="9"></div>
     <div class="control"><label><span>Duck attack</span><span id="c7-attack-v">80 ms</span></label><input id="c7-attack" type="range" min="10" max="500" step="10" value="80"></div>
     <div class="control"><label><span>Duck release</span><span id="c7-release-v">300 ms</span></label><input id="c7-release" type="range" min="50" max="1500" step="50" value="300"></div>
@@ -43,6 +42,110 @@
   bindRange('c7-duck', 'c7-duck-v', 'duckDb', ' dB');
   bindRange('c7-attack', 'c7-attack-v', 'attackMs', ' ms');
   bindRange('c7-release', 'c7-release-v', 'releaseMs', ' ms');
+
+  async function decode(context, src) {
+    const key = `${context.sampleRate}:${src}`;
+    if (cache.has(key)) return cache.get(key);
+    const bytes = await (await fetch(src)).arrayBuffer();
+    const buffer = await context.decodeAudioData(bytes.slice(0));
+    cache.set(key, buffer);
+    return buffer;
+  }
+
+  async function getClipDuration(context, clip) {
+    ensureClip(clip);
+    const layer = clip.layers?.find(x => x?.src);
+    if (!layer) return 0;
+    const buffer = await decode(context, layer.src);
+    return Math.max(0, buffer.duration - clip.trimStart - clip.trimEnd);
+  }
+
+  async function scheduleEditedClip(context, destination, clip, baseTime) {
+    ensureClip(clip);
+    if (clip.muted) return [];
+    const character = A.voiceLab.state.characters.find(c => c.id === clip.characterId);
+    const recipe = character?.recipe || { pitch:0, highpass:70, body:0, presence:0, compress:-18, drive:0, delayMix:0, reverb:0 };
+    const bus = A.voiceLab.createVoiceBus(context, destination, recipe, dbToGain(clip.gainDb));
+    const scheduled = [];
+    const clipStart = baseTime + Math.max(0, Number(clip.start) || 0);
+
+    for (let i = 0; i < (clip.layers || []).length; i += 1) {
+      const layer = clip.layers[i];
+      if (!layer?.src) continue;
+      const setting = clip.settings?.[i] || { gain:0, pan:0, detune:0, delayMs:0 };
+      const buffer = await decode(context, layer.src);
+      const offset = Math.min(buffer.duration, Math.max(0, Number(clip.trimStart) || 0));
+      const available = Math.max(0, buffer.duration - offset - Math.max(0, Number(clip.trimEnd) || 0));
+      if (!available) continue;
+
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      source.detune.value = clamp((Number(recipe.pitch) || 0) + (Number(setting.detune) || 0), -2400, 2400);
+      const gain = context.createGain();
+      const level = dbToGain(Number(setting.gain) || 0);
+      const when = clipStart + Math.max(0, Number(setting.delayMs) || 0) / 1000;
+      const fadeIn = Math.min(available / 2, Math.max(0, Number(clip.fadeIn) || 0));
+      const fadeOut = Math.min(available / 2, Math.max(0, Number(clip.fadeOut) || 0));
+      gain.gain.setValueAtTime(fadeIn ? 0 : level, when);
+      if (fadeIn) gain.gain.linearRampToValueAtTime(level, when + fadeIn);
+      if (fadeOut) {
+        gain.gain.setValueAtTime(level, Math.max(when + fadeIn, when + available - fadeOut));
+        gain.gain.linearRampToValueAtTime(0, when + available);
+      }
+      const panner = context.createStereoPanner ? context.createStereoPanner() : null;
+      if (panner) panner.pan.value = clamp(Number(setting.pan) || 0, -1, 1);
+      source.connect(gain);
+      if (panner) gain.connect(panner).connect(bus); else gain.connect(bus);
+      source.start(when, offset, available);
+      scheduled.push(source);
+    }
+    return scheduled;
+  }
+
+  async function makeFinalMix(stream) {
+    const context = new AudioContext();
+    const destination = context.createMediaStreamDestination();
+    const sources = [];
+    await context.resume();
+    const base = context.currentTime + 0.03;
+
+    if (A.audio?.track?.src) {
+      const buffer = await decode(context, A.audio.track.src);
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      const musicGain = context.createGain();
+      musicGain.gain.setValueAtTime(1, base);
+      const duckGain = dbToGain(-Math.max(0, state.duckDb));
+      const attack = Math.max(0.01, state.attackMs / 1000);
+      const release = Math.max(0.05, state.releaseMs / 1000);
+      const clips = (A.voiceLab.state.clips || []).filter(c => !c.muted).slice().sort((a,b) => Number(a.start) - Number(b.start));
+      for (const clip of clips) {
+        const duration = await getClipDuration(context, clip);
+        if (!duration) continue;
+        const start = base + Math.max(0, Number(clip.start) || 0);
+        const end = start + duration;
+        musicGain.gain.setValueAtTime(1, Math.max(base, start - attack));
+        musicGain.gain.linearRampToValueAtTime(duckGain, start);
+        musicGain.gain.setValueAtTime(duckGain, end);
+        musicGain.gain.linearRampToValueAtTime(1, end + release);
+      }
+      source.connect(musicGain).connect(destination);
+      source.start(base);
+      sources.push(source);
+    }
+
+    for (const clip of A.voiceLab.state.clips || []) {
+      sources.push(...await scheduleEditedClip(context, destination, clip, base));
+    }
+
+    const audioTrack = destination.stream.getAudioTracks()[0];
+    if (audioTrack) stream.addTrack(audioTrack);
+    return {
+      context,
+      sources,
+      stop() { sources.forEach(source => { try { source.stop(); } catch (_) {} }); }
+    };
+  }
 
   function render() {
     const box = $('c7-clips');
@@ -70,7 +173,7 @@
           const key = e.target.dataset.k;
           let value = Number(e.target.value) || 0;
           if (['start','trimStart','trimEnd','fadeIn','fadeOut'].includes(key)) value = Math.max(0, value);
-          if (key === 'gainDb') value = Math.max(-36, Math.min(18, value));
+          if (key === 'gainDb') value = clamp(value, -36, 18);
           clip[key] = value;
           A.status(`Dialogue ${key} updated`);
         });
@@ -81,10 +184,7 @@
 
   $('c7-refresh')?.addEventListener('click', render);
 
-  function serialize() {
-    return { ...state };
-  }
-
+  function serialize() { return { ...state }; }
   function loadState(next) {
     if (!next) return;
     if (Number.isFinite(Number(next.duckDb))) state.duckDb = Number(next.duckDb);
@@ -99,6 +199,7 @@
     render();
   }
 
-  A.dialogueEditor = { state, ensureClip, render, serialize, loadState };
+  A.voiceLab.makeCombinedAudioTrack = makeFinalMix;
+  A.dialogueEditor = { state, ensureClip, render, serialize, loadState, makeFinalMix, scheduleEditedClip };
   render();
 })();
