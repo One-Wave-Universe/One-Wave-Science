@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One-Wave Video Maker — C14</title>
+<title>One-Wave Video Maker — C15</title>
 <style>
 :root{font-family:system-ui,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;background:#101114}
 header{padding:18px 22px;border-bottom:1px solid #343741;background:#17191f}h1{margin:0 0 6px;font-size:24px}.sub{margin:0;color:#b8bdc8}
@@ -21,73 +21,30 @@ button:hover{background:#292d37}.scene-shell{border:1px solid #343741;border-rad
 aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:auto}aside h2{margin-top:0;font-size:15px}.card{border:1px solid #343741;border-radius:9px;padding:12px;background:#101217;margin-bottom:12px;line-height:1.45;color:#c5cad4;font-size:14px}
 .control{margin:14px 0}.control label{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;font-size:13px;font-weight:700}input[type=range]{width:100%}.pass{font-weight:900}.section-title{margin-top:22px;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:#aeb4c0}
 @media(max-width:860px){main{grid-template-columns:1fr}aside{border-left:0;border-top:1px solid #343741}}
-.frame-panel{margin-top:14px;border:1px solid #343741;border-radius:10px;background:#14161b;padding:12px}
-.frame-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-#frame-reel{display:flex;gap:8px;overflow-x:auto}
-.frame-card{min-width:78px;display:flex;flex-direction:column;align-items:flex-start;gap:3px}
-.frame-card.active{outline:2px solid white}
-.frame-card span{font-size:12px;color:#b8bdc8}
-#onion-layer{position:absolute;inset:0;z-index:7;pointer-events:none}
-.onion-asset{position:absolute;max-height:88%;object-fit:contain;opacity:.22;filter:grayscale(1)}
-.onion-prev{transform-origin:center bottom}
-.onion-next{transform-origin:center bottom}
+.frame-panel{margin-top:14px;border:1px solid #343741;border-radius:10px;background:#14161b;padding:12px}.frame-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+#frame-reel{display:flex;gap:8px;overflow-x:auto}.frame-card{min-width:78px;display:flex;flex-direction:column;align-items:flex-start;gap:3px}.frame-card.active{outline:2px solid white}.frame-card span{font-size:12px;color:#b8bdc8}
+#onion-layer{position:absolute;inset:0;z-index:7;pointer-events:none}.onion-asset{position:absolute;max-height:88%;object-fit:contain;opacity:.22;filter:grayscale(1)}.onion-prev{transform-origin:center bottom}.onion-next{transform-origin:center bottom}
 </style>
 </head>
 <body>
 <header>
 <h1>CHATGPT PROJECT — ONE-WAVE VIDEO MAKER</h1>
-<p class="sub">C14: true 24 fps scene production plus a reusable five-slot motion-sequence library.</p>
-<div class="status-row">
-<span class="pill">Phase C — Production</span>
-<span class="pill">C14 — Motion Library</span>
-<span class="pill">BUILDING / TESTING</span>
-</div>
+<p class="sub">C15: true 24 fps scene production plus a full reusable PNG motion atlas for complete character acting.</p>
+<div class="status-row"><span class="pill">Phase C — Production</span><span class="pill">C15 — Full Motion Atlas</span><span class="pill">BUILDING / TESTING</span></div>
 </header>
 <main>
 <section class="workspace">
 <div class="toolbar">
-<button id="load-background">Load / Replace Background</button>
-<button id="toggle-calibration">Show Calibration Grid</button>
-<button id="save-calibration">Save Calibration</button>
-<button id="toggle-placement">Placement / Sizing Mode</button>
-<button id="add-character">Add Character PNG</button>
-<button id="add-prop">Add Prop PNG</button>
-<button id="remove-selected">Remove Selected</button>
-<button id="clear-background">Remove Background</button>
-<input id="background-picker" type="file" accept="image/png,image/jpeg,image/webp" hidden>
-<input id="character-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden>
-<input id="prop-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden>
+<button id="load-background">Load / Replace Background</button><button id="toggle-calibration">Show Calibration Grid</button><button id="save-calibration">Save Calibration</button><button id="toggle-placement">Placement / Sizing Mode</button><button id="add-character">Add Character PNG</button><button id="add-prop">Add Prop PNG</button><button id="remove-selected">Remove Selected</button><button id="clear-background">Remove Background</button>
+<input id="background-picker" type="file" accept="image/png,image/jpeg,image/webp" hidden><input id="character-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden><input id="prop-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden>
 </div>
-<div class="scene-shell">
-<div class="scene-stage" id="scene-stage">
-<img id="scene-background" hidden>
-<div id="background-placeholder">Load and calibrate a background, then add a character or prop PNG.</div>
-<div id="calibration-overlay" hidden></div>
-<div id="asset-layer"></div>
-</div>
-<div class="scene-footer"><span id="background-meta">No background loaded</span><span id="runtime-status">Ready</span></div>
-</div>
-<div class="frame-panel">
-<div class="frame-toolbar">
-<strong id="active-frame-label">Frame 1</strong><button id="play-button" type="button">Play</button>
-<label>FPS <input id="fps-control" type="range" min="1" max="60" step="1" value="24"> <span id="fps-value">24</span></label>
-<button id="add-frame" type="button">Add Frame</button>
-<button id="duplicate-frame" type="button">Duplicate Frame</button>
-<button id="delete-frame" type="button">Delete Frame</button>
-<button id="insert-before" type="button">Insert Before</button>
-<button id="insert-after" type="button">Insert After</button>
-<button id="move-frame-left" type="button">Move Frame ◀</button>
-<button id="move-frame-right" type="button">Move Frame ▶</button>
-<label><input id="onion-prev" type="checkbox"> Previous onion</label>
-<label><input id="onion-next" type="checkbox"> Next onion</label>
-<label>Hold <input id="frame-hold" type="range" min="1" max="12" step="1" value="2"> <span id="frame-hold-value">2x</span></label>
-</div>
-<div id="frame-reel"></div>
-</div>
+<div class="scene-shell"><div class="scene-stage" id="scene-stage"><img id="scene-background" hidden><div id="background-placeholder">Load and calibrate a background, then add a character or prop PNG.</div><div id="calibration-overlay" hidden></div><div id="asset-layer"></div></div><div class="scene-footer"><span id="background-meta">No background loaded</span><span id="runtime-status">Ready</span></div></div>
+<div class="frame-panel"><div class="frame-toolbar"><strong id="active-frame-label">Frame 1</strong><button id="play-button" type="button">Play</button><label>FPS <input id="fps-control" type="range" min="1" max="60" step="1" value="24"> <span id="fps-value">24</span></label><button id="add-frame" type="button">Add Frame</button><button id="duplicate-frame" type="button">Duplicate Frame</button><button id="delete-frame" type="button">Delete Frame</button><button id="insert-before" type="button">Insert Before</button><button id="insert-after" type="button">Insert After</button><button id="move-frame-left" type="button">Move Frame ◀</button><button id="move-frame-right" type="button">Move Frame ▶</button><label><input id="onion-prev" type="checkbox"> Previous onion</label><label><input id="onion-next" type="checkbox"> Next onion</label><label>Hold <input id="frame-hold" type="range" min="1" max="12" step="1" value="2"> <span id="frame-hold-value">2x</span></label></div><div id="frame-reel"></div></div>
 </section>
 <aside>
-<h2>C14 production reel</h2>
-<div class="card"><strong>Animation clock:</strong> true 24 fps. Drawings can be held on 1s, 2s, 3s, or longer depending on the action. Reusable motions live in a separate <code>.owmotion</code> library.</div>
+<h2>C15 production reel</h2>
+<div class="card"><strong>Animation clock:</strong> true 24 fps. Drawings may be held on 1s, 2s, 3s, or mixed timing. Reusable art lives in the full <code>.owatlas</code> motion corpus, separate from the active scene.</div>
+<div class="card"><strong>Atlas target:</strong> complete 8-direction walk/run cycles plus transitions, jumping, rolling, interaction, gesture/acting sets, facial expressions, blinking/eye directions, and reusable speech-mouth shapes. Hundreds of transparent PNG drawings are expected.</div>
 <div class="section-title">Calibration</div>
 <div class="control"><label><span>Horizon</span><span id="horizon-y-value">0.36</span></label><input id="horizon-y" type="range" min="0.05" max="0.80" step="0.01"></div>
 <div class="control"><label><span>Far ground</span><span id="ground-far-y-value">0.48</span></label><input id="ground-far-y" type="range" min="0.15" max="0.85" step="0.01"></div>
@@ -95,41 +52,9 @@ aside{border-left:1px solid #343741;padding:18px;background:#14161b;overflow:aut
 <div class="control"><label><span>Near scale</span><span id="near-scale-value">1.00</span></label><input id="near-scale" type="range" min="0.50" max="2.00" step="0.05"></div>
 <div class="control"><label><span>Far scale</span><span id="far-scale-value">0.35</span></label><input id="far-scale" type="range" min="0.10" max="1.00" step="0.05"></div>
 <div class="card"><strong id="calibration-state">Calibration not yet changed</strong></div>
-<div class="section-title">Selected character / prop</div>
-<div id="no-selection" class="card">No asset selected.</div>
-<div id="selected-controls" hidden>
-<div class="card"><strong id="selected-name"></strong><br>Feet/base position controls depth. Auto scale comes from the saved background calibration.</div>
-<div class="control"><label><span>Horizontal position</span><span id="asset-x-value">0.50</span></label><input id="asset-x" type="range" min="0.00" max="1.00" step="0.01"></div>
-<div class="control"><label><span>Ground / feet depth</span><span id="asset-ground-y-value">0.72</span></label><input id="asset-ground-y" type="range" min="0.10" max="0.98" step="0.01"></div>
-<div class="control"><label><span>Manual scale trim</span><span id="asset-manual-scale-value">1.00</span></label><input id="asset-manual-scale" type="range" min="0.25" max="2.00" step="0.05"></div>
-<div class="card">Auto depth scale: <strong id="auto-scale-value">1.00</strong></div>
-<div class="card"><strong>Pose-to-pose tools</strong><br>Replace only the selected PNG on this frame, or copy this pose to an adjacent frame.</div>
-<button id="replace-selected-pose" type="button">Replace Selected Pose PNG</button>
-<button id="copy-pose-prev" type="button">Copy Pose to Previous Frame</button>
-<button id="copy-pose-next" type="button">Copy Pose to Next Frame</button>
-<input id="replacement-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden>
-<div class="card"><strong>Batch pose import</strong><br>Select the character/prop first, then choose many PNG pose files at once. Files sort naturally and become consecutive reel frames while placement/depth/scale are preserved.</div>
-<button id="batch-import-poses" type="button">Import Many Pose PNGs</button>
-<label>Batch hold <input id="batch-hold" type="range" min="1" max="12" step="1" value="2"></label>
-<input id="batch-pose-picker" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden>
-</div>
+<div class="section-title">Selected character / prop</div><div id="no-selection" class="card">No asset selected.</div>
+<div id="selected-controls" hidden><div class="card"><strong id="selected-name"></strong><br>Feet/base position controls depth. Auto scale comes from the saved background calibration.</div><div class="control"><label><span>Horizontal position</span><span id="asset-x-value">0.50</span></label><input id="asset-x" type="range" min="0.00" max="1.00" step="0.01"></div><div class="control"><label><span>Ground / feet depth</span><span id="asset-ground-y-value">0.72</span></label><input id="asset-ground-y" type="range" min="0.10" max="0.98" step="0.01"></div><div class="control"><label><span>Manual scale trim</span><span id="asset-manual-scale-value">1.00</span></label><input id="asset-manual-scale" type="range" min="0.25" max="2.00" step="0.05"></div><div class="card">Auto depth scale: <strong id="auto-scale-value">1.00</strong></div><div class="card"><strong>Pose-to-pose tools</strong><br>Replace only the selected PNG on this frame, or copy this pose to an adjacent frame.</div><button id="replace-selected-pose" type="button">Replace Selected Pose PNG</button><button id="copy-pose-prev" type="button">Copy Pose to Previous Frame</button><button id="copy-pose-next" type="button">Copy Pose to Next Frame</button><input id="replacement-picker" type="file" accept="image/png,image/webp,image/jpeg" hidden><div class="card"><strong>Batch pose import</strong><br>Select the character/prop first, then choose many PNG pose files at once.</div><button id="batch-import-poses" type="button">Import Many Pose PNGs</button><label>Batch hold <input id="batch-hold" type="range" min="1" max="12" step="1" value="2"></label><input id="batch-pose-picker" type="file" accept="image/png,image/webp,image/jpeg" multiple hidden></div>
 </aside>
 </main>
-<script src="./app.js"></script>
-<script src="./b4-frame-reel.js"></script>
-<script src="./b5-pose-editing.js"></script>
-<script src="./b6-onion-skin.js"></script>
-<script src="./b7-playback.js"></script>
-<script src="./b8-batch-pose-import.js"></script>
-<script src="./b9-sprite-sheet-slicer.js"></script>
-<script src="./b10-project-save-load.js"></script>
-<script src="./b11-audio-track.js"></script>
-<script src="./b12-camera-motion.js"></script>
-<script src="./b13-video-export.js"></script>
-<script src="./c1-path-motion.js"></script>
-<script src="./c2-walk-cadence.js"></script>
-<script src="./c3-walk-builder.js"></script>
-<script src="./c4-pose-normalizer.js"></script>
-<script src="./c14-motion-library.js"></script>
-</body>
-</html>
+<script src="./app.js"></script><script src="./b4-frame-reel.js"></script><script src="./b5-pose-editing.js"></script><script src="./b6-onion-skin.js"></script><script src="./b7-playback.js"></script><script src="./b8-batch-pose-import.js"></script><script src="./b9-sprite-sheet-slicer.js"></script><script src="./b10-project-save-load.js"></script><script src="./b11-audio-track.js"></script><script src="./b12-camera-motion.js"></script><script src="./b13-video-export.js"></script><script src="./c1-path-motion.js"></script><script src="./c2-walk-cadence.js"></script><script src="./c3-walk-builder.js"></script><script src="./c4-pose-normalizer.js"></script><script src="./c14-motion-library.js"></script><script src="./c15-motion-atlas.js"></script>
+</body></html>
