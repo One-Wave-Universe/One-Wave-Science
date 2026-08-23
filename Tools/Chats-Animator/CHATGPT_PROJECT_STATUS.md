@@ -1,66 +1,78 @@
 # CHATGPT PROJECT — ONE-WAVE VIDEO MAKER
 
 ## CURRENT STEP
-**C5 — Forest-path still-frame production test**
+**C9 — Voice Lab / Dialogue Production Pipeline**
 
 ## STATUS
-**PASS — real production output created**
+**BUILT — runtime production gate next**
 
 ## HARD START
-B13 video export runtime PASS plus C1–C4 production repair tools.
+B13 video export runtime PASS plus C1–C5 motion production pipeline.
 
-## C1 — DETERMINISTIC PATH MOTION
-Runtime PASS.
-- Existing consecutive pose stills fit to start/end X and feet depth.
-- Feet/base depth drives calibrated perspective size.
-- Smoothstep easing supported.
-- Reverse path supported.
-- Curved trail midpoint supported.
-- Pose artwork and manual scale remain untouched.
+## MOTION PIPELINE — PROTECTED
+C1 through C5 remain intact:
+- normalize authored stills before layout;
+- fit feet/base depth to straight or curved paths;
+- calibrated perspective controls size;
+- 24 FPS / 6 pose-beat walk cadence supported;
+- one-click Walk Away / Walk Toward;
+- real forest-path still-frame production output passed.
 
-## C2 — WALK CADENCE
-Runtime PASS.
-- Default clock: 24 FPS / 6 pose beats = 4-frame holds.
-- Optional longer turnaround hold.
+## C6 — VOICE LAB + SPEECH TIMELINE
+Built.
+- Reusable named character voice recipes.
+- Character pitch, low cut, body EQ, presence EQ, compression, drive, echo, and reverb.
+- Three-layer voice combiner per spoken line.
+- Each layer has level, pan, pitch offset, and micro-delay.
+- Spoken clips are placed at exact timeline seconds.
+- Clip gain, mute, preview, delete.
+- Voice recipes and speech clips serialize into `.owav` project data.
+- Existing B11 soundtrack remains supported.
+- Final video export uses a combined soundtrack + dialogue bus when Voice Lab is active.
 
-## C3 — ONE-CLICK WALK BUILDER
-Runtime PASS.
-- Walk Away and Walk Toward coordinate path fitting + cadence.
+## C7 — DIALOGUE EDITOR / FINAL MIX
+Built.
+- Non-destructive trim-in and trim-out per speech clip.
+- Fade-in and fade-out per speech clip.
+- Per-clip gain.
+- Global music duck amount, attack, and release.
+- Trim, fades, gain, and music ducking are applied to the actual final export mix.
+- Dialogue-editor mix settings serialize into `.owav`.
 
-## C4 — PRE-LAYOUT POSE NORMALIZER
-Runtime PASS.
-- Trims transparent padding.
-- Resizes to one consistent canvas.
-- Centers artwork horizontally.
-- Bottom-anchors visible feet before reel layout.
+## C8 — SPEECH ↔ VIDEO FRAME SYNC
+Built.
+- Converts reel frame/hold timing to exact seconds.
+- Next spoken line can snap directly to a target reel frame.
+- Existing speech clip can be snapped to the nearest selected frame boundary.
+- Frame timing follows current project FPS and reel holds.
 
-## C5 — FOREST PATH PRODUCTION TEST
-PASS.
-- 14 source walk stills normalized to 1024×768 before layout.
-- 72 total clock frames at 24 FPS.
-- 4-frame pose holds at a 6-beat walk clock.
-- 12-frame turnaround hold.
-- Final near pose gets a short settle hold.
-- MP4, WebM, and GIF production outputs created.
-- No optical-flow/synthetic in-between artwork used.
+## C9 — VOICE RECORDER
+Built.
+- Browser microphone recording through MediaRecorder.
+- Records directly into Voice Lab Layer 1, 2, or 3.
+- Recorded take can immediately be combined/shaped without leaving the animator.
 
-## PRODUCTION DECISION
-The canonical animator motion method remains authored stills + explicit reel timing + calibrated depth/size changes. Synthetic interpolation is optional later, not the default.
+## CURRENT AUDIO PRODUCTION ORDER
+1. Record or import the raw voice take.
+2. Choose/create the character voice recipe.
+3. Combine up to three layers if desired.
+4. Shape pitch/EQ/compression/drive/echo/reverb.
+5. Lay the spoken line onto the video timeline.
+6. Trim, fade, and set clip gain.
+7. Snap speech to reel frame/hold boundaries where useful.
+8. Duck music automatically around speech.
+9. Preview against the animated reel.
+10. Save the complete `.owav` project.
+11. Export WebM with one final mixed audio track.
 
-## PROTECTED WORKING FEATURES
-B1 through B13 remain intact: background/calibration, placement/depth sizing, reel/holds, pose editing, onion skin, playback, batch import, sprite-sheet slicing, save/load, audio, per-frame camera, and valid WebM export with optional Opus audio.
+## LOAD CHAIN
+B13 now guards and loads the audio workstation as:
+**C6 Voice Lab → C7 Dialogue Editor → C8 Frame Sync → C9 Voice Recorder**.
 
-C1 through C5 are additive production tools/tests and do not replace the protected B-stage engine.
+This remains additive to the protected B1–B13 engine and C1–C5 motion tools.
 
-## NEXT PERMITTED STEP
-**C6 — First dialogue-scene production test.**
+## NEXT REQUIRED GATE
+**Run the full audio workstation in Chromium:**
+record/import → three-layer combine → character processing → timed speech placement → trim/fade → frame snap → music duck → project save/load → WebM export.
 
-Build a real short scene with:
-1. background;
-2. normalized character poses;
-3. reel timing;
-4. dialogue/music;
-5. camera movement only where useful;
-6. saved `.owav` project;
-7. exported video;
-8. repair only what that real scene exposes.
+Do not call C6–C9 production PASS until that end-to-end browser test succeeds.
