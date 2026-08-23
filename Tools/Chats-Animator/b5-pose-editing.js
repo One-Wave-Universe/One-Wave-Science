@@ -29,14 +29,14 @@
     if (i <= 0) return;
     R.captureCurrent();
     [R.frames[i - 1], R.frames[i]] = [R.frames[i], R.frames[i - 1]];
-    R.restore(i - 1);
+    R.setFrames(R.frames, i - 1);
   });
   $('move-frame-right')?.addEventListener('click', () => {
     const i = R.activeIndex;
     if (i >= R.frames.length - 1) return;
     R.captureCurrent();
     [R.frames[i + 1], R.frames[i]] = [R.frames[i], R.frames[i + 1]];
-    R.restore(i + 1);
+    R.setFrames(R.frames, i + 1);
   });
   $('replace-selected-pose')?.addEventListener('click', () => {
     if (!currentSelected()) return A.status('Select a character or prop first');
