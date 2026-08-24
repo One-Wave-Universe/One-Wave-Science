@@ -184,26 +184,38 @@ The GUI smoke test uses `pytest.importorskip("PySide6")` and Qt's
 pattern, so the engine tests still run even where the GUI's system
 libraries aren't installed.
 
-### Packaging a standalone app (Ubuntu)
+### One-click install (Ubuntu desktop app)
 
-Running from source (above) needs a Python environment. To get an
-actual installable desktop app instead -- a binary plus an Applications
-menu entry, no `python`/`pip` required on the target machine --
-build and install it with:
+To get an actual installable desktop app instead of running from
+source -- a Desktop icon plus an Applications-menu entry, no
+`python`/`pip` needed afterwards -- run one script:
 
 ```
-Tools/Voice-Forge/packaging/build_ubuntu.sh    # -> dist/VoiceForge/VoiceForge
-Tools/Voice-Forge/packaging/install_ubuntu.sh  # installs for the current user, no sudo
+Tools/Voice-Forge/install.sh
 ```
 
-`build_ubuntu.sh` creates its own build virtualenv, installs
-`requirements.txt` plus PyInstaller, and produces a self-contained
-`dist/VoiceForge/` folder (the app plus its bundled Python/Qt runtime).
-`install_ubuntu.sh` copies that folder to `~/.local/share/voiceforge/`
-and adds a `~/.local/share/applications/voiceforge.desktop` launcher, so
-"One-Wave Voice Forge" shows up in the Applications menu with the icon
-in `assets/icon.png`. `uninstall_ubuntu.sh` removes both. Everything is
-per-user (no root, no system-wide changes).
+That's it. It builds a standalone binary the first time (takes a
+minute or two), installs it to `~/.local/share/voiceforge/`, and drops
+a "One-Wave Voice Forge" icon on your Desktop and in your Applications
+menu -- no sudo, no system-wide changes. Running it again later just
+reinstalls instantly (it only rebuilds if there's no build yet, or if
+you pass `--rebuild`). To remove everything it installed:
+
+```
+Tools/Voice-Forge/uninstall.sh
+```
+
+If the Desktop icon shows a warning instead of launching the first
+time you double-click it (a GNOME/Nautilus quirk for new desktop
+files), right-click it and choose "Allow Launching" -- the installer
+already tries to mark it trusted automatically via `gio`, but not every
+desktop environment honors that.
+
+Under the hood, `install.sh` is `packaging/build_ubuntu.sh` (builds
+`dist/VoiceForge/` with PyInstaller, bundling the Python/Qt runtime)
+followed by `packaging/install_ubuntu.sh` (copies it into your account
+and writes the two `.desktop` launchers); run those directly if you
+want the build and install steps separately.
 
 This is source-built packaging, not a signed/notarized release: the
 built binary still needs the same runtime system libraries as running

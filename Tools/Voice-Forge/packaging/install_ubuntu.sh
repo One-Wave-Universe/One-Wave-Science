@@ -5,6 +5,7 @@
 #   ~/.local/share/voiceforge/         the app itself
 #   ~/.local/share/icons/voiceforge.png
 #   ~/.local/share/applications/voiceforge.desktop   (Applications menu entry)
+#   ~/Desktop/One-Wave Voice Forge.desktop           (desktop icon)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -29,8 +30,9 @@ cp -r "$BUILT_DIR/." "$INSTALL_DIR/"
 
 cp "$PROJECT_ROOT/assets/icon.png" "$ICON_DIR/voiceforge.png"
 
-DESKTOP_FILE="$APPS_DIR/voiceforge.desktop"
-cat > "$DESKTOP_FILE" <<EOF
+make_desktop_entry() {
+  local out_file="$1"
+  cat > "$out_file" <<EOF
 [Desktop Entry]
 Type=Application
 Name=One-Wave Voice Forge
@@ -40,13 +42,36 @@ Icon=$ICON_DIR/voiceforge.png
 Terminal=false
 Categories=AudioVideo;Audio;
 EOF
-chmod +x "$DESKTOP_FILE"
+  chmod +x "$out_file"
+  # GNOME/Nautilus refuses to run a desktop file it doesn't consider
+  # "trusted" (shows a warning dialog instead of launching). Marking it
+  # here means the icon just works instead of needing a manual
+  # right-click -> "Allow Launching" the first time.
+  if command -v gio >/dev/null 2>&1; then
+    gio set "$out_file" "metadata::trusted" true >/dev/null 2>&1 || true
+  fi
+}
 
+echo "== Adding Applications menu entry =="
+make_desktop_entry "$APPS_DIR/voiceforge.desktop"
 if command -v update-desktop-database >/dev/null 2>&1; then
   update-desktop-database "$APPS_DIR" >/dev/null 2>&1 || true
 fi
 
+DESKTOP_DIR="$HOME/Desktop"
+if command -v xdg-user-dir >/dev/null 2>&1; then
+  XDG_DESKTOP="$(xdg-user-dir DESKTOP 2>/dev/null || true)"
+  [ -n "$XDG_DESKTOP" ] && DESKTOP_DIR="$XDG_DESKTOP"
+fi
+
+if [ -d "$DESKTOP_DIR" ] || mkdir -p "$DESKTOP_DIR" 2>/dev/null; then
+  echo "== Adding desktop shortcut in $DESKTOP_DIR =="
+  make_desktop_entry "$DESKTOP_DIR/One-Wave Voice Forge.desktop"
+else
+  echo "No Desktop folder found (skipping desktop shortcut); the Applications menu entry above still works."
+fi
+
 echo
-echo "Installed. Voice Forge should now appear in your Applications menu"
-echo "as \"One-Wave Voice Forge\", or run it directly with:"
+echo "Installed. Look for \"One-Wave Voice Forge\" on your Desktop or in"
+echo "your Applications menu, or run it directly with:"
 echo "  $INSTALL_DIR/VoiceForge"
