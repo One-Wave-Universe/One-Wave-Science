@@ -183,3 +183,30 @@ The GUI smoke test uses `pytest.importorskip("PySide6")` and Qt's
 `offscreen` platform plugin, matching the One-Wave Animator's test
 pattern, so the engine tests still run even where the GUI's system
 libraries aren't installed.
+
+### Packaging a standalone app (Ubuntu)
+
+Running from source (above) needs a Python environment. To get an
+actual installable desktop app instead -- a binary plus an Applications
+menu entry, no `python`/`pip` required on the target machine --
+build and install it with:
+
+```
+Tools/Voice-Forge/packaging/build_ubuntu.sh    # -> dist/VoiceForge/VoiceForge
+Tools/Voice-Forge/packaging/install_ubuntu.sh  # installs for the current user, no sudo
+```
+
+`build_ubuntu.sh` creates its own build virtualenv, installs
+`requirements.txt` plus PyInstaller, and produces a self-contained
+`dist/VoiceForge/` folder (the app plus its bundled Python/Qt runtime).
+`install_ubuntu.sh` copies that folder to `~/.local/share/voiceforge/`
+and adds a `~/.local/share/applications/voiceforge.desktop` launcher, so
+"One-Wave Voice Forge" shows up in the Applications menu with the icon
+in `assets/icon.png`. `uninstall_ubuntu.sh` removes both. Everything is
+per-user (no root, no system-wide changes).
+
+This is source-built packaging, not a signed/notarized release: the
+built binary still needs the same runtime system libraries as running
+from source (see Setup above) -- normal on a standard Ubuntu desktop,
+not guaranteed on a minimal server image. `build_ubuntu.sh` checks for
+them and tells you the `apt-get install` command if any are missing.
