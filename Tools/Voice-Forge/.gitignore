@@ -4,5 +4,6 @@ __pycache__/
 .venv-build/
 build/
 dist/
+release/
 /*.spec
 !packaging/voiceforge.spec
