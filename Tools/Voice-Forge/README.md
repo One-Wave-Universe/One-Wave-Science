@@ -85,3 +85,101 @@ Desktop/local-first program for Ubuntu/Jetson-compatible environments where poss
 
 ## Hard stop for Phase 1
 Phase 1 is complete only when two authorized human reference recordings can be loaded, blended with independent pitch/formant/body/brightness controls, previewed A/B, saved as a recipe, and rendered to WAV without using a canned TTS voice as the source.
+
+## Implementation status (Phase 1)
+
+Phase 1 is implemented as a local Python/PySide6 desktop app plus a
+headless engine package usable from a script or another program.
+
+```
+Voice-Forge/
+  engine/         DSP core: no Qt dependency, fully unit-testable.
+    io_utils.py     load/save WAV, mono conversion, resampling
+    analysis.py     LPC spectral-envelope + pitch estimation
+    dsp.py          pitch/formant tools, EQ, dynamics, breath/rasp,
+                     de-esser, delay, reverb, doubler, stereo width
+    blend.py        trait-based cross-synthesis blend of 2-4 references
+    recipe.py       the reusable JSON "character recipe" schema
+    pipeline.py     load -> blend -> pitch/formant -> character ->
+                     finishing -> render, plus stem/handoff export
+  app/            PySide6 GUI (main_window, sliders, undo/redo, preview)
+  tools/          make_sample_voices.py: synthesizes two original demo
+                  reference voices so the tool can be tried without any
+                  real recordings
+  tests/          pytest suite for the engine and a headless GUI smoke test
+```
+
+### How the blend works
+
+Each reference is decomposed (via per-frame LPC) into an excitation
+("residual") and a spectral envelope (formants). References are time-
+aligned to one chosen "timing source," their envelopes are combined with
+a weighted log-magnitude average, and their excitations are combined
+with a weighted sum -- so a blend mixes vocal-tract character and
+excitation character independently, per the "blend by trait, not just
+waveform volume" rule above. Pitch shift acts on the excitation only;
+formant shift warps the envelope's frequency axis only -- so the two
+controls are independent of each other. A recipe never stores rendered
+audio, only trait weights and references to the original files, so
+re-rendering the same recipe from the same originals is exact.
+
+### Setup
+
+```
+cd Tools/Voice-Forge
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+PySide6's Qt platform plugins need a few system libraries that aren't
+always preinstalled on a minimal Linux desktop/server image:
+`libegl1 libgl1 libxkbcommon0` (windowing) and `libpulse0` (audio
+playback for the in-app preview). On Debian/Ubuntu/Jetson:
+`sudo apt-get install libegl1 libgl1 libxkbcommon0 libpulse0`. Rendering
+to WAV works without these; only the on-screen window and audio preview
+need them.
+
+### Run the GUI
+
+```
+python tools/make_sample_voices.py   # optional: generate two demo reference voices
+python main.py
+```
+
+Load two (or up to four) reference WAV files into Ref A/B/C/D, adjust
+the blend amount per reference and the trait/finishing sliders, use
+"Preview current" or the A/B "Snapshot"/"Play" buttons to audition, then
+"Render..." to write the Animator handoff bundle to a folder you choose.
+
+### Use the engine headlessly (from a script or another program)
+
+```python
+from engine.recipe import Recipe
+from engine import pipeline
+
+recipe = Recipe.default_two_source("voice_a.wav", "voice_b.wav", name="My Blended Voice")
+recipe.traits.pitch_semitones = -2.0
+recipe.traits.formant_ratio = 1.1
+
+result = pipeline.render_recipe(recipe, render_stems=True)
+pipeline.export(result, "out/", recipe)  # writes dialogue.wav, dialogue.recipe.json, stems/
+```
+
+The rendered `dialogue.wav` is a plain stereo float WAV -- it can be
+dropped into any other program or app (a DAW, a game engine, a TTS
+front-end that accepts a reference voice, the One-Wave Animator, etc.)
+just like any other audio file. `dialogue.recipe.json` is the reusable,
+non-destructive recipe: reopen it in Voice Forge to keep tuning the same
+blend from the original references.
+
+### Tests
+
+```
+pip install pytest
+pytest tests/
+```
+
+The GUI smoke test uses `pytest.importorskip("PySide6")` and Qt's
+`offscreen` platform plugin, matching the One-Wave Animator's test
+pattern, so the engine tests still run even where the GUI's system
+libraries aren't installed.
