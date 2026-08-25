@@ -4,30 +4,30 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, or Android movement architecture.
 
-Current update handoff:
+Current node handoff:
 
-1. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-2. `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`
-3. `MATH_ATTACK_MAP_UPDATED_43.md`
-4. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
-5. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
-6. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
-7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
-8. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
-9. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
-10. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
-11. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
-12. `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`
-12. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
-11. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
-12. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-13. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-14. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-15. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-16. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-17. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-18. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-19. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
+2. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
+3. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
+4. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
+5. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
+6. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
+7. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
+8. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
+9. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
+10. `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`
+11. `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`
+12. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
+13. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+14. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+15. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+16. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+17. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+18. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+19. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+20. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+21. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+22. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 These files summarize the current separation among geometry, route grammar, procedural memory, foundational choice, binary oversight, and downstream spectral audit.
 
