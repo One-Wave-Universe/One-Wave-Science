@@ -121,7 +121,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
-| C-324 | Directional Gate-Array Hardware Concept | Proposed balanced-rail, virtual-ground, directional-MOSFET gate array; binary/ternary/five-state readout maps to B-205/B-223/B-225, magnetic hold/compute claim is unresolved. | BROWN |
+| C-324 | Directional Gate-Array Hardware Concept | Proposed balanced-rail, virtual-ground, directional-MOSFET gate array with a Rev 0/Rev 1 buildable bench-test plan; binary/ternary/five-state readout maps to B-205/B-223/B-225, magnetic hold/compute claim remains untested until Rev 0's bench data exists. | BROWN |
 ### Appendix D — Resonance, Modal & Dimensional Structure (13 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|

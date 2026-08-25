@@ -144,6 +144,81 @@ hold/compute element (item 6, ungrounded) => 3-gate return path reading
 five-state→ternary→binary back out => one Macro-scale output stage
 becomes the next unit's Micro-scale input (item 7, B-220's open problem).
 
+Proposed Build:
+Two revisions, deliberately staged so the ungrounded piece (item 6) gets
+tested cheaply before any exotic fabrication is required. Nothing below
+has been built yet — this is the concrete plan the Brown Audit and Future
+Work sections were pointing at, written out in buildable form rather than
+left as a to-do list.
+
+REV 0 — bench prototype, one cell, off-the-shelf parts only:
+1. Power: split +5V/-5V rail from a common bench supply or a dual-output
+   DC-DC converter — the physical instance of item 1.
+2. Virtual ground stage: a rail-splitter reference (precision resistor
+   divider + unity-gain buffer op-amp, the same class of part as the
+   TLE2426-style rail splitters used in real single-supply audio/analog
+   circuits) sets a local 0V reference at each stage, buffered back to
+   true system ground — the physical instance of item 3, repeated at
+   each stage rather than assumed once.
+3. Gate array: 3 forward + 3 return directional switch pairs, each pair a
+   standard back-to-back/synchronous N-channel MOSFET half-bridge with a
+   logic-level gate driver IC — the physical instance of item 2, six
+   gates total per item 4.
+4. Sequencer: a small microcontroller (or a discrete ring counter/shift
+   register, no microcontroller required for Rev 0) drives the six gates
+   in Begin→Move→Hold→Build→Break→Loop order. This is the first actual
+   test of the candidate B-221 mapping named in item 4 — not assumed
+   true, made falsifiable.
+5. Readout: after the forward gate path, the virtual-ground-referenced
+   node feeds a 4-comparator bank set at B-225's ±2/±1 thresholds,
+   producing the five-state code directly in hardware; simple downstream
+   logic collapses that to sign+magnitude (ternary) and then sign-only
+   (binary) for the return path — a literal circuit for item 5's
+   binary→ternary→five-state→ternary→binary chain, not a diagram of one.
+6. Magnetic hold element, Rev 0 stand-in — explicitly NOT a claim of
+   proven quaternary magnetic memory, only a cheap way to test whether
+   *anything* rotating-field-based can hold and read back a multi-level
+   state at all: a small coil wound on a soft-ferrite toroid, driven by
+   the sequencer, with a Hall-effect or GMR sensor reading back field
+   angle at hold time. Field angle at readout = the state under test.
+   This isolates the falsifiable core of item 6's claim (can a rotating
+   field hold >1 distinguishable state over a hold window?) from the much
+   bigger claim ("proven," general-purpose, ternary/binary/analog compute)
+   the proposer made, using parts anyone can buy.
+7. Cascade tap: unit n's return-path binary output feeds unit n+1's
+   virtual-ground reference input directly — a physical, buildable,
+   single-level instance of item 7's Macro(n)→Micro(n+1) interface,
+   built from nothing more exotic than a second rail-splitter stage.
+
+REV 1 — target build, only attempted after Rev 0 produces real data:
+Replace the coil/ferrite/Hall-sensor stand-in in step 6 with a real
+multi-level magnetic memory element — a domain-wall/racetrack cell or a
+multi-level MRAM cell — so the hold element natively stores more than two
+states instead of being reconstructed by an external angle sensor. This
+is the step where the proposer's "quaternary memory" claim would actually
+get checked against real device physics and real literature, rather than
+asserted or waved off.
+
+Bench Test Plan (what would move this node past Brown, per I-02's
+"Green->Yellow iff math is built and internally tested" — none of this
+has been run yet, this is the procedure, not a result):
+1. Confirm each virtual-ground stage holds within a stated tolerance of
+   true ground under full gate-switching load.
+2. Capture an oscilloscope trace of the 6-gate sequencer and confirm a
+   clean, repeatable Begin-Move-Hold-Build-Break-Loop timing pattern.
+3. Inject known reference voltages and confirm the 5-comparator bank
+   classifies them into the correct B-225 band every time.
+4. Confirm the ternary/binary collapse logic reproduces the correct
+   ternary and binary code for all five known input states.
+5. The actual falsifiable test of item 6: confirm the coil/ferrite/Hall
+   element can hold and correctly read back at least two distinguishable
+   field-angle states across a defined time window. This is the cheap,
+   real, buildable version of "magnetic field holds state" — pass/fail,
+   not asserted either way here.
+6. Confirm the Rev 0 cascade tap: unit 2's readout changes correctly in
+   response to unit 1's Macro-tap output, as the first real test of item
+   7's single-level nesting interface.
+
 Brown Audit:
 - No circuit topology exists — this is a labeled concept, not a schematic.
 - Item 6 (rotating magnetic field as a general analog/ternary/binary
@@ -167,23 +242,18 @@ Brown Audit:
   noted here rather than re-litigated.
 
 Future Work:
-Pick one concrete directional-MOSFET topology to start from (e.g. a
-back-to-back/synchronous-rectifier bidirectional switch pair) rather than
-inventing a new device class, and specify real component values.
-Define the five-state read circuit explicitly (comparator bank or ADC
-against B-225's -2/-1/0/+1/+2 bands) rather than leaving "readout" as a
-word.
-Do a real literature check on magnetic state-holding hardware (MRAM,
-racetrack/domain-wall memory, spintronic logic) before claiming this
-node's item 6 as novel; either cite a specific real mechanism or narrow
-the claim to what is actually being proposed.
+Build Rev 0 (Proposed Build, above) and run the six-step Bench Test Plan;
+record real pass/fail results and oscilloscope/data receipts rather than
+leaving this as a paper design.
+Only after Rev 0 test 5 produces real data, decide whether Rev 1's real
+multi-level magnetic memory element (domain-wall/racetrack or multi-level
+MRAM) is worth building, and cite the specific device literature used.
 Decide, explicitly, whether the 3-up/3-back gate structure is meant to be
-literally B-221's six steps or only loosely inspired by it — B-221's own
-Future Work already calls for testing its nested-recursion claim against
-one real instantiation, and this could become that test case if the
-mapping is confirmed rather than assumed.
-Define one concrete Macro(n)→Micro(n+1) interface for a single nesting
-level as a bounded first target, instead of waiting on B-220's general
-γ(s)/β(s) derivation.
+literally B-221's six steps or only loosely inspired by it — Bench Test
+Plan step 2 is the first real instantiation test B-221's own Future Work
+calls for, not just an analogy.
+Treat Bench Test Plan step 6 as the bounded, single-level Macro(n)→
+Micro(n+1) test that stands in for B-220's general γ(s)/β(s) derivation
+until that derivation exists.
 
 ---
