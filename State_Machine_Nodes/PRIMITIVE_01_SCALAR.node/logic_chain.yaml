@@ -1,0 +1,20 @@
+logic_chain:
+  - receive: current_field_state
+  - receive: reference_state
+  - require: reference_is_defined
+  - compute: "scalar_displacement = current_field_state - reference_state"
+  - attach: reference_state
+  - emit: scalar_displacement
+conditions:
+  zero: "current_field_state == reference_state"
+  displaced: "current_field_state != reference_state"
+failure:
+  - undefined_reference
+  - reference_drift_not_recorded
+  - representation_mismatch
+  - comparison_leaked_into_scalar
+handoff:
+  to: Differential
+  payload:
+    - scalar_displacement
+    - reference_state
