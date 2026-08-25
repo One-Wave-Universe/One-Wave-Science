@@ -1,0 +1,21 @@
+receipt:
+  timestamp: "2026-08-25T07:10:00-07:00"
+  branch: nodes/state-machine-source-inventory
+  parent_branch: nodes/state-machine-anti-drift-controls
+  main_goal: "Make the established state-machine build clear without changing its structure."
+  bounded_goal: "Inventory active sources only."
+  evidence:
+    source_head: 504b5239aab53fe5807e044688d10eefc5a2b63a
+    pull_request: 7
+    pull_request_mergeable_state: clean
+    pull_request_draft: true
+    check_runs: 0
+    changed_files_reviewed: 8
+    structural_units_mapped: 13
+  structural_drift:
+    status: NO_STRUCTURAL_DRIFT
+    evidence: "Inventory records existing names, order, layers, connections, semantics, and gaps; it does not modify source or runtime behavior."
+  clarity_gain: "Scattered definitions are mapped to thirteen explicit conversion units and a fixed conversion order."
+  next_permitted_action: "Create SM-004 Field Lifecycle watchdog node and exact transition validator in a new branch-step."
+  void_decision: ALLOW
+  hard_stop_status: REACHED
