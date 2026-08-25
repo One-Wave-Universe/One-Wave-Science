@@ -1,0 +1,20 @@
+node_id: PRIMITIVE-01
+canonical_name: Scalar
+namespace: STATE_MACHINE_PRIMITIVE
+gate: YELLOW
+lifecycle: ACTIVE
+position: 1
+next_primitive: Differential
+source_authority:
+  - Root_Axioms/A+101_One_Field_Ground.md
+  - Nodes/A-101_Ground_Zero.md
+  - Nodes/A-102_Displacement.md
+contract:
+  inputs: [current_field_state, reference_state]
+  output: scalar_displacement
+  expression: "x = psi - psi_0"
+  carries_reference: true
+boundary:
+  - does_not_compare_two_displacements
+  - does_not_create_direction
+  - does_not_define_vector_tensor_or_harmonic_behavior
