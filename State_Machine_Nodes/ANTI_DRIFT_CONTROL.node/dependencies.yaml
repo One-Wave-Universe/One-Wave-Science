@@ -1,0 +1,14 @@
+required:
+  - AGENTS.md
+  - BRANCH_STEP_PROJECT_TEMPLATE.md
+  - AI_CANONICAL_START_HERE.md
+  - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+  - Governance_I_Series/I-02_Node_Proof_Trust_Lifecycle.md
+  - Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md
+protected:
+  - canon/five-field-states
+exclusions:
+  - History/Superseded_Governance
+  - History/Unintegrated_Nodes
+  - generated PDFs
+  - domain prose that does not define active state-machine behavior
