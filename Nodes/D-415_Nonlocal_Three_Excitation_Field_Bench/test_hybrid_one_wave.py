@@ -40,6 +40,12 @@ class HybridOneWaveTests(unittest.TestCase):
         self.assertTrue(np.array_equal(r0, r1))
         self.assertTrue(np.array_equal(v0, v1))
 
+    def test_nonfinite_candidate_is_rejected_before_step(self):
+        r, v = initial_state()
+        nonfinite = lambda *_: np.full_like(r, np.nan)
+        with self.assertRaisesRegex(ValueError, "finite acceleration"):
+            hybrid_step(r, v, 0.1, 0.0, nonfinite)
+
     def test_hybrid_step_is_finite(self):
         r, v = initial_state()
         r, v, receipt = hybrid_step(r, v, 0.25, 0.0)
