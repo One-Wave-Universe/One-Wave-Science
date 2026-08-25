@@ -1,0 +1,22 @@
+receipt:
+  timestamp: "2026-08-25T07:38:00-07:00"
+  branch: nodes/state-machine-build-versions
+  observation: "The build scales in 3s and 5s."
+  locked_fact:
+    scaling_cadences: [3, 5]
+    coupled: true
+  unresolved:
+    - exact causal reason
+    - every location where the three-part cadence applies
+    - every location where the five-part cadence applies
+    - measurable coupling rule
+  anti_drift:
+    - keep 3 and 5 separate
+    - do not replace the five-primitive ladder with the three-part cadence
+    - do not claim a cause before programmable or bench evidence
+  structural_drift:
+    status: NO_STRUCTURAL_DRIFT
+    evidence: "The observed 3/5 rule was added without assigning unverified mechanics."
+  clarity_gain: "Both scaling cadences are now explicit requirements of the programmable and actual build versions."
+  next_permitted_action: "Define Scalar contract, then tag every verified 3-part and 5-part scaling occurrence."
+  void_decision: CORRECT
