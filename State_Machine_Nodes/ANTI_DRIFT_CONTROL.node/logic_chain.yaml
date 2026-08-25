@@ -1,0 +1,27 @@
+logic_chain:
+  - id: reference
+    action: Read active canon, branch control, prior receipts, and notes-to-self.
+  - id: propose
+    action: Select exactly one bounded state-machine unit for conversion.
+  - id: precheck
+    action: Compare the proposal with protected canon and record ALLOW, CORRECT, OVERRIDE, HOLD, or ESCALATE.
+  - id: convert
+    action: Create or update one watchdog node only.
+  - id: test
+    action: Run structural and semantic checks immediately.
+  - id: compare
+    action: Compare intended change, actual diff, active goal, and protected behavior.
+  - id: receipt
+    action: Save evidence, drift result, attempt count, and decision.
+  - id: notes
+    action: Update notes-to-self and next permitted action.
+  - id: stop_or_continue
+    action: Stop at the hard stop; otherwise begin the next separately bounded branch-step.
+transition_model:
+  - current_state: I_n
+  - proposed_state: R_n
+  - differential: Delta_n
+  - evaluation: E_Delta_n
+  - modulation: M_E
+  - validation: V_n
+  - committed_state: I_n_plus_1
