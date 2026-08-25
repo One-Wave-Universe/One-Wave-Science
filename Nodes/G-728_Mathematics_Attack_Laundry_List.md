@@ -60,8 +60,11 @@ visual pattern alone is not a derivation.
   slow-manifold candidate. Fast center crossing remains distinct from Hold;
   physical center type remains simulator-local. Artifact: G-738 and
   `dynamics/center_geometry.py` with six deterministic tests.
-- [ ] **B3 — Six-gate extraction:** derive Begin, coherent Build, Hold/Mass
-  Effect, unstable Build/heat, Break, and Loop from measured trajectories.
+- [x] **B3 — Six-gate extraction:** implemented conservative measured labels
+  for Begin, coherent Build, Hold, unstable Build/heat, Break, Loop, and
+  Unclassified from center, velocity, energy-rate, coherence, heat, boundary,
+  and prior-Break receipts. Artifact: G-739 and `dynamics/six_gate_extractor.py`
+  with five deterministic tests.
 - [ ] **B4 — Build-before-Break condition:** calculate minimum stored state,
   threshold, and phase required for a valid Break.
 - [ ] **B5 — Delayed noisy threshold:** extend B-216 with delay,
