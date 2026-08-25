@@ -1,0 +1,25 @@
+watchdog:
+  enabled: true
+  fail_closed: true
+  exact_position: 1
+  exact_name: Scalar
+  next_primitive: Differential
+  required_expression: "x = psi - psi_0"
+  required_properties:
+    - reference_is_defined
+    - output_is_one_referenced_value
+    - reference_travels_with_output
+  forbidden:
+    - compare_two_displacements
+    - create_direction
+    - create_tensor_relation
+    - create_harmonic_relation
+    - invent_physical_material
+    - collapse_three_and_five_scaling
+  checks:
+    - zero_case
+    - positive_displacement_case
+    - negative_displacement_case
+    - undefined_reference_rejected
+    - scalar_boundary_preserved
+  on_failure: HOLD
