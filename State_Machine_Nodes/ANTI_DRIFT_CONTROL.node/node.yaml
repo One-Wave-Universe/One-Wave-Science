@@ -1,0 +1,26 @@
+node_id: SM-CTRL-001
+canonical_name: State Machine Nodesification Anti-Drift Control
+namespace: STATE_MACHINE
+gate: YELLOW
+lifecycle: ACTIVE
+node_type: watchdog
+main_goal: Convert active state-machine definitions into canonical watchdog nodes without changing established semantics.
+active_goal: Establish the receipt and notes-to-self control layer before converting state-machine content.
+hard_start:
+  - Read AGENTS.md and BRANCH_STEP_PROJECT_TEMPLATE.md.
+  - Verify repository, branch, worktree, and HEAD.
+  - Read the active canonical state-machine sources.
+hard_stop:
+  - Stop after the control node and its templates are present and verified.
+  - Do not begin bulk state-machine conversion in this branch-step.
+protected_canon:
+  field_lifecycle_states:
+    - Idle
+    - Primed
+    - Executing
+    - Vectoring
+    - Resolving
+  distinct_from:
+    - five-level modulation
+    - six-step recursion
+    - domain-specific wrappers
