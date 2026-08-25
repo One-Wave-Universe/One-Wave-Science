@@ -241,6 +241,28 @@ Do not begin the next branch-step until:
 - known-good state is recorded
 - next branch-step hard-start conditions are satisfied
 
+## Repository-Wide Anti-Drift Law
+Every bounded work action anywhere in this repository must be treated as a deliberate action with an observable consequence and a validation step.
+
+Before acting:
+- identify the exact local page/file/area;
+- read its local reference when one exists;
+- state the bounded intended action internally;
+- know the success/verification check before changing anything.
+
+After acting:
+- compare the actual consequence with the intended result;
+- record PASS or DRIFT in the applicable anti-drift ledger/ticker;
+- do not count raw tool calls as successful work actions.
+
+If DRIFT occurs, implementation stops immediately and `DRIFT_INCIDENT_PROTOCOL.md` is mandatory before resuming. The drift event must produce a report containing the cause, consequence, correction, and at least one targeted prevention action. The no-drift streak resets to 0. The last known-good state must be preserved.
+
+Every new major work area touched by Chat should carry its own local reference/orientation note. A local note pertains only to its own page/file/area and must not silently summarize, replace, or modify another area's local instructions.
+
+The anti-drift feedback loop is:
+
+`ACTION -> CONSEQUENCE -> COMPARE TO INTENT -> PASS/DRIFT -> LEARN -> CORRECT/PREVENT -> NEXT BOUNDED ACTION`
+
 ## Jetson Resource Priority
 The Jetson Orin must stay controllable while work runs.
 
