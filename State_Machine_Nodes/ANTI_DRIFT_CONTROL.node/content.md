@@ -2,9 +2,34 @@
 
 ## Main goal
 
-Convert every active state-machine definition, transition, gate, action, view, scale, lifecycle rule, and validation rule into a canonical node graph without rewriting the established architecture.
+Turn the active state-machine build into a clear, traceable node graph without changing the build structure.
 
-Ordinary explanations, history, superseded material, and archived records are not executable nodes. They may reference canonical nodes but may not silently redefine them.
+Nodesification is an organizational conversion. It exposes the build that already exists: what each part is, where it connects, what it depends on, and how it is checked. It is not permission to redesign the machine.
+
+## Meaning of no drift
+
+**No drift means do not alter the established build structure.**
+
+A conversion must not reorder, rename, merge, split, add, remove, replace, or reinterpret any established build component. The locked structure is recorded in `BUILD_STRUCTURE_LOCK.yaml`.
+
+Allowed work:
+
+- expose an existing component as a node;
+- connect it to its existing dependencies;
+- make its place in the build easier to follow;
+- add validation, telemetry, receipts, indexes, and navigation;
+- remove duplicate hard-coded definitions only after they point to the same locked canonical node.
+
+Forbidden work:
+
+- invent a cleaner architecture;
+- move a component to a different layer;
+- combine distinct layers;
+- replace established names or order;
+- change behavior while calling it nodesification;
+- use a local optimization to reshape the whole build.
+
+If a proposed node makes the build behave differently, changes its order, or changes what a component means, the watchdog must return `HOLD` or `OVERRIDE`.
 
 ## Required node folder
 
@@ -25,55 +50,38 @@ A `.node` folder is a watchdog folder type, not a separate executable per node.
 
 For every conversion unit:
 
-1. Record the exact source and current canonical meaning.
-2. Convert one bounded unit.
-3. Run its structural and semantic checks immediately.
-4. Compare the result with the active goal and protected canon.
-5. Record drift, even when drift is zero.
-6. Write the receipt and notes-to-self before advancing.
-7. After three failures of the same approach, stop it, record what was learned, and switch approaches.
-8. Stop at the branch-step hard stop.
+1. Read `BUILD_STRUCTURE_LOCK.yaml`.
+2. Record the exact source, structural position, connections, and canonical meaning.
+3. Convert one bounded unit without altering any of them.
+4. Run structural and semantic checks immediately.
+5. Compare the resulting node graph to the locked build.
+6. Record `NO_STRUCTURAL_DRIFT` only when the build is unchanged.
+7. Write the receipt and notes-to-self before advancing.
+8. After three failures of the same approach, stop it and use a materially different approach.
+9. Stop at the branch-step hard stop.
 
 ## Anti-drift receipt law
 
-A conversion is incomplete without a receipt recording:
+A receipt must show, with evidence:
 
-- date/time;
-- branch, worktree, and HEAD before and after;
-- main goal and current bounded goal;
-- source files read;
-- files changed;
-- canonical meanings preserved;
-- tests/checks and exact results;
-- intended versus actual diff;
-- drift found or `NONE`;
-- what worked and failed;
-- attempt/strike count;
-- Field notes;
-- Void oversight decision;
-- next permitted action;
-- hard-stop status.
+- which locked build components were touched;
+- their before and after order, names, layer, connections, and meaning;
+- whether runtime/build behavior changed;
+- how clarity improved;
+- exact checks and results;
+- `NO_STRUCTURAL_DRIFT` or `STRUCTURAL_DRIFT_DETECTED`;
+- the next permitted action.
 
-## Notes-to-self law
-
-Before and after every bounded conversion, update `notes-to-self.md` with:
-
-- what must not change;
-- what is still uncertain;
-- what evidence would falsify the current mapping;
-- failed approaches not to repeat;
-- protected working behavior;
-- the exact next permitted action;
-- a direct check that the work still serves the main goal.
+A receipt may never report no drift merely because work stayed inside the task scope.
 
 ## Protected separation
 
-The five Field lifecycle states are:
+The five Field lifecycle states remain:
 
 `Idle -> Primed -> Executing -> Vectoring -> Resolving`
 
-They are not the five modulation levels and not the six recursion steps:
+They remain distinct from five-level modulation and from:
 
 `Begin -> Build -> Hold -> Build -> Break -> Loop`
 
-No conversion may merge these three layers.
+Nodesification must make those relationships clearer without changing them.
