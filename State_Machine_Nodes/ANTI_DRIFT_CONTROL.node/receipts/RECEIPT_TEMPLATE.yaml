@@ -1,0 +1,40 @@
+receipt:
+  timestamp:
+  branch:
+  worktree:
+  head_before:
+  head_after:
+  main_goal:
+  bounded_goal:
+  source_files_read: []
+  files_changed: []
+  protected_canon:
+    field_lifecycle_states:
+      - Idle
+      - Primed
+      - Executing
+      - Vectoring
+      - Resolving
+    layers_kept_distinct:
+      - field_lifecycle
+      - modulation
+      - six_step_recursion
+  checks:
+    - command_or_method:
+      result:
+      evidence:
+  intended_vs_actual_diff:
+  drift:
+    status: NONE
+    details:
+  what_worked:
+  what_failed:
+  what_learned:
+  field_notes:
+  void_decision:
+  attempt:
+    approach:
+    number:
+    strike_count:
+  next_permitted_action:
+  hard_stop_status:
