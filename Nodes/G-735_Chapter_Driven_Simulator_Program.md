@@ -38,6 +38,31 @@ parameter declarations, failed cases, and a visual driven by engine state.
 Legacy HTML visuals remain visual prototypes until their state is produced by
 validated engines. `UNBUILT` is recorded explicitly rather than hidden.
 
+## Active scope and merge boundary
+
+**Micro is the only active implementation scale in this branch.** The registry
+may name later scales so work cannot be skipped, but a registry entry is not an
+implementation and must remain `PLANNED` or `UNBUILT` until its own validated
+engine exists. Planetary, galactic, biological, cognitive, and media material in
+the repository is reference or prior control work; it is not promoted by this
+Micro pass.
+
+Merge readiness for this branch requires:
+
+- the six-route space to remain unique, reachable under the declared unified
+  transition law, reversible, and identity-preserving through Mirror projection;
+- invalid or non-finite candidate state to stop at the simulator boundary;
+- Gray/control evolution to remain unchanged when the One-Wave contribution is
+  zero;
+- conservation and error receipts to remain present;
+- non-Micro registry entries to remain explicitly unbuilt.
+
+The following remain Yellow/open research and do not become architecture claims
+or merge blockers: stationary-vortex persistence, the B-226 recursion floor,
+correlated-noise/delay/quantization/first-passage analysis, nonlinear PDE proton
+binding, reproduction of measured proton observables, and every higher-scale
+simulator.
+
 ## Immediate build order
 
 **Active freeze:** do not advance beyond Micro until the quark-vortex/proton
