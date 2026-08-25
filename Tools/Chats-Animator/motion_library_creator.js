@@ -1,109 +1,116 @@
 (()=>{
 'use strict';
 const FORMAT='one-wave-character-motion-library';
-const VERSION=2;
-const BATCH_SIZE=50;
+const VERSION=3;
+const FRAMES_PER_SHEET=50;
+const DEFAULT_COLUMNS=10;
+const DEFAULT_ROWS=5;
 const clone=v=>JSON.parse(JSON.stringify(v));
 const assert=(c,m)=>{if(!c)throw new Error(m)};
-const slug=s=>String(s||'pose').trim().replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase()||'pose';
+const slug=s=>String(s||'motion').trim().replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase()||'motion';
 
 function makeLibrary({character,bodyVariant='base'}={}){
   assert(character,'Character is required');
-  return {format:FORMAT,version:VERSION,character:String(character),bodyVariant:String(bodyVariant),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),frames:[],batches:[]};
+  return {
+    format:FORMAT,
+    version:VERSION,
+    character:String(character),
+    bodyVariant:String(bodyVariant),
+    createdAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString(),
+    motions:[]
+  };
 }
 
-function makeBatch(library,motions=[]){
+function makeMotionSheet(library,{motion,folder='general',columns=DEFAULT_COLUMNS,rows=DEFAULT_ROWS}={}){
   assert(library?.format===FORMAT,'Unsupported library');
-  assert(Array.isArray(motions)&&motions.length===BATCH_SIZE,`A generation batch must contain exactly ${BATCH_SIZE} motion jobs`);
-  const batchIndex=library.batches.length;
-  const startIndex=library.frames.length;
-  const id=`batch-${String(batchIndex+1).padStart(4,'0')}`;
-  const jobs=motions.map((motion,i)=>({
-    libraryIndex:startIndex+i,
-    batchIndex:i,
-    motion:String(motion),
-    state:'pending',
-    filename:`${String(startIndex+i+1).padStart(6,'0')}_${slug(motion)}.png`,
-    mimeType:null,width:null,height:null,transparent:null,assetRef:null,error:null
-  }));
-  const batch={id,index:batchIndex,size:BATCH_SIZE,startIndex,endIndex:startIndex+BATCH_SIZE-1,status:'pending',createdAt:new Date().toISOString(),completed:0,zipRef:null,manifestRef:null,jobs};
-  library.batches.push(batch);
-  library.frames.push(...jobs.map(j=>({...j,batchId:id})));
+  assert(motion,'Motion name is required');
+  columns=Number(columns);rows=Number(rows);
+  assert(columns>0&&rows>0&&columns*rows===FRAMES_PER_SHEET,`Motion sheet must contain exactly ${FRAMES_PER_SHEET} cells`);
+  const index=library.motions.length;
+  const id=`motion-${String(index+1).padStart(5,'0')}`;
+  const filename=`${slug(folder)}/${String(index+1).padStart(5,'0')}_${slug(motion)}.png`;
+  const entry={
+    id,index,motion:String(motion),folder:String(folder),filename,
+    frameCount:FRAMES_PER_SHEET,columns,rows,
+    state:'pending',mimeType:'image/png',width:null,height:null,
+    transparent:null,sheetRef:null,error:null,createdAt:new Date().toISOString()
+  };
+  library.motions.push(entry);
   library.updatedAt=new Date().toISOString();
-  return batch;
+  return entry;
 }
 
-function validateGeneratedFrame(result){
+function validateGeneratedSheet(result,entry){
   assert(result&&typeof result==='object','Generator returned no result');
-  assert(result.mimeType==='image/png','Each motion frame must be one PNG');
-  assert(result.transparent===true,'Motion frame must have transparent background');
+  assert(result.mimeType==='image/png','Each motion must be stored as one PNG sheet');
+  assert(result.transparent===true,'Motion sheet must have transparent background');
   assert(Number(result.width)>0&&Number(result.height)>0,'PNG dimensions missing');
-  assert(result.assetRef,'PNG must be persisted before completion');
-  assert(result.imageCount===undefined||Number(result.imageCount)===1,'Sprite sheets/composite boards are rejected');
+  assert(result.assetRef||result.sheetRef,'Motion sheet PNG must be persisted before completion');
+  if(result.frameCount!=null)assert(Number(result.frameCount)===FRAMES_PER_SHEET,`Motion sheet must contain exactly ${FRAMES_PER_SHEET} frames`);
+  if(result.columns!=null&&result.rows!=null)assert(Number(result.columns)*Number(result.rows)===FRAMES_PER_SHEET,`Motion sheet grid must contain exactly ${FRAMES_PER_SHEET} cells`);
+  assert(entry.columns*entry.rows===FRAMES_PER_SHEET,'Stored motion-sheet grid is invalid');
   return result;
 }
 
-function buildBatchManifest(library,batch){
+function frameAddress(entry,frameIndex){
+  assert(entry?.sheetRef,'Motion sheet is not saved');
+  assert(Number.isInteger(frameIndex)&&frameIndex>=0&&frameIndex<FRAMES_PER_SHEET,'Frame index must be 0..49');
+  const column=frameIndex%entry.columns;
+  const row=Math.floor(frameIndex/entry.columns);
   return {
-    format:'one-wave-motion-batch-manifest',version:1,
-    libraryFormat:FORMAT,libraryVersion:VERSION,
-    character:library.character,bodyVariant:library.bodyVariant,
-    batchId:batch.id,batchIndex:batch.index,size:batch.size,
-    frames:batch.jobs.map(j=>({libraryIndex:j.libraryIndex,batchIndex:j.batchIndex,motion:j.motion,filename:j.filename,width:j.width,height:j.height,transparent:j.transparent,assetRef:j.assetRef}))
+    sheetRef:entry.sheetRef,
+    frameIndex,
+    column,row,
+    columns:entry.columns,rows:entry.rows,
+    u0:column/entry.columns,v0:row/entry.rows,
+    u1:(column+1)/entry.columns,v1:(row+1)/entry.rows
   };
 }
 
 class MotionLibraryCreator{
-  constructor({generateOne,persistLibrary,packZip,unpackZip,onProgress}={}){
-    assert(typeof generateOne==='function','generateOne adapter required');
+  constructor({generateSheet,persistLibrary,onProgress}={}){
+    assert(typeof generateSheet==='function','generateSheet adapter required');
     assert(typeof persistLibrary==='function','persistLibrary adapter required');
-    this.generateOne=generateOne;
+    this.generateSheet=generateSheet;
     this.persistLibrary=persistLibrary;
-    this.packZip=packZip;
-    this.unpackZip=unpackZip;
     this.onProgress=typeof onProgress==='function'?onProgress:()=>{};
     this.running=false;this.stopRequested=false;
   }
   async checkpoint(library){library.updatedAt=new Date().toISOString();await this.persistLibrary(clone(library));this.onProgress(clone(library));}
   requestStop(){this.stopRequested=true;}
-  async runBatch(library,batchId,context={}){
+  async generateMotion(library,motionId,context={}){
     assert(!this.running,'Creator already running');
-    const batch=library.batches.find(b=>b.id===batchId);assert(batch,'Batch not found');
-    this.running=true;this.stopRequested=false;batch.status='generating';await this.checkpoint(library);
+    const entry=library.motions.find(m=>m.id===motionId);assert(entry,'Motion not found');
+    this.running=true;this.stopRequested=false;entry.state='generating';entry.error=null;await this.checkpoint(library);
     try{
-      for(const job of batch.jobs){
-        if(job.state==='saved')continue;if(this.stopRequested)break;
-        job.state='generating';job.error=null;await this.checkpoint(library);
-        try{
-          const result=validateGeneratedFrame(await this.generateOne({character:library.character,bodyVariant:library.bodyVariant,batchId:batch.id,libraryIndex:job.libraryIndex,batchIndex:job.batchIndex,motion:job.motion,filename:job.filename,transparentBackground:true,singleFrameOnly:true,context:clone(context)}));
-          Object.assign(job,{state:'saved',mimeType:'image/png',width:Number(result.width),height:Number(result.height),transparent:true,assetRef:String(result.assetRef)});
-          const frame=library.frames.find(f=>f.libraryIndex===job.libraryIndex);if(frame)Object.assign(frame,clone(job),{batchId:batch.id});
-          batch.completed=batch.jobs.filter(j=>j.state==='saved').length;await this.checkpoint(library);
-        }catch(error){job.state='failed';job.error=String(error?.message||error);batch.status='failed';await this.checkpoint(library);throw error;}
-      }
-      batch.completed=batch.jobs.filter(j=>j.state==='saved').length;
-      batch.status=batch.completed===batch.size?'complete':'paused';
+      if(this.stopRequested){entry.state='paused';await this.checkpoint(library);return clone(entry);}
+      const result=validateGeneratedSheet(await this.generateSheet({
+        character:library.character,
+        bodyVariant:library.bodyVariant,
+        motion:entry.motion,
+        folder:entry.folder,
+        filename:entry.filename,
+        frameCount:FRAMES_PER_SHEET,
+        columns:entry.columns,
+        rows:entry.rows,
+        transparentBackground:true,
+        singlePngSheet:true,
+        context:clone(context)
+      }),entry);
+      Object.assign(entry,{
+        state:'saved',mimeType:'image/png',width:Number(result.width),height:Number(result.height),
+        transparent:true,sheetRef:String(result.sheetRef||result.assetRef),error:null
+      });
       await this.checkpoint(library);
-      return clone(batch);
-    }finally{this.running=false;}
-  }
-  async zipBatch(library,batchId){
-    assert(typeof this.packZip==='function','packZip adapter required');
-    const batch=library.batches.find(b=>b.id===batchId);assert(batch,'Batch not found');assert(batch.completed===batch.size,'Batch must be complete before zipping');
-    const manifest=buildBatchManifest(library,batch);
-    const packed=await this.packZip({filename:`${slug(library.character)}-${slug(library.bodyVariant)}-${batch.id}.zip`,manifest,files:batch.jobs.map(j=>({filename:j.filename,assetRef:j.assetRef}))});
-    assert(packed?.zipRef,'ZIP was not persisted');batch.zipRef=String(packed.zipRef);batch.manifestRef=packed.manifestRef?String(packed.manifestRef):null;await this.checkpoint(library);return clone(batch);
-  }
-  async importZip(library,zipRef){
-    assert(typeof this.unpackZip==='function','unpackZip adapter required');
-    const unpacked=await this.unpackZip(zipRef);assert(unpacked?.manifest,'ZIP manifest missing');
-    const m=unpacked.manifest;assert(m.format==='one-wave-motion-batch-manifest','Wrong ZIP manifest format');assert(m.character===library.character,'ZIP belongs to another character');assert(m.bodyVariant===library.bodyVariant,'ZIP belongs to another body variant');assert(Array.isArray(m.frames),'ZIP frame list missing');
-    const seen=new Set(library.frames.map(f=>f.filename));
-    for(const frame of m.frames){if(seen.has(frame.filename))continue;library.frames.push({...frame,state:'saved',mimeType:'image/png',batchId:m.batchId,error:null});seen.add(frame.filename);}
-    if(!library.batches.some(b=>b.id===m.batchId))library.batches.push({id:m.batchId,index:m.batchIndex,size:m.size,startIndex:Math.min(...m.frames.map(f=>f.libraryIndex)),endIndex:Math.max(...m.frames.map(f=>f.libraryIndex)),status:'complete',createdAt:new Date().toISOString(),completed:m.frames.length,zipRef:String(zipRef),manifestRef:null,jobs:m.frames.map(f=>({...f,state:'saved',mimeType:'image/png',error:null}))});
-    library.frames.sort((a,b)=>a.libraryIndex-b.libraryIndex);await this.checkpoint(library);return clone(library);
+      return clone(entry);
+    }catch(error){entry.state='failed';entry.error=String(error?.message||error);await this.checkpoint(library);throw error;}
+    finally{this.running=false;}
   }
 }
 
-window.OneWaveMotionLibraryCreator={FORMAT,VERSION,BATCH_SIZE,makeLibrary,makeBatch,validateGeneratedFrame,buildBatchManifest,MotionLibraryCreator};
+window.OneWaveMotionLibraryCreator={
+  FORMAT,VERSION,FRAMES_PER_SHEET,DEFAULT_COLUMNS,DEFAULT_ROWS,
+  makeLibrary,makeMotionSheet,validateGeneratedSheet,frameAddress,MotionLibraryCreator
+};
 })();
