@@ -55,8 +55,11 @@ visual pattern alone is not a derivation.
   stability, barriers, phase response, RK4 dynamics, and energy/work ledger are
   implemented in G-734. Field-level coefficient derivation remains open and is
   now subordinate to the Micro simulator freeze.
-- [ ] **B2 — Center geometry:** test whether the shared middle is a point,
-  finite band, crossing surface, limit-cycle section, or slow manifold.
+- [x] **B2 — Center geometry:** implemented independent receipts for point
+  residence, finite band, crossing section, recurrent limit-cycle section, and
+  slow-manifold candidate. Fast center crossing remains distinct from Hold;
+  physical center type remains simulator-local. Artifact: G-738 and
+  `dynamics/center_geometry.py` with six deterministic tests.
 - [ ] **B3 — Six-gate extraction:** derive Begin, coherent Build, Hold/Mass
   Effect, unstable Build/heat, Break, and Loop from measured trajectories.
 - [ ] **B4 — Build-before-Break condition:** calculate minimum stored state,
