@@ -1,0 +1,14 @@
+required:
+  - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/BUILD_STRUCTURE_LOCK.yaml
+  - State_Machine_Nodes/STATE_MACHINE_SOURCE_INVENTORY.yaml
+  - UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
+  - UPDATED_36_CONDITIONAL_FOLD_AND_RECURSIVE_EXIT_GATE.md
+  - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+references:
+  - AI_CANONICAL_START_HERE.md
+  - Nodes/B-221a_Six_Step_Oscillator_Program.md
+  - Nodes/B-225_Field_Cycle.md
+downstream:
+  - SM-008_STEP_6_CONDITIONAL_FOLD.node
+  - canonical_state_machine_graph
+  - state_machine_validator
