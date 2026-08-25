@@ -1,0 +1,19 @@
+node_id: SM-004
+canonical_name: Five Field Lifecycle States
+namespace: STATE_MACHINE
+gate: YELLOW
+lifecycle: ACTIVE
+node_type: watchdog
+source_authority: UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
+states:
+  - Idle
+  - Primed
+  - Executing
+  - Vectoring
+  - Resolving
+initial_state: Idle
+terminal_evaluation_state: Resolving
+separate_axes:
+  - five_modulation_levels
+  - five_void_octave_positions
+  - six_process_steps
