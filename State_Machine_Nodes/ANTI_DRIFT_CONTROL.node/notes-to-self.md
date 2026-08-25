@@ -1,21 +1,19 @@
 # Notes to Self
 
-## Before this branch-step
+## Permanent correction
 
-- Do not confuse nodesification with rewriting the architecture.
+- Anti-drift does not mean only staying inside the assigned task.
+- Anti-drift means **do not fuck with the established build structure**.
+- Nodesification must make the existing build clearer, easier to trace, and easier to test.
+- Do not redesign, reorder, rename, merge, split, add, remove, replace, or reinterpret build components.
+- Read `BUILD_STRUCTURE_LOCK.yaml` before converting any state-machine unit.
+- A receipt must compare names, order, layers, connections, semantics, and behavior before and after.
+- Report `NO_STRUCTURAL_DRIFT` only when all of those are unchanged.
+- If clarity improves but structure changes, the conversion fails.
+- If structure is preserved but the build is not clearer, the conversion is incomplete.
 - Preserve `Idle -> Primed -> Executing -> Vectoring -> Resolving` exactly.
 - Keep Field lifecycle, modulation, and six-step recursion separate.
-- Do not bulk-convert until the watchdog and receipt format exist.
-- Do not treat ordinary explanations, history, or generated artifacts as executable nodes.
-- Do not make every node a separate executable.
-- Read the same canonical references before every bounded conversion.
-- Change one thing, test it immediately, compare it with the goal, and record drift.
-- After three failed attempts, stop that approach instead of disguising a fourth attempt.
-- The exact next permitted action after this branch-step is inventorying active state-machine source units.
-
-## After this branch-step
-
-- Control node created before content conversion.
-- No state-machine semantics intentionally changed.
-- No bulk conversion performed.
-- Next branch-step must begin with a source inventory receipt and a hard start.
+- Do not make each node a separate executable.
+- Change one thing, test immediately, compare against the structure lock, then write the receipt.
+- After three failed attempts, stop that approach.
+- Next permitted action: inventory the existing build exactly as-is, mapping each active source to its structural position without changing it.
