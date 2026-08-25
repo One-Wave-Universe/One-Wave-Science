@@ -1,3 +1,12 @@
+/*
+PAGE REFERENCE — THIS NOTE PERTAINS TO THIS FILE ONLY. IT HAS NOTHING TO DO WITH RULES OR UPDATES FOR ANY OTHER FILE OR PAGE. DO NOT SUMMARIZE ANOTHER PAGE INTO THIS ONE OR APPLY THIS NOTE OUTSIDE ai_sequence_editor.js.
+
+WHO YOU ARE HERE: You are working on the One-Wave Animator AI reel-sequence editor.
+WHAT THIS FILE DOES: Opens a saved sequence, edits frame order/holds/motion labels, saves revisions, and presents completed still frames at project FPS.
+ANIMATION MODEL HERE: Every sequence item references one saved PNG frame file. Playback advances completed still-frame states. This file must not convert the reel into tweening, moving placeholders, or sprite-sheet-as-frame storage.
+PLAN HERE: Keep AI edits compatible with the same manually editable animator project. AI changes frame references/order/holds; the real animator presents those frames.
+TEST HERE: Sequence behavior must ultimately be verified by the actual animator presenting real frame PNGs at FPS, not by a detached mock player.
+*/
 (()=>{
 'use strict';
 const FPS=24;
