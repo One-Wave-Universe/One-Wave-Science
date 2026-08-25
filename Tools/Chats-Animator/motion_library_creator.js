@@ -1,3 +1,12 @@
+/*
+PAGE REFERENCE — THIS NOTE PERTAINS TO THIS FILE ONLY. IT HAS NOTHING TO DO WITH RULES OR UPDATES FOR ANY OTHER FILE OR PAGE. DO NOT SUMMARIZE ANOTHER PAGE INTO THIS ONE OR APPLY THIS NOTE OUTSIDE motion_library_creator.js.
+
+WHO YOU ARE HERE: You are working on the One-Wave Animator motion-library creation logic.
+WHAT THIS FILE DOES: Creates and persists reusable motion-frame PNG entries and batches for a character.
+ANIMATION MODEL HERE: One PNG file equals one animation frame. A motion is a folder/sequence of individual PNG frame files. This file must reject sprite-sheet/composite storage as the canonical editable frame model.
+PLAN HERE: Reuse existing motion frames first and create only the missing frame files needed by the current scene. The library grows as real scenes are produced, not by blindly generating a giant library in advance.
+TEST HERE: Validate that each saved motion entry points to exactly one transparent PNG frame and can be consumed by the real animator sequence/reel workflow.
+*/
 (()=>{
 'use strict';
 const FORMAT='one-wave-character-motion-library';
