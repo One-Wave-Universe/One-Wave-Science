@@ -1,0 +1,40 @@
+watchdog:
+  enabled: true
+  fail_closed: true
+  checks:
+    - id: required_files
+      require:
+        - node.yaml
+        - content.md
+        - logic_chain.yaml
+        - dependencies.yaml
+        - node.watchdog.yaml
+        - notes-to-self.md
+        - telemetry
+        - receipts
+    - id: lifecycle_separation
+      forbid_merging:
+        - field_lifecycle_states
+        - modulation_levels
+        - six_step_recursion
+    - id: canonical_field_states
+      exact_order:
+        - Idle
+        - Primed
+        - Executing
+        - Vectoring
+        - Resolving
+    - id: receipt_required
+      require_before_advance: true
+    - id: notes_to_self_required
+      require_before_and_after: true
+    - id: one_change
+      maximum_bounded_units_per_pass: 1
+    - id: three_strikes
+      maximum_attempts_per_approach: 3
+  decisions:
+    - ALLOW
+    - CORRECT
+    - OVERRIDE
+    - HOLD
+    - ESCALATE
