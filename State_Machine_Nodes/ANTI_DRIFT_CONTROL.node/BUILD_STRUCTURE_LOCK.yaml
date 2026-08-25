@@ -1,0 +1,71 @@
+build_structure_lock:
+  rule: "Nodesification documents and connects the established build. It does not alter the build structure."
+  invariant_pair_order:
+    - "F1/V6"
+    - "V5/F2"
+    - "F3/V4"
+    - "V3/F4"
+    - "F5/V2"
+    - "V1/F6"
+  pair_semantics:
+    slash: "simultaneous mirrored pair"
+    dash: "Mirror Gate return/crossover through shared (0)"
+  process_steps:
+    - Begin
+    - Build
+    - Hold
+    - Build
+    - Break
+    - Loop
+  engagement_choices:
+    - Everything
+    - Nothing
+  differential_moves:
+    - Left
+    - Stay
+    - Right
+  differential_values:
+    - -1
+    - 0
+    - 1
+  views:
+    - Direction
+    - Phase
+    - Strength
+    - Reference
+  actions:
+    - Inward
+    - Outward
+    - Across
+    - Over
+  field_lifecycle_states:
+    - Idle
+    - Primed
+    - Executing
+    - Vectoring
+    - Resolving
+  modulation_levels:
+    - -2
+    - -1
+    - 0
+    - 1
+    - 2
+  forbidden_structural_changes:
+    - reorder
+    - rename
+    - merge
+    - split
+    - add_gate
+    - remove_gate
+    - reinterpret
+    - replace
+  allowed_nodesification_changes:
+    - expose existing relationships
+    - add explicit dependencies
+    - add validation
+    - add receipts
+    - add telemetry
+    - add navigation and indexes
+  test:
+    pass: "The node graph reproduces the established build exactly and makes it easier to trace."
+    fail: "Any node changes how the build is assembled or behaves."
