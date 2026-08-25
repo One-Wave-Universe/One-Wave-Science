@@ -1,0 +1,53 @@
+build_versions:
+  programmable_version:
+    name: Programmable State-Machine Reference
+    role: "Runs, inspects, and validates the same structure intended for the actual primitive build."
+    contains:
+      - canonical primitive nodes
+      - state and transition graph
+      - Field lifecycle
+      - Step-6 evaluation
+      - receipts and telemetry
+      - anti-drift validator
+    completion:
+      - all five primitive stages represented
+      - legal inputs and outputs explicit
+      - transitions executable
+      - invalid transitions rejected
+      - result retained as next reference
+      - output traceable by receipt
+  actual_primitive_version:
+    name: Actual Primitive Build
+    exact_ladder:
+      1: Scalar
+      2: Differential
+      3: Vector
+      4: Tensor
+      5: Harmonic
+    completion:
+      - each primitive has a measurable input
+      - each primitive has a measurable state or relation
+      - each primitive has a measurable output
+      - each primitive feeds the next without changing the ladder
+      - harmonic output can close or reinject as the next reference
+      - bench receipts distinguish observed behavior from architecture
+relationship:
+  rule: "The programmable version is the testable map of the actual primitive build, not a different machine."
+  state_machine_role: "Controls and observes movement through the primitive ladder."
+  lifecycle_role: "Describes the Field-side behavioral phase; it is not the primitive ladder."
+  anti_drift_rule: "Software names, order, interfaces, and transitions must remain aligned with the actual build."
+current_status:
+  structure_named: true
+  programmable_primitive_nodes_complete: false
+  physical_primitive_contracts_complete: false
+  bench_validation_complete: false
+next_work_order:
+  - Scalar primitive contract
+  - Differential primitive contract
+  - Vector primitive contract
+  - Tensor primitive contract
+  - Harmonic primitive contract
+  - connect five primitive nodes into programmable graph
+  - attach Field lifecycle and Step-6 routing
+  - run software validation
+  - issue bench-test packets and receipts
