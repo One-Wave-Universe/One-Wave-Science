@@ -1,0 +1,26 @@
+receipt:
+  timestamp: "2026-08-25T07:32:00-07:00"
+  branch: nodes/state-machine-build-versions
+  correction: "The prior inventory centered lifecycle units and did not expose the programmable-versus-actual build versions or the actual primitive spine."
+  locked_build_versions:
+    - Programmable State-Machine Reference
+    - Actual Primitive Build
+  locked_actual_primitive_order:
+    - Scalar
+    - Differential
+    - Vector
+    - Tensor
+    - Harmonic
+  structural_drift:
+    status: NO_STRUCTURAL_DRIFT
+    evidence: "The user-specified build versions and primitive order were added as the governing spine; no primitive semantics or runtime behavior were invented or changed."
+  clarity_gain: "Lifecycle, routing, and validation are now explicitly subordinate to the programmable model of the actual five-primitive build."
+  what_still_needs_definition:
+    - Scalar input/state/output contract
+    - Differential input/state/output contract
+    - Vector input/state/output contract
+    - Tensor input/state/output contract
+    - Harmonic input/state/output/closure contract
+  next_permitted_action: "Define and receipt the Scalar primitive contract."
+  void_decision: CORRECT
+  hard_stop_status: REACHED
