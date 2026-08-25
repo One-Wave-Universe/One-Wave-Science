@@ -1,0 +1,16 @@
+receipt:
+  timestamp: "2026-08-25T07:52:00-07:00"
+  branch: nodes/primitive-01-scalar
+  primitive: Scalar
+  position_before: 1
+  position_after: 1
+  source_expression: "x = psi - psi_0"
+  programmable_expression: "x = psi - psi_0"
+  input_contract: [current_field_state, reference_state]
+  output_contract: [scalar_displacement, reference_state]
+  structural_drift:
+    status: NO_STRUCTURAL_DRIFT
+    evidence: "The programmable node exposes A-101/A-102's existing reference-dependent single-displacement contract and preserves Differential ownership of comparison."
+  clarity_gain: "Scalar now has an explicit input, output, boundary, handoff, watchdog, and scaling declaration."
+  next_permitted_action: "Validate Scalar cases and save telemetry."
+  void_decision: ALLOW
