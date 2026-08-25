@@ -5,6 +5,7 @@ build_structure_lock:
       purpose: "Executable software reference of the same build structure."
       must_model:
         - primitive_ladder
+        - three_and_five_scaling
         - state_machine
         - legal_transitions
         - memory_and_consequence
@@ -12,28 +13,20 @@ build_structure_lock:
       must_not_become: "A replacement architecture."
     actual:
       purpose: "Physical primitive build."
-      primitive_ladder:
-        - Scalar
-        - Differential
-        - Vector
-        - Tensor
-        - Harmonic
+      primitive_ladder: [Scalar, Differential, Vector, Tensor, Harmonic]
   primitive_ladder:
-    exact_order:
-      - Scalar
-      - Differential
-      - Vector
-      - Tensor
-      - Harmonic
+    exact_order: [Scalar, Differential, Vector, Tensor, Harmonic]
     rule: "The programmable version must model these actual primitives in this order; lifecycle and routing logic operate through them but do not replace them."
     semantics_status: "Interfaces and measurable completion criteria must be locked one primitive at a time from authoritative sources and bench receipts."
-  invariant_pair_order:
-    - "F1/V6"
-    - "V5/F2"
-    - "F3/V4"
-    - "V3/F4"
-    - "F5/V2"
-    - "V1/F6"
+  scaling:
+    locked_cadences: [3, 5]
+    status: "Observed architecture rule; causal explanation not yet validated."
+    anti_drift:
+      - "Do not collapse 3 and 5 into one count."
+      - "Do not assign a cause or physical mechanism without a programmable receipt or bench receipt."
+      - "Do not replace the five-primitive ladder with the three-part cadence."
+      - "The programmable version must expose both cadences independently and test their coupling."
+  invariant_pair_order: ["F1/V6", "V5/F2", "F3/V4", "V3/F4", "F5/V2", "V1/F6"]
   pair_semantics:
     slash: "simultaneous mirrored pair"
     dash: "Mirror Gate return/crossover through shared (0)"
@@ -45,15 +38,7 @@ build_structure_lock:
   actions: [Inward, Outward, Across, Over]
   field_lifecycle_states: [Idle, Primed, Executing, Vectoring, Resolving]
   modulation_levels: [-2, -1, 0, 1, 2]
-  forbidden_structural_changes:
-    - reorder
-    - rename
-    - merge
-    - split
-    - add_gate
-    - remove_gate
-    - reinterpret
-    - replace
+  forbidden_structural_changes: [reorder, rename, merge, split, add_gate, remove_gate, reinterpret, replace]
   allowed_nodesification_changes:
     - expose existing relationships
     - add explicit dependencies
@@ -62,5 +47,5 @@ build_structure_lock:
     - add telemetry
     - add navigation and indexes
   test:
-    pass: "The programmable graph reproduces the established actual build exactly and makes it easier to trace."
-    fail: "Any node changes the primitive ladder or how the build is assembled or behaves."
+    pass: "The programmable graph reproduces the established actual build, including separate 3-and-5 scaling, and makes it easier to trace."
+    fail: "Any node changes the primitive ladder, collapses the 3/5 cadences, or changes how the build is assembled or behaves."
