@@ -1,0 +1,34 @@
+initial_state: Idle
+forward_transitions:
+  - from: Idle
+    to: Primed
+    trigger: bounded_potential_loaded
+  - from: Primed
+    to: Executing
+    trigger: selected_action_fires
+  - from: Executing
+    to: Vectoring
+    trigger: active_action_enters_feedback_orientation
+  - from: Vectoring
+    to: Resolving
+    trigger: action_consequence_begins_settling
+step_6_transitions:
+  - from: Resolving
+    outcome: Hold
+    to: Idle
+    effect: retain_resolved_state_as_local_reference
+  - from: Resolving
+    outcome: Continue
+    to: Primed
+    depth_change: 1
+    effect: bounded_compression_becomes_next_reference
+  - from: Resolving
+    outcome: Break-Reroute
+    to: Boundary
+    effect: return_through_shared_zero_then_reroute_or_terminate
+forbidden:
+  - skip_forward_state
+  - reverse_lifecycle_without_explicit_architecture_revision
+  - substitute_modulation_for_lifecycle
+  - substitute_scale_for_lifecycle
+  - substitute_process_step_for_lifecycle
