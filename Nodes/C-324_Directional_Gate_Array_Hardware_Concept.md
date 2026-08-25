@@ -25,7 +25,9 @@ real, defined nodes; one piece (the magnetic hold/compute claim) does not,
 and is flagged as such rather than smoothed over.
 
 Dependencies:
-Upstream: A-101 Ground/Zero (virtual ground reference), B-205 Mirror (the
+Upstream: A-101 Ground/Zero (virtual ground reference, and Candidate B's
+scalar rank), A-103 Differential (Candidate B's differential rank),
+A-104 Gradient (Candidate B's vector rank), B-205 Mirror (the
 flip operation a directional gate physically instantiates), B-220 Scale
 Layer (the Micro/Small/Medium/Large/Macro nesting this proposal explicitly
 invokes), B-221 Six Recursive Steps (candidate mapping for the 3-up/3-back
@@ -78,20 +80,49 @@ repo terms rather than left as informal description:
 
 5. Binary → ternary → five-state ("quadratic") readout, and back — gate
    state read out at increasing resolution on the way in, and back down
-   on the return path. This maps directly onto real, already-defined repo
-   layers, not new math:
-   - Binary: B-205 Mirror's own two states (Expression/Compression), or
-     equivalently C-308 Spin-half's m=±1.
-   - Ternary: B-223 Three Moves' signed vector, -1/0/+1.
-   - Five-state ("quadratic" in the proposer's words — the closest real
-     match is B-225's five-band structure, not a true base-4/quaternary
-     system): B-225 Five-State Modulation Around Reference, -2/-1/0/+1/+2.
-   B-225 is explicit that these five states are a coarse modulation of
-   Strength, not a fourth logic base, and that they are NOT a
-   replacement for B-221's six-step timing grammar (see B-225's own
-   "Relationship to Six Steps"). The proposer's "views the back through
-   ternary and binary" is naturally read as: five-state → ternary → binary
-   on the return/read path, the mirror image of the write path above.
+   on the return path. Two candidate readings exist for what the five
+   states actually are. They are NOT reconciled — held here as an open
+   fork, same discipline as B-221's own unresolved LOOP-step fork, rather
+   than picking one and hiding the other:
+
+   CANDIDATE A — magnitude bands (the reading used in this node's
+   original draft): B-225 Five-State Modulation Around Reference,
+   -2/-1/0/+1/+2. B-225 is explicit these are a coarse modulation of
+   Strength, not a fourth logic base, and NOT a replacement for B-221's
+   six-step timing grammar (see B-225's own "Relationship to Six Steps").
+
+   CANDIDATE B — tensor rank (proposer's own later refinement): Scalar →
+   Differential → Vector → Tensor → Resolving. This maps onto real,
+   already-defined A-series math rank-by-rank, and is arguably the better
+   grounded of the two candidates:
+   - Scalar: A-101 Ground/Zero, the reference state itself.
+   - Differential: A-103 Differential, Δ(A,B) = A - B — literally named
+     "Differential" in the repo already, rank-0 comparison between two
+     defined states.
+   - Vector: A-104 Gradient, ∇ψ — A-103's Differential applied across
+     spatial relationships, real rank-1 directional structure with a
+     derived discrete form (∇ψᵢ ≈ Σⱼ(Δψᵢⱼ/aᵢⱼ)eᵢⱼ).
+   - Tensor: NO EXISTING NODE. Checked directly — no rank-2 tensor object
+     is defined anywhere in the A-series. The chain currently goes
+     A-104 Gradient (vector) straight to A-105 Restoring Response and
+     A-106 Pressure Response, and A-106's (∇²ψ)² term is a scalar built
+     from second-derivative structure, not a tensor object itself. This
+     is a genuine gap this candidate reading exposes, not a filled slot.
+   - Resolving: no node claims this name, but the closest functional
+     match is G-702 Evaluation (examines a differential and asks "does
+     it require action," i.e. collapses a higher-order signal into an
+     actionable one) or B-206b Four Views (the observation layer a state
+     can be read through). Neither is confirmed as "Resolving" specifically.
+
+   Candidate B is more mathematically grounded (it reuses real rank
+   structure instead of an arbitrary five-band scale) but requires a new
+   A-series tensor node that does not yet exist; Candidate A requires no
+   new node but is explicitly just a Strength-modulation convenience per
+   B-225 itself. Which one (or whether both coexist at different points
+   in the circuit) governs this proposal's five-state readout is open.
+   The proposer's "views the back through ternary and binary" reads the
+   same under either candidate: five-state → ternary → binary on the
+   return path, mirroring the write path above.
 
 6. Rotating magnetic field as the state-hold / compute element — this is
    the one piece with NO clean existing citation, and it is flagged
@@ -227,11 +258,17 @@ Brown Audit:
   treat as the single largest open claim in this node.
 - The "3 gates up / 3 gates back" ↔ B-221 six-step mapping is a candidate
   correspondence only, and inherits B-221's own unresolved LOOP-step fork.
-- Item 5's "quadratic" language is interpreted here as B-225's five-state
-  band, which B-225 itself describes as coarse Strength modulation, not a
-  fourth logic base — if the proposer meant a literal base-4/quaternary
-  encoding instead, that is a different, undefined structure and this
-  node does not yet distinguish the two.
+- Item 5 now carries two unreconciled candidate readings (Candidate A:
+  B-225 magnitude bands; Candidate B: Scalar/Differential/Vector/Tensor/
+  Resolving rank structure) rather than one. Candidate B exposes a real
+  gap — no tensor-rank (rank-2) node exists anywhere in the A-series —
+  which is new information surfaced by this node, not previously flagged
+  by A-104 Gradient or any downstream A-series node. Neither candidate is
+  picked as correct here.
+- If a future A-series tensor node is added to fill Candidate B's gap, it
+  should be checked against I-04's disposition taxonomy before being
+  written (is it Scale-Specific, Scale Recurrence, or a genuinely new
+  primitive) rather than assumed novel by default.
 - Item 7 requires B-220's γ(s)/β(s) scale-transition function in general;
   this node proposes narrowing that to one ad hoc single-level interface
   for a first prototype, but that narrower interface is itself still
