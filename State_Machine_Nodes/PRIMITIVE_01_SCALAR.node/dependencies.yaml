@@ -1,0 +1,12 @@
+required:
+  - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/BUILD_STRUCTURE_LOCK.yaml
+  - State_Machine_Nodes/BUILD_VERSIONS.yaml
+  - Root_Axioms/A+101_One_Field_Ground.md
+  - Nodes/A-101_Ground_Zero.md
+  - Nodes/A-102_Displacement.md
+downstream:
+  - Nodes/A-103_Differential.md
+  - PRIMITIVE_02_DIFFERENTIAL.node
+scaling:
+  cadences: [3, 5]
+  rule: "Carry the Scalar contract unchanged; do not assign the unresolved 3/5 cause here."
