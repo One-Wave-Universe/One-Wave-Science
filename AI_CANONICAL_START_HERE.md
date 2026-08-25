@@ -6,9 +6,10 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 Current node handoff:
 
-1. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
-2. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
-3. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
+1. `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`
+2. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
+3. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
+23. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
 4. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
 5. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
 6. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
