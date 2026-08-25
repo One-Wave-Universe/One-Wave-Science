@@ -1,0 +1,31 @@
+watchdog:
+  enabled: true
+  fail_closed: true
+  structural_lock: ../ANTI_DRIFT_CONTROL.node/BUILD_STRUCTURE_LOCK.yaml
+  exact_state_order:
+    - Idle
+    - Primed
+    - Executing
+    - Vectoring
+    - Resolving
+  exact_forward_edges:
+    - Idle->Primed
+    - Primed->Executing
+    - Executing->Vectoring
+    - Vectoring->Resolving
+  exact_step_6_edges:
+    - Resolving->Idle
+    - Resolving->Primed
+    - Resolving->Boundary
+  forbidden_alias_sets:
+    modulation: [-2, -1, 0, 1, 2]
+    octave_scale: [Micro, Small, Medium, Large, Macro]
+    process_steps: [Begin, Build, Hold, Build, Break, Loop]
+  checks:
+    - exact_state_order
+    - exact_forward_edges
+    - exact_step_6_edges
+    - no_skipped_forward_edge
+    - no_axis_substitution
+    - all_transitions_receipted
+  on_failure: HOLD
