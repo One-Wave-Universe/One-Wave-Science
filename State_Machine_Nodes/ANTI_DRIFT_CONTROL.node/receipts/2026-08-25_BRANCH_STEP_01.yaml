@@ -1,0 +1,66 @@
+receipt:
+  timestamp: "2026-08-25T06:46:00-07:00"
+  branch: "nodes/state-machine-anti-drift-controls"
+  base_ref: "canon/five-field-states"
+  head_before: "base_ref:canon/five-field-states"
+  head_after_control_files: "9c3660ac453b5272173b017647f0de46a9cbced1"
+  main_goal: "Convert active state-machine behavior into canonical watchdog nodes without changing established semantics."
+  bounded_goal: "Create the anti-drift control layer only."
+  source_files_read:
+    - AGENTS.md
+    - BRANCH_STEP_PROJECT_TEMPLATE.md
+    - AI_CANONICAL_START_HERE.md
+    - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+    - Nodes/G-716a_One_Wave_Conversion_Simulation_Rule.md
+  files_created:
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/node.yaml
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/content.md
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/logic_chain.yaml
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/dependencies.yaml
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/node.watchdog.yaml
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/notes-to-self.md
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/receipts/RECEIPT_TEMPLATE.yaml
+    - State_Machine_Nodes/ANTI_DRIFT_CONTROL.node/telemetry/README.md
+    - State_Machine_Nodes/BRANCH_STEP_01_ANTI_DRIFT_CONTROL.md
+  protected_canon:
+    field_lifecycle_states:
+      - Idle
+      - Primed
+      - Executing
+      - Vectoring
+      - Resolving
+    layers_kept_distinct:
+      - field_lifecycle
+      - modulation
+      - six_step_recursion
+  checks:
+    - method: "Fetch every required path from the working branch."
+      result: PASS
+      evidence: "9 of 9 required files exist and contain content."
+    - method: "Check exact lifecycle-state order in node.yaml and node.watchdog.yaml."
+      result: PASS
+      evidence: "Idle, Primed, Executing, Vectoring, Resolving found in exact order."
+    - method: "Check watchdog separation rule."
+      result: PASS
+      evidence: "field_lifecycle_states, modulation_levels, and six_step_recursion are explicitly forbidden from merging."
+    - method: "Check receipt and notes-to-self advancement gates."
+      result: PASS
+      evidence: "Receipt is required before advance; notes-to-self are required before and after."
+    - method: "Check branch hard stop."
+      result: PASS
+      evidence: "Bulk state-machine conversion is explicitly forbidden in Branch-Step 01."
+  intended_vs_actual_diff: "Only the nodesification control layer was added; no existing state-machine source was modified."
+  drift:
+    status: NONE
+    details: "The branch remained inside the bounded control-layer goal."
+  what_worked: "The watchdog folder, receipt template, notes-to-self, telemetry location, and branch-step control are present and verified."
+  what_failed: "Repository code search was unavailable because the repository index was not ready; the Git tree and direct file reads were used instead."
+  what_learned: "General repository controls existed, but state-machine-specific watchdog receipts and notes-to-self did not."
+  field_notes: "Control layer created without changing state-machine semantics."
+  void_decision: ALLOW
+  attempt:
+    approach: "Add the missing control layer before conversion."
+    number: 1
+    strike_count: 0
+  next_permitted_action: "Create a new bounded branch-step that inventories active state-machine source units and assigns one conversion unit at a time."
+  hard_stop_status: REACHED
