@@ -1,31 +1,37 @@
 receipt:
   timestamp: "2026-08-25T07:18:00-07:00"
+  validated_at: "2026-08-25T07:21:00-07:00"
   branch: nodes/sm-004-field-lifecycle
   node_id: SM-004
   main_goal: "Make the established build clear without changing its structure."
-  bounded_goal: "Convert the five Field lifecycle states into one watchdog node."
+  bounded_goal: "Convert and validate the five Field lifecycle states as one watchdog node."
   source_authority: UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
   state_order:
     before: [Idle, Primed, Executing, Vectoring, Resolving]
     after: [Idle, Primed, Executing, Vectoring, Resolving]
   forward_edges:
-    before:
-      - Idle->Primed
-      - Primed->Executing
-      - Executing->Vectoring
-      - Vectoring->Resolving
-    after:
-      - Idle->Primed
-      - Primed->Executing
-      - Executing->Vectoring
-      - Vectoring->Resolving
+    before: [Idle->Primed, Primed->Executing, Executing->Vectoring, Vectoring->Resolving]
+    after: [Idle->Primed, Primed->Executing, Executing->Vectoring, Vectoring->Resolving]
   step_6_edges:
     - Resolving->Idle
     - Resolving->Primed
     - Resolving->Boundary
+  checks:
+    - name: exact_state_order
+      result: PASS
+    - name: exact_forward_edges
+      result: PASS
+    - name: exact_step_6_outcomes
+      result: PASS
+    - name: illegal_skip_edges_rejected
+      result: PASS
+  telemetry: State_Machine_Nodes/SM-004_FIELD_LIFECYCLE.node/telemetry/2026-08-25_exact_graph_check.json
   structural_drift:
     status: NO_STRUCTURAL_DRIFT
-    evidence: "State names, order, layer, meaning, and closure routes match the source authority."
-  clarity_gain: "The lifecycle and its legal edges are now available as one machine-readable graph with a fail-closed watchdog."
-  next_permitted_action: "Run exact graph checks, save telemetry, then begin SM-008 in a new branch-step."
+    evidence: "State names, order, layer, meaning, legal edges, and closure routes match the source authority."
+  clarity_gain: "The lifecycle and legal edges are one machine-readable graph with a fail-closed watchdog and validation telemetry."
+  what_failed: "Nothing in this bounded conversion."
+  field_notes: "SM-004 is clear and machine-readable."
   void_decision: ALLOW
+  next_permitted_action: "Begin SM-008 Step-6 Conditional Fold in a new branch-step."
+  hard_stop_status: REACHED
