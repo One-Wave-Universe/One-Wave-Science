@@ -1,5 +1,32 @@
 build_structure_lock:
   rule: "Nodesification documents and connects the established build. It does not alter the build structure."
+  build_versions:
+    programmable:
+      purpose: "Executable software reference of the same build structure."
+      must_model:
+        - primitive_ladder
+        - state_machine
+        - legal_transitions
+        - memory_and_consequence
+        - anti_drift_validation
+      must_not_become: "A replacement architecture."
+    actual:
+      purpose: "Physical primitive build."
+      primitive_ladder:
+        - Scalar
+        - Differential
+        - Vector
+        - Tensor
+        - Harmonic
+  primitive_ladder:
+    exact_order:
+      - Scalar
+      - Differential
+      - Vector
+      - Tensor
+      - Harmonic
+    rule: "The programmable version must model these actual primitives in this order; lifecycle and routing logic operate through them but do not replace them."
+    semantics_status: "Interfaces and measurable completion criteria must be locked one primitive at a time from authoritative sources and bench receipts."
   invariant_pair_order:
     - "F1/V6"
     - "V5/F2"
@@ -10,46 +37,14 @@ build_structure_lock:
   pair_semantics:
     slash: "simultaneous mirrored pair"
     dash: "Mirror Gate return/crossover through shared (0)"
-  process_steps:
-    - Begin
-    - Build
-    - Hold
-    - Build
-    - Break
-    - Loop
-  engagement_choices:
-    - Everything
-    - Nothing
-  differential_moves:
-    - Left
-    - Stay
-    - Right
-  differential_values:
-    - -1
-    - 0
-    - 1
-  views:
-    - Direction
-    - Phase
-    - Strength
-    - Reference
-  actions:
-    - Inward
-    - Outward
-    - Across
-    - Over
-  field_lifecycle_states:
-    - Idle
-    - Primed
-    - Executing
-    - Vectoring
-    - Resolving
-  modulation_levels:
-    - -2
-    - -1
-    - 0
-    - 1
-    - 2
+  process_steps: [Begin, Build, Hold, Build, Break, Loop]
+  engagement_choices: [Everything, Nothing]
+  differential_moves: [Left, Stay, Right]
+  differential_values: [-1, 0, 1]
+  views: [Direction, Phase, Strength, Reference]
+  actions: [Inward, Outward, Across, Over]
+  field_lifecycle_states: [Idle, Primed, Executing, Vectoring, Resolving]
+  modulation_levels: [-2, -1, 0, 1, 2]
   forbidden_structural_changes:
     - reorder
     - rename
@@ -67,5 +62,5 @@ build_structure_lock:
     - add telemetry
     - add navigation and indexes
   test:
-    pass: "The node graph reproduces the established build exactly and makes it easier to trace."
-    fail: "Any node changes how the build is assembled or behaves."
+    pass: "The programmable graph reproduces the established actual build exactly and makes it easier to trace."
+    fail: "Any node changes the primitive ladder or how the build is assembled or behaves."
