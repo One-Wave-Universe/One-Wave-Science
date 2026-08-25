@@ -1,0 +1,13 @@
+{
+  "node_id": "PRIMITIVE-01",
+  "name": "Scalar",
+  "position": 1,
+  "inputs": ["psi", "psi_0"],
+  "output": {
+    "name": "x",
+    "expression": "psi - psi_0",
+    "reference_required": true
+  },
+  "next": "Differential",
+  "scaling_cadences": [3, 5]
+}
