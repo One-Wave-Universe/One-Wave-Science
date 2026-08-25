@@ -1,4 +1,15 @@
 
+## Node Consolidation — Updates 24-41 Retired (August 25, 2026)
+
+- Verified that Updates 24, 26-32 (and their audits) were already fully represented in canonical nodes (C-317/C-318/C-322, A-115/A-116/A-117, D-408 through D-413, G-721 through G-723a) and 00_MASTER_INDEX.md; retired the now-redundant root-level handoff files.
+- Found five existing canonical nodes (C-323, D-414, D-415, E-531, E-532) that were never added to 00_MASTER_INDEX.md's Appendix tables; added them.
+- Converted the still-uncaptured VTC/hardware architecture from Updates 33-34 into two new canonical nodes: `G-724_Invariant_VTC_Six_Pair_Oscillator_and_Triad_Architecture.md` and `G-725_Processing_Is_Memory_Connected_Cube_Architecture.md`.
+- Folded Update 33's Master Simulator Shell and Update 34/37's One-Wave Bench, real experiment receipts (EXP-DEMO-001, EXP-2026-07-23-002), and AI+Human Lattice Workstation into `D-413`'s own node file as a Tooling and Experimental Receipts section.
+- Converted the still-uncaptured planetary/orbital architecture from Updates 38-41 into two new canonical nodes: `E-533_Moving_Finite_Slope_Multi_Body_Field.md` and `E-534_Recursive_Point_Path_Field_Planetary_Displacement.md`, noting where later updates explicitly superseded earlier framings in the same sequence.
+- Added cross-referenced math sections to `Book1_Ch12_Gravity_At_Micro_Scale.md` (planetary-scale extension) and `Proposed_Android_Brain/Ch01_Functional_Runtime_Architecture.md` (VTC physical substrate).
+- Repointed `AI_CANONICAL_START_HERE.md`'s reading lists from the retired handoff files to the canonical nodes above.
+- Deleted all 26 root-level `UPDATED_*`/`AUDIT_UPDATED_*`/`AUDIT_MASS_ASSUMPTION_ERASURE.md` files now that their content is fully absorbed.
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.

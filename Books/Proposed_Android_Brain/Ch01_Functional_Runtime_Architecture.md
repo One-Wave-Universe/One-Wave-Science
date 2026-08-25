@@ -28,6 +28,29 @@ One possible Jetson-class implementation:
 
 This role mapping is a design proposal. The silicon is not literally transformed into biological brain regions.
 
+## Physical Substrate: the VTC Invariant Kernel
+
+Beneath the Jetson-class mapping above sits a candidate physical-computing kernel, formalized in G-724 (Invariant VTC Six-Pair Oscillator and Triad Architecture) and G-725 (Processing-Is-Memory Connected-Cube Architecture). It is the hardware instantiation of this book's own Four Views/Four Actions vocabulary, so the runtime and the substrate share one grammar instead of two.
+
+One triad couples two linked/opposed mirror elements with one differential evaluator; three triads form a nine-element base cluster exposing three physical Mirror Gates, traversed in two orientations for six logical pair positions:
+
+\[
+F_1/V_6 - V_5/F_2 - F_3/V_4 - V_3/F_4 - F_5/V_2 - V_1/F_6 - F_1/V_6\ \cdots
+\]
+
+Each cell resolves a two-layer choice — a DC engage/nothing gate, then an AC differential \(-1/0/+1\) — before crossing (Over) into the next stage:
+
+\[
+\text{IN}\rightarrow\text{DC}\rightarrow\text{Outward}\rightarrow\text{AC}(-1/0/+1)\rightarrow\text{Across}\rightarrow\text{Over}\rightarrow\text{next stage.}
+\]
+
+Because the target architecture is compute-in-memory rather than `CPU -> RAM -> CPU` (G-725), each cell must hold state, act on it, and leave the result locally available for the next differential — the same recursive-interface rule this chapter's route layer already assumes:
+
+\[
+\text{OUTPUT relation of level }n=\text{INPUT relation expected by level }n{+}1.
+\]
+
+This lets the Dream Engine / M4 / Administrator role split above be read two ways at once: as a functional pipeline, and as a Field/Void processor-scale split over a shared reference state (G-725), scaling from one triad to a connected-cube lattice without a new logical grammar at each scale. The kernel is GREEN as an internally consistent architecture; it is YELLOW as physical hardware until a breadboard primitive passes the write/retain/differentiate/propagate tests G-724 and G-725 specify.
 
 ## Symbolic Route and Validation Layer
 

@@ -246,3 +246,18 @@ D-413 fails if:
 6. the curvature well is described as derived gravity;
 7. the bounded shell is mislabeled as a quark or particle;
 8. a visually attractive orbit is promoted without convergence, ablation, and work-ledger tests.
+
+## Tooling and Experimental Receipts
+
+D-413 is now reachable through a unified entry point rather than only as a standalone file:
+
+- `OPEN_ONE_WAVE_SIMULATOR.html` (repository root) and `One_Wave_Simulator/index.html` provide stage navigation for the D-412 simulation ladder, with D-413 embedded as **Stage 01**. A stage stays locked until it has declared state, an update law, measurements, raw results, controls, failure tests, and a native-dimensional declaration (A-117, D-412) — the shell does not pretend an unfinished stage already runs.
+- `One_Wave_Bench/` is a shared AI+human laboratory built on this node: `schema/experiment_protocol.json` defines a request (id, author `human|ai`, hypothesis, parameter cases, falsifiers, required measurements) and a receipt (measured fields, control checks, pass/fail, native dimension, interpretation). `engine/run_experiment.py` imports the canonical physics from `simulate_d413.py` (single source of truth — no forked physics), runs a request, and writes a receipt plus per-case CSV time series, including a zero-input drift control and an activity check so a run can fail. `index.html` and `fixed_sim.html` expose live and locked-parameter reproducible players for wiki embedding.
+- `AI_HUMAN_LATTICE_WORKSTATION_START_HERE.md` and `ai_human_workstation.html` add an interactive reduced-laboratory workstation (controls, visualization, receipts, dialogue routing) that changes none of the claim-gate status above.
+
+**Real experiment receipts recorded against this node:**
+
+- **EXP-DEMO-001** (asymmetry sweep): induced spin rose monotonically with shell asymmetry — \(0.080\rightarrow0.134\rightarrow0.219\). Hypothesis **confirmed**.
+- **EXP-2026-07-23-002** (well-depth sweep): **partially falsified** — \(well\_distance\_min\) was non-monotonic (\(3.098\rightarrow2.960\rightarrow3.043\)) while spin rose strongly with depth (\(0.080\rightarrow0.134\rightarrow0.205\)), because the auto orbit-velocity was derived from \(well\_depth\), coupling depth to torque. Open follow-up: hold orbit velocity fixed while varying depth to separate the two effects.
+
+These are real runs of the reduced code path above; they validate the declared simulation behavior only and do not promote D-413's YELLOW claim-gate status.

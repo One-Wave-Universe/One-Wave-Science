@@ -4,10 +4,12 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, or VTC architecture.
 
-## Current update handoff
+## Current canonical architecture nodes
 
-1. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-2. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+The root-level `UPDATED_*`/`AUDIT_UPDATED_*` handoff logs formerly listed here have been fully absorbed into the canonical nodes below and retired. Read the nodes directly; they are the sole canonical record.
+
+1. `Nodes/G-725_Processing_Is_Memory_Connected_Cube_Architecture.md`
+2. `Nodes/G-724_Invariant_VTC_Six_Pair_Oscillator_and_Triad_Architecture.md`
 3. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
 4. `VTC_BUILD_ARCHITECTURE.md`
 5. `Nodes/B-206b_Four_Views.md`
@@ -18,16 +20,13 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 10. `Nodes/B-225_Field_Cycle.md`
 11. `Nodes/C-301_Mirror_Gate.md`
 12. `Nodes/G-711_Gate_7.md`
-13. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-14. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-15. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-16. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-17. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-18. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-19. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-20. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+13. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` (includes the Master Simulator Shell / One-Wave Bench tooling and experiment receipts)
+14. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
+15. `Nodes/D-412_Lattice_Simulation_and_State_Driven_Visualization_Standard.md`
 
-## Updated 34 processing/memory protection
+The G-721b through G-723a route-grammar and motor-memory nodes formerly cross-referenced here are listed in full in "Alphabet rabbit-hop and Fibonacci-word discipline" below.
+
+## G-725 processing/memory protection
 
 The target VTC architecture treats local persistent physical state as both working memory and the state being processed. The intended local cycle is:
 
@@ -52,7 +51,7 @@ Field and Void may be opposed processing regions with persistent local state rat
 
 Connected cubes must recurse both upward and downward. A complete cube should expose the same relational interface it consumes and be usable externally as one larger relational node. The mature machine is a connected cube lattice; computational density should primarily increase inside cubes rather than by requiring enormous hand-sized cube counts.
 
-## Updated 33 state-machine protection
+## G-724 state-machine protection
 
 For the current compute architecture, the invariant engine is:
 
@@ -129,23 +128,34 @@ Before extending the Wave Computer or Android movement language, read:
 
 The signed packet is `±(n,2n,2n+1)`. The Fibonacci word validates the ordered choice between the `2n` and `2n+1` recursive branches after a hop is committed. It does not replace live `-1(0)+1` choice, and its symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 33/34's engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with G-724/G-725's engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
-1. `UPDATED_26_MASS_ASSUMPTION_ERASURE.md`
-2. `AUDIT_MASS_ASSUMPTION_ERASURE.md`
-3. `Nodes/C-309_Friction_Limit.md`
-4. `Nodes/E-509_Propagation_Limit.md`
-5. `Nodes/C-318_Mass_Mechanism_Candidate_Resolution.md`
-6. `Nodes/C-322_Mirror_Gate_Higgs_Scale_Resonance.md`
-7. `Books/Book1_Micro/Book1_Ch14_Mass_Effect.md`
-8. `Books/Book1_Micro/Book1_Ch15_The_Higgs_Field_Is_The_Lattice.md`
-9. `Internal_Proofs/Mass_Effect_Mirror_Gate_Four_Interaction_Audit.md`
+The mass-assumption erasure this section used to point at is now permanently encoded in the nodes below and in "Permanent correction" above; there is no separate audit file to read.
+
+1. `Nodes/C-309_Friction_Limit.md`
+2. `Nodes/E-509_Propagation_Limit.md`
+3. `Nodes/C-318_Mass_Mechanism_Candidate_Resolution.md`
+4. `Nodes/C-322_Mirror_Gate_Higgs_Scale_Resonance.md`
+5. `Books/Book1_Micro/Book1_Ch14_Mass_Effect.md`
+6. `Books/Book1_Micro/Book1_Ch15_The_Higgs_Field_Is_The_Lattice.md`
+7. `Internal_Proofs/Mass_Effect_Mirror_Gate_Four_Interaction_Audit.md`
 
 Any imported text that conflicts with these files must be quarantined rather than merged.
 
-## Updated 32 Integrity Authorities
+## Planetary-scale architecture (E-533/E-534)
+
+Before extending gravity, orbital, or planetary-scale claims, read:
+
+1. `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md` (the micro-scale instance of the same finite-range concept)
+2. `Nodes/E-533_Moving_Finite_Slope_Multi_Body_Field.md`
+3. `Nodes/E-534_Recursive_Point_Path_Field_Planetary_Displacement.md`
+4. `Books/Book1_Micro/Book1_Ch12_Gravity_At_Micro_Scale.md` (Macro-Scale Extension section)
+
+Planetary influence is a moving, instantaneous, finite-range slope field recomputed every timestep — never a stored wake, a memory/relay term, or a universal cutoff radius. EM structure modifies shell stiffness/response; it is never a second gravity-like force.
+
+## Integrity Authorities
 
 - `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`
 - `LEGACY_ID_ALIAS_REGISTRY.md`

@@ -1,12 +1,8 @@
 # ONE-WAVE FRAMEWORK — MASTER DEFINITIONS LIST
 ### Micro Subatomic Structure → Galactic Macro Scale
-Compiled from the current consolidated node repository; updated July 23, 2026.
+Compiled from the current consolidated node repository; updated August 25, 2026.
 Gate values are read from each node's I-06 YAML metadata. Lifecycle and claim-specific detail remain in the source node and are not collapsed into this table.
-Updated 24 mass/Mirror-Gate handoff: `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
-Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
-Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
-Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
-Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+The root-level `UPDATED_*`/`AUDIT_UPDATED_*` handoff logs (Updates 24 through 41) have been fully absorbed into their canonical nodes (see each node's own file for its derivation history) and retired; this index and the node files under `Nodes/` are the sole canonical record.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -98,7 +94,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
 | B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
 | B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
-### Appendix C — Applied Mechanics & Conflict-Resolution (20 active files)
+### Appendix C — Applied Mechanics & Conflict-Resolution (21 active files)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | C-301 | Mirror Gate | The physical location/scale/boundary condition where Mirror (B-205) operates. | GREEN |
@@ -121,7 +117,8 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
-### Appendix D — Resonance, Modal & Dimensional Structure (13 nodes)
+| C-323 | Displacement Interaction Regimes of the Unified Compression Field | Continuum interaction-stress form written from A-115; recovers short/long-range regimes without inserting a separate force field by hand. | YELLOW |
+### Appendix D — Resonance, Modal & Dimensional Structure (15 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -136,8 +133,10 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-410 | Twenty-Fourfold 4D Field/Void Recurrence Shell | Completed Field/Void state cycle around one persistent identity; 24:1 is recurrence coordination, not automatically a spatial neighbor count. | YELLOW |
 | D-411 | Mirrored Axis Pairs and Directed Route Counts | Separates N axis pairs, 2N directed routes, and 2N+1 centered states; requires ratio-domain declarations. | YELLOW |
 | D-412 | Lattice Simulation and State-Driven Visualization Standard | Requires real state updates, raw receipts, graphs, failure regions, and dimensional declarations; rejects decorative animation as simulation. | YELLOW |
-| D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
-### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
+| D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations; now includes Master Simulator Shell / One-Wave Bench experiment receipts. | YELLOW |
+| D-414 | Four-Interaction Shell Simulation | Illustrative simulation of the C-318 coupled four-interaction state driven by real experimental data used as wave data; candidate geometry only. | YELLOW |
+| D-415 | Hexagonal Lattice Interaction Dynamics | Discrete interaction equations written from C-323 + D-408 + A-115; multi-core numerical validation still open. | YELLOW |
+### Appendix E — Field Mechanics, Cognition & Applied Extensions (31 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | E-501 | Zero Compression | The balanced reference state from which compression/expression are measured. | GREEN |
@@ -170,6 +169,10 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | E-528 | Static Redshift Transport | Tired-light energy loss on a static background with explicit field-energy accounting; no expansion variables. | GREEN |
 | E-529 | Low-Coupling Return Mode | Neutrino mapping as a weakly coupled return-transport mode in the cosmic loop. | GREEN |
 | E-530 | White Energy Recirculation Loop | Threshold quasar/white-hole-scale ejection returns stored compression energy without expanding space. | GREEN |
+| E-531 | Dual-Harmonic Propagation Operator | Algebraic propagation identity with a recorded mass-ladder null test; absolute scale remains free. | YELLOW |
+| E-532 | Bound vs Unbound Criterion and Finite Wake | Local bound-state flag `I_3 > I_1/2` plus a finite-range wake kernel; mass is a bound excitation, not continued octave scaling. | YELLOW |
+| E-533 | Moving Finite-Slope Multi-Body Field | Planetary gravity as an instantaneous moving finite-slope network (no stored wake, no universal cutoff), with EM-shell response modulation and a locked Mercury/Jupiter/Mars/Venus falsification ladder. | YELLOW |
+| E-534 | Recursive Point-Path-Field Planetary Displacement Structure | Planet as a coupled recursive Point-Path-Field displacement state; orbit, spin, tides, and EM-shell behavior are readouts of one state, not separate bolted-on mechanisms. | YELLOW |
 ### Appendix F — Interaction Primitives (8 nodes — most mature tier, all GREEN)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -181,7 +184,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
 | F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
 | F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
-### Appendix G — Evaluation, Modulation & Governance (30 nodes)
+### Appendix G — Evaluation, Modulation & Governance (32 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
@@ -214,6 +217,8 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
 | G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
 | G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+| G-724 | Invariant VTC Six-Pair Oscillator and Triad Architecture | Domain-independent physical-computing kernel: six-pair Mirror-Gate oscillator, DC engage / AC ternary differential, Four Views vs. Four Actions, triad/cluster geometry, balanced-ternary compute target. | GREEN |
+| G-725 | Processing-Is-Memory Connected-Cube Architecture | Compute-in-memory cell requirement, sparse binary oversight of a ternary local network, Field/Void processor-scale split, and the recursive interface contract scaling triads into connected cube modules. | GREEN |
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
@@ -294,6 +299,8 @@ A-106, A-107 (both now closer after the FIXED versions), Higgs (Ch15), Gravity (
 - Lorentz invariance conflict (C-313) — real, checked, unresolved
 - Charge mapping after C-316 — textual conflict resolved; measured sign/gradient mapping remains underived
 - A-115/C-318/C-322/E-528/E-529/E-530 program - four-interaction response coefficients, absolute-energy calibration, 125 GeV pressure-work derivation, galaxy fits, static redshift transport, neutrino return, and White Energy balance remain open
+- E-533/E-534 planetary program - the finite-range boundary law and the EM-to-displacement-shell coupling law are not yet derived from first principles; numerical Solar-System implementation and ablation testing remain open
+- G-724/G-725 VTC hardware program - no breadboard primitive has yet passed the write/retain/differentiate/propagate proof; the architecture is GREEN as a specification only
 - Book 1 numbering is continuous from Ch1 through Ch17 after the Updated 32 renumber
 
 ---

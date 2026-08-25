@@ -491,6 +491,27 @@ No separate quantization of a graviton is needed.
 
 ---
 
+## Macro-Scale Extension: The Planetary Orbital Test Program
+
+The same claim — gravity is a gradient response, not a force-carrier exchange — is tested at planetary scale by E-533 (Moving Finite-Slope Multi-Body Field) and E-534 (Recursive Point-Path-Field Planetary Displacement Structure). Each body's gravitational influence is treated as an *instantaneous, moving, finite-range slope region* rather than an infinite well or a stored wake:
+
+\[
+S_i(\mathbf r,t)=|\nabla\Phi_i(\mathbf r,t)|,\qquad
+\Omega_i(t)=\{\mathbf r:\ \Delta S_i(\mathbf r,t)\ \text{stays distinguishable from the reference}\},
+\]
+
+with the orbital response written as \(a_i(t)=-F(\Delta S_i(t),K_{i,\mathrm{eff}}(t))\) — the direct macro-scale analogue of this chapter's gradient-response gravity, in the same sense that E-507/E-522 extend the One-Wave update rule from cellular to stellar scale. The finite-range boundary \(R_i(t)\) is an emergent output of the field state (E-533), exactly as this chapter treats Phi_M(r) as something to be *derived* from the update rule rather than assigned.
+
+A candidate electromagnetic-shell term modifies a body's displacement-shell stiffness rather than acting as a second gravity-like force:
+\[
+K_{i,\mathrm{eff}}(t)=K_{i0}\bigl[1+\eta\,C_i(t)\bigr],
+\]
+with an extra Sun-Mercury term for Mercury's deep immersion in the solar field. Mars and Venus (no global intrinsic dipole) and the four giant planets (large dipole moment) are the required falsification controls: the law must not turn magnetic moment alone into an orbital correction. E-534 folds each body's internal rotation, circulation, and EM state into one recursive Point-Path-Field structure so that the active range \(R_{\mathrm{active},i}(t)\) is a readout of the full state rather than an assigned constant.
+
+This program remains YELLOW candidate architecture: the finite-range boundary law and the EM-to-shell coupling law are not yet derived from first principles, and no claim is made that the celestial three-body problem or an EM-gravity coupling has been established.
+
+---
+
 ## Future Work
 
 Derive Phi_M(r) from the update rule for a stable Persistent Mode.
