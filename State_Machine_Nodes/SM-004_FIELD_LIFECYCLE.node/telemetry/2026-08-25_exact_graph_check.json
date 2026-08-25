@@ -1,0 +1,14 @@
+{
+  "validator": "SM-004 exact-graph check",
+  "validator_version": "1.0",
+  "timestamp": "2026-08-25T07:21:00-07:00",
+  "branch": "nodes/sm-004-field-lifecycle",
+  "results": {
+    "exact_state_order": true,
+    "exact_forward_edges": true,
+    "exact_step_6_outcomes": true,
+    "illegal_skip_edges_rejected": true
+  },
+  "classification": "PASS",
+  "structural_drift": "NO_STRUCTURAL_DRIFT"
+}
