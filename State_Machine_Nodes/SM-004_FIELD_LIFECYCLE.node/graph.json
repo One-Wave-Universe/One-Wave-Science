@@ -1,0 +1,16 @@
+{
+  "node_id": "SM-004",
+  "initial": "Idle",
+  "states": ["Idle", "Primed", "Executing", "Vectoring", "Resolving"],
+  "forward_edges": [
+    ["Idle", "Primed"],
+    ["Primed", "Executing"],
+    ["Executing", "Vectoring"],
+    ["Vectoring", "Resolving"]
+  ],
+  "step_6_edges": [
+    {"outcome": "Hold", "from": "Resolving", "to": "Idle", "depth_delta": 0},
+    {"outcome": "Continue", "from": "Resolving", "to": "Primed", "depth_delta": 1},
+    {"outcome": "Break-Reroute", "from": "Resolving", "to": "Boundary", "depth_delta": 0}
+  ]
+}
