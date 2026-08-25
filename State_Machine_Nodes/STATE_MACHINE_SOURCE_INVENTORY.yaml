@@ -1,0 +1,137 @@
+inventory:
+  purpose: "Map the existing state-machine build exactly as-is before nodesification."
+  source_branch: canon/five-field-states
+  source_head: 504b5239aab53fe5807e044688d10eefc5a2b63a
+  source_pull_request: 7
+  source_pull_request_state:
+    open: true
+    draft: true
+    mergeable: true
+    mergeable_state: clean
+    automated_check_runs: 0
+  structural_units:
+    - node_id: SM-001
+      name: Invariant Mirror-Pair Kernel
+      locked_value: "F1/V6 -> V5/F2 -> F3/V4 -> V3/F4 -> F5/V2 -> V1/F6"
+      sources:
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+        - AI_CANONICAL_START_HERE.md
+      status: NEEDS_WATCHDOG_NODE
+    - node_id: SM-002
+      name: Three Physical Gate Classes
+      locked_value: "BC-DC -> TC-AC -> QC-RC"
+      aliases:
+        - "2-BDC -> 3-TAC -> 4-QRC"
+        - "2DC -> 3AC -> 4RC"
+      sources:
+        - UPDATED_37_THREE_GATE_LANGUAGE_AND_SIX_STEP_MIRROR.md
+        - VTC_BUILD_ARCHITECTURE.md
+      status: NEEDS_WATCHDOG_NODE
+    - node_id: SM-003
+      name: Six Mirrored Logical Positions
+      locked_value: "2B -> 3T -> 4QA -> 4QV -> 3T -> 2B"
+      sources:
+        - UPDATED_37_THREE_GATE_LANGUAGE_AND_SIX_STEP_MIRROR.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+        - Nodes/B-221a_Six_Step_Oscillator_Program.md
+      status: NEEDS_WATCHDOG_NODE
+    - node_id: SM-004
+      name: Field Lifecycle
+      locked_value: "Idle -> Primed -> Executing -> Vectoring -> Resolving"
+      sources:
+        - UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+        - Nodes/B-225_Field_Cycle.md
+        - AI_CANONICAL_START_HERE.md
+      status: NEEDS_WATCHDOG_NODE_AND_TRANSITION_TABLE
+    - node_id: SM-005
+      name: Five Modulation Levels
+      locked_value: [-2, -1, 0, 1, 2]
+      sources:
+        - UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+      status: NEEDS_SEPARATE_WATCHDOG_NODE
+    - node_id: SM-006
+      name: Five Void Octave Positions
+      locked_value: [Micro, Small, Medium, Large, Macro]
+      closure: "Macro[n] -> Micro[n+1]"
+      sources:
+        - UPDATED_35_FIVE_FIELD_LIFECYCLE_STATES.md
+        - AI_CANONICAL_START_HERE.md
+      status: NEEDS_SEPARATE_WATCHDOG_NODE
+    - node_id: SM-007
+      name: Six Process Steps
+      locked_value: [Begin, Build, Hold, Build, Break, Loop]
+      sources:
+        - Nodes/B-221a_Six_Step_Oscillator_Program.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+      status: EXISTING_NODE_NEEDS_WATCHDOG_WRAPPER
+    - node_id: SM-008
+      name: Step-6 Conditional Fold
+      locked_outcomes: [Continue, Hold, Break-Reroute]
+      sources:
+        - UPDATED_36_CONDITIONAL_FOLD_AND_RECURSIVE_EXIT_GATE.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+        - Nodes/B-225_Field_Cycle.md
+      status: NEEDS_WATCHDOG_NODE_AND_EXECUTABLE_VALIDATION
+    - node_id: SM-009
+      name: Four Actions
+      locked_value: [Inward, Outward, Across, Over]
+      sources:
+        - UPDATED_37_THREE_GATE_LANGUAGE_AND_SIX_STEP_MIRROR.md
+        - Nodes/B-206c_Four_Actions.md
+      status: EXISTING_NODE_NEEDS_WATCHDOG_WRAPPER
+    - node_id: SM-010
+      name: Four Views
+      locked_value: [Direction, Phase, Strength, Reference]
+      sources:
+        - UPDATED_37_THREE_GATE_LANGUAGE_AND_SIX_STEP_MIRROR.md
+        - Nodes/B-206b_Four_Views.md
+      status: EXISTING_NODE_NEEDS_WATCHDOG_WRAPPER
+    - node_id: SM-011
+      name: Two Engagement Choices
+      locked_value: [Everything, Nothing]
+      sources:
+        - Nodes/B-224_Two_Choices.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+      status: EXISTING_NODE_NEEDS_WATCHDOG_WRAPPER
+    - node_id: SM-012
+      name: Three Differential Moves
+      locked_value: [Left, Stay, Right]
+      encoded_value: [-1, 0, 1]
+      sources:
+        - Nodes/B-223_Three_Moves.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+      status: EXISTING_NODE_NEEDS_WATCHDOG_WRAPPER
+    - node_id: SM-013
+      name: Local State Is Processing and Memory
+      locked_rule: "resolved consequence remains locally available as the next reference"
+      sources:
+        - VTC_BUILD_ARCHITECTURE.md
+        - Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+      status: NEEDS_WATCHDOG_NODE_AND_BENCH_RECEIPT
+  missing_lock_components:
+    - canonical machine-readable graph linking all structural units
+    - exact legal transition table for Field lifecycle
+    - executable validator for order, layer separation, and forbidden transitions
+    - Step-6 four-case simulation receipts
+    - automated pull-request check
+    - node-local telemetry and anti-drift receipts for each converted unit
+    - canonical index redirecting duplicated prose to the node graph
+  conversion_order:
+    - SM-004
+    - SM-008
+    - SM-003
+    - SM-001
+    - SM-002
+    - SM-007
+    - SM-009
+    - SM-010
+    - SM-011
+    - SM-012
+    - SM-005
+    - SM-006
+    - SM-013
+  anti_drift:
+    rule: "Conversion order may improve clarity; it may not change the locked build order, names, layers, connections, semantics, or behavior."
+    next_unit: SM-004
