@@ -1,6 +1,8 @@
 watchdog:
   enabled: true
   fail_closed: true
+  structural_lock: BUILD_STRUCTURE_LOCK.yaml
+  purpose: "Make the established build clearer without changing its structure."
   checks:
     - id: required_files
       require:
@@ -8,10 +10,33 @@ watchdog:
         - content.md
         - logic_chain.yaml
         - dependencies.yaml
+        - BUILD_STRUCTURE_LOCK.yaml
         - node.watchdog.yaml
         - notes-to-self.md
         - telemetry
         - receipts
+    - id: build_structure_unchanged
+      compare:
+        - component_names
+        - component_order
+        - layer_assignment
+        - connections
+        - semantics
+        - runtime_behavior
+      pass_status: NO_STRUCTURAL_DRIFT
+      fail_status: STRUCTURAL_DRIFT_DETECTED
+      on_fail: HOLD
+    - id: forbidden_build_operations
+      forbid:
+        - reorder
+        - rename
+        - merge
+        - split
+        - add_gate
+        - remove_gate
+        - reinterpret
+        - replace
+      on_detection: OVERRIDE
     - id: lifecycle_separation
       forbid_merging:
         - field_lifecycle_states
@@ -24,8 +49,14 @@ watchdog:
         - Executing
         - Vectoring
         - Resolving
+    - id: clarity_gain
+      require_evidence_of:
+        - existing_component_exposed
+        - existing_connections_explicit
+        - navigation_or_traceability_improved
     - id: receipt_required
       require_before_advance: true
+      forbid_scope_only_no_drift_claim: true
     - id: notes_to_self_required
       require_before_and_after: true
     - id: one_change
