@@ -61,6 +61,11 @@ For the domain-specific verbal-command runtime, read
 legs: paired views travel up to the brain and paired actions travel down. Its
 domain vocabulary does not replace Updated 33's invariant kernel vocabulary.
 
+The corresponding unbuilt low-voltage hardware proposition is
+`Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`.
+It must remain experimental until its six routes, millivolt state margins,
+thresholds, phase behavior, Hold, and Override are measured.
+
 ## Updated 34 processing/memory protection
 
 The target VTC architecture treats local persistent physical state as both working memory and the state being processed. The intended local cycle is:
