@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PORT="${ONE_WAVE_ANIMATOR_PORT:-8765}"
+URL="http://127.0.0.1:${PORT}/index.html"
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}/one-wave-animator"
+PID_FILE="$RUNTIME_DIR/server.pid"
+LOG_FILE="$RUNTIME_DIR/server.log"
+mkdir -p "$RUNTIME_DIR"
+
+server_alive() {
+  if [[ -f "$PID_FILE" ]]; then
+    local pid
+    pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+    [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null
+  else
+    return 1
+  fi
+}
+
+if ! server_alive; then
+  nohup python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP_DIR" >"$LOG_FILE" 2>&1 &
+  echo $! > "$PID_FILE"
+  sleep 0.35
+fi
+
+if command -v chromium >/dev/null 2>&1; then
+  exec chromium --app="$URL"
+elif command -v chromium-browser >/dev/null 2>&1; then
+  exec chromium-browser --app="$URL"
+elif command -v google-chrome >/dev/null 2>&1; then
+  exec google-chrome --app="$URL"
+elif command -v google-chrome-stable >/dev/null 2>&1; then
+  exec google-chrome-stable --app="$URL"
+elif command -v firefox >/dev/null 2>&1; then
+  exec firefox --new-window "$URL"
+else
+  exec xdg-open "$URL"
+fi
