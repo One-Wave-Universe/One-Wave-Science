@@ -1,0 +1,29 @@
+{
+  "id": "G-737",
+  "canonical_name": "Synchronized Dual-State Mind — Fast Router and Consequence Feedback",
+  "status": "proposed computational architecture",
+  "claim_boundary": "not proof of consciousness and not a literal anatomical map",
+  "components": {
+    "compressive_machine": ["filter", "inhibit", "stabilize", "preserve continuity"],
+    "expressive_machine": ["generate", "explore", "communicate", "act"],
+    "fast_subconscious_router": ["salience", "routing", "attention allocation", "learned response"],
+    "consequence_feedback": "observed outcome minus predicted outcome"
+  },
+  "update": {
+    "route": "r_t = R(s_t, m_t, f_(t-1))",
+    "compress": "c_(t+1) = C(c_t, r_t)",
+    "express": "e_(t+1) = E(e_t, r_t, c_(t+1))",
+    "action": "a_t = G(c_(t+1), e_(t+1))",
+    "feedback": "f_t = o_t - predicted_o_t"
+  },
+  "governing_rule": "Compress without silencing; express without losing coherence; route quickly; correct through consequence.",
+  "prohibited_inference": "feedback is not authorization for coercive external control",
+  "required_tests": [
+    "compressive ablation",
+    "expressive ablation",
+    "router delay and scramble",
+    "feedback ablation",
+    "coupling sweep",
+    "comparison against simpler recurrent controls"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "node_id": "G-724",
+  "canonical_name": "M4 Heterogeneous Runtime and Dual Six-Gate Controller",
+  "gate": "GREEN",
+  "lifecycle": "PROPOSED_BUILD",
+  "center_origin": true,
+  "mirror_meaning": "phase rotation; never an ontology-side swap",
+  "devices": {
+    "cpu": ["authoritative state", "database", "safety", "scheduling", "receipts", "Gate-7 commit"],
+    "gpu": ["Field simulation", "PPF tensor batches", "visualization", "Boltzmann candidate sampling"],
+    "npu": ["M4 fast loop", "dual six-gate inference", "Hopfield recall", "coherence scoring"]
+  },
+  "memory_roles": {
+    "hopfield": "partial-cue completion and attractor settling",
+    "boltzmann": "bounded probabilistic candidate exploration",
+    "ternary": "local Down/Stay/Up proposal",
+    "binary": "permission, block, stop, isolate"
+  },
+  "gate7": "CPU-committed coupling of two complete six-gate systems",
+  "authority": "UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md"
+}

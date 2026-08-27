@@ -2,7 +2,8 @@
   "node_id": "G-721b",
   "title": "Sturmian Binary Branch Grammar",
   "canonical_source": "Nodes/G-721b_Sturmian_Binary_Branch_Grammar.md",
-  "branch_rule": "r=2n+b, b=floor((t+1)alpha+rho)-floor(t alpha+rho)",
+  "branch_rule": "e=2(n+j), o=e+(2b-1), b=floor((t+1)alpha+rho)-floor(t alpha+rho)",
+  "anchor_rule": "j in {0,1} is declared separately",
   "tests": [
     "p(m)=m+1",
     "balance",

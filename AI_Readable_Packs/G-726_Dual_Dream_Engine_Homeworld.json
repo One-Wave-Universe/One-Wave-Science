@@ -1,0 +1,23 @@
+{
+  "node_id": "G-726",
+  "canonical_name": "Dual Dream Engine — Programmed 2D Ternary Homeworld",
+  "gate": "GREEN",
+  "lifecycle": "PROPOSED_BUILD",
+  "engines": {
+    "cognitive": "separate Dream Engine research system; not part of the programmed world's update loop",
+    "world_2d_non_cognitive": "persistent programmed 2D Homeworld and Mega-City simulation with no Administrator"
+  },
+  "spatial_dimension": "2D",
+  "native_mirror_gate": "3 > 1(0)1 < 6",
+  "three_means": "ternary local state, not three-dimensional space",
+  "ternary_moves": {"-1": "compress", "0": "hold", "+1": "express"},
+  "storage": "NAS-backed 2D maps, layers, assets, immutable snapshots, chunks, rules, receipts, and backups; not cognitive memory",
+  "compute": {
+    "cpu": "2D world rules, database, chunk streaming, versioning, networking, replay",
+    "gpu": "2D rendering, particles, lighting, large-grid updates, visualization, video export",
+    "npu": "optional tagging, navigation hints, animation selection, procedural suggestions",
+    "nas": "persistent world state and assets"
+  },
+  "administrator": false,
+  "boundary": "programmed world runs independently; optional cognitive observation/request channel is outside its update loop"
+}

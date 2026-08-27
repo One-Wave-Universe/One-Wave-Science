@@ -7,11 +7,15 @@ Fibonacci number properties and golden-ratio metrics are attached specifically t
 The architecture is now:
 
 \[
-\boxed{C_{\pm}(n)=\pm(n,2n,2n+1)}
+\boxed{C_{\pm}(n;j,s)=\pm(n,2(n+j),2(n+j)+s)}
 \]
 
 \[
-\boxed{b_t=|r_t|-2|n_t|\in\{0,1\}}
+\boxed{j\in\{0,1\},\quad s\in\{-1,+1\}}
+\]
+
+\[
+\boxed{b_t=(|o_t|-|e_t|+1)/2\in\{0,1\}}
 \]
 
 \[
@@ -44,6 +48,10 @@ Wk = W(k-1) W(k-2)
 ```
 
 Fibonacci token `0` is not the Mirror Gate. Sign mirroring preserves the token trace. Reverse traversal compares against the reversed expected trace and does not imply token complement.
+
+The Fibonacci token selects the lower or upper odd side around a declared even
+anchor. The anchor generation is retained separately. The shared bridge
+`2n+1=2(n+1)-1` cannot be decoded without that anchor receipt.
 
 ## Golden-ratio scope
 

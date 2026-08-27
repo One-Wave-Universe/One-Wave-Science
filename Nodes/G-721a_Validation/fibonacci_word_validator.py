@@ -40,24 +40,28 @@ def fibonacci_prefix(length: int) -> str:
     return words[-1][:length]
 
 
-def branch_from_coordinates(identity: int, recursive: int) -> int:
+def branch_from_coordinates(identity: int, even: int, odd: int) -> int:
     n = abs(identity)
-    r = abs(recursive)
+    e = abs(even)
+    o = abs(odd)
     if not 1 <= n <= 26:
         raise ValueError(f"letter identity out of range: {identity}")
-    branch = r - 2 * n
-    if branch not in (0, 1):
+    anchor = e // 2 - n
+    if e % 2 or anchor not in (0, 1):
         raise ValueError(
-            f"illegal recursive coordinate {recursive} for identity {identity}; "
-            f"expected ±{2*n} or ±{2*n+1}"
+            f"illegal even anchor {even} for identity {identity}; "
+            f"expected ±{2*n} or ±{2*(n+1)}"
         )
-    if identity * recursive <= 0:
-        raise ValueError("identity and recursive coordinate must share mirror sign")
-    return branch
+    side = o - e
+    if side not in (-1, 1):
+        raise ValueError(f"odd coordinate {odd} must be one below or above even {even}")
+    if identity * even <= 0 or identity * odd <= 0:
+        raise ValueError("identity, even, and odd coordinates must share mirror sign")
+    return 0 if side == -1 else 1
 
 
-def decode_trace(records: Iterable[tuple[int, int]]) -> str:
-    return "".join(str(branch_from_coordinates(n, r)) for n, r in records)
+def decode_trace(records: Iterable[tuple[int, int, int]]) -> str:
+    return "".join(str(branch_from_coordinates(n, e, o)) for n, e, o in records)
 
 
 def mismatch_rate(observed: str, expected: str) -> float:
@@ -135,9 +139,12 @@ def build_reference_route() -> list[dict[str, int | str]]:
                 "letter": chr(64 + n),
                 "n": n,
                 "branch": bit,
-                "recursive_coordinate": 2 * n + bit,
+                "anchor": 0,
+                "even_coordinate": 2 * n,
+                "odd_coordinate": 2 * n + (-1 if bit == 0 else 1),
                 "mirror_n": -n,
-                "mirror_recursive_coordinate": -(2 * n + bit),
+                "mirror_even_coordinate": -(2 * n),
+                "mirror_odd_coordinate": -(2 * n + (-1 if bit == 0 else 1)),
             }
         )
     return rows
@@ -161,9 +168,17 @@ def write_outputs(output_dir: Path, max_generation: int = 12) -> dict[str, objec
         writer.writeheader()
         writer.writerows(route)
 
-    positive_records = [(int(row["n"]), int(row["recursive_coordinate"])) for row in route]
+    positive_records = [
+        (int(row["n"]), int(row["even_coordinate"]), int(row["odd_coordinate"]))
+        for row in route
+    ]
     negative_records = [
-        (int(row["mirror_n"]), int(row["mirror_recursive_coordinate"])) for row in route
+        (
+            int(row["mirror_n"]),
+            int(row["mirror_even_coordinate"]),
+            int(row["mirror_odd_coordinate"]),
+        )
+        for row in route
     ]
     expected = fibonacci_prefix(len(route))
     positive_trace = decode_trace(positive_records)

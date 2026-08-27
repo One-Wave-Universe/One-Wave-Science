@@ -121,7 +121,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
-### Appendix D — Resonance, Modal & Dimensional Structure (13 nodes)
+### Appendix D — Resonance, Modal & Dimensional Structure (15 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -137,6 +137,8 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-411 | Mirrored Axis Pairs and Directed Route Counts | Separates N axis pairs, 2N directed routes, and 2N+1 centered states; requires ratio-domain declarations. | YELLOW |
 | D-412 | Lattice Simulation and State-Driven Visualization Standard | Requires real state updates, raw receipts, graphs, failure regions, and dimensional declarations; rejects decorative animation as simulation. | YELLOW |
 | D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
+| D-414 | Four-Interaction Shell Simulation | Reduced visualization of four coupled micro-scale channels driven by real datasets as wave inputs; candidate geometry and couplings, not a universal four-interaction derivation. | YELLOW |
+| D-415 | Nonlocal Three-Excitation One-Field Bench | Runnable six-neighbor triangular-lattice bench evolving one globally connected nonlinear Field and measuring three extended excitations with origin-free relational receipts; candidate kernel and potential remain underived. | YELLOW |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|

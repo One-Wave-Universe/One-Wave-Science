@@ -7,7 +7,8 @@
     "W1": "01",
     "recurrence": "Wk=W(k-1)W(k-2)"
   },
-  "input": "ordered b trace recovered from G-721 recursive coordinates",
+  "input": "ordered lower/upper odd-side trace recovered from full G-721 (n,e,o) receipts",
+  "anchor_rule": "even-anchor generation j is retained separately from the Fibonacci side token",
   "metrics": [
     "packet legality",
     "prefix mismatch",

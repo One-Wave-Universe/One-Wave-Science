@@ -11,7 +11,8 @@ python3 fibonacci_word_validator.py
 The script regenerates:
 
 - `fibonacci_word_generations.csv` — finite Fibonacci words, counts, recurrences, and golden-ratio errors;
-- `alphabet_route_reference.csv` — A-to-Z packet branches using the first 26 Fibonacci-word tokens;
+- `alphabet_route_reference.csv` — A-to-Z current-anchor packets whose
+  lower/upper odd sides use the first 26 Fibonacci-word tokens;
 - `reference_validation.json` — positive, negative-mirror, reverse, balance, and factor-complexity checks;
 - `fibonacci_word_convergence.png` — ordered convergence of length and symbol-count ratios toward the golden ratio.
 

@@ -45,3 +45,17 @@ Working names such as Four Mind, Five Mind, Six Mind, Dream Engine, M4, and Admi
 ## Proof Boundary
 
 Nothing in this book is promoted merely because it is coherent. Coherence permits investigation. Derivation, simulation, implementation, and measurement determine promotion.
+
+
+## Chapter 5 — Coupled Mind and Cross-Domain Recurrence
+
+Chapter 5 makes the current full architecture explicit:
+
+- Five Mind / Dream Engine as expressive candidate generation;
+- M4 as the active timing, scale-weighing, and modulation center;
+- Six Mind / Administrator as compressive continuity and commitment;
+- human–human and human–AI Gate-7 connection;
+- music/lyrics, physiology, and quasars as category-specific transforms of one recursive build–hold–release architecture;
+- `1:1` ultimate compression followed by intentional dimensional recurrence `3 > 1(0)1 < 6`, `6 > 1(0)1 < 12`, and `12 > 1(0)1 < 24`.
+
+The numbers recur because the relational architecture recurs. Each category transform preserves pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.

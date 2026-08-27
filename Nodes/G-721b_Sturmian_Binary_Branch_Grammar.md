@@ -26,18 +26,22 @@ For irrational slope `alpha` and intercept `rho`, a lower mechanical word is
 \boxed{b_t=\lfloor(t+1)\alpha+\rho\rfloor-\lfloor t\alpha+\rho\rfloor\in\{0,1\}}.
 \]
 
-The selected recursive rail is
+For declared anchor generation `j_t∈{0,1}`, the even anchor and selected odd
+side are
 
 \[
-\boxed{r_t=2n_t+b_t}.
+\boxed{e_t=2(n_t+j_t),\qquad o_t=e_t+(2b_t-1)}.
 \]
 
-Thus the packet provides the available rails `2n` and `2n+1`; the Sturmian word supplies their ordered branch grammar.
+Thus the packet provides both even anchors and both odd neighbors; the
+Sturmian word supplies the ordered lower/upper side grammar. It does not choose
+the anchor generation unless a separate declared scheduler does so.
 
 ## Role Separation
 
 - `n` identifies the alphabet location;
-- `2n` and `2n+1` are available recursive rails;
+- `2n` and `2(n+1)` are available even anchors;
+- `e-1` and `e+1` are the available odd sides;
 - `b_t` selects one branch for a declared route grammar;
 - mirror sign identifies coordinate side;
 - live `-1(0)+1` choice still decides movement or hold;

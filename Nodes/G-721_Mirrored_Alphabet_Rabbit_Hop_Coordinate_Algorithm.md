@@ -54,37 +54,70 @@ use
 A=1,\quad B=2,\quad \ldots,\quad Z=26.
 \]
 
-The positive coordinate packet is
+For identity rank `n`, retain two successive even anchors
 
 \[
-\boxed{C_{+}(n)=(n,2n,2n+1)}.
+E_0=2n,\qquad E_1=2(n+1),
 \]
 
-The negative mirror is
+and both odd neighbors of each even anchor:
 
 \[
-\boxed{C_{-}(n)=(-n,-2n,-(2n+1))}.
+O_j^\pm=E_j\pm1,\qquad j\in\{0,1\}.
 \]
+
+The complete positive coordinate family is
+
+\[
+\boxed{
+C_+(n)=\{
+(n,2n,2n-1),
+(n,2n,2n+1),
+(n,2(n+1),2(n+1)-1),
+(n,2(n+1),2(n+1)+1)
+\}.
+}
+\]
+
+The negative family is its exact sign mirror, `C_-(n)=-C_+(n)`
+coordinate by coordinate.
 
 Examples:
 
 \[
-C_{+}(A)=(1,2,3),\qquad C_{-}(A)=(-1,-2,-3),
+C_+(A)=\{(1,2,1),(1,2,3),(1,4,3),(1,4,5)\},
 \]
 
 \[
-C_{+}(Z)=(26,52,53),\qquad C_{-}(Z)=(-26,-52,-53).
+C_+(B)=\{(2,4,3),(2,4,5),(2,6,5),(2,6,7)\},
 \]
 
-## Coordinate Rails
+\[
+C_+(Z)=\{(26,52,51),(26,52,53),(26,54,53),(26,54,55)\}.
+\]
 
-Each packet preserves three related values:
+For A, the negative family begins
+`(-1,-2,-1), (-1,-2,-3)` and continues
+`(-1,-4,-3), (-1,-4,-5)`.
+
+## Coordinate Rails and Shared Bridge
+
+Each selected hop preserves:
 
 1. **identity/location rail:** \(n\);
-2. **even recursive rail:** \(2n\);
-3. **odd recursive rail:** \(2n+1\).
+2. **even-anchor generation:** current `E0=2n` or next `E1=2(n+1)`;
+3. **odd side:** lower `E-1` or upper `E+1`.
 
-The packet must remain intact even when one recursive branch is selected for a particular hop. Selecting \(2n\) or \(2n+1\) does not erase the unused coordinate.
+The upper odd neighbor of the current anchor equals the lower odd neighbor of
+the next anchor:
+
+\[
+\boxed{2n+1=2(n+1)-1}.
+\]
+
+This repeated value is an intentional shared bridge, not a duplicate to
+delete. The odd value alone is therefore insufficient to reconstruct a hop;
+the receipt must retain its even anchor and lower/upper side.
 
 ## Two-Axis Structure
 
@@ -99,12 +132,12 @@ The letter index identifies location in the A-to-Z order. The side of the Mirror
 The relations
 
 \[
-n\rightarrow2n,
+n\rightarrow E_j=2(n+j),
 \qquad
-n\rightarrow2n+1
+E_j\rightarrow E_j\pm1
 \]
 
-identify the two recursive branches attached to the letter's identity coordinate.
+identify the anchor generation and odd side attached to the identity.
 
 These axes must not be collapsed. A sign change does not alter the letter identity, and a recursive-branch change does not automatically reverse traversal direction.
 
@@ -118,37 +151,32 @@ The Mirror Gate is the shared zero boundary:
 
 Crossing the gate changes side or polarity. It does not delete the coordinate packet.
 
-Two valid layout classes are retained:
+Two valid alphabet-orientation layouts are retained:
 
-### Recursive mirror layout
+### Forward-outward / reverse-return layout
 
 The same alphabet order is preserved across opposite signs:
 
 ```text
--Z ... -A (0) +A ... +Z
+A ... Z (0) Z ... A
 ```
 
-or numerically:
-
-```text
--26 ... -1 (0) +1 ... +26
-```
-
-### Direction/location mirror layout
+### Inverted-outward / forward-return layout
 
 The alphabet traversal is opposed across the gate:
 
 ```text
--A ... -Z (0) +Z ... +A
+Z ... A (0) A ... Z
 ```
 
-or numerically:
+Every path must separately declare alphabet orientation and coordinate
+polarity. Under inverted alphabet orientation,
 
-```text
--1 ... -26 (0) +26 ... +1
-```
+\[
+\boxed{n_{inv}=27-n},
+\]
 
-Every generated path must declare which layout it uses.
+so A has rank 26 and Z has rank 1. Inversion does not imply negative polarity.
 
 ## Word-to-Path Compilation
 
@@ -158,7 +186,7 @@ For a word with letter indices
 \mathbf n=(n_0,n_1,\ldots,n_{m-1}),
 \]
 
-and mirror signs
+mirror signs, even-anchor generations, and odd sides
 
 \[
 \boldsymbol\sigma=(\sigma_0,\sigma_1,\ldots,\sigma_{m-1}),
@@ -166,12 +194,18 @@ and mirror signs
 \sigma_t\in\{-1,+1\},
 \]
 
+\[
+j_t\in\{0,1\},\qquad s_t\in\{-1,+1\},
+\]
+
 the full packet path is
 
 \[
+\boxed{
 \mathbf C_t
 =
-\sigma_t(n_t,2n_t,2n_t+1).
+\sigma_t\left(n_t,2(n_t+j_t),2(n_t+j_t)+s_t\right).
+}
 \]
 
 The packet differential between consecutive letters is
@@ -186,30 +220,35 @@ This differential is the machine-readable rabbit hop between symbolic addresses.
 
 ## Recursive-Branch Trace
 
-When a run commits one recursive branch for letter \(n_t\), record the selected coordinate as
+When a run commits one odd side around a declared even anchor, retain the full
+triple
 
 \[
-r_t=\sigma_t(2n_t+b_t),
+(n_t,e_t,o_t)
+=
+\sigma_t\left(n_t,2(n_t+j_t),2(n_t+j_t)+s_t\right).
+\]
+
+Recover anchor generation and binary side token by
+
+\[
+\boxed{j_t=\frac{|e_t|}{2}-|n_t|},
 \qquad
-b_t\in\{0,1\}.
+\boxed{b_t=\frac{|o_t|-|e_t|+1}{2}}.
 \]
 
-The branch symbol can be recovered from the signed coordinate without losing mirror information:
+A valid packet must satisfy
 
 \[
-\boxed{b_t=|r_t|-2|n_t|}.
-\]
-
-A valid packet branch must satisfy
-
-\[
-b_t\in\{0,1\}.
+j_t\in\{0,1\},\qquad b_t\in\{0,1\}.
 \]
 
 Thus:
 
-- \(b_t=0\) selects the even recursive rail \(2n_t\);
-- \(b_t=1\) selects the odd recursive rail \(2n_t+1\).
+- `j=0` selects current even anchor `2n`;
+- `j=1` selects next even anchor `2(n+1)`;
+- `b=0` selects the lower odd neighbor `e-1`;
+- `b=1` selects the upper odd neighbor `e+1`.
 
 The ordered branch trace
 
@@ -289,8 +328,9 @@ The 2D, 3D, and 4D rules of A-117 remain controlling.
 A valid implementation must verify:
 
 1. every letter index lies in \(1\ldots26\);
-2. every packet equals \(\pm(n,2n,2n+1)\);
-3. every selected recursive coordinate gives \(b_t\in\{0,1\}\);
+2. every packet equals
+   `±(n, 2(n+j), 2(n+j)+s)` for declared `j∈{0,1}`, `s∈{-1,+1}`;
+3. every packet recovers legal `j` and `b` values;
 4. forward and reverse paths are exact reversals;
 5. positive and negative paths are exact sign mirrors;
 6. Mirror-Gate zero is never confused with branch symbol zero;
@@ -302,7 +342,9 @@ A valid implementation must verify:
 The algorithm fails when:
 
 - a packet value is changed to improve a later ratio;
-- a branch symbol is inferred from sign rather than \(2n\) versus \(2n+1\);
+- a branch symbol is inferred from polarity rather than the odd side of its
+  declared even anchor;
+- a shared odd bridge is decoded without retaining its anchor generation;
 - branch zero is treated as the Mirror Gate;
 - reversing a path silently complements its branch symbols;
 - the coordinate grammar is presented as the live movement mechanism;
