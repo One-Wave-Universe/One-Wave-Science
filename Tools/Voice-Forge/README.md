@@ -103,10 +103,14 @@ Voice-Forge/
     pipeline.py     load -> blend -> pitch/formant -> character ->
                      finishing -> render, plus stem/handoff export
   app/            PySide6 GUI (main_window, sliders, undo/redo, preview)
+  api/            FastAPI HTTP surface: find/create voice profiles from
+                  a recording or video, combine two into a new voice --
+                  what a ChatGPT Custom GPT Action plugs into
   tools/          make_sample_voices.py: synthesizes two original demo
                   reference voices so the tool can be tried without any
                   real recordings
-  tests/          pytest suite for the engine and a headless GUI smoke test
+  tests/          pytest suite for the engine, the API, and a headless
+                  GUI smoke test
 ```
 
 ### How the blend works
@@ -183,6 +187,80 @@ The GUI smoke test uses `pytest.importorskip("PySide6")` and Qt's
 `offscreen` platform plugin, matching the One-Wave Animator's test
 pattern, so the engine tests still run even where the GUI's system
 libraries aren't installed.
+
+### ChatGPT integration (HTTP API)
+
+`api/` exposes the engine over HTTP so an external caller -- a Custom GPT
+Action, or anything else that can make HTTPS calls -- can find or create
+voice profiles from a recording or video, and combine two of them into a
+new voice it can play back. It's a thin wrapper: every request just
+builds a `Recipe` and calls `pipeline.render_recipe`, same as the GUI.
+
+Voice profiles are stored under `library/` (one directory per voice,
+holding its reference audio) with a JSON index; combined renders are
+served back over HTTP so a caller gets a URL, not a binary blob.
+
+#### Setup
+
+```
+cd Tools/Voice-Forge
+pip install -r requirements.txt -r requirements-api.txt
+```
+
+Uploads go through `ffmpeg` first (so any audio *or video* container --
+mp4, mov, m4a, mp3, whatever a phone or export tool produces -- works,
+not just WAV): `sudo apt-get install ffmpeg`.
+
+#### Run it
+
+```
+export VOICE_FORGE_API_KEY=choose-a-long-random-value   # omit only for local-only testing
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+
+This must be reachable over **HTTPS** at a stable public URL for a
+Custom GPT Action to call it -- for a quick test, tunnel it (e.g. `ngrok
+http 8000`); for anything real, deploy it behind a proper reverse proxy
+(Fly.io, Render, your own VPS with Caddy/nginx, etc.). This repo doesn't
+include that hosting step -- it's wherever you already deploy things.
+
+#### Wire it into a Custom GPT
+
+In the GPT builder: **Configure -> Actions -> Create new action**, then
+**Import from URL** with `https://your-host/openapi.json` (FastAPI
+generates this automatically). Set Authentication to **API Key**, header
+name `X-API-Key`, value matching `VOICE_FORGE_API_KEY`. That's it --
+ChatGPT reads the three operations below from the schema itself.
+
+#### Endpoints
+
+| Method | Path | operationId | Does |
+|---|---|---|---|
+| POST | `/voices` | `createVoiceProfile` | Upload a recording or video; extracts and saves the voice |
+| GET | `/voices?query=...` | `findVoiceProfiles` | Search saved voices by name/description/tag |
+| GET | `/voices/{id}` | `getVoiceProfile` | Fetch one voice profile |
+| DELETE | `/voices/{id}` | `deleteVoiceProfile` | Remove a saved voice profile |
+| POST | `/voices/combine` | `combineVoiceProfiles` | Blend two voices, render a WAV, optionally save the result as a new voice |
+
+`combine` accepts the same trait controls as the GUI (pitch, formant,
+body, brightness, breathiness, rasp, nasality, articulation, dry/wet,
+output gain) and returns `audio_url` pointing at the rendered file, plus
+`saved_voice` if `save_as_name` was given -- so "combine this voice and
+that voice" can also become a new findable voice in one call, matching
+the original ask: find this voice and this voice, combine them, and
+hear it.
+
+```bash
+curl -X POST https://your-host/voices \
+  -H "X-API-Key: $VOICE_FORGE_API_KEY" \
+  -F "file=@grandpa.mp4" -F "name=Grandpa" -F "tags=warm,narrator"
+
+curl https://your-host/voices?query=grandpa -H "X-API-Key: $VOICE_FORGE_API_KEY"
+
+curl -X POST https://your-host/voices/combine \
+  -H "X-API-Key: $VOICE_FORGE_API_KEY" -H "Content-Type: application/json" \
+  -d '{"voice_id_a":"<id_a>","voice_id_b":"<id_b>","amount_a":0.6,"amount_b":0.4,"save_as_name":"Blended Narrator"}'
+```
 
 ### One-click install (Ubuntu desktop app)
 
