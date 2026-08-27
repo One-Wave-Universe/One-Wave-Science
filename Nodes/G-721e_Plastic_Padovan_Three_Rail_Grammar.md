@@ -18,13 +18,18 @@ Downstream: three-rail rabbit tests, Android procedural-route experiments
 
 ## Three Alphabet Rails
 
-For letter index `n`, define the retained packet rails
+The complete G-721 packet is now larger than this three-symbol scheduler. For
+letter index `n`, retain identity and the declared active anchor/side families
 
 \[
-I_n=n,\qquad E_n=2n,\qquad O_n=2n+1.
+I_n=n,\qquad E_{n,j}=2(n+j),\qquad O_{n,j,s}=E_{n,j}+s,
 \]
 
-Here `I`, `E`, and `O` mean identity/reference, even recursive rail, and odd recursive rail. They are not physical particles or binary truth values.
+with `j∈{0,1}` and `s∈{-1,+1}`.
+
+Here `I`, `E`, and `O` mean identity/reference, even-anchor family, and
+odd-side family. The three-symbol substitution does not by itself encode `j`
+or `s`; those labels remain in the full coordinate receipt.
 
 ## Plastic Substitution Candidate
 
@@ -89,10 +94,12 @@ For active rail symbol `s_t`, map
 R(n_t,s_t)=
 \begin{cases}
 n_t,&s_t=I,\\
-2n_t,&s_t=E,\\
-2n_t+1,&s_t=O.
+2(n_t+j_t),&s_t=E,\\
+2(n_t+j_t)+q_t,&s_t=O,
 \end{cases}
 \]
+
+where the receipt separately declares `j_t∈{0,1}` and `q_t∈{-1,+1}`.
 
 Foundational choice then gives negative movement, hold, or positive movement along the selected route.
 
