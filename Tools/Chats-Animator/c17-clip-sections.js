@@ -87,10 +87,9 @@
     if (!frames.length) return A.status('No frames in selected section');
 
     const canvas = A.videoExport.canvas;
-    if (!canvas.width) {
-      canvas.width = 1280;
-      canvas.height = 720;
-    }
+    const width = Math.max(320, Number($('export-width')?.value || 1280));
+    canvas.width = width;
+    canvas.height = Math.round(width * 9 / 16);
     const rate = fps();
     const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
     const stream = canvas.captureStream(rate);
