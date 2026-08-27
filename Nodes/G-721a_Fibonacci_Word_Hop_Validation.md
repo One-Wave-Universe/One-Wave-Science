@@ -20,7 +20,10 @@ Downstream: G-721b Sturmian generalization, Wave Computer route tests, Android p
 
 ## Purpose
 
-This node uses one declared Fibonacci-word convention as a fixed regression validator for the ordered even/odd recursive-branch trace produced by G-721. It is a special Sturmian case, not the complete rabbit-routing family.
+This node uses one declared Fibonacci-word convention as a fixed regression
+validator for the ordered lower/upper odd-side trace around declared even
+anchors produced by G-721. It is a special Sturmian case, not the complete
+rabbit-routing family.
 
 It does **not** apply the golden ratio to the triangular/hexagonal lattice, the 6:1 / 12:1 / 24:1 dimensional architecture, arbitrary alphabet values, or unrelated simulation outputs.
 
@@ -48,18 +51,18 @@ They are not:
 - binary permission states;
 - physical particles or lattice cells.
 
-They label the two recursive packet branches:
+They label the two odd sides of a separately declared even anchor `e`:
 
 \[
-f_0\leftrightarrow 2n,
+f_0\leftrightarrow e-1,
 \qquad
-f_1\leftrightarrow 2n+1.
+f_1\leftrightarrow e+1.
 \]
 
-For a recorded rabbit-hop coordinate \((n_t,r_t)\), recover the token as
+For a recorded rabbit-hop coordinate \((n_t,e_t,o_t)\), recover the token as
 
 \[
-b_t=|r_t|-2|n_t|.
+b_t=\frac{|o_t|-|e_t|+1}{2}.
 \]
 
 The record is valid only when
@@ -150,7 +153,9 @@ The golden-ratio alignment is therefore a consequence of the ordered Fibonacci-w
 For each hop record, compute
 
 \[
-b_t=|r_t|-2|n_t|.
+j_t=\frac{|e_t|}{2}-|n_t|,
+\qquad
+b_t=\frac{|o_t|-|e_t|+1}{2}.
 \]
 
 Define
@@ -158,7 +163,7 @@ Define
 \[
 I_t=
 \begin{cases}
-1,& b_t\in\{0,1\},\\
+1,& j_t\in\{0,1\}\text{ and }b_t\in\{0,1\},\\
 0,& \text{otherwise}.
 \end{cases}
 \]
@@ -294,13 +299,16 @@ A periodic alternating pattern, shuffled trace, or count-matched random word may
 For
 
 \[
-(n_t,r_t)\mapsto(-n_t,-r_t),
+(n_t,e_t,o_t)\mapsto(-n_t,-e_t,-o_t),
 \]
 
 the recovered token is invariant:
 
 \[
-|-r_t|-2|-n_t|=|r_t|-2|n_t|=b_t.
+\frac{|-o_t|-|-e_t|+1}{2}
+=
+\frac{|o_t|-|e_t|+1}{2}
+=b_t.
 \]
 
 Therefore the positive and negative mirrored paths must produce the same Fibonacci-word trace.
@@ -331,7 +339,7 @@ The correct architecture is
 
 ```text
 live -1(0)+1 choice
--> committed even/odd recursive branch
+-> committed anchor generation and lower/upper odd side
 -> recorded branch trace
 -> Fibonacci-word validation
 -> binary top-down allow / block / flag
@@ -353,7 +361,9 @@ This node does not validate:
 - the fact that the alphabet has 26 letters;
 - the 53-value signed/null address count.
 
-The relations \(2n\) and \(2n+1\) define recursive packet branches. They are not themselves Fibonacci recurrence.
+The relations `e=2(n+j)` and `o=e±1` define the anchor and odd side.
+They are not themselves Fibonacci recurrence. The anchor generation
+`j∈{0,1}` is retained independently of the Fibonacci side token.
 
 ## Mandatory Validation Record
 
@@ -367,7 +377,7 @@ original letter order
 mirror layout
 forward or reverse traversal
 letter indices n_t
-selected recursive coordinates r_t
+selected full coordinates (n_t,e_t,o_t)
 recovered branch trace b_t
 expected Fibonacci prefix
 packet-legality result
@@ -432,7 +442,8 @@ The reference run compiles A through Z using the first 26 canonical Fibonacci-wo
 
 The One-Wave use of this validator must be revised or rejected when:
 
-1. the branch trace cannot be recovered unambiguously from \(n,2n,2n+1\);
+1. the branch trace cannot be recovered from a full `(n,e,o)` receipt, or the
+   implementation attempts to decode the shared odd bridge without its anchor;
 2. mirror or reverse operations alter tokens contrary to the declared grammar;
 3. exact-word claims fail the recursive block identity;
 4. ratio alignment survives only after reordering or selecting terms;
