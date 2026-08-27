@@ -36,10 +36,11 @@ For `k=2`, this reduces to the Sturmian value `m+1`. For `k=3`,
 
 The triangular 2D lattice has three undirected route axes. A ternary Arnoux-Rauzy scheduler can label those route families while `-1(0)+1` supplies signed direction or hold.
 
-Two different `2n+1` forms must remain separate:
+Two different uses of the form `2n+1` must remain separate:
 
 - `p(n)=2n+1` counts route-language factors of length `n` in the ternary strict word;
-- the alphabet packet value `2n+1` is the odd recursive rail for letter index `n`.
+- the alphabet value `2n+1` is the shared bridge between current-anchor upper
+  odd and next-anchor lower odd; its anchor receipt must be retained.
 
 Shared form is a comparison target, not variable identity.
 
