@@ -8,7 +8,12 @@ from enum import Enum
 import json
 from pathlib import Path
 
-from One_Wave_Bench.brain.command_memory import M4DualStateRouter, VerbalCommand
+from One_Wave_Bench.brain.command_memory import (
+    M4DualStateRouter,
+    QuadraticDirection,
+    VerbalCommand,
+    VoidDecision,
+)
 from One_Wave_Bench.brain.jetson_runtime import default_brain_home, detect_jetson
 from One_Wave_Bench.brain.receipt_store import ReceiptStore
 
@@ -59,19 +64,30 @@ def run_smoke_test(store: ReceiptStore, *, require_jetson: bool) -> dict[str, ob
         "stop": VerbalCommand.STOP,
     }
     command_checks = {}
+    routing_checks = []
     for phrase, command in expected.items():
         receipt = router.route(phrase)
         command_checks[phrase] = receipt.compressive_after.committed_command is command
+        routing_checks.append(
+            receipt.upward_direction is QuadraticDirection.VIEWS_UP
+            and receipt.downward_direction is QuadraticDirection.ACTIONS_DOWN
+            and len(receipt.upward_field_views) == 4
+            and len(receipt.upward_void_views) == 4
+            and len(receipt.downward_field_actions) == 4
+            and len(receipt.downward_void_actions) == 4
+            and receipt.compressive_after.void_decision is VoidDecision.CONFIRM
+        )
     archive_rebuilt = ReceiptStore(store.path).load().receipts == memory.receipts
     checks = {
         "command_checks": command_checks,
+        "field_void_quadratic_routing": all(routing_checks),
         "archive_rebuilt": archive_rebuilt,
         "gpu_proposal_role": profile.expressive_device == "JETSON_GPU",
         "cpu_commit_role": profile.compressive_device in ("JETSON_CPU", "CPU_REFERENCE"),
         "jetson_required": not require_jetson or profile.hardware_split_ready,
     }
     return {
-        "ready": all(command_checks.values()) and archive_rebuilt
+        "ready": all(command_checks.values()) and all(routing_checks) and archive_rebuilt
                  and checks["cpu_commit_role"] and checks["jetson_required"],
         "profile": profile.receipt,
         "checks": checks,

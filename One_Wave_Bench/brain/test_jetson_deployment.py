@@ -30,6 +30,7 @@ class JetsonDeploymentTests(unittest.TestCase):
         result = run_smoke_test(self.store, require_jetson=False)
         self.assertTrue(result["ready"])
         self.assertTrue(all(result["checks"]["command_checks"].values()))
+        self.assertTrue(result["checks"]["field_void_quadratic_routing"])
         self.assertTrue(result["checks"]["archive_rebuilt"])
         if not result["profile"]["is_jetson"]:
             self.assertEqual(result["profile"]["expressive_device"], "CPU_FALLBACK")

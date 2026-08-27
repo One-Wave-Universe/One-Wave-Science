@@ -48,6 +48,21 @@ class DifferentialDirection(Enum):
     EXPRESS = 1
 
 
+class VoidDecision(str, Enum):
+    """Void ternary; distinct from the Field differential."""
+
+    DENY = "deny"
+    DEFER = "defer"
+    CONFIRM = "confirm"
+
+
+class QuadraticDirection(str, Enum):
+    """Views report upward; brain-resolved actions return downward."""
+
+    VIEWS_UP = "views_up"
+    ACTIONS_DOWN = "actions_down"
+
+
 @dataclass(frozen=True, slots=True)
 class CommandDefinition:
     command: VerbalCommand
@@ -192,6 +207,7 @@ class CompressiveState:
     cycle: int = 0
     device: str = "JETSON_CPU"
     committed_command: VerbalCommand = VerbalCommand.STOP
+    void_decision: VoidDecision = VoidDecision.DEFER
     permission: bool = False
     consequence_error: float = 0.0
     reason: str = "reference hold"
@@ -206,6 +222,14 @@ class DualBrainReceipt:
     compressive_before: CompressiveState
     compressive_after: CompressiveState
     m4_device: str = "CPU_REFERENCE"
+    upward_direction: QuadraticDirection = QuadraticDirection.VIEWS_UP
+    upward_field_views: tuple[int, int, int, int] = (0, 0, 0, 0)
+    upward_void_views: tuple[int, int, int, int] = (0, 0, 0, 0)
+    void_view: str = "oversight"
+    downward_direction: QuadraticDirection = QuadraticDirection.ACTIONS_DOWN
+    downward_field_actions: tuple[int, int, int, int] = (0, 0, 0, 0)
+    downward_void_actions: tuple[int, int, int, int] = (0, 0, 0, 0)
+    void_action: str | None = None
 
     @property
     def committed_definition(self) -> CommandDefinition:
@@ -262,27 +286,32 @@ class M4DualStateRouter:
             quadratic_views=(0, 0, 0, 0) if definition is None else definition.quadratic_views,
         )
 
-        # STOP is an explicit compressive safety commitment and requires no
-        # actuator-ready permission.  Every movement proposal requires both
-        # valid recall and current boundary permission.
+        # Oversight is the Void view traveling up with the Field views.  The
+        # brain resolves the Void ternary without replacing the Field ternary:
+        # CONFIRM commits, DEFER preserves Hold, and DENY sends Override down.
         if recall.command is VerbalCommand.STOP:
             committed = VerbalCommand.STOP
+            void_decision = VoidDecision.CONFIRM
             permission = True
             reason = "Administrator safety commit"
         elif not recall.executable:
             committed = VerbalCommand.STOP
+            void_decision = VoidDecision.DEFER
             permission = False
-            reason = "Administrator hold: recall unresolved"
+            reason = "Administrator defer: recall unresolved"
         elif not actuator_ready:
             committed = VerbalCommand.STOP
+            void_decision = VoidDecision.DEFER
             permission = False
-            reason = "Administrator hold: actuator unavailable"
+            reason = "Administrator defer: actuator unavailable"
         elif not boundary_clear:
             committed = VerbalCommand.STOP
+            void_decision = VoidDecision.DENY
             permission = False
-            reason = "Administrator hold: boundary blocked"
+            reason = "Administrator override: boundary blocked"
         else:
             committed = recall.command
+            void_decision = VoidDecision.CONFIRM
             permission = True
             reason = "Administrator committed expressive proposal"
 
@@ -290,10 +319,13 @@ class M4DualStateRouter:
             cycle=compressive_before.cycle + 1,
             device=self.compressive_device,
             committed_command=committed,
+            void_decision=void_decision,
             permission=permission,
             consequence_error=float(consequence_error),
             reason=reason,
         )
+        upward_views = self.expressive.quadratic_views
+        downward_actions = COMMANDS[committed].quadratic_views
         return DualBrainReceipt(
             cue=normalize_phrase(cue),
             recall=recall,
@@ -302,6 +334,13 @@ class M4DualStateRouter:
             compressive_before=compressive_before,
             compressive_after=self.compressive,
             m4_device=self.m4_device,
+            upward_field_views=upward_views,
+            upward_void_views=upward_views,
+            downward_field_actions=downward_actions,
+            downward_void_actions=downward_actions,
+            void_action=(
+                "override" if void_decision is VoidDecision.DENY else None
+            ),
         )
 
 

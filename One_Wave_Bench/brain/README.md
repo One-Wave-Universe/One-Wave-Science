@@ -7,19 +7,26 @@ drive physical motors.
 ## Fixed processing chain
 
 1. **BC–DC:** binary choice and direct command selection.
-2. **TC–AC:** ternary `COMPRESS / HOLD / EXPRESS` differential cycle. These
-   are the only directional words exposed by this brain layer.
-3. **QC–RC:** Inward, Outward, Across, and Over views routed by one of four
-   rotational-field phase quadrants.
-4. **M4:** fast associative recall and routing between the two state machines.
-5. **Dream Engine / Field / expressive:** interprets the cue and proposes.
-6. **Administrator / Void / compressive:** checks safety, continuity, and
+2. **TC–AC:** paired ternaries. Field uses `COMPRESS / HOLD / EXPRESS`; Void
+   uses `DENY / DEFER / CONFIRM`. Neither vocabulary replaces the other.
+3. **QC–RC upward:** all four Field views and all four Void views travel up to
+   the brain. `OVERSIGHT` is the Void view.
+4. **QC–RC downward:** after brain resolution, all four Field actions and all
+   four Void actions travel down. `OVERRIDE` is the Void action produced by a
+   `DENY`; `DEFER` preserves Hold without fabricating an override.
+5. **M4:** fast associative recall and routing between the two state machines.
+6. **Dream Engine / Field / expressive:** interprets the cue and proposes.
+7. **Administrator / Void / compressive:** checks safety, continuity, and
    permission, then commits or holds.
-7. **Consequence feedback:** measured error returns to the next M4 cycle.
+8. **Consequence feedback:** measured error returns to the next M4 cycle.
 
 The Dream Engine cannot authorize its own motion. The Administrator cannot
 silently erase the expressive proposal. `STOP` is committed by the
 Administrator even when movement actuators are unavailable.
+
+The quadratic invariant is `Field + Void views UP -> brain command -> Field +
+Void actions DOWN`. Views and actions are never collapsed into ternary choices.
+The settled six-route projection and Field/Void boundary remain unchanged.
 
 ## Command constellation
 

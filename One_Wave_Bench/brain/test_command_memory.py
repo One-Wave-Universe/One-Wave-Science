@@ -6,7 +6,9 @@ from One_Wave_Bench.brain.command_memory import (
     DifferentialDirection,
     LearningReceipt,
     M4DualStateRouter,
+    QuadraticDirection,
     VerbalCommand,
+    VoidDecision,
     octave_ratio,
 )
 from One_Wave_Bench.logic_core.six_route_logic import BinaryChoice
@@ -29,6 +31,16 @@ class CommandMemoryTests(unittest.TestCase):
         self.assertEqual(
             {direction.name for direction in DifferentialDirection},
             {"COMPRESS", "HOLD", "EXPRESS"},
+        )
+
+    def test_void_ternary_does_not_replace_field_ternary(self):
+        self.assertEqual(
+            [choice.value for choice in VoidDecision],
+            ["deny", "defer", "confirm"],
+        )
+        self.assertEqual(
+            {direction.value for direction in QuadraticDirection},
+            {"views_up", "actions_down"},
         )
 
     def test_exact_commands_recall_without_boltzmann_guessing(self):
@@ -103,6 +115,28 @@ class CommandMemoryTests(unittest.TestCase):
         self.assertIs(receipt.compressive_after.committed_command, VerbalCommand.STOP)
         self.assertFalse(receipt.compressive_after.permission)
         self.assertIn("boundary", receipt.compressive_after.reason)
+        self.assertIs(receipt.compressive_after.void_decision, VoidDecision.DENY)
+        self.assertEqual(receipt.void_view, "oversight")
+        self.assertEqual(receipt.void_action, "override")
+
+    def test_unresolved_or_unavailable_defer_without_override(self):
+        router = M4DualStateRouter(CommandMemory.defaults())
+        unresolved = router.route("purple window")
+        unavailable = router.route("follow", actuator_ready=False)
+        for receipt in (unresolved, unavailable):
+            self.assertIs(receipt.compressive_after.void_decision, VoidDecision.DEFER)
+            self.assertIsNone(receipt.void_action)
+
+    def test_field_and_void_views_go_up_and_actions_come_down(self):
+        receipt = M4DualStateRouter(CommandMemory.defaults()).route("hurry up")
+        self.assertIs(receipt.upward_direction, QuadraticDirection.VIEWS_UP)
+        self.assertIs(receipt.downward_direction, QuadraticDirection.ACTIONS_DOWN)
+        self.assertEqual(receipt.upward_field_views, receipt.upward_void_views)
+        self.assertEqual(
+            receipt.downward_field_actions, receipt.downward_void_actions
+        )
+        self.assertEqual(len(receipt.upward_field_views), 4)
+        self.assertEqual(len(receipt.downward_field_actions), 4)
 
     def test_stop_bypasses_motion_permission_but_not_the_administrator(self):
         router = M4DualStateRouter(CommandMemory.defaults())
