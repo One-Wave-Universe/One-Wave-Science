@@ -3,8 +3,11 @@
   "name": "Mirrored Alphabet Rabbit-Hop Coordinate Algorithm",
   "purpose": "Symbolic identity, coordinate, and route compiler for alphabet-based rabbit hops.",
   "packet": {
-    "positive": "(n,2n,2n+1)",
-    "negative": "(-n,-2n,-(2n+1))",
+    "formula": "sign*(n,2*(n+j),2*(n+j)+s)",
+    "anchor_generation": "j in {0,1}",
+    "odd_side": "s in {-1,+1}",
+    "positive_A": [[1,2,1],[1,2,3],[1,4,3],[1,4,5]],
+    "negative_A": [[-1,-2,-1],[-1,-2,-3],[-1,-4,-3],[-1,-4,-5]],
     "n_range": [
       1,
       26
@@ -12,11 +15,13 @@
   },
   "axes": {
     "direction_location": "alphabet order plus Mirror-Gate side",
-    "recursive_state": "n, 2n, 2n+1 rails"
+    "recursive_state": "identity n, current/next even anchor, lower/upper odd side"
   },
-  "branch_decode": "b=abs(r)-2*abs(n), b in {0,1}",
+  "branch_decode": "j=abs(e)/2-abs(n); b=(abs(o)-abs(e)+1)/2",
+  "shared_bridge": "2n+1=2(n+1)-1; retain anchor to disambiguate",
+  "alphabet_orientation": "A-Z or inverted rank 27-n, independent of polarity",
   "mirror_rules": {
-    "sign_mirror": "(n,r)->(-n,-r), b unchanged",
+    "sign_mirror": "(n,e,o)->(-n,-e,-o), j and b unchanged",
     "reverse": "reverse token order, do not complement"
   },
   "separation": {
