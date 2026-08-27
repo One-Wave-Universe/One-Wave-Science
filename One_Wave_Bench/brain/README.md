@@ -75,3 +75,20 @@ Threshold bands are preserved exactly as declared: `100–90`, `85–75`,
 ```bash
 python -m unittest One_Wave_Bench.brain.test_command_memory
 ```
+
+## Install on Jetson Orin
+
+From the repository checkout on the Jetson:
+
+```bash
+git switch state-machines/m4-command-memory
+bash One_Wave_Bench/brain/install_jetson.sh
+one-wave-brain status
+one-wave-brain cycle "follow"
+```
+
+The installer uses only Python's standard library, creates a local virtual
+environment, initializes the digest-chained receipt archive, and runs a smoke
+test that requires a detected Jetson GPU. It does not install a microphone,
+motor driver, CUDA kernel, or automatic startup service. The current package
+is the safe command/memory/runtime boundary those later adapters connect to.
