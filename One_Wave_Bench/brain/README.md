@@ -70,6 +70,13 @@ Threshold bands are preserved exactly as declared: `100–90`, `85–75`,
 `15` remains a shared transition boundary. The season state cycles Spring/Birth
 → Summer/Life → Fall/Decline → Winter/Death → Spring/Birth.
 
+## Rabbit-hop alphabet coordinates
+
+`rabbit_hop_alphabet.py` implements the complete G-721 family
+`±(n,2(n+j),2(n+j)+s)` with current/next even anchor `j`, lower/upper
+odd side `s`, forward or inverted alphabet rank, and independent polarity. It
+retains the shared odd bridge instead of trying to decode it without its anchor.
+
 ## Test
 
 ```bash
