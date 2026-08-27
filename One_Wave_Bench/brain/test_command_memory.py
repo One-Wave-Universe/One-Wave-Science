@@ -122,7 +122,10 @@ class CommandMemoryTests(unittest.TestCase):
 
     def test_jetson_brains_keep_device_provenance(self):
         router = M4DualStateRouter(
-            CommandMemory.defaults(), m4_device="JETSON_ACCELERATOR"
+            CommandMemory.defaults(),
+            m4_device="JETSON_ACCELERATOR",
+            expressive_device="JETSON_GPU",
+            compressive_device="JETSON_CPU",
         )
         receipt = router.route("follow")
         self.assertEqual(receipt.expressive_after.device, "JETSON_GPU")
