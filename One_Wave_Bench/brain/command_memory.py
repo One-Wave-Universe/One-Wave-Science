@@ -220,13 +220,22 @@ class M4DualStateRouter:
     the exact command archive.
     """
 
-    def __init__(self, memory: "CommandMemory", *, m4_device: str = "CPU_REFERENCE"):
-        if not m4_device:
-            raise ValueError("m4_device provenance is required")
+    def __init__(
+        self,
+        memory: "CommandMemory",
+        *,
+        m4_device: str = "CPU_REFERENCE",
+        expressive_device: str = "JETSON_GPU",
+        compressive_device: str = "JETSON_CPU",
+    ):
+        if not all((m4_device, expressive_device, compressive_device)):
+            raise ValueError("all device provenance fields are required")
         self.memory = memory
         self.m4_device = m4_device
-        self.expressive = ExpressiveState()
-        self.compressive = CompressiveState()
+        self.expressive_device = expressive_device
+        self.compressive_device = compressive_device
+        self.expressive = ExpressiveState(device=expressive_device)
+        self.compressive = CompressiveState(device=compressive_device)
 
     def route(
         self,
@@ -246,7 +255,7 @@ class M4DualStateRouter:
 
         self.expressive = ExpressiveState(
             cycle=expressive_before.cycle + 1,
-            device="JETSON_GPU",
+            device=self.expressive_device,
             proposed_command=recall.command,
             route_address=None if definition is None else definition.route.address,
             rotational_phase=0.0 if definition is None else definition.rotational_phase,
@@ -279,7 +288,7 @@ class M4DualStateRouter:
 
         self.compressive = CompressiveState(
             cycle=compressive_before.cycle + 1,
-            device="JETSON_CPU",
+            device=self.compressive_device,
             committed_command=committed,
             permission=permission,
             consequence_error=float(consequence_error),
