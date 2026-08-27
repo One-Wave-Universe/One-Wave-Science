@@ -66,6 +66,11 @@ The corresponding unbuilt low-voltage hardware proposition is
 It must remain experimental until its six routes, millivolt state margins,
 thresholds, phase behavior, Hold, and Override are measured.
 
+`Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` adds the build
+requirement that the Field/Void self-loop, five lifecycle states, orientation,
+and exact receipts continue without words. Language remains a learned,
+replaceable adapter over nonverbal state rather than the cognition core.
+
 ## Updated 34 processing/memory protection
 
 The target VTC architecture treats local persistent physical state as both working memory and the state being processed. The intended local cycle is:
