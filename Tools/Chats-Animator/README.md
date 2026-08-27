@@ -1,30 +1,56 @@
-# Chat's Animator — Repository Backup
+# One-Wave Animator
 
-This directory is the GitHub backup/home for the current ChatGPT-built One-Wave Animator checkpoint while the standalone `Chats-Animatateo` repository is empty.
+This is the restored FPS / exposure-sheet animator that previously reached runtime-tested production features before it was accidentally removed from `main`.
 
-## Current checkpoint
-B9 — Sprite-Sheet Slicer / Pose-Sheet Extraction.
+## What it is
 
-## Important state
-The JavaScript runtime chain referenced by `index.html` has been restored in this backup:
-- `app.js`
-- `b4-frame-reel.js`
-- `b5-pose-editing.js`
-- `b6-onion-skin.js`
-- `b7-playback.js`
-- `b8-batch-pose-import.js`
-- `b9-sprite-sheet-slicer.js`
+A local frame-animation program for making short animated sections against a background, then exporting those sections as clips for assembly in a separate video editor.
 
-All seven JavaScript files pass static `node --check` syntax verification. A real browser smoke test is still required before B9 is considered runtime-verified.
+The reel is the source of truth. Characters and props are transparent still drawings placed on a calibrated background. Each reel frame can hold a drawing for one or more FPS ticks, while position, depth, camera, and pose remain frame-editable.
 
-## Protected direction
-- Background first, calibrated perspective/depth grid.
-- Grid is editor-only and never exported.
-- Characters/props live in scene/world coordinates.
-- Stop-motion / frame-reel animation with explicit frame holds.
-- Human + AI co-edit the same project state.
-- B8 supports many separate pose PNGs in one import.
-- B9 supports slicing one sprite/pose sheet into consecutive frames.
+This is not a single-image tween/moving-frame shortcut.
 
-## Next gate
-Browser smoke-test B9. Do not begin B10 until B9 receives a runtime PASS.
+## Current production features
+
+- configurable FPS reel, default 24 fps;
+- explicit drawing holds / exposures;
+- background loading and perspective/depth calibration grid;
+- character and prop PNG placement;
+- manual per-frame pose replacement and neighboring-frame copying;
+- onion skin;
+- batch pose import and sprite-sheet slicing;
+- project save/load (`.owav`);
+- reusable motion-sequence libraries (`.owmotion`);
+- reusable character motion atlases (`.owatlas`);
+- path/walk production tools;
+- per-frame camera motion;
+- full-reel WebM export;
+- start/end section preview and WebM clip export for external editing.
+
+## Ubuntu install / desktop shortcut
+
+From this directory run:
+
+```bash
+bash install-ubuntu.sh
+```
+
+That creates **One-Wave Animator** in the Ubuntu application menu and a desktop shortcut. The launcher starts a local-only Python web server and opens the animator in Chromium app mode when Chromium is available, with Firefox/`xdg-open` fallback.
+
+No cloud service is required just to open and edit the animator.
+
+## Working method
+
+1. Load a background.
+2. Show the calibration grid, set perspective/depth, then hide the grid.
+3. Add character/prop PNGs or insert a saved motion sequence.
+4. Build and play the reel at the chosen FPS.
+5. Edit any reel frame manually: pose, position, depth, scale, hold, camera, insertion/deletion/order.
+6. Save useful actions into `.owmotion` / `.owatlas` archives.
+7. Mark a start and end frame in **Clip / section export**.
+8. Preview that section.
+9. Export the section as WebM and assemble finished clips in the separate video editor.
+
+## AI-director boundary
+
+The animator data model is intentionally human-and-AI coeditable, but this local launcher does not pretend to contain ChatGPT. A real director/chat bridge must edit the same reel and motion-library structures rather than generating a second incompatible animation format.
