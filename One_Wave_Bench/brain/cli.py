@@ -48,6 +48,60 @@ def _cycle_receipt(store: ReceiptStore, phrase: str):
     return profile, receipt
 
 
+def memory_health(store: ReceiptStore) -> dict[str, object]:
+    """Inspect durable memory independently of whether the brain speaks."""
+    try:
+        memory = store.initialize()
+    except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
+        return {
+            "healthy": False,
+            "receipt_chain_valid": False,
+            "error": f"{type(exc).__name__}: {exc}",
+            "memory_path": str(store.path),
+        }
+    archive_stat = store.path.stat()
+    experience_path = store.path.with_name("experience.jsonl")
+    experience_records = 0
+    heard_records = 0
+    association_records = 0
+    experience_valid = True
+    if experience_path.exists():
+        try:
+            with experience_path.open("r", encoding="utf-8") as stream:
+                for line in stream:
+                    if line.strip():
+                        record = json.loads(line)
+                        if not str(record["cue"]).strip():
+                            raise ValueError("empty cue")
+                        kind = record.get("kind", "association" if "followed_by" in record else None)
+                        if kind == "heard":
+                            heard_records += 1
+                        elif kind == "association":
+                            VerbalCommand(record["followed_by"])
+                            association_records += 1
+                        else:
+                            raise ValueError("unknown experience record kind")
+                        experience_records += 1
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError):
+            experience_valid = False
+    receipts = memory.receipts
+    return {
+        "healthy": experience_valid,
+        "receipt_chain_valid": True,
+        "receipt_count": len(receipts),
+        "known_phrase_count": len({receipt.phrase for receipt in receipts}),
+        "latest_receipt_digest": receipts[-1].digest if receipts else None,
+        "archive_bytes": archive_stat.st_size,
+        "archive_modified_ns": archive_stat.st_mtime_ns,
+        "experience_journal_valid": experience_valid,
+        "experience_records": experience_records,
+        "heard_records": heard_records,
+        "association_records": association_records,
+        "memory_path": str(store.path),
+        "experience_path": str(experience_path),
+    }
+
+
 def run_smoke_test(store: ReceiptStore, *, require_jetson: bool) -> dict[str, object]:
     profile = detect_jetson()
     memory = store.initialize()
@@ -101,6 +155,7 @@ def build_parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="action", required=True)
     commands.add_parser("init", help="initialize or verify command memory")
     commands.add_parser("status", help="show Jetson CPU/GPU readiness")
+    commands.add_parser("memory-status", help="verify memory activity and archive integrity")
     teach = commands.add_parser("teach", help="teach one exact phrase")
     teach.add_argument("command", choices=[command.value for command in VerbalCommand])
     teach.add_argument("phrase")
@@ -110,6 +165,9 @@ def build_parser() -> argparse.ArgumentParser:
     cycle.add_argument("phrase")
     smoke = commands.add_parser("smoke-test", help="verify memory and device split")
     smoke.add_argument("--require-jetson", action="store_true")
+    loop = commands.add_parser("loop", help="run persistent hearing and association loop")
+    loop.add_argument("--silent", action="store_true", help="print speech without audio")
+    loop.add_argument("--responses", choices=("always", "changes", "never"), default="changes", help="choose when speech is emitted")
     return parser
 
 
@@ -121,6 +179,8 @@ def main(argv=None) -> int:
         result = {"memory_path": str(store.path), "receipts": len(memory.receipts)}
     elif args.action == "status":
         result = detect_jetson().receipt
+    elif args.action == "memory-status":
+        result = memory_health(store)
     elif args.action == "teach":
         memory = store.teach(args.phrase, VerbalCommand(args.command))
         result = {"memory_path": str(store.path), "receipts": len(memory.receipts)}
@@ -129,10 +189,23 @@ def main(argv=None) -> int:
     elif args.action == "cycle":
         profile, receipt = _cycle_receipt(store, args.phrase)
         result = {"profile": profile.receipt, "cycle": receipt}
+    elif args.action == "loop":
+        from One_Wave_Bench.brain.conversation_loop import ConversationLoop, SystemSpeaker
+        state = ConversationLoop(store, SystemSpeaker(enabled=not args.silent), responses=args.responses).run()
+        result = {
+            "cycles": state.cycles,
+            "teachings": state.teachings,
+            "silent_cycles": state.silent_cycles,
+            "unresolved_cue": state.unresolved_cue,
+            "memory": memory_health(store),
+        }
     else:
         result = run_smoke_test(store, require_jetson=args.require_jetson)
     print(json.dumps(_jsonable(result), indent=2, sort_keys=True))
-    return 0 if not isinstance(result, dict) or result.get("ready", True) else 1
+    successful = not isinstance(result, dict) or (
+        result.get("ready", True) and result.get("healthy", True)
+    )
+    return 0 if successful else 1
 
 
 if __name__ == "__main__":

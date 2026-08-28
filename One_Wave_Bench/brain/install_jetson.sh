@@ -20,6 +20,12 @@ chmod 0755 "$launcher"
 "$launcher" init
 "$launcher" smoke-test --require-jetson
 
+if command -v espeak-ng >/dev/null 2>&1 || command -v espeak >/dev/null 2>&1 || command -v spd-say >/dev/null 2>&1; then
+  printf 'Local voice: ready\n'
+else
+  printf 'Local voice: text-only (install espeak-ng for audio)\n'
+fi
+
 printf 'Installed: %s\n' "$launcher"
 printf 'Run: %s cycle "follow"\n' "$launcher"
-
+printf 'Loop: %s loop\n' "$launcher"

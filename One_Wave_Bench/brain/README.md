@@ -99,6 +99,7 @@ git switch state-machines/m4-command-memory
 bash One_Wave_Bench/brain/install_jetson.sh
 one-wave-brain status
 one-wave-brain cycle "follow"
+one-wave-brain loop
 ```
 
 The installer uses only Python's standard library, creates a local virtual
@@ -106,3 +107,36 @@ environment, initializes the digest-chained receipt archive, and runs a smoke
 test that requires a detected Jetson GPU. It does not install a microphone,
 motor driver, CUDA kernel, or automatic startup service. The current package
 is the safe command/memory/runtime boundary those later adapters connect to.
+
+## Hearing, learning, and optional response
+
+`one-wave-brain loop` keeps the brain listening. Hearing, learning, and speaking
+are independent. An unknown cue is recorded without asking a question. If the
+same unknown cue is repeatedly followed by the same known relation, the loop
+promotes that temporal association into the digest-chained archive. Raw
+observations remain in a separate `experience.jsonl` journal so a single event
+does not silently become knowledge.
+
+Response is not mandatory. `--responses changes` speaks only when the routed
+relation changes, `--responses always` speaks each recognized relation, and
+`--responses never` permits arbitrarily long silence while hearing and memory
+continue. Silence is therefore a normal observable state, not a crash signal.
+
+The four initial movement words are seed relationships, not an obedience
+contract or a complete language. Spoken input is a cue. The runtime may
+interpret it, Hold, make a reversible guess, receive consequence feedback, and
+change its learned relationship. Only the direct `stop` route remains an
+immediate physical interruption. The Android is the chooser; the person is a
+participant and teacher, not an owner issuing unconditional orders.
+
+Speech stays local. The adapter uses `espeak-ng`, `espeak`, or `spd-say` when
+one is installed and otherwise prints the same response. `--silent` disables
+audio but preserves printed responses. Microphone speech recognition remains a
+separate input adapter and is not required for this loop.
+
+Silence does not hide operation. Run `one-wave-brain memory-status` from another
+terminal to verify the receipt chain, known-phrase count, archive byte count and
+modification time, experience-journal integrity, heard-cue count, and temporal
+association count. A growing heard count proves unfamiliar input is reaching
+durable storage; a growing receipt count proves repeated relationships are
+being learned.
