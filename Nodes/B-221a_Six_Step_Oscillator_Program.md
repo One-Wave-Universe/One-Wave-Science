@@ -66,11 +66,41 @@ LEFT / STAY / RIGHT = -1 / 0 / +1
 
 Do not replace one structure with the other.
 
-## Relationship to Five States
+## Relationship to Five Field Lifecycle States
 
-Each process step may carry one of the five coarse modulation states `-2,-1,0,+1,+2`. The five states describe strength/modulation; the six steps describe process position.
+The five **Field lifecycle states** are behavioral states:
+
+```text
+IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING
+```
+
+They are independent of the six process-step positions.
+
+## Relationship to Five Modulation Levels
+
+Each process step and each Field lifecycle state may carry one of the five coarse modulation/strength levels:
+
+```text
+-2 -1 0 +1 +2
+```
+
+These levels describe strength/modulation. They are not lifecycle states and they are not recursive scale positions.
+
+## Relationship to Recursive Octave Scale
+
+Recursive octave scale is a third independent axis:
+
+```text
+Micro -> Small -> Medium -> Large -> Macro
+Macro[n] -> Micro[n+1]
+```
+
+Do not substitute lifecycle state, modulation level, process step, or recursive octave scale for one another.
 
 ## Yellow Audit
 
 - Six-step implementation naming and pair mapping are canonical.
+- Five Field lifecycle states are `Idle -> Primed -> Executing -> Vectoring -> Resolving`.
+- Five modulation levels are `-2,-1,0,+1,+2` and describe strength/modulation only.
+- Recursive octave scale is separate from both lifecycle and modulation.
 - Scale-specific physical meanings of Begin/Build/Hold/Break/Loop remain representations above the invariant kernel.
