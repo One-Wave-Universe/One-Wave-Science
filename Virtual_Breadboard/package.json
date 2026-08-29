@@ -1,0 +1,40 @@
+{
+  "name": "virtual-breadboard-simulator",
+  "version": "1.0.0",
+  "description": "A downloadable virtual breadboard: real parts, jumper wires, click-any-hole placement, and live circuit physics (Ohm's law, LED forward drop, RC transients, short-circuit detection).",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/circuit.test.js",
+    "dist": "electron-builder",
+    "dist:appimage": "electron-builder --linux AppImage",
+    "dist:deb": "electron-builder --linux deb"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.onewavescience.virtualbreadboard",
+    "productName": "Virtual Breadboard Simulator",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "style.css",
+      "js/**/*",
+      "!test/**"
+    ],
+    "linux": {
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] },
+        { "target": "deb", "arch": ["x64"] }
+      ],
+      "category": "Education",
+      "executableName": "virtual-breadboard-simulator"
+    }
+  }
+}

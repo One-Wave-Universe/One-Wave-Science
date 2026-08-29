@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Virtual Breadboard Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Virtual Breadboard Simulator</h1>
+      <p>Click any hole to place a part. Real Ohm's-law / diode / RC physics runs live underneath.</p>
+    </div>
+    <div class="top-actions">
+      <button id="btnSave">Save</button>
+      <button id="btnLoad">Load</button>
+      <button id="btnClear">Clear</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="toolbox">
+      <div id="toolbox"></div>
+      <div id="toolOptions"></div>
+      <div class="presets">
+        <h3>Example builds</h3>
+        <button id="presetLed">LED + resistor</button>
+        <button id="presetRC">RC charging (with switch)</button>
+        <button id="presetShort">Short circuit (danger demo)</button>
+      </div>
+    </aside>
+
+    <div class="board-scroll">
+      <canvas id="boardCanvas"></canvas>
+    </div>
+
+    <aside class="props-panel">
+      <h3>Inspector</h3>
+      <div id="props"></div>
+    </aside>
+  </div>
+
+  <footer class="status-bar">
+    <span id="hoverReadout">Hover a hole to read its node voltage.</span>
+    <div id="warnings"></div>
+  </footer>
+</div>
+
+<div id="flash"></div>
+
+<script src="js/circuit.js"></script>
+<script src="js/board.js"></script>
+<script src="js/components.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

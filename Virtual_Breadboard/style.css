@@ -1,0 +1,114 @@
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  background: #10141a;
+  color: #e8ecf1;
+  font-family: -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  height: 100%;
+}
+.app { display: flex; flex-direction: column; height: 100vh; }
+
+header.top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #232a34;
+  background: #141922;
+}
+header.top h1 { font-size: 16px; margin: 0; letter-spacing: .02em; }
+header.top p { margin: 0; color: #8a94a3; font-size: 12px; }
+.top-actions { margin-left: auto; display: flex; gap: 8px; }
+.top-actions button, .presets button {
+  background: #1c2430;
+  border: 1px solid #2c3644;
+  color: #cfd8e3;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.top-actions button:hover, .presets button:hover { border-color: #4d8dff; color: #fff; }
+#flash {
+  position: fixed; top: 60px; right: 18px; background: #1c2430; border: 1px solid #2c3644;
+  padding: 8px 12px; border-radius: 8px; font-size: 12px; opacity: 0; transition: opacity .3s;
+}
+
+.workspace { flex: 1; display: flex; min-height: 0; }
+
+aside.toolbox {
+  width: 190px;
+  padding: 14px;
+  border-right: 1px solid #232a34;
+  overflow-y: auto;
+  background: #141922;
+}
+.tool-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 10px; margin-bottom: 6px;
+  background: #1a212b; border: 1px solid #262e3a; border-radius: 8px;
+  color: #cfd8e3; font-size: 13px; cursor: pointer; text-align: left;
+}
+.tool-btn:hover { border-color: #4d8dff; }
+.tool-btn.active { background: #223049; border-color: #4d8dff; color: #fff; }
+.tool-icon { width: 18px; display: inline-block; text-align: center; opacity: .8; }
+
+#toolOptions { margin-top: 14px; border-top: 1px solid #232a34; padding-top: 12px; }
+.field { display: block; margin-bottom: 10px; font-size: 12px; color: #9aa5b3; }
+.field span { display: block; margin-bottom: 4px; }
+.field select, .field input[type="range"] { width: 100%; }
+select {
+  background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 5px;
+}
+.hint { font-size: 12px; color: #8a94a3; line-height: 1.5; }
+.swatches { display: flex; gap: 6px; }
+.swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+.swatch.active { border-color: #fff; }
+
+.presets { margin-top: 16px; border-top: 1px solid #232a34; padding-top: 12px; }
+.presets h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #6d7787; margin: 0 0 8px; }
+.presets button { display: block; width: 100%; margin-bottom: 6px; text-align: left; }
+
+.board-scroll {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 0%, #1a2130 0%, #10141a 60%);
+}
+#boardCanvas { border-radius: 10px; box-shadow: 0 20px 60px #0008; cursor: crosshair; }
+
+aside.props-panel {
+  width: 260px;
+  padding: 14px;
+  border-left: 1px solid #232a34;
+  background: #141922;
+  overflow-y: auto;
+}
+aside.props-panel h3 { font-size: 13px; margin: 0 0 12px; color: #cfd8e3; }
+.readout { margin: 12px 0; font-size: 12px; border-top: 1px solid #232a34; padding-top: 10px; }
+.readout div { display: flex; justify-content: space-between; padding: 3px 0; color: #9aa5b3; }
+.readout b { color: #e8ecf1; }
+.action-btn {
+  width: 100%; padding: 8px; margin-top: 8px; border-radius: 8px; border: 1px solid #2c3644;
+  background: #1c2430; color: #cfd8e3; cursor: pointer; font-size: 12px;
+}
+.action-btn:hover { border-color: #4d8dff; }
+.action-btn.danger:hover { border-color: #e0483f; color: #ff8a80; }
+
+footer.status-bar {
+  display: flex; align-items: center; gap: 18px;
+  padding: 8px 18px; border-top: 1px solid #232a34; background: #141922;
+  font-size: 12px; color: #9aa5b3; min-height: 20px;
+}
+#hoverReadout { font-family: ui-monospace, monospace; }
+#warnings { display: flex; gap: 14px; flex-wrap: wrap; }
+#warnings .ok { color: #3ddc6b; }
+#warnings .warn { color: #ffb020; }
+
+@media (max-width: 900px) {
+  .workspace { flex-direction: column; }
+  aside.toolbox, aside.props-panel { width: auto; border: 0; border-bottom: 1px solid #232a34; }
+}
