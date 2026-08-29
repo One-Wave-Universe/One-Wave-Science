@@ -1,21 +1,21 @@
 ---
 node_id: "B-225"
-canonical_name: "Five-Level Modulation Around Reference"
+canonical_name: "Five-Level Modulation Compatibility Around Reference"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Resolution / Formalization Node"
-claim_gate_detail: "Implementation-canonical coarse modulation levels; Field lifecycle states and octave scale remain separate"
+claim_gate_detail: "Legacy coarse modulation compatibility; current five-state authorities are Updated 43 and G-742"
 metadata_standard: "I-06"
 ---
 
-# Node B-225: Five-Level Modulation Around Reference
+# Node B-225: Five-Level Modulation Compatibility Around Reference
 
-## Correction
+## Current status
 
-Earlier versions mixed behavioral Field state, coarse modulation, and recursive scale. The current implementation architecture separates them.
+This node preserves an older neutral five-level modulation shorthand without allowing it to replace newer state definitions.
 
-The **five modulation levels** describe coarse strength modulation of one relation around its active middle/reference:
+Older work used:
 
 ```text
 +2
@@ -25,96 +25,65 @@ The **five modulation levels** describe coarse strength modulation of one relati
 -2
 ```
 
-or equivalently:
+as a generic coarse strength relation around a local reference. That notation may still be useful in a declared local model, but it is **not the repository's canonical five-state structure**.
+
+## Current five-state authorities
+
+`UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` owns the downstream five commitment/readout states:
 
 ```text
-upper-2
-upper-1
-middle/reference
-lower-1
-lower-2
+-3(0)3+ = full disagree
+-2(0)2+ = partial disagree
+1:1      = unity / Hold reference
++2(0)2- = partial agree
++3(0)3- = full agree
 ```
 
-They are not the five Field lifecycle states, not five new primitive forces, not recursive octave-scale positions, and not the six execution steps.
-
-## Kernel-Neutral Meaning
-
-- `+2` = strong state on one side of reference
-- `+1` = moderate state on that side
-- `0` = middle/reference band
-- `-1` = moderate state on the opposite side
-- `-2` = strong state on the opposite side
-
-Exact thresholds are implementation-specific.
-
-## Field Lifecycle Is Separate
-
-The five Field lifecycle states are behavioral states:
+`Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` separately owns the five-state self lifecycle:
 
 ```text
 IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING
 ```
 
-Lifecycle answers **where the Field is in its behavioral cycle**. Modulation answers **how strong the active relation is relative to reference**.
+These are independent axes and neither may be replaced by the legacy `-2,-1,0,+1,+2` shorthand.
 
-## Representation Wrappers
+## Relationship to the six-route primitive
 
-Different domains may map the modulation levels into easier human labels, for example:
-
-```text
-Spatial strength: Floor / Low / Middle / High / Ceiling
-Thermal strength: Frozen / Cold / Middle-Warm / Hot / Fire
-```
-
-These are strength representations, not invariant primitives. Matter-state, thermal, biological, or other domain mappings must not be hard-coded into the kernel.
-
-## Distinction from Recursive Octave Scale
-
-The recursive five-position octave scale is a separate axis:
+Updated 43 defines:
 
 ```text
-Micro -> Small -> Medium -> Large -> Macro
-Macro[n] -> Micro[n+1]
+2 binary choices x 3 ternary moves = 6 routes
 ```
 
-`Macro` closes the current loop/trunk and becomes `Micro` at the next larger loop/trunk. These octave positions must not be used as aliases for the `-2,-1,0,+1,+2` modulation levels or for the five Field lifecycle states.
+The five commitment/readout states are downstream interpretations of route history. They are not primitive choices and must not be multiplied into the route count.
 
-## Distinction from Seven Threshold Bands
+## Relationship to six oscillator gates
 
-The five-level layer is **coarse modulation**. A separate seven-band envelope may be used for finer confidence/intensity/trigger resolution. The two structures must not be collapsed into one.
-
-A currently discussed seven-band representation is:
+`Nodes/G-739_Six_Gate_Trajectory_Extraction.md` defines the measured oscillator labels:
 
 ```text
-100-90
-85-75
-70-60
-55-45
-40-30
-25-15
-15-0
+BEGIN -> BUILD(coherent) -> HOLD -> BUILD(unstable) -> BREAK -> LOOP
 ```
 
-This remains a representation/candidate threshold map until calibrated for a concrete implementation.
+Those six measured regions are also separate from both five-state axes.
 
-## Relationship to Views and Moves
+## Scale boundary
 
-```text
-Direction = Three Moves (-1/0/+1)
-Strength  = may be represented by the Five-Level modulation
-Phase     = oscillatory position/crossover relation
-Reference = local middle/baseline
-```
+Older examples sometimes grouped `Micro / Small / Mid / Large / Macro` with five-level modulation. Do not do that. Scale labels are a separate domain/recursive description and require their own declared mapping. A matching count of five is not evidence that the axes are interchangeable.
 
-The five modulation levels therefore primarily refine **Strength**, while Direction remains ternary. They are distinct from the Field lifecycle states `Idle -> Primed -> Executing -> Vectoring -> Resolving`.
+## Representation wrappers
 
-## Relationship to Six Steps
+`Floor / Low / Middle / High / Ceiling`, thermal names, percentages, and the neutral `-2..+2` ladder may be used only as explicitly declared representation or calibration wrappers. They do not define the invariant kernel by themselves.
 
-The six-step oscillator can carry any one of these five modulation levels through each operation. The count `5` is not a replacement for the six-pair timing grammar.
+## Views and strength
+
+The four-view contract still includes `Strength`, but its concrete encoding must name which representation is being used. A caller may not silently assume that `Strength` means this legacy five-level ladder.
 
 ## Yellow Audit
 
-- Separation of five-level modulation from the five Field lifecycle states and six-step execution is resolved.
-- Neutral `-2,-1,0,+1,+2` labels are canonical for modulation implementation.
-- `Micro -> Small -> Medium -> Large -> Macro` is recursive octave scale, not modulation.
-- Domain-specific labels and numerical thresholds require independent calibration.
+- Legacy `-2,-1,0,+1,+2` modulation is compatibility-only.
+- Updated 43 is authoritative for five commitment/readout states.
+- G-742 is authoritative for the five-state self lifecycle.
+- G-739 is authoritative for measured six-gate oscillator classification.
+- Scale remains a separate declared axis.
+- `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md` governs conflicts among older state terminology.
