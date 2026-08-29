@@ -1,21 +1,21 @@
 ---
 node_id: "B-225"
-canonical_name: "Five-State Modulation Around Reference"
+canonical_name: "Five-Level Modulation Compatibility Around Reference"
 namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Resolution / Formalization Node"
-claim_gate_detail: "Implementation-canonical coarse state bands; domain labels remain representations"
+claim_gate_detail: "Legacy coarse modulation compatibility; current five-state authorities are Updated 43 and G-742"
 metadata_standard: "I-06"
 ---
 
-# Node B-225: Five-State Modulation Around Reference
+# Node B-225: Five-Level Modulation Compatibility Around Reference
 
-## Correction
+## Current status
 
-Earlier versions mixed a five-step transformation narrative with the five-state modulation layer. The current implementation architecture separates them.
+This node preserves an older neutral five-level modulation shorthand without allowing it to replace newer state definitions.
 
-The **five states** are a coarse modulation of one relation around its active middle/reference:
+Older work used:
 
 ```text
 +2
@@ -25,75 +25,65 @@ The **five states** are a coarse modulation of one relation around its active mi
 -2
 ```
 
-or equivalently:
+as a generic coarse strength relation around a local reference. That notation may still be useful in a declared local model, but it is **not the repository's canonical five-state structure**.
+
+## Current five-state authorities
+
+`UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` owns the downstream five commitment/readout states:
 
 ```text
-upper-2
-upper-1
-middle/reference
-lower-1
-lower-2
+-3(0)3+ = full disagree
+-2(0)2+ = partial disagree
+1:1      = unity / ultimate compression / Hold reference
++2(0)2- = partial agree
++3(0)3- = full agree
 ```
 
-They are not five new primitive forces and they are not the six execution steps.
-
-## Kernel-Neutral Meaning
-
-- `+2` = strong state on one side of reference
-- `+1` = moderate state on that side
-- `0` = middle/reference band
-- `-1` = moderate state on the opposite side
-- `-2` = strong state on the opposite side
-
-Exact thresholds are implementation-specific.
-
-## Representation Wrappers
-
-Different domains may map the same five-band structure into easier human labels, for example:
+`Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` separately owns the five-state self lifecycle:
 
 ```text
-Spatial: Floor / Low / Middle / High / Ceiling
-Thermal: Frozen / Cold / Middle-Warm / Hot / Fire
-Other scale labels: Micro / Small / Mid / Large / Macro
+IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING
 ```
 
-These are representations, not invariant primitives. Matter-state, thermal, biological, or other domain mappings must not be hard-coded into the kernel.
+These are independent axes and neither may be replaced by the legacy `-2,-1,0,+1,+2` shorthand.
 
-## Distinction from Seven Threshold Bands
+## Relationship to the six-route primitive
 
-The five-state layer is **coarse modulation**. A separate seven-band envelope may be used for finer confidence/intensity/trigger resolution. The two structures must not be collapsed into one.
-
-A currently discussed seven-band representation is:
+Updated 43 defines:
 
 ```text
-100-90
-85-75
-70-60
-55-45
-40-30
-25-15
-15-0
+2 binary choices x 3 ternary moves = 6 routes
 ```
 
-This remains a representation/candidate threshold map until calibrated for a concrete implementation.
+The five commitment/readout states are downstream interpretations of route history. They are not primitive choices and must not be multiplied into the route count.
 
-## Relationship to Views and Moves
+## Relationship to six oscillator gates
+
+`Nodes/G-739_Six_Gate_Trajectory_Extraction.md` defines the measured oscillator labels:
 
 ```text
-Direction = Three Moves (-1/0/+1)
-Strength  = may be represented by the Five-State modulation
-Phase     = oscillatory position/crossover relation
-Reference = local middle/baseline
+BEGIN -> BUILD(coherent) -> HOLD -> BUILD(unstable) -> BREAK -> LOOP
 ```
 
-The five states therefore primarily refine **Strength**, while Direction remains ternary.
+Those six measured regions are also separate from both five-state axes.
 
-## Relationship to Six Steps
+## Scale boundary
 
-The six-step oscillator can carry any one of these five modulation levels through each operation. The count `5` is not a replacement for the six-pair timing grammar.
+Older examples sometimes grouped `Micro / Small / Mid / Large / Macro` with five-level modulation. Do not do that. Scale labels are a separate domain/recursive description and require their own declared mapping. A matching count of five is not evidence that the axes are interchangeable.
+
+## Representation wrappers
+
+`Floor / Low / Middle / High / Ceiling`, thermal names, percentages, and the neutral `-2..+2` ladder may be used only as explicitly declared representation or calibration wrappers. They do not define the invariant kernel by themselves.
+
+## Views and strength
+
+The four-view contract still includes `Strength`, but its concrete encoding must name which representation is being used. A caller may not silently assume that `Strength` means this legacy five-level ladder.
 
 ## Yellow Audit
 
-- Separation of five-state modulation from six-step execution is resolved.
-- Neutral `-2,-1,0,+1,+2` labels are canonical for implementation.
-- Domain-specific labels and numerical thresholds require independent calibration.
+- Legacy `-2,-1,0,+1,+2` modulation is compatibility-only.
+- Updated 43 is authoritative for five commitment/readout states.
+- G-742 is authoritative for the five-state self lifecycle.
+- G-739 is authoritative for measured six-gate oscillator classification.
+- Scale remains a separate declared axis.
+- `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md` governs conflicts among older state terminology.
