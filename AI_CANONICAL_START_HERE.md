@@ -6,33 +6,35 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 ## Current update handoff
 
-1. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-2. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-3. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-4. `VTC_BUILD_ARCHITECTURE.md`
-5. `Nodes/B-206b_Four_Views.md`
-6. `Nodes/B-206c_Four_Actions.md`
-7. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-8. `Nodes/B-223_Three_Moves.md`
-9. `Nodes/B-224_Two_Choices.md`
-10. `Nodes/B-225_Field_Cycle.md`
-11. `Nodes/C-301_Mirror_Gate.md`
-12. `Nodes/G-711_Gate_7.md`
-13. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-14. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-15. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-16. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-17. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-18. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-19. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-20. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
+2. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+3. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+4. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+5. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+6. `VTC_BUILD_ARCHITECTURE.md`
+7. `Nodes/B-206b_Four_Views.md`
+8. `Nodes/B-206c_Four_Actions.md`
+9. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+10. `Nodes/B-223_Three_Moves.md`
+11. `Nodes/B-224_Two_Choices.md`
+12. `Nodes/B-225_Field_Cycle.md`
+13. `Nodes/C-301_Mirror_Gate.md`
+14. `Nodes/G-711_Gate_7.md`
+15. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+16. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+17. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+18. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+19. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+20. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+21. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+22. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 ## Current Micro node handoff
 
 1. `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`
 2. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
 3. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
-4. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
+4. `Nodes/G-728_Mathematics_Attack_Laundry_LIST.md`
 5. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
 6. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
 7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
@@ -70,6 +72,24 @@ thresholds, phase behavior, Hold, and Override are measured.
 requirement that the Field/Void self-loop, five lifecycle states, orientation,
 and exact receipts continue without words. Language remains a learned,
 replaceable adapter over nonverbal state rather than the cognition core.
+
+## Current state-axis authority
+
+Before interpreting any older use of the word `state`, read `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`.
+
+The current structures are separate:
+
+```text
+2 binary choices
+3 ternary moves
+6 route addresses = 2 x 3
+6 measured oscillator gates
+5 downstream commitment/readout states (Updated 43)
+5-state self lifecycle: Idle -> Primed -> Executing -> Vectoring -> Resolving (G-742)
+Field/Void ternaries and quadratic routing (G-740)
+```
+
+Older neutral `-2,-1,0,+1,+2` modulation language is compatibility shorthand only. It must not replace the five commitment/readout states or the five-state self lifecycle. Matching counts are not evidence that two axes are the same.
 
 ## Updated 34 processing/memory protection
 
@@ -110,11 +130,11 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 - The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.
 - Four Views are **Direction, Phase, Strength, Reference**.
 - Four Actions are **Inward, Outward, Across, Over**.
-- Two engagement choices are **Everything / Nothing**.
-- Three differential moves are **Left / Stay / Right = -1 / 0 / +1**.
-- Five coarse modulation states are represented neutrally as `-2,-1,0,+1,+2`.
-- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**.
-- There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in the current architecture.
+- Two engagement choices are **Everything / Nothing** in this older vocabulary; Updated 43 owns the current executable YES/NO binary choice contract.
+- Three differential moves are **Left / Stay / Right = -1 / 0 / +1** in this older vocabulary; Updated 43 owns the current executable DOWN/HOLD/UP ternary move contract.
+- Older five-level `-2,-1,0,+1,+2` modulation is compatibility shorthand, not the canonical five-state structure. See Updated 44.
+- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**; G-739 constrains them as measured stability regions around a bidirectional oscillator.
+- There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in this architecture.
 
 ### Anti-drift rule
 
@@ -133,7 +153,7 @@ Do not reconstruct that claim from synonyms. In particular, do not derive Mass E
 Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory, or any M4/brainstem build, read:
 
 1. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
-2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
+2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_SIX_GATE_CONTROLLER.md`
 3. `Books/Proposed_One_Wave_Consciousness/Ch05_Two_Hemispheres_M4_Dream_Administrator_and_Cross_Domain_Coupling.md`
 4. `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`
 5. `Nodes/B-222_Oscillation_Center.md`
@@ -191,7 +211,7 @@ word schedules the lower/upper side around the separately retained even anchor
 after a hop is committed. It does not replace live `-1(0)+1` choice, and its
 symbol `0` is never the Mirror Gate.
 
-Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 33/34's engagement, differential, processing-is-memory, and cube-recursion architecture must be treated as domain-specific or superseded rather than silently promoted into the invariant kernel.
+Do not apply the golden ratio from G-721a to the triangular/hexagonal lattice, the seven-cell cluster, `6:1`, `12:1`, `24:1`, or physical simulations unless a separate node derives that relationship. Sequence families schedule or validate movement routes; Hopfield/Boltzmann reconstruct procedural memory; local `-1(0)+1` choice executes movement. Any older statement that conflicts with Updated 44/43/42 or later executable/domain-specific authorities must be treated as compatibility-only, domain-specific, or superseded rather than silently promoted into the invariant kernel.
 
 ## Required reading order
 
