@@ -1,4 +1,13 @@
 
+## Updated 41 — Planetary-Scale Displacement Lineage Promoted to Nodes
+
+- Added D-416 Finite-Wake Three-Body Perturbation Architecture (Updated 38), D-417 Moving Finite-Slope and EM-Shell Orbital Model (Updated 39), D-418 Recursive Planetary Point-Path-Field Rotation Model (Updated 40), and D-419 Planetary-Scale Displacement Model (Updated 41).
+- These four handoffs previously existed only as `UPDATED_*` files cited inside D-415's math-integration authority chain; each now has its own I-06 metadata, gate, lifecycle, and dependency record in Appendix D.
+- D-416 through D-418 are marked `lifecycle: SUPERSEDED` in sequence, matching each Updated file's own stated supersession of the prior step; D-419 is the current `ACTIVE` planetary architecture and the authority the D-415 bench (`planetary_displacement_state.py`, `solar_system_control.py`, `planetary_visual.html`) implements.
+- Confirmed Updated 37 (Consolidated Simulation Workspace) needed no new node: its listed deliverables (`AI_HUMAN_LATTICE_WORKSTATION_START_HERE.md`, D-413's `ai_human_workstation.html`) already exist in the repository.
+- Confirmed Updated 24, 26-32 remain fully absorbed into existing nodes (C-318/C-322 mass mechanics, A-117 dimensional integrity, the G-72x alphabet/route-grammar series, D-413's own name and content, the I-06 metadata pass) and Updated 42/43 already have dedicated nodes (G-724, G-727); none required new nodes here.
+- Updated `00_MASTER_INDEX.md` Appendix D to 19 nodes and `Nodes/D-415.../MATH_INTEGRATION_MAP.md` to cross-reference the new node IDs alongside the source `UPDATED_*` files.
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.

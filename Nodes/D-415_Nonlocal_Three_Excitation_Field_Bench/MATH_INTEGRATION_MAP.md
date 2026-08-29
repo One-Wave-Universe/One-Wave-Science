@@ -29,18 +29,22 @@ silently merged.
 
 ### Existing architecture that must control D-415
 
-- `UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md`
+Each handoff below is now also a dedicated canonical node (D-416 through
+D-419); the node is the authority for gate/lifecycle/dependencies, the
+`UPDATED_*` file remains the full engineering contract.
+
+- `UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md` (D-416, superseded)
   - local-minus-reference slope;
   - relational three-body graph;
   - finite-wake boundary;
   - Jupiter perturbation and Mercury stress-test ladders.
-- `UPDATED_39_MOVING_FINITE_SLOPE_AND_EM_SHELL_ORBITAL_MODEL.md`
+- `UPDATED_39_MOVING_FINITE_SLOPE_AND_EM_SHELL_ORBITAL_MODEL.md` (D-417, superseded)
   - instantaneous moving finite slope;
   - active region from distinguishability against the current reference;
   - EM shell as integrity/stiffness/response modifier;
   - Mars and Venus no-global-dipole controls;
   - full Solar-System falsification requirement.
-- `UPDATED_40_RECURSIVE_PLANETARY_POINT_PATH_FIELD_ROTATION_MODEL.md`
+- `UPDATED_40_RECURSIVE_PLANETARY_POINT_PATH_FIELD_ROTATION_MODEL.md` (D-418, superseded)
   - nine recursive Point–Path–Field components;
   - compressed 2D bound-lattice state;
   - internal differential rotation and shear;
@@ -48,7 +52,7 @@ silently merged.
   - path and Field rotation;
   - active range derived from the full state;
   - planet-specific ablations.
-- `UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`
+- `UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md` (D-419, active)
   - complete planetary displacement state;
   - internal material/fluid/current/EM rotation;
   - instantaneous neighboring/reference interactions;

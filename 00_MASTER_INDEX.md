@@ -7,6 +7,7 @@ Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATIO
 Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
 Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 38-41 planetary-scale displacement lineage, promoted to nodes D-416 (superseded), D-417 (superseded), D-418 (superseded), D-419 (active): `UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md` through `UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -121,7 +122,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
-### Appendix D — Resonance, Modal & Dimensional Structure (15 nodes)
+### Appendix D — Resonance, Modal & Dimensional Structure (19 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -139,6 +140,10 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
 | D-414 | Four-Interaction Shell Simulation | Reduced visualization of four coupled micro-scale channels driven by real datasets as wave inputs; candidate geometry and couplings, not a universal four-interaction derivation. | YELLOW |
 | D-415 | Nonlocal Three-Excitation One-Field Bench | Runnable six-neighbor triangular-lattice bench evolving one globally connected nonlinear Field and measuring three extended excitations with origin-free relational receipts; candidate kernel and potential remain underived. | YELLOW |
+| D-416 | Finite-Wake Three-Body Perturbation Architecture | Relational-edge three-body test architecture with a finite local wake assimilated into a parent reference field, superseded by D-417's memory-free reformulation. | YELLOW |
+| D-417 | Moving Finite-Slope and EM-Shell Orbital Model | Instantaneous moving body-specific finite slope/active-range network with EM treated as a shell-stability modifier, not a gravity-like force; superseded by D-418/D-419. | YELLOW |
+| D-418 | Recursive Planetary Point-Path-Field Rotation Model | Nine-component recursive Point-Path-Field state per body coupling internal rotation, shear, and EM circulation to the moving finite-slope orbital response; superseded by D-419. | YELLOW |
+| D-419 | Planetary-Scale Displacement Model | Current locked planetary architecture: orbit, spin, tides, EM-shell behavior, internal stress, and stability as readouts of one coupled 2D-bound/recursive-Point-Path-Field displacement state; no universal cutoff, memory relay, mass-only well, or bolt-on magnetic gravity term. | YELLOW |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
