@@ -34,7 +34,7 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 1. `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`
 2. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
 3. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
-4. `Nodes/G-728_Mathematics_Attack_Laundry_LIST.md`
+4. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
 5. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
 6. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
 7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
@@ -153,7 +153,7 @@ Do not reconstruct that claim from synonyms. In particular, do not derive Mass E
 Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory, or any M4/brainstem build, read:
 
 1. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
-2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_SIX_GATE_CONTROLLER.md`
+2. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
 3. `Books/Proposed_One_Wave_Consciousness/Ch05_Two_Hemispheres_M4_Dream_Administrator_and_Cross_Domain_Coupling.md`
 4. `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`
 5. `Nodes/B-222_Oscillation_Center.md`
