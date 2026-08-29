@@ -64,6 +64,37 @@ npm run dist:deb       # build a .deb package
 The AppImage is a single portable executable — `chmod +x` it and
 double-click (or run it) on any Ubuntu machine, no installation required.
 
+**As a downloadable Android app:**
+
+`android/VirtualBreadboardSimulator.apk` is a real, signed APK — install it
+by copying it to an Android phone/tablet and opening it (you'll need to
+allow "install unknown apps" for whatever app you used to open it, since
+it isn't from the Play Store). It's a native app with a single Activity
+that hosts a `WebView` loading the same `index.html`/`js` bundled into its
+assets, so it runs fully offline — no native runtime bundled, so it's only
+~29KB.
+
+To rebuild it after changing the web app:
+
+```bash
+sudo apt-get install --no-install-recommends \
+  aapt zipalign apksigner android-sdk-platform-23 libsmali-java
+cd android
+./build-apk.sh   # -> android/build/VirtualBreadboardSimulator.apk
+```
+
+This build path deliberately avoids Android Studio/Gradle and Google's SDK
+downloads entirely — it uses only `aapt` (manifest + asset packaging),
+`smali` (assembles `smali/.../MainActivity.smali`, a hand-written Dalvik
+bytecode equivalent of `src/.../MainActivity.java`, into `classes.dex`),
+`zipalign`, and `apksigner`, all available from Ubuntu/Debian's own apt
+repos. If you have Android Studio, it's simpler to just create a new
+project, drop `src/.../MainActivity.java` in, point its assets at this
+folder's `index.html`/`style.css`/`js/`, and build normally — the smali
+file exists only because this environment has no Java-to-Dalvik compiler
+(`dx`/`d8`) packaged, and Google's own SDK servers weren't reachable to
+fetch one.
+
 ## Using the simulator
 
 1. Pick a tool from the left palette (Jumper Wire, Resistor, LED,
@@ -97,6 +128,12 @@ js/app.js             toolbox, placement, simulation loop, UI wiring
 test/circuit.test.js  standalone physics tests (`npm test` / `node test/circuit.test.js`)
 main.js               Electron desktop wrapper
 package.json          npm scripts + electron-builder config for Linux
+android/               native Android app (WebView wrapper around the same web app)
+  AndroidManifest.xml
+  src/.../MainActivity.java     canonical source
+  smali/.../MainActivity.smali  hand-assembled equivalent (see android section above)
+  build-apk.sh                  reproducible build script
+  VirtualBreadboardSimulator.apk  the built, signed APK
 ```
 
 ## Running the physics tests

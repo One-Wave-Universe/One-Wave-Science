@@ -232,6 +232,22 @@
     state.hoverHole = null;
   });
 
+  // touch support (phones/tablets): update the hover readout as a finger
+  // moves, and let the browser's own tap-to-click synthesis handle placement
+  function touchPos(evt) {
+    const t = evt.touches[0] || evt.changedTouches[0];
+    const r = canvas.getBoundingClientRect();
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
+  }
+  canvas.addEventListener('touchstart', (evt) => {
+    const pos = touchPos(evt);
+    state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
+  }, { passive: true });
+  canvas.addEventListener('touchmove', (evt) => {
+    const pos = touchPos(evt);
+    state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
+  }, { passive: true });
+
   canvas.addEventListener('click', (evt) => {
     const pos = mousePos(evt);
     if (state.tool === 'select') {
@@ -243,7 +259,7 @@
       renderProps();
       return;
     }
-    const hole = Board.hitTest(board, pos.x, pos.y, 9);
+    const hole = Board.hitTest(board, pos.x, pos.y, 11);
     if (!hole) return;
     const need = terminalsNeeded(state.tool);
     if (state.pending.length && state.pending[state.pending.length - 1].x === hole.x && state.pending[state.pending.length - 1].y === hole.y) {
