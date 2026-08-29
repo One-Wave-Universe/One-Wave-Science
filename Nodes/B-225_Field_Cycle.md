@@ -34,7 +34,7 @@ as a generic coarse strength relation around a local reference. That notation ma
 ```text
 -3(0)3+ = full disagree
 -2(0)2+ = partial disagree
-1:1      = unity / Hold reference
+1:1      = unity / ultimate compression / Hold reference
 +2(0)2- = partial agree
 +3(0)3- = full agree
 ```
