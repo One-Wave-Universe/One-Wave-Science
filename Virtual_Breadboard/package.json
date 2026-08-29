@@ -18,6 +18,7 @@
   "build": {
     "appId": "com.onewavescience.virtualbreadboard",
     "productName": "Virtual Breadboard Simulator",
+    "publish": null,
     "directories": {
       "output": "dist"
     },
