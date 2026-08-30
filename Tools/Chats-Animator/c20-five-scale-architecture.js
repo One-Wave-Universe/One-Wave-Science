@@ -64,6 +64,13 @@
       if (parsed.type === 'control' && parsed.operation === 'capture_motion' && parsed.args.end < parsed.args.start) return { ok: false, reason: 'Motion end frame is before start frame' };
       return { ok: true, parsed, context };
     },
+    evaluatePlan(plan) {
+      if (!plan || !Array.isArray(plan.steps)) return { ok: false, reason: 'Planner did not return a step list' };
+      for (const step of plan.steps) {
+        if (!step?.operation || !A.control.operations.includes(step.operation)) return { ok: false, reason: `Unsupported planned operation: ${step?.operation || 'missing'}` };
+      }
+      return { ok: true, plan };
+    },
     acceptAssets(result) {
       const assets = Array.isArray(result?.assets) ? result.assets : (result?.asset ? [result.asset] : []);
       return assets.map((asset) => {
@@ -76,6 +83,39 @@
   };
 
   const M4 = {
+    async executePlan(plan) {
+      const verdict = Administrator.evaluatePlan(plan);
+      if (!verdict.ok) return { ok: false, stage: 'Administrator', message: verdict.reason, plan };
+      const results = [];
+      for (const step of plan.steps) {
+        const result = await A.control.call(step.operation, step.args || {});
+        results.push({ step, result });
+      }
+      const missing = Array.isArray(plan.missing) ? plan.missing : [];
+      if (missing.length) {
+        const project = await A.control.call('get_project').then((r) => r.result);
+        for (const need of missing) {
+          await Dream.generate({
+            kind: need.kind === 'motion' ? 'character' : (need.kind || 'asset'),
+            prompt: `${need.actor ? `${need.actor} ` : ''}${need.action || ''}${need.target ? ` ${need.target}` : ''}`.trim()
+          }, {
+            frame: plan.frame || ((A.reel?.activeIndex ?? 0) + 1),
+            time: new Date().toISOString(),
+            project
+          });
+        }
+      }
+      return {
+        ok: results.length > 0 || missing.length > 0,
+        stage: missing.length ? 'Dream' : 'Executor',
+        plan,
+        results,
+        missing,
+        message: missing.length
+          ? `${results.length} planned step${results.length === 1 ? '' : 's'} executed; ${missing.length} missing motion asset${missing.length === 1 ? '' : 's'} queued.`
+          : `${results.length} planned step${results.length === 1 ? '' : 's'} executed.`
+      };
+    },
     async route(text) {
       const parsed = Cells.parse(text);
       const context = {
@@ -107,6 +147,7 @@
       }
 
       const planned = await Dream.plan({ text, parsed }, context);
+      if (Array.isArray(planned?.steps)) return M4.executePlan(planned);
       if (planned?.operation) {
         const checked = Administrator.evaluate({ type: 'control', operation: planned.operation, args: planned.args || {} }, context);
         if (!checked.ok) return { ok: false, stage: 'Administrator', message: checked.reason };
@@ -117,7 +158,7 @@
         await Promise.all(Administrator.acceptAssets(planned));
         return { ok: true, stage: 'Administrator', message: planned.message || 'Generated asset accepted' };
       }
-      return { ok: false, stage: 'M4', message: 'Request needs a planner/generator that is not connected yet.' };
+      return { ok: false, stage: 'M4', message: 'Request could not be turned into executable work.' };
     }
   };
 
