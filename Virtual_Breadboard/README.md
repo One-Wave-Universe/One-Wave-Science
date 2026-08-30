@@ -64,6 +64,23 @@ npm run dist:deb       # build a .deb package
 The AppImage is a single portable executable — `chmod +x` it and
 double-click (or run it) on any Ubuntu machine, no installation required.
 
+**To add a proper desktop/app-menu shortcut** (an AppImage on its own
+doesn't register one):
+
+```bash
+./install-linux.sh /path/to/VirtualBreadboardSimulator.AppImage
+```
+
+This copies the AppImage to `~/.local/bin/`, installs `icon.svg` to
+`~/.local/share/icons/`, and writes a `.desktop` entry to
+`~/.local/share/applications/` (and to `~/Desktop/` if you have one) —
+all per-user, no `sudo` needed. Afterwards, "Virtual Breadboard Simulator"
+shows up in your applications menu/launcher with its own icon, and if you
+have a Desktop folder, a matching icon appears there too (GNOME may mark it
+untrusted the first time — right-click it and choose "Allow Launching").
+Run the script with no arguments and it will look for the AppImage next to
+itself or in `~/Downloads` automatically.
+
 **As a downloadable Android app:**
 
 `android/VirtualBreadboardSimulator.apk` is a real, signed APK — install it
