@@ -29,20 +29,25 @@ stop_server() {
   rm -f "$PID_FILE" "$DIR_FILE"
 }
 
-# If an older launcher left a server running from another extracted copy,
-# stop it so this launcher cannot accidentally show the old animator.
+# Always stop an older/static server so the live AI endpoint cannot be shadowed
+# by a previous extracted or installed copy.
 if server_alive; then
   previous_dir="$(cat "$DIR_FILE" 2>/dev/null || true)"
-  if [[ "$previous_dir" != "$APP_DIR" ]]; then
+  if [[ "$previous_dir" != "$APP_DIR" ]] || ! grep -q 'One-Wave Animator live server' "$LOG_FILE" 2>/dev/null; then
     stop_server
   fi
 fi
 
 if ! server_alive; then
-  nohup python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP_DIR" >"$LOG_FILE" 2>&1 &
+  nohup python3 "$APP_DIR/assistant_server.py" >"$LOG_FILE" 2>&1 &
   echo $! > "$PID_FILE"
   printf '%s\n' "$APP_DIR" > "$DIR_FILE"
-  sleep 0.35
+  sleep 0.5
+fi
+
+if ! curl --fail --silent "http://127.0.0.1:${PORT}/api/assistant/health" >/dev/null 2>&1; then
+  printf 'One-Wave Animator server failed to start. Log: %s\n' "$LOG_FILE" >&2
+  exit 1
 fi
 
 if command -v chromium >/dev/null 2>&1; then
