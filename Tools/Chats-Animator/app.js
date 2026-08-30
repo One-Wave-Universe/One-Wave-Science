@@ -129,14 +129,37 @@
     renderSelectedControls();
   }
 
-  async function addAssetFromFile(file, kind) {
-    const src = await readFile(file);
-    const asset = { id: uid(kind), kind, name: file.name, src, x: 0.5, groundY: 0.72, manualScale: 1.0 };
+  function setBackgroundFromSource(src, name = 'Generated Background.png') {
+    if (!src) throw new Error('Background source missing');
+    state.background = { name, src };
+    renderAll();
+    window.Animator?.reel?.captureCurrent?.();
+    status(`Background ready: ${name}`);
+    return clone(state.background);
+  }
+
+  function addAssetFromSource(src, kind = 'prop', name = 'Generated Asset.png', placement = {}) {
+    if (!src) throw new Error('Asset source missing');
+    if (!['character', 'prop'].includes(kind)) throw new Error(`Unsupported asset kind: ${kind}`);
+    const asset = {
+      id: uid(kind),
+      kind,
+      name,
+      src,
+      x: Number.isFinite(Number(placement.x)) ? Math.max(0, Math.min(1, Number(placement.x))) : 0.5,
+      groundY: Number.isFinite(Number(placement.groundY)) ? Math.max(0.1, Math.min(0.98, Number(placement.groundY))) : 0.72,
+      manualScale: Number.isFinite(Number(placement.manualScale)) ? Math.max(0.25, Math.min(2, Number(placement.manualScale))) : 1.0
+    };
     state.assets.push(asset);
     state.selectedAssetId = asset.id;
     renderAll();
     window.Animator?.reel?.captureCurrent?.();
-    status(`${kind} added`);
+    status(`${kind} ready: ${name}`);
+    return clone(asset);
+  }
+
+  async function addAssetFromFile(file, kind) {
+    return addAssetFromSource(await readFile(file), kind, file.name);
   }
 
   function bindRange(inputId, valueId, key, target = state.calibration) {
@@ -157,10 +180,7 @@
   $('background-picker')?.addEventListener('change', async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    state.background = { name: file.name, src: await readFile(file) };
-    renderAll();
-    window.Animator?.reel?.captureCurrent?.();
-    status('Background loaded');
+    setBackgroundFromSource(await readFile(file), file.name);
     event.target.value = '';
   });
   $('clear-background')?.addEventListener('click', () => {
@@ -240,6 +260,9 @@
     renderAssets,
     renderSelectedControls,
     selectAsset,
+    setBackgroundFromSource,
+    addAssetFromSource,
+    addAssetFromFile,
     snapshot() {
       return clone({ background: state.background, calibration: state.calibration, assets: state.assets, selectedAssetId: state.selectedAssetId });
     },
