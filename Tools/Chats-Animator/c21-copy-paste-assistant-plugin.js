@@ -43,14 +43,22 @@
     try {
       const response = await fetch('/api/assistant/health', { cache: 'no-store' });
       const info = await response.json();
-      if (!response.ok || !info.ok) throw new Error(info.error || `HTTP ${response.status}`);
-      setState(`AI server ready — ${info.backend}${info.model ? ` / ${info.model}` : ''}`);
-      if (report) addMessage('AI', 'Connection is ready.');
+      if (!response.ok || !info.ok || !info.server) throw new Error(info.error || `HTTP ${response.status}`);
+
+      if (info.connected) {
+        const label = info.model || info.backend || 'AI';
+        setState(`AI connected — ${label}`);
+        if (report) addMessage('AI', `Connected and ready — ${label}.`);
+      } else {
+        const detail = info.error ? ` — ${info.error}` : '';
+        setState(`Animator server ready; AI model not connected${detail}`);
+        if (report) addMessage('AI', `Animator server is ready, but no AI model is connected${detail}.`);
+      }
       return info;
     } catch (error) {
-      const message = `AI connection unavailable: ${error.message || error}`;
+      const message = `Animator AI server unavailable: ${error.message || error}`;
       setState(message);
-      if (report) addMessage('AI', `${message}. The animator still works; only the AI connection is offline.`);
+      if (report) addMessage('AI', message);
       return null;
     }
   }
@@ -80,7 +88,7 @@
       lastBackend = result._backend || null;
       delete result._backend;
       const backendLabel = lastBackend?.model || lastBackend?.type || 'AI';
-      setState(`Connected — ${backendLabel}`);
+      setState(`AI connected — ${backendLabel}`);
       if (kind === 'director') addMessage('AI', result.message || 'Ready.');
       return result;
     } catch (error) {
@@ -98,14 +106,14 @@
   host.register({
     id: 'live-ai-creative-partner',
     name: 'Live AI Creative Partner',
-    version: '3',
+    version: '4',
     capabilities: ['director', 'asset', 'provider-neutral', 'local-ready', 'human-ai-cocreative'],
     director(payload) { return call('director', payload); },
     asset(job) { return call('asset', job); },
     metadata: {
       transport: 'local-http',
       storesApiKeys: false,
-      role: 'The human and AI are the Dream/Director creative pair. Delegated automatic support may handle small routine pieces, but it does not replace either creator.'
+      role: 'The human and AI are the primary creative participants. Dream/Director may delegate small routine jobs to automatic support without replacing either creator.'
     }
   });
 
