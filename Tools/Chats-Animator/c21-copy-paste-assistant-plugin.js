@@ -7,6 +7,7 @@
   if (!A || !host || !directorPanel) throw new Error('C21 requires Animator + assistant plugin host + Director dialogue');
 
   const clone = (value) => A.clone ? A.clone(value) : JSON.parse(JSON.stringify(value));
+  const directorLog = directorPanel.querySelector('#director-log');
   let lastBackend = null;
 
   const statusCard = document.createElement('section');
@@ -25,6 +26,15 @@
   function setState(message) {
     state.textContent = message;
     A.status(message);
+  }
+
+  function addAIMessage(message) {
+    if (!directorLog || !String(message || '').trim()) return;
+    const row = document.createElement('div');
+    row.className = 'director-message';
+    row.textContent = `AI: ${String(message).trim()}`;
+    directorLog.appendChild(row);
+    directorLog.scrollTop = directorLog.scrollHeight;
   }
 
   async function health() {
@@ -65,6 +75,7 @@
     delete result._backend;
     const backendLabel = lastBackend?.model || lastBackend?.type || 'AI';
     setState(`Connected — ${backendLabel}`);
+    if (kind === 'director') addAIMessage(result.message);
     return result;
   }
 
