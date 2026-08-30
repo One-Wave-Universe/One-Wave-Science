@@ -1,9 +1,13 @@
 """Bounded internal dialogue for mounted Field/Void instances.
 
 This is explicit program state, not access to any model's hidden chain-of-thought.
-The goal is to give mounted instances a reproducible deliberation protocol:
-Field proposes, Void challenges/checks, Field revises, and M4 routes the exchange
-until commit/defer/deny or a hard turn limit.
+The core dialogue rule is:
+
+    Field asks -> M4 routes -> Void answers -> M4 returns -> Field asks again
+
+Field is the inquiry/expansion side. Void is the answering/checking/compression
+side. The exchange continues until Void confirms, denies, defers, or the bounded
+turn budget is exhausted.
 """
 
 from __future__ import annotations
@@ -20,9 +24,9 @@ class DialogueRole(str, Enum):
 
 
 class DialogueAction(str, Enum):
-    PROPOSE = "PROPOSE"
-    CHALLENGE = "CHALLENGE"
-    REVISE = "REVISE"
+    ASK = "ASK"
+    ANSWER = "ANSWER"
+    REASK = "REASK"
     DEFER = "DEFER"
     CONFIRM = "CONFIRM"
     DENY = "DENY"
@@ -60,12 +64,12 @@ class DialoguePolicy:
     field_budget: int = 2
     void_budget: int = 2
     max_turns: int = 6
-    allow_revision: bool = True
+    allow_reask: bool = True
     allow_defer: bool = True
 
 
 class InternalDialogue:
-    """Run a bounded Field/Void exchange with M4 as the explicit router."""
+    """Run a bounded Field-asks / Void-answers exchange routed by M4."""
 
     def __init__(self, policy: Optional[DialoguePolicy] = None) -> None:
         self.policy = policy or DialoguePolicy()
@@ -74,9 +78,9 @@ class InternalDialogue:
         self,
         cue: Any,
         *,
-        field_propose: Callable[[Any], Any],
-        void_review: Callable[[Any, Any], tuple[DialogueAction, Any]],
-        field_revise: Optional[Callable[[Any, Any], Any]] = None,
+        field_ask: Callable[[Any], Any],
+        void_answer: Callable[[Any, Any], tuple[DialogueAction, Any]],
+        field_reask: Optional[Callable[[Any, Any], Any]] = None,
         m4_route: Optional[Callable[[DialogueRole, DialogueRole, Any], Any]] = None,
     ) -> DialogueResult:
         turns: List[DialogueTurn] = []
@@ -89,13 +93,13 @@ class InternalDialogue:
             turn_no += 1
             turns.append(DialogueTurn(turn_no, role, action, payload, metadata))
 
-        proposal = field_propose(cue)
+        question = field_ask(cue)
         field_used += 1
-        append(DialogueRole.FIELD, DialogueAction.PROPOSE, proposal)
+        append(DialogueRole.FIELD, DialogueAction.ASK, question)
 
-        current = proposal
+        current_question = question
         while turn_no < self.policy.max_turns:
-            routed = m4_route(DialogueRole.FIELD, DialogueRole.VOID, current) if m4_route else current
+            routed = m4_route(DialogueRole.FIELD, DialogueRole.VOID, current_question) if m4_route else current_question
             append(DialogueRole.M4, DialogueAction.ROUTE, routed, source="FIELD", target="VOID")
             if turn_no >= self.policy.max_turns:
                 break
@@ -103,35 +107,37 @@ class InternalDialogue:
             if void_used >= self.policy.void_budget:
                 break
 
-            verdict, response = void_review(cue, routed)
+            verdict, answer = void_answer(cue, routed)
             void_used += 1
-            append(DialogueRole.VOID, verdict, response)
+            void_action = verdict if verdict in (
+                DialogueAction.CONFIRM,
+                DialogueAction.DENY,
+                DialogueAction.DEFER,
+            ) else DialogueAction.ANSWER
+            append(DialogueRole.VOID, void_action, answer)
 
             if verdict in (DialogueAction.CONFIRM, DialogueAction.DENY):
-                return DialogueResult(turns, verdict, response, exhausted=False)
+                return DialogueResult(turns, verdict, answer, exhausted=False)
 
-            if verdict == DialogueAction.DEFER and not self.policy.allow_revision:
-                return DialogueResult(turns, verdict, response, exhausted=False)
+            if verdict == DialogueAction.DEFER and not self.policy.allow_reask:
+                return DialogueResult(turns, verdict, answer, exhausted=False)
 
-            if verdict not in (DialogueAction.CHALLENGE, DialogueAction.DEFER):
-                raise ValueError(f"Unsupported Void dialogue action: {verdict}")
+            if not self.policy.allow_reask or field_reask is None or field_used >= self.policy.field_budget:
+                return DialogueResult(turns, DialogueAction.DEFER, answer, exhausted=False)
 
-            if not self.policy.allow_revision or field_revise is None or field_used >= self.policy.field_budget:
-                return DialogueResult(turns, DialogueAction.DEFER, response, exhausted=False)
-
-            routed_back = m4_route(DialogueRole.VOID, DialogueRole.FIELD, response) if m4_route else response
+            routed_back = m4_route(DialogueRole.VOID, DialogueRole.FIELD, answer) if m4_route else answer
             append(DialogueRole.M4, DialogueAction.ROUTE, routed_back, source="VOID", target="FIELD")
             if turn_no >= self.policy.max_turns:
                 break
 
-            current = field_revise(current, routed_back)
+            current_question = field_reask(current_question, routed_back)
             field_used += 1
-            append(DialogueRole.FIELD, DialogueAction.REVISE, current)
+            append(DialogueRole.FIELD, DialogueAction.REASK, current_question)
 
         return DialogueResult(
             turns=turns,
             outcome=DialogueAction.DEFER,
-            final_payload=current,
+            final_payload=current_question,
             exhausted=True,
         )
 
@@ -156,6 +162,6 @@ def suggested_policy(field_bias: float, void_bias: float, m4_demand: float) -> D
         field_budget=field_budget,
         void_budget=void_budget,
         max_turns=max_turns,
-        allow_revision=field_budget > 1,
+        allow_reask=field_budget > 1,
         allow_defer=True,
     )
