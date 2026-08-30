@@ -2,8 +2,6 @@
 import json
 import os
 import re
-import sys
-import urllib.error
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -15,10 +13,10 @@ BACKEND = os.environ.get('ONE_WAVE_AI_BACKEND', 'auto').strip().lower()
 CUSTOM_URL = os.environ.get('ONE_WAVE_AI_URL', '').strip()
 API_KEY = os.environ.get('ONE_WAVE_AI_API_KEY', '').strip()
 
-SYSTEM = '''You are the live AI creative partner inside One-Wave Animator. The human and AI are the Dream/Director creative pair. Talk with the human naturally and help create the scene. You may also propose executable animator edits.
+SYSTEM = '''You are the live AI creative partner inside One-Wave Animator. The human and AI are the primary creative participants. Together they discuss, direct, create, and revise scenes. Dream/Director may also delegate small routine creative jobs to automatic helpers when useful; those helpers are support machinery, not replacement creative agents.
 Return JSON only with this shape:
 {"message":"natural reply to the human","steps":[{"operation":"...","args":{}}],"missing":[{"kind":"motion|background|character|prop","actor":"","action":"","target":""}]}
-Use only operations supplied in context.operations. Never invent operations. If the human is discussing/brainstorming rather than requesting an executable edit, reply in message and leave steps empty. If art or motion frames are needed but cannot be produced through an available operation, describe that need in missing. Keep the reply concise and useful.'''
+Use only operations supplied in context.operations. Never invent operations. If the human is discussing or brainstorming rather than requesting an executable edit, reply naturally in message and leave steps empty. If art or motion frames are needed but cannot be produced through an available operation, describe that need in missing so it can be delegated to an asset/motion worker. Keep the reply concise and useful.'''
 
 
 def request_json(url, payload=None, headers=None, timeout=120):
@@ -50,10 +48,7 @@ def strip_json(text):
 def ollama_candidates():
     if CUSTOM_URL and BACKEND in ('auto', 'ollama'):
         base = CUSTOM_URL.rstrip('/')
-        if base.endswith('/api/chat'):
-            yield base
-        else:
-            yield base + '/api/chat'
+        yield base if base.endswith('/api/chat') else base + '/api/chat'
     yield 'http://127.0.0.1:11434/api/chat'
     yield 'http://192.168.55.1:11434/api/chat'
 
@@ -69,27 +64,35 @@ def choose_ollama_model(chat_url):
     return models[0].get('name') or models[0].get('model')
 
 
-def call_ollama(packet):
+def discover_ollama():
     errors = []
     for url in dict.fromkeys(ollama_candidates()):
         try:
             model = choose_ollama_model(url)
-            result = request_json(url, {
-                'model': model,
-                'stream': False,
-                'format': 'json',
-                'messages': [
-                    {'role': 'system', 'content': SYSTEM},
-                    {'role': 'user', 'content': json.dumps(packet, separators=(',', ':'))},
-                ],
-            }, timeout=120)
-            content = ((result.get('message') or {}).get('content') or '')
-            parsed = strip_json(content)
-            parsed['_backend'] = {'type': 'ollama', 'model': model, 'url': url}
-            return parsed
+            return {'ok': True, 'backend': 'ollama', 'model': model, 'url': url}
         except Exception as exc:
             errors.append(f'{url}: {exc}')
-    raise RuntimeError('No reachable Ollama AI. Tried local computer and Jetson. ' + ' | '.join(errors))
+    return {'ok': False, 'backend': 'ollama', 'model': MODEL or '', 'error': ' | '.join(errors)}
+
+
+def call_ollama(packet):
+    found = discover_ollama()
+    if not found['ok']:
+        raise RuntimeError('No reachable Ollama AI. Tried local computer and Jetson. ' + found.get('error', ''))
+    url, model = found['url'], found['model']
+    result = request_json(url, {
+        'model': model,
+        'stream': False,
+        'format': 'json',
+        'messages': [
+            {'role': 'system', 'content': SYSTEM},
+            {'role': 'user', 'content': json.dumps(packet, separators=(',', ':'))},
+        ],
+    }, timeout=120)
+    content = ((result.get('message') or {}).get('content') or '')
+    parsed = strip_json(content)
+    parsed['_backend'] = {'type': 'ollama', 'model': model, 'url': url}
+    return parsed
 
 
 def call_openai_compatible(packet):
@@ -134,12 +137,12 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/api/assistant/health':
-            return self.send_json(200, {
-                'ok': True,
-                'backend': BACKEND,
-                'model': MODEL or 'auto',
-                'customUrl': bool(CUSTOM_URL),
-            })
+            if BACKEND == 'openai-compatible':
+                if CUSTOM_URL:
+                    return self.send_json(200, {'ok': True, 'backend': BACKEND, 'model': MODEL or 'default'})
+                return self.send_json(503, {'ok': False, 'backend': BACKEND, 'error': 'ONE_WAVE_AI_URL is not configured'})
+            info = discover_ollama()
+            return self.send_json(200 if info.get('ok') else 503, info)
         return super().do_GET()
 
     def do_POST(self):
