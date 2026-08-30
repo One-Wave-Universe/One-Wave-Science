@@ -9,6 +9,9 @@ whether the action was accepted, whose turn follows, and whether the episode
 ended. No reward values or strategic hints are supplied.
 
 Learning belongs entirely inside the plugins.
+
+Hard consequence rule:
+    Any illegal move is an immediate terminal loss for the side that attempted it.
 """
 
 from __future__ import annotations
@@ -49,7 +52,7 @@ class WorldConsequence:
     actor_side: int
     next_side: int
     terminal: bool
-    terminal_fact: str  # CONTINUE / BLACK_WIN / WHITE_WIN / DRAW / REJECTED
+    terminal_fact: str  # CONTINUE / BLACK_WIN / WHITE_WIN / DRAW
     move: Move
 
 
@@ -165,9 +168,12 @@ class CheckersWorld:
         return captures if captures else quiet
 
     def apply(self, move: Move) -> Tuple[bool, str]:
-        legal = self.legal_moves(self.turn)
+        actor = self.turn
+        legal = self.legal_moves(actor)
         if move not in legal:
-            return False, "REJECTED"
+            # Wrong move = immediate loss. The board does not change.
+            winner = WHITE if actor == BLACK else BLACK
+            return False, "BLACK_WIN" if winner == BLACK else "WHITE_WIN"
 
         sr, sc = move.src
         dr, dc = move.dst
@@ -185,7 +191,6 @@ class CheckersWorld:
 
         self.board[dr][dc] = piece
         self.ply += 1
-        actor = self.turn
         self.turn = -self.turn
 
         if not self.legal_moves(self.turn):
@@ -267,7 +272,7 @@ class CheckersApp:
         self.canvas.create_text(PAD, status_y + 28, anchor="w", fill="#cfcfcf",
                                 text=f"BLACK: {black}     WHITE: {white}")
         self.canvas.create_text(PAD, status_y + 56, anchor="w", fill="#a9a9a9",
-                                text="World supplies consequences only. Learning lives inside each plugin.")
+                                text="Wrong move = immediate loss. World gives no strategy reward.")
 
     def start(self) -> None:
         if not self.running:
@@ -293,7 +298,8 @@ class CheckersApp:
         agent = self.agents[side]
         legal = self.world.legal_moves(side)
         if not legal:
-            self.reset()
+            self.running = False
+            self.draw()
             return
 
         before = self.grayscale_pixels()
@@ -317,10 +323,13 @@ class CheckersApp:
 
         if terminal:
             self.running = False
+            label = fact.replace("_", " ")
+            if not accepted:
+                label = f"WRONG MOVE — {label}"
             self.canvas.create_text(
                 PAD + BOARD * CELL / 2,
                 PAD + BOARD * CELL / 2,
-                text=fact.replace("_", " "),
+                text=label,
                 fill="white",
                 font=("TkDefaultFont", 28, "bold"),
             )
