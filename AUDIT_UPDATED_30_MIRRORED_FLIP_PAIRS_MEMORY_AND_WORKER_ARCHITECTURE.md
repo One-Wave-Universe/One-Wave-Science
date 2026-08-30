@@ -2,7 +2,9 @@
 
 Date: 2026-08-30
 
-Status: working architecture / preservation update. This file records the important decisions and corrections from today without replacing older evidence. Where a relationship is still being tested, it is labeled provisional rather than promoted to a proven physical claim.
+Status: **working structural architecture / convergence update — not proof.**
+
+Nothing in this update is being entered as proof of the larger theory. Its importance is structural: several previously separate ideas now fit together more coherently, reduce ambiguity between jobs, and make the next build steps easier to identify. Preserve all of it as working structure to test, refine, connect, or reject through implementation.
 
 ## 1. Six apparent positions are three mirrored flip-pairs
 
@@ -20,23 +22,23 @@ A flip is one paired transition across the mirror, not two unrelated events. Do 
 
 ### Functional direction
 
-Current functional description:
+Current structural description:
 
 `binary -> ternary -> quadratic` = oversight / view side
 
 `quadratic -> ternary -> binary` = action / execution side
 
-This is a functional mapping, not a claim that the underlying physics has been experimentally established.
+Treat this as a working control-architecture relationship to encode and test.
 
-### Temporal receipt — provisional but important
+### Temporal receipt
 
-Preserve the stated timing relationship for testing:
+Preserve the stated timing relationship as part of the working structure:
 
 - old view travels upward
 - new view travels upward
 - old action travels downward
 
-The point is that the mirrored transition carries state history through the flip instead of replacing everything at once. The exact timing and implementation remain experimental, but the relationship must not be silently flattened into six stateless steps.
+The point is that the mirrored transition carries state history through the flip instead of replacing everything at once. The exact timing and implementation still have to be built and tested, but the relationship must not be silently flattened into six stateless steps.
 
 ## 2. Fast loop and slower oversight / override
 
@@ -49,6 +51,8 @@ This expresses a 3:1 local nerve-to-supervisory event relationship and a 6:1 ful
 The fast subconscious / nerve loop is intentionally ahead of slower cognition. Local body-protection responses can occur before the higher layer finishes interpreting them.
 
 The higher layer should receive compressed, routed, referenced information rather than raw uncontrolled traffic.
+
+Structurally this now supplies the timing relationship between the fast lower layer and the slower supervisory layer.
 
 ## 3. New code-construction organization by job and scale
 
@@ -131,6 +135,18 @@ Actual committed action.
 
 Executor receives an approved action and carries it out. It should not independently reinterpret the entire problem unless a failure receipt forces re-evaluation.
 
+### Why this matters structurally
+
+This worker chain gives the mirrored timing model somewhere concrete to live:
+
+- Cells and Nerves supply fast local state changes.
+- M4 preserves order, timing, routing, and compression.
+- Dream creates candidate future states.
+- Administrator provides the slower view / oversight decision.
+- Executor produces the descending committed action.
+
+This does not establish that the architecture is correct. It gives us an executable decomposition that can now be tested one interface at a time.
+
 ## 4. Five AI workers, two state machines, fast loop beneath
 
 Project direction preserved today:
@@ -150,6 +166,8 @@ The system should integrate:
 - meaningful learned or measured weights rather than arbitrary weighting
 
 Do not collapse the five workers into one omnipotent agent just because a single model can technically perform all five roles.
+
+The exact mapping between the five workers and the six named software jobs above is intentionally left open until the interfaces are tested. Some jobs may be deterministic infrastructure rather than separate AI workers.
 
 ## 5. Rabbit hopping — scale and reconstruction route
 
@@ -182,6 +200,8 @@ Two route families remain distinct:
 
 Do not merge them simply because some values coincide.
 
+Structurally, rabbit hopping now has a clearer possible role: it can provide addressable, reversible traversal information to the memory system without being confused with the memory completion process itself.
+
 ## 6. Constellation memory reconstruction
 
 Today’s canonical memory architecture is in `ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`.
@@ -209,6 +229,14 @@ A useful recall receipt can include:
 
 Pattern separation is mandatory: similar memories must not be silently collapsed into one attractor.
 
+### Structural connection to the worker chain
+
+This gives memory a route through the software organization:
+
+`cue -> Cells/Nerves detect -> M4 routes -> constellation neighborhood -> rabbit-hop route -> completion/reconstruction -> Administrator/context check -> accepted state -> Executor if action is required`
+
+Dream can participate when reconstruction genuinely needs candidate generation, but generated material must remain distinguishable from retrieved or strongly reconstructed material.
+
 ## 7. Micro -> Macro recursive coding loop
 
 Preserve the emerging software-construction principle:
@@ -220,6 +248,8 @@ The important part is not copying identical code at every scale. The recurring p
 `local primitive -> event/reaction -> route/synchronize -> generate -> evaluate -> execute -> receipt`
 
 Higher layers should be composed from tested lower-layer behaviors rather than replacing them with a giant opaque controller.
+
+This is one of the strongest structural consequences of today’s work: the theory no longer has to be implemented all at once. Each boundary can become a small executable contract.
 
 ## 8. Animator / Director work completed or advanced today
 
@@ -254,7 +284,9 @@ The editor is intended to work as a co-creation surface:
 - completed sequences can be played and inspected, then edited over a specified time range
 - the project should keep provider-facing invocation from becoming unnecessarily tied to one AI provider even when one provider is used as the current Director
 
-Do not reintroduce the discarded Chats-Animator structure as a separate competing architecture; work from the current proven animator path.
+Do not reintroduce the discarded Chats-Animator structure as a separate competing architecture; work from the **current working animator path**.
+
+The animator is useful as a separate real software testbed for the job-separated coding method, but it must not be used as evidence for the physical/control theory.
 
 ## 9. Separation rules from today
 
@@ -276,24 +308,150 @@ The five canonical Field lifecycle states remain:
 
 Do not invent a sixth lifecycle state from the mirror geometry.
 
-## 10. Next executable architecture tests
+## 10. What today now makes clearer
 
-1. Encode one three-flip-pair transition with an explicit receipt showing old view, new view, and old action.
-2. Verify the receipt can be inverted without treating the mirror faces as six unrelated events.
-3. Implement one tiny Cells -> Nerves -> M4 path with deterministic tests before adding Dream or Administrator.
-4. Add one Dream proposal and require Administrator acceptance before Executor action.
-5. Run the minimum constellation-memory rebuild test already defined in `ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`.
-6. Compare memory rebuild with and without rabbit-hop route receipts.
-7. Keep animator regression testing separate: background + character frame playback + Director dialogue must stay runnable while architecture work continues.
+Today’s value is not that a final answer was reached. It is that the architecture has fewer loose pieces.
 
-## 11. Evidence / claim discipline
+The emerging structural stack can now be read as:
 
-This update preserves the architecture as currently understood. It does not convert speculative physical interpretations into established experimental facts.
+`small deterministic state`
+
+`-> fast local reaction`
+
+`-> timed/routed/compressed transport`
+
+`-> memory/context reconstruction when needed`
+
+`-> candidate generation when needed`
+
+`-> slower oversight/selection`
+
+`-> committed action`
+
+`-> receipt carried back into state/memory`
+
+At the same time, the mirrored flip-pair model provides a candidate way to describe how view and action states hand off without pretending they are six unrelated moments.
+
+This narrows the next question from **“How do we build the whole architecture?”** to **“What is the smallest packet that can survive one full round trip through it?”**
+
+## 11. Next build order
+
+The next work should follow dependency order rather than trying to instantiate every layer at once.
+
+### Step A — define the packet
+
+Create one minimal packet that can carry:
+
+- current state
+- old view
+- new view
+- old action
+- direction / mirror side
+- timestamp or phase
+- source
+- destination
+- confidence / uncertainty where relevant
+- route receipt
+
+Do not add more fields until a test requires them.
+
+### Step B — encode one mirrored transition
+
+Implement one three-flip-pair transition using the packet.
+
+The first test is not whether the theory is true. The test is whether the software representation can:
+
+- preserve old/new state distinctly
+- move through the mirror without duplicating flips
+- retain direction/orientation
+- reconstruct what happened from the receipt
+
+### Step C — Cells -> Nerves -> M4 only
+
+Build the smallest executable lower loop:
+
+`Cell detects -> Nerve reacts -> M4 routes -> receipt`
+
+No Dream, Administrator, memory reconstruction, or full AI worker is required yet.
+
+This establishes the fast path first.
+
+### Step D — add oversight
+
+Add Administrator only after the fast path is deterministic.
+
+Test:
+
+`fast event -> compressed M4 report -> Administrator oversight -> no action or override -> receipt`
+
+Then test the second half:
+
+`fast event -> report -> Administrator override -> Executor action -> receipt`
+
+This is where `flip, flip, oversight; flip, flip, override` becomes executable instead of descriptive.
+
+### Step E — add Dream as proposals, not authority
+
+Once oversight works, allow Dream to generate more than one candidate response.
+
+Administrator must be able to choose, reject, or hold all candidates.
+
+Executor only receives the selected committed action.
+
+### Step F — attach reconstructive memory
+
+Only after the live packet loop works, connect:
+
+`constellation -> rabbit-hop route -> associative completion -> probabilistic fill if needed`
+
+Feed the rebuilt result back through Administrator validation before it changes committed state.
+
+### Step G — test recursive scaling
+
+Once one small loop works, instantiate a second level using the same interface discipline.
+
+Do not copy every implementation detail. Reuse the packet/receipt contract and see whether the higher level can treat the lower loop as one bounded unit.
+
+### Step H — then decide the five-worker split
+
+After the interfaces are visible in running code, assign the five AI workers based on actual computational jobs and bottlenecks.
+
+Do not decide the five workers merely to satisfy the number five. The structure should determine which jobs genuinely benefit from separate learned agents and which should remain deterministic code.
+
+## 12. Immediate executable tests
+
+1. Define the minimal transition packet and receipt schema.
+2. Encode one three-mirrored-flip transition showing old view, new view, and old action.
+3. Reverse the receipt and verify the transition history can be reconstructed.
+4. Build one deterministic `Cells -> Nerves -> M4` event path.
+5. Add one oversight event without override.
+6. Add one override event with Executor action.
+7. Add a Dream proposal only after those six tests pass.
+8. Run the minimum constellation-memory rebuild test already defined in `ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`.
+9. Compare reconstruction with and without rabbit-hop route receipts.
+10. Keep animator regression testing separate: background + character frame playback + Director dialogue must stay runnable while architecture work continues.
+
+## 13. Claim discipline for this update
+
+**None of the architecture recorded here is proof.**
+
+The repository should treat it as:
+
+- structural organization
+- candidate relationships
+- implementation hypotheses
+- interface definitions
+- test targets
+- corrections to earlier structural misunderstandings
+- clues about dependency order
+
+A piece becoming more coherent with neighboring pieces is valuable because it tells us what to build next. Coherence alone is not evidence that the larger physical interpretation is correct.
 
 For repo maintenance:
 
-- preserve old evidence rather than rewriting history
+- preserve old material rather than rewriting history
 - add corrections explicitly
-- keep working hypotheses labeled working / provisional
-- promote claims only when there is a reproducible test or external evidence appropriate to the claim
+- keep structural hypotheses available for implementation
+- record failures as aggressively as successes
+- let executable tests determine which pieces survive
 - when two descriptions conflict, keep the newer explicit correction and record what changed
