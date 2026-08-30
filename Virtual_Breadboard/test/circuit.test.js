@@ -133,4 +133,48 @@ function approx(a, b, eps, msg) {
   console.log('Test 7 OK: switch open I=0, closed I =', (res.currents.get('r1') * 1000).toFixed(2), 'mA');
 }
 
+// Test 8: generic diode conducts forward (Vf=0.7V) and blocks reverse
+{
+  const c = new Circuit();
+  const els = {
+    wires: [{ a: 'P', b: 'N1' }],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'N1', b: 'N2', value: 220 },
+      { id: 'd1', type: 'diode', a: 'N2', b: 'M' },
+    ],
+  };
+  let res;
+  for (let i = 0; i < 5; i++) res = c.solve(els, 1 / 60);
+  approx(res.currents.get('d1'), (5 - 0.7) / (220 + 5 + 1), 1e-3, 'forward diode current');
+
+  const c2 = new Circuit();
+  els.components[2] = { id: 'd1', type: 'diode', a: 'M', b: 'N2' }; // reversed
+  for (let i = 0; i < 5; i++) res = c2.solve(els, 1 / 60);
+  approx(res.currents.get('d1'), 0, 1e-6, 'reversed diode current should be ~0');
+  console.log('Test 8 OK: diode forward =', (res.currents.get('d1') * 1000).toFixed(2), 'mA (reversed), blocks correctly');
+}
+
+// Test 9: pushbutton is momentary — closed only while held
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'pb1', type: 'pushbutton', a: 'P', b: 'N1', closed: false },
+      { id: 'r1', type: 'resistor', a: 'N1', b: 'M', value: 220 },
+    ],
+  };
+  let res = c.solve(els, 1 / 60);
+  approx(res.currents.get('r1'), 0, 1e-6, 'released pushbutton -> no current');
+  els.components[1].closed = true;
+  res = c.solve(els, 1 / 60);
+  approx(res.currents.get('r1'), 5 / 221, 1e-3, 'held pushbutton -> Ohm\'s law current');
+  els.components[1].closed = false;
+  res = c.solve(els, 1 / 60);
+  approx(res.currents.get('r1'), 0, 1e-6, 'released again -> no current');
+  console.log('Test 9 OK: pushbutton momentary behavior correct');
+}
+
 console.log('\nAll circuit engine tests passed.');

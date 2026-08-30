@@ -17,6 +17,7 @@
     },
     pending: [],
     hoverHole: null,
+    hoverPart: null,
     selectedPartId: null,
     lastResult: { voltages: new Map(), currents: new Map(), warnings: [], uf: null },
     animT: 0,
@@ -26,6 +27,22 @@
 
   function H(row, col) {
     return board.holes.find((h) => h.row === row && h.col === col);
+  }
+
+  // A real 6-pin trimmer straddles the center channel: 3 pins in one strip
+  // row, 3 mirrored pins in the corresponding row of the other bank (a<->f,
+  // b<->g, c<->h, d<->i, e<->j — always exactly 5 rows apart). Clicking one
+  // anchor hole places all 6; rails have no mirror row and are rejected.
+  const POT_MIRROR_ROW = { a: 'f', b: 'g', c: 'h', d: 'i', e: 'j', f: 'a', g: 'b', h: 'c', i: 'd', j: 'e' };
+  function derivePotentiometerHoles(anchor) {
+    const mirrorRow = POT_MIRROR_ROW[anchor.row];
+    if (!mirrorRow) return null;
+    const c = anchor.col;
+    if (c + 2 > Board.COLS) return null;
+    return [
+      H(anchor.row, c), H(anchor.row, c + 1), H(anchor.row, c + 2),
+      H(mirrorRow, c), H(mirrorRow, c + 1), H(mirrorRow, c + 2),
+    ];
   }
 
   function newId(prefix) {
@@ -45,9 +62,17 @@
       if (p.type === 'wire') {
         wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
       } else if (p.type === 'potentiometer') {
+        const t = p.terminals;
+        if (t.length === 6) {
+          // the far row's 3 pins are wired internally to the near row's —
+          // model that as ordinary jumpers rather than touching circuit.js
+          wires.push({ a: t[0].cellId, b: t[3].cellId });
+          wires.push({ a: t[1].cellId, b: t[4].cellId });
+          wires.push({ a: t[2].cellId, b: t[5].cellId });
+        }
         components.push({
           id: p.id, type: 'potentiometer', label: p.id,
-          a: p.terminals[0].cellId, wiper: p.terminals[1].cellId, b: p.terminals[2].cellId,
+          a: t[0].cellId, wiper: t[1].cellId, b: t[2].cellId,
           value: p.value, pos: p.pos,
         });
       } else {
@@ -134,15 +159,25 @@
       p.className = 'hint';
       p.textContent = 'Click a hole, then click another hole to drop a jumper wire.';
       toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'diode') {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Click the anode, then the cathode (banded end).';
+      toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'pushbutton') {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Click two holes. Hold it down on the board (or in the Inspector) to close the circuit.';
+      toolOptionsEl.appendChild(p);
     } else if (state.tool === 'potentiometer') {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = 'Click 3 holes in order: end A, wiper (middle), end B.';
+      p.textContent = 'Click one hole in either bank (not a rail) — a real 6-pin trimmer straddles the center channel, so the other 5 pins are placed for you.';
       toolOptionsEl.appendChild(p);
     } else if (state.tool === 'select') {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = 'Click a switch to toggle it. Click any part to edit or delete it.';
+      p.textContent = 'Click a switch to toggle it, or hold down a pushbutton. Click any part to edit or delete it.';
       toolOptionsEl.appendChild(p);
     }
   }
@@ -187,10 +222,16 @@
     if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor };
     if (type === 'resistor') return { type: 'resistor', terminals: holes.slice(0, 2), value: opts.resistorValue };
     if (type === 'led') return { type: 'led', terminals: holes.slice(0, 2), color: opts.ledColor };
+    if (type === 'diode') return { type: 'diode', terminals: holes.slice(0, 2) };
     if (type === 'capacitor') return { type: 'capacitor', terminals: holes.slice(0, 2), value: opts.capacitorValue };
     if (type === 'battery') return { type: 'battery', terminals: holes.slice(0, 2), value: opts.batteryValue };
     if (type === 'switch') return { type: 'switch', terminals: holes.slice(0, 2), closed: false };
-    if (type === 'potentiometer') return { type: 'potentiometer', terminals: holes.slice(0, 3), value: 10000, pos: 0.5 };
+    if (type === 'pushbutton') return { type: 'pushbutton', terminals: holes.slice(0, 2), closed: false };
+    if (type === 'potentiometer') {
+      const terminals = derivePotentiometerHoles(holes[0]);
+      if (!terminals) return null;
+      return { type: 'potentiometer', terminals, value: 10000, pos: 0.5 };
+    }
     return null;
   }
 
@@ -211,39 +252,69 @@
     if (part) addPart(part);
   }
 
+  // distance from a point to the nearest point on a line segment — lets
+  // hovering/clicking register anywhere along a part's drawn body, not just
+  // near its exact midpoint
+  function distToSegment(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const lenSq = dx * dx + dy * dy;
+    let t = lenSq ? ((px - x1) * dx + (py - y1) * dy) / lenSq : 0;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+  }
+
+  // Iterate topmost-first (later-placed parts draw on top) so hovering/
+  // clicking an overlapping spot matches what's actually visible.
   function hitTestPart(pos) {
-    let best = null;
-    let bestD = 12 * 12;
-    state.parts.forEach((p) => {
+    for (let i = state.parts.length - 1; i >= 0; i--) {
+      const p = state.parts[i];
       const t = p.terminals;
-      if (t.length === 2) {
-        const mx = (t[0].x + t[1].x) / 2;
-        const my = (t[0].y + t[1].y) / 2;
-        const d = (mx - pos.x) ** 2 + (my - pos.y) ** 2;
-        if (d < bestD) {
-          bestD = d;
-          best = p;
-        }
-      } else if (t.length === 3) {
-        const mx = t[1].x;
-        const my = t[1].y - 14;
-        const d = (mx - pos.x) ** 2 + (my - pos.y) ** 2;
-        if (d < 20 * 20) {
-          best = p;
-          bestD = 0;
-        }
+      if (t.length === 6) {
+        const left = Math.min(t[0].x, t[3].x) - 10;
+        const right = Math.max(t[2].x, t[5].x) + 10;
+        const top = Math.min(t[1].y, t[4].y) - 17;
+        const bottom = Math.max(t[1].y, t[4].y) + 17;
+        if (pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom) return p;
+      } else if (t.length === 2) {
+        if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
       }
+    }
+    return null;
+  }
+
+  // where the selection ring / occupied-hole body is centered for a part
+  function partCenter(p) {
+    const t = p.terminals;
+    if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
+    return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
+  }
+
+  // executor: the state changes behind a momentary pushbutton press/release
+  function pressPushbutton(pos) {
+    const part = hitTestPart(pos);
+    if (part && part.type === 'pushbutton') part.closed = true;
+  }
+  function releaseAllPushbuttons() {
+    state.parts.forEach((p) => {
+      if (p.type === 'pushbutton') p.closed = false;
     });
-    return best;
   }
 
   canvas.addEventListener('mousemove', (evt) => {
     const pos = mousePos(evt);
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 8);
+    state.hoverPart = hitTestPart(pos);
   });
   canvas.addEventListener('mouseleave', () => {
     state.hoverHole = null;
+    state.hoverPart = null;
+    releaseAllPushbuttons();
   });
+  canvas.addEventListener('mousedown', (evt) => {
+    if (state.tool === 'select') pressPushbutton(mousePos(evt));
+  });
+  canvas.addEventListener('mouseup', releaseAllPushbuttons);
 
   // touch support (phones/tablets): update the hover readout as a finger
   // moves, and let the browser's own tap-to-click synthesis handle placement
@@ -255,11 +326,15 @@
   canvas.addEventListener('touchstart', (evt) => {
     const pos = touchPos(evt);
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
+    state.hoverPart = hitTestPart(pos);
+    if (state.tool === 'select') pressPushbutton(pos);
   }, { passive: true });
   canvas.addEventListener('touchmove', (evt) => {
     const pos = touchPos(evt);
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
+    state.hoverPart = hitTestPart(pos);
   }, { passive: true });
+  canvas.addEventListener('touchend', releaseAllPushbuttons, { passive: true });
 
   // validator: is this hole a legal next click for the placement in progress?
   // (rejects only re-clicking the exact same hole twice in a row)
@@ -317,11 +392,13 @@
 
   // ---------------- properties panel ----------------
   const propsEl = document.getElementById('props');
+  let currentReadoutEl = null;
   function renderProps() {
     propsEl.innerHTML = '';
     const part = state.parts.find((p) => p.id === state.selectedPartId);
     if (!part) {
       propsEl.innerHTML = '<p class="hint">Select a placed part to inspect or edit it.</p>';
+      currentReadoutEl = null;
       return;
     }
     const title = document.createElement('h3');
@@ -357,6 +434,16 @@
         renderProps();
       });
       propsEl.appendChild(btn);
+    } else if (part.type === 'pushbutton') {
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      btn.textContent = 'Hold to press';
+      btn.addEventListener('mousedown', () => (part.closed = true));
+      btn.addEventListener('mouseup', () => (part.closed = false));
+      btn.addEventListener('mouseleave', () => (part.closed = false));
+      btn.addEventListener('touchstart', (e) => { e.preventDefault(); part.closed = true; }, { passive: false });
+      btn.addEventListener('touchend', () => (part.closed = false));
+      propsEl.appendChild(btn);
     } else if (part.type === 'potentiometer') {
       const range = document.createElement('input');
       range.type = 'range';
@@ -368,21 +455,10 @@
       propsEl.appendChild(makeSelect('Total resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
     }
 
-    const readout = document.createElement('div');
-    readout.className = 'readout';
-    const I = state.lastResult.currents.get(part.id);
-    const uf = state.lastResult.uf;
-    if (uf) {
-      const va = state.lastResult.voltages.get(uf.find(part.terminals[0].cellId));
-      const vb = state.lastResult.voltages.get(uf.find(part.terminals[part.type === 'potentiometer' ? 2 : 1].cellId));
-      readout.innerHTML = `
-        <div><span>V(A)</span><b>${fmtV(va)}</b></div>
-        <div><span>V(B)</span><b>${fmtV(vb)}</b></div>
-        <div><span>ΔV</span><b>${fmtV(va - vb)}</b></div>
-        <div><span>Current</span><b>${fmtI(I)}</b></div>
-      `;
-    }
-    propsEl.appendChild(readout);
+    currentReadoutEl = document.createElement('div');
+    currentReadoutEl.className = 'readout';
+    propsEl.appendChild(currentReadoutEl);
+    updatePropsReadout();
 
     const del = document.createElement('button');
     del.className = 'action-btn danger';
@@ -395,6 +471,25 @@
     propsEl.appendChild(del);
   }
   renderProps();
+
+  // presentation: refresh just the live numbers every frame, without
+  // rebuilding the surrounding controls (which would drop focus mid-drag on
+  // a slider, or swallow a button press).
+  function updatePropsReadout() {
+    if (!currentReadoutEl) return;
+    const part = state.parts.find((p) => p.id === state.selectedPartId);
+    const uf = state.lastResult.uf;
+    if (!part || !uf) return;
+    const I = state.lastResult.currents.get(part.id);
+    const va = state.lastResult.voltages.get(uf.find(part.terminals[0].cellId));
+    const vb = state.lastResult.voltages.get(uf.find(part.terminals[part.type === 'potentiometer' ? 2 : 1].cellId));
+    currentReadoutEl.innerHTML = `
+      <div><span>V(A)</span><b>${fmtV(va)}</b></div>
+      <div><span>V(B)</span><b>${fmtV(vb)}</b></div>
+      <div><span>ΔV</span><b>${fmtV(va - vb)}</b></div>
+      <div><span>Current</span><b>${fmtI(I)}</b></div>
+    `;
+  }
 
   function fmtV(v) {
     if (v == null || Number.isNaN(v)) return '—';
@@ -545,16 +640,26 @@
   }
 
   // generator: turn a validated AI spec's {row,col} references into real
-  // board holes, the same terminal shape every other part uses.
+  // board holes, the same terminal shape every other part uses. A
+  // potentiometer spec gives one anchor hole; the other 5 pins of its real
+  // 6-pin footprint are derived the same way a manual click derives them.
   function specPartsToBoardParts(specParts) {
-    return specParts.map((p) => ({
-      type: p.type,
-      value: p.value,
-      color: p.color,
-      closed: !!p.closed,
-      pos: p.type === 'potentiometer' ? 0.5 : undefined,
-      terminals: p.terminals.map((t) => H(t.row, t.col)),
-    }));
+    return specParts
+      .map((p) => {
+        const terminals = p.type === 'potentiometer'
+          ? derivePotentiometerHoles(H(p.terminals[0].row, p.terminals[0].col))
+          : p.terminals.map((t) => H(t.row, t.col));
+        if (!terminals) return null;
+        return {
+          type: p.type,
+          value: p.value,
+          color: p.color,
+          closed: !!p.closed,
+          pos: p.type === 'potentiometer' ? 0.5 : undefined,
+          terminals,
+        };
+      })
+      .filter(Boolean);
   }
 
   async function runAiBuild() {
@@ -598,6 +703,7 @@
 
     render(dt);
     updateWarnings();
+    updatePropsReadout();
     requestAnimationFrame(frame);
   }
 
@@ -619,27 +725,33 @@
 
     state.parts.forEach((p) => {
       const t = p.terminals;
+      // see-through-on-hover: fade whatever's under the cursor so holes
+      // hidden underneath its body stay reachable for a jumper wire
+      const opacity = state.hoverPart && p.id === state.hoverPart.id ? 0.28 : 1;
       if (p.type === 'wire') {
-        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color);
+        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color, opacity);
       } else if (p.type === 'resistor') {
-        Components.drawResistor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y);
+        Components.drawResistor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'led') {
         const I = currents.get(p.id) || 0;
         const glow = Math.min(1, I * 60);
-        Components.drawLed(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, glow);
+        Components.drawLed(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, glow, opacity);
+      } else if (p.type === 'diode') {
+        Components.drawDiode(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'capacitor') {
-        Components.drawCapacitor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y);
+        Components.drawCapacitor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'battery') {
-        Components.drawBattery(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y);
+        Components.drawBattery(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'switch') {
-        Components.drawSwitch(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y);
+        Components.drawSwitch(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
+      } else if (p.type === 'pushbutton') {
+        Components.drawPushbutton(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'potentiometer') {
-        Components.drawPotentiometer(ctx, p, { a: t[0], wiper: t[1], b: t[2] });
+        Components.drawPotentiometer(ctx, p, t, opacity);
       }
 
       if (p.id === state.selectedPartId) {
-        const mx = t.length === 3 ? t[1].x : (t[0].x + t[1].x) / 2;
-        const my = (t.length === 3 ? t[1].y - 14 : (t[0].y + t[1].y) / 2);
+        const { x: mx, y: my } = partCenter(p);
         ctx.save();
         ctx.strokeStyle = '#ffb020';
         ctx.lineWidth = 1.5;
@@ -658,6 +770,31 @@
         }
       }
     });
+
+    // occupied-hole markers for whatever part is faded under the cursor —
+    // so it's clear exactly which holes it's using before you place a wire
+    if (state.hoverPart) {
+      ctx.save();
+      ctx.strokeStyle = '#6ea8e0';
+      ctx.lineWidth = 2;
+      state.hoverPart.terminals.forEach((h) => {
+        ctx.beginPath();
+        ctx.arc(h.x, h.y, 6, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    // snap indicator: exactly which hole a placement tool will use next
+    if (state.tool !== 'select' && state.hoverHole) {
+      ctx.save();
+      ctx.strokeStyle = '#ffdd55';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(state.hoverHole.x, state.hoverHole.y, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
 
     // pending placement preview
     if (state.pending.length && state.hoverHole) {

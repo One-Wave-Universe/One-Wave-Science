@@ -28,10 +28,16 @@
       '  wire          2 terminals, no value/color needed (a zero-resistance jumper)',
       '  resistor      2 terminals, "value" in ohms, e.g. 220, 1000, 10000',
       '  led           2 terminals, "color" one of red/yellow/green/blue/white (terminals[0] is the anode/+)',
+      '  diode         2 terminals, a generic silicon rectifier, no value/color (terminals[0] is the anode/+)',
       '  capacitor     2 terminals, "value" in farads, e.g. 0.0001 for 100uF',
       '  battery       2 terminals, "value" in volts, e.g. 5 or 9 (terminals[0] is +, terminals[1] is -)',
       '  switch        2 terminals, optional "closed": true or false (defaults to open)',
-      '  potentiometer 3 terminals in order [end A, wiper, end B], "value" is total ohms',
+      '  pushbutton    2 terminals, momentary — only conducts while "closed": true',
+      '  potentiometer 1 terminal: an anchor hole in row a-e or f-j (not a rail), column 1-61.',
+      '                It is a real 6-pin part: the simulator places 5 more pins for you,',
+      '                mirrored in the corresponding row of the OTHER bank (a<->f, b<->g, c<->h,',
+      '                d<->i, e<->j) to straddle the center channel, so leave those 6 holes clear.',
+      '                "value" is total ohms.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -124,8 +130,9 @@
     return JSON.parse(body.slice(start, end + 1));
   }
 
-  const TERMINALS_NEEDED = { wire: 2, resistor: 2, led: 2, capacitor: 2, battery: 2, switch: 2, potentiometer: 3 };
+  const TERMINALS_NEEDED = { wire: 2, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1 };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
+  const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
   const LED_COLORS = new Set(['red', 'yellow', 'green', 'blue', 'white']);
   const NUMERIC_TYPES = new Set(['resistor', 'capacitor', 'battery', 'potentiometer']);
 
@@ -153,6 +160,11 @@
       });
       if (p.type === 'led' && p.color && !LED_COLORS.has(p.color)) errors.push('part ' + i + ': bad led color "' + p.color + '"');
       if (NUMERIC_TYPES.has(p.type) && !(Number(p.value) > 0)) errors.push('part ' + i + ' (' + p.type + '): needs a positive numeric value');
+      if (p.type === 'potentiometer') {
+        const t = p.terminals[0];
+        if (t && !STRIP_ROWS.has(t.row)) errors.push('part ' + i + ' (potentiometer): anchor must be in row a-j, not a rail ("' + t.row + '")');
+        if (t && Number.isInteger(t.col) && t.col > 61) errors.push('part ' + i + ' (potentiometer): anchor column ' + t.col + ' leaves no room for its other 2 columns (max 61)');
+      }
     });
     return { ok: errors.length === 0, errors, parts };
   }

@@ -42,8 +42,20 @@
 
   const LED_VF = { red: 1.8, yellow: 2.0, green: 2.1, blue: 3.0, white: 3.0, ir: 1.4 };
   const LED_RON = 12; // ohms, approximate forward dynamic resistance
+  const DIODE_VF = 0.7; // volts, generic silicon rectifier (e.g. 1N4001-class)
+  const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
+
+  // LEDs and plain diodes are the same device electrically (one-way
+  // conduction past a threshold) — only the threshold/dynamic-resistance and
+  // whether it glows differ.
+  function forwardVoltage(c) {
+    return c.type === 'diode' ? DIODE_VF : LED_VF[c.color] || 1.8;
+  }
+  function forwardRon(c) {
+    return c.type === 'diode' ? DIODE_RON : LED_RON;
+  }
 
   function solveLinear(A, bIn) {
     const n = bIn.length;
@@ -108,7 +120,7 @@
         uf.find(c.a);
         uf.find(c.b);
         if (c.type === 'potentiometer') uf.find(c.wiper);
-        if (c.type === 'switch' && c.closed) uf.union(c.a, c.b);
+        if ((c.type === 'switch' || c.type === 'pushbutton') && c.closed) uf.union(c.a, c.b);
         if (c.type === 'battery') uf.find(batInternal(c));
       });
 
@@ -146,9 +158,9 @@
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
 
-      const leds = components.filter((c) => c.type === 'led');
-      leds.forEach((l) => {
-        if (!this._ledState.has(l.id)) this._ledState.set(l.id, false);
+      const diodes = components.filter((c) => c.type === 'led' || c.type === 'diode');
+      diodes.forEach((d) => {
+        if (!this._ledState.has(d.id)) this._ledState.set(d.id, false);
       });
 
       let voltages = new Map();
@@ -210,10 +222,10 @@
             const Ieq = gC * vPrev;
             stampI(i, Ieq);
             stampI(j, -Ieq);
-          } else if (c.type === 'led') {
+          } else if (c.type === 'led' || c.type === 'diode') {
             if (this._ledState.get(c.id)) {
-              const vf = LED_VF[c.color] || 1.8;
-              const g = 1 / LED_RON;
+              const vf = forwardVoltage(c);
+              const g = 1 / forwardRon(c);
               const i = gi(uf.find(c.a));
               const j = gi(uf.find(c.b));
               stampG(i, i, g);
@@ -255,19 +267,19 @@
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
         let changed = false;
-        leds.forEach((l) => {
-          const va = voltages.get(uf.find(l.a));
-          const vb = voltages.get(uf.find(l.b));
+        diodes.forEach((d) => {
+          const va = voltages.get(uf.find(d.a));
+          const vb = voltages.get(uf.find(d.b));
           const vd = va - vb;
-          const vf = LED_VF[l.color] || 1.8;
-          const wasOn = this._ledState.get(l.id);
+          const vf = forwardVoltage(d);
+          const wasOn = this._ledState.get(d.id);
           if (!wasOn && vd > vf) {
-            this._ledState.set(l.id, true);
+            this._ledState.set(d.id, true);
             changed = true;
           } else if (wasOn) {
-            const i = (vd - vf) / LED_RON;
+            const i = (vd - vf) / forwardRon(d);
             if (i < 0) {
-              this._ledState.set(l.id, false);
+              this._ledState.set(d.id, false);
               changed = true;
             }
           }
@@ -287,17 +299,18 @@
           I = (va - vb) / c.value;
           const p = I * I * c.value;
           if (p > 0.25) warnings.push(`Resistor ${c.label || c.id}: ${p.toFixed(2)} W — exceeds a typical 1/4W resistor's rating`);
-        } else if (c.type === 'led') {
+        } else if (c.type === 'led' || c.type === 'diode') {
           const on = this._ledState.get(c.id);
-          I = on ? (va - vb - (LED_VF[c.color] || 1.8)) / LED_RON : 0;
-          if (I > 0.03) warnings.push(`LED ${c.label || c.id}: ${(I * 1000).toFixed(0)} mA — add a current-limiting resistor`);
+          I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;
+          if (c.type === 'led' && I > 0.03) warnings.push(`LED ${c.label || c.id}: ${(I * 1000).toFixed(0)} mA — add a current-limiting resistor`);
+          if (c.type === 'diode' && I > 1.0) warnings.push(`Diode ${c.label || c.id}: ${I.toFixed(2)} A — exceeds a typical small rectifier's rating`);
         } else if (c.type === 'capacitor') {
           const vPrev = this._capState.get(c.id) || 0;
           I = (c.value * ((va - vb) - vPrev)) / Math.max(dt, 1e-6);
           this._capState.set(c.id, va - vb);
         } else if (c.type === 'potentiometer') {
           I = 0;
-        } else if (c.type === 'switch') {
+        } else if (c.type === 'switch' || c.type === 'pushbutton') {
           I = 0;
         }
         currents.set(c.id, I);
@@ -319,7 +332,7 @@
     }
   }
 
-  const api = { Circuit, UnionFind, solveLinear, LED_VF, LED_RON, BATTERY_RINT };
+  const api = { Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

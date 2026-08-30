@@ -35,7 +35,7 @@
     { id: 'railBM', kind: 'rail', label: '-', color: '#3f7fe0' },
   ];
 
-  const GAP_BEFORE = { a: 16, f: 24, railBP: 16 };
+  const GAP_BEFORE = { a: 16, f: 10, railBP: 16 };
 
   function xForCol(col) {
     return MARGIN + (col - 1) * HOLE + Math.floor((col - 1) / 5) * GROUP_GAP;
