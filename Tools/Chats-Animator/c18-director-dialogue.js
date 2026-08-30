@@ -33,6 +33,26 @@
     log.scrollTop = log.scrollHeight;
   }
 
+  function showAutomaticWork(result) {
+    const reused = result?.plan?.automatic?.reusedMotion || [];
+    for (const item of reused) {
+      const action = item?.need?.action || 'motion';
+      const actor = item?.need?.actor ? ` for ${item.need.actor}` : '';
+      const name = item?.name || `motion ${item?.index ?? ''}`;
+      addMessage('Dream', `Reused ${name}${actor} for ${action}.`);
+    }
+
+    if (result?.audit?.ok) {
+      const count = Array.isArray(result?.results) ? result.results.length : 0;
+      addMessage('Administrator', `Checked ${count} executed step${count === 1 ? '' : 's'} — no executor failures reported.`);
+    }
+
+    const missing = Array.isArray(result?.missing) ? result.missing : [];
+    if (missing.length) {
+      addMessage('Dream', `${missing.length} creative gap${missing.length === 1 ? '' : 's'} still need human/AI judgment or a new asset.`);
+    }
+  }
+
   async function submit() {
     const text = input.value.trim();
     if (!text) return;
@@ -48,8 +68,13 @@
       const stage = result?.stage || 'M4';
       const message = result?.message || (result?.ok ? 'Done.' : 'Could not route request.');
       addMessage(stage, message);
+      showAutomaticWork(result);
       A.status(message);
-      state.textContent = result?.ok ? `${stage} complete` : `${stage} needs input`;
+
+      if (result?.pending) state.textContent = `${stage} waiting for assistant`;
+      else if (result?.ok && result?.missing?.length) state.textContent = 'Automatic work done — creative input needed';
+      else if (result?.ok) state.textContent = 'Automatic checks passed';
+      else state.textContent = `${stage} needs input`;
     } catch (error) {
       console.error(error);
       addMessage('Administrator', `Edit failed: ${error.message || error}`);
@@ -66,5 +91,5 @@
   });
 
   A.directorDialogue = { history, submit };
-  addMessage('M4', 'Ready. Cells parse, Nerves react, M4 routes, Dream proposes, Administrator checks, and the control API executes.');
+  addMessage('M4', 'Ready. Routine Dream prep and Administrator checks run automatically; human and AI handle the creative choices that remain.');
 })();
