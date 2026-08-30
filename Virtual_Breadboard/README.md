@@ -140,10 +140,11 @@ fetch one.
    - The **Potentiometer** is different — it's a real 6-pin trimmer, so one
      click on an anchor hole (any strip row, not a rail) places all 6 legs,
      straddling the center channel automatically.
-   - The **Y-Split Wire** is a single physical wire feeding 3 holes — good
-     for tapping a ground/rail node to a second point without a whole
-     second jumper. Click end A, then end B (the main end-to-end run), then
-     the branch hole; the branch taps off the midpoint of that run.
+   - The **Y-Split Wire** is a standalone part bridging two rows, forked to
+     2 holes at each end (a V/Y shape) — good for carrying a ground/rail
+     node from 2 points on one side to 2 more points on the other, in one
+     piece. Click 2 holes for one end's fork, then 2 holes for the other
+     end's fork; all 4 holes end up as one electrical node.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, or click any part to
    inspect it — its live voltage, current, and an editable value dropdown
@@ -232,5 +233,5 @@ node test/circuit.test.js
 
 Covers Ohm's law, LED/diode forward conduction and reverse blocking,
 short-circuit detection, over-current warnings, real RC charging curves,
-switch/pushbutton open-closed behavior, and a Y-split wire tying 3 holes
-to one electrical node.
+switch/pushbutton open-closed behavior, and a Y-split wire tying 4 holes
+(2 forked at each end) to one electrical node.

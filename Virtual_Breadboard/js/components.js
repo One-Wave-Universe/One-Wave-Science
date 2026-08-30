@@ -28,10 +28,10 @@
 
   const PALETTE = [
     { type: 'wire', label: 'Jumper Wire', terminals: 2, icon: '/' },
-    // end A, end B (the "end to end" run), then the branch hole the tap
-    // reaches — one physical wire, all 3 holes the same node. For
-    // distributing a ground/rail to a second point without a second wire.
-    { type: 'ywire', label: 'Y-Split Wire', terminals: 3, icon: 'Y' },
+    // A standalone 4-lead part: each end forks into 2 holes (a V/Y at both
+    // ends), joined by one wire in the middle — all 4 holes the same node.
+    // For distributing a ground/rail from 2 points to 2 more points.
+    { type: 'ywire', label: 'Y-Split Wire', terminals: 4, icon: 'Y' },
     { type: 'resistor', label: 'Resistor', terminals: 2, icon: '▭', defaultValue: 220 },
     { type: 'led', label: 'LED', terminals: 2, icon: '●', defaultColor: 'red' },
     { type: 'diode', label: 'Diode', terminals: 2, icon: '▷|' },
@@ -396,17 +396,32 @@
   // t[1] (drawn exactly like a normal wire), with a third lead tapping off
   // its midpoint out to t[2] — for feeding a ground/rail node to a second
   // point without a whole second jumper. All 3 holes are one electrical node.
+  // t = [end1A, end1B, end2A, end2B]: a standalone 4-lead part — each end
+  // forks (a V/Y) into 2 holes, joined by one wire between the two fork
+  // points. All 4 holes are one electrical node. Good for bridging one
+  // node (e.g. a ground/rail row) from 2 points to 2 more points elsewhere.
+  function yWireJunctions(t) {
+    return [
+      { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 },
+      { x: (t[2].x + t[3].x) / 2, y: (t[2].y + t[3].y) / 2 },
+    ];
+  }
+
   function drawYWire(ctx, t, color, opacity, style) {
-    drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, color, opacity, style);
-    const midX = (t[0].x + t[1].x) / 2;
-    const midY = (t[0].y + t[1].y) / 2;
-    drawWire(ctx, midX, midY, t[2].x, t[2].y, color, opacity, style);
+    const [j1, j2] = yWireJunctions(t);
+    drawWire(ctx, t[0].x, t[0].y, j1.x, j1.y, color, opacity, style);
+    drawWire(ctx, t[1].x, t[1].y, j1.x, j1.y, color, opacity, style);
+    drawWire(ctx, j1.x, j1.y, j2.x, j2.y, color, opacity, style);
+    drawWire(ctx, t[2].x, t[2].y, j2.x, j2.y, color, opacity, style);
+    drawWire(ctx, t[3].x, t[3].y, j2.x, j2.y, color, opacity, style);
     ctx.save();
     ctx.globalAlpha = op(opacity);
-    ctx.beginPath();
-    ctx.arc(midX, midY, 2.5, 0, Math.PI * 2);
     ctx.fillStyle = color || '#2a6f4a';
-    ctx.fill();
+    [j1, j2].forEach((j) => {
+      ctx.beginPath();
+      ctx.arc(j.x, j.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
     ctx.restore();
   }
 
@@ -424,7 +439,7 @@
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     resistorColorBands, formatOhms, formatFarads,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
-    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, roundRect, lerp,
+    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, roundRect, lerp,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

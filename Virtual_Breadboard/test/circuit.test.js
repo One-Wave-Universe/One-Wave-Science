@@ -177,26 +177,26 @@ function approx(a, b, eps, msg) {
   console.log('Test 9 OK: pushbutton momentary behavior correct');
 }
 
-// Test 10: a Y-split wire is just two zero-resistance ties sharing an
-// endpoint (root->end-B, root->branch) — confirm all 3 holes end up as one
-// electrical node, the mechanism app.js's Y-split wire relies on.
+// Test 10: a Y-split wire is a standalone 4-lead part — each end forks to 2
+// holes, joined by a run between the forks — modeled as 3 zero-resistance
+// ties (end1A-end1B, end1A-end2A, end2A-end2B). Confirm all 4 holes end up
+// as one electrical node, the mechanism app.js's Y-split wire relies on.
 {
   const c = new Circuit();
   const els = {
-    wires: [{ a: 'A', b: 'B' }, { a: 'A', b: 'C' }],
+    wires: [{ a: 'A1', b: 'B1' }, { a: 'A1', b: 'A2' }, { a: 'A2', b: 'B2' }],
     components: [
-      { id: 'bat1', type: 'battery', a: 'A', b: 'M', value: 9 },
-      { id: 'r1', type: 'resistor', a: 'C', b: 'M', value: 1000 },
+      { id: 'bat1', type: 'battery', a: 'A1', b: 'M', value: 9 },
+      { id: 'r1', type: 'resistor', a: 'B2', b: 'M', value: 1000 },
     ],
   };
   const res = c.solve(els, 1 / 60);
-  const vA = res.voltages.get(res.uf.find('A'));
-  const vB = res.voltages.get(res.uf.find('B'));
-  const vC = res.voltages.get(res.uf.find('C'));
-  approx(vA, vB, 1e-9, 'Y-split: end A and end B should be the same node');
-  approx(vA, vC, 1e-9, 'Y-split: end A and the branch should be the same node');
-  approx(res.currents.get('r1'), 9 / 1001, 1e-3, 'current flows through the branch as expected');
-  console.log('Test 10 OK: Y-split ties all 3 holes to one node, V =', vA.toFixed(3), 'V');
+  const v = ['A1', 'B1', 'A2', 'B2'].map((id) => res.voltages.get(res.uf.find(id)));
+  approx(v[0], v[1], 1e-9, 'Y-split: end1A and end1B should be the same node');
+  approx(v[0], v[2], 1e-9, 'Y-split: end1A and end2A should be the same node');
+  approx(v[0], v[3], 1e-9, 'Y-split: end1A and end2B should be the same node');
+  approx(res.currents.get('r1'), 9 / 1001, 1e-3, 'current flows through the far fork as expected');
+  console.log('Test 10 OK: Y-split ties all 4 holes to one node, V =', v[0].toFixed(3), 'V');
 }
 
 console.log('\nAll circuit engine tests passed.');

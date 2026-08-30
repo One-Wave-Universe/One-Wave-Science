@@ -62,10 +62,12 @@
       if (p.type === 'wire') {
         wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
       } else if (p.type === 'ywire') {
-        // end-to-end run plus a tap to the branch hole — both pairs zero
-        // resistance, so all 3 holes end up as one electrical node
-        wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
-        wires.push({ a: p.terminals[0].cellId, b: p.terminals[2].cellId });
+        // each end's fork, plus the run joining the two forks — 3 zero-
+        // resistance ties chain all 4 holes into one electrical node
+        const t = p.terminals;
+        wires.push({ a: t[0].cellId, b: t[1].cellId });
+        wires.push({ a: t[0].cellId, b: t[2].cellId });
+        wires.push({ a: t[2].cellId, b: t[3].cellId });
       } else if (p.type === 'potentiometer') {
         const t = p.terminals;
         if (t.length === 6) {
@@ -167,7 +169,7 @@
     } else if (state.tool === 'ywire') {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = 'One physical wire feeding 3 holes — good for a ground/rail tap. Click end A, then end B (the main run), then the branch hole.';
+      p.textContent = 'One physical wire bridging 2 rows, forked to 2 holes at each end — good for a ground/rail tap. Click 2 holes for one end, then 2 holes for the other end.';
       toolOptionsEl.appendChild(p);
     } else if (state.tool === 'diode') {
       const p = document.createElement('p');
@@ -238,7 +240,7 @@
   // for cosmetic color-cycling), so the caller resolves it and passes it in.
   function buildPart(type, holes, opts) {
     if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor, style: 'loop' };
-    if (type === 'ywire') return { type: 'ywire', terminals: holes.slice(0, 3), color: opts.wireColor, style: 'loop' };
+    if (type === 'ywire') return { type: 'ywire', terminals: holes.slice(0, 4), color: opts.wireColor, style: 'loop' };
     if (type === 'resistor') return { type: 'resistor', terminals: holes.slice(0, 2), value: opts.resistorValue };
     if (type === 'led') return { type: 'led', terminals: holes.slice(0, 2), color: opts.ledColor };
     if (type === 'diode') return { type: 'diode', terminals: holes.slice(0, 2) };
@@ -295,11 +297,14 @@
         const top = Math.min(t[1].y, t[4].y) - 17;
         const bottom = Math.max(t[1].y, t[4].y) + 17;
         if (pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom) return p;
-      } else if (t.length === 3) {
-        const mid = yWireMidpoint(t);
+      } else if (t.length === 4) {
+        const [j1, j2] = Components.yWireJunctions(t);
         if (
-          distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14 ||
-          distToSegment(pos.x, pos.y, mid.x, mid.y, t[2].x, t[2].y) < 14
+          distToSegment(pos.x, pos.y, t[0].x, t[0].y, j1.x, j1.y) < 14 ||
+          distToSegment(pos.x, pos.y, t[1].x, t[1].y, j1.x, j1.y) < 14 ||
+          distToSegment(pos.x, pos.y, j1.x, j1.y, j2.x, j2.y) < 14 ||
+          distToSegment(pos.x, pos.y, t[2].x, t[2].y, j2.x, j2.y) < 14 ||
+          distToSegment(pos.x, pos.y, t[3].x, t[3].y, j2.x, j2.y) < 14
         ) return p;
       } else if (t.length === 2) {
         if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
@@ -308,16 +313,14 @@
     return null;
   }
 
-  // the point where a Y-split wire's branch taps off its main end-to-end run
-  function yWireMidpoint(t) {
-    return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
-  }
-
   // where the selection ring / occupied-hole body is centered for a part
   function partCenter(p) {
     const t = p.terminals;
     if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
-    if (t.length === 3) return yWireMidpoint(t);
+    if (t.length === 4) {
+      const [j1, j2] = Components.yWireJunctions(t);
+      return { x: (j1.x + j2.x) / 2, y: (j1.y + j2.y) / 2 };
+    }
     return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
   }
 
