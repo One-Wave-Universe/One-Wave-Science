@@ -9,7 +9,14 @@ RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}/one-wave-animator"
 PID_FILE="$RUNTIME_DIR/server.pid"
 DIR_FILE="$RUNTIME_DIR/server-app-dir"
 LOG_FILE="$RUNTIME_DIR/server.log"
+CONFIG_FILE="$HOME/.config/one-wave-animator/openai.env"
 mkdir -p "$RUNTIME_DIR"
+
+# Load the user's OpenAI Director key/config without placing secrets in the app files.
+if [[ -f "$CONFIG_FILE" ]]; then
+  # shellcheck disable=SC1090
+  source "$CONFIG_FILE"
+fi
 
 server_alive() {
   if [[ -f "$PID_FILE" ]]; then
@@ -37,9 +44,8 @@ if server_alive; then
   fi
 fi
 
-# Prefer the live local assistant server. If it cannot start, keep the animator
-# usable and fall back to a plain local file server; the dialogue reports AI
-# availability separately instead of killing the whole editor.
+# Start the local bridge that serves the animator and routes creative work.
+# The animator remains usable for manual/local edits even when no OpenAI key is configured.
 if ! server_alive; then
   nohup python3 "$APP_DIR/assistant_server.py" >"$LOG_FILE" 2>&1 &
   echo $! > "$PID_FILE"
