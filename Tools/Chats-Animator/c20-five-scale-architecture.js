@@ -4,7 +4,6 @@
   if (!A?.control) throw new Error('C20 requires Animator control API');
 
   const clone = (value) => A.clone ? A.clone(value) : JSON.parse(JSON.stringify(value));
-  const normalize = (value) => String(value || '').trim().toLowerCase();
 
   const Cells = {
     parse(text) {
@@ -33,30 +32,6 @@
       if (/make (?:this|it) faster/i.test(raw)) return { type: 'adjust-hold', delta: -1 };
       if (/make (?:this|it) slower/i.test(raw)) return { type: 'adjust-hold', delta: 1 };
       return { type: 'scene', raw };
-    },
-    splitActions(text) {
-      return String(text || '').replace(/[.!?]+/g, ' and ').split(/\b(?:and then|then|and|,)\b/i).map((x) => x.trim()).filter(Boolean);
-    },
-    actor(text, fallback = '') {
-      const m = String(text || '').match(/^\s*(?:have\s+)?([A-Za-z0-9_-]+)\s+(?:to\s+)?/i);
-      return m ? m[1] : fallback;
-    },
-    action(clause) {
-      const t = normalize(clause);
-      const known = [
-        ['walk toward', 'walk toward'], ['walk away', 'walk away'], ['run toward', 'run toward'], ['run away', 'run away'],
-        ['scurry', 'scurry'], ['kick', 'kick'], ['jump', 'jump'], ['run', 'run'], ['walk', 'walk'], ['look', 'look'],
-        ['pick', 'pick up'], ['sniff', 'sniff'], ['stop', 'stop']
-      ];
-      for (const [needle, action] of known) if (t.includes(needle)) return action;
-      return '';
-    },
-    target(clause, action) {
-      if (!action) return '';
-      const raw = String(clause || '').trim();
-      const rx = new RegExp(`\\b${action.replace(/\s+/g, '\\s+')}\\b\\s+(?:at|to|toward|towards|over|into|from)?\\s*(.*)$`, 'i');
-      const m = raw.match(rx);
-      return m ? m[1].replace(/^(?:the|a|an)\s+/i, '').trim() : '';
     }
   };
 
@@ -69,89 +44,89 @@
     }
   };
 
-  const Workers = {
-    motionLibrary() { return A.motionLibrary?.library || { sequences: [] }; },
-    sequenceIndexFor(action, actor = '') {
-      const wanted = normalize(action);
-      const who = normalize(actor);
-      const sequences = Workers.motionLibrary().sequences || [];
-      let best = -1;
-      let score = -1;
-      sequences.forEach((seq, index) => {
-        const name = normalize(seq.name);
-        const tag = normalize(seq.characterTag);
-        let next = 0;
-        if (name === wanted) next += 8;
-        if (name.includes(wanted) || wanted.includes(name)) next += 5;
-        if (who && tag === who) next += 4;
-        else if (who && tag && (tag.includes(who) || who.includes(tag))) next += 2;
-        if (next > score) { score = next; best = index; }
-      });
-      return score >= 5 ? best : -1;
+  // The human + attached assistant are the high-level workers.
+  // This port deliberately does not invent a scene plan on its own.
+  const DirectorPort = {
+    worker: null,
+    attach(worker) {
+      if (typeof worker !== 'function') throw new Error('Director worker must be a function');
+      DirectorPort.worker = worker;
+      window.oneWaveDirectorWorker = worker;
+      Nerves.emit('onewave-director-attached', { attached: true });
+      A.status('Director worker attached');
+      return true;
     },
-    planScene(text, context) {
-      const clauses = Cells.splitActions(text);
-      const steps = [];
-      const missing = [];
-      let actor = Cells.actor(clauses[0], '');
-      clauses.forEach((clause, order) => {
-        actor = Cells.actor(clause, actor) || actor;
-        const action = Cells.action(clause);
-        if (!action) return;
-        const target = Cells.target(clause, action);
-        const index = Workers.sequenceIndexFor(action, actor);
-        if (index >= 0) {
-          steps.push({ operation: 'insert_motion', args: { index }, meta: { order, actor, action, target } });
-        } else {
-          missing.push({ order, actor, action, target, kind: 'motion' });
-        }
-      });
-      return {
-        type: 'scene-plan', sourceText: text, frame: context.frame, steps, missing,
-        message: missing.length ? `${steps.length} motion step${steps.length === 1 ? '' : 's'} ready; ${missing.length} missing.` : `${steps.length} motion step${steps.length === 1 ? '' : 's'} ready.`
-      };
+    detach() {
+      DirectorPort.worker = null;
+      if (window.oneWaveDirectorWorker) delete window.oneWaveDirectorWorker;
+      Nerves.emit('onewave-director-attached', { attached: false });
+      A.status('Director worker detached');
     },
-    queueAsset(job) {
-      const key = 'onewave-asset-worker-queue-v1';
-      let queue = [];
-      try { queue = JSON.parse(localStorage.getItem(key) || '[]'); } catch (_) {}
-      const item = {
-        id: `asset-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        status: 'needed', createdAt: new Date().toISOString(), kind: job.kind || 'asset', prompt: job.prompt || '', frame: job.frame || 1
+    get attached() {
+      return typeof (DirectorPort.worker || window.oneWaveDirectorWorker) === 'function';
+    },
+    async request(request, context) {
+      const worker = DirectorPort.worker || window.oneWaveDirectorWorker;
+      if (typeof worker === 'function') return worker({ request: clone(request), context: clone(context), control: A.control });
+      const envelope = {
+        id: `director-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        request: clone(request),
+        context: clone(context),
+        operations: [...A.control.operations]
       };
-      queue.push(item);
-      if (queue.length > 100) queue = queue.slice(-100);
-      try { localStorage.setItem(key, JSON.stringify(queue)); } catch (_) {}
-      Nerves.emit('onewave-asset-needed', clone(item));
-      return item;
+      Nerves.emit('onewave-director-request', envelope);
+      return { pending: true, stage: 'Director', envelope, message: 'Director request ready for an attached assistant.' };
     }
   };
 
+  // Dream is thin creative support. The creative source is normally the user.
   const Dream = {
-    async generate(request, context) {
-      const job = { type: 'create-asset', kind: request.kind, prompt: request.prompt, frame: context.frame, project: context.project, requestedAt: context.time };
+    async requestAsset(request, context) {
+      const job = {
+        type: 'create-asset',
+        kind: request.kind,
+        prompt: request.prompt,
+        frame: context.frame,
+        project: context.project,
+        requestedAt: context.time
+      };
       if (typeof window.oneWaveAssetWorker === 'function') return window.oneWaveAssetWorker(job);
-      const item = Workers.queueAsset(job);
-      return { pending: true, worker: 'local-asset-queue', request: item, message: `Asset worker queued ${item.kind}: ${item.prompt}` };
+      Nerves.emit('onewave-asset-request', job);
+      return { pending: true, stage: 'Dream', job, message: `Asset request ready: ${request.kind} — ${request.prompt}` };
     },
-    async plan(request, context) {
-      if (typeof window.oneWaveDirectorWorker === 'function') return window.oneWaveDirectorWorker({ request, animator: A, context });
-      return Workers.planScene(request.text || request.raw || '', context);
+    support(plan, context) {
+      const missing = Array.isArray(plan?.missing) ? plan.missing : [];
+      return {
+        missing,
+        suggestions: missing.map((need) => ({
+          kind: need.kind || 'motion',
+          prompt: [need.actor, need.action, need.target].filter(Boolean).join(' ').trim(),
+          frame: plan?.frame || context.frame
+        }))
+      };
     }
   };
 
+  // Administrator is thin supervision: validate, protect continuity, approve executable work.
   const Administrator = {
-    evaluate(parsed, context) {
+    evaluate(parsed) {
       if (!parsed) return { ok: false, reason: 'Nothing parsed' };
       if (parsed.type === 'control' && !A.control.operations.includes(parsed.operation)) return { ok: false, reason: `Unsupported operation: ${parsed.operation}` };
       if (parsed.type === 'generate' && !parsed.prompt) return { ok: false, reason: 'Generation prompt is empty' };
       if (parsed.type === 'control' && parsed.operation === 'capture_motion' && parsed.args.end < parsed.args.start) return { ok: false, reason: 'Motion end frame is before start frame' };
-      return { ok: true, parsed, context };
+      return { ok: true };
     },
-    evaluatePlan(plan) {
-      if (!plan || !Array.isArray(plan.steps)) return { ok: false, reason: 'Planner did not return a step list' };
-      for (const step of plan.steps) if (!step?.operation || !A.control.operations.includes(step.operation)) return { ok: false, reason: `Unsupported planned operation: ${step?.operation || 'missing'}` };
-      return { ok: true, plan };
+    evaluatePlan(plan, context) {
+      if (!plan || !Array.isArray(plan.steps)) return { ok: false, reason: 'Director did not return an executable step list' };
+      for (const step of plan.steps) {
+        if (!step?.operation || !A.control.operations.includes(step.operation)) return { ok: false, reason: `Unsupported planned operation: ${step?.operation || 'missing'}` };
+        if (step.operation === 'select_frame') {
+          const frame = Number(step.args?.frame);
+          const count = Number(context.project?.frames?.length || 0);
+          if (!Number.isInteger(frame) || frame < 1 || frame > count) return { ok: false, reason: `Planned frame ${step.args?.frame} does not exist` };
+        }
+      }
+      return { ok: true };
     },
     acceptAssets(result) {
       const assets = Array.isArray(result?.assets) ? result.assets : (result?.asset ? [result.asset] : []);
@@ -165,29 +140,42 @@
   };
 
   const M4 = {
-    async executePlan(plan) {
-      const verdict = Administrator.evaluatePlan(plan);
+    async context() {
+      return {
+        frame: (A.reel?.activeIndex ?? 0) + 1,
+        time: new Date().toISOString(),
+        project: await A.control.call('get_project').then((r) => r.result),
+        scene: await A.control.call('get_scene').then((r) => r.result),
+        motionLibrary: await A.control.call('get_motion_library').then((r) => r.result),
+        operations: [...A.control.operations]
+      };
+    },
+    async executePlan(plan, context) {
+      const verdict = Administrator.evaluatePlan(plan, context);
       if (!verdict.ok) return { ok: false, stage: 'Administrator', message: verdict.reason, plan };
       const results = [];
       for (const step of plan.steps) results.push({ step, result: await A.control.call(step.operation, step.args || {}) });
-      const missing = Array.isArray(plan.missing) ? plan.missing : [];
-      if (missing.length) {
-        const project = await A.control.call('get_project').then((r) => r.result);
-        for (const need of missing) {
-          await Dream.generate({ kind: need.kind === 'motion' ? 'character' : (need.kind || 'asset'), prompt: `${need.actor ? `${need.actor} ` : ''}${need.action || ''}${need.target ? ` ${need.target}` : ''}`.trim() }, { frame: plan.frame, time: new Date().toISOString(), project });
-        }
-      }
+
+      const support = Dream.support(plan, context);
+      for (const request of support.suggestions) await Dream.requestAsset(request, context);
+
       return {
-        ok: results.length > 0 || missing.length > 0,
-        stage: missing.length ? 'Dream' : 'Executor', plan, results, missing,
-        message: missing.length ? `${results.length} step${results.length === 1 ? '' : 's'} executed; ${missing.length} missing motion asset${missing.length === 1 ? '' : 's'} queued.` : `${results.length} step${results.length === 1 ? '' : 's'} executed.`
+        ok: results.length > 0 || support.missing.length > 0,
+        stage: support.missing.length ? 'Dream' : 'Executor',
+        plan,
+        results,
+        missing: support.missing,
+        message: support.missing.length
+          ? `${results.length} step${results.length === 1 ? '' : 's'} executed; ${support.missing.length} missing asset request${support.missing.length === 1 ? '' : 's'} surfaced.`
+          : `${results.length} step${results.length === 1 ? '' : 's'} executed.`
       };
     },
     async route(text) {
       const parsed = Cells.parse(text);
-      const context = { frame: (A.reel?.activeIndex ?? 0) + 1, time: new Date().toISOString(), project: await A.control.call('get_project').then((r) => r.result) };
-      const verdict = Administrator.evaluate(parsed, context);
+      const context = await M4.context();
+      const verdict = Administrator.evaluate(parsed);
       if (!verdict.ok) return { ok: false, stage: 'Administrator', message: verdict.reason };
+
       if (parsed.type === 'control') return { ok: true, stage: 'Executor', parsed, result: await A.control.call(parsed.operation, parsed.args || {}), message: parsed.operation };
       if (parsed.type === 'picker') { Nerves.click(parsed.target); return { ok: true, stage: 'Nerves', parsed, message: parsed.message }; }
       if (parsed.type === 'adjust-hold') {
@@ -196,18 +184,25 @@
         return { ok: true, stage: 'Executor', parsed, result: await A.control.call('set_hold', { hold }), message: `Hold ${hold}x` };
       }
       if (parsed.type === 'generate') {
-        const generated = await Dream.generate(parsed, context);
+        const generated = await Dream.requestAsset(parsed, context);
         if (generated?.asset || generated?.assets) await Promise.all(Administrator.acceptAssets(generated));
-        return { ok: true, stage: 'Dream', parsed, generated, message: generated?.message || 'Generation request sent' };
+        return { ok: true, stage: 'Dream', parsed, generated, message: generated?.message || 'Asset request sent' };
       }
-      const planned = await Dream.plan({ text, parsed }, context);
-      if (Array.isArray(planned?.steps)) return M4.executePlan(planned);
-      return { ok: false, stage: 'M4', message: 'Request could not be turned into executable work.' };
+
+      const planned = await DirectorPort.request({ text, parsed }, context);
+      if (planned?.pending) return { ok: false, stage: 'Director', pending: true, message: planned.message, envelope: planned.envelope };
+      if (Array.isArray(planned?.steps)) return M4.executePlan(planned, context);
+      if (planned?.asset || planned?.assets) {
+        await Promise.all(Administrator.acceptAssets(planned));
+        return { ok: true, stage: 'Administrator', message: planned.message || 'Asset accepted' };
+      }
+      return { ok: false, stage: 'Director', message: 'Attached Director worker returned no executable plan.' };
     }
   };
 
-  A.architecture = { Cells, Nerves, M4, Dream, Administrator, Workers };
-  A.workers = Workers;
+  A.architecture = { Cells, Nerves, M4, Dream, Administrator, DirectorPort };
+  A.directorPort = DirectorPort;
   window.OneWaveArchitecture = A.architecture;
-  A.status('Five-scale architecture and workers ready');
+  window.OneWaveDirectorPort = DirectorPort;
+  A.status('Delegation ready — human + attached assistant are the workers');
 })();
