@@ -29,15 +29,17 @@ stop_server() {
   rm -f "$PID_FILE" "$DIR_FILE"
 }
 
-# Always stop an older/static server so the live AI endpoint cannot be shadowed
-# by a previous extracted or installed copy.
+# Replace any server started by another extracted/installed copy.
 if server_alive; then
   previous_dir="$(cat "$DIR_FILE" 2>/dev/null || true)"
-  if [[ "$previous_dir" != "$APP_DIR" ]] || ! grep -q 'One-Wave Animator live server' "$LOG_FILE" 2>/dev/null; then
+  if [[ "$previous_dir" != "$APP_DIR" ]]; then
     stop_server
   fi
 fi
 
+# Prefer the live local assistant server. If it cannot start, keep the animator
+# usable and fall back to a plain local file server; the dialogue reports AI
+# availability separately instead of killing the whole editor.
 if ! server_alive; then
   nohup python3 "$APP_DIR/assistant_server.py" >"$LOG_FILE" 2>&1 &
   echo $! > "$PID_FILE"
@@ -46,8 +48,13 @@ if ! server_alive; then
 fi
 
 if ! curl --fail --silent "http://127.0.0.1:${PORT}/api/assistant/health" >/dev/null 2>&1; then
-  printf 'One-Wave Animator server failed to start. Log: %s\n' "$LOG_FILE" >&2
-  exit 1
+  if server_alive; then
+    stop_server
+  fi
+  nohup python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP_DIR" >"$LOG_FILE" 2>&1 &
+  echo $! > "$PID_FILE"
+  printf '%s\n' "$APP_DIR" > "$DIR_FILE"
+  sleep 0.35
 fi
 
 if command -v chromium >/dev/null 2>&1; then
