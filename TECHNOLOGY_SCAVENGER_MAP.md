@@ -178,13 +178,6 @@ Still ours to solve:
 - generated states require Field/Administrator provenance and acceptance;
 - determine whether hardware stochasticity is actually useful versus software sampling on the target platform.
 
-Key external results:
-- Nature 2019 stochastic-MTJ probabilistic computing;
-- Nature Communications 2024 on-chip p-bit core;
-- Nature Communications 2024 CMOS+sMTJ probabilistic/deep Boltzmann prototype;
-- Nature Electronics 2025 large integrated probabilistic computer;
-- Nature Communications 2026 FTJ-based hardware Boltzmann machine.
-
 ## G. Hopfield / associative-memory hardware
 
 External family:
@@ -207,9 +200,6 @@ Still ours to solve:
 - pattern separation and provenance;
 - route-aware reconstruction;
 - separation between fast recalled candidate and authoritative archive.
-
-Important current result:
-- Nature Communications 2026 demonstrated hardware-adaptive Hopfield-style associative memory on memristor crossbars with binary and continuous patterns.
 
 ## H. Biological memory mechanisms worth stealing computationally
 
@@ -277,6 +267,46 @@ Still ours to solve:
 
 ## J. M4 / brainstem-router analogues
 
+### Hierarchical quadruped motor control — robot-dog pattern
+
+External family:
+- ANYmal low-level locomotion controllers;
+- DeepMind Neural Probabilistic Motor Primitives (NPMP);
+- hierarchical reinforcement learning for quadrupeds;
+- low-level MPC or learned gait controllers under slower high-level planners;
+- Boston Dynamics Spot high-level navigation/autonomy over lower-level locomotion/joint control.
+
+What already exists:
+- a fast low-level controller continuously converts a compact high-level intent into joint/motor commands;
+- the low-level layer runs faster than the planner;
+- learned motor primitives can be reused across higher-level tasks;
+- high-level policy can issue velocity, gait, waypoint, or latent motor-intention commands instead of solving every joint torque;
+- locomotion remains stable while higher layers reason at a slower timescale.
+
+Concrete external examples:
+- Google/DeepMind NPMP: future trajectory is compressed into a motor intention, and a reusable low-level controller turns current state plus motor intention into actions; the same controller was deployed on ANYmal B;
+- Google hierarchical quadruped locomotion: high-level terrain/skill policy chooses gait/speed while a low-level MPC converts the skill into motor torque commands;
+- Google agile locomotion: high-level and low-level policies use separate observation spaces and timescales, with the low-level policy producing motor commands;
+- Boston Dynamics Spot exposes high-level GraphNav/Missions autonomy while also maintaining a distinct low-level joint-control interface.
+
+Potential reuse:
+- DIRECT REUSE as the architectural pattern for the Android brain/body boundary;
+- M4/subconscious layer can own fast learned motor primitives and timing;
+- higher Field/Void cognition can send compact intent instead of actuator detail;
+- body reflex/locomotion can continue while the brain operates more slowly;
+- gives us concrete latency-ratio and packet-design benchmarks.
+
+Still ours to solve:
+- our M4 also includes associative recall, Field/Void routing, and the proposed oversight/override timing, which these robot systems do not automatically provide;
+- exact mapping between motor intention and our ternary/six-route primitive;
+- how local nerve reactions, M4 motor primitives, and higher Void override arbitrate without fighting each other;
+- whether the desired `flip, flip, oversight; flip, flip, override` scheduler improves control compared with standard hierarchical control.
+
+Classification:
+- DIRECT REUSE for hierarchical fast/slow motor architecture;
+- BENCHMARK for M4 timing and motor-intention interfaces;
+- PARTIAL MATCH for the full M4 concept.
+
 ### Thalamic routing
 
 Research theme:
@@ -320,7 +350,7 @@ Potential reuse:
 - mathematical comparison class for Field candidate prediction and consequence error.
 
 Warning:
-- empirical support is mixed/modest depending on formulation; always compare against feedforward and model-free alternatives.
+- always compare against feedforward and model-free alternatives.
 
 ## K. Oscillator and phase-computing families
 
@@ -348,39 +378,21 @@ These are scientific comparison classes, not evidence that One-Wave is correct.
 
 ### Pilot-wave hydrodynamics
 
-What exists:
-- droplets interacting with their own resonant wave fields;
-- macroscopic wave-mediated dynamics with memory effects;
-- quantum-like analog behavior under limited conditions.
-
 Use:
 - comparison model for wave-mediated path/history dynamics;
 - warning against extrapolating analog systems beyond their demonstrated regime.
 
 ### Nonlinear waves / solitons
 
-What exists:
-- self-maintaining localized wave structures from nonlinearity/dispersion balance;
-- breathers, vortices, nonlinear phase structures.
-
 Use:
 - mathematical candidate families for persistent localized structure.
 
 ### Magnetic skyrmions / topological textures
 
-What exists:
-- stable localized magnetic spin textures;
-- creation, annihilation, motion, topology-dependent stability.
-
 Use:
 - concrete example of a field configuration behaving as a durable information-bearing localized structure.
 
 ### Lattice Boltzmann / multiscale coupling
-
-What exists:
-- mesoscopic lattice dynamics that recover macroscopic fluid equations under defined limits;
-- explicit micro/meso/macro coupling methods;
-- well-developed validation and stability literature.
 
 Use:
 - model for how One-Wave lattice simulations should demonstrate continuum recovery rather than assuming it;
@@ -391,24 +403,26 @@ Use:
 ### Strong-front scavenging
 
 1. Reproduce a three-phase FOC simulation and map every variable against the ternary primitive.
-2. Reproduce a Hopfield partial-cue test and compare with constellation+rabbit routing.
-3. Reproduce a p-bit/Boltzmann network in software before considering exotic hardware.
-4. Build a center-reference differential circuit simulation and measure drift/noise/load response.
+2. Reproduce a hierarchical quadruped controller with a compact high-level velocity/intention packet driving a faster low-level gait controller.
+3. Reproduce a Hopfield partial-cue test and compare with constellation+rabbit routing.
+4. Reproduce a p-bit/Boltzmann network in software before considering exotic hardware.
+5. Build a center-reference differential circuit simulation and measure drift/noise/load response.
 
 ### Weak-front scavenging
 
 1. Find the closest existing four-variable magnetic sensing architecture to the quadratic Views.
 2. Find the closest existing four-state/multi-axis magnetic write architecture to the quadratic Actions.
 3. Find a minimal existing circuit that maps DC polarity/choice into phase-controlled three-winding output.
-4. Find reusable open-source implementations for HDC/VSA, HNSW, Hopfield, continuous attractors, and FOC.
+4. Find reusable open-source implementations for HDC/VSA, HNSW, Hopfield, continuous attractors, FOC, and quadruped low-level locomotion.
 
 ### Middle-front scavenging
 
 1. Test whether Clarke/Park d-q variables can serve as a lawful bridge between three winding state and four-view packets.
 2. Test whether View/action separation resembles sensor/estimator vs controller/actuator separation in modern control.
-3. Connect HDC/VSA relational storage to Hopfield completion without losing provenance.
-4. Compare cerebellar forward-model logic against the current M4 consequence loop.
-5. Compare thalamic routing against M4 without copying biological labels.
+3. Compare quadruped motor-intention interfaces directly with the M4 brain/body packet.
+4. Connect HDC/VSA relational storage to Hopfield completion without losing provenance.
+5. Compare cerebellar forward-model logic against the current M4 consequence loop.
+6. Compare thalamic routing against M4 without copying biological labels.
 
 ## N. Import discipline
 
