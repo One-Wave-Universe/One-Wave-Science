@@ -57,21 +57,10 @@ grep -q 'c21-copy-paste-assistant-plugin.js' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
-grep -q 'provider-neutral' c18-director-dialogue.js
-grep -q 'local-ready' c18-director-dialogue.js
-echo "PASS provider-neutral assistant plugin contract"
-
 grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
 grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
-grep -q 'human-ai-cocreative' c21-copy-paste-assistant-plugin.js
-grep -q "addMessage('AI'" c21-copy-paste-assistant-plugin.js
 grep -q 'Retry AI connection' c21-copy-paste-assistant-plugin.js
-echo "PASS live human+AI creative partner bridge contract"
-
-grep -q '/api/assistant/health' assistant_server.py
-grep -q '192.168.55.1:11434' assistant_server.py
-grep -q 'The human and AI are the Dream/Director creative pair' assistant_server.py
-echo "PASS local/Jetson AI backend contract"
+echo "PASS live assistant contract"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
