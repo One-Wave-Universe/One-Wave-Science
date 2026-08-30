@@ -179,23 +179,36 @@
     return def ? def.terminals : 2;
   }
 
+  // generator: given a tool + the holes clicked, decide what the resulting
+  // part looks like. Pure — no state mutation, easy to test/reason about on
+  // its own. Wire color selection is the one stateful exception (a counter
+  // for cosmetic color-cycling), so the caller resolves it and passes it in.
+  function buildPart(type, holes, opts) {
+    if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor };
+    if (type === 'resistor') return { type: 'resistor', terminals: holes.slice(0, 2), value: opts.resistorValue };
+    if (type === 'led') return { type: 'led', terminals: holes.slice(0, 2), color: opts.ledColor };
+    if (type === 'capacitor') return { type: 'capacitor', terminals: holes.slice(0, 2), value: opts.capacitorValue };
+    if (type === 'battery') return { type: 'battery', terminals: holes.slice(0, 2), value: opts.batteryValue };
+    if (type === 'switch') return { type: 'switch', terminals: holes.slice(0, 2), closed: false };
+    if (type === 'potentiometer') return { type: 'potentiometer', terminals: holes.slice(0, 3), value: 10000, pos: 0.5 };
+    return null;
+  }
+
+  // executor: picks the next cosmetic wire color (the one bit of state this
+  // path needs) and commits the generated part into the board.
+  function nextWireColor() {
+    return WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
+  }
+
   function commitPart(type, holes) {
-    if (type === 'wire') {
-      const color = WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
-      addPart({ type: 'wire', terminals: holes.slice(0, 2), color });
-    } else if (type === 'resistor') {
-      addPart({ type: 'resistor', terminals: holes.slice(0, 2), value: state.toolValue.resistor });
-    } else if (type === 'led') {
-      addPart({ type: 'led', terminals: holes.slice(0, 2), color: state.toolValue.led });
-    } else if (type === 'capacitor') {
-      addPart({ type: 'capacitor', terminals: holes.slice(0, 2), value: state.toolValue.capacitor });
-    } else if (type === 'battery') {
-      addPart({ type: 'battery', terminals: holes.slice(0, 2), value: state.toolValue.battery });
-    } else if (type === 'switch') {
-      addPart({ type: 'switch', terminals: holes.slice(0, 2), closed: false });
-    } else if (type === 'potentiometer') {
-      addPart({ type: 'potentiometer', terminals: holes.slice(0, 3), value: 10000, pos: 0.5 });
-    }
+    const part = buildPart(type, holes, {
+      resistorValue: state.toolValue.resistor,
+      capacitorValue: state.toolValue.capacitor,
+      ledColor: state.toolValue.led,
+      batteryValue: state.toolValue.battery,
+      wireColor: type === 'wire' ? nextWireColor() : undefined,
+    });
+    if (part) addPart(part);
   }
 
   function hitTestPart(pos) {
@@ -248,29 +261,52 @@
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
   }, { passive: true });
 
-  canvas.addEventListener('click', (evt) => {
-    const pos = mousePos(evt);
+  // validator: is this hole a legal next click for the placement in progress?
+  // (rejects only re-clicking the exact same hole twice in a row)
+  function isValidPlacement(pending, hole) {
+    if (!pending.length) return true;
+    const last = pending[pending.length - 1];
+    return !(last.x === hole.x && last.y === hole.y);
+  }
+
+  // executor: the actual state changes for select-mode clicks
+  function toggleSwitch(part) {
+    part.closed = !part.closed;
+  }
+  function selectPart(id) {
+    state.selectedPartId = id;
+    renderProps();
+  }
+
+  // router: a click means something different depending on which tool is
+  // active — this is the only place that decides which path to take.
+  function handleCanvasClick(pos) {
     if (state.tool === 'select') {
-      const part = hitTestPart(pos);
-      if (part && part.type === 'switch') {
-        part.closed = !part.closed;
-      }
-      state.selectedPartId = part ? part.id : null;
-      renderProps();
-      return;
+      handleSelectClick(pos);
+    } else {
+      handlePlacementClick(pos);
     }
+  }
+
+  function handleSelectClick(pos) {
+    const part = hitTestPart(pos);
+    if (part && part.type === 'switch') toggleSwitch(part);
+    selectPart(part ? part.id : null);
+  }
+
+  function handlePlacementClick(pos) {
     const hole = Board.hitTest(board, pos.x, pos.y, 11);
     if (!hole) return;
-    const need = terminalsNeeded(state.tool);
-    if (state.pending.length && state.pending[state.pending.length - 1].x === hole.x && state.pending[state.pending.length - 1].y === hole.y) {
-      return; // clicked the exact same hole again, ignore
-    }
+    if (!isValidPlacement(state.pending, hole)) return;
     state.pending.push(hole);
-    if (state.pending.length >= need) {
+    if (state.pending.length >= terminalsNeeded(state.tool)) {
       commitPart(state.tool, state.pending);
       state.pending = [];
     }
-  });
+  }
+
+  // event handler: just captures the click and hands it to the router
+  canvas.addEventListener('click', (evt) => handleCanvasClick(mousePos(evt)));
 
   window.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
@@ -416,35 +452,41 @@
   }
 
   // ---------------- example presets ----------------
-  function loadPresetLedResistor() {
+  // generator: each preset is just data — a list of parts to place. Building
+  // this list has no effect on the board by itself.
+  function presetLedResistorParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 10), H('f', 10)], value: 5 },
+      { type: 'resistor', terminals: [H('c', 10), H('c', 15)], value: 220 },
+      { type: 'led', terminals: [H('a', 15), H('j', 15)], color: 'red' },
+      { type: 'wire', terminals: [H('h', 10), H('h', 15)], color: nextWireColor() },
+    ];
+  }
+  function presetShortParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 10), H('f', 10)], value: 9 },
+      { type: 'wire', terminals: [H('c', 10), H('h', 10)], color: nextWireColor() },
+    ];
+  }
+  function presetRCParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 9 },
+      { type: 'switch', terminals: [H('b', 5), H('b', 8)], closed: false },
+      { type: 'resistor', terminals: [H('c', 8), H('c', 20)], value: 100000 },
+      { type: 'capacitor', terminals: [H('d', 20), H('g', 20)], value: 100e-6 },
+      { type: 'wire', terminals: [H('i', 5), H('i', 20)], color: nextWireColor() },
+    ];
+  }
+  // executor: the one place that actually clears the board and writes a
+  // preset's parts into it.
+  function applyPreset(parts) {
     state.parts = [];
     circuit.reset();
-    addPart({ type: 'battery', terminals: [H('e', 10), H('f', 10)], value: 5 });
-    addPart({ type: 'resistor', terminals: [H('c', 10), H('c', 15)], value: 220 });
-    addPart({ type: 'led', terminals: [H('a', 15), H('j', 15)], color: 'red' });
-    const color = WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
-    addPart({ type: 'wire', terminals: [H('h', 10), H('h', 15)], color });
+    parts.forEach(addPart);
   }
-  function loadPresetShort() {
-    state.parts = [];
-    circuit.reset();
-    addPart({ type: 'battery', terminals: [H('e', 10), H('f', 10)], value: 9 });
-    const color = WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
-    addPart({ type: 'wire', terminals: [H('c', 10), H('h', 10)], color });
-  }
-  function loadPresetRC() {
-    state.parts = [];
-    circuit.reset();
-    addPart({ type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 9 });
-    addPart({ type: 'switch', terminals: [H('b', 5), H('b', 8)], closed: false });
-    addPart({ type: 'resistor', terminals: [H('c', 8), H('c', 20)], value: 100000 });
-    addPart({ type: 'capacitor', terminals: [H('d', 20), H('g', 20)], value: 100e-6 });
-    const color = WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
-    addPart({ type: 'wire', terminals: [H('i', 5), H('i', 20)], color });
-  }
-  document.getElementById('presetLed').addEventListener('click', () => { loadPresetLedResistor(); selectTool('select'); });
-  document.getElementById('presetShort').addEventListener('click', () => { loadPresetShort(); selectTool('select'); });
-  document.getElementById('presetRC').addEventListener('click', () => { loadPresetRC(); selectTool('select'); });
+  document.getElementById('presetLed').addEventListener('click', () => { applyPreset(presetLedResistorParts()); selectTool('select'); });
+  document.getElementById('presetShort').addEventListener('click', () => { applyPreset(presetShortParts()); selectTool('select'); });
+  document.getElementById('presetRC').addEventListener('click', () => { applyPreset(presetRCParts()); selectTool('select'); });
 
   // ---------------- main loop ----------------
   let lastT = performance.now();
