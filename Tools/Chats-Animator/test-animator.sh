@@ -22,6 +22,7 @@ required=(
   c18-director-dialogue.js
   c19-local-control-api.js
   c20-five-scale-architecture.js
+  c21-copy-paste-assistant-plugin.js
   launch-animator.sh
   install-ubuntu.sh
 )
@@ -48,12 +49,19 @@ echo "PASS launcher/install shell syntax"
 grep -q 'c19-local-control-api.js' index.html
 grep -q 'c20-five-scale-architecture.js' index.html
 grep -q 'c18-director-dialogue.js' index.html
-echo "PASS control/architecture/director scripts wired into index"
+grep -q 'c21-copy-paste-assistant-plugin.js' index.html
+echo "PASS control/architecture/director/AI bridge scripts wired into index"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
 grep -q 'provider-neutral' c18-director-dialogue.js
 grep -q 'local-ready' c18-director-dialogue.js
 echo "PASS provider-neutral assistant plugin contract"
+
+grep -q 'copy-paste-bridge' c21-copy-paste-assistant-plugin.js
+grep -q 'chatgpt-ready' c21-copy-paste-assistant-plugin.js
+grep -q 'claude-ready' c21-copy-paste-assistant-plugin.js
+grep -q 'Apply AI Response' c21-copy-paste-assistant-plugin.js
+echo "PASS universal assistant bridge contract"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
