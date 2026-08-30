@@ -9,6 +9,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#10141a',
     title: 'Virtual Breadboard Simulator',
+    icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,

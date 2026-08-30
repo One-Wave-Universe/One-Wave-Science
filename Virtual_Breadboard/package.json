@@ -27,6 +27,7 @@
       "index.html",
       "style.css",
       "js/**/*",
+      "build/icon.png",
       "!test/**"
     ],
     "linux": {
@@ -35,7 +36,8 @@
         { "target": "deb", "arch": ["x64"] }
       ],
       "category": "Education",
-      "executableName": "virtual-breadboard-simulator"
+      "executableName": "virtual-breadboard-simulator",
+      "icon": "build/icon.png"
     }
   }
 }
