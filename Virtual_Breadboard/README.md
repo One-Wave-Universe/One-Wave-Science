@@ -133,6 +133,42 @@ fetch one.
 7. **Save** / **Load** keep a build in the browser's local storage;
    **Clear** wipes the board.
 
+## Ask AI to build it
+
+The right-hand panel has a dialogue box: describe a circuit in plain
+English ("build a 9V circuit with a green LED and a current-limiting
+resistor") and click **Build it**. Click **settings** above it first to
+pick a provider and paste in your own API key:
+
+- **Anthropic (Claude)** — calls the Messages API directly from the
+  browser using Anthropic's documented `anthropic-dangerous-direct-browser-access`
+  header (meant for exactly this: a client-side app with no backend).
+- **OpenAI** — calls the Chat Completions API the same way.
+- **Custom (OpenAI-compatible)** — any endpoint that speaks the same
+  `POST { model, messages }` shape: a local Ollama/LM Studio server, a
+  self-hosted proxy, another vendor. The endpoint must send CORS headers
+  (`Access-Control-Allow-Origin`) since the request comes straight from
+  the page — most local LLM servers do this by default.
+
+Your key is stored only in this browser's local storage and sent only to
+the provider you picked, directly from the page — it never passes through
+anything else. Whatever the AI returns is checked against the board's real
+rules (`js/ai.js`'s `validateSpec`) before anything is placed — bad row
+names, wrong terminal counts, unknown part types, or invalid values are
+rejected with a specific error instead of silently breaking the board. A
+build that passes validation is applied through the exact same code path
+as the hardcoded example presets (`applyPreset()`), so it's held to the
+same live physics: a bad design still shows up as a short-circuit or
+over-current warning in the status bar.
+
+Adding another provider is one function in `js/ai.js`'s `PROVIDERS` map —
+anything that can take a system prompt + user text and return text works.
+
+Note: this only works in the real app (opened directly, the Ubuntu
+AppImage, or the Android APK) — the in-chat Artifact preview's sandbox
+blocks calls to external AI APIs, so the dialogue box won't be able to
+reach a provider from there.
+
 ## Project layout
 
 ```
@@ -142,6 +178,7 @@ js/circuit.js         circuit-physics engine (MNA solver, component models)
 js/board.js           breadboard geometry, hole layout, hit-testing
 js/components.js      part definitions, defaults, canvas drawing
 js/app.js             toolbox, placement, simulation loop, UI wiring
+js/ai.js               pluggable AI provider layer + circuit-spec validator
 test/circuit.test.js  standalone physics tests (`npm test` / `node test/circuit.test.js`)
 main.js               Electron desktop wrapper
 package.json          npm scripts + electron-builder config for Linux

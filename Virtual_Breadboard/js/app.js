@@ -488,6 +488,103 @@
   document.getElementById('presetShort').addEventListener('click', () => { applyPreset(presetShortParts()); selectTool('select'); });
   document.getElementById('presetRC').addEventListener('click', () => { applyPreset(presetRCParts()); selectTool('select'); });
 
+  // ---------------- AI build (pluggable generator) ----------------
+  // Whatever provider is configured plays the same role the hardcoded
+  // presets play above: it produces a parts list, nothing more. Validation
+  // and committing to the board go through the exact same evaluator/executor
+  // path either way.
+  const AI_SETTINGS_KEY = 'virtual-breadboard-ai-settings';
+
+  function loadAiSettings() {
+    try {
+      return Object.assign({ provider: 'anthropic', apiKey: '', model: '', endpoint: '' }, JSON.parse(localStorage.getItem(AI_SETTINGS_KEY) || '{}'));
+    } catch (e) {
+      return { provider: 'anthropic', apiKey: '', model: '', endpoint: '' };
+    }
+  }
+  function saveAiSettings(settings) {
+    localStorage.setItem(AI_SETTINGS_KEY, JSON.stringify(settings));
+  }
+
+  const aiSettingsToggle = document.getElementById('aiSettingsToggle');
+  const aiSettingsEl = document.getElementById('aiSettings');
+  const aiProviderEl = document.getElementById('aiProvider');
+  const aiEndpointField = document.getElementById('aiEndpointField');
+  const aiEndpointEl = document.getElementById('aiEndpoint');
+  const aiApiKeyEl = document.getElementById('aiApiKey');
+  const aiModelEl = document.getElementById('aiModel');
+  const aiPromptEl = document.getElementById('aiPrompt');
+  const aiStatusEl = document.getElementById('aiStatus');
+
+  function renderAiSettingsForm() {
+    const s = loadAiSettings();
+    aiProviderEl.value = s.provider;
+    aiEndpointEl.value = s.endpoint;
+    aiApiKeyEl.value = s.apiKey;
+    aiModelEl.value = s.model;
+    aiEndpointField.hidden = s.provider !== 'custom';
+  }
+  renderAiSettingsForm();
+
+  aiSettingsToggle.addEventListener('click', () => {
+    aiSettingsEl.hidden = !aiSettingsEl.hidden;
+  });
+  aiProviderEl.addEventListener('change', () => {
+    aiEndpointField.hidden = aiProviderEl.value !== 'custom';
+    saveAiSettings({ provider: aiProviderEl.value, endpoint: aiEndpointEl.value, apiKey: aiApiKeyEl.value, model: aiModelEl.value });
+  });
+  [aiEndpointEl, aiApiKeyEl, aiModelEl].forEach((el) => {
+    el.addEventListener('change', () => {
+      saveAiSettings({ provider: aiProviderEl.value, endpoint: aiEndpointEl.value, apiKey: aiApiKeyEl.value, model: aiModelEl.value });
+    });
+  });
+
+  function setAiStatus(text, kind) {
+    aiStatusEl.textContent = text;
+    aiStatusEl.className = 'ai-status' + (kind ? ' ' + kind : '');
+  }
+
+  // generator: turn a validated AI spec's {row,col} references into real
+  // board holes, the same terminal shape every other part uses.
+  function specPartsToBoardParts(specParts) {
+    return specParts.map((p) => ({
+      type: p.type,
+      value: p.value,
+      color: p.color,
+      closed: !!p.closed,
+      pos: p.type === 'potentiometer' ? 0.5 : undefined,
+      terminals: p.terminals.map((t) => H(t.row, t.col)),
+    }));
+  }
+
+  async function runAiBuild() {
+    const text = aiPromptEl.value.trim();
+    if (!text) return setAiStatus('Describe what you want built first.', 'err');
+    const settings = loadAiSettings();
+    if (settings.provider !== 'custom' && !settings.apiKey) {
+      return setAiStatus('Add an API key in settings first.', 'err');
+    }
+    const call = AIBuilder.PROVIDERS[settings.provider];
+    if (!call) return setAiStatus('Unknown provider.', 'err');
+
+    setAiStatus('Thinking…', 'busy');
+    try {
+      const raw = await call({ apiKey: settings.apiKey, model: settings.model, endpoint: settings.endpoint, userText: text });
+      const spec = AIBuilder.extractJson(raw);
+      const { ok, errors, parts } = AIBuilder.validateSpec(spec);
+      if (!ok) {
+        setAiStatus("The AI's response wasn't a valid circuit:\n" + errors.join('\n'), 'err');
+        return;
+      }
+      applyPreset(specPartsToBoardParts(parts));
+      selectTool('select');
+      setAiStatus('Built ' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '. Check the status bar for any warnings.', 'ok');
+    } catch (err) {
+      setAiStatus('Could not build that: ' + err.message, 'err');
+    }
+  }
+  document.getElementById('aiBuild').addEventListener('click', runAiBuild);
+
   // ---------------- main loop ----------------
   let lastT = performance.now();
   function frame(now) {

@@ -39,6 +39,34 @@
     <aside class="props-panel">
       <h3>Inspector</h3>
       <div id="props"></div>
+
+      <div class="ai-panel">
+        <h3>Ask AI to build <button id="aiSettingsToggle" class="link-btn" type="button">settings</button></h3>
+
+        <div id="aiSettings" class="ai-settings" hidden>
+          <label class="field"><span>Provider</span>
+            <select id="aiProvider">
+              <option value="anthropic">Anthropic (Claude)</option>
+              <option value="openai">OpenAI</option>
+              <option value="custom">Custom (OpenAI-compatible)</option>
+            </select>
+          </label>
+          <label class="field" id="aiEndpointField" hidden><span>Endpoint URL</span>
+            <input id="aiEndpoint" type="text" placeholder="http://localhost:11434/v1/chat/completions">
+          </label>
+          <label class="field"><span>API key</span>
+            <input id="aiApiKey" type="password" placeholder="pasted key stays on this device only" autocomplete="off">
+          </label>
+          <label class="field"><span>Model (optional)</span>
+            <input id="aiModel" type="text" placeholder="uses provider default">
+          </label>
+          <p class="hint">Stored only in this browser's local storage. Sent only to the provider above, directly from this page — never anywhere else.</p>
+        </div>
+
+        <textarea id="aiPrompt" class="ai-prompt" rows="3" placeholder="e.g. build a 9V circuit with a green LED and a current-limiting resistor"></textarea>
+        <button id="aiBuild" class="action-btn">Build it</button>
+        <div id="aiStatus" class="ai-status"></div>
+      </div>
     </aside>
   </div>
 
@@ -53,6 +81,7 @@
 <script src="js/circuit.js"></script>
 <script src="js/board.js"></script>
 <script src="js/components.js"></script>
+<script src="js/ai.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -95,6 +95,26 @@ aside.props-panel h3 { font-size: 13px; margin: 0 0 12px; color: #cfd8e3; }
   width: 100%; padding: 8px; margin-top: 8px; border-radius: 8px; border: 1px solid #2c3644;
   background: #1c2430; color: #cfd8e3; cursor: pointer; font-size: 12px;
 }
+
+.ai-panel { margin-top: 22px; border-top: 1px solid #232a34; padding-top: 16px; }
+.ai-panel h3 { display: flex; align-items: center; justify-content: space-between; }
+.link-btn {
+  background: none; border: 0; color: #6ea8e0; font-size: 11px; cursor: pointer; padding: 0;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.link-btn:hover { color: #93c3ff; }
+.ai-settings { margin-bottom: 12px; padding: 10px; border: 1px solid #232a34; border-radius: 8px; background: #10141a; }
+.ai-settings input[type="text"], .ai-settings input[type="password"] {
+  width: 100%; background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 6px 8px; font-size: 12px;
+}
+.ai-prompt {
+  width: 100%; resize: vertical; background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644;
+  border-radius: 8px; padding: 8px; font: 12px/1.4 inherit;
+}
+.ai-status { margin-top: 8px; font-size: 12px; line-height: 1.5; }
+.ai-status.ok { color: #3ddc6b; }
+.ai-status.err { color: #ff8a80; white-space: pre-wrap; }
+.ai-status.busy { color: #9aa5b3; }
 .action-btn:hover { border-color: #4d8dff; }
 .action-btn.danger:hover { border-color: #e0483f; color: #ff8a80; }
 
