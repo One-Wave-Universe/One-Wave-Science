@@ -10,21 +10,23 @@
   let track = null;
   let playbackWasRunning = false;
 
-  const panel = document.createElement('div');
-  panel.className = 'card';
+  const panel = document.createElement('details');
+  panel.className = 'card audio-dropdown';
   panel.innerHTML = `
-    <strong>Audio track</strong><br>
-    Load one music/dialogue track and play it from time zero with the reel.
-    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button id="load-audio" type="button">Load Audio</button>
-      <button id="remove-audio" type="button">Remove Audio</button>
-      <input id="audio-picker" type="file" accept="audio/*" hidden>
+    <summary style="cursor:pointer;font-weight:800">Audio</summary>
+    <div style="margin-top:10px">
+      <div style="color:#aeb4c0;margin-bottom:8px">Music / dialogue track. Hidden until you need it.</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="load-audio" type="button">Load Audio</button>
+        <button id="remove-audio" type="button">Remove Audio</button>
+        <input id="audio-picker" type="file" accept="audio/*" hidden>
+      </div>
+      <audio id="project-audio" controls preload="metadata" style="width:100%;margin-top:10px"></audio>
+      <div id="audio-meta" style="margin-top:8px">No audio loaded</div>
+      <div id="timeline-meta" style="margin-top:4px"></div>
     </div>
-    <audio id="project-audio" controls preload="metadata" style="width:100%;margin-top:10px"></audio>
-    <div id="audio-meta" style="margin-top:8px">No audio loaded</div>
-    <div id="timeline-meta" style="margin-top:4px"></div>
   `;
-  aside.insertBefore(panel, aside.firstChild);
+  aside.appendChild(panel);
 
   const audio = $('project-audio');
 
@@ -46,8 +48,10 @@
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
-      if (track?.src) audio.src = track.src;
-      else {
+      if (track?.src) {
+        audio.src = track.src;
+        panel.open = true;
+      } else {
         audio.removeAttribute('src');
         audio.load();
       }
@@ -75,6 +79,7 @@
   });
   $('remove-audio')?.addEventListener('click', () => {
     loadTrack(null);
+    panel.open = false;
     A.status('Audio removed');
   });
 
@@ -82,8 +87,6 @@
   $('fps-control')?.addEventListener('input', renderMeta);
   $('frame-hold')?.addEventListener('input', renderMeta);
 
-  // B7 registers its Play button listener before B11. After B7 toggles playback,
-  // this listener mirrors that state to the audio element.
   $('play-button')?.addEventListener('click', () => {
     if (!track?.src || !audio) return;
     if (A.playback.playing) {
@@ -94,7 +97,6 @@
     }
   });
 
-  // B7 can stop itself when the reel ends, so watch that state and stop audio too.
   setInterval(() => {
     const nowPlaying = Boolean(A.playback?.playing);
     if (playbackWasRunning && !nowPlaying && audio && !audio.paused) audio.pause();
@@ -103,10 +105,11 @@
 
   A.audio = {
     element: audio,
+    panel,
     get track() { return track ? A.clone(track) : null; },
     loadTrack,
     loadFile,
-    remove() { loadTrack(null); },
+    remove() { loadTrack(null); panel.open = false; },
     reelDurationSeconds,
     renderMeta
   };
