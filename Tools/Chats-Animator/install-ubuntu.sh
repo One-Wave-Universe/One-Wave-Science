@@ -15,7 +15,7 @@ mkdir -p "$INSTALL_DIR" "$USER_APPS" "$DESKTOP_DIR"
 # Keep the install in one stable location so future patches have one target.
 find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 cp -a "$SOURCE_DIR"/. "$INSTALL_DIR"/
-chmod +x "$INSTALL_DIR/launch-animator.sh"
+chmod +x "$INSTALL_DIR/launch-animator.sh" "$INSTALL_DIR/configure-openai.sh" "$INSTALL_DIR/test-animator.sh"
 
 write_desktop_file() {
   local target="$1"
@@ -23,7 +23,7 @@ write_desktop_file() {
 [Desktop Entry]
 Type=Application
 Name=$APP_NAME
-Comment=Frame-by-frame FPS animation and clip maker
+Comment=Frame-by-frame FPS animation with OpenAI Director dialogue
 Exec=$INSTALL_DIR/launch-animator.sh
 Terminal=false
 Categories=AudioVideo;Graphics;
@@ -43,4 +43,13 @@ printf '\nInstalled %s.\n' "$APP_NAME"
 printf 'Installed app: %s\n' "$INSTALL_DIR"
 printf 'Desktop shortcut: %s/%s\n' "$DESKTOP_DIR" "$DESKTOP_FILE"
 printf 'Application menu shortcut: %s/%s\n' "$USER_APPS" "$DESKTOP_FILE"
+
+CONFIG_FILE="$HOME/.config/one-wave-animator/openai.env"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+  printf '\nNow connect the creative Director.\n'
+  "$INSTALL_DIR/configure-openai.sh"
+else
+  printf '\nExisting OpenAI Director configuration kept at: %s\n' "$CONFIG_FILE"
+fi
+
 printf '\nDouble-click the desktop icon or run:\n  %q\n\n' "$INSTALL_DIR/launch-animator.sh"
