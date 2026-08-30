@@ -24,6 +24,7 @@ required=(
   c20-five-scale-architecture.js
   c21-copy-paste-assistant-plugin.js
   assistant_server.py
+  configure-openai.sh
   launch-animator.sh
   install-ubuntu.sh
 )
@@ -48,7 +49,8 @@ fi
 
 bash -n launch-animator.sh
 bash -n install-ubuntu.sh
-echo "PASS launcher/install shell syntax"
+bash -n configure-openai.sh
+echo "PASS launcher/install/config shell syntax"
 
 grep -q 'c19-local-control-api.js' index.html
 grep -q 'c20-five-scale-architecture.js' index.html
@@ -56,11 +58,17 @@ grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
+grep -q 'gpt-5.6-sol' assistant_server.py
+grep -q 'gpt-image-2' assistant_server.py
+grep -q 'x/z-image-turbo' assistant_server.py
+grep -q 'OPENAI_API_KEY' configure-openai.sh
+echo "PASS OpenAI Director + local-first art contract"
+
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
 grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
 grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
 grep -q 'Retry AI connection' c21-copy-paste-assistant-plugin.js
-echo "PASS live assistant contract"
+echo "PASS live assistant UI contract"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
