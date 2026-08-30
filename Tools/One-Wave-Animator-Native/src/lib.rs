@@ -1,3 +1,3 @@
-pub mod cells;
+pub mod parser;
 
-pub use cells::{CellError, CellIntent, Cells};
+pub use parser::{Parser, ParserError, ParserIntent};
