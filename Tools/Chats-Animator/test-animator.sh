@@ -64,7 +64,8 @@ echo "PASS provider-neutral assistant plugin contract"
 grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
 grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
 grep -q 'human-ai-cocreative' c21-copy-paste-assistant-plugin.js
-grep -q 'AI:' c21-copy-paste-assistant-plugin.js
+grep -q "addMessage('AI'" c21-copy-paste-assistant-plugin.js
+grep -q 'Retry AI connection' c21-copy-paste-assistant-plugin.js
 echo "PASS live human+AI creative partner bridge contract"
 
 grep -q '/api/assistant/health' assistant_server.py
