@@ -61,6 +61,11 @@
     state.parts.forEach((p) => {
       if (p.type === 'wire') {
         wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
+      } else if (p.type === 'ywire') {
+        // end-to-end run plus a tap to the branch hole — both pairs zero
+        // resistance, so all 3 holes end up as one electrical node
+        wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
+        wires.push({ a: p.terminals[0].cellId, b: p.terminals[2].cellId });
       } else if (p.type === 'potentiometer') {
         const t = p.terminals;
         if (t.length === 6) {
@@ -157,7 +162,12 @@
     } else if (state.tool === 'wire') {
       const p = document.createElement('p');
       p.className = 'hint';
-      p.textContent = 'Click a hole, then click another hole to drop a jumper wire.';
+      p.textContent = 'Click a hole, then click another hole to drop a jumper wire. Right-click a placed wire to change its color or style.';
+      toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'ywire') {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'One physical wire feeding 3 holes — good for a ground/rail tap. Click end A, then end B (the main run), then the branch hole.';
       toolOptionsEl.appendChild(p);
     } else if (state.tool === 'diode') {
       const p = document.createElement('p');
@@ -204,6 +214,14 @@
   }
   renderToolOptions();
 
+  // the palette's own friendly label (e.g. "Y-Split Wire") beats capitalizing
+  // the raw type name (which would read as "Ywire")
+  function partTitle(part) {
+    const def = Components.PALETTE.find((p) => p.type === part.type);
+    const label = def ? def.label : part.type[0].toUpperCase() + part.type.slice(1);
+    return label + ' · ' + part.id;
+  }
+
   // ---------------- placing / interacting ----------------
   function cancelPending() {
     state.pending = [];
@@ -219,7 +237,8 @@
   // its own. Wire color selection is the one stateful exception (a counter
   // for cosmetic color-cycling), so the caller resolves it and passes it in.
   function buildPart(type, holes, opts) {
-    if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor };
+    if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor, style: 'loop' };
+    if (type === 'ywire') return { type: 'ywire', terminals: holes.slice(0, 3), color: opts.wireColor, style: 'loop' };
     if (type === 'resistor') return { type: 'resistor', terminals: holes.slice(0, 2), value: opts.resistorValue };
     if (type === 'led') return { type: 'led', terminals: holes.slice(0, 2), color: opts.ledColor };
     if (type === 'diode') return { type: 'diode', terminals: holes.slice(0, 2) };
@@ -247,7 +266,7 @@
       capacitorValue: state.toolValue.capacitor,
       ledColor: state.toolValue.led,
       batteryValue: state.toolValue.battery,
-      wireColor: type === 'wire' ? nextWireColor() : undefined,
+      wireColor: type === 'wire' || type === 'ywire' ? nextWireColor() : undefined,
     });
     if (part) addPart(part);
   }
@@ -276,6 +295,12 @@
         const top = Math.min(t[1].y, t[4].y) - 17;
         const bottom = Math.max(t[1].y, t[4].y) + 17;
         if (pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom) return p;
+      } else if (t.length === 3) {
+        const mid = yWireMidpoint(t);
+        if (
+          distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14 ||
+          distToSegment(pos.x, pos.y, mid.x, mid.y, t[2].x, t[2].y) < 14
+        ) return p;
       } else if (t.length === 2) {
         if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
       }
@@ -283,10 +308,16 @@
     return null;
   }
 
+  // the point where a Y-split wire's branch taps off its main end-to-end run
+  function yWireMidpoint(t) {
+    return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
+  }
+
   // where the selection ring / occupied-hole body is centered for a part
   function partCenter(p) {
     const t = p.terminals;
     if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
+    if (t.length === 3) return yWireMidpoint(t);
     return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
   }
 
@@ -387,30 +418,29 @@
     if (evt.key === 'Escape') {
       cancelPending();
       selectTool('select');
+      closeContextMenu();
     }
   });
 
   // ---------------- properties panel ----------------
   const propsEl = document.getElementById('props');
   let currentReadoutEl = null;
-  function renderProps() {
-    propsEl.innerHTML = '';
-    const part = state.parts.find((p) => p.id === state.selectedPartId);
-    if (!part) {
-      propsEl.innerHTML = '<p class="hint">Select a placed part to inspect or edit it.</p>';
-      currentReadoutEl = null;
-      return;
-    }
-    const title = document.createElement('h3');
-    title.textContent = part.type[0].toUpperCase() + part.type.slice(1) + ' · ' + part.id;
-    propsEl.appendChild(title);
-
+  // presentation: builds the type-specific controls for a part (value
+  // dropdowns, color swatches, toggle buttons, wire color/style) into
+  // whatever container is given. Shared by the Inspector panel and the
+  // right-click context menu, so each control lives in exactly one place.
+  // `refresh` is called only where the control needs its own visual state
+  // (an active swatch, a button's label) rebuilt after a change — value
+  // dropdowns and the pot slider update natively and skip it, and the
+  // pushbutton skips it too so a rebuild never interrupts a press-and-hold.
+  function buildPartControls(part, container, refresh) {
+    const notify = refresh || (() => {});
     if (part.type === 'resistor') {
-      propsEl.appendChild(makeSelect('Resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(makeSelect('Resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
     } else if (part.type === 'capacitor') {
-      propsEl.appendChild(makeSelect('Capacitance', Components.CAPACITOR_VALUES.map((v) => [v.farads, v.label]), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(makeSelect('Capacitance', Components.CAPACITOR_VALUES.map((v) => [v.farads, v.label]), part.value, (v) => (part.value = Number(v))));
     } else if (part.type === 'battery') {
-      propsEl.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), part.value, (v) => (part.value = Number(v))));
     } else if (part.type === 'led') {
       const wrap = document.createElement('div');
       wrap.className = 'swatches';
@@ -420,20 +450,20 @@
         b.style.background = Components.LED_HEX[c];
         b.addEventListener('click', () => {
           part.color = c;
-          renderProps();
+          notify();
         });
         wrap.appendChild(b);
       });
-      propsEl.appendChild(labeled('Color', wrap));
+      container.appendChild(labeled('Color', wrap));
     } else if (part.type === 'switch') {
       const btn = document.createElement('button');
       btn.className = 'action-btn';
       btn.textContent = part.closed ? 'Open switch' : 'Close switch';
       btn.addEventListener('click', () => {
         part.closed = !part.closed;
-        renderProps();
+        notify();
       });
-      propsEl.appendChild(btn);
+      container.appendChild(btn);
     } else if (part.type === 'pushbutton') {
       const btn = document.createElement('button');
       btn.className = 'action-btn';
@@ -443,7 +473,7 @@
       btn.addEventListener('mouseleave', () => (part.closed = false));
       btn.addEventListener('touchstart', (e) => { e.preventDefault(); part.closed = true; }, { passive: false });
       btn.addEventListener('touchend', () => (part.closed = false));
-      propsEl.appendChild(btn);
+      container.appendChild(btn);
     } else if (part.type === 'potentiometer') {
       const range = document.createElement('input');
       range.type = 'range';
@@ -451,9 +481,52 @@
       range.max = '100';
       range.value = String(Math.round((part.pos ?? 0.5) * 100));
       range.addEventListener('input', () => (part.pos = Number(range.value) / 100));
-      propsEl.appendChild(labeled('Wiper position', range));
-      propsEl.appendChild(makeSelect('Total resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(labeled('Wiper position', range));
+      container.appendChild(makeSelect('Total resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
+    } else if (part.type === 'wire' || part.type === 'ywire') {
+      const wrap = document.createElement('div');
+      wrap.className = 'swatches';
+      Components.WIRE_COLOR_CHOICES.forEach((c) => {
+        const b = document.createElement('button');
+        b.className = 'swatch' + (part.color === c ? ' active' : '');
+        b.style.background = c;
+        b.addEventListener('click', () => {
+          part.color = c;
+          notify();
+        });
+        wrap.appendChild(b);
+      });
+      container.appendChild(labeled('Color', wrap));
+
+      const styleWrap = document.createElement('div');
+      styleWrap.className = 'seg-toggle';
+      [['loop', 'Looped'], ['flat', 'Flat']].forEach(([val, label]) => {
+        const b = document.createElement('button');
+        b.className = 'seg-btn' + ((part.style || 'loop') === val ? ' active' : '');
+        b.textContent = label;
+        b.addEventListener('click', () => {
+          part.style = val;
+          notify();
+        });
+        styleWrap.appendChild(b);
+      });
+      container.appendChild(labeled('Style', styleWrap));
     }
+  }
+
+  function renderProps() {
+    propsEl.innerHTML = '';
+    const part = state.parts.find((p) => p.id === state.selectedPartId);
+    if (!part) {
+      propsEl.innerHTML = '<p class="hint">Select a placed part to inspect or edit it.</p>';
+      currentReadoutEl = null;
+      return;
+    }
+    const title = document.createElement('h3');
+    title.textContent = partTitle(part);
+    propsEl.appendChild(title);
+
+    buildPartControls(part, propsEl, renderProps);
 
     currentReadoutEl = document.createElement('div');
     currentReadoutEl.className = 'readout';
@@ -502,6 +575,57 @@
     if (a >= 1e-3) return (i * 1000).toFixed(2) + ' mA';
     return (i * 1e6).toFixed(1) + ' µA';
   }
+
+  // ---------------- right-click context menu ----------------
+  // router: right-clicking a part opens a floating menu with its controls
+  // (via the same buildPartControls used by the Inspector) plus Remove —
+  // a quicker path than select-then-scroll-to-Inspector.
+  const contextMenuEl = document.getElementById('contextMenu');
+  const contextMenuTitleEl = document.getElementById('contextMenuTitle');
+  const contextMenuControlsEl = document.getElementById('contextMenuControls');
+  const contextMenuRemoveEl = document.getElementById('contextMenuRemove');
+  let contextMenuPartId = null;
+
+  function refreshContextMenu() {
+    const part = state.parts.find((p) => p.id === contextMenuPartId);
+    if (!part) return closeContextMenu();
+    contextMenuControlsEl.innerHTML = '';
+    buildPartControls(part, contextMenuControlsEl, refreshContextMenu);
+  }
+
+  function openContextMenu(part, clientX, clientY) {
+    contextMenuPartId = part.id;
+    contextMenuTitleEl.textContent = partTitle(part);
+    contextMenuEl.hidden = false;
+    refreshContextMenu();
+    const menuW = contextMenuEl.offsetWidth || 230;
+    const menuH = contextMenuEl.offsetHeight || 160;
+    contextMenuEl.style.left = Math.max(8, Math.min(clientX, window.innerWidth - menuW - 8)) + 'px';
+    contextMenuEl.style.top = Math.max(8, Math.min(clientY, window.innerHeight - menuH - 8)) + 'px';
+  }
+
+  function closeContextMenu() {
+    contextMenuPartId = null;
+    contextMenuEl.hidden = true;
+  }
+
+  canvas.addEventListener('contextmenu', (evt) => {
+    evt.preventDefault();
+    const part = hitTestPart(mousePos(evt));
+    if (part) openContextMenu(part, evt.clientX, evt.clientY);
+    else closeContextMenu();
+  });
+  document.addEventListener('click', (evt) => {
+    if (!contextMenuEl.hidden && !contextMenuEl.contains(evt.target)) closeContextMenu();
+  });
+  contextMenuRemoveEl.addEventListener('click', () => {
+    state.parts = state.parts.filter((p) => p.id !== contextMenuPartId);
+    if (state.selectedPartId === contextMenuPartId) {
+      state.selectedPartId = null;
+      renderProps();
+    }
+    closeContextMenu();
+  });
 
   // ---------------- toolbar actions ----------------
   document.getElementById('btnClear').addEventListener('click', () => {
@@ -650,12 +774,14 @@
           ? derivePotentiometerHoles(H(p.terminals[0].row, p.terminals[0].col))
           : p.terminals.map((t) => H(t.row, t.col));
         if (!terminals) return null;
+        const isWire = p.type === 'wire' || p.type === 'ywire';
         return {
           type: p.type,
           value: p.value,
-          color: p.color,
+          color: isWire ? nextWireColor() : p.color,
           closed: !!p.closed,
           pos: p.type === 'potentiometer' ? 0.5 : undefined,
+          style: isWire ? 'loop' : undefined,
           terminals,
         };
       })
@@ -729,7 +855,9 @@
       // hidden underneath its body stay reachable for a jumper wire
       const opacity = state.hoverPart && p.id === state.hoverPart.id ? 0.28 : 1;
       if (p.type === 'wire') {
-        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color, opacity);
+        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color, opacity, p.style);
+      } else if (p.type === 'ywire') {
+        Components.drawYWire(ctx, t, p.color, opacity, p.style);
       } else if (p.type === 'resistor') {
         Components.drawResistor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'led') {
@@ -766,7 +894,7 @@
       if (p.type !== 'potentiometer') {
         const I = currents.get(p.id);
         if (I && Math.abs(I) > 1e-6) {
-          drawCurrentDots(t[0], t[1], I, p.type === 'wire');
+          drawCurrentDots(t[0], t[1], I, p.type === 'wire' || (p.type === 'ywire' && p.style !== 'flat'));
         }
       }
     });
@@ -878,7 +1006,7 @@
   // debug/test hook (harmless, purely introspective — used by the automated
   // test harness and handy in the browser console while developing)
   window.__debugState = () => ({
-    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, closed: p.closed, pos: p.pos, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
+    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, closed: p.closed, pos: p.pos, style: p.style, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
@@ -890,5 +1018,9 @@
   window.__toggleSwitchById = (id) => {
     const p = state.parts.find((x) => x.id === id);
     if (p) p.closed = !p.closed;
+  };
+  window.__nodeVoltage = (cellId) => {
+    const uf = state.lastResult.uf;
+    return uf ? state.lastResult.voltages.get(uf.find(cellId)) : undefined;
   };
 })();

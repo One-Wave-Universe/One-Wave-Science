@@ -24,8 +24,14 @@
   const BATTERY_VALUES = [1.5, 3, 3.3, 5, 9, 12];
   const ELECTROLYTIC_THRESHOLD = 1e-6; // farads; at/above this a cap is drawn as an electrolytic can, below as a ceramic disc
 
+  const WIRE_COLOR_CHOICES = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7', '#e8ecf1', '#1a1a1a'];
+
   const PALETTE = [
     { type: 'wire', label: 'Jumper Wire', terminals: 2, icon: '/' },
+    // end A, end B (the "end to end" run), then the branch hole the tap
+    // reaches — one physical wire, all 3 holes the same node. For
+    // distributing a ground/rail to a second point without a second wire.
+    { type: 'ywire', label: 'Y-Split Wire', terminals: 3, icon: 'Y' },
     { type: 'resistor', label: 'Resistor', terminals: 2, icon: '▭', defaultValue: 220 },
     { type: 'led', label: 'LED', terminals: 2, icon: '●', defaultColor: 'red' },
     { type: 'diode', label: 'Diode', terminals: 2, icon: '▷|' },
@@ -365,8 +371,10 @@
     ctx.restore();
   }
 
-  function drawWire(ctx, x1, y1, x2, y2, color, opacity) {
-    const midY = Math.min(y1, y2) - 18 - Math.min(40, Math.hypot(x2 - x1, y2 - y1) * 0.12);
+  // style: 'loop' (default) is a flexible wire arcing up and over whatever's
+  // between its ends; 'flat' is a rigid pre-formed jumper lying straight
+  // against the board.
+  function drawWire(ctx, x1, y1, x2, y2, color, opacity, style) {
     ctx.save();
     ctx.globalAlpha = op(opacity);
     ctx.strokeStyle = color || '#2a6f4a';
@@ -374,10 +382,32 @@
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(x1, y1);
-    ctx.quadraticCurveTo((x1 + x2) / 2, midY, x2, y2);
+    if (style === 'flat') {
+      ctx.lineTo(x2, y2);
+    } else {
+      const midY = Math.min(y1, y2) - 18 - Math.min(40, Math.hypot(x2 - x1, y2 - y1) * 0.12);
+      ctx.quadraticCurveTo((x1 + x2) / 2, midY, x2, y2);
+    }
     ctx.stroke();
     ctx.restore();
-    return { quadCtrl: { x: (x1 + x2) / 2, y: midY } };
+  }
+
+  // Y-split wire: a single conductor running end-to-end between t[0] and
+  // t[1] (drawn exactly like a normal wire), with a third lead tapping off
+  // its midpoint out to t[2] — for feeding a ground/rail node to a second
+  // point without a whole second jumper. All 3 holes are one electrical node.
+  function drawYWire(ctx, t, color, opacity, style) {
+    drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, color, opacity, style);
+    const midX = (t[0].x + t[1].x) / 2;
+    const midY = (t[0].y + t[1].y) / 2;
+    drawWire(ctx, midX, midY, t[2].x, t[2].y, color, opacity, style);
+    ctx.save();
+    ctx.globalAlpha = op(opacity);
+    ctx.beginPath();
+    ctx.arc(midX, midY, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = color || '#2a6f4a';
+    ctx.fill();
+    ctx.restore();
   }
 
   function roundRect(ctx, x, y, w, h, r) {
@@ -391,10 +421,10 @@
   }
 
   const api = {
-    PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD,
+    PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     resistorColorBands, formatOhms, formatFarads,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
-    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, roundRect, lerp,
+    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, roundRect, lerp,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

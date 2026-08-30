@@ -132,3 +132,26 @@ footer.status-bar {
   .workspace { flex-direction: column; }
   aside.toolbox, aside.props-panel { width: auto; border: 0; border-bottom: 1px solid #232a34; }
 }
+
+.seg-toggle { display: flex; gap: 6px; }
+.seg-btn {
+  flex: 1; padding: 6px 8px; border-radius: 6px; border: 1px solid #2c3644;
+  background: #1a212b; color: #9aa5b3; cursor: pointer; font-size: 11px;
+}
+.seg-btn.active { background: #223049; border-color: #4d8dff; color: #fff; }
+.seg-btn:hover { border-color: #4d8dff; }
+
+.context-menu {
+  position: fixed;
+  z-index: 50;
+  width: 230px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #2c3644;
+  background: #171d27;
+  box-shadow: 0 12px 40px #000a;
+}
+.context-menu h4 { margin: 0 0 10px; font-size: 12px; color: #cfd8e3; letter-spacing: .02em; }
+.context-menu .field { display: block; margin-bottom: 10px; font-size: 12px; color: #9aa5b3; }
+.context-menu .field span { display: block; margin-bottom: 4px; }
+.context-menu .action-btn { margin-top: 4px; }

@@ -25,7 +25,11 @@
       '{"parts": [ {"type": "resistor", "value": 220, "terminals": [{"row":"c","col":10},{"row":"c","col":15}]} ]}',
       '',
       'Rules for "type" and how many terminals each needs:',
-      '  wire          2 terminals, no value/color needed (a zero-resistance jumper)',
+      '  wire          2 terminals, no value needed (a zero-resistance jumper)',
+      '  ywire         3 terminals [end A, end B, branch]: one physical wire running end-to-end',
+      '                from A to B, plus a third lead tapping off the midpoint of that run to the',
+      '                branch hole. All 3 holes end up as one electrical node — use this instead',
+      '                of two separate wires when one node (e.g. ground) needs to reach 3 points.',
       '  resistor      2 terminals, "value" in ohms, e.g. 220, 1000, 10000',
       '  led           2 terminals, "color" one of red/yellow/green/blue/white (terminals[0] is the anode/+)',
       '  diode         2 terminals, a generic silicon rectifier, no value/color (terminals[0] is the anode/+)',
@@ -130,7 +134,7 @@
     return JSON.parse(body.slice(start, end + 1));
   }
 
-  const TERMINALS_NEEDED = { wire: 2, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1 };
+  const TERMINALS_NEEDED = { wire: 2, ywire: 3, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1 };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
   const LED_COLORS = new Set(['red', 'yellow', 'green', 'blue', 'white']);

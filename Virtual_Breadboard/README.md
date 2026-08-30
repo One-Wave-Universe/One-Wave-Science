@@ -132,28 +132,39 @@ fetch one.
 
 ## Using the simulator
 
-1. Pick a tool from the left palette (Jumper Wire, Resistor, LED, Diode,
-   Capacitor, Power Supply, Switch, Pushbutton, Potentiometer).
-2. Click a hole to start placing; click a second hole to drop most parts.
-   The **Potentiometer** is different — it's a real 6-pin trimmer, so one
-   click on an anchor hole (any strip row, not a rail) places all 6 legs,
-   straddling the center channel automatically.
+1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
+   LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer).
+2. Click a hole to start placing; click a second hole to drop most parts —
+   the wire's other end snaps wherever you click next, so click the first
+   hole then move to wherever you want the far end and click again.
+   - The **Potentiometer** is different — it's a real 6-pin trimmer, so one
+     click on an anchor hole (any strip row, not a rail) places all 6 legs,
+     straddling the center channel automatically.
+   - The **Y-Split Wire** is a single physical wire feeding 3 holes — good
+     for tapping a ground/rail node to a second point without a whole
+     second jumper. Click end A, then end B (the main end-to-end run), then
+     the branch hole; the branch taps off the midpoint of that run.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, or click any part to
    inspect it — its live voltage, current, and an editable value dropdown
    appear in the right-hand Inspector, with a Delete button.
-4. Hover any hole at any time to read its voltage and see every other hole
+4. **Right-click any placed part** for a quick floating menu with the same
+   options as the Inspector (value, color, style) plus **Remove part** —
+   right-click a wire to pick its color or switch it between **Looped**
+   (a flexible wire arcing up and over — the default) and **Flat** (a rigid
+   pre-formed jumper lying straight against the board).
+5. Hover any hole at any time to read its voltage and see every other hole
    sharing that electrical node highlighted. Hover a placed part to fade it
    see-through (with its occupied holes ringed in blue) so you can still
    reach a hole hidden under its body; with a placement tool active,
    hovering also rings the hole your next click will snap to.
-5. The status bar along the bottom reports live warnings: short circuits,
+6. The status bar along the bottom reports live warnings: short circuits,
    resistors dissipating more than their rating, LEDs that need a
    current-limiting resistor.
-6. Try the **Example builds** in the sidebar (LED + resistor, RC charging
+7. Try the **Example builds** in the sidebar (LED + resistor, RC charging
    with a switch, and a short-circuit danger demo) to see the physics in
    action immediately.
-7. **Save** / **Load** keep a build in the browser's local storage;
+8. **Save** / **Load** keep a build in the browser's local storage;
    **Clear** wipes the board.
 
 ## Ask AI to build it
@@ -221,4 +232,5 @@ node test/circuit.test.js
 
 Covers Ohm's law, LED/diode forward conduction and reverse blocking,
 short-circuit detection, over-current warnings, real RC charging curves,
-and switch/pushbutton open-closed behavior.
+switch/pushbutton open-closed behavior, and a Y-split wire tying 3 holes
+to one electrical node.
