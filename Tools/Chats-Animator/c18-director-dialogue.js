@@ -13,7 +13,7 @@
     </div>
     <div id="director-log" aria-live="polite"></div>
     <div class="director-entry">
-      <textarea id="director-input" rows="3" placeholder="Try: duplicate frame, add frame, go to frame 3, hold 4, fps 12, play, stop…"></textarea>
+      <textarea id="director-input" rows="3" placeholder="Try: add prop, load background, save frames 1 to 8 as Walk, create background: alley at night…"></textarea>
       <button id="director-send" type="button">Do Edit</button>
     </div>
   `;
@@ -40,6 +40,15 @@
     return true;
   }
 
+  function setInput(id, value) {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    el.value = String(value);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    return true;
+  }
+
   function setRange(id, value) {
     const el = document.getElementById(id);
     if (!el) return false;
@@ -48,6 +57,53 @@
     el.value = String(Math.max(min, Math.min(max, value)));
     el.dispatchEvent(new Event('input', { bubbles: true }));
     return true;
+  }
+
+  function acceptAsset(asset) {
+    if (!asset?.src) throw new Error('Worker returned an asset without image data');
+    const kind = String(asset.kind || 'prop').toLowerCase();
+    if (kind === 'background') {
+      return A.setBackgroundFromSource(asset.src, asset.name || 'Generated Background.png');
+    }
+    return A.addAssetFromSource(
+      asset.src,
+      kind === 'character' ? 'character' : 'prop',
+      asset.name || (kind === 'character' ? 'Generated Character.png' : 'Generated Prop.png'),
+      asset.placement || {}
+    );
+  }
+
+  async function requestAsset(kind, prompt, item) {
+    const job = {
+      type: 'create-asset',
+      kind,
+      prompt,
+      frame: item.frame,
+      project: A.snapshot(),
+      requestedAt: item.time
+    };
+
+    if (typeof window.oneWaveAssetWorker === 'function') {
+      state.textContent = 'Creating asset…';
+      const result = await window.oneWaveAssetWorker(job);
+      const assets = Array.isArray(result?.assets) ? result.assets : (result?.asset ? [result.asset] : []);
+      if (!assets.length) throw new Error('Asset worker returned no PNG');
+      assets.forEach(acceptAsset);
+      return result?.message || `${assets.length} ${kind} asset${assets.length === 1 ? '' : 's'} added.`;
+    }
+
+    window.dispatchEvent(new CustomEvent('onewave-asset-request', { detail: job }));
+    return `Asset request ready for the external worker: ${kind} — ${prompt}`;
+  }
+
+  function captureMotion(start, end, name, tag = '') {
+    if (!document.getElementById('c14-capture')) return null;
+    setInput('c14-start', start);
+    setInput('c14-end', end);
+    setInput('c14-seq-name', name);
+    if (tag) setInput('c14-tag', tag);
+    click('c14-capture');
+    return `Saved frames ${start}-${end} to the Motion Library as “${name}”.`;
   }
 
   function runLocal(text) {
@@ -70,6 +126,21 @@
     }
     if (/^(delete frame|remove frame|delete this frame)$/.test(t)) {
       return click('delete-frame') ? 'Deleted the current frame.' : null;
+    }
+    if (/^(load|add|choose) background(?: png)?$/.test(t)) {
+      return click('background-picker') ? 'Choose the background PNG.' : null;
+    }
+    if (/^(add|load|choose) prop(?: png)?$/.test(t)) {
+      return click('prop-picker') ? 'Choose the prop PNG.' : null;
+    }
+    if (/^(add|load|choose) character(?: png)?$/.test(t)) {
+      return click('character-picker') ? 'Choose the character PNG.' : null;
+    }
+    if ((m = t.match(/(?:save|capture)\s+frames?\s+(\d+)\s+(?:to|through|-)\s*(\d+)\s+(?:as|to)\s+(.+)/))) {
+      const start = Number(m[1]);
+      const end = Number(m[2]);
+      const name = text.trim().match(/(?:as|to)\s+(.+)$/i)?.[1]?.trim() || 'Motion';
+      return captureMotion(start, end, name);
     }
     if ((m = t.match(/(?:go to|show|select)?\s*frame\s*(\d+)/))) {
       const n = Number(m[1]);
@@ -100,6 +171,14 @@
     return null;
   }
 
+  function parseAssetRequest(text) {
+    const match = text.match(/^\s*(?:create|make|generate)\s+(?:a\s+|an\s+)?(background|prop|character|motion(?:\s+pose)?)\s*(?::|-)?\s*(.+)$/i);
+    if (!match) return null;
+    const rawKind = match[1].toLowerCase();
+    const kind = rawKind.startsWith('motion') ? 'character' : rawKind;
+    return { kind, prompt: match[2].trim(), motionPose: rawKind.startsWith('motion') };
+  }
+
   async function submit() {
     const text = input.value.trim();
     if (!text) return;
@@ -111,10 +190,19 @@
     state.textContent = 'Working…';
 
     try {
-      // Provider-neutral hook: a future local brain or remote agent can replace
-      // the tiny built-in worker without changing the animator data model.
+      const assetRequest = parseAssetRequest(text);
+      if (assetRequest) {
+        const message = await requestAsset(assetRequest.kind, assetRequest.prompt, item);
+        addMessage('Worker', message);
+        A.status(message);
+        state.textContent = typeof window.oneWaveAssetWorker === 'function' ? 'Asset worker connected' : 'Needs asset worker';
+        return;
+      }
+
       if (typeof window.oneWaveDirectorWorker === 'function') {
         const result = await window.oneWaveDirectorWorker({ request: item, animator: A });
+        const assets = Array.isArray(result?.assets) ? result.assets : (result?.asset ? [result.asset] : []);
+        assets.forEach(acceptAsset);
         if (result?.message) addMessage('Worker', result.message);
         state.textContent = 'External worker connected';
         return;
@@ -145,6 +233,14 @@
     if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') submit();
   });
 
-  A.directorDialogue = { history, submit, runLocal };
-  addMessage('Worker', 'Ready. I can control the reel now; the learning-brain bridge plugs into this same box later.');
+  A.assetWorker = {
+    acceptAsset,
+    requestAsset,
+    complete(assetOrAssets) {
+      const assets = Array.isArray(assetOrAssets) ? assetOrAssets : [assetOrAssets];
+      return assets.map(acceptAsset);
+    }
+  };
+  A.directorDialogue = { history, submit, runLocal, captureMotion };
+  addMessage('Worker', 'Ready. I can control the reel, load/place scene assets, capture motion-library ranges, and accept generated PNGs from the asset-worker bridge.');
 })();
