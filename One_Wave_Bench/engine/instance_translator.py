@@ -7,13 +7,48 @@ Goal:
 
 This module does not pretend translation can be inferred from names alone.
 Identity is behavioral: state, input/output contract, timing, memory, preserved
-invariants, thresholds, consequence, and failure behavior.
+invariants, thresholds, consequence, failure behavior, and the native balance
+between Field-like generation, Void-like checking, and M4-like fast routing.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field, asdict
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Protocol
+
+
+@dataclass
+class RoleEvidence:
+    """Observed native behaviors used to shape the mounted loop.
+
+    These are measurements/descriptions of what the old instance already does.
+    They are not personality labels and they do not force a 50/50 Field/Void
+    split.
+    """
+
+    generates_candidates: float = 0.0
+    expands_state_space: float = 0.0
+    explores_alternatives: float = 0.0
+    validates_constraints: float = 0.0
+    rejects_or_inhibits: float = 0.0
+    preserves_continuity: float = 0.0
+    routes_events: float = 0.0
+    timing_sensitive: float = 0.0
+    synchronizes_subsystems: float = 0.0
+
+
+@dataclass
+class LoopBiasProfile:
+    """How strongly this instance naturally loads each loop function."""
+
+    field: float
+    void: float
+    m4: float
+    dominant: str
+    evidence: RoleEvidence
+
+    def as_dict(self) -> Dict[str, Any]:
+        return asdict(self)
 
 
 @dataclass
@@ -28,6 +63,7 @@ class InstanceIdentity:
     invariants: List[str] = field(default_factory=list)
     failure_modes: List[str] = field(default_factory=list)
     notes: Dict[str, Any] = field(default_factory=dict)
+    loop_bias: Optional[LoopBiasProfile] = None
 
 
 @dataclass
@@ -88,6 +124,62 @@ class MountedInstanceLike(Protocol):
         ...
 
 
+def _mean(values: Iterable[float]) -> float:
+    values = list(values)
+    if not values:
+        return 0.0
+    return sum(values) / len(values)
+
+
+def profile_loop_bias(evidence: RoleEvidence) -> LoopBiasProfile:
+    """Convert observed behavior into a Field/Void/M4 mounting profile.
+
+    Each input is expected on 0..1. The profile is intentionally independent:
+    an instance can score high on both Field and Void, or low on both. The
+    largest score is only a useful mounting hint; it is not an ontology claim.
+    """
+
+    values = asdict(evidence)
+    for name, value in values.items():
+        if not 0.0 <= value <= 1.0:
+            raise ValueError(f"{name} must be between 0 and 1")
+
+    field_score = _mean(
+        [
+            evidence.generates_candidates,
+            evidence.expands_state_space,
+            evidence.explores_alternatives,
+        ]
+    )
+    void_score = _mean(
+        [
+            evidence.validates_constraints,
+            evidence.rejects_or_inhibits,
+            evidence.preserves_continuity,
+        ]
+    )
+    m4_score = _mean(
+        [
+            evidence.routes_events,
+            evidence.timing_sensitive,
+            evidence.synchronizes_subsystems,
+        ]
+    )
+
+    scores = {"FIELD": field_score, "VOID": void_score, "M4": m4_score}
+    highest = max(scores.values())
+    winners = [name for name, score in scores.items() if score == highest]
+    dominant = winners[0] if len(winners) == 1 else "BALANCED_OR_MIXED"
+
+    return LoopBiasProfile(
+        field=field_score,
+        void=void_score,
+        m4=m4_score,
+        dominant=dominant,
+        evidence=evidence,
+    )
+
+
 class IdentityScanner:
     """Collect explicit identity declarations plus observed state keys.
 
@@ -107,6 +199,7 @@ class IdentityScanner:
         invariants: Iterable[str] = (),
         failure_modes: Iterable[str] = (),
         notes: Optional[Mapping[str, Any]] = None,
+        role_evidence: Optional[RoleEvidence] = None,
     ) -> InstanceIdentity:
         snap = instance.snapshot()
         if isinstance(snap, Mapping):
@@ -125,6 +218,7 @@ class IdentityScanner:
             invariants=list(invariants),
             failure_modes=list(failure_modes),
             notes=dict(notes or {}),
+            loop_bias=profile_loop_bias(role_evidence) if role_evidence else None,
         )
 
 
@@ -210,6 +304,8 @@ class TranslationCandidate:
     preserved_invariants: List[str] = field(default_factory=list)
     unresolved_fields: List[str] = field(default_factory=list)
     failed_cases: List[str] = field(default_factory=list)
+    loop_bias: Optional[LoopBiasProfile] = None
+    mounting_notes: List[str] = field(default_factory=list)
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -227,9 +323,23 @@ def derive_candidate(identity: InstanceIdentity, diffs: Iterable[TraceDiff]) -> 
         if not diff.equivalent:
             failed.append(f"{diff.case_id}:{diff.step}")
 
+    mounting_notes: List[str] = []
+    if identity.loop_bias:
+        bias = identity.loop_bias
+        if bias.field > bias.void:
+            mounting_notes.append("preserve wider/faster Field proposal path")
+        if bias.void > bias.field:
+            mounting_notes.append("preserve stronger Void validation/continuity path")
+        if bias.m4 >= 0.5:
+            mounting_notes.append("instance needs explicit fast routing/timing state")
+        else:
+            mounting_notes.append("M4 may remain thin or identity-like at this scale")
+
     return TranslationCandidate(
         instance_name=identity.name,
         preserved_invariants=list(identity.invariants),
         unresolved_fields=list(identity.state_keys),
         failed_cases=failed,
+        loop_bias=identity.loop_bias,
+        mounting_notes=mounting_notes,
     )
