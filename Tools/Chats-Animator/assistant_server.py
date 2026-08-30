@@ -69,15 +69,15 @@ def discover_ollama():
     for url in dict.fromkeys(ollama_candidates()):
         try:
             model = choose_ollama_model(url)
-            return {'ok': True, 'backend': 'ollama', 'model': model, 'url': url}
+            return {'connected': True, 'backend': 'ollama', 'model': model, 'url': url}
         except Exception as exc:
             errors.append(f'{url}: {exc}')
-    return {'ok': False, 'backend': 'ollama', 'model': MODEL or '', 'error': ' | '.join(errors)}
+    return {'connected': False, 'backend': 'ollama', 'model': MODEL or '', 'error': ' | '.join(errors)}
 
 
 def call_ollama(packet):
     found = discover_ollama()
-    if not found['ok']:
+    if not found['connected']:
         raise RuntimeError('No reachable Ollama AI. Tried local computer and Jetson. ' + found.get('error', ''))
     url, model = found['url'], found['model']
     result = request_json(url, {
@@ -138,11 +138,17 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/api/assistant/health':
             if BACKEND == 'openai-compatible':
-                if CUSTOM_URL:
-                    return self.send_json(200, {'ok': True, 'backend': BACKEND, 'model': MODEL or 'default'})
-                return self.send_json(503, {'ok': False, 'backend': BACKEND, 'error': 'ONE_WAVE_AI_URL is not configured'})
+                connected = bool(CUSTOM_URL)
+                return self.send_json(200, {
+                    'ok': True,
+                    'server': True,
+                    'connected': connected,
+                    'backend': BACKEND,
+                    'model': MODEL or 'default',
+                    'error': '' if connected else 'ONE_WAVE_AI_URL is not configured'
+                })
             info = discover_ollama()
-            return self.send_json(200 if info.get('ok') else 503, info)
+            return self.send_json(200, {'ok': True, 'server': True, **info})
         return super().do_GET()
 
     def do_POST(self):
