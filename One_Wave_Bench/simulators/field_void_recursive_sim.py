@@ -1,17 +1,21 @@
 """Reference simulator for recursive Field/Void routing.
 
 This is an executable architecture probe, not a claim that the transition rules
-are final hardware. It preserves the current identities and five-scale ladder:
+are final hardware.
 
-Micro -> Small -> Medium -> Large -> Macro
+Five-scale ladder:
+    Micro -> Small -> Medium -> Large -> Macro
 
-Known identities used here:
+Critical correction:
+- Micro is the Cell / parser machine itself.
+- A Cell is already a complete minimum Field/Void loop.
+- M4/Dream/Admin/Executor belong to higher organization built from Cell output;
+  they are not stuffed into the Cell just to make the code look uniform.
+
+Known identities retained above the Cell layer:
 - Field = Dream / expressive side
 - Void = Administrator = Checker / compressive side
 - M4 = brainstem router
-
-The simulator keeps two distinct state machines (Field and Void), routes through
-M4, records a receipt, and compresses the accepted result upward one scale.
 """
 
 from dataclasses import dataclass, asdict
@@ -52,17 +56,30 @@ class Lifecycle(str, Enum):
 
 
 @dataclass
-class Packet:
-    scale: Scale
-    cue: str
-    field_move: FieldMove
-    confidence: float
-    urgency: float
-    prior_receipt: Optional[Dict] = None
+class CellState:
+    reference: str = "CENTER"
+    last_input: str = ""
+    last_field: FieldMove = FieldMove.HOLD
+    last_void: VoidMove = VoidMove.DEFER
+    cycle: int = 0
 
 
 @dataclass
-class Receipt:
+class CellReceipt:
+    scale: Scale
+    cycle: int
+    raw_input: str
+    reference_before: str
+    binary_choice: str
+    field_move: str
+    void_check: str
+    output: str
+    reference_after: str
+    compressed_summary: str
+
+
+@dataclass
+class HigherReceipt:
     scale: Scale
     cue: str
     lifecycle: Lifecycle
@@ -75,86 +92,141 @@ class Receipt:
     compressed_summary: str
 
 
-class ParserWorker:
-    """Tiny deterministic parser / cell layer."""
+class CellParser:
+    """Minimum Micro Field/Void machine.
 
-    def parse(self, scale: Scale, cue: str, prior_receipt: Optional[Dict] = None) -> Packet:
-        text = cue.strip().lower()
-        if any(word in text for word in ("stop", "deny", "unsafe")):
-            move = FieldMove.HOLD
-            confidence = 0.95
-            urgency = 1.0
-        elif any(word in text for word in ("go", "run", "faster", "expand", "express")):
-            move = FieldMove.EXPRESS
-            confidence = 0.8
-            urgency = 0.75
-        elif any(word in text for word in ("slow", "compress", "reduce")):
-            move = FieldMove.COMPRESS
-            confidence = 0.8
-            urgency = 0.5
+    Jobs intentionally kept primitive:
+      1. read one local input;
+      2. compare it with the current local reference;
+      3. form one opposed binary orientation;
+      4. resolve one ternary Field move;
+      5. let Void confirm/defer/deny;
+      6. update or preserve the local reference;
+      7. emit an auditable receipt.
+
+    The Cell does not plan, imagine, globally route, or command a body.
+    """
+
+    def __init__(self) -> None:
+        self.state = CellState()
+
+    @staticmethod
+    def _binary_choice(text: str) -> str:
+        if any(word in text for word in ("no", "stop", "deny", "unsafe", "reject")):
+            return "NO"
+        if text:
+            return "YES"
+        return "GROUND"
+
+    @staticmethod
+    def _field_move(text: str) -> FieldMove:
+        if any(word in text for word in ("go", "run", "faster", "expand", "express", "up")):
+            return FieldMove.EXPRESS
+        if any(word in text for word in ("slow", "compress", "reduce", "down")):
+            return FieldMove.COMPRESS
+        return FieldMove.HOLD
+
+    @staticmethod
+    def _void_check(text: str, binary_choice: str) -> VoidMove:
+        if binary_choice == "NO":
+            return VoidMove.DENY
+        if not text or any(word in text for word in ("unknown", "maybe", "unclear")):
+            return VoidMove.DEFER
+        return VoidMove.CONFIRM
+
+    def cycle(self, raw_input: str) -> CellReceipt:
+        text = raw_input.strip().lower()
+        reference_before = self.state.reference
+        binary = self._binary_choice(text)
+        field = self._field_move(text)
+        void = self._void_check(text, binary)
+
+        if void == VoidMove.DENY:
+            output = "STOP"
+            reference_after = reference_before
+        elif void == VoidMove.DEFER:
+            output = "HOLD"
+            reference_after = reference_before
         else:
-            move = FieldMove.HOLD
-            confidence = 0.5
-            urgency = 0.25
-        return Packet(scale, cue, move, confidence, urgency, prior_receipt)
+            output = field.value
+            reference_after = f"{binary}:{field.value}"
+
+        self.state.cycle += 1
+        self.state.last_input = raw_input
+        self.state.last_field = field
+        self.state.last_void = void
+        self.state.reference = reference_after
+
+        summary = (
+            f"Micro|B={binary}|F={field.value}|V={void.value}|"
+            f"OUT={output}|REF={reference_after}"
+        )
+
+        return CellReceipt(
+            scale=Scale.MICRO,
+            cycle=self.state.cycle,
+            raw_input=raw_input,
+            reference_before=reference_before,
+            binary_choice=binary,
+            field_move=field.value,
+            void_check=void.value,
+            output=output,
+            reference_after=reference_after,
+            compressed_summary=summary,
+        )
 
 
 class FieldStateMachine:
-    """Dream / Field: generates the expressive proposal."""
+    """Higher-scale Field / Dream side: proposes from compressed Cell state."""
 
-    def step(self, packet: Packet) -> str:
-        return f"{packet.field_move.value}:{packet.cue}"
+    def step(self, cue: str) -> str:
+        return f"PROPOSE:{cue}"
 
 
 class M4Router:
-    """Brainstem router: fast routing, timing, scale and compression boundary."""
+    """Higher-scale brainstem router."""
 
-    def route(self, packet: Packet, proposal: str) -> str:
-        lane = "FAST" if packet.urgency >= 0.75 else "NORMAL"
-        return f"{packet.scale.value}:{lane}:{proposal}"
+    def route(self, scale: Scale, proposal: str) -> str:
+        return f"{scale.value}:ROUTE:{proposal}"
 
 
 class VoidStateMachine:
-    """Void = Administrator = Checker: confirms, defers, or denies."""
+    """Higher-scale Void = Administrator = Checker."""
 
-    def check(self, packet: Packet, routed: str) -> VoidMove:
-        text = packet.cue.lower()
-        if any(word in text for word in ("stop", "deny", "unsafe")):
+    def check(self, cue: str) -> VoidMove:
+        lowered = cue.lower()
+        if "v=deny" in lowered or "out=stop" in lowered:
             return VoidMove.DENY
-        if packet.confidence < 0.6:
+        if "v=defer" in lowered or "out=hold" in lowered:
             return VoidMove.DEFER
         return VoidMove.CONFIRM
 
 
 class ExecutorWorker:
-    """Commits only what Void/Admin/Checker allows."""
-
-    def execute(self, field_move: FieldMove, resolution: VoidMove) -> str:
+    def execute(self, resolution: VoidMove) -> str:
         if resolution == VoidMove.DENY:
             return "OVERRIDE_STOP"
         if resolution == VoidMove.DEFER:
             return "HOLD"
-        return field_move.value
+        return "COMMIT"
 
 
 class RecursiveFieldVoidSimulator:
-    """Five-worker reference flow across Micro->Small->Medium->Large->Macro."""
+    """Cell-first recursion through Micro -> Small -> Medium -> Large -> Macro."""
 
     def __init__(self) -> None:
-        self.parser = ParserWorker()          # Cells / parser
-        self.field = FieldStateMachine()      # Dream / Field
-        self.m4 = M4Router()                  # M4 brainstem router
-        self.void = VoidStateMachine()        # Void/Admin/Checker
-        self.executor = ExecutorWorker()      # Executor
+        self.cell = CellParser()
+        self.field = FieldStateMachine()
+        self.m4 = M4Router()
+        self.void = VoidStateMachine()
+        self.executor = ExecutorWorker()
 
-    def run_scale(self, scale: Scale, cue: str, prior: Optional[Receipt]) -> Receipt:
-        prior_dict = asdict(prior) if prior else None
-        packet = self.parser.parse(scale, cue, prior_dict)
-        proposal = self.field.step(packet)
-        routed = self.m4.route(packet, proposal)
-        resolution = self.void.check(packet, routed)
-        action = self.executor.execute(packet.field_move, resolution)
-        committed = resolution == VoidMove.CONFIRM or resolution == VoidMove.DENY
+    def run_higher_scale(self, scale: Scale, cue: str) -> HigherReceipt:
+        proposal = self.field.step(cue)
+        routed = self.m4.route(scale, proposal)
+        resolution = self.void.check(cue)
+        action = self.executor.execute(resolution)
+        committed = resolution != VoidMove.DEFER
 
         lifecycle = {
             VoidMove.DEFER: Lifecycle.PRIMED,
@@ -164,10 +236,10 @@ class RecursiveFieldVoidSimulator:
 
         next_reference = f"{scale.value}:{resolution.value}:{action}"
         compressed_summary = (
-            f"{scale.value}|F={packet.field_move.value}|V={resolution.value}|A={action}"
+            f"{scale.value}|V={resolution.value}|A={action}|SRC={cue}"
         )
 
-        return Receipt(
+        return HigherReceipt(
             scale=scale,
             cue=cue,
             lifecycle=lifecycle,
@@ -180,13 +252,16 @@ class RecursiveFieldVoidSimulator:
             compressed_summary=compressed_summary,
         )
 
-    def run(self, cue: str) -> List[Receipt]:
-        receipts: List[Receipt] = []
-        prior: Optional[Receipt] = None
-        for scale in SCALE_ORDER:
-            scale_cue = cue if prior is None else prior.compressed_summary
-            prior = self.run_scale(scale, scale_cue, prior)
-            receipts.append(prior)
+    def run(self, cue: str) -> List[object]:
+        receipts: List[object] = []
+        micro = self.cell.cycle(cue)
+        receipts.append(micro)
+        upward = micro.compressed_summary
+
+        for scale in SCALE_ORDER[1:]:
+            higher = self.run_higher_scale(scale, upward)
+            receipts.append(higher)
+            upward = higher.compressed_summary
         return receipts
 
 
