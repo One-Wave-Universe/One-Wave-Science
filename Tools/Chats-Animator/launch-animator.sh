@@ -3,7 +3,8 @@ set -euo pipefail
 
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PORT="${ONE_WAVE_ANIMATOR_PORT:-8765}"
-URL="http://127.0.0.1:${PORT}/index.html"
+BUILD_ID="$(date +%s)"
+URL="http://127.0.0.1:${PORT}/index.html?build=${BUILD_ID}"
 RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}/one-wave-animator"
 PID_FILE="$RUNTIME_DIR/server.pid"
 DIR_FILE="$RUNTIME_DIR/server-app-dir"
