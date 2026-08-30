@@ -37,12 +37,20 @@
     return projectSnapshot();
   }
 
+  function setInput(id, value) {
+    const el = document.getElementById(id);
+    if (!el) throw new Error(`Control missing: ${id}`);
+    el.value = String(value);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    return el;
+  }
+
   function setHold(value) {
     const el = document.getElementById('frame-hold');
     if (!el) throw new Error('Frame hold control missing');
     const next = Math.max(Number(el.min || 1), Math.min(Number(el.max || 12), Number(value)));
-    el.value = String(next);
-    el.dispatchEvent(new Event('input', { bubbles: true }));
+    setInput('frame-hold', next);
     return next;
   }
 
@@ -50,8 +58,7 @@
     const el = document.getElementById('fps-control');
     if (!el) throw new Error('FPS control missing');
     const next = Math.max(Number(el.min || 1), Math.min(Number(el.max || 60), Number(value)));
-    el.value = String(next);
-    el.dispatchEvent(new Event('input', { bubbles: true }));
+    setInput('fps-control', next);
     return next;
   }
 
@@ -59,6 +66,17 @@
     const el = document.getElementById(id);
     if (!el) throw new Error(`Control missing: ${id}`);
     el.click();
+  }
+
+  function captureMotion(args) {
+    const start = Math.max(1, Number(args.start || 1));
+    const end = Math.max(start, Number(args.end || start));
+    setInput('c14-start', start);
+    setInput('c14-end', end);
+    setInput('c14-seq-name', args.name || 'Motion');
+    if (args.tag) setInput('c14-tag', args.tag);
+    click('c14-capture');
+    return { start, end, name: args.name || 'Motion', tag: args.tag || '' };
   }
 
   const mutating = new Set([
@@ -92,11 +110,7 @@
       case 'add_prop': result = A.addAssetFromSource(args.src, 'prop', args.name || 'Generated Prop.png', args.placement || {}); break;
       case 'add_character': result = A.addAssetFromSource(args.src, 'character', args.name || 'Generated Character.png', args.placement || {}); break;
       case 'remove_selected': click('remove-selected'); result = { removed: true }; break;
-      case 'capture_motion': {
-        if (!A.directorDialogue?.captureMotion) throw new Error('Motion capture bridge not ready');
-        result = { message: A.directorDialogue.captureMotion(Number(args.start), Number(args.end), args.name || 'Motion', args.tag || '') };
-        break;
-      }
+      case 'capture_motion': result = captureMotion(args); break;
       case 'insert_motion': {
         if (!A.motionLibrary?.insertSequence) throw new Error('Motion Library not ready');
         A.motionLibrary.insertSequence(Number(args.index || 0)); result = { inserted: Number(args.index || 0) }; break;
