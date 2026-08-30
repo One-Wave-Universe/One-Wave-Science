@@ -31,9 +31,20 @@ jobs:
           grep -q 'c18-director-dialogue.js' /tmp/one-wave-index.html
           grep -q 'c19-local-control-api.js' /tmp/one-wave-index.html
           grep -q 'c20-five-scale-architecture.js' /tmp/one-wave-index.html
+          grep -q 'c21-copy-paste-assistant-plugin.js' /tmp/one-wave-index.html
       - name: Stop smoke server
         if: always()
         run: |
           if [ -f /tmp/one-wave-animator-smoke.pid ]; then
             kill "$(cat /tmp/one-wave-animator-smoke.pid)" 2>/dev/null || true
           fi
+      - name: Package animator
+        run: |
+          cd Tools
+          zip -r ../One-Wave-Animator.zip Chats-Animator
+      - name: Upload animator download
+        uses: actions/upload-artifact@v4
+        with:
+          name: One-Wave-Animator
+          path: One-Wave-Animator.zip
+          if-no-files-found: error
