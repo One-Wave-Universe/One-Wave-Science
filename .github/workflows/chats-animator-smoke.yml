@@ -1,0 +1,39 @@
+name: Chats Animator Smoke Test
+
+on:
+  push:
+    paths:
+      - 'Tools/Chats-Animator/**'
+      - '.github/workflows/chats-animator-smoke.yml'
+  pull_request:
+    paths:
+      - 'Tools/Chats-Animator/**'
+      - '.github/workflows/chats-animator-smoke.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run structural and syntax smoke test
+        run: bash Tools/Chats-Animator/test-animator.sh
+      - name: Start local animator server
+        working-directory: Tools/Chats-Animator
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/one-wave-animator-smoke.log 2>&1 &
+          echo $! > /tmp/one-wave-animator-smoke.pid
+          sleep 1
+      - name: Verify animator page serves
+        run: |
+          curl --fail --silent --show-error http://127.0.0.1:8765/index.html > /tmp/one-wave-index.html
+          grep -q 'ONE-WAVE ANIMATOR' /tmp/one-wave-index.html
+          grep -q 'c18-director-dialogue.js' /tmp/one-wave-index.html
+          grep -q 'c19-local-control-api.js' /tmp/one-wave-index.html
+          grep -q 'c20-five-scale-architecture.js' /tmp/one-wave-index.html
+      - name: Stop smoke server
+        if: always()
+        run: |
+          if [ -f /tmp/one-wave-animator-smoke.pid ]; then
+            kill "$(cat /tmp/one-wave-animator-smoke.pid)" 2>/dev/null || true
+          fi
