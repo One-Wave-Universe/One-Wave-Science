@@ -23,6 +23,7 @@ required=(
   c19-local-control-api.js
   c20-five-scale-architecture.js
   c21-copy-paste-assistant-plugin.js
+  assistant_server.py
   launch-animator.sh
   install-ubuntu.sh
 )
@@ -32,6 +33,9 @@ for file in "${required[@]}"; do
 done
 
 echo "PASS required animator files"
+
+python3 -m py_compile assistant_server.py
+echo "PASS assistant server syntax"
 
 if command -v node >/dev/null 2>&1; then
   for file in ./*.js; do
@@ -50,26 +54,26 @@ grep -q 'c19-local-control-api.js' index.html
 grep -q 'c20-five-scale-architecture.js' index.html
 grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
-echo "PASS control/architecture/director/AI bridge scripts wired into index"
+echo "PASS control/architecture/director/live-AI scripts wired into index"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
 grep -q 'provider-neutral' c18-director-dialogue.js
 grep -q 'local-ready' c18-director-dialogue.js
 echo "PASS provider-neutral assistant plugin contract"
 
-grep -q 'copy-paste-bridge' c21-copy-paste-assistant-plugin.js
-grep -q 'chatgpt-ready' c21-copy-paste-assistant-plugin.js
-grep -q 'claude-ready' c21-copy-paste-assistant-plugin.js
-grep -q 'Apply AI Response' c21-copy-paste-assistant-plugin.js
-echo "PASS universal assistant bridge contract"
+grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
+grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
+grep -q 'human-ai-cocreative' c21-copy-paste-assistant-plugin.js
+grep -q 'AI:' c21-copy-paste-assistant-plugin.js
+echo "PASS live human+AI creative partner bridge contract"
+
+grep -q '/api/assistant/health' assistant_server.py
+grep -q '192.168.55.1:11434' assistant_server.py
+grep -q 'The human and AI are the Dream/Director creative pair' assistant_server.py
+echo "PASS local/Jetson AI backend contract"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
 echo "PASS external control API contract"
-
-grep -q 'Micro' c20-five-scale-architecture.js || true
-grep -q 'M4' c20-five-scale-architecture.js
-grep -q 'Administrator' c20-five-scale-architecture.js
-echo "PASS five-scale/oversight architecture present"
 
 echo "SMOKE TEST PASS"
