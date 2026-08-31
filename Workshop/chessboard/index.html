@@ -26,8 +26,8 @@ for(let r=0;r<8;r++){
     const sq=document.createElement('div');
     const dark=(r+c)%2===1;
     sq.className='sq '+(dark?'dark':'light');
-    if(dark && r<3){const p=document.createElement('div');p.className='piece void';sq.appendChild(p)}
-    if(dark && r>4){const p=document.createElement('div');p.className='piece field';sq.appendChild(p)}
+    if(dark && c<3){const p=document.createElement('div');p.className='piece field';sq.appendChild(p)}
+    if(dark && c>4){const p=document.createElement('div');p.className='piece void';sq.appendChild(p)}
     board.appendChild(sq);
   }
 }
