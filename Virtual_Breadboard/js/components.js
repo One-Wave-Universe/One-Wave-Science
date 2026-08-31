@@ -33,6 +33,22 @@
   };
   const WIRE_GAUGES = { thin: '30 AWG', standard: '22 AWG', thick: '18 AWG' };
   const WIRE_GAUGE_WIDTH = { thin: 1.8, standard: 3, thick: 4.6 };
+  // real copper resistance-per-meter for each gauge -- used to give a
+  // toroid's windings actual DC resistance from wire gauge + turns + core size
+  const WIRE_GAUGE_OHMS_PER_M = { thin: 0.339, standard: 0.0531, thick: 0.0210 };
+
+  // ferrite toroid cores: A_L (inductance factor, henries per turn^2 -- real
+  // datasheet parameter, e.g. a small FT37-43-class core) and a
+  // representative mean-turn length (meters) for winding-resistance math.
+  const TOROID_CORES = {
+    small: { al: 100e-9, meanTurnLen: 0.03, label: 'Small' },
+    medium: { al: 250e-9, meanTurnLen: 0.05, label: 'Medium' },
+    large: { al: 600e-9, meanTurnLen: 0.08, label: 'Large' },
+  };
+  const TOROID_TURNS_VALUES = [5, 10, 20, 50, 100, 200];
+  // coupling coefficient between windings sharing one core, as a function of
+  // how tightly the sections are wound relative to each other
+  const TOROID_SPACING_COUPLING = { tight: 0.97, normal: 0.9, wide: 0.75 };
   // matches a typical 4-channel scope's trace colors (yellow/CH1, green/CH2, ...)
   const SCOPE_COLORS = ['#f4d35e', '#3ddc6b', '#4d8dff', '#ff6ec7'];
 
@@ -65,6 +81,10 @@
     // a zero-load voltage tap, like a real scope probe -- never enters the
     // circuit physics itself, just reads whatever node it's touching.
     { type: 'scope', label: 'Scope Probe', terminals: 1, icon: 'CH' },
+    // terminal count is variable (2 per winding section, chosen before
+    // placement) -- app.js overrides terminalsNeeded() for this type;
+    // `terminals` here is just the 1-section default.
+    { type: 'toroid', label: 'Ferrite Toroid', terminals: 2, icon: '◯' },
   ];
 
   function resistorColorBands(value) {
@@ -661,6 +681,78 @@
     ctx.restore();
   }
 
+  const TOROID_SECTION_COLORS = ['#d4af37', '#4d8dff', '#3ddc6b'];
+
+  // t = terminal points, 2 per winding section in order [s0a,s0b, s1a,s1b, ...]
+  function toroidCentroid(t) {
+    const x = t.reduce((s, p) => s + p.x, 0) / t.length;
+    const y = t.reduce((s, p) => s + p.y, 0) / t.length;
+    return { x, y };
+  }
+
+  function drawToroid(ctx, comp, t, opacity) {
+    const o = op(opacity);
+    const c = toroidCentroid(t);
+    const sections = comp.turnsPerSection ? comp.turnsPerSection.length : t.length / 2;
+    const outerR = 24;
+    const innerR = 13;
+
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    t.forEach((p) => {
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+
+    // the ferrite core itself -- a dark donut
+    ctx.globalAlpha = 0.94 * o;
+    ctx.fillStyle = '#2b2b2e';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, outerR, 0, Math.PI * 2);
+    ctx.arc(c.x, c.y, innerR, 0, Math.PI * 2, true);
+    ctx.fill('evenodd');
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#4a4a4e';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, outerR, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, innerR, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // windings: each section gets its own color and its own arc of the ring,
+    // drawn as a run of loops over the core -- visual loop count is capped
+    // for legibility even though the real turn count (used electrically)
+    // can be much higher
+    const spacing = comp.spacing || 'normal';
+    const arcSpan = spacing === 'tight' ? (Math.PI * 2) / sections / 2.2 : spacing === 'wide' ? (Math.PI * 2) / sections / 1.15 : (Math.PI * 2) / sections / 1.6;
+    for (let s = 0; s < sections; s++) {
+      const turns = comp.turnsPerSection ? comp.turnsPerSection[s] : 10;
+      const loops = Math.max(3, Math.min(14, Math.round(turns / 4)));
+      const baseAngle = (Math.PI * 2 * s) / sections - Math.PI / 2;
+      ctx.strokeStyle = TOROID_SECTION_COLORS[s % TOROID_SECTION_COLORS.length];
+      ctx.lineWidth = 1.6;
+      for (let i = 0; i < loops; i++) {
+        const ang = baseAngle + (arcSpan * i) / Math.max(1, loops - 1) - arcSpan / 2;
+        ctx.beginPath();
+        ctx.ellipse(c.x + Math.cos(ang) * (outerR + innerR) / 2, c.y + Math.sin(ang) * (outerR + innerR) / 2, 5, (outerR - innerR) / 2 + 3, ang + Math.PI / 2, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    ctx.fillStyle = '#cfd8e3cc';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText((comp.core ? comp.core[0].toUpperCase() + comp.core.slice(1) : '') + ' core', c.x, c.y + outerR + 12);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   // A canonical, centered rendering of any part type into a small square --
   // used by the preview card in the toolbox/Inspector, so a part looks the
   // same whether you're still choosing its value or it's already on the
@@ -706,6 +798,17 @@
       drawScopeProbe(ctx, Object.assign({ color: SCOPE_COLORS[0] }, p), cx, h * 0.78, 1);
       return;
     }
+    if (type === 'toroid') {
+      const sections = p.turnsPerSection ? p.turnsPerSection.length : 1;
+      const t = [];
+      for (let s = 0; s < sections; s++) {
+        const ang = (Math.PI * 2 * s) / sections;
+        t.push({ x: cx + Math.cos(ang) * w * 0.4, y: cy + Math.sin(ang) * h * 0.35 - 4 });
+        t.push({ x: cx + Math.cos(ang) * w * 0.4, y: cy + Math.sin(ang) * h * 0.35 + 4 });
+      }
+      drawToroid(ctx, Object.assign({ turnsPerSection: [10], core: 'medium', spacing: 'normal' }, p), t, 1);
+      return;
+    }
     // every remaining type is a plain 2-terminal horizontal part
     const x1 = w * 0.14;
     const x2 = w * 0.86;
@@ -732,13 +835,15 @@
 
   const api = {
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
-    INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES,
+    INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES, WIRE_GAUGE_OHMS_PER_M,
+    TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING,
     resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
     potCentroid, potPosToAngle, potAngleToPos,
     drawInductor, drawAcSource, drawMtjSensor, mtjCentroid,
     drawScopeProbe, drawPartIcon,
+    drawToroid, toroidCentroid,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

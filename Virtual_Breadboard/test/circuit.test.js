@@ -329,4 +329,61 @@ function approx(a, b, eps, msg) {
   console.log('Test 14 OK: MTJ sin/cos quadrature pair holds sin^2+cos^2 = 1 (max deviation', maxErr.toFixed(5), ')');
 }
 
+// Test 15: ferrite toroid -- a single winding should behave exactly like a
+// plain inductor (L/R transient), and two windings sharing a core with
+// real mutual-inductance coupling should transform an AC drive by
+// (approximately, given finite coupling/loading) their turns ratio, the
+// way an actual transformer does.
+{
+  // single winding == plain inductor
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'N1', value: 100 },
+      { id: 'tor1', type: 'toroid', coupling: 0, windings: [{ a: 'N1', b: 'M', L: 0.1, R: 0 }] },
+    ],
+  };
+  const dt1 = 1 / 2000;
+  let res;
+  for (let i = 0; i < 2000; i++) res = c.solve(els, dt1);
+  const totalR = 100 + CircuitEngine.BATTERY_RINT;
+  const tau = 0.1 / totalR;
+  const iExpected = (5 / totalR) * (1 - Math.exp(-1 / tau));
+  approx(res.currents.get('tor1'), iExpected, 1e-3, 'single-winding toroid follows the L/R rise curve like a plain inductor');
+
+  // two windings, 1:2 turns ratio, tightly coupled -- secondary should read
+  // ~2x the primary at steady state (ideal-transformer limit)
+  const c2 = new Circuit();
+  const AL = 250e-9;
+  const turnsP = 10, turnsS = 20;
+  const els2 = {
+    wires: [],
+    components: [
+      { id: 'ac1', type: 'acsource', a: 'P1', b: 'P2', value: 5, freq: 1000, phase: 0 },
+      {
+        id: 'tor2', type: 'toroid', coupling: 0.995,
+        windings: [
+          { a: 'P1', b: 'P2', L: AL * turnsP * turnsP, R: 0.01 },
+          { a: 'S1', b: 'S2', L: AL * turnsS * turnsS, R: 0.01 },
+        ],
+      },
+      { id: 'rload', type: 'resistor', a: 'S1', b: 'S2', value: 100000 },
+    ],
+  };
+  const dt2 = 1 / 200000;
+  const steps = Math.round(20 / 1000 / dt2); // 20 cycles at 1kHz
+  let maxVp = 0, maxVs = 0;
+  for (let i = 0; i < steps; i++) {
+    res = c2.solve(els2, dt2);
+    if (i > steps * 0.7) {
+      maxVp = Math.max(maxVp, Math.abs(res.voltages.get(res.uf.find('P1')) - res.voltages.get(res.uf.find('P2'))));
+      maxVs = Math.max(maxVs, Math.abs(res.voltages.get(res.uf.find('S1')) - res.voltages.get(res.uf.find('S2'))));
+    }
+  }
+  approx(maxVs / maxVp, turnsS / turnsP, 0.1, 'toroid transformer output follows the turns ratio (1:2)');
+  console.log('Test 15 OK: toroid single-winding matches a plain inductor, two-winding transformer ratio =', (maxVs / maxVp).toFixed(3), '(expect ~2)');
+}
+
 console.log('\nAll circuit engine tests passed.');

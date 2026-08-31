@@ -26,6 +26,11 @@
  *     parts): two buffered analog outputs, sin(theta) and cos(theta) of a
  *     rotating field, referenced to a shared pin — implemented as a
  *     quadrature pair of ideal sources sharing one clock, 90 degrees apart.
+ *   - Ferrite toroids generalize the single inductor to N windings sharing
+ *     one magnetic core: real mutual inductance (SPICE-style coupling),
+ *     each winding a backward-Euler branch whose equation now also carries
+ *     every other winding's discretized current, plus real per-winding DC
+ *     winding resistance from wire gauge and core size.
  *   - A tiny leak conductance (gmin) from every node to ground prevents the
  *     matrix from going singular when part of the board isn't wired to
  *     anything yet.
@@ -122,6 +127,7 @@
       this._ledState = new Map(); // component id -> boolean (conducting)
       this._capState = new Map(); // component id -> voltage across it last frame
       this._indState = new Map(); // component id -> current through it last frame
+      this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -163,6 +169,7 @@
           uf.find(mtjSinInternal(c));
           uf.find(mtjCosInternal(c));
         }
+        if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
@@ -170,6 +177,7 @@
       const inductors = components.filter((c) => c.type === 'inductor');
       const acsources = components.filter((c) => c.type === 'acsource');
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
+      const toroids = components.filter((c) => c.type === 'toroid');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -202,6 +210,7 @@
           touch(mtjSinInternal(c));
           touch(mtjCosInternal(c));
         }
+        if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
       });
       roots.add(groundRoot);
 
@@ -214,15 +223,27 @@
       const nInd = inductors.length;
       const nAc = acsources.length;
       const nMtj = mtjsensors.length;
+      const nToroidRows = toroids.reduce((s, tor) => s + tor.windings.length, 0);
       // extra-unknown row offsets, in stamping order: batteries, vgnds,
-      // inductors, ac sources, then 2 rows (sin, cos) per MTJ sensor
+      // inductors, ac sources, 2 rows (sin, cos) per MTJ sensor, then one
+      // row per toroid winding (windings of the same toroid stay adjacent)
       const rowBat = (k) => nNodes + k;
       const rowVgnd = (k) => nNodes + nSrc + k;
       const rowInd = (k) => nNodes + nSrc + nVgnd + k;
       const rowAc = (k) => nNodes + nSrc + nVgnd + nInd + k;
       const rowMtjSin = (k) => nNodes + nSrc + nVgnd + nInd + nAc + k * 2;
       const rowMtjCos = (k) => nNodes + nSrc + nVgnd + nInd + nAc + k * 2 + 1;
-      const size = nNodes + nSrc + nVgnd + nInd + nAc + nMtj * 2;
+      const toroidRowBase = nNodes + nSrc + nVgnd + nInd + nAc + nMtj * 2;
+      const toroidRowOffsets = [];
+      {
+        let off = toroidRowBase;
+        toroids.forEach((tor) => {
+          toroidRowOffsets.push(off);
+          off += tor.windings.length;
+        });
+      }
+      const rowToroid = (torK, windingIdx) => toroidRowOffsets[torK] + windingIdx;
+      const size = toroidRowBase + nToroidRows;
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
 
@@ -405,6 +426,45 @@
           b[row] += -Ldt * iPrev;
         });
 
+        // Ferrite toroid: N windings sharing one core. Each winding is a
+        // backward-Euler branch like a plain inductor, but its equation now
+        // includes every OTHER winding's discretized current too (mutual
+        // inductance -- the standard SPICE "K" coupling generalized to
+        // transient), plus its own real DC winding resistance:
+        //   V(a_i)-V(b_i) - R_i*i_i - sum_j(L_ij/dt)*i_j = -sum_j(L_ij/dt)*iPrev_j
+        // L_ii is the winding's own self-inductance; L_ij (i != j) is the
+        // mutual inductance k*sqrt(L_i*L_j) from sharing the same core.
+        toroids.forEach((tor, tk) => {
+          const n = tor.windings.length;
+          const dtSafe = Math.max(dt, 1e-6);
+          const prev = this._toroidState.get(tor.id) || new Array(n).fill(0);
+          const k = tor.coupling || 0;
+          const Lself = tor.windings.map((w) => Math.max(w.L, 1e-12));
+          for (let i = 0; i < n; i++) {
+            const row = rowToroid(tk, i);
+            const w = tor.windings[i];
+            const ia = gi(uf.find(w.a));
+            const ib = gi(uf.find(w.b));
+            if (ia >= 0) {
+              A[ia][row] += 1;
+              A[row][ia] += 1;
+            }
+            if (ib >= 0) {
+              A[ib][row] -= 1;
+              A[row][ib] -= 1;
+            }
+            A[row][row] -= w.R || 0;
+            let rhs = 0;
+            for (let j = 0; j < n; j++) {
+              const Lij = i === j ? Lself[i] : k * Math.sqrt(Lself[i] * Lself[j]);
+              const Ldt2 = Lij / dtSafe;
+              A[row][rowToroid(tk, j)] -= Ldt2;
+              rhs += -Ldt2 * (prev[j] || 0);
+            }
+            b[row] += rhs;
+          }
+        });
+
         // AC source: an ideal source like a battery, but its target value is
         // the shared sim clock's sinusoid instead of a constant.
         acsources.forEach((ac, k) => {
@@ -491,6 +551,17 @@
       const acCurrent = new Map();
       acsources.forEach((ac, k) => acCurrent.set(ac.id, -(xSol[rowAc(k)] || 0)));
 
+      // toroid windings: report each winding's own current under
+      // "<toroidId>:<windingIndex>" (voltages need no special handling --
+      // winding terminals are ordinary cellIds already in the voltages map)
+      const toroidCurrent = new Map();
+      toroids.forEach((tor, tk) => {
+        const arr = tor.windings.map((w, wi) => xSol[rowToroid(tk, wi)] || 0);
+        this._toroidState.set(tor.id, arr);
+        arr.forEach((I, wi) => toroidCurrent.set(tor.id + ':' + wi, I));
+        toroidCurrent.set(tor.id, arr[0] || 0);
+      });
+
       components.forEach((c) => {
         const va = voltages.get(uf.find(c.a));
         const vb = voltages.get(uf.find(c.b));
@@ -518,9 +589,12 @@
           I = acCurrent.get(c.id) || 0;
         } else if (c.type === 'mtjsensor') {
           I = 0;
+        } else if (c.type === 'toroid') {
+          I = toroidCurrent.get(c.id) || 0;
         }
         currents.set(c.id, I);
       });
+      toroidCurrent.forEach((I, key) => currents.set(key, I));
 
       batteries.forEach((bat, k) => {
         // MNA's branch-current unknown is defined flowing p->m through the

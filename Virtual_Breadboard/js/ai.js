@@ -58,6 +58,16 @@
       '                proper bipolar sensor reference.',
       '  scope         1 terminal: a zero-load probe tap for visualizing a node on the Oscilloscope',
       '                panel. Never affects the circuit. No value needed.',
+      '  toroid        A ferrite-core inductor/transformer. Terminals = 2 per winding "section"',
+      '                (1-3 sections): [s1a,s1b] or [s1a,s1b,s2a,s2b] etc. Needs a "turns" array,',
+      '                one positive integer per section (e.g. [10,20] for a 1:2-turns-ratio',
+      '                transformer). Optional "core": "small"/"medium"/"large" (default "medium",',
+      '                bigger = more inductance per turn), "gauge": "thin"/"standard"/"thick"',
+      '                (default "standard", affects winding resistance), "spacing":',
+      '                "tight"/"normal"/"wide" (default "normal", only matters with 2+ sections --',
+      '                how tightly coupled the windings are to each other). One section behaves like',
+      '                a plain inductor; 2+ sections are real mutual-inductance-coupled windings on',
+      '                one core (an actual transformer, including turns-ratio voltage transformation).',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -168,6 +178,24 @@
     if (!parts) return { ok: false, errors: ['Response has no "parts" array.'], parts: [] };
     if (!parts.length) errors.push('The "parts" array is empty.');
     parts.forEach((p, i) => {
+      if (p && p.type === 'toroid') {
+        const turns = Array.isArray(p.turns) ? p.turns : null;
+        if (!turns || !turns.length || turns.length > 3) {
+          errors.push('part ' + i + ' (toroid): needs a "turns" array of 1-3 positive integers (one per winding section)');
+          return;
+        }
+        if (turns.some((n) => !(Number(n) > 0))) errors.push('part ' + i + ' (toroid): all turns counts must be positive');
+        const needT = turns.length * 2;
+        if (!Array.isArray(p.terminals) || p.terminals.length !== needT) {
+          errors.push('part ' + i + ' (toroid): needs ' + needT + ' terminals (2 per winding section), got ' + (p.terminals ? p.terminals.length : 0));
+          return;
+        }
+        p.terminals.forEach((t, j) => {
+          if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
+          if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
+        });
+        return;
+      }
       const need = TERMINALS_NEEDED[p && p.type];
       if (!need) {
         errors.push('part ' + i + ': unknown type "' + (p && p.type) + '"');

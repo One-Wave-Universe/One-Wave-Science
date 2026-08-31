@@ -4,10 +4,11 @@ A real, from-scratch electronics breadboard simulator: a full-size 63-column
 solderless breadboard rendered hole-by-hole, a palette of real parts
 (resistors, LEDs, diodes, capacitors, a power supply, a switch, a momentary
 pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
-an inductor, a real AC source, an MTJ rotary angle sensor, and jumper
-wires), a built-in oscilloscope, and a live circuit-physics engine
-underneath — not a toy animation. Click any hole to wire something into
-it, and the simulator solves the actual circuit every frame.
+an inductor, a real AC source, an MTJ rotary angle sensor, a multi-section
+ferrite toroid transformer, and jumper wires), a built-in oscilloscope,
+and a live circuit-physics engine underneath — not a toy animation. Click
+any hole to wire something into it, and the simulator solves the actual
+circuit every frame.
 
 ## What makes the physics "real"
 
@@ -73,7 +74,23 @@ linear-algebra method SPICE-class simulators use:
   "rotating field" setup; wire its `ref` pin to a Virtual Ground for a
   proper bipolar sensor reference. It's an honest electrical model of the
   sensor IC's output stage, not a claim to simulate real magnetic/inductive
-  field physics — the engine has no AC-coupling/mutual-inductance solve.
+  field physics.
+- The **Ferrite Toroid** is a real mutual-inductance component: 1-3
+  independent windings ("sections") sharing one core, each with its own
+  turns count, wire gauge, and 2 terminals. One section behaves exactly
+  like a plain inductor; 2 or 3 sections are genuinely coupled the way a
+  real transformer's windings are (SPICE-style "K" coupling, generalized to
+  the same backward-Euler transient stepping as everything else), so a
+  step-up/step-down turns ratio between sections actually transforms an AC
+  voltage. Each winding's inductance comes from `A_L * turns²` (`A_L` is
+  the core's real datasheet inductance factor — pick Small/Medium/Large),
+  and its DC resistance comes from real copper-wire resistance-per-meter
+  for the chosen gauge times the turns and the core's mean turn length —
+  so gauge, turns, and core size all have a genuine electrical effect, not
+  just a cosmetic one. "Winding spacing" (Tight/Normal/Wide) sets how
+  strongly multiple sections couple to each other. This is a linear
+  inductance model — it doesn't simulate core saturation (a real ferrite's
+  B-H curve) or leakage flux in detail.
 - The **Oscilloscope** panel below the board is fed by zero-load Scope
   Probes (like a real 10MΩ probe — they never affect the circuit) sampled
   every frame into a rolling window, so AC and quadrature signals are
@@ -207,7 +224,8 @@ fetch one.
    changing it starts the build over, so do it before you place parts.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
-   Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe).
+   Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe,
+   Ferrite Toroid).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -228,6 +246,10 @@ fetch one.
      sin-out pin, then the cos-out pin.
    - The **Scope Probe** takes 1 click — it taps whatever node it lands on
      and adds a live trace to the Oscilloscope panel below the board.
+   - The **Ferrite Toroid** takes 2 clicks per winding section (pick 1-3
+     sections and each section's turns count in the tool panel first) —
+     click that section's 2 terminal holes, then the next section's 2, and
+     so on.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it. Both
@@ -347,5 +369,8 @@ switch/pushbutton open-closed behavior, a Y-split wire tying 4 holes
 splitter holding its output at the exact midpoint of two rails (both
 unloaded and loaded, symmetric and asymmetric supply voltage), a real L/R
 current-rise transient through an inductor, an AC source tracked against
-its analytic sine at specific points on the simulator's own clock, and an
-MTJ sensor's sin/cos quadrature pair holding the sin²+cos²=1 identity.
+its analytic sine at specific points on the simulator's own clock, an MTJ
+sensor's sin/cos quadrature pair holding the sin²+cos²=1 identity, and a
+ferrite toroid transformer (a single winding matching a plain inductor's
+L/R curve exactly, and two coupled windings transforming an AC drive by
+their turns ratio).

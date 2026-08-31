@@ -31,6 +31,11 @@
       wireGauge: 'standard',
       potentiometer: 10000,
       wireColor: WIRE_COLORS[0],
+      toroidSections: 1,
+      toroidCore: 'medium',
+      toroidGauge: 'standard',
+      toroidSpacing: 'normal',
+      toroidTurns: [10, 10, 10],
     },
     pending: [],
     hoverHole: null,
@@ -80,6 +85,22 @@
     return part;
   }
 
+  // generator: derive each winding's real self-inductance (from turns and
+  // core A_L) and DC winding resistance (from turns, wire gauge, and the
+  // core's mean turn length) -- the electrical consequences of the part's
+  // user-facing dropdowns, computed once per solve rather than baked in
+  // at placement time so editing them later (Inspector) takes effect live.
+  function toroidWindings(p) {
+    const coreDef = Components.TOROID_CORES[p.core] || Components.TOROID_CORES.medium;
+    const ohmsPerM = Components.WIRE_GAUGE_OHMS_PER_M[p.gauge] || Components.WIRE_GAUGE_OHMS_PER_M.standard;
+    return p.turnsPerSection.map((turns, i) => ({
+      a: p.terminals[i * 2].cellId,
+      b: p.terminals[i * 2 + 1].cellId,
+      L: coreDef.al * turns * turns,
+      R: turns * coreDef.meanTurnLen * ohmsPerM,
+    }));
+  }
+
   function toEngineElements() {
     const wires = [];
     const components = [];
@@ -125,6 +146,12 @@
           id: p.id, type: 'mtjsensor', label: p.id,
           ref: p.terminals[0].cellId, sin: p.terminals[1].cellId, cos: p.terminals[2].cellId,
           value: p.value, freq: p.freq, phase: p.phase,
+        });
+      } else if (p.type === 'toroid') {
+        components.push({
+          id: p.id, type: 'toroid', label: p.id,
+          windings: toroidWindings(p),
+          coupling: p.turnsPerSection.length > 1 ? (Components.TOROID_SPACING_COUPLING[p.spacing] || 0.9) : 0,
         });
       } else {
         components.push({
@@ -219,6 +246,7 @@
       case 'mtjsensor': return { value: tv.mtjsensor, freq: tv.mtjsensorFreq };
       case 'potentiometer': return { value: tv.potentiometer, pos: 0.5 };
       case 'wire': case 'ywire': return { color: tv.wireColor, style: 'loop', gauge: tv.wireGauge };
+      case 'toroid': return { turnsPerSection: tv.toroidTurns.slice(0, tv.toroidSections), core: tv.toroidCore, spacing: tv.toroidSpacing };
       default: return {};
     }
   }
@@ -250,6 +278,17 @@
     } else if (state.tool === 'wire' || state.tool === 'ywire') {
       toolOptionsEl.appendChild(makeSelect('Color', Components.WIRE_COLOR_CHOICES.map((c) => [c, Components.WIRE_COLOR_NAMES[c] || c]), state.toolValue.wireColor, (v) => { state.toolValue.wireColor = v; renderToolOptions(); }));
       toolOptionsEl.appendChild(makeSelect('Gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), state.toolValue.wireGauge, (v) => { state.toolValue.wireGauge = v; renderToolOptions(); }));
+    } else if (state.tool === 'toroid') {
+      const tv = state.toolValue;
+      toolOptionsEl.appendChild(makeSelect('Core', Object.entries(Components.TOROID_CORES).map(([k, v]) => [k, v.label]), tv.toroidCore, (v) => { tv.toroidCore = v; renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Wire gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), tv.toroidGauge, (v) => { tv.toroidGauge = v; renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Sections', [1, 2, 3].map((n) => [n, n]), tv.toroidSections, (v) => { tv.toroidSections = Number(v); renderToolOptions(); }));
+      for (let s = 0; s < tv.toroidSections; s++) {
+        toolOptionsEl.appendChild(makeSelect('Turns (section ' + (s + 1) + ')', Components.TOROID_TURNS_VALUES.map((n) => [n, n]), tv.toroidTurns[s], (v) => { tv.toroidTurns[s] = Number(v); renderToolOptions(); }));
+      }
+      if (tv.toroidSections > 1) {
+        toolOptionsEl.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), tv.toroidSpacing, (v) => { tv.toroidSpacing = v; renderToolOptions(); }));
+      }
     }
   }
   function labeled(text, el) {
@@ -289,6 +328,9 @@
   }
 
   function terminalsNeeded(type) {
+    // a toroid's terminal count depends on how many winding sections were
+    // chosen in the tool options (2 per section) -- not a fixed PALETTE value
+    if (type === 'toroid') return state.toolValue.toroidSections * 2;
     const def = Components.PALETTE.find((p) => p.type === type);
     return def ? def.terminals : 2;
   }
@@ -317,6 +359,14 @@
     if (type === 'acsource') return { type: 'acsource', terminals: holes.slice(0, 2), value: opts.acValue, freq: opts.acFreq, phase: 0 };
     if (type === 'mtjsensor') return { type: 'mtjsensor', terminals: holes.slice(0, 3), value: opts.mtjValue, freq: opts.mtjFreq, phase: 0 };
     if (type === 'scope') return { type: 'scope', terminals: holes.slice(0, 1), color: opts.scopeColor, samples: [] };
+    if (type === 'toroid') {
+      const sections = opts.toroidSections;
+      return {
+        type: 'toroid', terminals: holes.slice(0, sections * 2),
+        turnsPerSection: opts.toroidTurns.slice(0, sections),
+        core: opts.toroidCore, gauge: opts.toroidGauge, spacing: opts.toroidSpacing,
+      };
+    }
     return null;
   }
 
@@ -344,6 +394,11 @@
       wireColor: type === 'wire' || type === 'ywire' ? state.toolValue.wireColor : undefined,
       wireGauge: state.toolValue.wireGauge,
       scopeColor: type === 'scope' ? nextScopeColor() : undefined,
+      toroidSections: state.toolValue.toroidSections,
+      toroidTurns: state.toolValue.toroidTurns,
+      toroidCore: state.toolValue.toroidCore,
+      toroidGauge: state.toolValue.toroidGauge,
+      toroidSpacing: state.toolValue.toroidSpacing,
     });
     if (part) addPart(part);
   }
@@ -366,7 +421,13 @@
     for (let i = state.parts.length - 1; i >= 0; i--) {
       const p = state.parts[i];
       const t = p.terminals;
-      if (t.length === 6) {
+      if (p.type === 'toroid') {
+        const c = Components.toroidCentroid(t);
+        if (Math.hypot(pos.x - c.x, pos.y - c.y) < 28) return p;
+        // terminals can sit far from the ring itself (each section's holes
+        // are wherever the user clicked) -- also catch a click on a lead
+        if (t.some((term) => distToSegment(pos.x, pos.y, term.x, term.y, c.x, c.y) < 10)) return p;
+      } else if (t.length === 6) {
         const left = Math.min(t[0].x, t[3].x) - 10;
         const right = Math.max(t[2].x, t[5].x) + 10;
         const top = Math.min(t[1].y, t[4].y) - 17;
@@ -396,6 +457,7 @@
   // where the selection ring / occupied-hole body is centered for a part
   function partCenter(p) {
     const t = p.terminals;
+    if (p.type === 'toroid') return Components.toroidCentroid(t);
     if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
     if (t.length === 4) {
       const [j1, j2] = Components.yWireJunctions(t);
@@ -677,6 +739,15 @@
       container.appendChild(makeSelect('Color', Components.WIRE_COLOR_CHOICES.map((c) => [c, Components.WIRE_COLOR_NAMES[c] || c]), part.color, (v) => { part.color = v; notify(); }));
       container.appendChild(makeSelect('Gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), part.gauge || 'standard', (v) => { part.gauge = v; notify(); }));
       container.appendChild(makeSelect('Style', [['loop', 'Looped'], ['flat', 'Flat']], part.style || 'loop', (v) => { part.style = v; notify(); }));
+    } else if (part.type === 'toroid') {
+      container.appendChild(makeSelect('Core', Object.entries(Components.TOROID_CORES).map(([k, v]) => [k, v.label]), part.core, (v) => { part.core = v; notify(); }));
+      container.appendChild(makeSelect('Wire gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), part.gauge, (v) => { part.gauge = v; notify(); }));
+      part.turnsPerSection.forEach((turns, s) => {
+        container.appendChild(makeSelect('Turns (section ' + (s + 1) + ')', Components.TOROID_TURNS_VALUES.map((n) => [n, n]), turns, (v) => { part.turnsPerSection[s] = Number(v); notify(); }));
+      });
+      if (part.turnsPerSection.length > 1) {
+        container.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), part.spacing, (v) => { part.spacing = v; notify(); }));
+      }
     }
   }
 
@@ -749,6 +820,19 @@
         <div><span>V(cos) - V(ref)</span><b>${fmtV(vCos)}</b></div>
         <div><span>Decoded angle</span><b>${angleDeg.toFixed(1)}°</b></div>
       `;
+      return;
+    } else if (part.type === 'toroid') {
+      // one V/I pair per winding section -- a transformer's whole point is
+      // comparing sections against each other (turns ratio, phase), so the
+      // generic single-pair readout would hide the interesting part
+      currentReadoutEl.innerHTML = part.turnsPerSection.map((turns, s) => {
+        const vs = vOf(s * 2) - vOf(s * 2 + 1);
+        const Is = state.lastResult.currents.get(part.id + ':' + s);
+        return `
+          <div><span>V(section ${s + 1})</span><b>${fmtV(vs)}</b></div>
+          <div><span>I(section ${s + 1})</span><b>${fmtI(Is)}</b></div>
+        `;
+      }).join('');
       return;
     } else {
       rows = `
@@ -1028,6 +1112,10 @@
           style: isWire ? 'loop' : undefined,
           freq: p.freq,
           phase: p.phase,
+          turnsPerSection: p.type === 'toroid' ? p.turns : undefined,
+          core: p.type === 'toroid' ? (p.core || 'medium') : undefined,
+          gauge: p.type === 'toroid' ? (p.gauge || 'standard') : undefined,
+          spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
           terminals,
         };
       })
@@ -1219,6 +1307,8 @@
         Components.drawMtjSensor(ctx, p, t, opacity, state.animT);
       } else if (p.type === 'scope') {
         Components.drawScopeProbe(ctx, p, t[0].x, t[0].y, opacity);
+      } else if (p.type === 'toroid') {
+        Components.drawToroid(ctx, p, t, opacity);
       }
 
       if (p.id === state.selectedPartId) {
@@ -1349,7 +1439,7 @@
   // debug/test hook (harmless, purely introspective — used by the automated
   // test harness and handy in the browser console while developing)
   window.__debugState = () => ({
-    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, gauge: p.gauge, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
+    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, gauge: p.gauge, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, turnsPerSection: p.turnsPerSection, core: p.core, spacing: p.spacing, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
