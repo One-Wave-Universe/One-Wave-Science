@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sentient Surrender — Human Sensory Windows</title>
+<style>
+html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:system-ui,Segoe UI,Arial,sans-serif}body{display:grid;grid-template-rows:auto 1fr}.bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#12161b;border-bottom:1px solid #303740;font-size:12px}.lamp{display:inline-block;width:9px;height:9px;border-radius:50%;background:#66717d;margin-right:5px}.on{background:#8ef0c8;box-shadow:0 0 10px #8ef0c8}.vision{background:#7fb4ff;box-shadow:0 0 10px #7fb4ff}.box{padding:3px 8px;border:1px solid #38414c;border-radius:999px;color:#aab5c0}iframe{width:100%;height:100%;border:0}.strong{color:#fff;font-weight:700}
+</style>
+</head>
+<body>
+<div class="bar">
+  <span class="strong">HUMAN-WINDOW SENSOR CLOCK</span>
+  <span class="box"><i id="earLamp" class="lamp"></i> hearing sample 10 ms</span>
+  <span class="box">auditory integration 30 ms</span>
+  <span class="box"><i id="eyeLamp" class="lamp"></i> vision frame ≈16.7 ms</span>
+  <span class="box">visual integration 50 ms</span>
+  <span class="box">multisensory bind 100 ms</span>
+  <span id="state" class="box">starting…</span>
+</div>
+<iframe id="game" src="index.html"></iframe>
+<script>
+/*
+  Practical human-like timing windows for this simulator, not claims of exact
+  biological constants. Hearing is sampled faster than vision; both are
+  integrated before a slower multisensory state is committed.
+
+  HEARING: 10 ms sampling, 30 ms short integration.
+  VISION: browser refresh (~16.7 ms at 60 Hz), 50 ms integration.
+  BIND: 100 ms combined sensory snapshot handed to the state-machine monitor.
+*/
+const AUDIO_SAMPLE_MS=10;
+const AUDIO_WINDOW_MS=30;
+const VISUAL_WINDOW_MS=50;
+const BIND_WINDOW_MS=100;
+
+const frame=document.getElementById('game');
+const earLamp=document.getElementById('earLamp');
+const eyeLamp=document.getElementById('eyeLamp');
+const state=document.getElementById('state');
+let audioSamples=[];
+let visualSamples=[];
+let lastVisualCommit=0;
+let lastBoardSignature='';
+
+function now(){return performance.now()}
+function pulse(el,cls='on'){el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),35)}
+
+function readEar(doc){
+  const t=doc.getElementById('earReadout')?.textContent||'silent';
+  const m=t.match(/field\s+([0-9.]+).*void\s+([0-9.]+)/i);
+  return {t:now(),text:t,field:m?Number(m[1]):0,void:m?Number(m[2]):0};
+}
+function readVision(doc){
+  const board=doc.getElementById('board');
+  if(!board)return null;
+  const sig=[...board.querySelectorAll('.sq')].map(s=>s.childNodes[0]?.nodeValue||'').join('');
+  const turn=doc.getElementById('turnBadge')?.textContent?.trim()||'';
+  return {t:now(),sig,turn};
+}
+function trim(buf,age){const cutoff=now()-age;while(buf.length&&buf[0].t<cutoff)buf.shift()}
+
+frame.addEventListener('load',()=>{
+  const doc=frame.contentDocument;
+  state.textContent='sensory loops live';
+
+  // Fast auditory loop: 10 ms samples, integrated over the latest 30 ms.
+  setInterval(()=>{
+    audioSamples.push(readEar(doc));
+    trim(audioSamples,AUDIO_WINDOW_MS);
+    pulse(earLamp,'on');
+  },AUDIO_SAMPLE_MS);
+
+  // Vision enters at display refresh. We do not pretend the eye is a camera;
+  // refresh samples are accumulated, then committed in a 50 ms visual window.
+  function visualTick(){
+    const v=readVision(doc);if(v)visualSamples.push(v);
+    trim(visualSamples,VISUAL_WINDOW_MS);
+    pulse(eyeLamp,'vision');
+    if(now()-lastVisualCommit>=VISUAL_WINDOW_MS){
+      lastVisualCommit=now();
+      const latest=visualSamples[visualSamples.length-1];
+      if(latest)lastBoardSignature=latest.sig;
+    }
+    requestAnimationFrame(visualTick);
+  }
+  requestAnimationFrame(visualTick);
+
+  // Slower combined perceptual packet. This is the only combined packet the
+  // monitor exposes; fast ear/eye sampling remains underneath it.
+  setInterval(()=>{
+    const a=audioSamples.length?audioSamples[audioSamples.length-1]:{field:0,void:0,text:'silent'};
+    const v=visualSamples.length?visualSamples[visualSamples.length-1]:{turn:''};
+    const f=document.querySelector('#game').contentDocument.querySelector('.fieldPanel .gate.active')?.textContent?.trim()||'';
+    const q=document.querySelector('#game').contentDocument.querySelector('.voidPanel .gate.active')?.textContent?.trim()||'';
+    state.textContent=`100 ms bind · ${v.turn||'no turn'} · ear F ${a.field.toFixed(2)} / V ${a.void.toFixed(2)} · gates ${f.split('·')[0].trim()}/${q.split('·')[0].trim()}`;
+  },BIND_WINDOW_MS);
+});
+</script>
+</body>
+</html>
