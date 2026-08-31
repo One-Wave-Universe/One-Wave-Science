@@ -11,6 +11,10 @@
     "dist": "electron-builder",
     "dist:appimage": "electron-builder --linux AppImage",
     "dist:deb": "electron-builder --linux deb",
+    "dist:win": "electron-builder --win portable zip",
+    "dist:win-installer": "electron-builder --win nsis",
+    "dist:mac": "electron-builder --mac zip",
+    "dist:mac-dmg": "electron-builder --mac dmg",
     "bundle": "node build-standalone.js"
   },
   "devDependencies": {
@@ -41,6 +45,30 @@
       "executableName": "virtual-breadboard-simulator",
       "icon": "build/icon.png",
       "maintainer": "One Wave Science <opensource@one-wave-universe.example>"
+    },
+    "win": {
+      "target": [
+        { "target": "portable", "arch": ["x64"] },
+        { "target": "zip", "arch": ["x64"] },
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.png"
+    },
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.education",
+      "identity": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Virtual Breadboard Simulator"
     }
   }
 }

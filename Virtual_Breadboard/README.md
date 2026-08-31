@@ -116,12 +116,12 @@ linear-algebra method SPICE-class simulators use:
   a hole on one board then a hole on another.
 
 This is deliberately a simplified analog model (piecewise-linear diodes,
-not a full Shockley exponential; real time-domain AC sources and inductors,
-but no mutual inductance/transformer coupling, no skin effect, and no
-frequency-domain/phasor analysis — everything is stepped forward in real
-time the same way the RC/RL transients are) — accurate enough to design and
-debug real low-voltage hobby circuits, not a replacement for SPICE on
-precision analog design.
+not a full Shockley exponential; real time-domain AC sources, inductors,
+and mutual-inductance/transformer coupling via the ferrite toroid, but no
+core saturation, no skin effect, and no frequency-domain/phasor analysis —
+everything is stepped forward in real time the same way the RC/RL
+transients are) — accurate enough to design and debug real low-voltage
+hobby circuits, not a replacement for SPICE on precision analog design.
 
 ## Running it
 
@@ -155,36 +155,55 @@ a design fast. The one thing that won't work in a sandboxed chat-window
 context is the AI dialogue box's own outbound API calls (same restriction
 as the in-chat Artifact preview, see below).
 
-**As a downloadable desktop app for Ubuntu (Electron + AppImage):**
+**As a downloadable desktop app — Linux, Windows, or macOS (Electron):**
 
 ```bash
 npm install
-npm start              # run it as a desktop app directly
-
-npm run dist:appimage  # build dist/Virtual Breadboard Simulator-*.AppImage
-# or
-npm run dist:deb       # build a .deb package
+npm start                    # run it as a desktop app directly
 ```
 
-The AppImage is a single portable executable — `chmod +x` it and
-double-click (or run it) on any Ubuntu machine, no installation required.
-
-**To add a proper desktop/app-menu shortcut** (an AppImage on its own
-doesn't register one):
+Each platform builds from the same `npm install` and the same `main.js`/
+`index.html` — only the electron-builder target differs:
 
 ```bash
-./install-linux.sh /path/to/VirtualBreadboardSimulator.AppImage
+# Linux (build these ON Linux)
+npm run dist:appimage        # -> dist/Virtual Breadboard Simulator-*.AppImage
+npm run dist:deb             # -> dist/virtual-breadboard-simulator_*.deb
+
+# Windows (cross-buildable from Linux with wine installed --
+# apt-get install wine wine32:i386 -- or run natively on Windows)
+npm run dist:win             # -> dist/*.exe (portable, no install) + a .zip
+npm run dist:win-installer   # -> dist/*Setup*.exe (NSIS installer, adds a
+                              #    Desktop + Start Menu shortcut automatically)
+
+# macOS (the .app/.zip cross-builds from Linux; the .dmg does NOT --
+# electron-builder's dmg step needs real macOS. Run dist:mac-dmg on a Mac.)
+npm run dist:mac              # -> dist/*-mac.zip (unpack, drag the .app
+                               #    to Applications, no installer needed)
+npm run dist:mac-dmg          # -> dist/*.dmg (macOS only)
 ```
 
-This copies the AppImage to `~/.local/bin/`, installs `icon.svg` to
-`~/.local/share/icons/`, and writes a `.desktop` entry to
-`~/.local/share/applications/` (and to `~/Desktop/` if you have one) —
-all per-user, no `sudo` needed. Afterwards, "Virtual Breadboard Simulator"
-shows up in your applications menu/launcher with its own icon, and if you
-have a Desktop folder, a matching icon appears there too (GNOME may mark it
-untrusted the first time — right-click it and choose "Allow Launching").
-Run the script with no arguments and it will look for the AppImage next to
-itself or in `~/Downloads` automatically.
+**Desktop shortcuts, per platform:**
+- **Windows** — run the NSIS `*Setup*.exe`; it creates a Desktop and Start
+  Menu shortcut for you (`npm run dist:win-installer`). The plain portable
+  `.exe` from `dist:win` is a no-install single file with no shortcut.
+- **macOS** — unzip and drag `Virtual Breadboard Simulator.app` into
+  `/Applications` (or drag it straight to the Desktop) — that's the normal
+  macOS equivalent of installing; Spotlight/Launchpad pick it up
+  automatically. These builds are unsigned (no Apple Developer certificate
+  in this pipeline), so the first launch needs right-click → Open once to
+  get past Gatekeeper.
+- **Linux — AppImage**: a single portable executable with no installer, so
+  it doesn't register a shortcut on its own — run `./install-linux.sh
+  /path/to/VirtualBreadboardSimulator.AppImage` (or with no arguments, and
+  it looks next to itself or in `~/Downloads`). That copies it to
+  `~/.local/bin/`, installs `icon.svg` to `~/.local/share/icons/`, and
+  writes a `.desktop` entry to `~/.local/share/applications/` and to
+  `~/Desktop/` if you have one — all per-user, no `sudo` (GNOME may mark
+  the desktop icon untrusted the first time — right-click it and choose
+  "Allow Launching").
+- **Linux — .deb**: `sudo dpkg -i virtual-breadboard-simulator_*.deb`
+  registers the applications-menu entry for you; no extra script needed.
 
 **As a downloadable Android app:**
 
