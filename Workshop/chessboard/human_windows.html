@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sentient Surrender — Human Sensory Windows</title>
 <style>
-html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:system-ui,Segoe UI,Arial,sans-serif}body{display:grid;grid-template-rows:auto 1fr auto}.bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#12161b;border-bottom:1px solid #303740;font-size:12px}.lamp{display:inline-block;width:9px;height:9px;border-radius:50%;background:#66717d;margin-right:5px}.on{background:#8ef0c8;box-shadow:0 0 10px #8ef0c8}.vision{background:#7fb4ff;box-shadow:0 0 10px #7fb4ff}.box{padding:3px 8px;border:1px solid #38414c;border-radius:999px;color:#aab5c0}iframe{width:100%;height:100%;border:0}.strong{color:#fff;font-weight:700}.language{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 12px;background:#101318;border-top:1px solid #303740}.mouth{min-height:42px;border:1px solid #303740;border-radius:9px;padding:7px 10px;font-size:13px}.fieldMouth{color:#dcae56}.voidMouth{color:#79a9df}.who{font-weight:800;margin-right:7px}.teacher{grid-column:1/-1;display:flex;gap:8px}.teacher input{flex:1;background:#0b0e12;color:#fff;border:1px solid #3a434e;border-radius:8px;padding:8px 10px}.teacher button{background:#222831;color:#fff;border:1px solid #46515e;border-radius:8px;padding:8px 12px;cursor:pointer}.quiet{color:#78838f}.memory{font-size:11px;color:#8d99a6;margin-top:3px}
+html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:system-ui,Segoe UI,Arial,sans-serif}body{display:grid;grid-template-rows:auto 1fr}.bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:#12161b;border-bottom:1px solid #303740;font-size:12px}.lamp{display:inline-block;width:9px;height:9px;border-radius:50%;background:#66717d;margin-right:5px}.on{background:#8ef0c8;box-shadow:0 0 10px #8ef0c8}.vision{background:#7fb4ff;box-shadow:0 0 10px #7fb4ff}.box{padding:3px 8px;border:1px solid #38414c;border-radius:999px;color:#aab5c0}iframe{width:100%;height:100%;border:0}.strong{color:#fff;font-weight:700}
 </style>
 </head>
 <body>
@@ -19,122 +19,73 @@ html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:syst
   <span id="state" class="box">starting…</span>
 </div>
 <iframe id="game" src="index.html"></iframe>
-<div class="language">
-  <div id="fieldTalk" class="mouth fieldMouth"><span class="who">FIELD:</span><span class="quiet">…</span><div id="fieldMem" class="memory">language memory: 0</div></div>
-  <div id="voidTalk" class="mouth voidMouth"><span class="who">VOID:</span><span class="quiet">…</span><div id="voidMem" class="memory">language memory: 0</div></div>
-  <div class="teacher">
-    <input id="teach" autocomplete="off" placeholder="Say something to them. They only learn words they actually receive here." />
-    <button id="teachBtn">Speak</button>
-  </div>
-</div>
 <script>
 const AUDIO_SAMPLE_MS=10;
 const AUDIO_WINDOW_MS=30;
 const VISUAL_WINDOW_MS=50;
 const BIND_WINDOW_MS=100;
-const TALK_COOLDOWN_MS=1200;
 
 const frame=document.getElementById('game');
 const earLamp=document.getElementById('earLamp');
 const eyeLamp=document.getElementById('eyeLamp');
 const state=document.getElementById('state');
-const fieldTalk=document.getElementById('fieldTalk');
-const voidTalk=document.getElementById('voidTalk');
-const fieldMem=document.getElementById('fieldMem');
-const voidMem=document.getElementById('voidMem');
-const teach=document.getElementById('teach');
-let audioSamples=[],visualSamples=[],lastVisualCommit=0,lastBoardSignature='';
-let lastLogCount=0,lastTalk=0;
-
-// No built-in vocabulary. Both machines begin empty.
-function makeBrain(){return {tokens:new Map(),pairs:new Map(),contexts:new Map(),heard:0,spoken:0}}
-const brains={FIELD:makeBrain(),VOID:makeBrain()};
+let audioSamples=[];
+let visualSamples=[];
+let lastVisualCommit=0;
+let lastBoardSignature='';
 
 function now(){return performance.now()}
 function pulse(el,cls='on'){el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),35)}
-function tokenize(text){return (text.toLowerCase().match(/[a-z0-9']+/g)||[])}
-function addCount(map,key,n=1){map.set(key,(map.get(key)||0)+n)}
-function contextKey(doc,side){
-  const gate=doc.querySelector(`.${side==='FIELD'?'fieldPanel':'voidPanel'} .gate.active`)?.textContent?.trim()||'gate';
-  const turn=doc.getElementById('turnBadge')?.textContent?.includes(side)?'myturn':'otherturn';
-  const moves=(doc.getElementById('moveLog')?.textContent||'').split('\n').filter(Boolean).length;
-  return `${gate.split('·')[0].trim()}|${turn}|${moves%4}`;
+function readEar(doc){
+  const t=doc.getElementById('earReadout')?.textContent||'silent';
+  const m=t.match(/field\s+([0-9.]+).*void\s+([0-9.]+)/i);
+  return {t:now(),text:t,field:m?Number(m[1]):0,void:m?Number(m[2]):0};
 }
-function learn(side,text,doc){
-  const b=brains[side],t=tokenize(text);if(!t.length)return;
-  b.heard++;
-  const ctx=contextKey(doc,side);
-  for(const w of t){addCount(b.tokens,w);addCount(b.contexts,ctx+'|'+w,2)}
-  for(let i=0;i<t.length-1;i++)addCount(b.pairs,t[i]+'>'+t[i+1]);
-  updateMem();
+function readVision(doc){
+  const board=doc.getElementById('board');
+  if(!board)return null;
+  const sig=[...board.querySelectorAll('.sq')].map(s=>s.childNodes[0]?.nodeValue||'').join('');
+  const turn=doc.getElementById('turnBadge')?.textContent?.trim()||'';
+  return {t:now(),sig,turn};
 }
-function chooseWeighted(entries){
-  const total=entries.reduce((s,x)=>s+x[1],0);if(!total)return null;let r=Math.random()*total;
-  for(const x of entries){r-=x[1];if(r<=0)return x[0]}return entries[entries.length-1][0];
-}
-function speak(side,doc){
-  const b=brains[side];
-  // They must have actually heard enough language before attempting speech.
-  if(b.tokens.size<4||b.heard<2)return null;
-  const ctx=contextKey(doc,side);
-  let starts=[];
-  for(const [w,c] of b.tokens){starts.push([w,c+(b.contexts.get(ctx+'|'+w)||0)])}
-  let word=chooseWeighted(starts);if(!word)return null;
-  const out=[word];
-  const target=2+Math.floor(Math.random()*4);
-  while(out.length<target){
-    const prefix=out[out.length-1]+'>';let next=[];
-    for(const [p,c] of b.pairs)if(p.startsWith(prefix))next.push([p.slice(prefix.length),c]);
-    if(!next.length)break;
-    word=chooseWeighted(next);if(!word)break;out.push(word);
-  }
-  if(out.length<2)return null;
-  b.spoken++;return out.join(' ');
-}
-function showSpeech(side,text){
-  const el=side==='FIELD'?fieldTalk:voidTalk;
-  const mem=side==='FIELD'?fieldMem:voidMem;
-  el.innerHTML=`<span class="who">${side}:</span>${text}<div id="${side==='FIELD'?'fieldMem':'voidMem'}" class="memory"></div>`;
-  updateMem();
-}
-function updateMem(){
-  const fm=document.getElementById('fieldMem'),vm=document.getElementById('voidMem');
-  if(fm)fm.textContent=`language memory: ${brains.FIELD.tokens.size} words · heard ${brains.FIELD.heard} · spoken ${brains.FIELD.spoken}`;
-  if(vm)vm.textContent=`language memory: ${brains.VOID.tokens.size} words · heard ${brains.VOID.heard} · spoken ${brains.VOID.spoken}`;
-}
-function readEar(doc){const t=doc.getElementById('earReadout')?.textContent||'silent';const m=t.match(/field\s+([0-9.]+).*void\s+([0-9.]+)/i);return {t:now(),text:t,field:m?Number(m[1]):0,void:m?Number(m[2]):0}}
-function readVision(doc){const board=doc.getElementById('board');if(!board)return null;const sig=[...board.querySelectorAll('.sq')].map(s=>s.childNodes[0]?.nodeValue||'').join('');const turn=doc.getElementById('turnBadge')?.textContent?.trim()||'';return {t:now(),sig,turn}}
 function trim(buf,age){const cutoff=now()-age;while(buf.length&&buf[0].t<cutoff)buf.shift()}
 
 frame.addEventListener('load',()=>{
   const doc=frame.contentDocument;
-  state.textContent='sensory loops live · language memory empty';
-  setInterval(()=>{audioSamples.push(readEar(doc));trim(audioSamples,AUDIO_WINDOW_MS);pulse(earLamp,'on')},AUDIO_SAMPLE_MS);
-  function visualTick(){const v=readVision(doc);if(v)visualSamples.push(v);trim(visualSamples,VISUAL_WINDOW_MS);pulse(eyeLamp,'vision');if(now()-lastVisualCommit>=VISUAL_WINDOW_MS){lastVisualCommit=now();const latest=visualSamples[visualSamples.length-1];if(latest)lastBoardSignature=latest.sig}requestAnimationFrame(visualTick)}
+  const translator=doc.createElement('script');
+  translator.src='audio_language.js';
+  doc.head.appendChild(translator);
+  state.textContent='sensory loops live';
+
+  setInterval(()=>{
+    audioSamples.push(readEar(doc));
+    trim(audioSamples,AUDIO_WINDOW_MS);
+    pulse(earLamp,'on');
+  },AUDIO_SAMPLE_MS);
+
+  function visualTick(){
+    const v=readVision(doc);if(v)visualSamples.push(v);
+    trim(visualSamples,VISUAL_WINDOW_MS);
+    pulse(eyeLamp,'vision');
+    if(now()-lastVisualCommit>=VISUAL_WINDOW_MS){
+      lastVisualCommit=now();
+      const latest=visualSamples[visualSamples.length-1];
+      if(latest)lastBoardSignature=latest.sig;
+    }
+    requestAnimationFrame(visualTick);
+  }
   requestAnimationFrame(visualTick);
+
   setInterval(()=>{
     const a=audioSamples.length?audioSamples[audioSamples.length-1]:{field:0,void:0,text:'silent'};
     const v=visualSamples.length?visualSamples[visualSamples.length-1]:{turn:''};
     const f=doc.querySelector('.fieldPanel .gate.active')?.textContent?.trim()||'';
     const q=doc.querySelector('.voidPanel .gate.active')?.textContent?.trim()||'';
-    state.textContent=`100 ms bind · ${v.turn||'no turn'} · ear F ${a.field.toFixed(2)} / V ${a.void.toFixed(2)} · gates ${f.split('·')[0].trim()}/${q.split('·')[0].trim()}`;
-
-    const logText=doc.getElementById('moveLog')?.textContent||'';
-    const count=logText==='No moves yet.'?0:logText.split('\n').filter(Boolean).length;
-    if(count>lastLogCount && now()-lastTalk>TALK_COOLDOWN_MS){
-      const justMoved=(doc.getElementById('turnBadge')?.textContent||'').includes('FIELD')?'VOID':'FIELD';
-      const other=justMoved==='FIELD'?'VOID':'FIELD';
-      const own=speak(justMoved,doc);if(own){showSpeech(justMoved,own);learn(other,own,doc);lastTalk=now()}
-      setTimeout(()=>{const reply=speak(other,doc);if(reply){showSpeech(other,reply);learn(justMoved,reply,doc);lastTalk=now()}},500);
-    }
-    lastLogCount=count;
+    const lang=frame.contentWindow.ONE_WAVE_SOUND_LANGUAGE?.latest;
+    const code=lang?` · sound R${lang.root} ${lang.diff.pitch}/${lang.diff.pressure}/${lang.diff.brightness}`:'';
+    state.textContent=`100 ms bind · ${v.turn||'no turn'} · ear F ${a.field.toFixed(2)} / V ${a.void.toFixed(2)} · gates ${f.split('·')[0].trim()}/${q.split('·')[0].trim()}${code}`;
   },BIND_WINDOW_MS);
-
-  function teachBoth(){const text=teach.value.trim();if(!text)return;learn('FIELD',text,doc);learn('VOID',text,doc);teach.value='';state.textContent='language heard and stored in current sensory context'}
-  document.getElementById('teachBtn').onclick=teachBoth;
-  teach.addEventListener('keydown',e=>{if(e.key==='Enter')teachBoth()});
 });
-updateMem();
 </script>
 </body>
 </html>
