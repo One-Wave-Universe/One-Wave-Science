@@ -11,8 +11,6 @@ DESKTOP_DIR="$(xdg-user-dir DESKTOP 2>/dev/null || true)"
 
 mkdir -p "$INSTALL_DIR" "$USER_APPS" "$DESKTOP_DIR"
 
-# Replace the installed animator with this exact downloaded version.
-# Keep the install in one stable location so future patches have one target.
 find "$INSTALL_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 cp -a "$SOURCE_DIR"/. "$INSTALL_DIR"/
 chmod +x "$INSTALL_DIR/launch-animator.sh" "$INSTALL_DIR/configure-openai.sh" "$INSTALL_DIR/test-animator.sh"
@@ -23,7 +21,7 @@ write_desktop_file() {
 [Desktop Entry]
 Type=Application
 Name=$APP_NAME
-Comment=Frame-by-frame FPS animation with OpenAI Director dialogue
+Comment=Frame-by-frame FPS animation with live AI Director dialogue
 Exec=$INSTALL_DIR/launch-animator.sh
 Terminal=false
 Categories=AudioVideo;Graphics;
@@ -45,11 +43,10 @@ printf 'Desktop shortcut: %s/%s\n' "$DESKTOP_DIR" "$DESKTOP_FILE"
 printf 'Application menu shortcut: %s/%s\n' "$USER_APPS" "$DESKTOP_FILE"
 
 CONFIG_FILE="$HOME/.config/one-wave-animator/openai.env"
-if [[ ! -f "$CONFIG_FILE" ]]; then
-  printf '\nNow connect the creative Director.\n'
-  "$INSTALL_DIR/configure-openai.sh"
+if [[ -f "$CONFIG_FILE" ]]; then
+  printf '\nExisting AI key configuration was preserved.\n'
 else
-  printf '\nExisting OpenAI Director configuration kept at: %s\n' "$CONFIG_FILE"
+  printf '\nNo AI key is configured yet. The animator will open its key-entry panel on first launch.\n'
 fi
 
-printf '\nDouble-click the desktop icon or run:\n  %q\n\n' "$INSTALL_DIR/launch-animator.sh"
+printf '\nLaunch the animator now with:\n  %q\n\n' "$INSTALL_DIR/launch-animator.sh"
