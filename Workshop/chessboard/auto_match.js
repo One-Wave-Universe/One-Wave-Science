@@ -51,27 +51,39 @@
     for(let r=0;r<8;r++)for(let c=0;c<8;c++){
       const p=window.board?.[r]?.[c];
       if(p&&sideOf(p)===side){
-        for(const [rr,cc] of movesFor(window.board,r,c)) out.push({from:{r,c},to:{r:rr,c:cc},piece:p,capture:window.board[rr][cc]||''});
+        for(const [rr,cc] of movesFor(window.board,r,c)) out.push({from:{r,c},to:{r:rr,c:cc},piece:p,pieceType:PIECES[p],capture:window.board[rr][cc]||'',captureType:PIECES[window.board[rr][cc]]||''});
       }
     }
     return out;
   }
 
-  function machineBias(side,m){
+  function localFallback(side,ms){
     const gate=side==='FIELD'?(window.fieldStep||0):(window.voidStep||0);
     const sound=side==='FIELD'?window.FIELD_SOUND_TOKEN:window.VOID_SOUND_TOKEN;
-    const captureScore=m.capture?(value[PIECES[m.capture]]||0)*12:0;
-    const advance=side==='FIELD'?(m.from.r-m.to.r):(m.to.r-m.from.r);
-    const center=3.5-(Math.abs(3.5-m.to.r)+Math.abs(3.5-m.to.c))/2;
-    const sonic=sound?.diff?.pitch||0;
-    if(side==='FIELD') return captureScore + advance*(2+gate*.25) + center*1.3 + sonic*.4 + Math.random()*2;
-    return captureScore + center*(2+gate*.2) - advance*.4 - sonic*.4 + Math.random()*2.5;
+    const pitch=sound?.diff?.pitch||0;
+    ms.sort((a,b)=>score(b)-score(a));return ms[0];
+    function score(m){
+      const capture=(value[m.captureType]||0)*12;
+      const advance=side==='FIELD'?(m.from.r-m.to.r):(m.to.r-m.from.r);
+      const center=3.5-(Math.abs(3.5-m.to.r)+Math.abs(3.5-m.to.c))/2;
+      return side==='FIELD'?capture+advance*(2+gate*.25)+center*1.3+pitch*.4+Math.random()*2:capture+center*(2+gate*.2)-advance*.4-pitch*.4+Math.random()*2.5;
+    }
   }
 
-  function choose(side){
+  async function choose(side){
     const ms=allMoves(side); if(!ms.length)return null;
-    ms.sort((a,b)=>machineBias(side,b)-machineBias(side,a));
-    return ms[0];
+    const gate=side==='FIELD'?(window.fieldStep||0):(window.voidStep||0);
+    const sound=side==='FIELD'?window.FIELD_SOUND_TOKEN:window.VOID_SOUND_TOKEN;
+    if(window.ONE_WAVE_LOCAL_BRAINS){
+      try{
+        const res=await window.ONE_WAVE_LOCAL_BRAINS.choose(side,ms,gate,sound);
+        if(res?.move){
+          window.ONE_WAVE_LAST_BRAIN_REPLY=res;
+          return res.move;
+        }
+      }catch(e){ console.warn('Local brain unavailable; using browser fallback.',e); }
+    }
+    return localFallback(side,ms);
   }
 
   function kingAlive(side){
@@ -84,13 +96,10 @@
     if(!running||busy)return;
     if(!kingAlive('FIELD')||!kingAlive('VOID')){ stop(); return; }
     const side=window.turn;
-    const m=choose(side);
-    if(!m){stop();return;}
     busy=true;
     try{
-      // No piece moves directly. The machine must first drive its pointer:
-      // quadratic oversight observes the candidate, ternary windings select
-      // the virtual switch state, then downward override commits the action.
+      const m=await choose(side);
+      if(!m){stop();return;}
       if(window.ONE_WAVE_POINTERS) await window.ONE_WAVE_POINTERS.touch(side,m);
       window.selected={...m.from};
       window.clickSquare(m.to.r,m.to.c);
