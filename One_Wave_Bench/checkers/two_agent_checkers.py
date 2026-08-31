@@ -1,34 +1,34 @@
-"""Visible two-agent checkers world with pluggable controllers.
+"""Visible grayscale checkers lab for two mounted state-machine agents.
+
+Architecture under test:
+    grayscale pixels -> M4 loop -> Field state machine -> Void state machine
+    -> attempted move -> world consequence -> persistent memory -> next cycle
 
 The environment is deliberately dumb reality:
-- it renders a grayscale board;
-- each plugin sees pixels, not a symbolic board or legal-move list;
-- each plugin attempts any source/destination move it chooses;
-- legal moves change the world;
-- an illegal move is an immediate loss;
-- games restart automatically while running;
-- the world supplies no strategy reward, hints, or correction.
-
-This makes stale attention costly without hard-coding an "attention penalty".
-If a plugin keeps acting from an old internal world, it can repeat the same bad
-assumption across games and trap itself in a consequence loop until its own
-memory/ActiveWorld changes.
-
-Learning belongs entirely inside the plugins. reset_episode() marks an episode
-boundary; it must not be treated as an instruction to erase learned memory.
+- plugins see the grayscale framebuffer, not the symbolic board;
+- plugins do not receive a legal-move list;
+- an illegal move is an immediate terminal loss;
+- games restart automatically;
+- the two agent variants swap sides every game;
+- no strategy reward or correction hint is supplied.
 """
 
 from __future__ import annotations
 
-import random
 import tkinter as tk
-from dataclasses import dataclass
-from typing import List, Optional, Protocol, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
+
+try:
+    from .checkers_contract import AgentPlugin, Move, WorldConsequence
+    from .mounted_checkers_agents import FieldHeavyAgent, VoidHeavyAgent
+except ImportError:
+    from checkers_contract import AgentPlugin, Move, WorldConsequence
+    from mounted_checkers_agents import FieldHeavyAgent, VoidHeavyAgent
 
 BOARD = 8
 CELL = 72
 PAD = 16
-STATUS_H = 132
+STATUS_H = 158
 DELAY_MS = 350
 TERMINAL_PAUSE_MS = 1000
 MAX_PLIES = 300
@@ -38,84 +38,7 @@ BLACK = 1
 BLACK_KING = 2
 WHITE = -1
 WHITE_KING = -2
-
 Coord = Tuple[int, int]
-
-
-@dataclass(frozen=True)
-class Move:
-    src: Coord
-    dst: Coord
-
-
-@dataclass(frozen=True)
-class WorldConsequence:
-    accepted: bool
-    before_pixels: Tuple[int, ...]
-    after_pixels: Tuple[int, ...]
-    actor_side: int
-    next_side: int
-    terminal: bool
-    terminal_fact: str  # CONTINUE / BLACK_WIN / WHITE_WIN / DRAW
-    move: Move
-
-
-class AgentPlugin(Protocol):
-    name: str
-
-    def choose_move(
-        self,
-        grayscale: Sequence[int],
-        width: int,
-        height: int,
-        side: int,
-    ) -> Move:
-        """Choose from pixels only. No symbolic board or legal-move list."""
-        ...
-
-    def observe(self, consequence: WorldConsequence) -> None:
-        """Observe what actually happened. The plugin decides what it means."""
-        ...
-
-    def reset_episode(self, side: int) -> None:
-        """Episode boundary only; learned memory may persist."""
-        ...
-
-
-class RandomPixelActor:
-    """Non-learning smoke-test plugin.
-
-    It proves the environment really permits mistakes: it guesses a source and
-    diagonal destination without access to the board model or legal moves.
-    Replace this with a mounted Field/Void/M4 learner.
-    """
-
-    def __init__(self, name: str, seed: int) -> None:
-        self.name = name
-        self.rng = random.Random(seed)
-        self.games_seen = 0
-        self.last_consequence: Optional[WorldConsequence] = None
-
-    def reset_episode(self, side: int) -> None:
-        self.games_seen += 1
-        # Deliberately preserve learned/long-term state across games.
-        self.last_consequence = None
-
-    def choose_move(
-        self,
-        grayscale: Sequence[int],
-        width: int,
-        height: int,
-        side: int,
-    ) -> Move:
-        sr = self.rng.randrange(BOARD)
-        sc = self.rng.randrange(BOARD)
-        dr = sr + self.rng.choice((-1, 1, -2, 2))
-        dc = sc + self.rng.choice((-1, 1, -2, 2))
-        return Move((sr, sc), (dr, dc))
-
-    def observe(self, consequence: WorldConsequence) -> None:
-        self.last_consequence = consequence
 
 
 class CheckersWorld:
@@ -213,16 +136,19 @@ class CheckersWorld:
 
 
 class CheckersApp:
-    def __init__(self, black_agent: AgentPlugin, white_agent: AgentPlugin) -> None:
+    def __init__(self, field_agent: AgentPlugin, void_agent: AgentPlugin) -> None:
         self.world = CheckersWorld()
-        self.agents = {BLACK: black_agent, WHITE: white_agent}
+        self.field_agent = field_agent
+        self.void_agent = void_agent
+        self.agents = {BLACK: field_agent, WHITE: void_agent}
         self.running = False
         self.game_number = 1
         self.last_terminal = ""
-        self.loss_streak = {BLACK: 0, WHITE: 0}
+        self.wins = {field_agent.name: 0, void_agent.name: 0}
+        self.illegal_losses = {field_agent.name: 0, void_agent.name: 0}
 
         self.root = tk.Tk()
-        self.root.title("One-Wave Vision Checkers Lab")
+        self.root.title("One-Wave Field vs Void Vision Checkers")
         width = BOARD * CELL + 2 * PAD
         height = BOARD * CELL + 2 * PAD + STATUS_H
         self.canvas = tk.Canvas(self.root, width=width, height=height, bg="#202020")
@@ -284,25 +210,22 @@ class CheckersApp:
 
         black = self.agents[BLACK].name
         white = self.agents[WHITE].name
-        turn_name = black if self.world.turn == BLACK else white
-        status_y = PAD + BOARD * CELL + 20
+        turn_name = self.agents[self.world.turn].name
+        fy = PAD + BOARD * CELL + 20
+        self.canvas.create_text(PAD, fy, anchor="w", fill="white",
+                                text=f"Game {self.game_number}   Ply {self.world.ply}   Turn: {turn_name}")
+        self.canvas.create_text(PAD, fy + 26, anchor="w", fill="#cfcfcf",
+                                text=f"BLACK: {black}     WHITE: {white}   (sides swap every game)")
+        self.canvas.create_text(PAD, fy + 52, anchor="w", fill="#a9a9a9",
+                                text="Grayscale pixels in. Move out. Illegal move = immediate loss.")
         self.canvas.create_text(
-            PAD, status_y, anchor="w", fill="white",
-            text=f"Game {self.game_number}   Ply {self.world.ply}   Turn: {turn_name}",
+            PAD, fy + 78, anchor="w", fill="#999999",
+            text=(f"Wins: Field {self.wins[self.field_agent.name]} / Void {self.wins[self.void_agent.name]}   "
+                  f"Illegal losses: Field {self.illegal_losses[self.field_agent.name]} / "
+                  f"Void {self.illegal_losses[self.void_agent.name]}"),
         )
-        self.canvas.create_text(
-            PAD, status_y + 26, anchor="w", fill="#cfcfcf",
-            text=f"BLACK: {black}     WHITE: {white}",
-        )
-        self.canvas.create_text(
-            PAD, status_y + 52, anchor="w", fill="#a9a9a9",
-            text="Pixels in. Any move out. Illegal move = immediate loss. No legal-move hints.",
-        )
-        self.canvas.create_text(
-            PAD, status_y + 78, anchor="w", fill="#8f8f8f",
-            text=(f"Loss streaks — black {self.loss_streak[BLACK]} / white {self.loss_streak[WHITE]}"
-                  + (f"   Last: {self.last_terminal}" if self.last_terminal else "")),
-        )
+        self.canvas.create_text(PAD, fy + 104, anchor="w", fill="#858585",
+                                text=(f"Last: {self.last_terminal}" if self.last_terminal else "Learning from consequences only"))
 
     def start(self) -> None:
         if not self.running:
@@ -312,9 +235,13 @@ class CheckersApp:
     def pause(self) -> None:
         self.running = False
 
+    def _swap_sides(self) -> None:
+        self.agents[BLACK], self.agents[WHITE] = self.agents[WHITE], self.agents[BLACK]
+
     def _begin_next_game(self) -> None:
         self.world.reset()
         self.game_number += 1
+        self._swap_sides()
         for side, agent in self.agents.items():
             agent.reset_episode(side)
         self.draw()
@@ -329,9 +256,9 @@ class CheckersApp:
             return
 
         side = self.world.turn
-        agent = self.agents[side]
+        actor = self.agents[side]
         before = self.grayscale_pixels()
-        move = agent.choose_move(before, BOARD * CELL, BOARD * CELL, side)
+        move = actor.choose_move(before, BOARD * CELL, BOARD * CELL, side)
         accepted, fact = self.world.apply(move)
         after = self.grayscale_pixels()
         terminal = fact != "CONTINUE"
@@ -346,14 +273,15 @@ class CheckersApp:
             terminal_fact=fact,
             move=move,
         )
-        agent.observe(consequence)
+        actor.observe(consequence)
 
         if terminal:
-            winner = BLACK if fact == "BLACK_WIN" else WHITE if fact == "WHITE_WIN" else 0
-            if winner:
-                loser = -winner
-                self.loss_streak[loser] += 1
-                self.loss_streak[winner] = 0
+            if fact in ("BLACK_WIN", "WHITE_WIN"):
+                winner_side = BLACK if fact == "BLACK_WIN" else WHITE
+                winner_agent = self.agents[winner_side]
+                self.wins[winner_agent.name] += 1
+            if not accepted:
+                self.illegal_losses[actor.name] += 1
             self.last_terminal = ("WRONG MOVE — " if not accepted else "") + fact.replace("_", " ")
 
         self.draw()
@@ -378,8 +306,8 @@ class CheckersApp:
 
 def main() -> None:
     app = CheckersApp(
-        black_agent=RandomPixelActor("BLACK PLUGIN", seed=1),
-        white_agent=RandomPixelActor("WHITE PLUGIN", seed=2),
+        field_agent=FieldHeavyAgent(),
+        void_agent=VoidHeavyAgent(),
     )
     app.run()
 
