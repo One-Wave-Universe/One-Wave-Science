@@ -12,8 +12,10 @@ html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:syst
 <div class="bar">
   <span class="title">SENTIENT SURRENDER — LIVE MATCH</span>
   <span class="tag live">FIELD vs VOID</span>
+  <span class="tag">pointer-actuated pieces</span>
+  <span class="tag">ternary 3-winding switch</span>
+  <span class="tag">quadratic oversight ↑ / override ↓</span>
   <span class="tag">24 fps reel</span>
-  <span class="tag">10 ms hearing feed</span>
   <span id="status" class="tag">loading board…</span>
 </div>
 <iframe id="game" src="index.html"></iframe>
@@ -22,14 +24,15 @@ const game=document.getElementById('game');
 const status=document.getElementById('status');
 function loadScript(doc,src){return new Promise((ok,fail)=>{const s=doc.createElement('script');s.src=src;s.onload=ok;s.onerror=fail;doc.head.appendChild(s);});}
 game.addEventListener('load',async()=>{
-  const doc=game.contentDocument, win=game.contentWindow;
+  const doc=game.contentDocument;
   try{
     await loadScript(doc,'audio_language.js');
     await loadScript(doc,'reel_engine.js');
+    await loadScript(doc,'pointer_controller.js');
     await loadScript(doc,'auto_match.js');
     status.textContent='ready · press START MATCH';
     const music=doc.getElementById('musicBtn');
-    if(music) music.addEventListener('click',()=>{status.textContent='audio + reel + match ready';},{once:true});
+    if(music) music.addEventListener('click',()=>{status.textContent='audio + reel + pointers + match live';},{once:true});
   }catch(e){status.textContent='load error';console.error(e);}
 });
 </script>
