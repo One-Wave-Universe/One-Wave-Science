@@ -3,6 +3,7 @@ import base64
 import json
 import os
 import re
+import shlex
 import urllib.error
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -10,6 +11,8 @@ from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parent
 PORT = int(os.environ.get("ONE_WAVE_ANIMATOR_PORT", "8765"))
+CONFIG_DIR = Path.home() / ".config" / "one-wave-animator"
+CONFIG_FILE = CONFIG_DIR / "openai.env"
 
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "").strip() or os.environ.get("ONE_WAVE_OPENAI_API_KEY", "").strip()
 DIRECTOR_MODEL = os.environ.get("ONE_WAVE_DIRECTOR_MODEL", "gpt-5.6-sol").strip()
@@ -19,6 +22,7 @@ ASSET_BACKEND = os.environ.get("ONE_WAVE_ASSET_BACKEND", "auto").strip().lower()
 
 OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations"
+OPENAI_MODELS_URL = "https://api.openai.com/v1/models"
 OLLAMA_IMAGE_URLS = [
     "http://127.0.0.1:11434/v1/images/generations",
     "http://192.168.55.1:11434/v1/images/generations",
@@ -73,12 +77,37 @@ def strip_json(text):
     return obj
 
 
-def openai_headers():
-    if not OPENAI_API_KEY:
-        raise RuntimeError(
-            "OpenAI API key is not configured. Run ~/.local/share/one-wave-animator/configure-openai.sh"
-        )
-    return {"Authorization": f"Bearer {OPENAI_API_KEY}"}
+def openai_headers(key=None):
+    use_key = (key if key is not None else OPENAI_API_KEY).strip()
+    if not use_key:
+        raise RuntimeError("OpenAI API key is not configured")
+    return {"Authorization": f"Bearer {use_key}"}
+
+
+def validate_openai_key(key):
+    key = str(key or "").strip()
+    if not key:
+        raise ValueError("Paste an OpenAI API key first")
+    request_json(OPENAI_MODELS_URL, headers=openai_headers(key), timeout=30)
+    return True
+
+
+def save_openai_key(key):
+    global OPENAI_API_KEY
+    key = str(key or "").strip()
+    validate_openai_key(key)
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    lines = [
+        f"export OPENAI_API_KEY={shlex.quote(key)}",
+        f"export ONE_WAVE_DIRECTOR_MODEL={shlex.quote(DIRECTOR_MODEL)}",
+        f"export ONE_WAVE_ASSET_BACKEND={shlex.quote(ASSET_BACKEND)}",
+        f"export ONE_WAVE_OLLAMA_IMAGE_MODEL={shlex.quote(OLLAMA_IMAGE_MODEL)}",
+        f"export ONE_WAVE_IMAGE_MODEL={shlex.quote(IMAGE_MODEL)}",
+    ]
+    CONFIG_FILE.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.chmod(CONFIG_FILE, 0o600)
+    OPENAI_API_KEY = key
+    return {"ok": True, "connected": True, "saved": True, "key_suffix": key[-4:] if len(key) >= 4 else ""}
 
 
 def call_director(packet):
@@ -231,6 +260,8 @@ def health():
         "asset_backend": ASSET_BACKEND,
         "image_model": IMAGE_MODEL,
         "ollama_image_model": OLLAMA_IMAGE_MODEL,
+        "key_saved": CONFIG_FILE.exists(),
+        "key_suffix": OPENAI_API_KEY[-4:] if director_connected and len(OPENAI_API_KEY) >= 4 else "",
         "error": "" if director_connected else "OpenAI API key not configured",
     }
 
@@ -248,17 +279,28 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def read_json(self):
+        length = int(self.headers.get("Content-Length", "0"))
+        return json.loads(self.rfile.read(length).decode("utf-8"))
+
     def do_GET(self):
         if self.path.startswith("/api/assistant/health"):
             return self.send_json(200, health())
         return super().do_GET()
 
     def do_POST(self):
+        if self.path == "/api/assistant/config":
+            try:
+                packet = self.read_json()
+                result = save_openai_key(packet.get("apiKey"))
+                return self.send_json(200, result)
+            except Exception as exc:
+                return self.send_json(400, {"ok": False, "error": str(exc)})
+
         if self.path != "/api/assistant":
             return self.send_json(404, {"ok": False, "error": "Not found"})
         try:
-            length = int(self.headers.get("Content-Length", "0"))
-            packet = json.loads(self.rfile.read(length).decode("utf-8"))
+            packet = self.read_json()
             kind = str(packet.get("kind") or "director").lower()
             payload = packet.get("payload") or {}
             if kind == "asset":
