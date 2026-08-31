@@ -1040,7 +1040,7 @@ footer.status-bar {
         rowY += rowMaxH + BOARD_GAP_Y;
         rowMaxH = 0;
       }
-      boardsMeta.push({ boardIdx: i, xOffset: rowX, yOffset: rowY, width: b.width, height: b.height, cols: b.cols, rows: b.rows });
+      boardsMeta.push({ boardIdx: i, xOffset: rowX, yOffset: rowY, width: b.width, height: b.height, cols: b.cols, rows: b.rows.map((r) => ({ ...r, y: r.y + rowY })) });
       rowX += b.width + BOARD_GAP_X;
       rowMaxH = Math.max(rowMaxH, b.height);
       overallW = Math.max(overallW, rowX - BOARD_GAP_X);
