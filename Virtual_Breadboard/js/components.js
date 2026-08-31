@@ -694,8 +694,15 @@
     const o = op(opacity);
     const c = toroidCentroid(t);
     const sections = comp.turnsPerSection ? comp.turnsPerSection.length : t.length / 2;
-    const outerR = 24;
-    const innerR = 13;
+    // unlike a fixed size, scale the ring to the actual leg spread (same
+    // idea as drawResistor/drawInductor sizing their body off the real
+    // distance between terminals) -- a hardcoded radius bigger than the
+    // terminal spacing would swallow the legs and look off-center whenever
+    // the toroid is placed on closely-spaced holes, which is the common case
+    // for a single compact part
+    const spread = Math.max(...t.map((p) => Math.hypot(p.x - c.x, p.y - c.y)));
+    const outerR = Math.min(24, Math.max(10, spread * 0.85));
+    const innerR = outerR * 0.54;
 
     ctx.save();
     ctx.globalAlpha = o;
