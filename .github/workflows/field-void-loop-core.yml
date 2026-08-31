@@ -1,0 +1,40 @@
+name: Field Void Loop Core
+
+on:
+  push:
+    paths:
+      - 'One_Wave_Bench/brain/loop_state_machine.py'
+      - 'One_Wave_Bench/brain/test_loop_state_machine.py'
+      - 'One_Wave_Bench/brain/README.md'
+      - 'FIELD_VOID_LOOP_BUILD_LADDER.md'
+      - '.github/workflows/field-void-loop-core.yml'
+  pull_request:
+    paths:
+      - 'One_Wave_Bench/brain/loop_state_machine.py'
+      - 'One_Wave_Bench/brain/test_loop_state_machine.py'
+      - 'One_Wave_Bench/brain/README.md'
+      - 'FIELD_VOID_LOOP_BUILD_LADDER.md'
+      - '.github/workflows/field-void-loop-core.yml'
+
+jobs:
+  micro-loop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test parser state machine and exact rebuild
+        run: python -m unittest One_Wave_Bench.brain.test_loop_state_machine -v
+      - name: Emit canonical Field and Void receipts
+        run: |
+          python - <<'PY'
+          from One_Wave_Bench.brain.loop_state_machine import LoopStateMachine, Profile, canonical_cycle
+
+          for profile in (Profile.FIELD, Profile.VOID):
+              machine = LoopStateMachine()
+              machine.run(canonical_cycle(profile))
+              rebuilt = LoopStateMachine.rebuild([r.to_json() for r in machine.receipts])
+              assert rebuilt.state.snapshot() == machine.state.snapshot()
+              print(profile.value, machine.state.snapshot(), machine.receipts[-1].digest)
+          PY
