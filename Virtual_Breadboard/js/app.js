@@ -5,6 +5,7 @@
     '1large': [{ size: 'large' }],
     '2large': [{ size: 'large' }, { size: 'large' }],
     '2small': [{ size: 'small' }, { size: 'small' }],
+    '3small': [{ size: 'small' }, { size: 'small' }, { size: 'small' }],
     '4small': [{ size: 'small' }, { size: 'small' }, { size: 'small' }, { size: 'small' }],
     '1large1small': [{ size: 'large' }, { size: 'small' }],
     '1large2small': [{ size: 'large' }, { size: 'small' }, { size: 'small' }],
@@ -301,6 +302,7 @@
   const toolboxAsideEl = document.querySelector('aside.toolbox');
   const toolboxScrollHintEl = document.getElementById('toolboxScrollHint');
   function updateToolboxScrollHint() {
+    if (!toolboxAsideEl || !toolboxScrollHintEl) return;
     const scrollable = toolboxAsideEl.scrollHeight > toolboxAsideEl.clientHeight + 2;
     const atBottom = toolboxAsideEl.scrollTop + toolboxAsideEl.clientHeight >= toolboxAsideEl.scrollHeight - 2;
     toolboxScrollHintEl.hidden = !scrollable || atBottom;

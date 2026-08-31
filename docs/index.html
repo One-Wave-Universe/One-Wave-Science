@@ -234,6 +234,7 @@ footer.status-bar {
           <option value="1large">1 Large</option>
           <option value="2large">2 Large</option>
           <option value="2small">2 Small</option>
+          <option value="3small">3 Small</option>
           <option value="4small">4 Small</option>
           <option value="1large1small">1 Large + 1 Small</option>
           <option value="1large2small">1 Large + 2 Small</option>
@@ -2367,6 +2368,7 @@ footer.status-bar {
     '1large': [{ size: 'large' }],
     '2large': [{ size: 'large' }, { size: 'large' }],
     '2small': [{ size: 'small' }, { size: 'small' }],
+    '3small': [{ size: 'small' }, { size: 'small' }, { size: 'small' }],
     '4small': [{ size: 'small' }, { size: 'small' }, { size: 'small' }, { size: 'small' }],
     '1large1small': [{ size: 'large' }, { size: 'small' }],
     '1large2small': [{ size: 'large' }, { size: 'small' }, { size: 'small' }],
@@ -2663,6 +2665,7 @@ footer.status-bar {
   const toolboxAsideEl = document.querySelector('aside.toolbox');
   const toolboxScrollHintEl = document.getElementById('toolboxScrollHint');
   function updateToolboxScrollHint() {
+    if (!toolboxAsideEl || !toolboxScrollHintEl) return;
     const scrollable = toolboxAsideEl.scrollHeight > toolboxAsideEl.clientHeight + 2;
     const atBottom = toolboxAsideEl.scrollTop + toolboxAsideEl.clientHeight >= toolboxAsideEl.scrollHeight - 2;
     toolboxScrollHintEl.hidden = !scrollable || atBottom;
