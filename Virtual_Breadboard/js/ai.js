@@ -124,6 +124,25 @@
     return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
   }
 
+  async function callGemini({ apiKey, model, userText }) {
+    const m = model || 'gemini-2.5-flash';
+    const res = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent?key=' + encodeURIComponent(apiKey),
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt() }] },
+          contents: [{ role: 'user', parts: [{ text: userText }] }],
+        }),
+      }
+    );
+    if (!res.ok) throw new Error('Gemini API error ' + (await readError(res)));
+    const data = await res.json();
+    const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+    return parts.map((p) => p.text || '').join('');
+  }
+
   // Any OpenAI-chat-completions-compatible endpoint: a local Ollama/LM Studio
   // server, a self-hosted proxy, another vendor's compatible API, etc.
   async function callCustom({ endpoint, apiKey, model, userText }) {
@@ -149,7 +168,7 @@
     return JSON.stringify(data).slice(0, 500);
   }
 
-  const PROVIDERS = { anthropic: callAnthropic, openai: callOpenAI, custom: callCustom };
+  const PROVIDERS = { anthropic: callAnthropic, openai: callOpenAI, gemini: callGemini, custom: callCustom };
 
   function extractJson(text) {
     const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
