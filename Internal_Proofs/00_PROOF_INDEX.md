@@ -11,4 +11,5 @@
 | `05_Stability_Definition_Proofs.md` | Internal draft |
 | `06_Choice_Interaction_Terms.md` | Internal draft |
 | `07_Evaluation_Modulation_Validation_and_Balance.md` | Internal draft |
+| `08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md` | Gravity finite-boundary / hierarchical-assimilation proof target |
 | `Mass_Effect_Mirror_Gate_Four_Interaction_Audit.md` | Formal audit |
