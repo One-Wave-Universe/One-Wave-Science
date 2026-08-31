@@ -38,7 +38,11 @@ linear-algebra method SPICE-class simulators use:
   row `c` mirrors to row `h`). Electrically the mirrored legs are just wired
   to their partners (a real trimmer's two rows are joined internally for
   mechanical stability), modeled as three ordinary jumper connections rather
-  than touching the resistor-divider math itself.
+  than touching the resistor-divider math itself. In Select mode, click and
+  drag the knob directly on the canvas to turn it (a 270-degree sweep, like
+  a real trimmer), or use the Inspector's slider — it moves in 0.1% steps
+  (1000 positions) rather than a coarse 1%, fine enough to dial in a
+  specific millivolt-scale lean for asymmetric-voltage testing.
 - **Virtual Ground** is a rail-splitter: a 3-terminal part whose output node
   is forced to the exact midpoint voltage between the two rails/nodes it's
   connected to — e.g. split a single 9V supply into a `+4.5V` / `V0 (0V
@@ -161,9 +165,10 @@ fetch one.
      rails, letting you breadboard a proper `-`/`0`/`+` split-supply layout
      from a single single-ended battery.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
-   hold down a pushbutton to close it only while held, or click any part to
-   inspect it — its live voltage, current, and an editable value dropdown
-   appear in the right-hand Inspector, with a Delete button.
+   hold down a pushbutton to close it only while held, click and drag a
+   potentiometer's knob to turn it, or click any part to inspect it — its
+   live voltage, current, and an editable value dropdown appear in the
+   right-hand Inspector, with a Delete button.
 4. **Right-click any placed part** for a quick floating menu with the same
    options as the Inspector (value, color, style) plus **Remove part** —
    right-click a wire to pick its color or switch it between **Looped**

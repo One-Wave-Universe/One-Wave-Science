@@ -326,6 +326,31 @@
   // pins on the far row are wired internally to the near row for mechanical
   // stability, modeled upstream as extra jumper wires between them).
   // t = [nearA, nearWiper, nearB, farA, farWiper, farB]
+  function potCentroid(t) {
+    return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
+  }
+
+  // wiper "pos" (0-1) <-> knob pointer angle, a 270-degree sweep from
+  // -135deg (fully counter-clockwise) to +135deg (fully clockwise).
+  const POT_ANGLE_START = -Math.PI * 0.75;
+  const POT_ANGLE_SWEEP = Math.PI * 1.5;
+  function potPosToAngle(pos) {
+    return POT_ANGLE_START + pos * POT_ANGLE_SWEEP;
+  }
+  function potAngleToPos(angle) {
+    let a = angle - POT_ANGLE_START;
+    while (a < 0) a += Math.PI * 2;
+    while (a > Math.PI * 2) a -= Math.PI * 2;
+    // angles past the sweep's end snap to whichever endpoint is nearer,
+    // so grabbing the knob and dragging past a stop just pins it there
+    if (a > POT_ANGLE_SWEEP) {
+      const past = a - POT_ANGLE_SWEEP;
+      const wrapGap = Math.PI * 2 - POT_ANGLE_SWEEP;
+      a = past < wrapGap / 2 ? POT_ANGLE_SWEEP : 0;
+    }
+    return Math.max(0, Math.min(1, a / POT_ANGLE_SWEEP));
+  }
+
   function drawPotentiometer(ctx, comp, t, opacity) {
     const o = op(opacity);
     const cx = (t[1].x + t[4].x) / 2;
@@ -359,14 +384,16 @@
     roundRect(ctx, left, cy - halfH, right - left, halfH * 2, 6);
     ctx.stroke();
 
-    // knob position shows the wiper setting
+    // knob position shows the wiper setting -- click-drag it in Select mode
     const pos = comp.pos ?? 0.5;
-    const angle = -Math.PI * 0.75 + pos * Math.PI * 1.5;
+    const angle = potPosToAngle(pos);
     ctx.beginPath();
     ctx.arc(cx, cy, 10, 0, Math.PI * 2);
     ctx.fillStyle = '#f4f4f0';
     ctx.fill();
-    ctx.strokeStyle = '#5b5f52';
+    ctx.strokeStyle = comp.dragging ? '#3f7fe0' : '#5b5f52';
+    ctx.lineWidth = comp.dragging ? 2 : 1;
+    ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.lineTo(cx + Math.cos(angle) * 9, cy + Math.sin(angle) * 9);
@@ -478,6 +505,7 @@
     resistorColorBands, formatOhms, formatFarads,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
+    potCentroid, potPosToAngle, potAngleToPos,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

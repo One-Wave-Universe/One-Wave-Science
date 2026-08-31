@@ -22,6 +22,7 @@
     lastResult: { voltages: new Map(), currents: new Map(), warnings: [], uf: null },
     animT: 0,
     wireColorIdx: 0,
+    draggingPot: null,
   };
   const WIRE_COLORS = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7'];
 
@@ -344,16 +345,51 @@
     const part = hitTestPart(pos);
     if (part && part.type === 'pushbutton') part.closed = true;
   }
+
+  const POT_KNOB_RADIUS = 12;
+  // query: is this position over a placed potentiometer's knob?
+  function hitTestPotKnob(pos) {
+    for (let i = state.parts.length - 1; i >= 0; i--) {
+      const p = state.parts[i];
+      if (p.type !== 'potentiometer') continue;
+      const c = Components.potCentroid(p.terminals);
+      if (Math.hypot(pos.x - c.x, pos.y - c.y) < POT_KNOB_RADIUS) return p;
+    }
+    return null;
+  }
+  // executor: turning the knob by dragging it directly on the canvas --
+  // rounds to 0.1% steps, matching the Inspector's fine slider, so mouse
+  // jitter doesn't stop the wiper from settling on an exact value.
+  function turnPotKnob(part, pos) {
+    const c = Components.potCentroid(part.terminals);
+    const angle = Math.atan2(pos.y - c.y, pos.x - c.x);
+    part.pos = Math.round(Components.potAngleToPos(angle) * 1000) / 1000;
+  }
   function releaseAllPushbuttons() {
     state.parts.forEach((p) => {
       if (p.type === 'pushbutton') p.closed = false;
     });
   }
 
+  // keeps the Inspector's fine slider (and its % readout) in sync while the
+  // knob is being turned directly on the canvas, without a full re-render
+  function syncPotSliderUi(part) {
+    if (!currentPotRangeEl || !currentPotRangeEl.isConnected || currentPotPartId !== part.id) return;
+    const steps = String(Math.round(part.pos * 1000));
+    currentPotRangeEl.value = steps;
+    currentPotLabelEl.textContent = (Number(steps) / 10).toFixed(1) + '%';
+  }
+
   canvas.addEventListener('mousemove', (evt) => {
     const pos = mousePos(evt);
+    if (state.draggingPot) {
+      turnPotKnob(state.draggingPot, pos);
+      syncPotSliderUi(state.draggingPot);
+      return;
+    }
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 8);
     state.hoverPart = hitTestPart(pos);
+    canvas.style.cursor = state.tool === 'select' && hitTestPotKnob(pos) ? 'grab' : '';
   });
   canvas.addEventListener('mouseleave', () => {
     state.hoverHole = null;
@@ -361,9 +397,41 @@
     releaseAllPushbuttons();
   });
   canvas.addEventListener('mousedown', (evt) => {
-    if (state.tool === 'select') pressPushbutton(mousePos(evt));
+    if (state.tool !== 'select') return;
+    const pos = mousePos(evt);
+    const knob = hitTestPotKnob(pos);
+    if (knob) {
+      state.draggingPot = knob;
+      knob.dragging = true;
+      canvas.style.cursor = 'grabbing';
+      selectPart(knob.id);
+      turnPotKnob(knob, pos);
+      syncPotSliderUi(knob);
+      return;
+    }
+    pressPushbutton(pos);
   });
-  canvas.addEventListener('mouseup', releaseAllPushbuttons);
+  // mousedown+move+up over the canvas still synthesizes a trailing "click"
+  // at the release point -- suppress just that one click after a knob drag
+  // so releasing off the knob's body doesn't deselect the part it just set
+  let suppressNextClick = false;
+  window.addEventListener('mouseup', () => {
+    if (state.draggingPot) {
+      state.draggingPot.dragging = false;
+      state.draggingPot = null;
+      canvas.style.cursor = '';
+      suppressNextClick = true;
+    }
+    releaseAllPushbuttons();
+  });
+  // a fast drag can outrun the canvas's own bounds -- keep turning the knob
+  // as long as the button's held, even past the board's edge, like a real
+  // drag-to-turn control would
+  window.addEventListener('mousemove', (evt) => {
+    if (!state.draggingPot) return;
+    turnPotKnob(state.draggingPot, mousePos(evt));
+    syncPotSliderUi(state.draggingPot);
+  });
 
   // touch support (phones/tablets): update the hover readout as a finger
   // moves, and let the browser's own tap-to-click synthesis handle placement
@@ -376,14 +444,36 @@
     const pos = touchPos(evt);
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
     state.hoverPart = hitTestPart(pos);
-    if (state.tool === 'select') pressPushbutton(pos);
+    if (state.tool === 'select') {
+      const knob = hitTestPotKnob(pos);
+      if (knob) {
+        state.draggingPot = knob;
+        knob.dragging = true;
+        selectPart(knob.id);
+        turnPotKnob(knob, pos);
+        syncPotSliderUi(knob);
+        return;
+      }
+      pressPushbutton(pos);
+    }
   }, { passive: true });
   canvas.addEventListener('touchmove', (evt) => {
     const pos = touchPos(evt);
+    if (state.draggingPot) {
+      turnPotKnob(state.draggingPot, pos);
+      syncPotSliderUi(state.draggingPot);
+      return;
+    }
     state.hoverHole = Board.hitTest(board, pos.x, pos.y, 12);
     state.hoverPart = hitTestPart(pos);
   }, { passive: true });
-  canvas.addEventListener('touchend', releaseAllPushbuttons, { passive: true });
+  canvas.addEventListener('touchend', () => {
+    if (state.draggingPot) {
+      state.draggingPot.dragging = false;
+      state.draggingPot = null;
+    }
+    releaseAllPushbuttons();
+  }, { passive: true });
 
   // validator: is this hole a legal next click for the placement in progress?
   // (rejects only re-clicking the exact same hole twice in a row)
@@ -430,7 +520,13 @@
   }
 
   // event handler: just captures the click and hands it to the router
-  canvas.addEventListener('click', (evt) => handleCanvasClick(mousePos(evt)));
+  canvas.addEventListener('click', (evt) => {
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      return;
+    }
+    handleCanvasClick(mousePos(evt));
+  });
 
   window.addEventListener('keydown', (evt) => {
     if (evt.key === 'Escape') {
@@ -443,6 +539,9 @@
   // ---------------- properties panel ----------------
   const propsEl = document.getElementById('props');
   let currentReadoutEl = null;
+  let currentPotPartId = null;
+  let currentPotRangeEl = null;
+  let currentPotLabelEl = null;
   // presentation: builds the type-specific controls for a part (value
   // dropdowns, color swatches, toggle buttons, wire color/style) into
   // whatever container is given. Shared by the Inspector panel and the
@@ -493,14 +592,32 @@
       btn.addEventListener('touchend', () => (part.closed = false));
       container.appendChild(btn);
     } else if (part.type === 'potentiometer') {
+      // 0-1000 steps = 0.1% resolution, fine enough to dial in a specific
+      // millivolt-scale lean for asymmetric-voltage testing rather than
+      // just coarse 1% notches.
+      const wrap = document.createElement('div');
+      wrap.className = 'pot-slider';
       const range = document.createElement('input');
       range.type = 'range';
       range.min = '0';
-      range.max = '100';
-      range.value = String(Math.round((part.pos ?? 0.5) * 100));
-      range.addEventListener('input', () => (part.pos = Number(range.value) / 100));
-      container.appendChild(labeled('Wiper position', range));
+      range.max = '1000';
+      range.step = '1';
+      range.value = String(Math.round((part.pos ?? 0.5) * 1000));
+      const pctLabel = document.createElement('span');
+      pctLabel.className = 'pot-pct';
+      const updatePct = () => { pctLabel.textContent = (Number(range.value) / 10).toFixed(1) + '%'; };
+      updatePct();
+      range.addEventListener('input', () => {
+        part.pos = Number(range.value) / 1000;
+        updatePct();
+      });
+      wrap.appendChild(range);
+      wrap.appendChild(pctLabel);
+      container.appendChild(labeled('Wiper position (0.1% steps)', wrap));
       container.appendChild(makeSelect('Total resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), part.value, (v) => (part.value = Number(v))));
+      currentPotPartId = part.id;
+      currentPotRangeEl = range;
+      currentPotLabelEl = pctLabel;
     } else if (part.type === 'wire' || part.type === 'ywire') {
       const wrap = document.createElement('div');
       wrap.className = 'swatches';

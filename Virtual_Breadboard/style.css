@@ -61,6 +61,9 @@ select {
   background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 5px;
 }
 .hint { font-size: 12px; color: #8a94a3; line-height: 1.5; }
+.pot-slider { display: flex; align-items: center; gap: 8px; }
+.pot-slider input[type="range"] { flex: 1; width: auto; }
+.pot-pct { font-size: 11px; color: #cfd8e3; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
 .swatches { display: flex; gap: 6px; }
 .swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
 .swatch.active { border-color: #fff; }
