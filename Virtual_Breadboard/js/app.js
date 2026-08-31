@@ -924,6 +924,12 @@
     renderProps();
   });
 
+  document.getElementById('btnWebVersion').addEventListener('click', () => {
+    const url = 'https://one-wave-universe.github.io/One-Wave-Science/';
+    if (window.electronAPI && window.electronAPI.openExternal) window.electronAPI.openExternal(url);
+    else window.open(url, '_blank');
+  });
+
   // executor: swap in a different board layout. Each board keeps its own
   // power rails (namespaced cellIds) unless the user bridges them with an
   // ordinary jumper wire -- exactly like separate physical boards on a

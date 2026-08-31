@@ -217,6 +217,7 @@ footer.status-bar {
       <button id="btnSave">Save</button>
       <button id="btnLoad">Load</button>
       <button id="btnClear">Clear</button>
+      <button id="btnWebVersion" title="Open the shareable browser/AI version of this simulator">Web Version</button>
     </div>
   </header>
 
@@ -3213,6 +3214,12 @@ footer.status-bar {
     state.selectedPartId = null;
     circuit.reset();
     renderProps();
+  });
+
+  document.getElementById('btnWebVersion').addEventListener('click', () => {
+    const url = 'https://one-wave-universe.github.io/One-Wave-Science/';
+    if (window.electronAPI && window.electronAPI.openExternal) window.electronAPI.openExternal(url);
+    else window.open(url, '_blank');
   });
 
   // executor: swap in a different board layout. Each board keeps its own

@@ -30,6 +30,7 @@
     },
     "files": [
       "main.js",
+      "preload.js",
       "index.html",
       "style.css",
       "js/**/*",

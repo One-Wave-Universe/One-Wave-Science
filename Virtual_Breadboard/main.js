@@ -1,5 +1,11 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron');
 const path = require('path');
+
+// the renderer can only ask for this by name (see preload.js) -- validate
+// it's an actual http(s) URL before ever handing it to the OS to open
+ipcMain.on('open-external', (event, url) => {
+  if (typeof url === 'string' && /^https:\/\//.test(url)) shell.openExternal(url);
+});
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -14,6 +20,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
