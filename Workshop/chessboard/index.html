@@ -15,22 +15,99 @@ body{display:flex;align-items:center;justify-content:center;overflow:hidden}
 .piece{width:68%;aspect-ratio:1;border-radius:50%;border:3px solid #777;box-shadow:inset 0 0 0 6px #0002,0 3px 7px #0008}
 .field{background:#ececec}
 .void{background:#242424}
+.king{box-shadow:inset 0 0 0 6px #0002,inset 0 0 0 10px #999,0 3px 7px #0008}
 </style>
 </head>
 <body>
-<div id="board" aria-label="grayscale checkers board"></div>
+<div id="board" aria-label="left-to-right grayscale checkers board"></div>
 <script>
-const board=document.getElementById('board');
-for(let r=0;r<8;r++){
-  for(let c=0;c<8;c++){
+const E='',F='f',V='v',FK='F',VK='V';
+const boardEl=document.getElementById('board');
+const start=Array.from({length:8},(_,r)=>Array.from({length:8},(_,c)=>{
+  if((r+c)%2!==1) return E;
+  if(c<3) return F;
+  if(c>4) return V;
+  return E;
+}));
+let board=start.map(row=>row.slice());
+let turn='FIELD';
+
+function sideOf(p){return p===F||p===FK?'FIELD':p===V||p===VK?'VOID':null}
+function king(p){return p===FK||p===VK}
+function inside(r,c){return r>=0&&r<8&&c>=0&&c<8}
+
+function render(){
+  boardEl.innerHTML='';
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
     const sq=document.createElement('div');
-    const dark=(r+c)%2===1;
-    sq.className='sq '+(dark?'dark':'light');
-    if(dark && c<3){const p=document.createElement('div');p.className='piece field';sq.appendChild(p)}
-    if(dark && c>4){const p=document.createElement('div');p.className='piece void';sq.appendChild(p)}
-    board.appendChild(sq);
+    sq.className='sq '+(((r+c)%2===1)?'dark':'light');
+    sq.dataset.r=r;sq.dataset.c=c;
+    const p=board[r][c];
+    if(p){
+      const disc=document.createElement('div');
+      disc.className='piece '+(sideOf(p)==='FIELD'?'field':'void')+(king(p)?' king':'');
+      sq.appendChild(disc);
+    }
+    boardEl.appendChild(sq);
   }
 }
+
+function movesFor(r,c){
+  const p=board[r][c];
+  if(!p) return [];
+  const side=sideOf(p);
+  const colDirs=king(p)?[-1,1]:[side==='FIELD'?1:-1];
+  const moves=[];
+  for(const dc of colDirs){
+    for(const dr of [-1,1]){
+      const r1=r+dr,c1=c+dc;
+      if(inside(r1,c1)&&board[r1][c1]===E){
+        moves.push({from:{r,c},to:{r:r1,c:c1},capture:null});
+      }
+      const r2=r+2*dr,c2=c+2*dc;
+      if(inside(r2,c2)&&board[r2][c2]===E&&inside(r1,c1)&&board[r1][c1]!==E&&sideOf(board[r1][c1])!==side){
+        moves.push({from:{r,c},to:{r:r2,c:c2},capture:{r:r1,c:c1}});
+      }
+    }
+  }
+  return moves;
+}
+
+function legalMoves(side=turn){
+  const all=[];
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+    if(sideOf(board[r][c])===side) all.push(...movesFor(r,c));
+  }
+  const captures=all.filter(m=>m.capture);
+  return captures.length?captures:all;
+}
+
+function applyMove(m){
+  const p=board[m.from.r][m.from.c];
+  if(sideOf(p)!==turn) return false;
+  const legal=legalMoves(turn).find(x=>x.from.r===m.from.r&&x.from.c===m.from.c&&x.to.r===m.to.r&&x.to.c===m.to.c);
+  if(!legal) return false;
+  board[m.from.r][m.from.c]=E;
+  if(legal.capture) board[legal.capture.r][legal.capture.c]=E;
+  let next=p;
+  if(p===F&&legal.to.c===7) next=FK;
+  if(p===V&&legal.to.c===0) next=VK;
+  board[legal.to.r][legal.to.c]=next;
+  turn=turn==='FIELD'?'VOID':'FIELD';
+  render();
+  return true;
+}
+
+function reset(){board=start.map(row=>row.slice());turn='FIELD';render()}
+
+window.ONE_WAVE_BOARD={
+  get board(){return board},
+  get turn(){return turn},
+  legalMoves,
+  applyMove,
+  reset
+};
+render();
 </script>
 </body>
 </html>
