@@ -375,6 +375,43 @@ AI iterating on a design):
 - `window.__selectPartById(id)` / `window.__toggleSwitchById(id)` — drive
   the UI the same way a click would.
 
+### Headless (no browser at all): `simulate.js`
+
+For an external test harness that isn't driving the actual page (a CI job,
+an automated test loop on other hardware, a script in a different
+language), `simulate.js` runs a circuit spec through the real engine from
+a plain `node` process — same physics, no browser/DOM/Electron involved:
+
+```bash
+echo '{
+  "parts": [
+    {"type": "battery", "value": 9, "terminals": [{"row":"c","col":10},{"row":"h","col":10}]},
+    {"type": "resistor", "value": 1000, "terminals": [{"row":"d","col":10},{"row":"i","col":10}]}
+  ]
+}' | node simulate.js
+```
+
+Input is the same JSON shape (and the same validation rules) the in-app
+"Ask AI to build" panel uses -- see `js/ai.js`'s system prompt for the full
+part-type reference. Optional top-level fields: `"layout"` (any Board
+layout key, e.g. `"2small"`; default `"1large"`) and `"sim"` (`{"seconds",
+"dt", "sampleEvery"}` — a settle duration/step size, and an optional
+sampling interval to get a time-series `"samples"` array back instead of
+just the final settled state). Prints `{"ok": true, "final": {"voltages",
+"currents", "warnings"}, "samples": [...]}` on success, or `{"ok": false,
+"errors": [...]}` with a non-zero exit code on an invalid spec — the same
+validation errors the AI-build panel would show, so a script driving this
+gets the same feedback a person would.
+
+A non-JS caller (Python, say) just shells out to it:
+
+```python
+import json, subprocess
+result = subprocess.run(['node', 'simulate.js'], input=json.dumps(spec),
+                         capture_output=True, text=True, cwd='Virtual_Breadboard')
+data = json.loads(result.stdout)
+```
+
 ## Running the physics tests
 
 ```bash
