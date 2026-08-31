@@ -5,15 +5,17 @@ on:
     paths:
       - 'One_Wave_Bench/gravity/**'
       - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
+      - 'Internal_Proofs/09_Gradient_Curvature_Green_Function_Gravity_Bridge.md'
       - '.github/workflows/gravity-proof-bench.yml'
   pull_request:
     paths:
       - 'One_Wave_Bench/gravity/**'
       - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
+      - 'Internal_Proofs/09_Gradient_Curvature_Green_Function_Gravity_Bridge.md'
       - '.github/workflows/gravity-proof-bench.yml'
 
 jobs:
-  finite-slope-sieve:
+  gravity-proof-benches:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -24,9 +26,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run gravity proof bench tests
+      - name: Run all gravity proof bench tests
         working-directory: One_Wave_Bench/gravity
-        run: python -m unittest -v test_finite_slope_sieve_bench.py
+        run: python -m unittest discover -v
 
-      - name: Emit machine-readable proof receipt
+      - name: Emit finite-slope sieve receipt
         run: python One_Wave_Bench/gravity/finite_slope_sieve_bench.py --json
+
+      - name: Emit gradient-curvature slope receipt
+        run: python One_Wave_Bench/gravity/gradient_curvature_slope_bench.py --json
