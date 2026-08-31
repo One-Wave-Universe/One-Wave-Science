@@ -1,127 +1,44 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sentient Surrender — The Mind Render</title>
 <style>
-:root{--bg:#111316;--panel:#1b1f24;--line:#3a414b;--text:#eef2f7;--muted:#9aa6b2;--light:#d9d2bf;--dark:#626a74;--field:#dcae56;--void:#79a9df;--sel:#f5ef72;--ear:#8ef0c8}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif}.app{min-height:100vh;display:grid;grid-template-columns:minmax(240px,320px) minmax(420px,1fr) minmax(240px,320px);gap:18px;padding:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}.title{text-align:center;margin:0 0 4px;font-size:24px}.subtitle{text-align:center;color:var(--muted);margin:0 0 14px}.boardWrap{display:flex;align-items:center;justify-content:center}.board{width:min(68vh,72vw,720px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);border:3px solid #8d96a2;box-shadow:0 12px 40px #0008}.sq{position:relative;display:flex;align-items:center;justify-content:center;font-size:clamp(28px,5.6vw,62px);cursor:pointer;user-select:none}.sq.light{background:var(--light);color:#17191c}.sq.dark{background:var(--dark);color:#f7f7f7}.sq.selected{outline:5px solid var(--sel);outline-offset:-5px}.sq.last{box-shadow:inset 0 0 0 4px #76e0a6}.coord{position:absolute;font-size:10px;opacity:.65;left:4px;bottom:2px}.sideTitle{margin:0 0 8px;font-size:20px}.field{color:var(--field)}.void{color:var(--void)}.ear{color:var(--ear)}.gate{padding:9px 10px;border:1px solid var(--line);border-radius:9px;margin:7px 0;color:var(--muted);transition:.08s}.gate.active{color:#fff;border-color:currentColor;background:#ffffff0c;font-weight:700}.gate.heard{box-shadow:inset 0 0 0 2px var(--ear),0 0 18px #8ef0c833}.fieldPanel .gate.active{color:var(--field)}.voidPanel .gate.active{color:var(--void)}.status{margin-top:12px;padding:12px;border-radius:10px;background:#0d0f12;border:1px solid var(--line);min-height:74px}.controls{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}button{background:#252b32;color:#fff;border:1px solid #4b5562;border-radius:9px;padding:9px 13px;cursor:pointer}button:hover{background:#303842}button.musicOn{border-color:var(--ear);color:var(--ear)}.tiny{font-size:12px;color:var(--muted);line-height:1.4}.turn{font-weight:800}.legend{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.moveLog{max-height:180px;overflow:auto;font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:pre-wrap}.centerPanel{display:flex;flex-direction:column;justify-content:center}.badge{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted)}.earPath{margin-top:12px;padding:10px;border:1px solid #335a4d;border-radius:10px;background:#0b1512}.earFlow{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--ear);line-height:1.55}.meter{height:8px;border-radius:999px;background:#0a0d0f;border:1px solid var(--line);overflow:hidden;margin-top:7px}.meter>i{display:block;height:100%;width:0;background:var(--ear);transition:width .05s}.pulse{animation:pulse .14s ease-out}@keyframes pulse{0%{filter:brightness(1.8)}100%{filter:brightness(1)}}@media(max-width:1000px){.app{grid-template-columns:1fr}.panel{max-width:760px;width:100%;margin:auto}.board{width:min(92vw,720px)}}
+:root{--bg:#101010;--panel:#181818;--line:#444;--light:#d8d8d8;--dark:#5b5b5b;--field:#efefef;--void:#2b2b2b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:#eee;font-family:system-ui,sans-serif}
+body{display:flex;align-items:center;justify-content:center;padding:18px}.arena{width:min(1180px,98vw);display:grid;grid-template-columns:180px minmax(420px,720px) 180px;gap:18px;align-items:center}
+.player{height:min(76vh,720px);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.player h2{margin:0;font-size:18px;letter-spacing:.12em}.fieldName{color:#eee}.voidName{color:#aaa}.rack{width:112px;min-height:330px;border:1px solid #555;border-radius:12px;padding:10px;display:flex;align-content:flex-start;justify-content:center;gap:7px;flex-wrap:wrap;background:#0d0d0d}
+.captured{width:29px;height:29px;border-radius:50%;border:2px solid #777;box-shadow:inset 0 0 0 4px #111}.captured.fieldPiece{background:#e6e6e6}.captured.voidPiece{background:#303030}
+.center{display:flex;flex-direction:column;align-items:center;gap:12px}.title{font-size:22px;font-weight:800;letter-spacing:.05em}.board{width:min(72vw,72vh,720px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:4px solid #777}.sq{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0}.sq.light{background:var(--light)}.sq.dark{background:var(--dark)}
+.piece{width:72%;height:72%;border-radius:50%;border:3px solid #777;box-shadow:inset 0 0 0 6px #1115,0 3px 8px #0008}.piece.fieldPiece{background:#ececec}.piece.voidPiece{background:#282828}.piece.king::after{content:'K';display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-weight:900;font-size:clamp(14px,2vw,26px);color:#888}.piece.fieldPiece.king::after{color:#333}.controls{height:42px;display:flex;align-items:center;justify-content:center}.controls button{font:700 14px system-ui;padding:10px 18px;border-radius:999px;border:1px solid #777;background:#242424;color:#eee;cursor:pointer}.turn{font-size:12px;color:#999;min-height:18px}
+@media(max-width:900px){.arena{grid-template-columns:110px 1fr 110px;gap:8px}.player{height:auto;min-height:520px}.rack{width:80px}.board{width:min(74vw,680px)}}
 </style>
 </head>
 <body>
-<div class="app">
-  <section class="panel fieldPanel">
-    <h2 class="sideTitle field">FIELD machine</h2>
-    <div class="tiny">Field-heavy side: pushes outward, commits, then resolves through the same six-gate loop.</div>
-    <div id="fieldGates"></div>
-    <div class="status" id="fieldStatus"></div>
-  </section>
-
-  <main class="panel centerPanel">
-    <h1 class="title">Sentient Surrender</h1>
-    <p class="subtitle">The Mind Render · two state machines on one chessboard</p>
-    <div class="boardWrap"><div id="board" class="board" aria-label="chessboard"></div></div>
-    <div class="controls">
-      <button id="musicBtn">▶ EPIC 8-BIT SCORE</button>
-      <button id="resetBtn">Reset board</button>
-      <button id="undoBtn">Undo</button>
-      <span class="badge" id="turnBadge"></span>
-    </div>
-    <div class="earPath">
-      <strong class="ear">EAR PATH — live sensory feed</strong>
-      <div class="earFlow">score → waveform → envelope → beat/phase → FIELD + VOID active gates</div>
-      <div class="tiny" id="earReadout">silent · waiting for audio start</div>
-      <div class="meter"><i id="earMeter"></i></div>
-    </div>
-    <div class="legend tiny">Music is generated live with Web Audio — no sampled song. The beat does not choose moves. It enters both state machines as sensory timing/energy; each machine's currently active gate receives the pulse. Chess moves advance the gate loop.</div>
-  </main>
-
-  <section class="panel voidPanel">
-    <h2 class="sideTitle void">VOID machine</h2>
-    <div class="tiny">Void-heavy side: checks reference, constrains, mirrors, then returns through the same six-gate loop.</div>
-    <div id="voidGates"></div>
-    <div class="status" id="voidStatus"></div>
-    <div class="legend">
-      <strong>Move log</strong>
-      <div id="moveLog" class="moveLog"></div>
-    </div>
-  </section>
+<div class="arena">
+  <aside class="player" id="fieldPlayer"><h2 class="fieldName">FIELD</h2><div id="fieldRack" class="rack"></div></aside>
+  <main class="center"><div class="title">SENTIENT SURRENDER</div><div id="board" class="board"></div><div class="controls"><button id="startBtn">START MATCH</button></div><div id="turnText" class="turn"></div></main>
+  <aside class="player" id="voidPlayer"><h2 class="voidName">VOID</h2><div id="voidRack" class="rack"></div></aside>
 </div>
 <script>
-const gates=["1 · Begin / Reference","2 · Choice / Build","3 · Hold / Confirm","4(0) · Mirror / View","5 · State / Break","6 · Loop / Resolve"];
+const E='',F='f',V='v',FK='F',VK='V';
 const start=[
-  ['♜','♞','♝','♛','♚','♝','♞','♜'],['♟','♟','♟','♟','♟','♟','♟','♟'],
-  ['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],
-  ['♙','♙','♙','♙','♙','♙','♙','♙'],['♖','♘','♗','♕','♔','♗','♘','♖']
+ [E,V,E,V,E,V,E,V],[V,E,V,E,V,E,V,E],[E,V,E,V,E,V,E,V],[E,E,E,E,E,E,E,E],
+ [E,E,E,E,E,E,E,E],[F,E,F,E,F,E,F,E],[E,F,E,F,E,F,E,F],[F,E,F,E,F,E,F,E]
 ];
-const white=new Set(['♙','♖','♘','♗','♕','♔']),black=new Set(['♟','♜','♞','♝','♛','♚']);
-let board,turn,selected,fieldStep,voidStep,history,lastMove,log;
-let ear={energy:0,beat:0,phase:0,note:'—',fieldInput:0,voidInput:0};
-function cloneBoard(b){return b.map(r=>r.slice())}
-function init(){board=cloneBoard(start);turn='FIELD';selected=null;fieldStep=0;voidStep=0;history=[];lastMove=null;log=[];render()}
-function sideOf(piece){if(white.has(piece))return 'FIELD';if(black.has(piece))return 'VOID';return null}
-function squareName(r,c){return 'abcdefgh'[c]+(8-r)}
-function renderGates(id,step){document.getElementById(id).innerHTML=gates.map((g,i)=>`<div data-gate="${i}" class="gate ${i===step?'active':''}">${g}</div>`).join('')}
-function render(){
- const el=document.getElementById('board');el.innerHTML='';
- for(let r=0;r<8;r++)for(let c=0;c<8;c++){
-   const s=document.createElement('div');s.className='sq '+(((r+c)%2)?'dark':'light');
-   if(selected&&selected.r===r&&selected.c===c)s.classList.add('selected');
-   if(lastMove&&((lastMove.from.r===r&&lastMove.from.c===c)||(lastMove.to.r===r&&lastMove.to.c===c)))s.classList.add('last');
-   s.textContent=board[r][c];const co=document.createElement('span');co.className='coord';co.textContent=squareName(r,c);s.appendChild(co);s.onclick=()=>clickSquare(r,c);el.appendChild(s);
- }
- renderGates('fieldGates',fieldStep);renderGates('voidGates',voidStep);
- document.getElementById('turnBadge').innerHTML=`Turn: <span class="turn ${turn==='FIELD'?'field':'void'}">${turn}</span>`;
- document.getElementById('fieldStatus').innerHTML=`<strong>Current gate:</strong><br>${gates[fieldStep]}<br><span class="tiny">Ear input: ${ear.fieldInput.toFixed(2)} · Moves: ${log.filter(x=>x.side==='FIELD').length}</span>`;
- document.getElementById('voidStatus').innerHTML=`<strong>Current gate:</strong><br>${gates[voidStep]}<br><span class="tiny">Ear input: ${ear.voidInput.toFixed(2)} · Moves: ${log.filter(x=>x.side==='VOID').length}</span>`;
- document.getElementById('moveLog').textContent=log.length?log.map((x,i)=>`${i+1}. ${x.side} ${x.piece} ${x.from} → ${x.to}`).join('\n'):'No moves yet.';
-}
-function clickSquare(r,c){
- const p=board[r][c];if(!selected){if(p&&sideOf(p)===turn){selected={r,c};render()}return}if(p&&sideOf(p)===turn){selected={r,c};render();return}
- history.push({board:cloneBoard(board),turn,fieldStep,voidStep,lastMove,log:log.slice()});const piece=board[selected.r][selected.c],from={...selected},to={r,c};
- board[r][c]=piece;board[selected.r][selected.c]='';log.push({side:turn,piece,from:squareName(from.r,from.c),to:squareName(r,c)});lastMove={from,to};
- if(turn==='FIELD'){fieldStep=(fieldStep+1)%6;turn='VOID'}else{voidStep=(voidStep+1)%6;turn='FIELD'}selected=null;render();
-}
-
-document.getElementById('resetBtn').onclick=init;
-document.getElementById('undoBtn').onclick=()=>{const h=history.pop();if(!h)return;board=h.board;turn=h.turn;fieldStep=h.fieldStep;voidStep=h.voidStep;lastMove=h.lastMove;log=h.log;selected=null;render()};
-
-// ---------- ORIGINAL 8-BIT SCORE + EAR PATH ----------
-let ac=null,master=null,musicTimer=null,nextBeatTime=0,beatIndex=0,musicOn=false;
-const bpm=156,stepDur=60/bpm/2;
-const lead=[76,79,83,81,76,84,83,79,74,78,81,79,74,83,81,78];
-const bass=[40,40,43,43,36,36,38,38,40,40,43,43,36,38,35,38];
-const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-function hz(m){return 440*Math.pow(2,(m-69)/12)}
-function noteName(m){return names[m%12]+(Math.floor(m/12)-1)}
-function envOsc(time,freq,type,dur,gain){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(freq,time);g.gain.setValueAtTime(0.0001,time);g.gain.exponentialRampToValueAtTime(gain,time+.008);g.gain.exponentialRampToValueAtTime(0.0001,time+dur);o.connect(g).connect(master);o.start(time);o.stop(time+dur+.02)}
-function kick(time){const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(130,time);o.frequency.exponentialRampToValueAtTime(42,time+.12);g.gain.setValueAtTime(.24,time);g.gain.exponentialRampToValueAtTime(.0001,time+.14);o.connect(g).connect(master);o.start(time);o.stop(time+.15)}
-function noiseHat(time){const n=ac.createBufferSource(),g=ac.createGain(),buf=ac.createBuffer(1,ac.sampleRate*.035,ac.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;n.buffer=buf;g.gain.setValueAtTime(.045,time);g.gain.exponentialRampToValueAtTime(.0001,time+.035);n.connect(g).connect(master);n.start(time)}
-function feedEar(step,midi,energy){
- ear.beat=step;ear.phase=(step%16)/16;ear.note=noteName(midi);ear.energy=energy;
- // Same acoustic event enters both machines; opposed weighting preserves Field/Void asymmetry without letting music make the decision.
- ear.fieldInput=energy*(.65+.35*Math.sin(ear.phase*Math.PI*2)**2);
- ear.voidInput=energy*(.65+.35*Math.cos(ear.phase*Math.PI*2)**2);
- document.getElementById('earReadout').textContent=`beat ${step%16+1}/16 · ${ear.note} · phase ${ear.phase.toFixed(2)} · field ${ear.fieldInput.toFixed(2)} · void ${ear.voidInput.toFixed(2)}`;
- document.getElementById('earMeter').style.width=`${Math.min(100,energy*100)}%`;
- const fg=document.querySelector(`#fieldGates [data-gate="${fieldStep}"]`),vg=document.querySelector(`#voidGates [data-gate="${voidStep}"]`);if(fg)fg.classList.add('heard');if(vg)vg.classList.add('heard');
- document.querySelector('.board').classList.remove('pulse');void document.querySelector('.board').offsetWidth;document.querySelector('.board').classList.add('pulse');
- setTimeout(()=>{if(fg)fg.classList.remove('heard');if(vg)vg.classList.remove('heard');document.getElementById('earMeter').style.width='8%'},120);
- document.getElementById('fieldStatus').innerHTML=`<strong>Current gate:</strong><br>${gates[fieldStep]}<br><span class="tiny">Ear input: ${ear.fieldInput.toFixed(2)} · Moves: ${log.filter(x=>x.side==='FIELD').length}</span>`;
- document.getElementById('voidStatus').innerHTML=`<strong>Current gate:</strong><br>${gates[voidStep]}<br><span class="tiny">Ear input: ${ear.voidInput.toFixed(2)} · Moves: ${log.filter(x=>x.side==='VOID').length}</span>`;
-}
-function scheduleBeat(i,t){const k=i%16,mel=lead[k],bas=bass[k];envOsc(t,hz(mel),'square',stepDur*.72,.08);if(k%2===0)envOsc(t,hz(bas),'triangle',stepDur*1.7,.11);noiseHat(t);if(k%4===0)kick(t);if(k===6||k===14)envOsc(t,hz(mel+12),'square',stepDur*.32,.045);setTimeout(()=>feedEar(i,mel,k%4===0?.95:.58),Math.max(0,(t-ac.currentTime)*1000))}
-function scheduler(){while(nextBeatTime<ac.currentTime+.18){scheduleBeat(beatIndex,nextBeatTime);nextBeatTime+=stepDur;beatIndex++}}
-async function toggleMusic(){
- if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.55;master.connect(ac.destination)}
- if(ac.state==='suspended')await ac.resume();
- const b=document.getElementById('musicBtn');
- if(!musicOn){musicOn=true;nextBeatTime=ac.currentTime+.05;musicTimer=setInterval(scheduler,50);scheduler();b.textContent='■ STOP 8-BIT SCORE';b.classList.add('musicOn')}
- else{musicOn=false;clearInterval(musicTimer);musicTimer=null;b.textContent='▶ EPIC 8-BIT SCORE';b.classList.remove('musicOn');document.getElementById('earReadout').textContent='silent · sensory path standing by';document.getElementById('earMeter').style.width='0%'}
-}
-document.getElementById('musicBtn').onclick=toggleMusic;
-init();
+window.board=[];window.turn='FIELD';window.selected=null;window.fieldStep=0;window.voidStep=0;window.captured={FIELD:[],VOID:[]};
+const clone=b=>b.map(r=>r.slice());
+function sideOf(p){return p===F||p===FK?'FIELD':p===V||p===VK?'VOID':null}
+function isKing(p){return p===FK||p===VK}
+function render(){const el=document.getElementById('board');el.innerHTML='';for(let r=0;r<8;r++)for(let c=0;c<8;c++){const s=document.createElement('div');s.className='sq '+((r+c)%2?'dark':'light');s.dataset.r=r;s.dataset.c=c;const p=window.board[r][c];if(p){const d=document.createElement('div');d.className='piece '+(sideOf(p)==='FIELD'?'fieldPiece':'voidPiece')+(isKing(p)?' king':'');s.appendChild(d)}el.appendChild(s)}renderRack('FIELD');renderRack('VOID');document.getElementById('turnText').textContent=window.turn+' to move'}
+function renderRack(side){const rack=document.getElementById(side==='FIELD'?'fieldRack':'voidRack');rack.innerHTML='';for(const p of window.captured[side]){const d=document.createElement('div');d.className='captured '+(sideOf(p)==='FIELD'?'fieldPiece':'voidPiece');rack.appendChild(d)}}
+function resetGame(){window.board=clone(start);window.turn='FIELD';window.selected=null;window.fieldStep=0;window.voidStep=0;window.captured={FIELD:[],VOID:[]};render()}
+window.applyMove=function(m){const p=window.board[m.from.r][m.from.c],target=window.board[m.to.r][m.to.c];window.board[m.from.r][m.from.c]=E;if(m.capture){const cp=window.board[m.capture.r][m.capture.c];window.board[m.capture.r][m.capture.c]=E;window.captured[window.turn].push(cp)}else if(target){window.captured[window.turn].push(target)}let np=p;if(p===F&&m.to.r===0)np=FK;if(p===V&&m.to.r===7)np=VK;window.board[m.to.r][m.to.c]=np;if(window.turn==='FIELD'){window.fieldStep=(window.fieldStep+1)%6;window.turn='VOID'}else{window.voidStep=(window.voidStep+1)%6;window.turn='FIELD'}render()}
+window.startAudio=async function(){if(window._ac)return;const ac=new (window.AudioContext||window.webkitAudioContext)();window._ac=ac;const master=ac.createGain();master.gain.value=.12;master.connect(ac.destination);let beat=0;const notes=[261.6,329.6,392,523.2,392,329.6,293.7,440];window._music=setInterval(()=>{const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=notes[beat++%notes.length];g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.18,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.14);o.connect(g).connect(master);o.start(t);o.stop(t+.15)},180)}
+resetGame();
 </script>
-</body>
-</html>
+<script src="pointer_controller.js"></script>
+<script src="local_brain_bridge.js"></script>
+<script src="auto_match.js"></script>
+</body></html>
