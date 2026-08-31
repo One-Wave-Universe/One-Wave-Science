@@ -42,6 +42,10 @@
       '                mirrored in the corresponding row of the OTHER bank (a<->f, b<->g, c<->h,',
       '                d<->i, e<->j) to straddle the center channel, so leave those 6 holes clear.',
       '                "value" is total ohms.',
+      '  vgnd          3 terminals [railA, railB, out]: a virtual-ground / rail-splitter. Its "out"',
+      '                node is always forced to the midpoint voltage between railA and railB — e.g.',
+      '                splitting a 9V battery gives a 4.5V virtual ground (V0) usable as a 0V',
+      '                reference for a bipolar/split -4.5V/0V/+4.5V power scheme. No value needed.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -134,7 +138,7 @@
     return JSON.parse(body.slice(start, end + 1));
   }
 
-  const TERMINALS_NEEDED = { wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1 };
+  const TERMINALS_NEEDED = { wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1, vgnd: 3 };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
   const LED_COLORS = new Set(['red', 'yellow', 'green', 'blue', 'white']);

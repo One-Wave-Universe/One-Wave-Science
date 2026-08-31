@@ -199,4 +199,46 @@ function approx(a, b, eps, msg) {
   console.log('Test 10 OK: Y-split ties all 4 holes to one node, V =', v[0].toFixed(3), 'V');
 }
 
+// Test 11: virtual ground / rail splitter — its output node should always
+// sit at the midpoint of the two rails it splits, unloaded and loaded, and
+// for an asymmetric (single-supply, e.g. 9V) rail pair too.
+{
+  // Symmetric-looking case: a 5V rail split against 0V ground -> V0 = 2.5V.
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+    ],
+  };
+  let res = c.solve(els, 1 / 60);
+  const vP = res.voltages.get(res.uf.find('P'));
+  const vM = res.voltages.get(res.uf.find('M'));
+  const vOut = res.voltages.get(res.uf.find('V0'));
+  approx(vOut, (vP + vM) / 2, 1e-3, 'unloaded vgnd V0 should be midpoint of 5V rail');
+
+  // Load the V0 output with a resistor back to the minus rail -- midpoint
+  // should barely move (small internal resistance, like the battery model).
+  const c2 = new Circuit();
+  els.components.push({ id: 'r1', type: 'resistor', a: 'V0', b: 'M', value: 10000 });
+  res = c2.solve(els, 1 / 60);
+  const vOutLoaded = res.voltages.get(res.uf.find('V0'));
+  approx(vOutLoaded, 2.5, 0.01, 'loaded vgnd V0 should stay near midpoint (2.5V) with a 10k load');
+
+  // Asymmetric case: a 9V rail split against 0V ground -> V0 = 4.5V.
+  const c3 = new Circuit();
+  const els3 = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 9 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+    ],
+  };
+  res = c3.solve(els3, 1 / 60);
+  const vOut9 = res.voltages.get(res.uf.find('V0'));
+  approx(vOut9, 4.5, 1e-3, 'vgnd on a 9V rail should read 4.5V midpoint');
+  console.log('Test 11 OK: vgnd V0 =', vOut.toFixed(3), 'V (5V rail),', vOut9.toFixed(3), 'V (9V rail), loaded =', vOutLoaded.toFixed(4), 'V');
+}
+
 console.log('\nAll circuit engine tests passed.');

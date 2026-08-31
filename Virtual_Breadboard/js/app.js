@@ -82,6 +82,11 @@
           a: t[0].cellId, wiper: t[1].cellId, b: t[2].cellId,
           value: p.value, pos: p.pos,
         });
+      } else if (p.type === 'vgnd') {
+        components.push({
+          id: p.id, type: 'vgnd', label: p.id,
+          a: p.terminals[0].cellId, b: p.terminals[1].cellId, out: p.terminals[2].cellId,
+        });
       } else {
         components.push({
           id: p.id, type: p.type, label: p.id,
@@ -186,6 +191,11 @@
       p.className = 'hint';
       p.textContent = 'Click one hole in either bank (not a rail) — a real 6-pin trimmer straddles the center channel, so the other 5 pins are placed for you.';
       toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'vgnd') {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Click 2 holes for the rails to split (e.g. the + and - power rails), then 1 hole for the virtual-ground (V0) output — it always reads the midpoint voltage between the two rails.';
+      toolOptionsEl.appendChild(p);
     } else if (state.tool === 'select') {
       const p = document.createElement('p');
       p.className = 'hint';
@@ -253,6 +263,7 @@
       if (!terminals) return null;
       return { type: 'potentiometer', terminals, value: 10000, pos: 0.5 };
     }
+    if (type === 'vgnd') return { type: 'vgnd', terminals: holes.slice(0, 3) };
     return null;
   }
 
@@ -306,6 +317,9 @@
           distToSegment(pos.x, pos.y, t[2].x, t[2].y, j2.x, j2.y) < 14 ||
           distToSegment(pos.x, pos.y, t[3].x, t[3].y, j2.x, j2.y) < 14
         ) return p;
+      } else if (t.length === 3) {
+        const c = Components.vgndCentroid(t);
+        if (Math.hypot(pos.x - c.x, pos.y - c.y) < 20) return p;
       } else if (t.length === 2) {
         if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
       }
@@ -321,6 +335,7 @@
       const [j1, j2] = Components.yWireJunctions(t);
       return { x: (j1.x + j2.x) / 2, y: (j1.y + j2.y) / 2 };
     }
+    if (t.length === 3) return Components.vgndCentroid(t);
     return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
   }
 
@@ -557,14 +572,35 @@
     const uf = state.lastResult.uf;
     if (!part || !uf) return;
     const I = state.lastResult.currents.get(part.id);
-    const va = state.lastResult.voltages.get(uf.find(part.terminals[0].cellId));
-    const vb = state.lastResult.voltages.get(uf.find(part.terminals[part.type === 'potentiometer' ? 2 : 1].cellId));
-    currentReadoutEl.innerHTML = `
-      <div><span>V(A)</span><b>${fmtV(va)}</b></div>
-      <div><span>V(B)</span><b>${fmtV(vb)}</b></div>
+    const vOf = (idx) => state.lastResult.voltages.get(uf.find(part.terminals[idx].cellId));
+    const va = vOf(0);
+    const vb = vOf(part.type === 'potentiometer' ? 2 : 1);
+
+    let rows;
+    if (part.type === 'vgnd') {
+      // the derived virtual-ground/V0 output is the interesting number here,
+      // not "V(B)" — show all three explicitly instead of the generic pair
+      rows = `
+        <div><span>V(in A)</span><b>${fmtV(va)}</b></div>
+        <div><span>V(in B)</span><b>${fmtV(vb)}</b></div>
+        <div><span>V(out/V0)</span><b>${fmtV(vOf(2))}</b></div>
+      `;
+    } else {
+      rows = `
+        <div><span>V(A)</span><b>${fmtV(va)}</b></div>
+        <div><span>V(B)</span><b>${fmtV(vb)}</b></div>
+      `;
+      if (part.type === 'potentiometer') {
+        // the wiper is what actually shows an asymmetric lean off a virtual
+        // ground — the plain A/B endpoint readout alone can't show that
+        rows += `<div><span>V(wiper)</span><b>${fmtV(vOf(1))}</b></div>`;
+      }
+    }
+    rows += `
       <div><span>ΔV</span><b>${fmtV(va - vb)}</b></div>
       <div><span>Current</span><b>${fmtI(I)}</b></div>
     `;
+    currentReadoutEl.innerHTML = rows;
   }
 
   function fmtV(v) {
@@ -879,6 +915,8 @@
         Components.drawPushbutton(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'potentiometer') {
         Components.drawPotentiometer(ctx, p, t, opacity);
+      } else if (p.type === 'vgnd') {
+        Components.drawVGnd(ctx, p, t, opacity);
       }
 
       if (p.id === state.selectedPartId) {

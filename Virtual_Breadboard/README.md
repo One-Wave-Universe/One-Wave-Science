@@ -3,10 +3,10 @@
 A real, from-scratch electronics breadboard simulator: a full-size 63-column
 solderless breadboard rendered hole-by-hole, a palette of real parts
 (resistors, LEDs, diodes, capacitors, a power supply, a switch, a momentary
-pushbutton, a real 6-pin potentiometer, and jumper wires), and a live
-circuit-physics engine underneath — not a toy animation. Click any hole to
-wire something into it, and the simulator solves the actual circuit every
-frame.
+pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter, and
+jumper wires), and a live circuit-physics engine underneath — not a toy
+animation. Click any hole to wire something into it, and the simulator
+solves the actual circuit every frame.
 
 ## What makes the physics "real"
 
@@ -39,6 +39,15 @@ linear-algebra method SPICE-class simulators use:
   to their partners (a real trimmer's two rows are joined internally for
   mechanical stability), modeled as three ordinary jumper connections rather
   than touching the resistor-divider math itself.
+- **Virtual Ground** is a rail-splitter: a 3-terminal part whose output node
+  is forced to the exact midpoint voltage between the two rails/nodes it's
+  connected to — e.g. split a single 9V supply into a `+4.5V` / `V0 (0V
+  reference)` / `-4.5V` bipolar rail set, the way a real op-amp voltage-
+  divider "virtual ground" buffer does. It's modeled as its own ideal
+  constraint in the MNA solver (an extra equation forcing `V(out) =
+  (V(A)+V(B))/2`) through a small internal resistance, the same technique
+  used for the battery's ideal-voltage-source row — not just a resistor
+  divider, so it holds the midpoint under load instead of sagging.
 - The breadboard's electrical grouping is modeled exactly like a real
   board: each column's five holes in the top bank (rows a-e) are one node,
   each column's five holes in the bottom bank (rows f-j) are a separate
@@ -133,7 +142,8 @@ fetch one.
 ## Using the simulator
 
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
-   LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer).
+   LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
+   Virtual Ground).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -145,6 +155,11 @@ fetch one.
      node from 2 points on one side to 2 more points on the other, in one
      piece. Click 2 holes for one end's fork, then 2 holes for the other
      end's fork; all 4 holes end up as one electrical node.
+   - **Virtual Ground** takes 3 clicks: 2 holes for the rails you want to
+     split (e.g. a `+` and `-` power rail), then 1 hole for its `V0` output
+     — that output always reads the exact midpoint voltage between the two
+     rails, letting you breadboard a proper `-`/`0`/`+` split-supply layout
+     from a single single-ended battery.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, or click any part to
    inspect it — its live voltage, current, and an editable value dropdown
@@ -233,5 +248,7 @@ node test/circuit.test.js
 
 Covers Ohm's law, LED/diode forward conduction and reverse blocking,
 short-circuit detection, over-current warnings, real RC charging curves,
-switch/pushbutton open-closed behavior, and a Y-split wire tying 4 holes
-(2 forked at each end) to one electrical node.
+switch/pushbutton open-closed behavior, a Y-split wire tying 4 holes
+(2 forked at each end) to one electrical node, and a virtual-ground rail
+splitter holding its output at the exact midpoint of two rails, both
+unloaded and loaded, for a symmetric and an asymmetric supply voltage.

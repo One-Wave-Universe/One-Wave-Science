@@ -46,6 +46,7 @@
   const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
+  const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
 
   // LEDs and plain diodes are the same device electrically (one-way
   // conduction past a threshold) — only the threshold/dynamic-resistance and
@@ -114,6 +115,7 @@
       const uf = new UnionFind();
 
       const batInternal = (c) => '__batint__' + c.id;
+      const vgndInternal = (c) => '__vgndint__' + c.id;
 
       wires.forEach((w) => uf.union(w.a, w.b));
       components.forEach((c) => {
@@ -122,9 +124,14 @@
         if (c.type === 'potentiometer') uf.find(c.wiper);
         if ((c.type === 'switch' || c.type === 'pushbutton') && c.closed) uf.union(c.a, c.b);
         if (c.type === 'battery') uf.find(batInternal(c));
+        if (c.type === 'vgnd') {
+          uf.find(c.out);
+          uf.find(vgndInternal(c));
+        }
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
+      const vgnds = components.filter((c) => c.type === 'vgnd');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -146,6 +153,10 @@
         touch(c.b);
         if (c.type === 'potentiometer') touch(c.wiper);
         if (c.type === 'battery') touch(batInternal(c));
+        if (c.type === 'vgnd') {
+          touch(c.out);
+          touch(vgndInternal(c));
+        }
       });
       roots.add(groundRoot);
 
@@ -154,7 +165,8 @@
       for (const r of roots) if (r !== groundRoot) nodeIndex.set(r, idx++);
       const nNodes = idx;
       const nSrc = batteries.length;
-      const size = nNodes + nSrc;
+      const nVgnd = vgnds.length;
+      const size = nNodes + nSrc + nVgnd;
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
 
@@ -244,6 +256,14 @@
             stampG(j, j, g);
             stampG(i, j, -g);
             stampG(j, i, -g);
+          } else if (c.type === 'vgnd') {
+            const g = 1 / VGND_RINT;
+            const i = gi(uf.find(vgndInternal(c)));
+            const j = gi(uf.find(c.out));
+            stampG(i, i, g);
+            stampG(j, j, g);
+            stampG(i, j, -g);
+            stampG(j, i, -g);
           }
         });
 
@@ -260,6 +280,29 @@
             A[row][m] -= 1;
           }
           b[row] += bat.value;
+        });
+
+        // rail-splitter constraint: V(internal) = 0.5*(V(a) + V(b)), an
+        // ideal buffer forcing its own node to the midpoint of the two
+        // rails it reads — same extra-unknown technique as a battery, just
+        // a different equation on the source row.
+        vgnds.forEach((v, k) => {
+          const row = nNodes + nSrc + k;
+          const iInt = gi(uf.find(vgndInternal(v)));
+          const iA = gi(uf.find(v.a));
+          const iB = gi(uf.find(v.b));
+          if (iInt >= 0) {
+            A[iInt][row] += 1;
+            A[row][iInt] += 1;
+          }
+          if (iA >= 0) {
+            A[iA][row] -= 0.5;
+            A[row][iA] -= 0.5;
+          }
+          if (iB >= 0) {
+            A[iB][row] -= 0.5;
+            A[row][iB] -= 0.5;
+          }
         });
 
         xSol = size ? solveLinear(A, b) : [];
@@ -332,7 +375,7 @@
     }
   }
 
-  const api = { Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT };
+  const api = { Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

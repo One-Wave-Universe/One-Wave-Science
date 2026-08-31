@@ -42,6 +42,9 @@
     // 1 click: the anchor hole. The other 5 pins (a real 6-pin trimmer's
     // mirrored footprint straddling the center channel) are derived from it.
     { type: 'potentiometer', label: 'Potentiometer', terminals: 1, icon: '◎', defaultValue: 10000 },
+    // 2 inputs (the rails to split), 1 output forced to their midpoint —
+    // an ideal rail-splitter/virtual-ground buffer (TLE2426-class).
+    { type: 'vgnd', label: 'Virtual Ground', terminals: 3, icon: 'V0' },
   ];
 
   function resistorColorBands(value) {
@@ -425,6 +428,41 @@
     ctx.restore();
   }
 
+  // t = [inA, inB, out]: an ideal rail-splitter forcing its output to the
+  // midpoint of the two rails it reads (real hardware: TLE2426-class).
+  function vgndCentroid(t) {
+    return { x: (t[0].x + t[1].x + t[2].x) / 3, y: (t[0].y + t[1].y + t[2].y) / 3 };
+  }
+
+  function drawVGnd(ctx, comp, t, opacity) {
+    const o = op(opacity);
+    const c = vgndCentroid(t);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    t.forEach((p) => {
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+
+    ctx.fillStyle = '#3a3f4d';
+    roundRect(ctx, c.x - 15, c.y - 11, 30, 22, 5);
+    ctx.fill();
+    ctx.strokeStyle = '#5a6178';
+    ctx.lineWidth = 1;
+    roundRect(ctx, c.x - 15, c.y - 11, 30, 22, 5);
+    ctx.stroke();
+    ctx.fillStyle = '#8ecbff';
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('V0', c.x, c.y + 4);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   function roundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -439,7 +477,7 @@
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     resistorColorBands, formatOhms, formatFarads,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
-    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, roundRect, lerp,
+    drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;
