@@ -1,17 +1,25 @@
-"""Two mounted checkers learners built as two state machines plus one M4 loop.
+"""Mounted checkers learners with a grayscale Micro receptor layer.
 
-Both variants receive grayscale pixels only and learn from direct consequences.
-They share the same architecture:
+The agents receive only the grayscale framebuffer and direct consequences.
+No symbolic board, legal-move list, piece identity, or checkers movement rule is
+provided to the learners.
 
-    M4 builds/maintains ActiveWorld and routes memory
-    -> Field state machine generates possibilities
-    -> M4 routes candidates
-    -> Void state machine checks against remembered consequences
-    -> action
+Current experimental stack:
+
+    grayscale framebuffer
+    -> Micro receptor-cell workers (local light transduction)
+    -> M4 repeating loop / continuity and memory routing
+    -> Field state machine proposes an action
+    -> Void state machine checks remembered consequences
+    -> attempted move
     -> world consequence
-    -> M4 updates memory
+    -> memory update
+    -> repeat
 
-The experimental variable is Field/Void balance, not game knowledge.
+Micro is deliberately small and local: each receptor sees only a tiny patch of
+light and emits an activation.  It does not know what a square or checker is.
+The next scale can later be mounted between Micro and the Field/Void loop
+without changing the environment contract.
 """
 
 from __future__ import annotations
@@ -29,6 +37,84 @@ except ImportError:
 BOARD = 8
 Coord = Tuple[int, int]
 
+# The receptor sheet is intentionally independent of the 8x8 game board.
+# It is simply a regular sensory sheet laid over the incoming framebuffer.
+MICRO_ROWS = 16
+MICRO_COLS = 16
+
+
+@dataclass(frozen=True)
+class ReceptorSignal:
+    """One Micro worker's local grayscale transduction."""
+
+    index: int
+    intensity: int
+    activation: int
+    delta: int
+
+
+class GrayscaleReceptorCell:
+    """Micro worker: local grayscale in -> compact nerve-like activation out."""
+
+    def __init__(self, index: int) -> None:
+        self.index = index
+        self.previous_intensity: int | None = None
+
+    def sense(self, intensity: int) -> ReceptorSignal:
+        intensity = max(0, min(255, int(intensity)))
+        # Five coarse response bands.  They are sensory response levels, not
+        # semantic labels and carry no board/game meaning.
+        activation = min(4, intensity // 52)
+        delta = 0 if self.previous_intensity is None else intensity - self.previous_intensity
+        self.previous_intensity = intensity
+        return ReceptorSignal(self.index, intensity, activation, delta)
+
+
+class MicroReceptorSheet:
+    """A 2-D sheet of independent grayscale receptor-cell workers."""
+
+    def __init__(self, rows: int = MICRO_ROWS, cols: int = MICRO_COLS) -> None:
+        self.rows = rows
+        self.cols = cols
+        self.cells = [GrayscaleReceptorCell(i) for i in range(rows * cols)]
+
+    @staticmethod
+    def _patch_mean(
+        grayscale: Sequence[int],
+        width: int,
+        height: int,
+        r0: int,
+        r1: int,
+        c0: int,
+        c1: int,
+    ) -> int:
+        total = 0
+        count = 0
+        for y in range(r0, max(r0 + 1, r1)):
+            base = y * width
+            for x in range(c0, max(c0 + 1, c1)):
+                total += int(grayscale[base + x])
+                count += 1
+        return total // max(1, count)
+
+    def receive(
+        self, grayscale: Sequence[int], width: int, height: int
+    ) -> Tuple[ReceptorSignal, ...]:
+        if width <= 0 or height <= 0 or len(grayscale) < width * height:
+            raise ValueError("invalid grayscale framebuffer")
+
+        signals: List[ReceptorSignal] = []
+        for rr in range(self.rows):
+            y0 = rr * height // self.rows
+            y1 = (rr + 1) * height // self.rows
+            for cc in range(self.cols):
+                x0 = cc * width // self.cols
+                x1 = (cc + 1) * width // self.cols
+                intensity = self._patch_mean(grayscale, width, height, y0, y1, x0, x1)
+                cell = self.cells[rr * self.cols + cc]
+                signals.append(cell.sense(intensity))
+        return tuple(signals)
+
 
 @dataclass
 class Experience:
@@ -41,7 +127,7 @@ class Experience:
 @dataclass
 class ActiveWorld:
     side: int
-    cells: Tuple[int, ...]
+    micro_signals: Tuple[ReceptorSignal, ...]
     signature: Tuple[int, ...]
 
 
@@ -61,7 +147,7 @@ class VoidState(str, Enum):
 
 
 class FieldStateMachine:
-    """Inquiry/expansion machine. It knows no checkers legality rules."""
+    """Inquiry/expansion half. It knows no checkers legality rules."""
 
     def __init__(self, rng: random.Random, candidate_budget: int) -> None:
         self.rng = rng
@@ -72,10 +158,12 @@ class FieldStateMachine:
         self.state = FieldState.EXPAND
         candidates: List[Move] = []
         for _ in range(self.candidate_budget):
+            # Deliberately arbitrary source/destination coordinates.  Do not
+            # smuggle diagonal/checkers movement geometry into the learner.
             sr = self.rng.randrange(BOARD)
             sc = self.rng.randrange(BOARD)
-            dr = sr + self.rng.choice((-2, -1, 1, 2))
-            dc = sc + self.rng.choice((-2, -1, 1, 2))
+            dr = self.rng.randrange(BOARD)
+            dc = self.rng.randrange(BOARD)
             candidates.append(Move((sr, sc), (dr, dc)))
         self.state = FieldState.PROPOSE
         self.state = FieldState.HANDOFF
@@ -86,19 +174,14 @@ class FieldStateMachine:
 
 
 class VoidStateMachine:
-    """Answer/check machine using memory of consequences, not hidden rules."""
+    """Answer/check half using remembered consequences, never hidden rules."""
 
     def __init__(self, rng: random.Random, rejection_strength: int) -> None:
         self.rng = rng
         self.rejection_strength = rejection_strength
         self.state = VoidState.IDLE
 
-    def choose(
-        self,
-        world: ActiveWorld,
-        candidates: List[Move],
-        recall,
-    ) -> Move:
+    def choose(self, world: ActiveWorld, candidates: List[Move], recall) -> Move:
         self.state = VoidState.CHECK
         scored: List[Tuple[int, int, Move]] = []
         for move in candidates:
@@ -115,10 +198,7 @@ class VoidStateMachine:
         best_continuity = min(item[1] for item in survivors)
         finalists = [item[2] for item in survivors if item[1] == best_continuity]
 
-        if best_pressure > 0:
-            self.state = VoidState.DEFER
-        else:
-            self.state = VoidState.CONFIRM
+        self.state = VoidState.DEFER if best_pressure > 0 else VoidState.CONFIRM
         return self.rng.choice(finalists)
 
     def reset_local(self) -> None:
@@ -126,7 +206,7 @@ class VoidStateMachine:
 
 
 class M4Loop:
-    """The single loop: memory router plus active-world constructor/maintainer."""
+    """Repeating continuity loop: active state plus consequence-memory routing."""
 
     def __init__(self) -> None:
         self.memory: Dict[Tuple[Tuple[int, ...], Move], Experience] = {}
@@ -134,27 +214,15 @@ class M4Loop:
         self.last_move: Move | None = None
         self.cycles = 0
 
-    @staticmethod
-    def _sample_cell(
-        grayscale: Sequence[int], width: int, height: int, row: int, col: int
-    ) -> int:
-        cell_w = width // BOARD
-        cell_h = height // BOARD
-        x = min(width - 1, col * cell_w + cell_w // 2)
-        y = min(height - 1, row * cell_h + cell_h // 2)
-        return int(grayscale[y * width + x])
-
-    def build_world(
-        self, grayscale: Sequence[int], width: int, height: int, side: int
-    ) -> ActiveWorld:
+    def build_world(self, micro_signals: Tuple[ReceptorSignal, ...], side: int) -> ActiveWorld:
         self.cycles += 1
-        cells = tuple(
-            self._sample_cell(grayscale, width, height, r, c)
-            for r in range(BOARD)
-            for c in range(BOARD)
+        # The memory signature is built only from Micro activations and local
+        # change direction.  No symbolic board reconstruction occurs here.
+        signature = tuple(
+            (signal.activation * 3) + (1 if signal.delta > 0 else -1 if signal.delta < 0 else 0)
+            for signal in micro_signals
         )
-        signature = tuple(v // 32 for v in cells)
-        world = ActiveWorld(side=side, cells=cells, signature=signature)
+        world = ActiveWorld(side=side, micro_signals=micro_signals, signature=signature)
         self.last_world = world
         return world
 
@@ -189,6 +257,7 @@ class MountedCheckersAgent:
     ) -> None:
         self.name = name
         self.rng = random.Random(seed)
+        self.micro = MicroReceptorSheet()
         self.m4 = M4Loop()
         self.field = FieldStateMachine(self.rng, field_candidates)
         self.void = VoidStateMachine(self.rng, void_rejection_strength)
@@ -208,7 +277,8 @@ class MountedCheckersAgent:
         height: int,
         side: int,
     ) -> Move:
-        world = self.m4.build_world(grayscale, width, height, side)
+        micro_signals = self.micro.receive(grayscale, width, height)
+        world = self.m4.build_world(micro_signals, side)
         candidates = self.field.generate(world)
         routed = self.m4.route_field_to_void(candidates)
         move = self.void.choose(world, routed, self.m4.recall)
