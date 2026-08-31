@@ -1,0 +1,67 @@
+name: Virtual Breadboard - Desktop Installers (manual)
+
+# Manual, one-off trigger only -- this does not run automatically on push.
+# Run it from the Actions tab (or via the API) whenever you want fresh
+# Linux/Windows/macOS installers; download them from the run's Artifacts.
+on:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:appimage
+      - run: npm run dist:deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-installers
+          path: |
+            Virtual_Breadboard/dist/*.AppImage
+            Virtual_Breadboard/dist/*.deb
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:win-installer
+      - run: npm run dist:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installers
+          path: |
+            Virtual_Breadboard/dist/*.exe
+
+  macos:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:mac-dmg
+      - run: npm run dist:mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-installers
+          path: |
+            Virtual_Breadboard/dist/*.dmg
+            Virtual_Breadboard/dist/*.zip
