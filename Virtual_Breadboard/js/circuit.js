@@ -14,6 +14,18 @@
  *   - Capacitors use a backward-Euler companion model (conductance C/dt in
  *     parallel with a current source), which reproduces real RC charge/
  *     discharge curves frame to frame.
+ *   - Inductors use the dual backward-Euler companion model (an extra
+ *     branch-current unknown, same technique as an ideal voltage source),
+ *     reproducing real L/R current-rise transients frame to frame.
+ *   - AC sources are ideal voltage sources whose value is evaluated at the
+ *     simulator's own running clock (accumulated real dt, same clock every
+ *     frame draws from) instead of a fixed constant — genuine time-domain
+ *     AC, not a single-frequency phasor snapshot.
+ *   - The MTJ angle sensor models the electrical interface of a real
+ *     magnetic-tunnel-junction angle-sensor IC (e.g. AS5047P/TLE5012-class
+ *     parts): two buffered analog outputs, sin(theta) and cos(theta) of a
+ *     rotating field, referenced to a shared pin — implemented as a
+ *     quadrature pair of ideal sources sharing one clock, 90 degrees apart.
  *   - A tiny leak conductance (gmin) from every node to ground prevents the
  *     matrix from going singular when part of the board isn't wired to
  *     anything yet.
@@ -47,6 +59,15 @@
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
+  const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
+  const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
+
+  // shared time-domain waveform used by AC sources and the MTJ sensor's
+  // sin/cos channels -- a real sinusoid evaluated at the simulator's own
+  // running clock, not a single-frequency phasor snapshot
+  function wave(amplitude, freqHz, phaseDeg, t) {
+    return amplitude * Math.sin(2 * Math.PI * freqHz * t + (phaseDeg * Math.PI) / 180);
+  }
 
   // LEDs and plain diodes are the same device electrically (one-way
   // conduction past a threshold) — only the threshold/dynamic-resistance and
@@ -100,6 +121,8 @@
     reset() {
       this._ledState = new Map(); // component id -> boolean (conducting)
       this._capState = new Map(); // component id -> voltage across it last frame
+      this._indState = new Map(); // component id -> current through it last frame
+      this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
     /**
@@ -113,9 +136,14 @@
       const wires = elements.wires || [];
       const components = elements.components || [];
       const uf = new UnionFind();
+      this._t += dt;
+      const t = this._t;
 
       const batInternal = (c) => '__batint__' + c.id;
       const vgndInternal = (c) => '__vgndint__' + c.id;
+      const acInternal = (c) => '__acint__' + c.id;
+      const mtjSinInternal = (c) => '__mtjsin__' + c.id;
+      const mtjCosInternal = (c) => '__mtjcos__' + c.id;
 
       wires.forEach((w) => uf.union(w.a, w.b));
       components.forEach((c) => {
@@ -128,10 +156,20 @@
           uf.find(c.out);
           uf.find(vgndInternal(c));
         }
+        if (c.type === 'acsource') uf.find(acInternal(c));
+        if (c.type === 'mtjsensor') {
+          uf.find(c.sin);
+          uf.find(c.cos);
+          uf.find(mtjSinInternal(c));
+          uf.find(mtjCosInternal(c));
+        }
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
       const vgnds = components.filter((c) => c.type === 'vgnd');
+      const inductors = components.filter((c) => c.type === 'inductor');
+      const acsources = components.filter((c) => c.type === 'acsource');
+      const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -157,6 +195,13 @@
           touch(c.out);
           touch(vgndInternal(c));
         }
+        if (c.type === 'acsource') touch(acInternal(c));
+        if (c.type === 'mtjsensor') {
+          touch(c.sin);
+          touch(c.cos);
+          touch(mtjSinInternal(c));
+          touch(mtjCosInternal(c));
+        }
       });
       roots.add(groundRoot);
 
@@ -166,7 +211,18 @@
       const nNodes = idx;
       const nSrc = batteries.length;
       const nVgnd = vgnds.length;
-      const size = nNodes + nSrc + nVgnd;
+      const nInd = inductors.length;
+      const nAc = acsources.length;
+      const nMtj = mtjsensors.length;
+      // extra-unknown row offsets, in stamping order: batteries, vgnds,
+      // inductors, ac sources, then 2 rows (sin, cos) per MTJ sensor
+      const rowBat = (k) => nNodes + k;
+      const rowVgnd = (k) => nNodes + nSrc + k;
+      const rowInd = (k) => nNodes + nSrc + nVgnd + k;
+      const rowAc = (k) => nNodes + nSrc + nVgnd + nInd + k;
+      const rowMtjSin = (k) => nNodes + nSrc + nVgnd + nInd + nAc + k * 2;
+      const rowMtjCos = (k) => nNodes + nSrc + nVgnd + nInd + nAc + k * 2 + 1;
+      const size = nNodes + nSrc + nVgnd + nInd + nAc + nMtj * 2;
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
 
@@ -264,6 +320,28 @@
             stampG(j, j, g);
             stampG(i, j, -g);
             stampG(j, i, -g);
+          } else if (c.type === 'acsource') {
+            const g = 1 / AC_RINT;
+            const i = gi(uf.find(acInternal(c)));
+            const j = gi(uf.find(c.a));
+            stampG(i, i, g);
+            stampG(j, j, g);
+            stampG(i, j, -g);
+            stampG(j, i, -g);
+          } else if (c.type === 'mtjsensor') {
+            const g = 1 / MTJ_RINT;
+            const iS = gi(uf.find(mtjSinInternal(c)));
+            const jS = gi(uf.find(c.sin));
+            stampG(iS, iS, g);
+            stampG(jS, jS, g);
+            stampG(iS, jS, -g);
+            stampG(jS, iS, -g);
+            const iC = gi(uf.find(mtjCosInternal(c)));
+            const jC = gi(uf.find(c.cos));
+            stampG(iC, iC, g);
+            stampG(jC, jC, g);
+            stampG(iC, jC, -g);
+            stampG(jC, iC, -g);
           }
         });
 
@@ -305,6 +383,76 @@
           }
         });
 
+        // inductor: dual of the capacitor's backward-Euler model. Its own
+        // current is a state variable (can't be read off node voltages
+        // alone), so it gets an extra branch-current unknown like an ideal
+        // source: V(a) - V(b) - (L/dt)*iL = -(L/dt)*iL_prev.
+        inductors.forEach((ind, k) => {
+          const row = rowInd(k);
+          const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-6);
+          const iPrev = this._indState.get(ind.id) || 0;
+          const ia = gi(uf.find(ind.a));
+          const ib = gi(uf.find(ind.b));
+          if (ia >= 0) {
+            A[ia][row] += 1;
+            A[row][ia] += 1;
+          }
+          if (ib >= 0) {
+            A[ib][row] -= 1;
+            A[row][ib] -= 1;
+          }
+          A[row][row] -= Ldt;
+          b[row] += -Ldt * iPrev;
+        });
+
+        // AC source: an ideal source like a battery, but its target value is
+        // the shared sim clock's sinusoid instead of a constant.
+        acsources.forEach((ac, k) => {
+          const row = rowAc(k);
+          const p = gi(uf.find(acInternal(ac)));
+          const m = gi(uf.find(ac.b));
+          if (p >= 0) {
+            A[p][row] += 1;
+            A[row][p] += 1;
+          }
+          if (m >= 0) {
+            A[m][row] -= 1;
+            A[row][m] -= 1;
+          }
+          b[row] += wave(ac.value, ac.freq || 1, ac.phase || 0, t);
+        });
+
+        // MTJ angle sensor: two ideal sources sharing one rotating clock,
+        // 90 degrees apart, both referenced to the sensor's "ref" pin --
+        // the sin(theta)/cos(theta) quadrature pair a real MTJ/TMR
+        // angle-sensor IC's analog outputs present.
+        mtjsensors.forEach((sensor, k) => {
+          const rowS = rowMtjSin(k);
+          const rowC = rowMtjCos(k);
+          const ref = gi(uf.find(sensor.ref));
+          const pS = gi(uf.find(mtjSinInternal(sensor)));
+          const pC = gi(uf.find(mtjCosInternal(sensor)));
+          if (pS >= 0) {
+            A[pS][rowS] += 1;
+            A[rowS][pS] += 1;
+          }
+          if (ref >= 0) {
+            A[ref][rowS] -= 1;
+            A[rowS][ref] -= 1;
+          }
+          b[rowS] += wave(sensor.value, sensor.freq || 1, sensor.phase || 0, t);
+
+          if (pC >= 0) {
+            A[pC][rowC] += 1;
+            A[rowC][pC] += 1;
+          }
+          if (ref >= 0) {
+            A[ref][rowC] -= 1;
+            A[rowC][ref] -= 1;
+          }
+          b[rowC] += wave(sensor.value, sensor.freq || 1, (sensor.phase || 0) + 90, t);
+        });
+
         xSol = size ? solveLinear(A, b) : [];
         voltages = new Map();
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
@@ -334,6 +482,15 @@
       const currents = new Map();
       const warnings = [];
 
+      const indCurrent = new Map();
+      inductors.forEach((ind, k) => {
+        const I = xSol[rowInd(k)] || 0;
+        indCurrent.set(ind.id, I);
+        this._indState.set(ind.id, I);
+      });
+      const acCurrent = new Map();
+      acsources.forEach((ac, k) => acCurrent.set(ac.id, -(xSol[rowAc(k)] || 0)));
+
       components.forEach((c) => {
         const va = voltages.get(uf.find(c.a));
         const vb = voltages.get(uf.find(c.b));
@@ -355,6 +512,12 @@
           I = 0;
         } else if (c.type === 'switch' || c.type === 'pushbutton') {
           I = 0;
+        } else if (c.type === 'inductor') {
+          I = indCurrent.get(c.id) || 0;
+        } else if (c.type === 'acsource') {
+          I = acCurrent.get(c.id) || 0;
+        } else if (c.type === 'mtjsensor') {
+          I = 0;
         }
         currents.set(c.id, I);
       });
@@ -371,11 +534,21 @@
         }
       });
 
+      acsources.forEach((ac) => {
+        const I = acCurrent.get(ac.id) || 0;
+        if (Math.abs(I) > 1.0) {
+          warnings.push(`Overload at ${ac.label || ac.id}: ${I.toFixed(2)} A — check your wiring`);
+        }
+      });
+
       return { voltages, currents, warnings, uf, groundRoot, hasCircuit: true };
     }
   }
 
-  const api = { Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT };
+  const api = {
+    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
+    AC_RINT, MTJ_RINT,
+  };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

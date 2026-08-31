@@ -14,6 +14,11 @@
       capacitor: 100e-6,
       led: 'red',
       battery: 5,
+      inductor: 10e-3,
+      acsource: 5,
+      acsourceFreq: 1,
+      mtjsensor: 2.5,
+      mtjsensorFreq: 1,
     },
     pending: [],
     hoverHole: null,
@@ -22,8 +27,10 @@
     lastResult: { voltages: new Map(), currents: new Map(), warnings: [], uf: null },
     animT: 0,
     wireColorIdx: 0,
+    scopeColorIdx: 0,
     draggingPot: null,
   };
+  const SCOPE_WINDOW = 3; // seconds of history each probe trace keeps
   const WIRE_COLORS = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7'];
 
   function H(row, col) {
@@ -60,7 +67,9 @@
     const wires = [];
     const components = [];
     state.parts.forEach((p) => {
-      if (p.type === 'wire') {
+      if (p.type === 'scope') {
+        // a zero-load voltage tap -- never enters the circuit physics
+      } else if (p.type === 'wire') {
         wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
       } else if (p.type === 'ywire') {
         // each end's fork, plus the run joining the two forks — 3 zero-
@@ -87,6 +96,18 @@
         components.push({
           id: p.id, type: 'vgnd', label: p.id,
           a: p.terminals[0].cellId, b: p.terminals[1].cellId, out: p.terminals[2].cellId,
+        });
+      } else if (p.type === 'acsource') {
+        components.push({
+          id: p.id, type: 'acsource', label: p.id,
+          a: p.terminals[0].cellId, b: p.terminals[1].cellId,
+          value: p.value, freq: p.freq, phase: p.phase,
+        });
+      } else if (p.type === 'mtjsensor') {
+        components.push({
+          id: p.id, type: 'mtjsensor', label: p.id,
+          ref: p.terminals[0].cellId, sin: p.terminals[1].cellId, cos: p.terminals[2].cellId,
+          value: p.value, freq: p.freq, phase: p.phase,
         });
       } else {
         components.push({
@@ -167,6 +188,27 @@
       toolOptionsEl.appendChild(labeled('LED color', wrap));
     } else if (state.tool === 'battery') {
       toolOptionsEl.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), state.toolValue.battery, (v) => (state.toolValue.battery = Number(v))));
+    } else if (state.tool === 'inductor') {
+      toolOptionsEl.appendChild(makeSelect('Inductance', Components.INDUCTOR_VALUES.map((v) => [v, Components.formatHenries(v)]), state.toolValue.inductor, (v) => (state.toolValue.inductor = Number(v))));
+    } else if (state.tool === 'acsource') {
+      toolOptionsEl.appendChild(makeSelect('Amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.acsource, (v) => (state.toolValue.acsource = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Frequency', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.acsourceFreq, (v) => (state.toolValue.acsourceFreq = Number(v))));
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'A real time-varying source, evaluated on the sim clock every frame — not a static snapshot. Click two holes.';
+      toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'mtjsensor') {
+      toolOptionsEl.appendChild(makeSelect('Output amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.mtjsensor, (v) => (state.toolValue.mtjsensor = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Rotation rate', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.mtjsensorFreq, (v) => (state.toolValue.mtjsensorFreq = Number(v))));
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Models a real MTJ/TMR angle-sensor IC\'s analog output stage: sin(theta)/cos(theta) of a rotating field, referenced to a shared pin. Click 1 hole for the reference pin, then 1 for sin-out, then 1 for cos-out.';
+      toolOptionsEl.appendChild(p);
+    } else if (state.tool === 'scope') {
+      const p = document.createElement('p');
+      p.className = 'hint';
+      p.textContent = 'Click a hole to drop a probe — zero-load, like a real 10MΩ scope probe, never affects the circuit. Its live trace appears on the Oscilloscope panel below the board.';
+      toolOptionsEl.appendChild(p);
     } else if (state.tool === 'wire') {
       const p = document.createElement('p');
       p.className = 'hint';
@@ -265,6 +307,10 @@
       return { type: 'potentiometer', terminals, value: 10000, pos: 0.5 };
     }
     if (type === 'vgnd') return { type: 'vgnd', terminals: holes.slice(0, 3) };
+    if (type === 'inductor') return { type: 'inductor', terminals: holes.slice(0, 2), value: opts.inductorValue };
+    if (type === 'acsource') return { type: 'acsource', terminals: holes.slice(0, 2), value: opts.acValue, freq: opts.acFreq, phase: 0 };
+    if (type === 'mtjsensor') return { type: 'mtjsensor', terminals: holes.slice(0, 3), value: opts.mtjValue, freq: opts.mtjFreq, phase: 0 };
+    if (type === 'scope') return { type: 'scope', terminals: holes.slice(0, 1), color: opts.scopeColor, samples: [] };
     return null;
   }
 
@@ -273,6 +319,9 @@
   function nextWireColor() {
     return WIRE_COLORS[state.wireColorIdx++ % WIRE_COLORS.length];
   }
+  function nextScopeColor() {
+    return Components.SCOPE_COLORS[state.scopeColorIdx++ % Components.SCOPE_COLORS.length];
+  }
 
   function commitPart(type, holes) {
     const part = buildPart(type, holes, {
@@ -280,7 +329,13 @@
       capacitorValue: state.toolValue.capacitor,
       ledColor: state.toolValue.led,
       batteryValue: state.toolValue.battery,
+      inductorValue: state.toolValue.inductor,
+      acValue: state.toolValue.acsource,
+      acFreq: state.toolValue.acsourceFreq,
+      mtjValue: state.toolValue.mtjsensor,
+      mtjFreq: state.toolValue.mtjsensorFreq,
       wireColor: type === 'wire' || type === 'ywire' ? nextWireColor() : undefined,
+      scopeColor: type === 'scope' ? nextScopeColor() : undefined,
     });
     if (part) addPart(part);
   }
@@ -319,10 +374,12 @@
           distToSegment(pos.x, pos.y, t[3].x, t[3].y, j2.x, j2.y) < 14
         ) return p;
       } else if (t.length === 3) {
-        const c = Components.vgndCentroid(t);
+        const c = p.type === 'mtjsensor' ? Components.mtjCentroid(t) : Components.vgndCentroid(t);
         if (Math.hypot(pos.x - c.x, pos.y - c.y) < 20) return p;
       } else if (t.length === 2) {
         if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
+      } else if (t.length === 1) {
+        if (Math.hypot(pos.x - t[0].x, pos.y - t[0].y) < 16) return p;
       }
     }
     return null;
@@ -336,7 +393,8 @@
       const [j1, j2] = Components.yWireJunctions(t);
       return { x: (j1.x + j2.x) / 2, y: (j1.y + j2.y) / 2 };
     }
-    if (t.length === 3) return Components.vgndCentroid(t);
+    if (t.length === 3) return p.type === 'mtjsensor' ? Components.mtjCentroid(t) : Components.vgndCentroid(t);
+    if (t.length === 1) return { x: t[0].x, y: t[0].y };
     return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
   }
 
@@ -558,6 +616,14 @@
       container.appendChild(makeSelect('Capacitance', Components.CAPACITOR_VALUES.map((v) => [v.farads, v.label]), part.value, (v) => (part.value = Number(v))));
     } else if (part.type === 'battery') {
       container.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), part.value, (v) => (part.value = Number(v))));
+    } else if (part.type === 'inductor') {
+      container.appendChild(makeSelect('Inductance', Components.INDUCTOR_VALUES.map((v) => [v, Components.formatHenries(v)]), part.value, (v) => (part.value = Number(v))));
+    } else if (part.type === 'acsource') {
+      container.appendChild(makeSelect('Amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(makeSelect('Frequency', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), part.freq, (v) => (part.freq = Number(v))));
+    } else if (part.type === 'mtjsensor') {
+      container.appendChild(makeSelect('Output amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), part.value, (v) => (part.value = Number(v))));
+      container.appendChild(makeSelect('Rotation rate', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), part.freq, (v) => (part.freq = Number(v))));
     } else if (part.type === 'led') {
       const wrap = document.createElement('div');
       wrap.className = 'swatches';
@@ -702,6 +768,21 @@
         <div><span>V(in B)</span><b>${fmtV(vb)}</b></div>
         <div><span>V(out/V0)</span><b>${fmtV(vOf(2))}</b></div>
       `;
+    } else if (part.type === 'mtjsensor') {
+      // the two analog channels relative to the sensor's own reference pin
+      // are what a real angle decoder reads -- plus the angle atan2 decodes
+      // them back to, to confirm the quadrature pair is actually correct
+      const vRef = va;
+      const vSin = vb - vRef;
+      const vCos = vOf(2) - vRef;
+      const angleDeg = (Math.atan2(vSin, vCos) * 180) / Math.PI;
+      currentReadoutEl.innerHTML = `
+        <div><span>V(ref)</span><b>${fmtV(vRef)}</b></div>
+        <div><span>V(sin) - V(ref)</span><b>${fmtV(vSin)}</b></div>
+        <div><span>V(cos) - V(ref)</span><b>${fmtV(vCos)}</b></div>
+        <div><span>Decoded angle</span><b>${angleDeg.toFixed(1)}°</b></div>
+      `;
+      return;
     } else {
       rows = `
         <div><span>V(A)</span><b>${fmtV(va)}</b></div>
@@ -934,10 +1015,12 @@
         return {
           type: p.type,
           value: p.value,
-          color: isWire ? nextWireColor() : p.color,
+          color: p.type === 'scope' ? nextScopeColor() : isWire ? nextWireColor() : p.color,
           closed: !!p.closed,
           pos: p.type === 'potentiometer' ? 0.5 : undefined,
           style: isWire ? 'loop' : undefined,
+          freq: p.freq,
+          phase: p.phase,
           terminals,
         };
       })
@@ -972,6 +1055,91 @@
   }
   document.getElementById('aiBuild').addEventListener('click', runAiBuild);
 
+  // ---------------- oscilloscope ----------------
+  // Scope probes are zero-load voltage taps sampled straight off the live
+  // solve results every frame, kept as a rolling time window per probe —
+  // the same "real, live, frame by frame" philosophy as the RC/AC physics
+  // itself, just plotted instead of read as a single number.
+  const scopeCanvas = document.getElementById('scopeCanvas');
+  const scopeCtx = scopeCanvas.getContext('2d');
+  const scopeLegendEl = document.getElementById('scopeLegend');
+  let scopeSize = { w: 600, h: 150 };
+  function setupScopeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(scopeCanvas.clientWidth || scopeCanvas.parentElement.clientWidth, 100);
+    const h = 150;
+    scopeCanvas.width = w * dpr;
+    scopeCanvas.height = h * dpr;
+    scopeCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    scopeSize = { w, h };
+  }
+  setupScopeCanvas();
+  window.addEventListener('resize', setupScopeCanvas);
+
+  function sampleScopeProbes() {
+    const uf = state.lastResult.uf;
+    state.parts.forEach((p) => {
+      if (p.type !== 'scope') return;
+      if (!p.samples) p.samples = [];
+      const v = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+      p.samples.push({ t: state.animT, v: v == null ? 0 : v });
+      while (p.samples.length > 1 && state.animT - p.samples[0].t > SCOPE_WINDOW) p.samples.shift();
+    });
+  }
+
+  function renderScope() {
+    const { w, h } = scopeSize;
+    scopeCtx.clearRect(0, 0, w, h);
+    const probes = state.parts.filter((p) => p.type === 'scope');
+
+    let vMax = 0.5;
+    probes.forEach((p) => (p.samples || []).forEach((s) => { vMax = Math.max(vMax, Math.abs(s.v)); }));
+    vMax *= 1.15;
+
+    scopeCtx.strokeStyle = '#1c2430';
+    scopeCtx.lineWidth = 1;
+    scopeCtx.beginPath();
+    for (let i = 1; i < 4; i++) {
+      const y = (h / 4) * i;
+      scopeCtx.moveTo(0, y);
+      scopeCtx.lineTo(w, y);
+    }
+    for (let i = 1; i < 6; i++) {
+      const x = (w / 6) * i;
+      scopeCtx.moveTo(x, 0);
+      scopeCtx.lineTo(x, h);
+    }
+    scopeCtx.stroke();
+    scopeCtx.strokeStyle = '#3a4454';
+    scopeCtx.beginPath();
+    scopeCtx.moveTo(0, h / 2);
+    scopeCtx.lineTo(w, h / 2);
+    scopeCtx.stroke();
+
+    const tNow = state.animT;
+    probes.forEach((p) => {
+      const samples = p.samples || [];
+      if (samples.length < 2) return;
+      scopeCtx.strokeStyle = p.color;
+      scopeCtx.lineWidth = 1.6;
+      scopeCtx.beginPath();
+      samples.forEach((s, idx) => {
+        const x = w * (1 - (tNow - s.t) / SCOPE_WINDOW);
+        const y = h / 2 - (s.v / vMax) * (h / 2 - 6);
+        if (idx === 0) scopeCtx.moveTo(x, y);
+        else scopeCtx.lineTo(x, y);
+      });
+      scopeCtx.stroke();
+    });
+
+    scopeLegendEl.innerHTML = probes.length
+      ? probes.map((p) => {
+          const last = (p.samples && p.samples[p.samples.length - 1]) || { v: 0 };
+          return `<span class="chip"><span class="swatch-dot" style="background:${p.color}"></span>${p.id} @ ${p.terminals[0].cellId}: <b>${fmtV(last.v)}</b></span>`;
+        }).join('')
+      : '<span class="chip">No probes placed yet — pick the Scope Probe tool.</span>';
+  }
+
   // ---------------- main loop ----------------
   let lastT = performance.now();
   function frame(now) {
@@ -982,8 +1150,10 @@
 
     const elements = toEngineElements();
     state.lastResult = circuit.solve(elements, dt);
+    sampleScopeProbes();
 
     render(dt);
+    renderScope();
     updateWarnings();
     updatePropsReadout();
     requestAnimationFrame(frame);
@@ -1034,6 +1204,14 @@
         Components.drawPotentiometer(ctx, p, t, opacity);
       } else if (p.type === 'vgnd') {
         Components.drawVGnd(ctx, p, t, opacity);
+      } else if (p.type === 'inductor') {
+        Components.drawInductor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
+      } else if (p.type === 'acsource') {
+        Components.drawAcSource(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
+      } else if (p.type === 'mtjsensor') {
+        Components.drawMtjSensor(ctx, p, t, opacity, state.animT);
+      } else if (p.type === 'scope') {
+        Components.drawScopeProbe(ctx, p, t[0].x, t[0].y, opacity);
       }
 
       if (p.id === state.selectedPartId) {
@@ -1164,7 +1342,7 @@
   // debug/test hook (harmless, purely introspective — used by the automated
   // test harness and handy in the browser console while developing)
   window.__debugState = () => ({
-    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, closed: p.closed, pos: p.pos, style: p.style, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
+    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,

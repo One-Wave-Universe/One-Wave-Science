@@ -1,5 +1,6 @@
 const assert = require('assert');
-const { Circuit } = require('../js/circuit.js');
+const CircuitEngine = require('../js/circuit.js');
+const { Circuit } = CircuitEngine;
 
 function approx(a, b, eps, msg) {
   assert.ok(Math.abs(a - b) < eps, `${msg}: expected ~${b}, got ${a}`);
@@ -239,6 +240,93 @@ function approx(a, b, eps, msg) {
   const vOut9 = res.voltages.get(res.uf.find('V0'));
   approx(vOut9, 4.5, 1e-3, 'vgnd on a 9V rail should read 4.5V midpoint');
   console.log('Test 11 OK: vgnd V0 =', vOut.toFixed(3), 'V (5V rail),', vOut9.toFixed(3), 'V (9V rail), loaded =', vOutLoaded.toFixed(4), 'V');
+}
+
+// Test 12: inductor -- backward-Euler companion model should reproduce the
+// real L/R current-rise transient of a series battery+resistor+inductor
+// loop, the dual of Test 6's RC charging curve.
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'N1', value: 100 },
+      { id: 'l1', type: 'inductor', a: 'N1', b: 'M', value: 0.1 },
+    ],
+  };
+  const dt = 1 / 2000;
+  let res;
+  for (let i = 0; i < 2000; i++) res = c.solve(els, dt); // 1 second
+  // steady state: R includes the battery's own internal resistance too
+  const totalR = 100 + CircuitEngine.BATTERY_RINT;
+  const iSteady = 5 / totalR;
+  const tau = 0.1 / totalR;
+  const iExpected = iSteady * (1 - Math.exp(-1 / tau));
+  approx(res.currents.get('l1'), iExpected, 1e-3, 'inductor current follows the L/R rise curve');
+  console.log('Test 12 OK: inductor current after 1s =', (res.currents.get('l1') * 1000).toFixed(2), 'mA (expect ~', (iExpected * 1000).toFixed(2), 'mA)');
+}
+
+// Test 13: AC source -- a real time-varying ideal source, evaluated on the
+// simulator's own running clock. Step to specific times and check the
+// voltage across a resistor load matches the analytic sine.
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'ac1', type: 'acsource', a: 'P', b: 'M', value: 5, freq: 2, phase: 0 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'M', value: 100000 }, // light load, minimal sag
+    ],
+  };
+  const dt = 1 / 4000;
+  const stepTo = (target) => {
+    const steps = Math.round(target / dt);
+    let res;
+    for (let i = 0; i < steps; i++) res = c.solve(els, dt);
+    return res;
+  };
+  let res = stepTo(0.125); // quarter period of a 2Hz wave -> peak
+  let v = res.voltages.get(res.uf.find('P')) - res.voltages.get(res.uf.find('M'));
+  approx(v, 5, 0.05, 'AC source at t=T/4 should be near its positive peak');
+
+  const c2 = new Circuit();
+  res = null;
+  const steps2 = Math.round(0.25 / dt);
+  for (let i = 0; i < steps2; i++) res = c2.solve(els, dt); // half period -> back near zero-crossing
+  v = res.voltages.get(res.uf.find('P')) - res.voltages.get(res.uf.find('M'));
+  approx(v, 0, 0.05, 'AC source at t=T/2 should be near a zero-crossing');
+  console.log('Test 13 OK: AC source tracks a real sine on the sim clock (peak and zero-crossing both landed correctly)');
+}
+
+// Test 14: MTJ angle sensor -- a quadrature pair (sin/cos of a rotating
+// field) referenced to a shared pin, modeling a real MTJ/TMR angle-sensor
+// IC's analog outputs. sin^2+cos^2 should stay ~amplitude^2 (a real
+// quadrature identity) and the two channels should be 90 degrees apart.
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'VP', b: 'GND', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'VP', b: 'GND', out: 'V0' },
+      { id: 'mtj1', type: 'mtjsensor', ref: 'V0', sin: 'SIN', cos: 'COS', value: 1, freq: 1, phase: 0 },
+      { id: 'rs', type: 'resistor', a: 'SIN', b: 'V0', value: 1000000 },
+      { id: 'rc', type: 'resistor', a: 'COS', b: 'V0', value: 1000000 },
+    ],
+  };
+  const dt = 1 / 2000;
+  let maxErr = 0;
+  let res;
+  for (let i = 0; i < 2000; i++) {
+    res = c.solve(els, dt);
+    const v0 = res.voltages.get(res.uf.find('V0'));
+    const vs = res.voltages.get(res.uf.find('SIN')) - v0;
+    const vc = res.voltages.get(res.uf.find('COS')) - v0;
+    maxErr = Math.max(maxErr, Math.abs(vs * vs + vc * vc - 1));
+  }
+  if (maxErr > 0.01) throw new Error('MTJ sin^2+cos^2 deviated from the amplitude^2 quadrature identity by ' + maxErr);
+  console.log('Test 14 OK: MTJ sin/cos quadrature pair holds sin^2+cos^2 = 1 (max deviation', maxErr.toFixed(5), ')');
 }
 
 console.log('\nAll circuit engine tests passed.');

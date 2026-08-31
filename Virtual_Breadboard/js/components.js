@@ -23,8 +23,12 @@
   const LED_HEX = { red: '#ff4d4d', yellow: '#ffd23f', green: '#3ddc6b', blue: '#4d8dff', white: '#f4f7ff' };
   const BATTERY_VALUES = [1.5, 3, 3.3, 5, 9, 12];
   const ELECTROLYTIC_THRESHOLD = 1e-6; // farads; at/above this a cap is drawn as an electrolytic can, below as a ceramic disc
+  const INDUCTOR_VALUES = [1e-6, 10e-6, 100e-6, 1e-3, 10e-3, 100e-3, 1];
+  const AC_FREQ_VALUES = [0.1, 0.5, 1, 2, 5, 10, 60, 100];
 
   const WIRE_COLOR_CHOICES = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7', '#e8ecf1', '#1a1a1a'];
+  // matches a typical 4-channel scope's trace colors (yellow/CH1, green/CH2, ...)
+  const SCOPE_COLORS = ['#f4d35e', '#3ddc6b', '#4d8dff', '#ff6ec7'];
 
   const PALETTE = [
     { type: 'wire', label: 'Jumper Wire', terminals: 2, icon: '/' },
@@ -45,6 +49,16 @@
     // 2 inputs (the rails to split), 1 output forced to their midpoint —
     // an ideal rail-splitter/virtual-ground buffer (TLE2426-class).
     { type: 'vgnd', label: 'Virtual Ground', terminals: 3, icon: 'V0' },
+    { type: 'inductor', label: 'Inductor', terminals: 2, icon: 'L', defaultValue: 10e-3 },
+    // an ideal function-generator-style source: real time-varying AC,
+    // evaluated on the simulator's own running clock every frame.
+    { type: 'acsource', label: 'AC Source', terminals: 2, icon: '~', defaultValue: 5, defaultFreq: 1 },
+    // 1 reference pin + 2 outputs (sin, cos) -- the electrical interface of
+    // a real MTJ/TMR rotary angle-sensor IC, driven by a rotating field.
+    { type: 'mtjsensor', label: 'MTJ Angle Sensor', terminals: 3, icon: 'θ', defaultValue: 2.5, defaultFreq: 1 },
+    // a zero-load voltage tap, like a real scope probe -- never enters the
+    // circuit physics itself, just reads whatever node it's touching.
+    { type: 'scope', label: 'Scope Probe', terminals: 1, icon: 'CH' },
   ];
 
   function resistorColorBands(value) {
@@ -490,6 +504,157 @@
     ctx.restore();
   }
 
+  function drawInductor(ctx, comp, x1, y1, x2, y2, opacity) {
+    const o = op(opacity);
+    const bodyStart = lerp(x1, y1, x2, y2, 0.25);
+    const bodyEnd = lerp(x1, y1, x2, y2, 0.75);
+    drawLeads(ctx, x1, y1, x2, y2, bodyStart, bodyEnd, o);
+    const ang = midAngle(x1, y1, x2, y2);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.translate((bodyStart.x + bodyEnd.x) / 2, (bodyStart.y + bodyEnd.y) / 2);
+    ctx.rotate(ang);
+    const len = Math.hypot(bodyEnd.x - bodyStart.x, bodyEnd.y - bodyStart.y);
+    // 4 coil loops -- the classic inductor schematic symbol
+    ctx.strokeStyle = '#c98a3d';
+    ctx.lineWidth = 2.2;
+    ctx.lineCap = 'round';
+    const loops = 4;
+    const r = len / (loops * 2);
+    ctx.beginPath();
+    for (let k = 0; k < loops; k++) {
+      const cx = -len / 2 + r + k * r * 2;
+      ctx.moveTo(cx - r, 0);
+      ctx.arc(cx, 0, r, Math.PI, 0, false);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#cfd8e3cc';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(formatHenries(comp.value), 0, 13);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
+  function formatHenries(h) {
+    if (h >= 1) return h + 'H';
+    if (h >= 1e-3) return (h * 1e3).toFixed(h * 1e3 >= 10 ? 0 : 1) + 'mH';
+    return (h * 1e6).toFixed(0) + 'uH';
+  }
+
+  function drawAcSource(ctx, comp, x1, y1, x2, y2, opacity) {
+    const o = op(opacity);
+    const bodyStart = lerp(x1, y1, x2, y2, 0.3);
+    const bodyEnd = lerp(x1, y1, x2, y2, 0.7);
+    drawLeads(ctx, x1, y1, x2, y2, bodyStart, bodyEnd, o);
+    const ang = midAngle(x1, y1, x2, y2);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.translate((bodyStart.x + bodyEnd.x) / 2, (bodyStart.y + bodyEnd.y) / 2);
+    ctx.rotate(ang);
+    ctx.globalAlpha = 0.92 * o;
+    ctx.fillStyle = '#2f3550';
+    ctx.beginPath();
+    ctx.arc(0, 0, 13, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#6d7ba8';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(0, 0, 13, 0, Math.PI * 2);
+    ctx.stroke();
+    // the standard AC-source schematic symbol: a sine curve inside the circle
+    ctx.strokeStyle = '#8ecbff';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    for (let px = -8; px <= 8; px++) {
+      const py = -Math.sin((px / 8) * Math.PI) * 5;
+      if (px === -8) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#cfd8e3cc';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText((comp.freq || 1) + 'Hz', 0, 22);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
+  // t = [ref, sinOut, cosOut]: the electrical interface of a real MTJ/TMR
+  // rotary angle-sensor IC -- two analog outputs, sin(theta)/cos(theta) of
+  // a rotating field, referenced to a shared pin.
+  function mtjCentroid(t) {
+    return { x: (t[0].x + t[1].x + t[2].x) / 3, y: (t[0].y + t[1].y + t[2].y) / 3 };
+  }
+
+  function drawMtjSensor(ctx, comp, t, opacity, animT) {
+    const o = op(opacity);
+    const c = mtjCentroid(t);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    t.forEach((p) => {
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.92 * o;
+    ctx.fillStyle = '#3d2f50';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#8a6fb5';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // a live needle showing the sensed field angle, so the "rotating field"
+    // is actually visible turning, not just a static badge
+    const angle = 2 * Math.PI * (comp.freq || 1) * (animT || 0) + ((comp.phase || 0) * Math.PI) / 180;
+    ctx.strokeStyle = '#c9a6ff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(c.x, c.y);
+    ctx.lineTo(c.x + Math.cos(angle) * 10, c.y + Math.sin(angle) * 10);
+    ctx.stroke();
+
+    ctx.fillStyle = '#e8d9ff';
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('θ', c.x, c.y - 18);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
+  // a scope probe is a single-point marker, not a 2-lead part -- it draws a
+  // small flag at its hole instead of a body-with-leads
+  function drawScopeProbe(ctx, comp, x, y, opacity) {
+    const o = op(opacity);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = comp.color || SCOPE_COLORS[0];
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x, y - 22);
+    ctx.stroke();
+    ctx.fillStyle = comp.color || SCOPE_COLORS[0];
+    ctx.beginPath();
+    ctx.moveTo(x, y - 22);
+    ctx.lineTo(x + 12, y - 18);
+    ctx.lineTo(x, y - 14);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
   function roundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -502,10 +667,13 @@
 
   const api = {
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
-    resistorColorBands, formatOhms, formatFarads,
+    INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS,
+    resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
     potCentroid, potPosToAngle, potAngleToPos,
+    drawInductor, drawAcSource, drawMtjSensor, mtjCentroid,
+    drawScopeProbe,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

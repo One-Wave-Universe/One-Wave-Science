@@ -46,6 +46,18 @@
       '                node is always forced to the midpoint voltage between railA and railB — e.g.',
       '                splitting a 9V battery gives a 4.5V virtual ground (V0) usable as a 0V',
       '                reference for a bipolar/split -4.5V/0V/+4.5V power scheme. No value needed.',
+      '  inductor      2 terminals, "value" in henries, e.g. 0.001 for 1mH, 0.01 for 10mH. Real AC/',
+      '                transient behavior (backward-Euler), not just a wire.',
+      '  acsource      2 terminals, real time-varying AC (not a single-frequency snapshot): "value"',
+      '                is peak amplitude in volts, "freq" in Hz (default 1), optional "phase" in',
+      '                degrees (default 0). terminals[0] is the reference/+ side.',
+      '  mtjsensor     3 terminals [ref, sinOut, cosOut]: a rotary angle-sensor IC (real MTJ/TMR-class',
+      '                hardware, e.g. AS5047P/TLE5012). Outputs sin(theta) and cos(theta) of a',
+      '                rotating field referenced to "ref", "value" = peak amplitude in volts,',
+      '                "freq" = rotation rate in Hz (default 1). Use with a vgnd on "ref" for a',
+      '                proper bipolar sensor reference.',
+      '  scope         1 terminal: a zero-load probe tap for visualizing a node on the Oscilloscope',
+      '                panel. Never affects the circuit. No value needed.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -138,11 +150,14 @@
     return JSON.parse(body.slice(start, end + 1));
   }
 
-  const TERMINALS_NEEDED = { wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2, potentiometer: 1, vgnd: 3 };
+  const TERMINALS_NEEDED = {
+    wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2,
+    potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1,
+  };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
   const LED_COLORS = new Set(['red', 'yellow', 'green', 'blue', 'white']);
-  const NUMERIC_TYPES = new Set(['resistor', 'capacitor', 'battery', 'potentiometer']);
+  const NUMERIC_TYPES = new Set(['resistor', 'capacitor', 'battery', 'potentiometer', 'inductor', 'acsource', 'mtjsensor']);
 
   // evaluator: is this a structurally legal circuit spec? This checks shape
   // and range only — whether the resulting circuit is safe/complete is the

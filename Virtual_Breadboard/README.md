@@ -3,10 +3,11 @@
 A real, from-scratch electronics breadboard simulator: a full-size 63-column
 solderless breadboard rendered hole-by-hole, a palette of real parts
 (resistors, LEDs, diodes, capacitors, a power supply, a switch, a momentary
-pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter, and
-jumper wires), and a live circuit-physics engine underneath — not a toy
-animation. Click any hole to wire something into it, and the simulator
-solves the actual circuit every frame.
+pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
+an inductor, a real AC source, an MTJ rotary angle sensor, and jumper
+wires), a built-in oscilloscope, and a live circuit-physics engine
+underneath — not a toy animation. Click any hole to wire something into
+it, and the simulator solves the actual circuit every frame.
 
 ## What makes the physics "real"
 
@@ -52,6 +53,31 @@ linear-algebra method SPICE-class simulators use:
   (V(A)+V(B))/2`) through a small internal resistance, the same technique
   used for the battery's ideal-voltage-source row — not just a resistor
   divider, so it holds the midpoint under load instead of sagging.
+- **Inductors** use the dual of the capacitor's model: a backward-Euler
+  companion with its own branch-current unknown (the same extra-unknown
+  technique as an ideal source), reproducing a real L/R current-rise
+  transient — hook one to a battery through a resistor and watch the
+  current climb on the actual time constant, live.
+- **AC sources** are real time-varying ideal sources — not a single-
+  frequency phasor snapshot. Their value is evaluated on the simulator's
+  own running clock every frame (amplitude, frequency in Hz, and phase are
+  all adjustable), so a resistor or scope probe across one shows an actual
+  moving sine wave.
+- The **MTJ Angle Sensor** models the electrical interface of a real
+  magnetic-tunnel-junction rotary angle-sensor IC (the class of part behind
+  AS5047P/TLE5012-style sensors): two buffered analog outputs, sin(theta)
+  and cos(theta) of a rotating field, referenced to a shared pin — a
+  quadrature pair of ideal sources sharing one clock, 90 degrees apart,
+  each through the sensor's own ~200 ohm output impedance (so it sags
+  correctly under load, like the real part). This is the sensing side of a
+  "rotating field" setup; wire its `ref` pin to a Virtual Ground for a
+  proper bipolar sensor reference. It's an honest electrical model of the
+  sensor IC's output stage, not a claim to simulate real magnetic/inductive
+  field physics — the engine has no AC-coupling/mutual-inductance solve.
+- The **Oscilloscope** panel below the board is fed by zero-load Scope
+  Probes (like a real 10MΩ probe — they never affect the circuit) sampled
+  every frame into a rolling window, so AC and quadrature signals are
+  actually visible moving, not just a single readout number.
 - The breadboard's electrical grouping is modeled exactly like a real
   board: each column's five holes in the top bank (rows a-e) are one node,
   each column's five holes in the bottom bank (rows f-j) are a separate
@@ -64,9 +90,12 @@ linear-algebra method SPICE-class simulators use:
   snap to next.
 
 This is deliberately a simplified analog model (piecewise-linear diodes,
-not a full Shockley exponential; no AC/frequency analysis) — accurate
-enough to design and debug real low-voltage hobby circuits, not a
-replacement for SPICE on precision analog design.
+not a full Shockley exponential; real time-domain AC sources and inductors,
+but no mutual inductance/transformer coupling, no skin effect, and no
+frequency-domain/phasor analysis — everything is stepped forward in real
+time the same way the RC/RL transients are) — accurate enough to design and
+debug real low-voltage hobby circuits, not a replacement for SPICE on
+precision analog design.
 
 ## Running it
 
@@ -147,7 +176,7 @@ fetch one.
 
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
-   Virtual Ground).
+   Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -164,6 +193,10 @@ fetch one.
      — that output always reads the exact midpoint voltage between the two
      rails, letting you breadboard a proper `-`/`0`/`+` split-supply layout
      from a single single-ended battery.
+   - The **MTJ Angle Sensor** takes 3 clicks: the reference pin, then the
+     sin-out pin, then the cos-out pin.
+   - The **Scope Probe** takes 1 click — it taps whatever node it lands on
+     and adds a live trace to the Oscilloscope panel below the board.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it — its
@@ -254,6 +287,9 @@ node test/circuit.test.js
 Covers Ohm's law, LED/diode forward conduction and reverse blocking,
 short-circuit detection, over-current warnings, real RC charging curves,
 switch/pushbutton open-closed behavior, a Y-split wire tying 4 holes
-(2 forked at each end) to one electrical node, and a virtual-ground rail
-splitter holding its output at the exact midpoint of two rails, both
-unloaded and loaded, for a symmetric and an asymmetric supply voltage.
+(2 forked at each end) to one electrical node, a virtual-ground rail
+splitter holding its output at the exact midpoint of two rails (both
+unloaded and loaded, symmetric and asymmetric supply voltage), a real L/R
+current-rise transient through an inductor, an AC source tracked against
+its analytic sine at specific points on the simulator's own clock, and an
+MTJ sensor's sin/cos quadrature pair holding the sin²+cos²=1 identity.

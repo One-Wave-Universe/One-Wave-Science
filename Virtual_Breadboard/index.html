@@ -70,6 +70,15 @@
     </aside>
   </div>
 
+  <section class="scope-panel">
+    <div class="scope-head">
+      <h3>Oscilloscope</h3>
+      <div id="scopeLegend" class="scope-legend"></div>
+    </div>
+    <canvas id="scopeCanvas" height="150"></canvas>
+    <p class="hint">Use the <b>Scope Probe</b> tool to tap a hole — zero-load, like a real 10MΩ probe. Each probe gets its own trace here, live, so you can check AC/quadrature signals actually look right (and compare against a real scope).</p>
+  </section>
+
   <footer class="status-bar">
     <span id="hoverReadout">Hover a hole to read its node voltage.</span>
     <div id="warnings"></div>
