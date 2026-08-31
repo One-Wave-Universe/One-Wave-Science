@@ -1,0 +1,32 @@
+name: Gravity proof bench
+
+on:
+  push:
+    paths:
+      - 'One_Wave_Bench/gravity/**'
+      - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
+      - '.github/workflows/gravity-proof-bench.yml'
+  pull_request:
+    paths:
+      - 'One_Wave_Bench/gravity/**'
+      - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
+      - '.github/workflows/gravity-proof-bench.yml'
+
+jobs:
+  finite-slope-sieve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run gravity proof bench tests
+        working-directory: One_Wave_Bench/gravity
+        run: python -m unittest -v test_finite_slope_sieve_bench.py
+
+      - name: Emit machine-readable proof receipt
+        run: python One_Wave_Bench/gravity/finite_slope_sieve_bench.py --json
