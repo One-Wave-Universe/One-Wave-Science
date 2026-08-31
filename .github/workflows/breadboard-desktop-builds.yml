@@ -1,10 +1,14 @@
 name: Virtual Breadboard - Desktop Installers (manual)
 
-# Manual, one-off trigger only -- this does not run automatically on push.
-# Run it from the Actions tab (or via the API) whenever you want fresh
-# Linux/Windows/macOS installers; download them from the run's Artifacts.
+# One-off trigger only -- this does not run on every push. workflow_dispatch
+# only becomes clickable from the Actions tab/API once this file exists on
+# the repo's default branch, so until then, push a tag matching
+# "build-desktop-*" (from any branch) to fire a run immediately.
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - 'build-desktop-*'
 
 jobs:
   linux:
