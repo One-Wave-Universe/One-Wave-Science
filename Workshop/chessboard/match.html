@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sentient Surrender — Live Match</title>
 <style>
-html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:system-ui,Segoe UI,Arial,sans-serif}body{display:grid;grid-template-rows:auto 1fr}.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 12px;background:#11161b;border-bottom:1px solid #313943;font-size:12px}.tag{padding:3px 8px;border:1px solid #3d4854;border-radius:999px;color:#aeb9c4}.live{color:#8ef0c8;border-color:#3d7f68}.title{font-weight:800;color:#fff}iframe{width:100%;height:100%;border:0}
+html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:system-ui,Segoe UI,Arial,sans-serif}body{display:grid;grid-template-rows:auto 1fr}.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:8px 12px;background:#11161b;border-bottom:1px solid #313943;font-size:12px}.tag{padding:3px 8px;border:1px solid #3d4854;border-radius:999px;color:#aeb9c4}.live{color:#8ef0c8;border-color:#3d7f68}.warn{color:#ffd26a;border-color:#806c35}.title{font-weight:800;color:#fff}iframe{width:100%;height:100%;border:0}
 </style>
 </head>
 <body>
@@ -13,27 +13,32 @@ html,body{margin:0;height:100%;background:#090b0e;color:#eef2f7;font-family:syst
   <span class="title">SENTIENT SURRENDER — LIVE MATCH</span>
   <span class="tag live">FIELD vs VOID</span>
   <span class="tag">pointer-actuated pieces</span>
-  <span class="tag">ternary 3-winding switch</span>
-  <span class="tag">quadratic oversight ↑ / override ↓</span>
+  <span class="tag">3:1 nerve / 6:1 supervisor</span>
   <span class="tag">24 fps reel</span>
+  <span id="brainStatus" class="tag warn">local brains: checking…</span>
   <span id="status" class="tag">loading board…</span>
 </div>
 <iframe id="game" src="index.html"></iframe>
 <script>
 const game=document.getElementById('game');
 const status=document.getElementById('status');
+const brainStatus=document.getElementById('brainStatus');
 function loadScript(doc,src){return new Promise((ok,fail)=>{const s=doc.createElement('script');s.src=src;s.onload=ok;s.onerror=fail;doc.head.appendChild(s);});}
 game.addEventListener('load',async()=>{
-  const doc=game.contentDocument;
+  const doc=game.contentDocument,win=game.contentWindow;
   try{
     await loadScript(doc,'audio_language.js');
     await loadScript(doc,'reel_engine.js');
     await loadScript(doc,'pointer_controller.js');
+    await loadScript(doc,'local_brain_bridge.js');
+    const h=await win.ONE_WAVE_LOCAL_BRAINS.health();
+    if(h?.ok){brainStatus.textContent='local brains: LIVE';brainStatus.className='tag live';}
+    else {brainStatus.textContent='local brains: fallback';brainStatus.className='tag warn';}
     await loadScript(doc,'auto_match.js');
     status.textContent='ready · press START MATCH';
     const music=doc.getElementById('musicBtn');
     if(music) music.addEventListener('click',()=>{status.textContent='audio + reel + pointers + match live';},{once:true});
-  }catch(e){status.textContent='load error';console.error(e);}
+  }catch(e){brainStatus.textContent='local brains: fallback';status.textContent='ready with browser fallback';console.error(e);try{await loadScript(doc,'auto_match.js')}catch(_){}}
 });
 </script>
 </body>
