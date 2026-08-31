@@ -12,7 +12,6 @@ LOG_FILE="$RUNTIME_DIR/server.log"
 CONFIG_FILE="$HOME/.config/one-wave-animator/openai.env"
 mkdir -p "$RUNTIME_DIR"
 
-# Load the user's OpenAI Director key/config without placing secrets in the app files.
 if [[ -f "$CONFIG_FILE" ]]; then
   # shellcheck disable=SC1090
   source "$CONFIG_FILE"
@@ -36,7 +35,6 @@ stop_server() {
   rm -f "$PID_FILE" "$DIR_FILE"
 }
 
-# Replace any server started by another extracted/installed copy.
 if server_alive; then
   previous_dir="$(cat "$DIR_FILE" 2>/dev/null || true)"
   if [[ "$previous_dir" != "$APP_DIR" ]]; then
@@ -44,23 +42,30 @@ if server_alive; then
   fi
 fi
 
-# Start the local bridge that serves the animator and routes creative work.
-# The animator remains usable for manual/local edits even when no OpenAI key is configured.
 if ! server_alive; then
   nohup python3 "$APP_DIR/assistant_server.py" >"$LOG_FILE" 2>&1 &
   echo $! > "$PID_FILE"
   printf '%s\n' "$APP_DIR" > "$DIR_FILE"
-  sleep 0.5
 fi
 
-if ! curl --fail --silent "http://127.0.0.1:${PORT}/api/assistant/health" >/dev/null 2>&1; then
-  if server_alive; then
-    stop_server
+bridge_ready=0
+for _ in {1..20}; do
+  if curl --fail --silent "http://127.0.0.1:${PORT}/api/assistant/health" >/dev/null 2>&1; then
+    bridge_ready=1
+    break
   fi
-  nohup python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$APP_DIR" >"$LOG_FILE" 2>&1 &
-  echo $! > "$PID_FILE"
-  printf '%s\n' "$APP_DIR" > "$DIR_FILE"
-  sleep 0.35
+  sleep 0.15
+done
+
+if [[ "$bridge_ready" != "1" ]]; then
+  stop_server
+  echo "One-Wave Animator could not start its local AI bridge." >&2
+  echo "Log: $LOG_FILE" >&2
+  if [[ -s "$LOG_FILE" ]]; then
+    echo >&2
+    tail -n 40 "$LOG_FILE" >&2 || true
+  fi
+  exit 1
 fi
 
 if command -v chromium >/dev/null 2>&1; then
