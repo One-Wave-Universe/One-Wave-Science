@@ -14,6 +14,7 @@ dimension declaration).
 | `schema/experiment_protocol.json` | The request/receipt contract (hypothesis, cases, falsifiers, required measurements, control checks, native dimension). |
 | `engine/run_experiment.py` | Headless runner. Imports the canonical D-413 physics (single source of truth) and executes any experiment request, emitting a D-412 receipt + CSVs. |
 | `engine/build_manifest.py` | Scans `runs/` for receipts and writes `runs/manifest.json`, which the bench UI reads. |
+| `gravity/` | Finite-slope / sieve boundary proof bench: attacks hard-cutoff logic, derives the differential/Hill control boundary, and measures parent-field compression error. |
 | `runs/` | Real receipts, per-case CSV time series, and the manifest. |
 
 ## Fixed simulation scenarios
@@ -51,6 +52,17 @@ Add `&autoplay=0` to start paused. Click the canvas to pause/resume.
    python -m http.server 8899
    # then open http://localhost:8899/One_Wave_Bench/index.html
    ```
+
+## Running the gravity proof bench
+
+The gravity bench is deliberately smaller than the full orbital simulator. It attacks the finite-boundary logic before adding more planetary state.
+
+```bash
+python One_Wave_Bench/gravity/finite_slope_sieve_bench.py
+cd One_Wave_Bench/gravity && python -m unittest -v test_finite_slope_sieve_bench.py
+```
+
+See `Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md` for the derivation and proof ledger.
 
 ## D-412 discipline (enforced)
 
