@@ -119,6 +119,25 @@ python3 -m http.server 8000   # then open http://localhost:8000
 Everything is plain HTML/CSS/JS with no build step and no external
 dependencies — it works fully offline.
 
+**As one self-contained HTML file (for an AI chat window, an artifact host,
+or just handing someone a single file):**
+
+```bash
+node build-standalone.js            # -> dist/standalone.html
+# or
+npm run bundle
+```
+
+Inlines `style.css` and every `js/*.js` file into one `<title>`+`<style>`+
+`<script>` HTML document — no server, no separate files, nothing to unzip.
+Drop it into any chat window that can render/execute HTML (an Artifact,
+a canvas, etc.) and the whole simulator runs there, including the physics
+engine, ready for an AI to read the source directly and experiment with —
+click parts in, then use `window.__runFast(...)` (see below) to iterate on
+a design fast. The one thing that won't work in a sandboxed chat-window
+context is the AI dialogue box's own outbound API calls (same restriction
+as the in-chat Artifact preview, see below).
+
 **As a downloadable desktop app for Ubuntu (Electron + AppImage):**
 
 ```bash
@@ -211,14 +230,20 @@ fetch one.
      and adds a live trace to the Oscilloscope panel below the board.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
-   potentiometer's knob to turn it, or click any part to inspect it — its
-   live voltage, current, and an editable value dropdown appear in the
-   right-hand Inspector, with a Delete button.
+   potentiometer's knob to turn it, or click any part to inspect it. Both
+   the tool panel (before you place a part) and the Inspector (after you
+   select one) show the same framed picture of the part with its name
+   above it — the picture stays put while you change its dropdowns, so
+   you always see what you're about to build or are looking at, plus its
+   live voltage/current and a Delete button.
 4. **Right-click any placed part** for a quick floating menu with the same
    options as the Inspector (value, color, style) plus **Remove part** —
-   right-click a wire to pick its color or switch it between **Looped**
-   (a flexible wire arcing up and over — the default) and **Flat** (a rigid
-   pre-formed jumper lying straight against the board).
+   right-click a wire to pick its color, gauge (thin/standard/thick), or
+   switch it between **Looped** (a flexible wire arcing up and over — the
+   default) and **Flat** (a rigid pre-formed jumper lying straight against
+   the board). Every option anywhere in the app is a dropdown. Both side
+   panels have a resize handle in their bottom corner if you want more or
+   less room for the board.
 5. Hover any hole at any time to read its voltage and see every other hole
    sharing that electrical node highlighted. Hover a placed part to fade it
    see-through (with its occupied holes ringed in blue) so you can still
@@ -280,6 +305,7 @@ js/components.js      part definitions, defaults, canvas drawing
 js/app.js             toolbox, placement, simulation loop, UI wiring
 js/ai.js               pluggable AI provider layer + circuit-spec validator
 test/circuit.test.js  standalone physics tests (`npm test` / `node test/circuit.test.js`)
+build-standalone.js   bundles everything into one HTML file (`npm run bundle`)
 main.js               Electron desktop wrapper
 package.json          npm scripts + electron-builder config for Linux
 android/               native Android app (WebView wrapper around the same web app)
@@ -289,6 +315,24 @@ android/               native Android app (WebView wrapper around the same web a
   build-apk.sh                  reproducible build script
   VirtualBreadboardSimulator.apk  the built, signed APK
 ```
+
+## Driving it programmatically (for scripts or an AI)
+
+The live app exposes a small set of debug/automation hooks on `window` for
+anything scripting the page (a test harness, a browser-automation tool, an
+AI iterating on a design):
+
+- `window.__debugState()` — every placed part (type, value, terminals) plus
+  the latest solved voltages, currents, and warnings.
+- `window.__nodeVoltage(cellId)` — a specific node's live voltage.
+- `window.__runFast(seconds, dt)` — fast-forwards the simulation `seconds`
+  of sim time in one synchronous burst (default 1ms steps) instead of
+  waiting on real animation frames, and returns the settled voltages/
+  currents/warnings. Useful for evaluating a candidate build's transient or
+  steady-state behavior near-instantly while iterating, then switching back
+  to watching it run live at normal speed.
+- `window.__selectPartById(id)` / `window.__toggleSwitchById(id)` — drive
+  the UI the same way a click would.
 
 ## Running the physics tests
 

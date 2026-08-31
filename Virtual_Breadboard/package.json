@@ -4,12 +4,14 @@
   "description": "A downloadable virtual breadboard: real parts, jumper wires, click-any-hole placement, and live circuit physics (Ohm's law, LED forward drop, RC transients, short-circuit detection).",
   "main": "main.js",
   "private": true,
+  "homepage": "https://github.com/One-Wave-Universe/One-Wave-Science",
   "scripts": {
     "start": "electron .",
     "test": "node test/circuit.test.js",
     "dist": "electron-builder",
     "dist:appimage": "electron-builder --linux AppImage",
-    "dist:deb": "electron-builder --linux deb"
+    "dist:deb": "electron-builder --linux deb",
+    "bundle": "node build-standalone.js"
   },
   "devDependencies": {
     "electron": "^33.0.0",
@@ -37,7 +39,8 @@
       ],
       "category": "Education",
       "executableName": "virtual-breadboard-simulator",
-      "icon": "build/icon.png"
+      "icon": "build/icon.png",
+      "maintainer": "One Wave Science <opensource@one-wave-universe.example>"
     }
   }
 }

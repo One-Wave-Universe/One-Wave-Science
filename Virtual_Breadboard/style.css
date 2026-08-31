@@ -40,10 +40,14 @@ header.top p { margin: 0; color: #8a94a3; font-size: 12px; }
 
 aside.toolbox {
   width: 190px;
+  min-width: 150px;
+  max-width: 420px;
+  flex-shrink: 0;
   padding: 14px;
   border-right: 1px solid #232a34;
   overflow-y: auto;
   background: #141922;
+  resize: horizontal;
 }
 .tool-btn {
   display: flex; align-items: center; gap: 10px;
@@ -70,6 +74,18 @@ select {
 .swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
 .swatch.active { border-color: #fff; }
 
+.part-card { text-align: center; margin-bottom: 14px; position: relative; }
+.part-card-name {
+  font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+  color: #e8ecf1; margin-bottom: 8px;
+}
+.part-card-frame {
+  width: 150px; height: 108px; margin: 0 auto; border-radius: 10px;
+  background: #1c2430; border: 1px solid #2c3644;
+  display: flex; align-items: center; justify-content: center;
+}
+.part-card-id { font-size: 10px; color: #6d7787; margin-top: 6px; font-family: ui-monospace, monospace; }
+
 .presets { margin-top: 16px; border-top: 1px solid #232a34; padding-top: 12px; }
 .presets h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #6d7787; margin: 0 0 8px; }
 .presets button { display: block; width: 100%; margin-bottom: 6px; text-align: left; }
@@ -87,10 +103,14 @@ select {
 
 aside.props-panel {
   width: 260px;
+  min-width: 200px;
+  max-width: 480px;
+  flex-shrink: 0;
   padding: 14px;
   border-left: 1px solid #232a34;
   background: #141922;
   overflow-y: auto;
+  resize: horizontal;
 }
 aside.props-panel h3 { font-size: 13px; margin: 0 0 12px; color: #cfd8e3; }
 .readout { margin: 12px 0; font-size: 12px; border-top: 1px solid #232a34; padding-top: 10px; }

@@ -27,6 +27,12 @@
   const AC_FREQ_VALUES = [0.1, 0.5, 1, 2, 5, 10, 60, 100];
 
   const WIRE_COLOR_CHOICES = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7', '#e8ecf1', '#1a1a1a'];
+  const WIRE_COLOR_NAMES = {
+    '#2a6f4a': 'Green', '#c94a4a': 'Red', '#3f7fe0': 'Blue', '#d4af37': 'Gold',
+    '#7a4a2a': 'Brown', '#a855f7': 'Purple', '#e8ecf1': 'White', '#1a1a1a': 'Black',
+  };
+  const WIRE_GAUGES = { thin: '30 AWG', standard: '22 AWG', thick: '18 AWG' };
+  const WIRE_GAUGE_WIDTH = { thin: 1.8, standard: 3, thick: 4.6 };
   // matches a typical 4-channel scope's trace colors (yellow/CH1, green/CH2, ...)
   const SCOPE_COLORS = ['#f4d35e', '#3ddc6b', '#4d8dff', '#ff6ec7'];
 
@@ -418,11 +424,11 @@
   // style: 'loop' (default) is a flexible wire arcing up and over whatever's
   // between its ends; 'flat' is a rigid pre-formed jumper lying straight
   // against the board.
-  function drawWire(ctx, x1, y1, x2, y2, color, opacity, style) {
+  function drawWire(ctx, x1, y1, x2, y2, color, opacity, style, gauge) {
     ctx.save();
     ctx.globalAlpha = op(opacity);
     ctx.strokeStyle = color || '#2a6f4a';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = WIRE_GAUGE_WIDTH[gauge] || WIRE_GAUGE_WIDTH.standard;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -451,13 +457,13 @@
     ];
   }
 
-  function drawYWire(ctx, t, color, opacity, style) {
+  function drawYWire(ctx, t, color, opacity, style, gauge) {
     const [j1, j2] = yWireJunctions(t);
-    drawWire(ctx, t[0].x, t[0].y, j1.x, j1.y, color, opacity, style);
-    drawWire(ctx, t[1].x, t[1].y, j1.x, j1.y, color, opacity, style);
-    drawWire(ctx, j1.x, j1.y, j2.x, j2.y, color, opacity, style);
-    drawWire(ctx, t[2].x, t[2].y, j2.x, j2.y, color, opacity, style);
-    drawWire(ctx, t[3].x, t[3].y, j2.x, j2.y, color, opacity, style);
+    drawWire(ctx, t[0].x, t[0].y, j1.x, j1.y, color, opacity, style, gauge);
+    drawWire(ctx, t[1].x, t[1].y, j1.x, j1.y, color, opacity, style, gauge);
+    drawWire(ctx, j1.x, j1.y, j2.x, j2.y, color, opacity, style, gauge);
+    drawWire(ctx, t[2].x, t[2].y, j2.x, j2.y, color, opacity, style, gauge);
+    drawWire(ctx, t[3].x, t[3].y, j2.x, j2.y, color, opacity, style, gauge);
     ctx.save();
     ctx.globalAlpha = op(opacity);
     ctx.fillStyle = color || '#2a6f4a';
@@ -655,6 +661,65 @@
     ctx.restore();
   }
 
+  // A canonical, centered rendering of any part type into a small square --
+  // used by the preview card in the toolbox/Inspector, so a part looks the
+  // same whether you're still choosing its value or it's already on the
+  // board. Reuses the exact same draw*() functions the board itself uses.
+  function drawPartIcon(ctx, type, part, w, h) {
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2;
+    const cy = h / 2;
+    const p = part || {};
+    if (type === 'wire' || type === 'ywire') {
+      const color = p.color || WIRE_COLOR_CHOICES[0];
+      const style = p.style || 'loop';
+      const gauge = p.gauge || 'standard';
+      if (type === 'wire') {
+        drawWire(ctx, w * 0.15, h * 0.7, w * 0.85, h * 0.3, color, 1, style, gauge);
+      } else {
+        const t = [
+          { x: w * 0.12, y: h * 0.25 }, { x: w * 0.12, y: h * 0.55 },
+          { x: w * 0.88, y: h * 0.45 }, { x: w * 0.88, y: h * 0.75 },
+        ];
+        drawYWire(ctx, t, color, 1, style, gauge);
+      }
+      return;
+    }
+    if (type === 'potentiometer') {
+      const halfSpan = w * 0.28;
+      const t = [
+        { x: cx - halfSpan, y: cy - h * 0.14 }, { x: cx, y: cy - h * 0.14 }, { x: cx + halfSpan, y: cy - h * 0.14 },
+        { x: cx - halfSpan, y: cy + h * 0.14 }, { x: cx, y: cy + h * 0.14 }, { x: cx + halfSpan, y: cy + h * 0.14 },
+      ];
+      drawPotentiometer(ctx, Object.assign({ pos: 0.5 }, p), t, 1);
+      return;
+    }
+    if (type === 'vgnd' || type === 'mtjsensor') {
+      const t = [
+        { x: cx - w * 0.26, y: cy - h * 0.18 }, { x: cx + w * 0.26, y: cy - h * 0.18 }, { x: cx, y: cy + h * 0.24 },
+      ];
+      if (type === 'vgnd') drawVGnd(ctx, p, t, 1);
+      else drawMtjSensor(ctx, Object.assign({ freq: 1, phase: 0 }, p), t, 1, 0.15);
+      return;
+    }
+    if (type === 'scope') {
+      drawScopeProbe(ctx, Object.assign({ color: SCOPE_COLORS[0] }, p), cx, h * 0.78, 1);
+      return;
+    }
+    // every remaining type is a plain 2-terminal horizontal part
+    const x1 = w * 0.14;
+    const x2 = w * 0.86;
+    if (type === 'resistor') drawResistor(ctx, Object.assign({ value: 220 }, p), x1, cy, x2, cy, 1);
+    else if (type === 'led') drawLed(ctx, Object.assign({ color: 'red' }, p), x1, cy, x2, cy, 0, 1);
+    else if (type === 'diode') drawDiode(ctx, p, x1, cy, x2, cy, 1);
+    else if (type === 'capacitor') drawCapacitor(ctx, Object.assign({ value: 100e-6 }, p), x1, cy, x2, cy, 1);
+    else if (type === 'battery') drawBattery(ctx, Object.assign({ value: 5 }, p), x1, cy, x2, cy, 1);
+    else if (type === 'switch') drawSwitch(ctx, Object.assign({ closed: false }, p), x1, cy, x2, cy, 1);
+    else if (type === 'pushbutton') drawPushbutton(ctx, p, x1, cy, x2, cy, 1);
+    else if (type === 'inductor') drawInductor(ctx, Object.assign({ value: 10e-3 }, p), x1, cy, x2, cy, 1);
+    else if (type === 'acsource') drawAcSource(ctx, Object.assign({ freq: 1 }, p), x1, cy, x2, cy, 1);
+  }
+
   function roundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -667,13 +732,13 @@
 
   const api = {
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
-    INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS,
+    INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES,
     resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
     potCentroid, potPosToAngle, potAngleToPos,
     drawInductor, drawAcSource, drawMtjSensor, mtjCentroid,
-    drawScopeProbe,
+    drawScopeProbe, drawPartIcon,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

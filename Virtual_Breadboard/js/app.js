@@ -11,6 +11,7 @@
   };
   let board = Board.build(LAYOUT_PRESETS['1large']);
   const circuit = new CircuitEngine.Circuit();
+  const WIRE_COLORS = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7'];
 
   const state = {
     board,
@@ -27,6 +28,9 @@
       acsourceFreq: 1,
       mtjsensor: 2.5,
       mtjsensorFreq: 1,
+      wireGauge: 'standard',
+      potentiometer: 10000,
+      wireColor: WIRE_COLORS[0],
     },
     pending: [],
     hoverHole: null,
@@ -39,7 +43,6 @@
     draggingPot: null,
   };
   const SCOPE_WINDOW = 3; // seconds of history each probe trace keeps
-  const WIRE_COLORS = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7'];
 
   // boardIdx defaults to 0 (the primary/first board) -- row+col alone is
   // ambiguous once more than one board is on the workspace, since every
@@ -178,86 +181,75 @@
     renderProps();
   }
 
+  // presentation: a framed square preview of a part -- same body a placed
+  // part would draw -- with its name in block letters above it. Shown both
+  // while still choosing a tool's options (pre-placement) and once a part
+  // is selected in the Inspector, so the picture never disappears while
+  // the dropdowns underneath it change.
+  function buildPreviewCard(type, previewPart) {
+    const def = Components.PALETTE.find((pp) => pp.type === type);
+    const card = document.createElement('div');
+    card.className = 'part-card';
+    const name = document.createElement('div');
+    name.className = 'part-card-name';
+    name.textContent = (def ? def.label : type).toUpperCase();
+    card.appendChild(name);
+    const frame = document.createElement('div');
+    frame.className = 'part-card-frame';
+    const canvas = document.createElement('canvas');
+    canvas.width = 150;
+    canvas.height = 108;
+    frame.appendChild(canvas);
+    card.appendChild(frame);
+    Components.drawPartIcon(canvas.getContext('2d'), type, previewPart, canvas.width, canvas.height);
+    return card;
+  }
+
+  // generator: a plausible part-shaped object for the icon to draw, built
+  // from whatever's currently selected in the tool options
+  function toolPreviewPart(tool) {
+    const tv = state.toolValue;
+    switch (tool) {
+      case 'resistor': return { value: tv.resistor };
+      case 'capacitor': return { value: tv.capacitor };
+      case 'led': return { color: tv.led };
+      case 'battery': return { value: tv.battery };
+      case 'inductor': return { value: tv.inductor };
+      case 'acsource': return { value: tv.acsource, freq: tv.acsourceFreq };
+      case 'mtjsensor': return { value: tv.mtjsensor, freq: tv.mtjsensorFreq };
+      case 'potentiometer': return { value: tv.potentiometer, pos: 0.5 };
+      case 'wire': case 'ywire': return { color: tv.wireColor, style: 'loop', gauge: tv.wireGauge };
+      default: return {};
+    }
+  }
+
   const toolOptionsEl = document.getElementById('toolOptions');
   function renderToolOptions() {
     toolOptionsEl.innerHTML = '';
+    if (state.tool === 'select') return;
+    toolOptionsEl.appendChild(buildPreviewCard(state.tool, toolPreviewPart(state.tool)));
+
     if (state.tool === 'resistor') {
-      toolOptionsEl.appendChild(makeSelect('Value', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), state.toolValue.resistor, (v) => (state.toolValue.resistor = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Value', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), state.toolValue.resistor, (v) => { state.toolValue.resistor = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'capacitor') {
-      toolOptionsEl.appendChild(makeSelect('Value', Components.CAPACITOR_VALUES.map((v) => [v.farads, v.label]), state.toolValue.capacitor, (v) => (state.toolValue.capacitor = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Value', Components.CAPACITOR_VALUES.map((v) => [v.farads, v.label]), state.toolValue.capacitor, (v) => { state.toolValue.capacitor = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'led') {
-      const wrap = document.createElement('div');
-      wrap.className = 'swatches';
-      Components.LED_COLORS.forEach((c) => {
-        const b = document.createElement('button');
-        b.className = 'swatch' + (state.toolValue.led === c ? ' active' : '');
-        b.style.background = Components.LED_HEX[c];
-        b.title = c;
-        b.addEventListener('click', () => {
-          state.toolValue.led = c;
-          renderToolOptions();
-        });
-        wrap.appendChild(b);
-      });
-      toolOptionsEl.appendChild(labeled('LED color', wrap));
+      toolOptionsEl.appendChild(makeSelect('Color', Components.LED_COLORS.map((c) => [c, c[0].toUpperCase() + c.slice(1)]), state.toolValue.led, (v) => { state.toolValue.led = v; renderToolOptions(); }));
     } else if (state.tool === 'battery') {
-      toolOptionsEl.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), state.toolValue.battery, (v) => (state.toolValue.battery = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Voltage', Components.BATTERY_VALUES.map((v) => [v, v + ' V']), state.toolValue.battery, (v) => { state.toolValue.battery = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'inductor') {
-      toolOptionsEl.appendChild(makeSelect('Inductance', Components.INDUCTOR_VALUES.map((v) => [v, Components.formatHenries(v)]), state.toolValue.inductor, (v) => (state.toolValue.inductor = Number(v))));
+      toolOptionsEl.appendChild(makeSelect('Inductance', Components.INDUCTOR_VALUES.map((v) => [v, Components.formatHenries(v)]), state.toolValue.inductor, (v) => { state.toolValue.inductor = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'acsource') {
-      toolOptionsEl.appendChild(makeSelect('Amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.acsource, (v) => (state.toolValue.acsource = Number(v))));
-      toolOptionsEl.appendChild(makeSelect('Frequency', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.acsourceFreq, (v) => (state.toolValue.acsourceFreq = Number(v))));
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'A real time-varying source, evaluated on the sim clock every frame — not a static snapshot. Click two holes.';
-      toolOptionsEl.appendChild(p);
+      toolOptionsEl.appendChild(makeSelect('Amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.acsource, (v) => { state.toolValue.acsource = Number(v); renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Frequency', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.acsourceFreq, (v) => { state.toolValue.acsourceFreq = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'mtjsensor') {
-      toolOptionsEl.appendChild(makeSelect('Output amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.mtjsensor, (v) => (state.toolValue.mtjsensor = Number(v))));
-      toolOptionsEl.appendChild(makeSelect('Rotation rate', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.mtjsensorFreq, (v) => (state.toolValue.mtjsensorFreq = Number(v))));
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Models a real MTJ/TMR angle-sensor IC\'s analog output stage: sin(theta)/cos(theta) of a rotating field, referenced to a shared pin. Click 1 hole for the reference pin, then 1 for sin-out, then 1 for cos-out.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'scope') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click a hole to drop a probe — zero-load, like a real 10MΩ scope probe, never affects the circuit. Its live trace appears on the Oscilloscope panel below the board.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'wire') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click a hole, then click another hole to drop a jumper wire. Right-click a placed wire to change its color or style.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'ywire') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'One physical wire bridging 2 rows, forked to 2 holes at each end — good for a ground/rail tap. Click 2 holes for one end, then 2 holes for the other end.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'diode') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click the anode, then the cathode (banded end).';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'pushbutton') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click two holes. Hold it down on the board (or in the Inspector) to close the circuit.';
-      toolOptionsEl.appendChild(p);
+      toolOptionsEl.appendChild(makeSelect('Amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), state.toolValue.mtjsensor, (v) => { state.toolValue.mtjsensor = Number(v); renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Rotation', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), state.toolValue.mtjsensorFreq, (v) => { state.toolValue.mtjsensorFreq = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'potentiometer') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click one hole in either bank (not a rail) — a real 6-pin trimmer straddles the center channel, so the other 5 pins are placed for you.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'vgnd') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click 2 holes for the rails to split (e.g. the + and - power rails), then 1 hole for the virtual-ground (V0) output — it always reads the midpoint voltage between the two rails.';
-      toolOptionsEl.appendChild(p);
-    } else if (state.tool === 'select') {
-      const p = document.createElement('p');
-      p.className = 'hint';
-      p.textContent = 'Click a switch to toggle it, or hold down a pushbutton. Click any part to edit or delete it.';
-      toolOptionsEl.appendChild(p);
+      toolOptionsEl.appendChild(makeSelect('Resistance', Components.RESISTOR_VALUES.map((v) => [v, Components.formatOhms(v)]), state.toolValue.potentiometer, (v) => { state.toolValue.potentiometer = Number(v); renderToolOptions(); }));
+    } else if (state.tool === 'wire' || state.tool === 'ywire') {
+      toolOptionsEl.appendChild(makeSelect('Color', Components.WIRE_COLOR_CHOICES.map((c) => [c, Components.WIRE_COLOR_NAMES[c] || c]), state.toolValue.wireColor, (v) => { state.toolValue.wireColor = v; renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), state.toolValue.wireGauge, (v) => { state.toolValue.wireGauge = v; renderToolOptions(); }));
     }
   }
   function labeled(text, el) {
@@ -275,7 +267,7 @@
       const opt = document.createElement('option');
       opt.value = v;
       opt.textContent = text;
-      if (Number(v) === Number(value)) opt.selected = true;
+      if (String(v) === String(value)) opt.selected = true;
       sel.appendChild(opt);
     });
     sel.addEventListener('change', () => onChange(sel.value));
@@ -306,8 +298,8 @@
   // its own. Wire color selection is the one stateful exception (a counter
   // for cosmetic color-cycling), so the caller resolves it and passes it in.
   function buildPart(type, holes, opts) {
-    if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor, style: 'loop' };
-    if (type === 'ywire') return { type: 'ywire', terminals: holes.slice(0, 4), color: opts.wireColor, style: 'loop' };
+    if (type === 'wire') return { type: 'wire', terminals: holes.slice(0, 2), color: opts.wireColor, style: 'loop', gauge: opts.wireGauge };
+    if (type === 'ywire') return { type: 'ywire', terminals: holes.slice(0, 4), color: opts.wireColor, style: 'loop', gauge: opts.wireGauge };
     if (type === 'resistor') return { type: 'resistor', terminals: holes.slice(0, 2), value: opts.resistorValue };
     if (type === 'led') return { type: 'led', terminals: holes.slice(0, 2), color: opts.ledColor };
     if (type === 'diode') return { type: 'diode', terminals: holes.slice(0, 2) };
@@ -318,7 +310,7 @@
     if (type === 'potentiometer') {
       const terminals = derivePotentiometerHoles(holes[0]);
       if (!terminals) return null;
-      return { type: 'potentiometer', terminals, value: 10000, pos: 0.5 };
+      return { type: 'potentiometer', terminals, value: opts.potValue, pos: 0.5 };
     }
     if (type === 'vgnd') return { type: 'vgnd', terminals: holes.slice(0, 3) };
     if (type === 'inductor') return { type: 'inductor', terminals: holes.slice(0, 2), value: opts.inductorValue };
@@ -348,7 +340,9 @@
       acFreq: state.toolValue.acsourceFreq,
       mtjValue: state.toolValue.mtjsensor,
       mtjFreq: state.toolValue.mtjsensorFreq,
-      wireColor: type === 'wire' || type === 'ywire' ? nextWireColor() : undefined,
+      potValue: state.toolValue.potentiometer,
+      wireColor: type === 'wire' || type === 'ywire' ? state.toolValue.wireColor : undefined,
+      wireGauge: state.toolValue.wireGauge,
       scopeColor: type === 'scope' ? nextScopeColor() : undefined,
     });
     if (part) addPart(part);
@@ -639,28 +633,9 @@
       container.appendChild(makeSelect('Output amplitude', Components.BATTERY_VALUES.map((v) => [v, v + ' Vpk']), part.value, (v) => (part.value = Number(v))));
       container.appendChild(makeSelect('Rotation rate', Components.AC_FREQ_VALUES.map((v) => [v, v + ' Hz']), part.freq, (v) => (part.freq = Number(v))));
     } else if (part.type === 'led') {
-      const wrap = document.createElement('div');
-      wrap.className = 'swatches';
-      Components.LED_COLORS.forEach((c) => {
-        const b = document.createElement('button');
-        b.className = 'swatch' + (part.color === c ? ' active' : '');
-        b.style.background = Components.LED_HEX[c];
-        b.addEventListener('click', () => {
-          part.color = c;
-          notify();
-        });
-        wrap.appendChild(b);
-      });
-      container.appendChild(labeled('Color', wrap));
+      container.appendChild(makeSelect('Color', Components.LED_COLORS.map((c) => [c, c[0].toUpperCase() + c.slice(1)]), part.color, (v) => { part.color = v; notify(); }));
     } else if (part.type === 'switch') {
-      const btn = document.createElement('button');
-      btn.className = 'action-btn';
-      btn.textContent = part.closed ? 'Open switch' : 'Close switch';
-      btn.addEventListener('click', () => {
-        part.closed = !part.closed;
-        notify();
-      });
-      container.appendChild(btn);
+      container.appendChild(makeSelect('State', [['closed', 'Closed'], ['open', 'Open']], part.closed ? 'closed' : 'open', (v) => { part.closed = v === 'closed'; notify(); }));
     } else if (part.type === 'pushbutton') {
       const btn = document.createElement('button');
       btn.className = 'action-btn';
@@ -699,33 +674,9 @@
       currentPotRangeEl = range;
       currentPotLabelEl = pctLabel;
     } else if (part.type === 'wire' || part.type === 'ywire') {
-      const wrap = document.createElement('div');
-      wrap.className = 'swatches';
-      Components.WIRE_COLOR_CHOICES.forEach((c) => {
-        const b = document.createElement('button');
-        b.className = 'swatch' + (part.color === c ? ' active' : '');
-        b.style.background = c;
-        b.addEventListener('click', () => {
-          part.color = c;
-          notify();
-        });
-        wrap.appendChild(b);
-      });
-      container.appendChild(labeled('Color', wrap));
-
-      const styleWrap = document.createElement('div');
-      styleWrap.className = 'seg-toggle';
-      [['loop', 'Looped'], ['flat', 'Flat']].forEach(([val, label]) => {
-        const b = document.createElement('button');
-        b.className = 'seg-btn' + ((part.style || 'loop') === val ? ' active' : '');
-        b.textContent = label;
-        b.addEventListener('click', () => {
-          part.style = val;
-          notify();
-        });
-        styleWrap.appendChild(b);
-      });
-      container.appendChild(labeled('Style', styleWrap));
+      container.appendChild(makeSelect('Color', Components.WIRE_COLOR_CHOICES.map((c) => [c, Components.WIRE_COLOR_NAMES[c] || c]), part.color, (v) => { part.color = v; notify(); }));
+      container.appendChild(makeSelect('Gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), part.gauge || 'standard', (v) => { part.gauge = v; notify(); }));
+      container.appendChild(makeSelect('Style', [['loop', 'Looped'], ['flat', 'Flat']], part.style || 'loop', (v) => { part.style = v; notify(); }));
     }
   }
 
@@ -733,13 +684,15 @@
     propsEl.innerHTML = '';
     const part = state.parts.find((p) => p.id === state.selectedPartId);
     if (!part) {
-      propsEl.innerHTML = '<p class="hint">Select a placed part to inspect or edit it.</p>';
       currentReadoutEl = null;
       return;
     }
-    const title = document.createElement('h3');
-    title.textContent = partTitle(part);
-    propsEl.appendChild(title);
+    const card = buildPreviewCard(part.type, part);
+    const idTag = document.createElement('div');
+    idTag.className = 'part-card-id';
+    idTag.textContent = part.id;
+    card.appendChild(idTag);
+    propsEl.appendChild(card);
 
     buildPartControls(part, propsEl, renderProps);
 
@@ -1235,9 +1188,9 @@
       // hidden underneath its body stay reachable for a jumper wire
       const opacity = state.hoverPart && p.id === state.hoverPart.id ? 0.28 : 1;
       if (p.type === 'wire') {
-        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color, opacity, p.style);
+        Components.drawWire(ctx, t[0].x, t[0].y, t[1].x, t[1].y, p.color, opacity, p.style, p.gauge);
       } else if (p.type === 'ywire') {
-        Components.drawYWire(ctx, t, p.color, opacity, p.style);
+        Components.drawYWire(ctx, t, p.color, opacity, p.style, p.gauge);
       } else if (p.type === 'resistor') {
         Components.drawResistor(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'led') {
@@ -1396,7 +1349,7 @@
   // debug/test hook (harmless, purely introspective — used by the automated
   // test harness and handy in the browser console while developing)
   window.__debugState = () => ({
-    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
+    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, gauge: p.gauge, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
@@ -1409,8 +1362,31 @@
     const p = state.parts.find((x) => x.id === id);
     if (p) p.closed = !p.closed;
   };
+  window.__debugToolValue = () => state.toolValue;
   window.__nodeVoltage = (cellId) => {
     const uf = state.lastResult.uf;
     return uf ? state.lastResult.voltages.get(uf.find(cellId)) : undefined;
+  };
+  // automation hook: step the simulation forward `seconds` of sim time in
+  // one synchronous burst (default 1ms steps), instead of waiting on real
+  // wall-clock animation frames. Lets a script (or an AI driving this page
+  // headlessly) evaluate a candidate build's settled/transient behavior
+  // near-instantly, then keep watching it run live afterward same as always
+  // -- the same state.lastResult the render loop itself reads.
+  window.__runFast = (seconds, dt) => {
+    dt = dt || 1 / 1000;
+    const steps = Math.max(1, Math.round(seconds / dt));
+    const elements = toEngineElements();
+    for (let i = 0; i < steps; i++) {
+      state.animT += dt;
+      state.lastResult = circuit.solve(elements, dt);
+    }
+    return {
+      seconds,
+      steps,
+      voltages: Object.fromEntries(state.lastResult.voltages || []),
+      currents: Object.fromEntries(state.lastResult.currents || []),
+      warnings: state.lastResult.warnings,
+    };
   };
 })();
