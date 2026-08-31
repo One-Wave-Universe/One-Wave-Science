@@ -290,7 +290,23 @@
         toolOptionsEl.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), tv.toroidSpacing, (v) => { tv.toroidSpacing = v; renderToolOptions(); }));
       }
     }
+    updateToolboxScrollHint();
   }
+
+  // an OS/browser overlay scrollbar takes no layout space and only fades in
+  // on hover, giving no hint that a tool's own options (e.g. the toroid's
+  // Core/gauge/Sections/Turns/spacing, 5 controls deep) extend below the
+  // sidebar's fold -- so drive the "scroll for more" hint from real
+  // scroll-position math instead of relying on the scrollbar being visible.
+  const toolboxAsideEl = document.querySelector('aside.toolbox');
+  const toolboxScrollHintEl = document.getElementById('toolboxScrollHint');
+  function updateToolboxScrollHint() {
+    const scrollable = toolboxAsideEl.scrollHeight > toolboxAsideEl.clientHeight + 2;
+    const atBottom = toolboxAsideEl.scrollTop + toolboxAsideEl.clientHeight >= toolboxAsideEl.scrollHeight - 2;
+    toolboxScrollHintEl.hidden = !scrollable || atBottom;
+  }
+  toolboxAsideEl.addEventListener('scroll', updateToolboxScrollHint);
+  window.addEventListener('resize', updateToolboxScrollHint);
   function labeled(text, el) {
     const wrap = document.createElement('label');
     wrap.className = 'field';

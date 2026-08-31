@@ -81,8 +81,25 @@
     return res.status + ' ' + res.statusText + (body ? ': ' + body : '');
   }
 
+  // Some providers (OpenAI's chat completions endpoint, notably) never send
+  // CORS headers for browser-origin requests, so a plain page-context
+  // fetch() to them is blocked before the response body is even readable --
+  // that's OpenAI's own platform restriction, not something fixable with
+  // request headers here. In the desktop app, main.js exposes a fetch that
+  // runs in the Node/main process instead (no CORS concept there), routed
+  // through this helper transparently; the plain browser/web build has no
+  // such bridge and falls back to a normal fetch, which still works fine
+  // for the providers that DO allow direct browser calls (Anthropic, Gemini).
+  async function doFetch(url, options) {
+    if (typeof window !== 'undefined' && window.electronAPI && window.electronAPI.aiFetch) {
+      const { ok, status, statusText, text } = await window.electronAPI.aiFetch(url, options);
+      return { ok, status, statusText, text: async () => text, json: async () => JSON.parse(text) };
+    }
+    return fetch(url, options);
+  }
+
   async function callAnthropic({ apiKey, model, userText }) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await doFetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -105,7 +122,7 @@
   }
 
   async function callOpenAI({ apiKey, model, userText }) {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    const res = await doFetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -126,7 +143,7 @@
 
   async function callGemini({ apiKey, model, userText }) {
     const m = model || 'gemini-2.5-flash';
-    const res = await fetch(
+    const res = await doFetch(
       'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent?key=' + encodeURIComponent(apiKey),
       {
         method: 'POST',

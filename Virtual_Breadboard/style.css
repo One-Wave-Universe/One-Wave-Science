@@ -49,6 +49,31 @@ aside.toolbox {
   background: #141922;
   resize: horizontal;
 }
+/* an OS overlay scrollbar (the GTK/Linux default, and most modern browsers)
+   takes no layout space and fades in only on hover, so it's easy to miss
+   that the toroid/wire tool options extend below the fold and think the
+   tool is just missing them. A sticky fade at the bottom -- rather than
+   trying to force a classic always-visible scrollbar via ::-webkit-scrollbar,
+   which overlay-scrollbar browsers ignore entirely -- works regardless of
+   how (or whether) the real scrollbar renders: it sits pinned to the bottom
+   of whatever's currently in view, and stops overlapping content on its own
+   once you've actually scrolled to the true end (nothing left to hide then).
+*/
+.scroll-hint {
+  position: sticky;
+  bottom: 0;
+  height: 26px;
+  margin-top: -26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3px;
+  font-size: 11px;
+  color: #7fa8ff;
+  background: linear-gradient(to bottom, transparent, #141922 70%);
+  pointer-events: none;
+}
+.scroll-hint[hidden] { display: none; }
 .tool-btn {
   display: flex; align-items: center; gap: 10px;
   width: 100%; padding: 9px 10px; margin-bottom: 6px;

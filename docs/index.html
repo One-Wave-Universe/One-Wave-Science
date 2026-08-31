@@ -52,6 +52,31 @@ aside.toolbox {
   background: #141922;
   resize: horizontal;
 }
+/* an OS overlay scrollbar (the GTK/Linux default, and most modern browsers)
+   takes no layout space and fades in only on hover, so it's easy to miss
+   that the toroid/wire tool options extend below the fold and think the
+   tool is just missing them. A sticky fade at the bottom -- rather than
+   trying to force a classic always-visible scrollbar via ::-webkit-scrollbar,
+   which overlay-scrollbar browsers ignore entirely -- works regardless of
+   how (or whether) the real scrollbar renders: it sits pinned to the bottom
+   of whatever's currently in view, and stops overlapping content on its own
+   once you've actually scrolled to the true end (nothing left to hide then).
+*/
+.scroll-hint {
+  position: sticky;
+  bottom: 0;
+  height: 26px;
+  margin-top: -26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3px;
+  font-size: 11px;
+  color: #7fa8ff;
+  background: linear-gradient(to bottom, transparent, #141922 70%);
+  pointer-events: none;
+}
+.scroll-hint[hidden] { display: none; }
 .tool-btn {
   display: flex; align-items: center; gap: 10px;
   width: 100%; padding: 9px 10px; margin-bottom: 6px;
@@ -231,6 +256,7 @@ footer.status-bar {
         <button id="presetRC">RC charging (with switch)</button>
         <button id="presetShort">Short circuit (danger demo)</button>
       </div>
+      <div id="toolboxScrollHint" class="scroll-hint" hidden aria-hidden="true">&#9662; scroll for more</div>
     </aside>
 
     <div class="board-scroll">
@@ -249,6 +275,7 @@ footer.status-bar {
             <select id="aiProvider">
               <option value="anthropic">Anthropic (Claude)</option>
               <option value="openai">OpenAI</option>
+              <option value="gemini">Google (Gemini)</option>
               <option value="custom">Custom (OpenAI-compatible)</option>
             </select>
           </label>
@@ -2143,8 +2170,25 @@ footer.status-bar {
     return res.status + ' ' + res.statusText + (body ? ': ' + body : '');
   }
 
+  // Some providers (OpenAI's chat completions endpoint, notably) never send
+  // CORS headers for browser-origin requests, so a plain page-context
+  // fetch() to them is blocked before the response body is even readable --
+  // that's OpenAI's own platform restriction, not something fixable with
+  // request headers here. In the desktop app, main.js exposes a fetch that
+  // runs in the Node/main process instead (no CORS concept there), routed
+  // through this helper transparently; the plain browser/web build has no
+  // such bridge and falls back to a normal fetch, which still works fine
+  // for the providers that DO allow direct browser calls (Anthropic, Gemini).
+  async function doFetch(url, options) {
+    if (typeof window !== 'undefined' && window.electronAPI && window.electronAPI.aiFetch) {
+      const { ok, status, statusText, text } = await window.electronAPI.aiFetch(url, options);
+      return { ok, status, statusText, text: async () => text, json: async () => JSON.parse(text) };
+    }
+    return fetch(url, options);
+  }
+
   async function callAnthropic({ apiKey, model, userText }) {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await doFetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -2167,7 +2211,7 @@ footer.status-bar {
   }
 
   async function callOpenAI({ apiKey, model, userText }) {
-    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    const res = await doFetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -2184,6 +2228,25 @@ footer.status-bar {
     if (!res.ok) throw new Error('OpenAI API error ' + (await readError(res)));
     const data = await res.json();
     return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+  }
+
+  async function callGemini({ apiKey, model, userText }) {
+    const m = model || 'gemini-2.5-flash';
+    const res = await doFetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent?key=' + encodeURIComponent(apiKey),
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt() }] },
+          contents: [{ role: 'user', parts: [{ text: userText }] }],
+        }),
+      }
+    );
+    if (!res.ok) throw new Error('Gemini API error ' + (await readError(res)));
+    const data = await res.json();
+    const parts = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) || [];
+    return parts.map((p) => p.text || '').join('');
   }
 
   // Any OpenAI-chat-completions-compatible endpoint: a local Ollama/LM Studio
@@ -2211,7 +2274,7 @@ footer.status-bar {
     return JSON.stringify(data).slice(0, 500);
   }
 
-  const PROVIDERS = { anthropic: callAnthropic, openai: callOpenAI, custom: callCustom };
+  const PROVIDERS = { anthropic: callAnthropic, openai: callOpenAI, gemini: callGemini, custom: callCustom };
 
   function extractJson(text) {
     const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
@@ -2582,7 +2645,23 @@ footer.status-bar {
         toolOptionsEl.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), tv.toroidSpacing, (v) => { tv.toroidSpacing = v; renderToolOptions(); }));
       }
     }
+    updateToolboxScrollHint();
   }
+
+  // an OS/browser overlay scrollbar takes no layout space and only fades in
+  // on hover, giving no hint that a tool's own options (e.g. the toroid's
+  // Core/gauge/Sections/Turns/spacing, 5 controls deep) extend below the
+  // sidebar's fold -- so drive the "scroll for more" hint from real
+  // scroll-position math instead of relying on the scrollbar being visible.
+  const toolboxAsideEl = document.querySelector('aside.toolbox');
+  const toolboxScrollHintEl = document.getElementById('toolboxScrollHint');
+  function updateToolboxScrollHint() {
+    const scrollable = toolboxAsideEl.scrollHeight > toolboxAsideEl.clientHeight + 2;
+    const atBottom = toolboxAsideEl.scrollTop + toolboxAsideEl.clientHeight >= toolboxAsideEl.scrollHeight - 2;
+    toolboxScrollHintEl.hidden = !scrollable || atBottom;
+  }
+  toolboxAsideEl.addEventListener('scroll', updateToolboxScrollHint);
+  window.addEventListener('resize', updateToolboxScrollHint);
   function labeled(text, el) {
     const wrap = document.createElement('label');
     wrap.className = 'field';
