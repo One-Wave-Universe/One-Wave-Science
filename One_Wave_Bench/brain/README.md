@@ -4,6 +4,32 @@ This package is the first executable slice of the two-state-machine brain. It
 learns and recalls text commands but does not perform speech recognition or
 drive physical motors.
 
+## Shared loop core
+
+`loop_state_machine.py` is the domain-neutral Micro programming build beneath
+command-specific brains. It intentionally contains no speech, motor, chess, or
+physics-domain rules.
+
+It provides:
+
+- deterministic parsing of a small loop DSL;
+- immutable Field/Void build-profile provenance;
+- the five-state lifecycle validator;
+- exact `Micro -> Small -> Mid -> Large -> Macro` compression order;
+- `MIRROR -> RELEASE` turnaround;
+- exact `Large -> Mid -> Small -> Micro` expression return;
+- `PHASE` before the next compression cycle;
+- append-only SHA-256 digest-chained event receipts;
+- deterministic replay of active process state and simple process memory.
+
+This exact replay layer is deliberately separate from associative memory.
+Receipt replay answers what actually happened in the running machine.
+Constellation/rabbit-hop/Hopfield/Boltzmann reconstruction answers what missing
+relational content can be rebuilt from a partial cue.
+
+Field and Void use the same loop engine. They may have different roles and
+authority, but they do not get incompatible parsers or hidden route grammars.
+
 ## Fixed processing chain
 
 1. **BC–DC:** binary choice and direct command selection.
@@ -87,6 +113,7 @@ retains the shared odd bridge instead of trying to decode it without its anchor.
 ## Test
 
 ```bash
+python -m unittest One_Wave_Bench.brain.test_loop_state_machine -v
 python -m unittest One_Wave_Bench.brain.test_command_memory
 ```
 
