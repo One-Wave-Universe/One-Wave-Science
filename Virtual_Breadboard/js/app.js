@@ -948,6 +948,108 @@
     else window.open(url, '_blank');
   });
 
+  // executor: fetch an external <script src="..."> or <link rel=stylesheet
+  // href="..."> file's text so it can be inlined. Only used in the
+  // multi-file app/web build -- an already-exported standalone file has no
+  // such external resources left to fetch (everything's inline already), so
+  // callers treat a failed/empty fetch as "already inline, nothing to do".
+  async function fetchText(url) {
+    try {
+      const res = await fetch(url);
+      return res.ok ? await res.text() : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // generator: a single self-contained HTML file -- this exact build, this
+  // exact circuit -- that opens and runs in any browser with no install, no
+  // server, and none of the multi-file project structure. Works whether
+  // this page is itself the multi-file app (Electron/plain browser, where
+  // the css/js are separate files to fetch-and-inline) or already a
+  // previously-exported standalone file (where they're already inline and
+  // just get carried over as-is) being re-shared after further edits.
+  async function buildExportHtml() {
+    const styleLink = document.querySelector('link[rel="stylesheet"][href]');
+    const styleText = styleLink
+      ? (await fetchText(styleLink.getAttribute('href'))) || ''
+      : Array.from(document.querySelectorAll('head style')).map((s) => s.textContent).join('\n');
+
+    const scriptEls = Array.from(document.body.querySelectorAll('script'));
+    const scriptTexts = [];
+    for (const el of scriptEls) {
+      if (el.src) {
+        const text = await fetchText(el.getAttribute('src'));
+        if (text != null) scriptTexts.push(text);
+      } else {
+        scriptTexts.push(el.textContent);
+      }
+    }
+
+    // a clean copy of the live DOM, minus the <script> tags (re-added below,
+    // inlined) and minus anything that shouldn't ever leave this machine --
+    // an API key typed into the AI settings must never ride along in a file
+    // meant to be handed to someone else
+    const bodyClone = document.body.cloneNode(true);
+    bodyClone.querySelectorAll('script').forEach((s) => s.remove());
+    ['aiApiKey', 'aiEndpoint', 'aiModel'].forEach((id) => {
+      const el = bodyClone.querySelector('#' + id);
+      if (el) el.value = '';
+    });
+    // reset every element app.js populates at startup/runtime back to its
+    // pristine index.html state -- cloning the LIVE, already-populated DOM
+    // and then letting the reopened file's own app.js populate it AGAIN on
+    // top would duplicate anything built with appendChild (the toolbox's
+    // palette buttons, notably) instead of cleanly replacing it
+    ['toolbox', 'toolOptions', 'props', 'scopeLegend', 'warnings', 'aiStatus', 'contextMenuControls'].forEach((id) => {
+      const el = bodyClone.querySelector('#' + id);
+      if (el) el.innerHTML = '';
+    });
+    const hoverReadoutClone = bodyClone.querySelector('#hoverReadout');
+    if (hoverReadoutClone) hoverReadoutClone.textContent = "Hover a hole to read its node voltage.";
+    // a transient status message (e.g. this very "building export..." flash)
+    // can be mid-fade at the instant of cloning -- its text and inline
+    // opacity would otherwise ship baked into the file as a stale message
+    const flashClone = bodyClone.querySelector('#flash');
+    if (flashClone) { flashClone.textContent = ''; flashClone.removeAttribute('style'); }
+
+    const stateBootstrap = 'window.__EXPORT_STATE__ = ' + JSON.stringify({ layout: currentLayoutKey, parts: state.parts }) + ';';
+    // this file (app.js) is itself one of the scripts getting inlined below,
+    // so writing the literal closing-script-tag text directly in this
+    // source file would prematurely end the tag when the browser parses
+    // the exported HTML -- build it from pieces instead, producing the
+    // same string at runtime without that literal sequence ever appearing
+    // contiguously in app.js's own source
+    const closeTag = '<' + '/script>';
+    const scripts = [stateBootstrap].concat(scriptTexts).map((t) => '<script>\n' + t + '\n' + closeTag).join('\n\n');
+
+    return [
+      '<title>Virtual Breadboard Simulator - shared circuit</title>',
+      '<style>\n' + styleText + '\n</style>',
+      bodyClone.innerHTML.trim(),
+      scripts,
+    ].join('\n\n');
+  }
+
+  document.getElementById('btnExport').addEventListener('click', async () => {
+    try {
+      flashStatus('Building export file...');
+      const html = await buildExportHtml();
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'breadboard-circuit.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      flashStatus('Exported -- open the downloaded file in any browser to view/run this circuit.');
+    } catch (e) {
+      flashStatus('Could not export: ' + e.message);
+    }
+  });
+
   // executor: swap in a different board layout. Each board keeps its own
   // power rails (namespaced cellIds) unless the user bridges them with an
   // ordinary jumper wire -- exactly like separate physical boards on a
@@ -983,31 +1085,35 @@
       flashStatus('Could not save: ' + e.message);
     }
   });
+  // shared by the Load button (reads localStorage) and by opening an
+  // exported/shared circuit file (reads the bootstrap the export baked in)
+  function applySavedState(saved) {
+    // older saves stored a bare parts array with no layout info
+    const layoutKey = Array.isArray(saved) ? '1large' : saved.layout || '1large';
+    const loaded = Array.isArray(saved) ? saved : saved.parts;
+    if (layoutKey !== currentLayoutKey && LAYOUT_PRESETS[layoutKey]) {
+      currentLayoutKey = layoutKey;
+      boardLayoutEl.value = layoutKey;
+      board = Board.build(LAYOUT_PRESETS[layoutKey]);
+      state.board = board;
+      setupCanvas();
+    }
+    let maxId = 0;
+    loaded.forEach((p) => {
+      const n = parseInt(String(p.id).slice(1), 10);
+      if (!Number.isNaN(n)) maxId = Math.max(maxId, n);
+    });
+    state.nextId = maxId + 1;
+    state.parts = loaded;
+    state.selectedPartId = null;
+    circuit.reset();
+    renderProps();
+  }
   document.getElementById('btnLoad').addEventListener('click', () => {
     try {
       const raw = localStorage.getItem('virtual-breadboard-save');
       if (!raw) return flashStatus('No saved build found.');
-      const saved = JSON.parse(raw);
-      // older saves stored a bare parts array with no layout info
-      const layoutKey = Array.isArray(saved) ? '1large' : saved.layout || '1large';
-      const loaded = Array.isArray(saved) ? saved : saved.parts;
-      if (layoutKey !== currentLayoutKey && LAYOUT_PRESETS[layoutKey]) {
-        currentLayoutKey = layoutKey;
-        boardLayoutEl.value = layoutKey;
-        board = Board.build(LAYOUT_PRESETS[layoutKey]);
-        state.board = board;
-        setupCanvas();
-      }
-      let maxId = 0;
-      loaded.forEach((p) => {
-        const n = parseInt(String(p.id).slice(1), 10);
-        if (!Number.isNaN(n)) maxId = Math.max(maxId, n);
-      });
-      state.nextId = maxId + 1;
-      state.parts = loaded;
-      state.selectedPartId = null;
-      circuit.reset();
-      renderProps();
+      applySavedState(JSON.parse(raw));
       flashStatus('Loaded saved build.');
     } catch (e) {
       flashStatus('Could not load: ' + e.message);
@@ -1503,4 +1609,10 @@
       warnings: state.lastResult.warnings,
     };
   };
+
+  // an exported/shared circuit file (see buildExportHtml above) bakes its
+  // circuit in as this global instead of localStorage -- load it the same
+  // way opening the app and clicking Load would, so whoever it was sent to
+  // sees the actual build running the moment the file opens, no extra step
+  if (window.__EXPORT_STATE__) applySavedState(window.__EXPORT_STATE__);
 })();
