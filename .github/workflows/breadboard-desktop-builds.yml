@@ -1,12 +1,15 @@
 name: Virtual Breadboard - Desktop Installers (manual)
 
-# One-off trigger only -- this does not run on every push. workflow_dispatch
-# only becomes clickable from the Actions tab/API once this file exists on
-# the repo's default branch, so until then, push a tag matching
-# "build-desktop-*" (from any branch) to fire a run immediately.
+# workflow_dispatch only becomes clickable from the Actions tab/API once
+# this file exists on the repo's default branch. Until this is merged to
+# main, the branches: trigger below fires a run on every push to this
+# feature branch instead -- remove it once workflow_dispatch works from
+# the Actions tab, so this doesn't build on every future push.
 on:
   workflow_dispatch:
   push:
+    branches:
+      - 'claude/virtual-breadboard-simulator-q29p86'
     tags:
       - 'build-desktop-*'
 
