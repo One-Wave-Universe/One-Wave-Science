@@ -58,8 +58,6 @@
   }
 
   function machineBias(side,m){
-    // Both use the same legal move set; their current loop state biases which
-    // legal move they prefer so this is visibly two different state machines.
     const gate=side==='FIELD'?(window.fieldStep||0):(window.voidStep||0);
     const sound=side==='FIELD'?window.FIELD_SOUND_TOKEN:window.VOID_SOUND_TOKEN;
     const captureScore=m.capture?(value[PIECES[m.capture]]||0)*12:0;
@@ -81,15 +79,22 @@
     return window.board?.some(row=>row.includes(k));
   }
 
-  let timer=null, running=false, delay=700;
-  function step(){
-    if(!running)return;
+  let timer=null, running=false, delay=900, busy=false;
+  async function step(){
+    if(!running||busy)return;
     if(!kingAlive('FIELD')||!kingAlive('VOID')){ stop(); return; }
     const side=window.turn;
     const m=choose(side);
     if(!m){stop();return;}
-    window.selected={...m.from};
-    window.clickSquare(m.to.r,m.to.c);
+    busy=true;
+    try{
+      // No piece moves directly. The machine must first drive its pointer:
+      // quadratic oversight observes the candidate, ternary windings select
+      // the virtual switch state, then downward override commits the action.
+      if(window.ONE_WAVE_POINTERS) await window.ONE_WAVE_POINTERS.touch(side,m);
+      window.selected={...m.from};
+      window.clickSquare(m.to.r,m.to.c);
+    } finally { busy=false; }
   }
   function start(){
     if(running)return;
@@ -101,13 +106,13 @@
     running=false;if(timer){clearInterval(timer);timer=null;}
     const b=document.getElementById('autoMatchBtn');if(b)b.textContent='▶ START MATCH';
   }
-  function setSpeed(ms){delay=Math.max(120,Number(ms)||700);if(running){stop();start();}}
+  function setSpeed(ms){delay=Math.max(700,Number(ms)||900);if(running){stop();start();}}
 
   function addControls(){
     const controls=document.querySelector('.controls');if(!controls)return;
     if(document.getElementById('autoMatchBtn'))return;
     const btn=document.createElement('button');btn.id='autoMatchBtn';btn.textContent='▶ START MATCH';btn.onclick=()=>running?stop():start();
-    const speed=document.createElement('select');speed.id='matchSpeed';speed.innerHTML='<option value="1200">Slow</option><option value="700" selected>Match</option><option value="300">Fast</option>';
+    const speed=document.createElement('select');speed.id='matchSpeed';speed.innerHTML='<option value="1500">Slow</option><option value="900" selected>Match</option><option value="700">Fast</option>';
     speed.onchange=()=>setSpeed(speed.value);
     controls.prepend(speed);controls.prepend(btn);
   }
