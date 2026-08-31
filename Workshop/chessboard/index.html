@@ -1,44 +1,36 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sentient Surrender — The Mind Render</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sentient Surrender</title>
 <style>
-:root{--bg:#101010;--panel:#181818;--line:#444;--light:#d8d8d8;--dark:#5b5b5b;--field:#efefef;--void:#2b2b2b}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:#eee;font-family:system-ui,sans-serif}
-body{display:flex;align-items:center;justify-content:center;padding:18px}.arena{width:min(1180px,98vw);display:grid;grid-template-columns:180px minmax(420px,720px) 180px;gap:18px;align-items:center}
-.player{height:min(76vh,720px);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
-.player h2{margin:0;font-size:18px;letter-spacing:.12em}.fieldName{color:#eee}.voidName{color:#aaa}.rack{width:112px;min-height:330px;border:1px solid #555;border-radius:12px;padding:10px;display:flex;align-content:flex-start;justify-content:center;gap:7px;flex-wrap:wrap;background:#0d0d0d}
-.captured{width:29px;height:29px;border-radius:50%;border:2px solid #777;box-shadow:inset 0 0 0 4px #111}.captured.fieldPiece{background:#e6e6e6}.captured.voidPiece{background:#303030}
-.center{display:flex;flex-direction:column;align-items:center;gap:12px}.title{font-size:22px;font-weight:800;letter-spacing:.05em}.board{width:min(72vw,72vh,720px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:4px solid #777}.sq{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0}.sq.light{background:var(--light)}.sq.dark{background:var(--dark)}
-.piece{width:72%;height:72%;border-radius:50%;border:3px solid #777;box-shadow:inset 0 0 0 6px #1115,0 3px 8px #0008}.piece.fieldPiece{background:#ececec}.piece.voidPiece{background:#282828}.piece.king::after{content:'K';display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-weight:900;font-size:clamp(14px,2vw,26px);color:#888}.piece.fieldPiece.king::after{color:#333}.controls{height:42px;display:flex;align-items:center;justify-content:center}.controls button{font:700 14px system-ui;padding:10px 18px;border-radius:999px;border:1px solid #777;background:#242424;color:#eee;cursor:pointer}.turn{font-size:12px;color:#999;min-height:18px}
-@media(max-width:900px){.arena{grid-template-columns:110px 1fr 110px;gap:8px}.player{height:auto;min-height:520px}.rack{width:80px}.board{width:min(74vw,680px)}}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#111}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#board{width:min(92vmin,760px);height:min(92vmin,760px);display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:6px solid #777;box-shadow:0 14px 40px #000a}
+.sq{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.light{background:#d7d7d7}
+.dark{background:#565656}
+.piece{width:68%;aspect-ratio:1;border-radius:50%;border:3px solid #777;box-shadow:inset 0 0 0 6px #0002,0 3px 7px #0008}
+.field{background:#ececec}
+.void{background:#242424}
 </style>
 </head>
 <body>
-<div class="arena">
-  <aside class="player" id="fieldPlayer"><h2 class="fieldName">FIELD</h2><div id="fieldRack" class="rack"></div></aside>
-  <main class="center"><div class="title">SENTIENT SURRENDER</div><div id="board" class="board"></div><div class="controls"><button id="startBtn">START MATCH</button></div><div id="turnText" class="turn"></div></main>
-  <aside class="player" id="voidPlayer"><h2 class="voidName">VOID</h2><div id="voidRack" class="rack"></div></aside>
-</div>
+<div id="board" aria-label="grayscale checkers board"></div>
 <script>
-const E='',F='f',V='v',FK='F',VK='V';
-const start=[
- [E,V,E,V,E,V,E,V],[V,E,V,E,V,E,V,E],[E,V,E,V,E,V,E,V],[E,E,E,E,E,E,E,E],
- [E,E,E,E,E,E,E,E],[F,E,F,E,F,E,F,E],[E,F,E,F,E,F,E,F],[F,E,F,E,F,E,F,E]
-];
-window.board=[];window.turn='FIELD';window.selected=null;window.fieldStep=0;window.voidStep=0;window.captured={FIELD:[],VOID:[]};
-const clone=b=>b.map(r=>r.slice());
-function sideOf(p){return p===F||p===FK?'FIELD':p===V||p===VK?'VOID':null}
-function isKing(p){return p===FK||p===VK}
-function render(){const el=document.getElementById('board');el.innerHTML='';for(let r=0;r<8;r++)for(let c=0;c<8;c++){const s=document.createElement('div');s.className='sq '+((r+c)%2?'dark':'light');s.dataset.r=r;s.dataset.c=c;const p=window.board[r][c];if(p){const d=document.createElement('div');d.className='piece '+(sideOf(p)==='FIELD'?'fieldPiece':'voidPiece')+(isKing(p)?' king':'');s.appendChild(d)}el.appendChild(s)}renderRack('FIELD');renderRack('VOID');document.getElementById('turnText').textContent=window.turn+' to move'}
-function renderRack(side){const rack=document.getElementById(side==='FIELD'?'fieldRack':'voidRack');rack.innerHTML='';for(const p of window.captured[side]){const d=document.createElement('div');d.className='captured '+(sideOf(p)==='FIELD'?'fieldPiece':'voidPiece');rack.appendChild(d)}}
-function resetGame(){window.board=clone(start);window.turn='FIELD';window.selected=null;window.fieldStep=0;window.voidStep=0;window.captured={FIELD:[],VOID:[]};render()}
-window.applyMove=function(m){const p=window.board[m.from.r][m.from.c],target=window.board[m.to.r][m.to.c];window.board[m.from.r][m.from.c]=E;if(m.capture){const cp=window.board[m.capture.r][m.capture.c];window.board[m.capture.r][m.capture.c]=E;window.captured[window.turn].push(cp)}else if(target){window.captured[window.turn].push(target)}let np=p;if(p===F&&m.to.r===0)np=FK;if(p===V&&m.to.r===7)np=VK;window.board[m.to.r][m.to.c]=np;if(window.turn==='FIELD'){window.fieldStep=(window.fieldStep+1)%6;window.turn='VOID'}else{window.voidStep=(window.voidStep+1)%6;window.turn='FIELD'}render()}
-window.startAudio=async function(){if(window._ac)return;const ac=new (window.AudioContext||window.webkitAudioContext)();window._ac=ac;const master=ac.createGain();master.gain.value=.12;master.connect(ac.destination);let beat=0;const notes=[261.6,329.6,392,523.2,392,329.6,293.7,440];window._music=setInterval(()=>{const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type='square';o.frequency.value=notes[beat++%notes.length];g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.18,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.14);o.connect(g).connect(master);o.start(t);o.stop(t+.15)},180)}
-resetGame();
+const board=document.getElementById('board');
+for(let r=0;r<8;r++){
+  for(let c=0;c<8;c++){
+    const sq=document.createElement('div');
+    const dark=(r+c)%2===1;
+    sq.className='sq '+(dark?'dark':'light');
+    if(dark && r<3){const p=document.createElement('div');p.className='piece void';sq.appendChild(p)}
+    if(dark && r>4){const p=document.createElement('div');p.className='piece field';sq.appendChild(p)}
+    board.appendChild(sq);
+  }
+}
 </script>
-<script src="pointer_controller.js"></script>
-<script src="local_brain_bridge.js"></script>
-<script src="auto_match.js"></script>
-</body></html>
+</body>
+</html>
