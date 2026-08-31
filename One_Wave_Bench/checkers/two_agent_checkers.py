@@ -1,8 +1,9 @@
 """Visible grayscale checkers lab for two mounted state-machine agents.
 
 Architecture under test:
-    grayscale pixels -> M4 loop -> Field state machine -> Void state machine
-    -> attempted move -> world consequence -> persistent memory -> next cycle
+    grayscale framebuffer -> Micro receptor cells -> M4 repeating loop
+    -> Field state machine -> Void state machine -> attempted move
+    -> world consequence -> persistent memory -> next cycle
 
 The environment is deliberately dumb reality:
 - plugins see the grayscale framebuffer, not the symbolic board;
@@ -148,7 +149,7 @@ class CheckersApp:
         self.illegal_losses = {field_agent.name: 0, void_agent.name: 0}
 
         self.root = tk.Tk()
-        self.root.title("One-Wave Field vs Void Vision Checkers")
+        self.root.title("Sentient Surrender: The Mind Render")
         width = BOARD * CELL + 2 * PAD
         height = BOARD * CELL + 2 * PAD + STATUS_H
         self.canvas = tk.Canvas(self.root, width=width, height=height, bg="#202020")
@@ -217,7 +218,7 @@ class CheckersApp:
         self.canvas.create_text(PAD, fy + 26, anchor="w", fill="#cfcfcf",
                                 text=f"BLACK: {black}     WHITE: {white}   (sides swap every game)")
         self.canvas.create_text(PAD, fy + 52, anchor="w", fill="#a9a9a9",
-                                text="Grayscale pixels in. Move out. Illegal move = immediate loss.")
+                                text="Grayscale -> Micro receptor cells -> Field/Void loop. Illegal = loss.")
         self.canvas.create_text(
             PAD, fy + 78, anchor="w", fill="#999999",
             text=(f"Wins: Field {self.wins[self.field_agent.name]} / Void {self.wins[self.void_agent.name]}   "
@@ -225,7 +226,7 @@ class CheckersApp:
                   f"Void {self.illegal_losses[self.void_agent.name]}"),
         )
         self.canvas.create_text(PAD, fy + 104, anchor="w", fill="#858585",
-                                text=(f"Last: {self.last_terminal}" if self.last_terminal else "Learning from consequences only"))
+                                text=(f"Last: {self.last_terminal}" if self.last_terminal else "Subconscious Fender Bender"))
 
     def start(self) -> None:
         if not self.running:
