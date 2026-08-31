@@ -88,6 +88,15 @@ linear-algebra method SPICE-class simulators use:
   holes in blue, so you can still target a hole hidden under a component's
   body; hovering with a placement tool active also rings the hole it'll
   snap to next.
+- **Multiple boards**: the **Boards** dropdown in the header switches
+  between 1 or 2 large (63-column) boards, 2 or 4 small (30-column)
+  boards, or a large board plus 1-2 small ones — laid out side by side
+  like real boards on a desk. Every board keeps its own independent power
+  rails and node numbering by default (a jumper on one board's `+` rail
+  never touches another board's), exactly like separate physical boards —
+  bridge two boards' nodes (or share a supply across them) the same way
+  you'd bridge two points on one board: an ordinary jumper wire, clicking
+  a hole on one board then a hole on another.
 
 This is deliberately a simplified analog model (piecewise-linear diodes,
 not a full Shockley exponential; real time-domain AC sources and inductors,
@@ -174,6 +183,9 @@ fetch one.
 
 ## Using the simulator
 
+0. Pick a board layout from the **Boards** dropdown in the header first if
+   you want more than one board (1/2 Large, 2/4 Small, or Large + Small) —
+   changing it starts the build over, so do it before you place parts.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
    Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe).

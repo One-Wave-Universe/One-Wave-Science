@@ -1,7 +1,15 @@
 (function () {
   'use strict';
 
-  const board = Board.build();
+  const LAYOUT_PRESETS = {
+    '1large': [{ size: 'large' }],
+    '2large': [{ size: 'large' }, { size: 'large' }],
+    '2small': [{ size: 'small' }, { size: 'small' }],
+    '4small': [{ size: 'small' }, { size: 'small' }, { size: 'small' }, { size: 'small' }],
+    '1large1small': [{ size: 'large' }, { size: 'small' }],
+    '1large2small': [{ size: 'large' }, { size: 'small' }, { size: 'small' }],
+  };
+  let board = Board.build(LAYOUT_PRESETS['1large']);
   const circuit = new CircuitEngine.Circuit();
 
   const state = {
@@ -33,8 +41,12 @@
   const SCOPE_WINDOW = 3; // seconds of history each probe trace keeps
   const WIRE_COLORS = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7'];
 
-  function H(row, col) {
-    return board.holes.find((h) => h.row === row && h.col === col);
+  // boardIdx defaults to 0 (the primary/first board) -- row+col alone is
+  // ambiguous once more than one board is on the workspace, since every
+  // board has its own row 'a'/col 5/etc.
+  function H(row, col, boardIdx) {
+    const bi = boardIdx == null ? 0 : boardIdx;
+    return board.holes.find((h) => h.row === row && h.col === col && h.boardIdx === bi);
   }
 
   // A real 6-pin trimmer straddles the center channel: 3 pins in one strip
@@ -46,10 +58,12 @@
     const mirrorRow = POT_MIRROR_ROW[anchor.row];
     if (!mirrorRow) return null;
     const c = anchor.col;
-    if (c + 2 > Board.COLS) return null;
+    const bi = anchor.boardIdx || 0;
+    const boardMeta = board.boards[bi];
+    if (!boardMeta || c + 2 > boardMeta.cols) return null;
     return [
-      H(anchor.row, c), H(anchor.row, c + 1), H(anchor.row, c + 2),
-      H(mirrorRow, c), H(mirrorRow, c + 1), H(mirrorRow, c + 2),
+      H(anchor.row, c, bi), H(anchor.row, c + 1, bi), H(anchor.row, c + 2, bi),
+      H(mirrorRow, c, bi), H(mirrorRow, c + 1, bi), H(mirrorRow, c + 2, bi),
     ];
   }
 
@@ -872,9 +886,37 @@
     circuit.reset();
     renderProps();
   });
+
+  // executor: swap in a different board layout. Each board keeps its own
+  // power rails (namespaced cellIds) unless the user bridges them with an
+  // ordinary jumper wire -- exactly like separate physical boards on a
+  // desk. Since existing parts' hole references would no longer line up
+  // with a different board geometry, a layout change starts the board over.
+  const boardLayoutEl = document.getElementById('boardLayout');
+  let currentLayoutKey = '1large';
+  function rebuildBoard(layoutKey) {
+    const layout = LAYOUT_PRESETS[layoutKey];
+    if (!layout) return;
+    if (state.parts.length && !confirm('Changing the board layout clears the current build. Continue?')) {
+      boardLayoutEl.value = currentLayoutKey;
+      return;
+    }
+    currentLayoutKey = layoutKey;
+    board = Board.build(layout);
+    state.board = board;
+    state.parts = [];
+    state.selectedPartId = null;
+    state.pending = [];
+    state.hoverHole = null;
+    state.hoverPart = null;
+    circuit.reset();
+    setupCanvas();
+    renderProps();
+  }
+  boardLayoutEl.addEventListener('change', () => rebuildBoard(boardLayoutEl.value));
   document.getElementById('btnSave').addEventListener('click', () => {
     try {
-      localStorage.setItem('virtual-breadboard-save', JSON.stringify(state.parts));
+      localStorage.setItem('virtual-breadboard-save', JSON.stringify({ layout: currentLayoutKey, parts: state.parts }));
       flashStatus('Saved to browser storage.');
     } catch (e) {
       flashStatus('Could not save: ' + e.message);
@@ -884,7 +926,17 @@
     try {
       const raw = localStorage.getItem('virtual-breadboard-save');
       if (!raw) return flashStatus('No saved build found.');
-      const loaded = JSON.parse(raw);
+      const saved = JSON.parse(raw);
+      // older saves stored a bare parts array with no layout info
+      const layoutKey = Array.isArray(saved) ? '1large' : saved.layout || '1large';
+      const loaded = Array.isArray(saved) ? saved : saved.parts;
+      if (layoutKey !== currentLayoutKey && LAYOUT_PRESETS[layoutKey]) {
+        currentLayoutKey = layoutKey;
+        boardLayoutEl.value = layoutKey;
+        board = Board.build(LAYOUT_PRESETS[layoutKey]);
+        state.board = board;
+        setupCanvas();
+      }
       let maxId = 0;
       loaded.forEach((p) => {
         const n = parseInt(String(p.id).slice(1), 10);
@@ -892,7 +944,9 @@
       });
       state.nextId = maxId + 1;
       state.parts = loaded;
+      state.selectedPartId = null;
       circuit.reset();
+      renderProps();
       flashStatus('Loaded saved build.');
     } catch (e) {
       flashStatus('Could not load: ' + e.message);

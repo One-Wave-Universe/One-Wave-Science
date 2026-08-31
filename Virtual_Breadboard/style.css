@@ -18,7 +18,9 @@ header.top {
 }
 header.top h1 { font-size: 16px; margin: 0; letter-spacing: .02em; }
 header.top p { margin: 0; color: #8a94a3; font-size: 12px; }
-.top-actions { margin-left: auto; display: flex; gap: 8px; }
+.top-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.board-layout-field { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; color: #9aa5b3; }
+.board-layout-field select { background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 5px 8px; }
 .top-actions button, .presets button {
   background: #1c2430;
   border: 1px solid #2c3644;
