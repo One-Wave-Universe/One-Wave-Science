@@ -40,7 +40,7 @@ Flower-of-Life, Seed-of-Life, Fruit-of-Life, and Metatron-style diagrams are per
 | Higgs boson signal | **Mirror-Gate Boundary Response** | The approximately 125 GeV finite pressure-work threshold for a coupled boundary flip; measured anchor, not yet numerically derived by One-Wave. |
 | dark energy | **White Energy** | Large-scale outward ejection and reinjection through quasar/white-hole-scale release; never expansion of space. |
 | cosmic expansion | No One-Wave equivalent | Rejected inside One-Wave. Redshift is assigned to static-background propagation loss and field interaction. |
-| photon | Propagating Light Mode | A traveling electromagnetic/pressure oscillation sampled discretely at interaction. |
+| photon | Focal-Point Measurement | A discrete detector-boundary registration produced when the continuing Propagating Light Mode (the light wave) converges strongly enough at a focal point to cross the measurement threshold. The photon is the registration, not the traveling wave itself. |
 | neutrino | Low-Coupling Return Mode | A weakly coupled transport mode proposed to carry released coupling energy through the return loop. |
 | quark | Vortex Phase | One phase component of a single bounded knot structure, not an independently isolatable bead. |
 | proton | Three-Vortex Knot | Three coupled Vortex Phases inside a closed 3D boundary. |
@@ -139,3 +139,41 @@ The golden ratio applies to the ordered Fibonacci-word length and symbol-count c
 - **Hopfield/Boltzmann motor memory:** associative attractor settling plus probabilistic candidate reconstruction; neither replaces local choice.
 - **Pisot/Salem/Mahler audit:** spectral measurement of contraction, persistent rhythm, expansion, and drift; not a movement generator.
 - **Advanced Mahler methods:** Deninger, Rodriguez-Villegas, and elliptic-dilogarithm tools remain held until a qualifying polynomial exists.
+
+
+## OG Recursive Emergence Terms
+
+| Term | Canonical meaning |
+|---|---|
+| Original Ground / Null | Undivided condition before a selected distinction, direction, identity, or committed state. |
+| Feedback | Returned movement altering the next movement. |
+| Recurrence | Feedback occurring again with the prior return now affecting the new cycle. |
+| Nested Loops | Local, neighboring, and containing feedback loops affecting one another bottom-up and top-down. |
+| Retained Pattern | A relationship that survives repeated cycling. |
+| Memory | A retained pattern available to a later cycle. |
+| Reference | A retained state used as Ground for comparison. |
+| Comparison | Current state measured against retained Reference. |
+| Primitive Awareness | Internal registration of a difference in the system's own state. |
+| Presence | Awareness held as the current condition. |
+| Field | Complete current condition defining available choices. |
+| Choice | Selection among differentials available within the Field. |
+| Move | Choice expressed as state-changing action. |
+| Mirror Gate / Interaction | Shared boundary where movement meets return, resistance, inversion, or consequence. |
+| State | Resulting condition after interaction. |
+| Commit | Result stabilized as the next accepted Ground, Presence, and Field. |
+| Emergence | Stable higher-order behavior created by repeated committed loops. |
+| Beyond / New Scale | Emergence at one scale becoming Ground or Presence at the next. |
+
+Count rule: `22` stages are not the same count as the `6` active gates or the `21+21=42` mirrored operating positions.
+
+
+## Balanced Brain Runtime Terms — Updated 42
+
+| Canonical engineering term | Meaning | Do not collapse into |
+|---|---|---|
+| Five-Line Dream Cube | GPU-dominant expressive workspace operating through Gates 1–5 | Gate 6 authority, anatomical cube claim |
+| M4 Fast Subconscious Sphere | hidden instinct, habit, recall, timing, attention, virtual-switch, and automatic-route layer | third slow brain, final chooser, physical sphere claim |
+| Administrator Double-Pyramid | one CPU-dominant six-vertex bidirectional control geometry | multiple Administrators, decorative pyramid claim |
+| Gate 5-to-6 boundary | evaluation/loop-break/oversight crossing before Commit | automatic speech continuation |
+| Tip-to-tip | focused crossing, handoff, or commit comparison inside the one recursive geometry | duplicate Administrator unit |
+| Base-to-base | broad shared Field comparison and balance inside the one recursive geometry | multiple independent brains |
