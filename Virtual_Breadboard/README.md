@@ -310,8 +310,13 @@ fetch one.
    resistors dissipating more than their rating, LEDs that need a
    current-limiting resistor.
 7. Try the **Example builds** in the sidebar (LED + resistor, RC charging
-   with a switch, and a short-circuit danger demo) to see the physics in
-   action immediately.
+   with a switch, a short-circuit danger demo, and a ternary 3-phase drive —
+   3 Ternary Cells sharing one Virtual Ground reference, each independently
+   deciding hold/positive/negative from its own AC-driven differential and
+   feeding one section of a 3-section toroid; the scope probes tap each
+   cell's sense input to make the 120-degree phase offset visible, since a
+   small winding's own terminal voltage stays pinned near V0 even while its
+   current genuinely rotates) to see the physics in action immediately.
 8. **Save** / **Load** keep a build in the browser's local storage;
    **Clear** wipes the board.
 

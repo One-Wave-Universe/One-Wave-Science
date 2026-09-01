@@ -1183,6 +1183,48 @@
       { type: 'wire', terminals: [H('i', 5), H('i', 20)], color: nextWireColor() },
     ];
   }
+  // The full causal chain from a shared reference to a rotating field:
+  // 3 AC sources (120 degrees apart, one shared V0 reference) each feed one
+  // Ternary Cell's "sense" input; each cell's decision (independently
+  // resolved from comparing its own sense against the shared V0) drives one
+  // winding of a 3-section toroid, with all three windings' return ends
+  // tied together at V0 (a star/wye point). Nothing here is scripted --
+  // every winding's current is a direct, measured consequence of its own
+  // cell's real comparator decision, and the three currents come out 120
+  // degrees apart in time purely because the three reference AC sources
+  // driving the comparisons are (verified: each winding's current tracks
+  // its own cell's decision almost exactly, +/-19.5mA for +/-20mV/1ohm).
+  //
+  // The scope probes below tap each cell's SENSE input, not its winding
+  // output -- a small toroid winding's reactance at a slow, visually-
+  // watchable drive frequency is genuinely negligible next to the switch's
+  // 1 ohm on-resistance (a real electrical fact, not a simulator quirk:
+  // 2*pi*1Hz*25uH is only ~157 micro-ohms), so the winding terminal's
+  // *voltage* stays pinned within a millivolt of V0 even while its
+  // *current* rotates correctly -- exactly like a real low-impedance motor
+  // stator winding. The oscilloscope only plots voltage, so scoping SENSE
+  // is what actually shows the rotation; scoping the winding terminal
+  // would just be an honest but uselessly flat line.
+  function presetTernaryDriveParts() {
+    const v0 = H('c', 8);
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 9 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), v0] },
+      { type: 'acsource', terminals: [H('c', 12), H('d', 8)], value: 0.05, freq: 1, phase: 0 },
+      { type: 'acsource', terminals: [H('c', 16), H('d', 8)], value: 0.05, freq: 1, phase: 120 },
+      { type: 'acsource', terminals: [H('c', 20), H('d', 8)], value: 0.05, freq: 1, phase: 240 },
+      { type: 'ternarycell', terminals: [H('e', 8), H('e', 12), H('c', 24)], value: 0.02 },
+      { type: 'ternarycell', terminals: [H('e', 8), H('e', 16), H('c', 28)], value: 0.02 },
+      { type: 'ternarycell', terminals: [H('e', 8), H('e', 20), H('c', 32)], value: 0.02 },
+      {
+        type: 'toroid', turnsPerSection: [10, 10, 10], core: 'medium', gauge: 'standard', spacing: 'normal',
+        terminals: [H('c', 24), H('d', 8), H('c', 28), H('d', 8), H('c', 32), H('d', 8)],
+      },
+      { type: 'scope', terminals: [H('e', 12)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('e', 16)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('e', 20)], color: nextScopeColor() },
+    ];
+  }
   // executor: the one place that actually clears the board and writes a
   // preset's parts into it.
   function applyPreset(parts) {
@@ -1193,6 +1235,7 @@
   document.getElementById('presetLed').addEventListener('click', () => { applyPreset(presetLedResistorParts()); selectTool('select'); });
   document.getElementById('presetShort').addEventListener('click', () => { applyPreset(presetShortParts()); selectTool('select'); });
   document.getElementById('presetRC').addEventListener('click', () => { applyPreset(presetRCParts()); selectTool('select'); });
+  document.getElementById('presetTernaryDrive').addEventListener('click', () => { applyPreset(presetTernaryDriveParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------
   // Whatever provider is configured plays the same role the hardcoded
@@ -1605,6 +1648,7 @@
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
+    ternaryStates: Object.fromEntries(state.lastResult.ternaryStates || []),
   });
   window.__selectPartById = (id) => {
     state.selectedPartId = id;
