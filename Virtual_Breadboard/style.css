@@ -1,0 +1,218 @@
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  background: #10141a;
+  color: #e8ecf1;
+  font-family: -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  height: 100%;
+}
+.app { display: flex; flex-direction: column; height: 100vh; }
+
+header.top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #232a34;
+  background: #141922;
+}
+header.top h1 { font-size: 16px; margin: 0; letter-spacing: .02em; }
+header.top p { margin: 0; color: #8a94a3; font-size: 12px; }
+.top-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.board-layout-field { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 12px; color: #9aa5b3; }
+.board-layout-field select { background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 5px 8px; }
+.top-actions button, .presets button {
+  background: #1c2430;
+  border: 1px solid #2c3644;
+  color: #cfd8e3;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.top-actions button:hover, .presets button:hover { border-color: #4d8dff; color: #fff; }
+#flash {
+  position: fixed; top: 60px; right: 18px; background: #1c2430; border: 1px solid #2c3644;
+  padding: 8px 12px; border-radius: 8px; font-size: 12px; opacity: 0; transition: opacity .3s;
+}
+
+.workspace { flex: 1; display: flex; min-height: 0; }
+
+aside.toolbox {
+  width: 190px;
+  min-width: 150px;
+  max-width: 420px;
+  flex-shrink: 0;
+  padding: 14px;
+  border-right: 1px solid #232a34;
+  overflow-y: auto;
+  background: #141922;
+  resize: horizontal;
+}
+/* an OS overlay scrollbar (the GTK/Linux default, and most modern browsers)
+   takes no layout space and fades in only on hover, so it's easy to miss
+   that the toroid/wire tool options extend below the fold and think the
+   tool is just missing them. A sticky fade at the bottom -- rather than
+   trying to force a classic always-visible scrollbar via ::-webkit-scrollbar,
+   which overlay-scrollbar browsers ignore entirely -- works regardless of
+   how (or whether) the real scrollbar renders: it sits pinned to the bottom
+   of whatever's currently in view, and stops overlapping content on its own
+   once you've actually scrolled to the true end (nothing left to hide then).
+*/
+.scroll-hint {
+  position: sticky;
+  bottom: 0;
+  height: 26px;
+  margin-top: -26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 3px;
+  font-size: 11px;
+  color: #7fa8ff;
+  background: linear-gradient(to bottom, transparent, #141922 70%);
+  pointer-events: none;
+}
+.scroll-hint[hidden] { display: none; }
+.tool-btn {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 9px 10px; margin-bottom: 6px;
+  background: #1a212b; border: 1px solid #262e3a; border-radius: 8px;
+  color: #cfd8e3; font-size: 13px; cursor: pointer; text-align: left;
+}
+.tool-btn:hover { border-color: #4d8dff; }
+.tool-btn.active { background: #223049; border-color: #4d8dff; color: #fff; }
+.tool-icon { width: 18px; display: inline-block; text-align: center; opacity: .8; }
+
+#toolOptions { margin-top: 14px; border-top: 1px solid #232a34; padding-top: 12px; }
+.field { display: block; margin-bottom: 10px; font-size: 12px; color: #9aa5b3; }
+.field span { display: block; margin-bottom: 4px; }
+.field select, .field input[type="range"] { width: 100%; }
+select {
+  background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 5px;
+}
+.hint { font-size: 12px; color: #8a94a3; line-height: 1.5; }
+.pot-slider { display: flex; align-items: center; gap: 8px; }
+.pot-slider input[type="range"] { flex: 1; width: auto; }
+.pot-pct { font-size: 11px; color: #cfd8e3; font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
+.swatches { display: flex; gap: 6px; }
+.swatch { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; }
+.swatch.active { border-color: #fff; }
+
+.part-card { text-align: center; margin-bottom: 14px; position: relative; }
+.part-card-name {
+  font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+  color: #e8ecf1; margin-bottom: 8px;
+}
+.part-card-frame {
+  width: 150px; height: 108px; margin: 0 auto; border-radius: 10px;
+  background: #1c2430; border: 1px solid #2c3644;
+  display: flex; align-items: center; justify-content: center;
+}
+.part-card-id { font-size: 10px; color: #6d7787; margin-top: 6px; font-family: ui-monospace, monospace; }
+
+.presets { margin-top: 16px; border-top: 1px solid #232a34; padding-top: 12px; }
+.presets h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #6d7787; margin: 0 0 8px; }
+.presets button { display: block; width: 100%; margin-bottom: 6px; text-align: left; }
+
+.board-scroll {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 0%, #1a2130 0%, #10141a 60%);
+}
+#boardCanvas { border-radius: 10px; box-shadow: 0 20px 60px #0008; cursor: crosshair; }
+
+aside.props-panel {
+  width: 260px;
+  min-width: 200px;
+  max-width: 480px;
+  flex-shrink: 0;
+  padding: 14px;
+  border-left: 1px solid #232a34;
+  background: #141922;
+  overflow-y: auto;
+  resize: horizontal;
+}
+aside.props-panel h3 { font-size: 13px; margin: 0 0 12px; color: #cfd8e3; }
+.readout { margin: 12px 0; font-size: 12px; border-top: 1px solid #232a34; padding-top: 10px; }
+.readout div { display: flex; justify-content: space-between; padding: 3px 0; color: #9aa5b3; }
+.readout b { color: #e8ecf1; }
+.action-btn {
+  width: 100%; padding: 8px; margin-top: 8px; border-radius: 8px; border: 1px solid #2c3644;
+  background: #1c2430; color: #cfd8e3; cursor: pointer; font-size: 12px;
+}
+
+.ai-panel { margin-top: 22px; border-top: 1px solid #232a34; padding-top: 16px; }
+.ai-panel h3 { display: flex; align-items: center; justify-content: space-between; }
+.link-btn {
+  background: none; border: 0; color: #6ea8e0; font-size: 11px; cursor: pointer; padding: 0;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.link-btn:hover { color: #93c3ff; }
+.ai-settings { margin-bottom: 12px; padding: 10px; border: 1px solid #232a34; border-radius: 8px; background: #10141a; }
+.ai-settings input[type="text"], .ai-settings input[type="password"] {
+  width: 100%; background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644; border-radius: 6px; padding: 6px 8px; font-size: 12px;
+}
+.ai-prompt {
+  width: 100%; resize: vertical; background: #1a212b; color: #e8ecf1; border: 1px solid #2c3644;
+  border-radius: 8px; padding: 8px; font: 12px/1.4 inherit;
+}
+.ai-status { margin-top: 8px; font-size: 12px; line-height: 1.5; }
+.ai-status.ok { color: #3ddc6b; }
+.ai-status.err { color: #ff8a80; white-space: pre-wrap; }
+.ai-status.busy { color: #9aa5b3; }
+.action-btn:hover { border-color: #4d8dff; }
+.action-btn.danger:hover { border-color: #e0483f; color: #ff8a80; }
+
+.scope-panel {
+  border-top: 1px solid #232a34; background: #10141b; padding: 10px 18px 14px;
+}
+.scope-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.scope-panel h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #6d7787; }
+.scope-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11px; font-family: ui-monospace, monospace; }
+.scope-legend .chip { display: flex; align-items: center; gap: 5px; color: #cfd8e3; }
+.scope-legend .swatch-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+#scopeCanvas { width: 100%; height: 150px; display: block; border-radius: 6px; background: #0a0d12; }
+.scope-panel .hint { margin: 6px 0 0; }
+
+footer.status-bar {
+  display: flex; align-items: center; gap: 18px;
+  padding: 8px 18px; border-top: 1px solid #232a34; background: #141922;
+  font-size: 12px; color: #9aa5b3; min-height: 20px;
+}
+#hoverReadout { font-family: ui-monospace, monospace; }
+#warnings { display: flex; gap: 14px; flex-wrap: wrap; }
+#warnings .ok { color: #3ddc6b; }
+#warnings .warn { color: #ffb020; }
+
+@media (max-width: 900px) {
+  .workspace { flex-direction: column; }
+  aside.toolbox, aside.props-panel { width: auto; border: 0; border-bottom: 1px solid #232a34; }
+}
+
+.seg-toggle { display: flex; gap: 6px; }
+.seg-btn {
+  flex: 1; padding: 6px 8px; border-radius: 6px; border: 1px solid #2c3644;
+  background: #1a212b; color: #9aa5b3; cursor: pointer; font-size: 11px;
+}
+.seg-btn.active { background: #223049; border-color: #4d8dff; color: #fff; }
+.seg-btn:hover { border-color: #4d8dff; }
+
+.context-menu {
+  position: fixed;
+  z-index: 50;
+  width: 230px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #2c3644;
+  background: #171d27;
+  box-shadow: 0 12px 40px #000a;
+}
+.context-menu h4 { margin: 0 0 10px; font-size: 12px; color: #cfd8e3; letter-spacing: .02em; }
+.context-menu .field { display: block; margin-bottom: 10px; font-size: 12px; color: #9aa5b3; }
+.context-menu .field span { display: block; margin-bottom: 4px; }
+.context-menu .action-btn { margin-top: 4px; }

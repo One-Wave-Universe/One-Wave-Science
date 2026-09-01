@@ -1,0 +1,74 @@
+name: Virtual Breadboard - Desktop Installers (manual)
+
+# workflow_dispatch only becomes clickable from the Actions tab/API once
+# this file exists on the repo's default branch. Until this is merged to
+# main, the branches: trigger below fires a run on every push to this
+# feature branch instead -- remove it once workflow_dispatch works from
+# the Actions tab, so this doesn't build on every future push.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'claude/virtual-breadboard-simulator-q29p86'
+    tags:
+      - 'build-desktop-*'
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:appimage
+      - run: npm run dist:deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-installers
+          path: |
+            Virtual_Breadboard/dist/*.AppImage
+            Virtual_Breadboard/dist/*.deb
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:win-installer
+      - run: npm run dist:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installers
+          path: |
+            Virtual_Breadboard/dist/*.exe
+
+  macos:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run dist:mac-dmg
+      - run: npm run dist:mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-installers
+          path: |
+            Virtual_Breadboard/dist/*.dmg
+            Virtual_Breadboard/dist/*.zip

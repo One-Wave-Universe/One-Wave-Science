@@ -1,0 +1,76 @@
+{
+  "name": "virtual-breadboard-simulator",
+  "version": "1.0.0",
+  "description": "A downloadable virtual breadboard: real parts, jumper wires, click-any-hole placement, and live circuit physics (Ohm's law, LED forward drop, RC transients, short-circuit detection).",
+  "main": "main.js",
+  "private": true,
+  "homepage": "https://github.com/One-Wave-Universe/One-Wave-Science",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test/circuit.test.js",
+    "simulate": "node simulate.js",
+    "dist": "electron-builder",
+    "dist:appimage": "electron-builder --linux AppImage",
+    "dist:deb": "electron-builder --linux deb",
+    "dist:win": "electron-builder --win portable zip",
+    "dist:win-installer": "electron-builder --win nsis",
+    "dist:mac": "electron-builder --mac zip",
+    "dist:mac-dmg": "electron-builder --mac dmg",
+    "bundle": "node build-standalone.js"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.onewavescience.virtualbreadboard",
+    "productName": "Virtual Breadboard Simulator",
+    "publish": null,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "style.css",
+      "js/**/*",
+      "build/icon.png",
+      "!test/**"
+    ],
+    "linux": {
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] },
+        { "target": "deb", "arch": ["x64"] }
+      ],
+      "category": "Education",
+      "executableName": "virtual-breadboard-simulator",
+      "icon": "build/icon.png",
+      "maintainer": "One Wave Science <opensource@one-wave-universe.example>"
+    },
+    "win": {
+      "target": [
+        { "target": "portable", "arch": ["x64"] },
+        { "target": "zip", "arch": ["x64"] },
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "build/icon.png"
+    },
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.education",
+      "identity": null
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Virtual Breadboard Simulator"
+    }
+  }
+}

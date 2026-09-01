@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Virtual Breadboard Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <h1>Virtual Breadboard Simulator</h1>
+      <p>Click any hole to place a part. Real Ohm's-law / diode / RC physics runs live underneath.</p>
+    </div>
+    <div class="top-actions">
+      <label class="field board-layout-field"><span>Boards</span>
+        <select id="boardLayout">
+          <option value="1large">1 Large</option>
+          <option value="2large">2 Large</option>
+          <option value="2small">2 Small</option>
+          <option value="3small">3 Small</option>
+          <option value="4small">4 Small</option>
+          <option value="1large1small">1 Large + 1 Small</option>
+          <option value="1large2small">1 Large + 2 Small</option>
+        </select>
+      </label>
+      <button id="btnSave">Save</button>
+      <button id="btnLoad">Load</button>
+      <button id="btnExport" title="Download this exact circuit as one self-contained HTML file you can send to anyone -- opens and runs in any browser, no install needed">Export</button>
+      <button id="btnClear">Clear</button>
+      <button id="btnWebVersion" title="Open the shareable browser/AI version of this simulator">Web Version</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="toolbox">
+      <div id="toolbox"></div>
+      <div id="toolOptions"></div>
+      <div class="presets">
+        <h3>Example builds</h3>
+        <button id="presetLed">LED + resistor</button>
+        <button id="presetRC">RC charging (with switch)</button>
+        <button id="presetShort">Short circuit (danger demo)</button>
+        <button id="presetTernaryDrive" title="3 ternary cells, one shared V0 reference, driving a 3-section toroid -- a rotating field with no scripted phase">Ternary 3-phase drive</button>
+      </div>
+      <div id="toolboxScrollHint" class="scroll-hint" hidden aria-hidden="true">&#9662; scroll for more</div>
+    </aside>
+
+    <div class="board-scroll">
+      <canvas id="boardCanvas"></canvas>
+    </div>
+
+    <aside class="props-panel">
+      <h3>Inspector</h3>
+      <div id="props"></div>
+
+      <div class="ai-panel">
+        <h3>Ask AI to build <button id="aiSettingsToggle" class="link-btn" type="button">settings</button></h3>
+
+        <div id="aiSettings" class="ai-settings" hidden>
+          <label class="field"><span>Provider</span>
+            <select id="aiProvider">
+              <option value="anthropic">Anthropic (Claude)</option>
+              <option value="openai">OpenAI</option>
+              <option value="gemini">Google (Gemini)</option>
+              <option value="custom">Custom (OpenAI-compatible)</option>
+            </select>
+          </label>
+          <label class="field" id="aiEndpointField" hidden><span>Endpoint URL</span>
+            <input id="aiEndpoint" type="text" placeholder="http://localhost:11434/v1/chat/completions">
+          </label>
+          <label class="field"><span>API key</span>
+            <input id="aiApiKey" type="password" placeholder="pasted key stays on this device only" autocomplete="off">
+          </label>
+          <label class="field"><span>Model (optional)</span>
+            <input id="aiModel" type="text" placeholder="uses provider default">
+          </label>
+          <p class="hint">Stored only in this browser's local storage. Sent only to the provider above, directly from this page — never anywhere else.</p>
+        </div>
+
+        <textarea id="aiPrompt" class="ai-prompt" rows="3" placeholder="e.g. build a 9V circuit with a green LED and a current-limiting resistor"></textarea>
+        <button id="aiBuild" class="action-btn">Build it</button>
+        <div id="aiStatus" class="ai-status"></div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="scope-panel">
+    <div class="scope-head">
+      <h3>Oscilloscope</h3>
+      <div id="scopeLegend" class="scope-legend"></div>
+    </div>
+    <canvas id="scopeCanvas" height="150"></canvas>
+    <p class="hint">Use the <b>Scope Probe</b> tool to tap a hole — zero-load, like a real 10MΩ probe. Each probe gets its own trace here, live, so you can check AC/quadrature signals actually look right (and compare against a real scope).</p>
+  </section>
+
+  <footer class="status-bar">
+    <span id="hoverReadout">Hover a hole to read its node voltage.</span>
+    <div id="warnings"></div>
+  </footer>
+</div>
+
+<div id="flash"></div>
+
+<div id="contextMenu" class="context-menu" hidden>
+  <h4 id="contextMenuTitle"></h4>
+  <div id="contextMenuControls"></div>
+  <button id="contextMenuRemove" class="action-btn danger">Remove part</button>
+</div>
+
+<script src="js/circuit.js"></script>
+<script src="js/board.js"></script>
+<script src="js/components.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
