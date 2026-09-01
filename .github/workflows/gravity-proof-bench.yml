@@ -6,12 +6,18 @@ on:
       - 'One_Wave_Bench/gravity/**'
       - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
       - 'Internal_Proofs/09_Gradient_Curvature_Green_Function_Gravity_Bridge.md'
+      - 'Internal_Proofs/10_Exact_Equilateral_Three_Body_Closure_for_Gradient_Curvature_Law.md'
+      - 'Internal_Proofs/11_Source_Response_Reciprocity_and_Universal_Fall_Coupling_Theorem.md'
+      - 'Internal_Proofs/12_Finite_Uniform_Sphere_Smooth_Core_and_Exterior_Form_Factor.md'
       - '.github/workflows/gravity-proof-bench.yml'
   pull_request:
     paths:
       - 'One_Wave_Bench/gravity/**'
       - 'Internal_Proofs/08_Finite_Slope_Sieve_Boundary_and_Assimilation_Proof_Target.md'
       - 'Internal_Proofs/09_Gradient_Curvature_Green_Function_Gravity_Bridge.md'
+      - 'Internal_Proofs/10_Exact_Equilateral_Three_Body_Closure_for_Gradient_Curvature_Law.md'
+      - 'Internal_Proofs/11_Source_Response_Reciprocity_and_Universal_Fall_Coupling_Theorem.md'
+      - 'Internal_Proofs/12_Finite_Uniform_Sphere_Smooth_Core_and_Exterior_Form_Factor.md'
       - '.github/workflows/gravity-proof-bench.yml'
 
 jobs:
@@ -35,3 +41,9 @@ jobs:
 
       - name: Emit gradient-curvature slope receipt
         run: python One_Wave_Bench/gravity/gradient_curvature_slope_bench.py --json
+
+      - name: Emit exact equilateral three-body receipt
+        run: python One_Wave_Bench/gravity/gradient_curvature_three_body_bench.py --json
+
+      - name: Emit finite uniform-sphere receipt
+        run: python One_Wave_Bench/gravity/finite_uniform_sphere_bench.py --json
