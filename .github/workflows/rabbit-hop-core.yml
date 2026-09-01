@@ -1,0 +1,54 @@
+name: Rabbit Hop Core
+
+on:
+  push:
+    paths:
+      - 'RABBIT_HOPPING_CANONICAL.md'
+      - 'ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md'
+      - 'ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md'
+      - 'One_Wave_Bench/rabbit_hop/**'
+      - 'One_Wave_Bench/brain/rabbit_hop_alphabet.py'
+      - 'One_Wave_Bench/brain/test_rabbit_hop_alphabet.py'
+      - 'Nodes/G-721_Sequence_Validation/**'
+      - '.github/workflows/rabbit-hop-core.yml'
+  pull_request:
+    paths:
+      - 'RABBIT_HOPPING_CANONICAL.md'
+      - 'ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md'
+      - 'ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md'
+      - 'One_Wave_Bench/rabbit_hop/**'
+      - 'One_Wave_Bench/brain/rabbit_hop_alphabet.py'
+      - 'One_Wave_Bench/brain/test_rabbit_hop_alphabet.py'
+      - 'Nodes/G-721_Sequence_Validation/**'
+      - '.github/workflows/rabbit-hop-core.yml'
+
+jobs:
+  rabbit-hop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test generic reversible route grammar
+        run: python -m unittest One_Wave_Bench.rabbit_hop.test_route_core -v
+      - name: Test alphabet G-721 adapter regression
+        run: python -m unittest One_Wave_Bench.brain.test_rabbit_hop_alphabet -v
+      - name: Run related G-721 sequence-family reference validator
+        run: python Nodes/G-721_Sequence_Validation/sequence_family_validator.py > /tmp/g721-sequence-receipt.json
+      - name: Emit reversible route receipt
+        run: |
+          python - <<'PY'
+          from One_Wave_Bench.rabbit_hop.route_core import (
+              RouteFamily, WrapperSide, make_receipt, validate_receipt
+          )
+
+          receipt = make_receipt(
+              1,
+              RouteFamily.SHIFT_FIRST,
+              offset=2,
+              wrapper=WrapperSide.UPPER,
+          )
+          validate_receipt(receipt)
+          print(receipt.to_json())
+          PY
