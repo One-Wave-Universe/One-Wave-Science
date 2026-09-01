@@ -9,6 +9,7 @@ on:
       - 'Internal_Proofs/10_Exact_Equilateral_Three_Body_Closure_for_Gradient_Curvature_Law.md'
       - 'Internal_Proofs/11_Source_Response_Reciprocity_and_Universal_Fall_Coupling_Theorem.md'
       - 'Internal_Proofs/12_Finite_Uniform_Sphere_Smooth_Core_and_Exterior_Form_Factor.md'
+      - 'Internal_Proofs/13_Linear_Stability_Theorem_for_Regularized_Equilateral_Three_Body_Orbit.md'
       - '.github/workflows/gravity-proof-bench.yml'
   pull_request:
     paths:
@@ -18,6 +19,7 @@ on:
       - 'Internal_Proofs/10_Exact_Equilateral_Three_Body_Closure_for_Gradient_Curvature_Law.md'
       - 'Internal_Proofs/11_Source_Response_Reciprocity_and_Universal_Fall_Coupling_Theorem.md'
       - 'Internal_Proofs/12_Finite_Uniform_Sphere_Smooth_Core_and_Exterior_Form_Factor.md'
+      - 'Internal_Proofs/13_Linear_Stability_Theorem_for_Regularized_Equilateral_Three_Body_Orbit.md'
       - '.github/workflows/gravity-proof-bench.yml'
 
 jobs:
@@ -47,3 +49,6 @@ jobs:
 
       - name: Emit finite uniform-sphere receipt
         run: python One_Wave_Bench/gravity/finite_uniform_sphere_bench.py --json
+
+      - name: Emit equilateral linear-stability receipt
+        run: python One_Wave_Bench/gravity/equilateral_linear_stability_bench.py --json
