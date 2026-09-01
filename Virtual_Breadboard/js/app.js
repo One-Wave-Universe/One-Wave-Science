@@ -37,6 +37,7 @@
       toroidGauge: 'standard',
       toroidSpacing: 'normal',
       toroidTurns: [10, 10, 10],
+      ternarycell: 0.02,
     },
     pending: [],
     hoverHole: null,
@@ -154,6 +155,12 @@
           windings: toroidWindings(p),
           coupling: p.turnsPerSection.length > 1 ? (Components.TOROID_SPACING_COUPLING[p.spacing] || 0.9) : 0,
         });
+      } else if (p.type === 'ternarycell') {
+        components.push({
+          id: p.id, type: 'ternarycell', label: p.id,
+          ref: p.terminals[0].cellId, sense: p.terminals[1].cellId, out: p.terminals[2].cellId,
+          value: p.value,
+        });
       } else {
         components.push({
           id: p.id, type: p.type, label: p.id,
@@ -248,6 +255,7 @@
       case 'potentiometer': return { value: tv.potentiometer, pos: 0.5 };
       case 'wire': case 'ywire': return { color: tv.wireColor, style: 'loop', gauge: tv.wireGauge };
       case 'toroid': return { turnsPerSection: tv.toroidTurns.slice(0, tv.toroidSections), core: tv.toroidCore, spacing: tv.toroidSpacing };
+      case 'ternarycell': return { value: tv.ternarycell };
       default: return {};
     }
   }
@@ -290,6 +298,8 @@
       if (tv.toroidSections > 1) {
         toolOptionsEl.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), tv.toroidSpacing, (v) => { tv.toroidSpacing = v; renderToolOptions(); }));
       }
+    } else if (state.tool === 'ternarycell') {
+      toolOptionsEl.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), state.toolValue.ternarycell, (v) => { state.toolValue.ternarycell = Number(v); renderToolOptions(); }));
     }
     updateToolboxScrollHint();
   }
@@ -385,6 +395,7 @@
         core: opts.toroidCore, gauge: opts.toroidGauge, spacing: opts.toroidSpacing,
       };
     }
+    if (type === 'ternarycell') return { type: 'ternarycell', terminals: holes.slice(0, 3), value: opts.ternaryDelta };
     return null;
   }
 
@@ -417,6 +428,7 @@
       toroidCore: state.toolValue.toroidCore,
       toroidGauge: state.toolValue.toroidGauge,
       toroidSpacing: state.toolValue.toroidSpacing,
+      ternaryDelta: state.toolValue.ternarycell,
     });
     if (part) addPart(part);
   }
@@ -766,6 +778,8 @@
       if (part.turnsPerSection.length > 1) {
         container.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), part.spacing, (v) => { part.spacing = v; notify(); }));
       }
+    } else if (part.type === 'ternarycell') {
+      container.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), part.value, (v) => (part.value = Number(v))));
     }
   }
 
@@ -851,6 +865,21 @@
           <div><span>I(section ${s + 1})</span><b>${fmtI(Is)}</b></div>
         `;
       }).join('');
+      return;
+    } else if (part.type === 'ternarycell') {
+      // the discrete decision is the whole point of this part -- show it as
+      // an explicit label, not just the millivolt-scale voltages it produces
+      const vRef = va;
+      const vSense = vb;
+      const vOut = vOf(2);
+      const decision = state.lastResult.ternaryStates ? state.lastResult.ternaryStates.get(part.id) : undefined;
+      const decisionLabel = { pos: 'POSITIVE (+)', neg: 'NEGATIVE (−)', hold: 'HOLD (0)' }[decision] || '—';
+      currentReadoutEl.innerHTML = `
+        <div><span>V(ref)</span><b>${fmtV(vRef)}</b></div>
+        <div><span>V(sense) - V(ref)</span><b>${fmtV(vSense - vRef)}</b></div>
+        <div><span>V(out)</span><b>${fmtV(vOut)}</b></div>
+        <div><span>Decision</span><b>${decisionLabel}</b></div>
+      `;
       return;
     } else {
       rows = `
@@ -1439,6 +1468,9 @@
         Components.drawScopeProbe(ctx, p, t[0].x, t[0].y, opacity);
       } else if (p.type === 'toroid') {
         Components.drawToroid(ctx, p, t, opacity);
+      } else if (p.type === 'ternarycell') {
+        const decision = state.lastResult.ternaryStates ? state.lastResult.ternaryStates.get(p.id) : undefined;
+        Components.drawTernaryCell(ctx, p, t, opacity, decision);
       }
 
       if (p.id === state.selectedPartId) {

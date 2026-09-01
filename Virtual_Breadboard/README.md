@@ -5,7 +5,8 @@ solderless breadboard rendered hole-by-hole, a palette of real parts
 (resistors, LEDs, diodes, capacitors, a power supply, a switch, a momentary
 pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
 an inductor, a real AC source, an MTJ rotary angle sensor, a multi-section
-ferrite toroid transformer, and jumper wires), a built-in oscilloscope,
+ferrite toroid transformer, a ternary nerve cell (a window-comparator-driven
+MOSFET switch pair), and jumper wires), a built-in oscilloscope,
 and a live circuit-physics engine underneath — not a toy animation. Click
 any hole to wire something into it, and the simulator solves the actual
 circuit every frame.
@@ -91,6 +92,19 @@ linear-algebra method SPICE-class simulators use:
   strongly multiple sections couple to each other. This is a linear
   inductance model — it doesn't simulate core saturation (a real ferrite's
   B-H curve) or leakage flux in detail.
+- The **Ternary Cell** models a real window-comparator-driven MOSFET switch
+  pair (a TLV3202-class comparator plus two back-to-back AO3400A-class
+  N-channel MOSFETs) — 3 terminals: `ref`, `sense`, `out`. It compares
+  `sense` against `ref` and resolves `out` to exactly one of three states:
+  driven to `ref + value` (sense reads well above ref), `ref - value` (well
+  below), or held at `ref` through a 100kΩ tie (sense within the ±`value`
+  decision window). This is one state variable, not two independently-
+  closeable switches, so the positive and negative paths can never conduct
+  simultaneously by construction. Real hysteresis (about 15% of the window)
+  keeps sensing noise sitting right at the threshold from repeatedly
+  flipping the decision, and a fresh cell (or one whose control input
+  collapses back to `ref`) always settles in Hold. Wire `ref` to a Virtual
+  Ground output for a proper bench-style reference.
 - The **Oscilloscope** panel below the board is fed by zero-load Scope
   Probes (like a real 10MΩ probe — they never affect the circuit) sampled
   every frame into a rolling window, so AC and quadrature signals are
@@ -244,7 +258,7 @@ fetch one.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
    Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe,
-   Ferrite Toroid).
+   Ferrite Toroid, Ternary Cell).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -269,6 +283,8 @@ fetch one.
      sections and each section's turns count in the tool panel first) —
      click that section's 2 terminal holes, then the next section's 2, and
      so on.
+   - The **Ternary Cell** takes 3 clicks: `ref` (wire this to a Virtual
+     Ground output), `sense` (the signal being compared), then `out`.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it. Both
@@ -429,4 +445,7 @@ its analytic sine at specific points on the simulator's own clock, an MTJ
 sensor's sin/cos quadrature pair holding the sin²+cos²=1 identity, and a
 ferrite toroid transformer (a single winding matching a plain inductor's
 L/R curve exactly, and two coupled windings transforming an AC drive by
-their turns ratio).
+their turns ratio), and a ternary nerve cell resolving exactly one of
+hold/positive/negative from a differential input, with hysteresis proven
+to prevent threshold-noise chatter and a clean return to Hold on control
+disconnect or reset.

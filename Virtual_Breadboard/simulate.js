@@ -149,6 +149,8 @@ function toEngineElements(parts) {
       });
     } else if (p.type === 'vgnd') {
       components.push({ id: p.id, type: 'vgnd', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, out: p.terminals[2].cellId });
+    } else if (p.type === 'ternarycell') {
+      components.push({ id: p.id, type: 'ternarycell', label: p.id, ref: p.terminals[0].cellId, sense: p.terminals[1].cellId, out: p.terminals[2].cellId, value: p.value });
     } else if (p.type === 'acsource') {
       components.push({ id: p.id, type: 'acsource', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, freq: p.freq || 1, phase: p.phase || 0 });
     } else if (p.type === 'mtjsensor') {
@@ -167,11 +169,15 @@ function toEngineElements(parts) {
 }
 
 function snapshot(result) {
-  return {
+  const out = {
     voltages: Object.fromEntries((result && result.voltages) || []),
     currents: Object.fromEntries((result && result.currents) || []),
     warnings: (result && result.warnings) || [],
   };
+  if (result && result.ternaryStates && result.ternaryStates.size) {
+    out.ternaryStates = Object.fromEntries(result.ternaryStates);
+  }
+  return out;
 }
 
 function main() {
