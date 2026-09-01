@@ -1,9 +1,23 @@
-"""Complete mirrored-alphabet rabbit-hop coordinate family for G-721."""
+"""Alphabet/G-721 adapter over the canonical rabbit-hop route core.
+
+The alphabet is one consumer of rabbit hopping, not the definition of rabbit
+hopping itself.  Generic route arithmetic lives in
+`One_Wave_Bench.rabbit_hop.route_core`.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import IntEnum, Enum
+from enum import Enum, IntEnum
+
+from One_Wave_Bench.rabbit_hop.route_core import (
+    Polarity,
+    RouteFamily,
+    WrapperSide,
+    route_address,
+    route_center,
+    shared_shift_boundary,
+)
 
 
 class AlphabetOrientation(str, Enum):
@@ -63,12 +77,31 @@ def coordinate(
     odd_side: OddSide = OddSide.UPPER,
 ) -> RabbitHopCoordinate:
     n = alphabet_rank(letter, orientation)
-    sign = int(polarity)
-    even_unsigned = 2 * (n + int(anchor))
-    odd_unsigned = even_unsigned + int(odd_side)
+    core_polarity = Polarity(int(polarity))
+    offset = int(anchor)
+    even = route_address(
+        n,
+        RouteFamily.SHIFT_FIRST,
+        offset=offset,
+        wrapper=WrapperSide.CENTER,
+        polarity=core_polarity,
+    )
+    odd = route_address(
+        n,
+        RouteFamily.SHIFT_FIRST,
+        offset=offset,
+        wrapper=WrapperSide(int(odd_side)),
+        polarity=core_polarity,
+    )
     return RabbitHopCoordinate(
-        letter.upper(), orientation, polarity, anchor, odd_side,
-        sign * n, sign * even_unsigned, sign * odd_unsigned,
+        letter.upper(),
+        orientation,
+        polarity,
+        anchor,
+        odd_side,
+        int(polarity) * n,
+        even,
+        odd,
     )
 
 
@@ -111,14 +144,26 @@ def shared_odd_bridge(
     orientation: AlphabetOrientation = AlphabetOrientation.A_TO_Z,
     polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
 ) -> int:
+    n = alphabet_rank(letter, orientation)
+    bridge = shared_shift_boundary(
+        n,
+        offset=0,
+        polarity=Polarity(int(polarity)),
+    )
     current_upper = coordinate(
-        letter, orientation=orientation, polarity=polarity,
-        anchor=EvenAnchor.CURRENT, odd_side=OddSide.UPPER,
+        letter,
+        orientation=orientation,
+        polarity=polarity,
+        anchor=EvenAnchor.CURRENT,
+        odd_side=OddSide.UPPER,
     )
     next_lower = coordinate(
-        letter, orientation=orientation, polarity=polarity,
-        anchor=EvenAnchor.NEXT, odd_side=OddSide.LOWER,
+        letter,
+        orientation=orientation,
+        polarity=polarity,
+        anchor=EvenAnchor.NEXT,
+        odd_side=OddSide.LOWER,
     )
-    if current_upper.odd != next_lower.odd:
-        raise AssertionError("adjacent even anchors must share their middle odd address")
-    return current_upper.odd
+    if bridge != current_upper.odd or bridge != next_lower.odd:
+        raise AssertionError("alphabet adapter lost canonical shared boundary")
+    return bridge
