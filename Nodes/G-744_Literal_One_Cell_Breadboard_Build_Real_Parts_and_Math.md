@@ -17,6 +17,35 @@ Translate the current One-Wave cell architecture into ordinary low-voltage elect
 
 This node is intentionally staged. It does **not** attempt the entire quadratic / reflex / actuator stack at once. Stage 1 proves one millivolt ternary primitive around one shared reference. Only after that passes is it duplicated to three physical triads and linked into the six-position cell.
 
+## Software pre-verification (simulated, not a bench substitute)
+
+`Virtual_Breadboard/` (repo root, merged to `main`) is a real modified-nodal-analysis
+circuit simulator — it solves the actual electrical equations rather than
+scripting an animation. It implements this node's window-comparator + MOSFET
+switch pair as a first-class "Ternary Cell" component (differential input,
+hysteresis, mutual exclusion by construction between the pos/neg paths, clean
+return to Hold), matching this node's pass conditions in software before
+anything touches a bench.
+
+Available launch paths:
+
+- Interactive, in-browser: open `Virtual_Breadboard/index.html` (or
+  `docs/index.html` for the hosted copy) and use the "Ternary 3-phase drive"
+  preset button, which wires three Ternary Cells to a shared `V0` reference
+  and a toroid exactly as this node's Stage 2/3 triads describe.
+- Headless, for an automated loop (e.g. a Python driver on other hardware):
+  `node Virtual_Breadboard/simulate.js` reads a circuit spec as JSON on
+  stdin and returns solved voltages/currents/warnings/ternary states as
+  JSON — no browser, no npm install, no dependencies beyond Node itself.
+- Regression tests: `node Virtual_Breadboard/test/circuit.test.js` (see its
+  Test 16 for the ternary hold/pos/neg + hysteresis/no-chatter proof).
+- Full usage docs: `Virtual_Breadboard/README.md`.
+
+This does not advance this node's gate. `claim_gate_detail` stays
+"YELLOW until measured on bench" — a correct circuit-equation solve is
+evidence the design is electrically sound on paper, not a substitute for the
+real-component measurements this node's stages require.
+
 ## Locked One-Wave constraints
 
 - one local shared reference `V0` per cell;

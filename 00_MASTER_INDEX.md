@@ -322,6 +322,20 @@ into the main Book1_Chapters set. Now included.
 Inspired Design) — real content, hardware-adjacent, was present in archives
 but not previously categorized anywhere in this repo.
 
+**Virtual_Breadboard/ folder (NEW, merged into main from a feature branch
+via PR #13):** A runnable Electron/browser circuit simulator with a real
+modified-nodal-analysis solver (not a scripted animation) — resistors,
+diodes/LEDs, capacitors, inductors, AC sources, an MTJ quadrature sensor, a
+ferrite toroid with real mutual inductance, a virtual-ground rail splitter,
+and a Ternary Cell implementing Node G-744's window-comparator + MOSFET
+switch-pair primitive with hysteresis. Includes a live oscilloscope, an
+AI-assisted circuit-build panel, a headless `simulate.js` CLI (`node
+Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
+automation, and a physics regression suite (`node
+Virtual_Breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
+Full docs: `Virtual_Breadboard/README.md`. See G-744's own file for the
+node-to-software cross-reference and its claim-gate boundary.
+
 **History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md (historical unintegrated draft):** A differently-structured
 neutrino node (function-node format) distinct from Book1 Ch8's chapter
 treatment. Not reconciled against Ch8 — may be an earlier draft, may contain
