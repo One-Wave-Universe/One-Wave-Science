@@ -194,17 +194,18 @@ A 2D Flower-of-Life, Seed-of-Life, hexagonal, or Metatron-style view is a planar
 
 Before extending the Wave Computer or Android movement language, read:
 
-1. `Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md`
-2. `Nodes/G-721a_Fibonacci_Word_Hop_Validation.md`
-3. `Nodes/G-721b_Sturmian_Binary_Branch_Grammar.md`
-4. `Nodes/G-721c_Episturmian_Multi_Route_Directive_Grammar.md`
-5. `Nodes/G-721d_Arnoux_Rauzy_Strict_Multi_Route_Validation.md`
-6. `Nodes/G-721e_Plastic_Padovan_Three_Rail_Grammar.md`
-7. `Nodes/G-722_Android_Subconscious_Motor_Memory_Architecture.md`
-8. `Nodes/G-723_Pisot_Salem_Mahler_Motor_Stability_Audit.md`
-9. `Nodes/G-723a_Advanced_Mahler_Regulator_Computation_Hold.md`
+1. `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+2. `Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md`
+3. `Nodes/G-721a_Fibonacci_Word_Hop_Validation.md`
+4. `Nodes/G-721b_Sturmian_Binary_Branch_Grammar.md`
+5. `Nodes/G-721c_Episturmian_Multi_Route_Directive_Grammar.md`
+6. `Nodes/G-721d_Arnoux_Rauzy_Strict_Multi_Route_Validation.md`
+7. `Nodes/G-721e_Plastic_Padovan_Three_Rail_Grammar.md`
+8. `Nodes/G-722_Android_Subconscious_Motor_Memory_Architecture.md`
+9. `Nodes/G-723_Pisot_Salem_Mahler_Motor_Stability_Audit.md`
+10. `Nodes/G-723a_Advanced_Mahler_Regulator_Computation_Hold.md`
 
-The complete signed packet family is `±(n,2(n+j),2(n+j)+s)` for
+The bounded historical G-721a validator packet is `±(n,2(n+j),2(n+j)+s)` for
 `j∈{0,1}` and `s∈{-1,+1}`. The even anchor and lower/upper odd side remain in
 the receipt because the shared odd bridge alone is ambiguous. The Fibonacci
 word schedules the lower/upper side around the separately retained even anchor

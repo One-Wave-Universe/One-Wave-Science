@@ -40,8 +40,10 @@ class ConstellationMemoryTests(unittest.TestCase):
             {"flower"}, route_handle="A", context="garden"
         ).receipt
         inverse = receipt.inverted_route()
-        self.assertEqual(inverse[0].source, receipt.route[0].target)
-        self.assertEqual(inverse[0].target, receipt.route[0].source)
+        self.assertEqual(inverse[0].source.tuple, receipt.route[0].target.tuple)
+        self.assertEqual(inverse[0].target.tuple, receipt.route[0].source.tuple)
+        self.assertNotEqual(inverse[0].source.traversal,
+                            receipt.route[0].target.traversal)
         self.assertEqual(inverse[0].connector, receipt.route[0].connector)
 
     def test_mirror_polarity_is_preserved_in_route_receipt(self):
