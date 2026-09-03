@@ -66,15 +66,6 @@
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
-  // LEGACY: the Ternary Cell is a higher-level macro (comparator + MOSFET
-  // pair collapsed into one part with a built-in Hold/Pos/Neg state
-  // machine). Keep it working for existing builds, but new example circuits
-  // should use the discrete nmos/pmos parts below instead -- real switching
-  // built from real transistors, not a pre-decided abstraction.
-  const TERNARY_ON_R = 1; // ohms, a MOSFET switch pair's RDS(on) driving the active state (e.g. AO3400A-class)
-  const TERNARY_HOLD_R = 100000; // ohms, ties the output back to the reference when neither path conducts (e.g. AO3400A-class)
-  const TERNARY_DELTA_DEFAULT = 0.02; // volts, default +/- state displacement from the reference (matches a 20mV first-proof margin)
-  const TERNARY_HYSTERESIS_FRAC = 0.15; // fraction of delta -- a real window comparator's hysteresis, sized so ordinary sensing noise can't repeatedly flip the decision right at a threshold
 
   // Discrete MOSFETs: real parts, real limits. "value" selects between two
   // real part classes rather than a made-up continuous parameter -- the
@@ -157,7 +148,6 @@
       this._capState = new Map(); // component id -> voltage across it last frame
       this._indState = new Map(); // component id -> current through it last frame
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
-      this._ternaryState = new Map(); // ternary-cell id -> 'hold' | 'pos' | 'neg', persists across frames
       this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
       this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
@@ -202,7 +192,6 @@
           uf.find(mtjCosInternal(c));
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
-        if (c.type === 'ternarycell') { uf.find(c.ref); uf.find(c.sense); uf.find(c.out); }
         if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
       });
 
@@ -212,7 +201,6 @@
       const acsources = components.filter((c) => c.type === 'acsource');
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
-      const ternaryCells = components.filter((c) => c.type === 'ternarycell');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
 
       let groundRoot = null;
@@ -256,7 +244,6 @@
           touch(mtjCosInternal(c));
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
-        if (c.type === 'ternarycell') { touch(c.ref); touch(c.sense); touch(c.out); }
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
       });
       roots.add(groundRoot);
@@ -297,11 +284,6 @@
       const diodes = components.filter((c) => c.type === 'led' || c.type === 'diode');
       diodes.forEach((d) => {
         if (!this._ledState.has(d.id)) this._ledState.set(d.id, false);
-      });
-      ternaryCells.forEach((tc) => {
-        // a cell with no prior history (just placed, or a fresh reset --
-        // power just started) always begins in Hold, never mid-decision
-        if (!this._ternaryState.has(tc.id)) this._ternaryState.set(tc.id, 'hold');
       });
       mosfets.forEach((f) => {
         // a fresh MOSFET (just placed, or a fresh reset -- power just
@@ -381,33 +363,6 @@
               stampG(i, j, -g);
               stampG(j, i, -g);
               const Ieq = g * vf;
-              stampI(i, Ieq);
-              stampI(j, -Ieq);
-            }
-          } else if (c.type === 'ternarycell') {
-            // a real window-comparator-driven MOSFET switch pair: exactly
-            // one of {hold, +, -} is ever true at a time (it's one state
-            // variable, not two independently-closeable switches), which by
-            // construction makes the positive and negative paths mutually
-            // exclusive -- there is no shoot-through state to reach.
-            const state = this._ternaryState.get(c.id);
-            const i = gi(uf.find(c.out));
-            const j = gi(uf.find(c.ref));
-            if (state === 'hold') {
-              const g = 1 / TERNARY_HOLD_R;
-              stampG(i, i, g);
-              stampG(j, j, g);
-              stampG(i, j, -g);
-              stampG(j, i, -g);
-            } else {
-              const g = 1 / TERNARY_ON_R;
-              const delta = c.value > 0 ? c.value : TERNARY_DELTA_DEFAULT;
-              const sign = state === 'pos' ? 1 : -1;
-              stampG(i, i, g);
-              stampG(j, j, g);
-              stampG(i, j, -g);
-              stampG(j, i, -g);
-              const Ieq = g * sign * delta;
               stampI(i, Ieq);
               stampI(j, -Ieq);
             }
@@ -655,33 +610,6 @@
           }
         });
 
-        ternaryCells.forEach((tc) => {
-          const vref = voltages.get(uf.find(tc.ref));
-          const vsense = voltages.get(uf.find(tc.sense));
-          const vd = vsense - vref;
-          const delta = tc.value > 0 ? tc.value : TERNARY_DELTA_DEFAULT;
-          const hyst = delta * TERNARY_HYSTERESIS_FRAC;
-          const prev = this._ternaryState.get(tc.id);
-          // a real window comparator's hysteresis: the crossing that ENTERS
-          // a state sits at the nominal threshold, but the crossing that
-          // LEAVES it is offset further out -- so a signal sitting exactly
-          // at the boundary (sensing noise, most commonly) can't repeatedly
-          // re-trigger the decision every iteration/frame
-          let next = prev;
-          if (prev === 'pos') {
-            if (vd < delta - hyst) next = vd < -(delta - hyst) ? 'neg' : 'hold';
-          } else if (prev === 'neg') {
-            if (vd > -(delta - hyst)) next = vd > delta - hyst ? 'pos' : 'hold';
-          } else {
-            if (vd > delta) next = 'pos';
-            else if (vd < -delta) next = 'neg';
-          }
-          if (next !== prev) {
-            this._ternaryState.set(tc.id, next);
-            changed = true;
-          }
-        });
-
         mosfets.forEach((f) => {
           const spec = mosfetSpec(f);
           const vg = voltages.get(uf.find(f.gate));
@@ -768,12 +696,6 @@
           I = 0;
         } else if (c.type === 'toroid') {
           I = toroidCurrent.get(c.id) || 0;
-        } else if (c.type === 'ternarycell') {
-          const vout = voltages.get(uf.find(c.out));
-          const vref = voltages.get(uf.find(c.ref));
-          const state = this._ternaryState.get(c.id);
-          const r = state === 'hold' ? TERNARY_HOLD_R : TERNARY_ON_R;
-          I = (vout - vref) / r;
         } else if (c.type === 'nmos' || c.type === 'pmos') {
           const spec = mosfetSpec(c);
           const vg = voltages.get(uf.find(c.gate));
@@ -824,23 +746,18 @@
         }
       });
 
-      // the discrete decision itself ('hold'/'pos'/'neg'), not just the
-      // millivolt-scale voltage it produces -- lets a nerve-loop/supervisory
-      // layer read the actual state directly instead of re-deriving it from
-      // out/ref voltages every time
-      const ternaryStates = new Map();
-      ternaryCells.forEach((tc) => ternaryStates.set(tc.id, this._ternaryState.get(tc.id)));
-
-      // same idea as ternaryStates: expose the MOSFET's actual on/off
-      // decisions directly, so the Inspector (or a test) doesn't have to
-      // re-derive "is the channel on" from raw currents/voltages itself
+      // expose each MOSFET's actual on/off decisions directly, so the
+      // Inspector (or a test) doesn't have to re-derive "is the channel on"
+      // from raw currents/voltages itself -- these are read off the real
+      // Vgs/Vth comparison and body-diode conduction computed above, not a
+      // separately invented state
       const mosfetStates = new Map();
       mosfets.forEach((f) => mosfetStates.set(f.id, {
         channelOn: this._fetChannelState.get(f.id),
         bodyDiodeOn: this._fetDiodeState.get(f.id),
       }));
 
-      return { voltages, currents, warnings, ternaryStates, mosfetStates, uf, groundRoot, hasCircuit: true };
+      return { voltages, currents, warnings, mosfetStates, uf, groundRoot, hasCircuit: true };
     }
   }
 

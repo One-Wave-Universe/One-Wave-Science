@@ -21,30 +21,44 @@ This node is intentionally staged. It does **not** attempt the entire quadratic 
 
 `Virtual_Breadboard/` (repo root, merged to `main`) is a real modified-nodal-analysis
 circuit simulator — it solves the actual electrical equations rather than
-scripting an animation. It implements this node's window-comparator + MOSFET
-switch pair as a first-class "Ternary Cell" component (differential input,
-hysteresis, mutual exclusion by construction between the pos/neg paths, clean
-return to Hold), matching this node's pass conditions in software before
-anything touches a bench.
+scripting an animation. It does **not** provide this node's window-comparator
+decision as a pre-built part: an earlier revision did (a "Ternary Cell"
+component with a built-in Hold/Pos/Neg state machine), and it was deliberately
+removed, because a simulator that hands back the answer in advance can't be
+used to discover whether the real circuit actually produces it. What the
+simulator provides instead are the discrete, real building blocks this
+node's design is made of — `nmos`/`pmos` (real Vgs threshold, real RDS(on),
+a real always-on body diode, so two of them wired back-to-back genuinely
+block current in both directions when off), a `vgnd` rail-splitter for the
+shared `V0` reference, plus ordinary resistors/capacitors — and the actual
+decision behavior (comparator threshold, hysteresis, Hold) has to be wired
+and proven from those parts, the same as it would on a bench.
 
 Available launch paths:
 
 - Interactive, in-browser: open `Virtual_Breadboard/index.html` (or
-  `docs/index.html` for the hosted copy) and use the "Ternary 3-phase drive"
-  preset button, which wires three Ternary Cells to a shared `V0` reference
-  and a toroid exactly as this node's Stage 2/3 triads describe.
+  `docs/index.html` for the hosted copy) and use the **Calibration boards**
+  sidebar section — Cal C/D prove the discrete-MOSFET switching and
+  bidirectional-blocking this node's design depends on, and the **Memory
+  cell (sample & hold)** preset wires supply + `vgnd` + two back-to-back
+  N-MOSFETs + a cap + a leak resistor into the actual millivolt-scale analog
+  memory this node's Hold state would be built from — probe `mem` vs `V0`
+  in millivolts, same as a bench multimeter would.
 - Headless, for an automated loop (e.g. a Python driver on other hardware):
   `node Virtual_Breadboard/simulate.js` reads a circuit spec as JSON on
-  stdin and returns solved voltages/currents/warnings/ternary states as
-  JSON — no browser, no npm install, no dependencies beyond Node itself.
-- Regression tests: `node Virtual_Breadboard/test/circuit.test.js` (see its
-  Test 16 for the ternary hold/pos/neg + hysteresis/no-chatter proof).
+  stdin and returns solved voltages/currents/warnings/MOSFET channel and
+  body-diode states as JSON — no browser, no npm install, no dependencies
+  beyond Node itself.
+- Regression tests: `node Virtual_Breadboard/test/circuit.test.js` — see
+  T-NFET-ON/OFF, T-NFET-DIODE, T-BB-PAIR, and T-MEM for the switching,
+  body-diode-direction, bidirectional-blocking, and sample/hold proofs.
 - Full usage docs: `Virtual_Breadboard/README.md`.
 
 This does not advance this node's gate. `claim_gate_detail` stays
-"YELLOW until measured on bench" — a correct circuit-equation solve is
-evidence the design is electrically sound on paper, not a substitute for the
-real-component measurements this node's stages require.
+"YELLOW until measured on bench" — a correct circuit-equation solve of the
+discrete parts is evidence they're wired soundly on paper, not a substitute
+for the real-component measurements this node's stages require, and it is
+not a comparator decision handed to you in advance.
 
 ## Locked One-Wave constraints
 

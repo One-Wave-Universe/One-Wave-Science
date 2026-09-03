@@ -68,14 +68,6 @@
       '                how tightly coupled the windings are to each other). One section behaves like',
       '                a plain inductor; 2+ sections are real mutual-inductance-coupled windings on',
       '                one core (an actual transformer, including turns-ratio voltage transformation).',
-      '  ternarycell   LEGACY macro, still supported -- 3 terminals [ref, sense, out]: a window-',
-      '                comparator + back-to-back MOSFET pair collapsed into one part with a built-in',
-      '                Hold/Pos/Neg decision. Prefer nmos/pmos for new designs (build the same',
-      '                behavior from real discrete transistors instead of this pre-decided macro).',
-      '                Compares "sense" against "ref" and drives "out" to exactly one of three states:',
-      '                ref+value (sense reads well above ref), ref-value (well below), or held at ref',
-      '                through a 100k tie (sense within +/-value of ref). "value" is the decision',
-      '                window in volts (default 0.02 for a 20mV first-proof margin).',
       '  nmos          3 terminals [gate, drain, source]: a real discrete N-channel MOSFET (AO3400A/',
       '                2N7000-class). Conducts drain-source only while Vgs (gate minus source) is',
       '                above its real threshold -- a piecewise switch with a fixed on-resistance, not',
@@ -218,7 +210,7 @@
 
   const TERMINALS_NEEDED = {
     wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2,
-    potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1, ternarycell: 3,
+    potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1,
     nmos: 3, pmos: 3,
   };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
@@ -272,9 +264,6 @@
         const t = p.terminals[0];
         if (t && !STRIP_ROWS.has(t.row)) errors.push('part ' + i + ' (potentiometer): anchor must be in row a-j, not a rail ("' + t.row + '")');
         if (t && Number.isInteger(t.col) && t.col > 61) errors.push('part ' + i + ' (potentiometer): anchor column ' + t.col + ' leaves no room for its other 2 columns (max 61)');
-      }
-      if (p.type === 'ternarycell' && p.value != null && !(Number(p.value) > 0)) {
-        errors.push('part ' + i + ' (ternarycell): "value" (decision window) must be a positive number if given');
       }
       if ((p.type === 'nmos' || p.type === 'pmos') && p.value != null && p.value !== 1.5 && p.value !== 2.1) {
         errors.push('part ' + i + ' (' + p.type + '): "value" must be 1.5 (AO3400A/AO3401A-class) or 2.1 (2N7000/BS250-class) if given');

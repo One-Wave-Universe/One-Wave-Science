@@ -388,127 +388,7 @@ function approx(a, b, eps, msg) {
   console.log('Test 15 OK: toroid single-winding matches a plain inductor, two-winding transformer ratio =', (maxVs / maxVp).toFixed(3), '(expect ~2)');
 }
 
-// Test 16: ternary nerve cell (the G-744 one-cell build) -- a window-
-// comparator-driven MOSFET switch pair with exactly three states
-{
-  const delta = 0.02; // 20mV, matching the doc's first-proof margin
-  function solveAt(c, offset, dt) {
-    const els = {
-      wires: [],
-      components: [
-        { id: 'refsrc', type: 'battery', a: 'REF', b: 'GND', value: 0 },
-        { id: 'gapsrc', type: 'battery', a: 'SENSE', b: 'REF', value: offset },
-        { id: 'tc1', type: 'ternarycell', ref: 'REF', sense: 'SENSE', out: 'OUT', value: delta },
-      ],
-    };
-    return c.solve(els, dt || 1 / 60);
-  }
-
-  // fresh cell, sense sitting exactly on the reference -> Hold, never
-  // mid-decision, and OUT settles back at REF through the hold resistor
-  {
-    const c = new Circuit();
-    const res = solveAt(c, 0);
-    assert.strictEqual(res.ternaryStates.get('tc1'), 'hold', 'fresh cell at zero differential starts in Hold');
-    approx(res.voltages.get(res.uf.find('OUT')), res.voltages.get(res.uf.find('REF')), 1e-6, 'Hold ties OUT back to REF');
-  }
-
-  // positive differential opens only the positive path
-  {
-    const c = new Circuit();
-    const res = solveAt(c, delta * 2);
-    assert.strictEqual(res.ternaryStates.get('tc1'), 'pos', 'positive differential -> positive state');
-    const vout = res.voltages.get(res.uf.find('OUT'));
-    const vref = res.voltages.get(res.uf.find('REF'));
-    assert.ok(vout > vref, 'positive state drives OUT above REF');
-  }
-
-  // negative differential opens only the negative path
-  {
-    const c = new Circuit();
-    const res = solveAt(c, -delta * 2);
-    assert.strictEqual(res.ternaryStates.get('tc1'), 'neg', 'negative differential -> negative state');
-    const vout = res.voltages.get(res.uf.find('OUT'));
-    const vref = res.voltages.get(res.uf.find('REF'));
-    assert.ok(vout < vref, 'negative state drives OUT below REF');
-  }
-
-  // center differential (well inside the +/-delta window) opens neither path
-  {
-    const c = new Circuit();
-    const res = solveAt(c, delta * 0.3);
-    assert.strictEqual(res.ternaryStates.get('tc1'), 'hold', 'small centered differential stays in Hold');
-  }
-
-  // both paths can never conduct simultaneously -- there is exactly one
-  // state variable, so this is true by construction; assert it directly
-  // across every differential tried above plus the exact boundary
-  {
-    const c = new Circuit();
-    [-delta * 3, -delta, 0, delta, delta * 3].forEach((offset) => {
-      const res = solveAt(c, offset);
-      const s = res.ternaryStates.get('tc1');
-      assert.ok(s === 'hold' || s === 'pos' || s === 'neg', 'state is always exactly one of hold/pos/neg');
-    });
-  }
-
-  // three genuinely distinct STATE_OUT levels relative to REF
-  {
-    const c = new Circuit();
-    const vHold = solveAt(c, 0).voltages;
-    const outHold = vHold.get(vHold.keys().next().value) !== undefined; // sanity: map is non-empty
-    assert.ok(outHold, 'solve produced voltages');
-    const c2 = new Circuit();
-    const rPos = solveAt(c2, delta * 2);
-    const rNeg = solveAt(c2, -delta * 2);
-    const posOut = rPos.voltages.get(rPos.uf.find('OUT'));
-    const negOut = rNeg.voltages.get(rNeg.uf.find('OUT'));
-    assert.ok(posOut > negOut + 0.01, 'positive and negative STATE_OUT levels are clearly distinguishable');
-  }
-
-  // noise sitting exactly at the nominal threshold cannot repeatedly flip
-  // the decision -- hysteresis holds the prior state until the signal
-  // clears past it by more than the hysteresis band
-  {
-    const c = new Circuit();
-    solveAt(c, delta * 2); // establish 'pos' first
-    let flips = 0;
-    let last = 'pos';
-    for (let i = 0; i < 20; i++) {
-      // hover right at the nominal threshold -- without hysteresis this
-      // would be right on the decision boundary and could chatter
-      const res = solveAt(c, i % 2 === 0 ? delta : delta - 1e-4);
-      const s = res.ternaryStates.get('tc1');
-      if (s !== last) flips++;
-      last = s;
-    }
-    assert.ok(flips === 0, `noise at the threshold must not chatter the decision (saw ${flips} flips)`);
-  }
-
-  // the cell returns to Hold if its control wire effectively disconnects
-  // (sense collapses back to the reference)
-  {
-    const c = new Circuit();
-    solveAt(c, delta * 2); // 'pos'
-    const res = solveAt(c, 0); // sense reconnected at exactly REF
-    assert.strictEqual(res.ternaryStates.get('tc1'), 'hold', 'sense returning to REF returns the cell to Hold');
-  }
-
-  // a brand-new Circuit (power just started) always begins in Hold, even
-  // if the very first differential it ever sees would otherwise be pos/neg
-  // by the time it's actually asked to solve -- reset() must not preserve
-  // a mid-decision state across an explicit reset
-  {
-    const c = new Circuit();
-    solveAt(c, delta * 2); // 'pos'
-    c.reset();
-    assert.strictEqual(c._ternaryState.size, 0, 'reset() clears prior ternary-cell decisions (safe state on power cycle)');
-  }
-
-  console.log('Test 16 OK: ternary nerve cell resolves exactly one of hold/pos/neg, with hysteresis preventing threshold chatter and a clean Hold return on disconnect/reset');
-}
-
-// Test 17 (T-DIV): a 124k/1k divider off a 2.5V mid-rail (5V split by a
+// Test 16 (T-DIV): a 124k/1k divider off a 2.5V mid-rail (5V split by a
 // vgnd) must resolve to 2.520V, not snap/round to 2.500V -- proves the
 // solver actually carries millivolt-scale asymmetry riding on volts, to
 // within 1mV of the exact analytic answer.
@@ -526,10 +406,10 @@ function approx(a, b, eps, msg) {
   const res = c.solve(els, 1 / 60);
   const vN = res.voltages.get(res.uf.find('N'));
   approx(vN, 2.52, 0.001, 'T-DIV: 124k/1k divider off 2.5V mid-rail must resolve to 2.520V within 1mV');
-  console.log('Test 17 OK (T-DIV): divider node =', vN.toFixed(4), 'V (expect 2.5200V)');
+  console.log('Test 16 OK (T-DIV): divider node =', vN.toFixed(4), 'V (expect 2.5200V)');
 }
 
-// Test 18 (T-VGND): Virtual Ground's V0 output must hold the midpoint
+// Test 17 (T-VGND): Virtual Ground's V0 output must hold the midpoint
 // under a real 100k load to a rail, not sag like a plain resistor divider.
 {
   const c = new Circuit();
@@ -555,10 +435,10 @@ function approx(a, b, eps, msg) {
   const resLoaded = c2.solve(elsLoaded, 1 / 60);
   const vLoaded = resLoaded.voltages.get(resLoaded.uf.find('V0'));
   approx(vLoaded, 2.5, 0.001, 'T-VGND: V0 under a 100k load must stay within 1mV of the unloaded midpoint');
-  console.log('Test 18 OK (T-VGND): V0 unloaded =', vUnloaded.toFixed(4), 'V, under 100k load =', vLoaded.toFixed(4), 'V');
+  console.log('Test 17 OK (T-VGND): V0 unloaded =', vUnloaded.toFixed(4), 'V, under 100k load =', vLoaded.toFixed(4), 'V');
 }
 
-// Test 19 (T-NFET-ON): a real N-MOSFET with Vgs=5V (well above its
+// Test 18 (T-NFET-ON): a real N-MOSFET with Vgs=5V (well above its
 // threshold) must conduct, with the drain voltage set exactly by the
 // RDS(on) divider against its load resistor -- not just "some current".
 {
@@ -578,10 +458,10 @@ function approx(a, b, eps, msg) {
   const vExpected = 5 * spec.rdsOn / (1000 + spec.rdsOn);
   approx(vD, vExpected, 1e-4, 'T-NFET-ON: drain voltage must match I*RDS(on) exactly');
   assert.strictEqual(res.mosfetStates.get('f1').channelOn, true, 'T-NFET-ON: channel must be reported on');
-  console.log('Test 19 OK (T-NFET-ON): Vgs=5V conducts, drain =', vD.toFixed(4), 'V (expect', vExpected.toFixed(4), 'V)');
+  console.log('Test 18 OK (T-NFET-ON): Vgs=5V conducts, drain =', vD.toFixed(4), 'V (expect', vExpected.toFixed(4), 'V)');
 }
 
-// Test 20 (T-NFET-OFF): the same N-MOSFET with Vgs=0 (gate tied to source)
+// Test 19 (T-NFET-OFF): the same N-MOSFET with Vgs=0 (gate tied to source)
 // must block the channel entirely -- current through it comes only from
 // whatever the body diode allows, tested separately below.
 {
@@ -600,10 +480,10 @@ function approx(a, b, eps, msg) {
   assert.strictEqual(res.mosfetStates.get('f1').channelOn, false, 'T-NFET-OFF: Vgs=0 must leave the channel off');
   assert.strictEqual(res.mosfetStates.get('f1').bodyDiodeOn, false, 'T-NFET-OFF: reverse-biased body diode must also stay off here (drain above source)');
   approx(res.currents.get('f1'), 0, 1e-6, 'T-NFET-OFF: current through an off FET (no forward-biased diode) must be ~0');
-  console.log('Test 20 OK (T-NFET-OFF): Vgs=0 blocks the channel, current =', res.currents.get('f1'));
+  console.log('Test 19 OK (T-NFET-OFF): Vgs=0 blocks the channel, current =', res.currents.get('f1'));
 }
 
-// Test 21 (T-NFET-DIODE): a single off N-MOSFET's body diode conducts
+// Test 20 (T-NFET-DIODE): a single off N-MOSFET's body diode conducts
 // source->drain past ~0.7V (forward), and blocks drain->source (reverse) --
 // the real body-diode direction that makes back-to-back pairs work.
 {
@@ -634,10 +514,10 @@ function approx(a, b, eps, msg) {
   for (let i = 0; i < 10; i++) resRev = cRev.solve(elsRev, 1 / 60);
   assert.strictEqual(resRev.mosfetStates.get('f1').bodyDiodeOn, false, 'T-NFET-DIODE: drain above source must reverse-bias (block) the body diode');
   approx(resRev.currents.get('f1'), 0, 1e-6, 'T-NFET-DIODE: reverse-biased body diode must pass ~0 current');
-  console.log('Test 21 OK (T-NFET-DIODE): body diode conducts source->drain, blocks drain->source');
+  console.log('Test 20 OK (T-NFET-DIODE): body diode conducts source->drain, blocks drain->source');
 }
 
-// Test 22 (T-BB-PAIR): two N-MOSFETs with sources tied together and both
+// Test 21 (T-BB-PAIR): two N-MOSFETs with sources tied together and both
 // gates tied to that shared source (definitely off) must block current in
 // BOTH directions -- the real bidirectional-switch arrangement (whichever
 // way current would try to flow, one of the two body diodes opposes it).
@@ -662,10 +542,10 @@ function approx(a, b, eps, msg) {
   approx(rev.I, 0, 1e-6, 'T-BB-PAIR: back-to-back pair must block current in the other direction too');
   assert.strictEqual(fwd.res.mosfetStates.get('f1').channelOn, false, 'T-BB-PAIR: both channels stay off');
   assert.strictEqual(fwd.res.mosfetStates.get('f2').channelOn, false, 'T-BB-PAIR: both channels stay off');
-  console.log('Test 22 OK (T-BB-PAIR): 9V across the pair blocks both directions (I =', fwd.I.toExponential(2), 'A /', rev.I.toExponential(2), 'A)');
+  console.log('Test 21 OK (T-BB-PAIR): 9V across the pair blocks both directions (I =', fwd.I.toExponential(2), 'A /', rev.I.toExponential(2), 'A)');
 }
 
-// Test 23 (T-RC): 150k + 100nF must rise on the real tau = R*C = 15ms
+// Test 22 (T-RC): 150k + 100nF must rise on the real tau = R*C = 15ms
 // time constant, checked against the analytic 1-e^(-t/RC) curve at 1 tau
 // and 3 tau, not just "eventually gets there".
 {
@@ -695,10 +575,10 @@ function approx(a, b, eps, msg) {
   }
   approx(v1tau, vFinal * (1 - Math.exp(-1)), vFinal * 0.02, 'T-RC: voltage at 1 tau must match the analytic RC curve');
   approx(v3tau, vFinal * (1 - Math.exp(-3)), vFinal * 0.02, 'T-RC: voltage at 3 tau must match the analytic RC curve');
-  console.log('Test 23 OK (T-RC): 150k+100nF at 1 tau =', v1tau.toFixed(3), 'V, at 3 tau =', v3tau.toFixed(3), 'V (tau =', (tau * 1000).toFixed(1), 'ms)');
+  console.log('Test 22 OK (T-RC): 150k+100nF at 1 tau =', v1tau.toFixed(3), 'V, at 3 tau =', v3tau.toFixed(3), 'V (tau =', (tau * 1000).toFixed(1), 'ms)');
 }
 
-// Test 24 (T-MEM): the actual acceptance circuit -- supply, vgnd, two
+// Test 23 (T-MEM): the actual acceptance circuit -- supply, vgnd, two
 // N-MOSFETs back-to-back (sources tied, gates driven by a shared control
 // signal), a cap, and a leak resistor. Closing the shared gate control
 // (SAMPLE) must let "mem" track a real millivolt-scale input; opening it
@@ -753,10 +633,10 @@ function approx(a, b, eps, msg) {
   approx(vAt1Tau, 0.02 * Math.exp(-1), 0.002, 'T-MEM: mem must decay toward V0 on the real leak*cap tau, not toward absolute ground');
   const vMemFinal = res.voltages.get(res.uf.find('MEM')) - res.voltages.get(res.uf.find('V0'));
   assert.ok(Math.abs(vMemFinal) < 0.005, 'T-MEM: after several tau, mem must settle within a few mV of V0, not diverge past it');
-  console.log('Test 24 OK (T-MEM): sampled mem-V0 =', ((vMemSampled - vV0Sampled) * 1000).toFixed(2), 'mV, decays to', (vAt1Tau * 1000).toFixed(2), 'mV at 1 tau, settles to', (vMemFinal * 1000).toFixed(3), 'mV');
+  console.log('Test 23 OK (T-MEM): sampled mem-V0 =', ((vMemSampled - vV0Sampled) * 1000).toFixed(2), 'mV, decays to', (vAt1Tau * 1000).toFixed(2), 'mV at 1 tau, settles to', (vMemFinal * 1000).toFixed(3), 'mV');
 }
 
-// Test 25 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 24 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
@@ -768,7 +648,7 @@ function approx(a, b, eps, msg) {
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 25 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 24 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

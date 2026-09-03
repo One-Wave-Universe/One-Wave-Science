@@ -37,7 +37,6 @@
       toroidGauge: 'standard',
       toroidSpacing: 'normal',
       toroidTurns: [10, 10, 10],
-      ternarycell: 0.02,
       nmos: 1.5,
       pmos: 1.5,
     },
@@ -157,12 +156,6 @@
           windings: toroidWindings(p),
           coupling: p.turnsPerSection.length > 1 ? (Components.TOROID_SPACING_COUPLING[p.spacing] || 0.9) : 0,
         });
-      } else if (p.type === 'ternarycell') {
-        components.push({
-          id: p.id, type: 'ternarycell', label: p.id,
-          ref: p.terminals[0].cellId, sense: p.terminals[1].cellId, out: p.terminals[2].cellId,
-          value: p.value,
-        });
       } else if (p.type === 'nmos' || p.type === 'pmos') {
         components.push({
           id: p.id, type: p.type, label: p.id,
@@ -263,7 +256,6 @@
       case 'potentiometer': return { value: tv.potentiometer, pos: 0.5 };
       case 'wire': case 'ywire': return { color: tv.wireColor, style: 'loop', gauge: tv.wireGauge };
       case 'toroid': return { turnsPerSection: tv.toroidTurns.slice(0, tv.toroidSections), core: tv.toroidCore, spacing: tv.toroidSpacing };
-      case 'ternarycell': return { value: tv.ternarycell };
       case 'nmos': return { type: 'nmos', value: tv.nmos };
       case 'pmos': return { type: 'pmos', value: tv.pmos };
       default: return {};
@@ -308,8 +300,6 @@
       if (tv.toroidSections > 1) {
         toolOptionsEl.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), tv.toroidSpacing, (v) => { tv.toroidSpacing = v; renderToolOptions(); }));
       }
-    } else if (state.tool === 'ternarycell') {
-      toolOptionsEl.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), state.toolValue.ternarycell, (v) => { state.toolValue.ternarycell = Number(v); renderToolOptions(); }));
     } else if (state.tool === 'nmos' || state.tool === 'pmos') {
       const key = state.tool;
       toolOptionsEl.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), state.toolValue[key], (v) => { state.toolValue[key] = Number(v); renderToolOptions(); }));
@@ -408,7 +398,6 @@
         core: opts.toroidCore, gauge: opts.toroidGauge, spacing: opts.toroidSpacing,
       };
     }
-    if (type === 'ternarycell') return { type: 'ternarycell', terminals: holes.slice(0, 3), value: opts.ternaryDelta };
     if (type === 'nmos' || type === 'pmos') return { type, terminals: holes.slice(0, 3), value: opts.mosfetValue };
     return null;
   }
@@ -442,7 +431,6 @@
       toroidCore: state.toolValue.toroidCore,
       toroidGauge: state.toolValue.toroidGauge,
       toroidSpacing: state.toolValue.toroidSpacing,
-      ternaryDelta: state.toolValue.ternarycell,
       mosfetValue: state.toolValue[type],
     });
     if (part) addPart(part);
@@ -802,8 +790,6 @@
       if (part.turnsPerSection.length > 1) {
         container.appendChild(makeSelect('Winding spacing', Object.keys(Components.TOROID_SPACING_COUPLING).map((k) => [k, k[0].toUpperCase() + k.slice(1)]), part.spacing, (v) => { part.spacing = v; notify(); }));
       }
-    } else if (part.type === 'ternarycell') {
-      container.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), part.value, (v) => (part.value = Number(v))));
     } else if (part.type === 'nmos' || part.type === 'pmos') {
       container.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), part.value, (v) => (part.value = Number(v))));
     }
@@ -892,21 +878,6 @@
         `;
       }).join('');
       return;
-    } else if (part.type === 'ternarycell') {
-      // the discrete decision is the whole point of this part -- show it as
-      // an explicit label, not just the millivolt-scale voltages it produces
-      const vRef = va;
-      const vSense = vb;
-      const vOut = vOf(2);
-      const decision = state.lastResult.ternaryStates ? state.lastResult.ternaryStates.get(part.id) : undefined;
-      const decisionLabel = { pos: 'POSITIVE (+)', neg: 'NEGATIVE (−)', hold: 'HOLD (0)' }[decision] || '—';
-      currentReadoutEl.innerHTML = `
-        <div><span>V(ref)</span><b>${fmtV(vRef)}</b></div>
-        <div><span>V(sense) - V(ref)</span><b>${fmtV(vSense - vRef)}</b></div>
-        <div><span>V(out)</span><b>${fmtV(vOut)}</b></div>
-        <div><span>Decision</span><b>${decisionLabel}</b></div>
-      `;
-      return;
     } else if (part.type === 'nmos' || part.type === 'pmos') {
       // the two real on/off decisions (channel, body diode) are the whole
       // point -- show them as explicit labels next to the Vgs/Vds that
@@ -944,8 +915,8 @@
   function fmtV(v) {
     if (v == null || Number.isNaN(v)) return '—';
     // 4 decimal places = 0.1mV resolution -- needed to actually see a
-    // +/-20mV ternary/comparator swing riding on a multi-volt reference,
-    // not just that something moved
+    // millivolt-scale swing riding on a multi-volt reference, not just
+    // that something moved
     return v.toFixed(4) + ' V';
   }
   function fmtI(i) {
@@ -1333,52 +1304,6 @@
     ];
   }
 
-  // LEGACY EXAMPLE -- kept for existing builds/comparisons, but no longer
-  // the default demo. It drives 3 Ternary Cells (a higher-level macro; see
-  // circuit.js) instead of discrete transistors. New work should look at
-  // the calibration boards above and Cal C/D's discrete nmos parts instead.
-  // The full causal chain from a shared reference to a rotating field:
-  // 3 AC sources (120 degrees apart, one shared V0 reference) each feed one
-  // Ternary Cell's "sense" input; each cell's decision (independently
-  // resolved from comparing its own sense against the shared V0) drives one
-  // winding of a 3-section toroid, with all three windings' return ends
-  // tied together at V0 (a star/wye point). Nothing here is scripted --
-  // every winding's current is a direct, measured consequence of its own
-  // cell's real comparator decision, and the three currents come out 120
-  // degrees apart in time purely because the three reference AC sources
-  // driving the comparisons are (verified: each winding's current tracks
-  // its own cell's decision almost exactly, +/-19.5mA for +/-20mV/1ohm).
-  //
-  // The scope probes below tap each cell's SENSE input, not its winding
-  // output -- a small toroid winding's reactance at a slow, visually-
-  // watchable drive frequency is genuinely negligible next to the switch's
-  // 1 ohm on-resistance (a real electrical fact, not a simulator quirk:
-  // 2*pi*1Hz*25uH is only ~157 micro-ohms), so the winding terminal's
-  // *voltage* stays pinned within a millivolt of V0 even while its
-  // *current* rotates correctly -- exactly like a real low-impedance motor
-  // stator winding. The oscilloscope only plots voltage, so scoping SENSE
-  // is what actually shows the rotation; scoping the winding terminal
-  // would just be an honest but uselessly flat line.
-  function presetTernaryDriveParts() {
-    const v0 = H('c', 8);
-    return [
-      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 9 },
-      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), v0] },
-      { type: 'acsource', terminals: [H('c', 12), H('d', 8)], value: 0.05, freq: 1, phase: 0 },
-      { type: 'acsource', terminals: [H('c', 16), H('d', 8)], value: 0.05, freq: 1, phase: 120 },
-      { type: 'acsource', terminals: [H('c', 20), H('d', 8)], value: 0.05, freq: 1, phase: 240 },
-      { type: 'ternarycell', terminals: [H('e', 8), H('e', 12), H('c', 24)], value: 0.02 },
-      { type: 'ternarycell', terminals: [H('e', 8), H('e', 16), H('c', 28)], value: 0.02 },
-      { type: 'ternarycell', terminals: [H('e', 8), H('e', 20), H('c', 32)], value: 0.02 },
-      {
-        type: 'toroid', turnsPerSection: [10, 10, 10], core: 'medium', gauge: 'standard', spacing: 'normal',
-        terminals: [H('c', 24), H('d', 8), H('c', 28), H('d', 8), H('c', 32), H('d', 8)],
-      },
-      { type: 'scope', terminals: [H('e', 12)], color: nextScopeColor() },
-      { type: 'scope', terminals: [H('e', 16)], color: nextScopeColor() },
-      { type: 'scope', terminals: [H('e', 20)], color: nextScopeColor() },
-    ];
-  }
   // executor: the one place that actually clears the board and writes a
   // preset's parts into it.
   function applyPreset(parts) {
@@ -1395,7 +1320,6 @@
   document.getElementById('presetCalD').addEventListener('click', () => { applyPreset(presetCalDParts()); selectTool('select'); });
   document.getElementById('presetCalE').addEventListener('click', () => { applyPreset(presetCalEParts()); selectTool('select'); });
   document.getElementById('presetMemCell').addEventListener('click', () => { applyPreset(presetMemoryCellParts()); selectTool('select'); });
-  document.getElementById('presetTernaryDrive').addEventListener('click', () => { applyPreset(presetTernaryDriveParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------
   // Whatever provider is configured plays the same role the hardcoded
@@ -1671,9 +1595,6 @@
         Components.drawScopeProbe(ctx, p, t[0].x, t[0].y, opacity);
       } else if (p.type === 'toroid') {
         Components.drawToroid(ctx, p, t, opacity);
-      } else if (p.type === 'ternarycell') {
-        const decision = state.lastResult.ternaryStates ? state.lastResult.ternaryStates.get(p.id) : undefined;
-        Components.drawTernaryCell(ctx, p, t, opacity, decision);
       } else if (p.type === 'nmos' || p.type === 'pmos') {
         const mstate = state.lastResult.mosfetStates ? state.lastResult.mosfetStates.get(p.id) : undefined;
         Components.drawMosfet(ctx, p, t, opacity, mstate);
@@ -1811,7 +1732,6 @@
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
-    ternaryStates: Object.fromEntries(state.lastResult.ternaryStates || []),
     mosfetStates: Object.fromEntries(state.lastResult.mosfetStates || []),
   });
   window.__selectPartById = (id) => {
