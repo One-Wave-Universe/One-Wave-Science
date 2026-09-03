@@ -90,6 +90,12 @@ Polarity, route family, offset, wrapper side, orientation, and traversal remain
 separate receipt fields. The authoritative grammar and examples are locked in
 `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
 
+`rabbit_hop_scale_rail.py` adds the bounded label-independent rail: sources
+`1–12` generate doubled tops and mandatory wrappers; addresses `12–24` divide
+back inward. Even addresses have one exact halved source. Odd addresses are
+shared wrappers and return both neighboring sources through `(X-1)÷2` and
+`(X+1)÷2`, avoiding invented half-addresses.
+
 ## Rabbit-hop constellation reconstruction
 
 `constellation_memory.py` is the first executable end-to-end reconstruction
@@ -107,6 +113,7 @@ constellation actually improve recall instead of merely adding machinery.
 python -m unittest One_Wave_Bench.brain.test_command_memory
 python -m unittest One_Wave_Bench.brain.test_constellation_memory
 python -m unittest One_Wave_Bench.brain.test_rabbit_hop_alphabet
+python -m unittest One_Wave_Bench.brain.test_rabbit_hop_scale_rail
 ```
 
 ## Install on Jetson Orin
