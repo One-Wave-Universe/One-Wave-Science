@@ -66,10 +66,35 @@
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
+  // LEGACY: the Ternary Cell is a higher-level macro (comparator + MOSFET
+  // pair collapsed into one part with a built-in Hold/Pos/Neg state
+  // machine). Keep it working for existing builds, but new example circuits
+  // should use the discrete nmos/pmos parts below instead -- real switching
+  // built from real transistors, not a pre-decided abstraction.
   const TERNARY_ON_R = 1; // ohms, a MOSFET switch pair's RDS(on) driving the active state (e.g. AO3400A-class)
   const TERNARY_HOLD_R = 100000; // ohms, ties the output back to the reference when neither path conducts (e.g. AO3400A-class)
   const TERNARY_DELTA_DEFAULT = 0.02; // volts, default +/- state displacement from the reference (matches a 20mV first-proof margin)
   const TERNARY_HYSTERESIS_FRAC = 0.15; // fraction of delta -- a real window comparator's hysteresis, sized so ordinary sensing noise can't repeatedly flip the decision right at a threshold
+
+  // Discrete MOSFETs: real parts, real limits. "value" selects between two
+  // real part classes rather than a made-up continuous parameter -- the
+  // same idea as LED_VF picking a real forward-voltage family by color.
+  // RDS(on) here is a fixed on-resistance once the channel is on (a
+  // piecewise switch model), not a continuous Vgs-dependent square law --
+  // sufficient for "does this switch turn on/off and clamp near its rail",
+  // which is what a breadboard-level design needs to get right first.
+  const NMOS_PARTS = {
+    1.5: { name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30 },
+    2.1: { name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+  };
+  const PMOS_PARTS = {
+    1.5: { name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30 },
+    2.1: { name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+  };
+  function mosfetSpec(c) {
+    const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
+    return table[c.value] || table[1.5];
+  }
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
   // sin/cos channels -- a real sinusoid evaluated at the simulator's own
@@ -133,6 +158,8 @@
       this._indState = new Map(); // component id -> current through it last frame
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._ternaryState = new Map(); // ternary-cell id -> 'hold' | 'pos' | 'neg', persists across frames
+      this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
+      this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -176,6 +203,7 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
         if (c.type === 'ternarycell') { uf.find(c.ref); uf.find(c.sense); uf.find(c.out); }
+        if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
@@ -185,6 +213,7 @@
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const ternaryCells = components.filter((c) => c.type === 'ternarycell');
+      const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -196,7 +225,16 @@
       }
 
       const roots = new Set();
-      const touch = (id) => roots.add(uf.find(id));
+      // touchCount: how many distinct pins (wires + component terminals)
+      // land on each electrical node -- used to detect a MOSFET gate that
+      // isn't wired to anything at all (a node touched exactly once, by
+      // its own gate pin and nothing else: no wire, no other component).
+      const touchCount = new Map();
+      const touch = (id) => {
+        const r = uf.find(id);
+        roots.add(r);
+        touchCount.set(r, (touchCount.get(r) || 0) + 1);
+      };
       wires.forEach((w) => {
         touch(w.a);
         touch(w.b);
@@ -219,6 +257,7 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'ternarycell') { touch(c.ref); touch(c.sense); touch(c.out); }
+        if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
       });
       roots.add(groundRoot);
 
@@ -263,6 +302,13 @@
         // a cell with no prior history (just placed, or a fresh reset --
         // power just started) always begins in Hold, never mid-decision
         if (!this._ternaryState.has(tc.id)) this._ternaryState.set(tc.id, 'hold');
+      });
+      mosfets.forEach((f) => {
+        // a fresh MOSFET (just placed, or a fresh reset -- power just
+        // started) always begins fully off, same reasoning as the diode/LED
+        // on/off state: don't presume a decision before ever solving
+        if (!this._fetChannelState.has(f.id)) this._fetChannelState.set(f.id, false);
+        if (!this._fetDiodeState.has(f.id)) this._fetDiodeState.set(f.id, false);
       });
 
       let voltages = new Map();
@@ -364,6 +410,39 @@
               const Ieq = g * sign * delta;
               stampI(i, Ieq);
               stampI(j, -Ieq);
+            }
+          } else if (c.type === 'nmos' || c.type === 'pmos') {
+            // a real discrete MOSFET: a channel (RDS(on) resistor between
+            // drain and source, only while gate-source crosses the real
+            // threshold) IN PARALLEL WITH a real body diode (silicon-
+            // rectifier-class one-way conduction, oriented per channel
+            // type). Both are independently on/off -- exactly like the
+            // physical part, where the body diode conducts even with the
+            // gate held off.
+            const spec = mosfetSpec(c);
+            const d = gi(uf.find(c.drain));
+            const s = gi(uf.find(c.source));
+            if (this._fetChannelState.get(c.id)) {
+              const g = 1 / spec.rdsOn;
+              stampG(d, d, g);
+              stampG(s, s, g);
+              stampG(d, s, -g);
+              stampG(s, d, -g);
+            }
+            if (this._fetDiodeState.get(c.id)) {
+              // NMOS body diode: anode at source, cathode at drain (blocks
+              // drain->source, conducts source->drain past Vf). PMOS is the
+              // complementary orientation: anode at drain, cathode at source.
+              const anode = c.type === 'nmos' ? s : d;
+              const cathode = c.type === 'nmos' ? d : s;
+              const g = 1 / DIODE_RON;
+              stampG(anode, anode, g);
+              stampG(cathode, cathode, g);
+              stampG(anode, cathode, -g);
+              stampG(cathode, anode, -g);
+              const Ieq = g * DIODE_VF;
+              stampI(anode, Ieq);
+              stampI(cathode, -Ieq);
             }
           } else if (c.type === 'battery') {
             const g = 1 / BATTERY_RINT;
@@ -603,6 +682,37 @@
           }
         });
 
+        mosfets.forEach((f) => {
+          const spec = mosfetSpec(f);
+          const vg = voltages.get(uf.find(f.gate));
+          const vs = voltages.get(uf.find(f.source));
+          const vd = voltages.get(uf.find(f.drain));
+          const vgs = vg - vs;
+          const channelShouldBeOn = f.type === 'nmos' ? vgs > spec.vth : vgs < spec.vth;
+          if (channelShouldBeOn !== this._fetChannelState.get(f.id)) {
+            this._fetChannelState.set(f.id, channelShouldBeOn);
+            changed = true;
+          }
+
+          // body diode: same on/off fixed-point iteration as the LED/diode
+          // model above, just with the anode/cathode assignment swapped per
+          // channel type (see the stamping comment above).
+          const anodeV = f.type === 'nmos' ? vs : vd;
+          const cathodeV = f.type === 'nmos' ? vd : vs;
+          const vDiode = anodeV - cathodeV;
+          const wasOn = this._fetDiodeState.get(f.id);
+          if (!wasOn && vDiode > DIODE_VF) {
+            this._fetDiodeState.set(f.id, true);
+            changed = true;
+          } else if (wasOn) {
+            const i = (vDiode - DIODE_VF) / DIODE_RON;
+            if (i < 0) {
+              this._fetDiodeState.set(f.id, false);
+              changed = true;
+            }
+          }
+        });
+
         if (!changed) break;
       }
 
@@ -664,6 +774,32 @@
           const state = this._ternaryState.get(c.id);
           const r = state === 'hold' ? TERNARY_HOLD_R : TERNARY_ON_R;
           I = (vout - vref) / r;
+        } else if (c.type === 'nmos' || c.type === 'pmos') {
+          const spec = mosfetSpec(c);
+          const vg = voltages.get(uf.find(c.gate));
+          const vs = voltages.get(uf.find(c.source));
+          const vd = voltages.get(uf.find(c.drain));
+          // total conventional current from drain to source: the channel
+          // (when on) and the body diode (when on) are two parallel paths
+          // between the same two nodes, so their currents just add.
+          I = this._fetChannelState.get(c.id) ? (vd - vs) / spec.rdsOn : 0;
+          if (this._fetDiodeState.get(c.id)) {
+            const anodeV = c.type === 'nmos' ? vs : vd;
+            const cathodeV = c.type === 'nmos' ? vd : vs;
+            const diodeI = (anodeV - cathodeV - DIODE_VF) / DIODE_RON; // anode->cathode
+            I += c.type === 'nmos' ? -diodeI : diodeI; // convert to the drain->source convention
+          }
+          const vgs = vg - vs;
+          const vds = vd - vs;
+          if (Math.abs(vgs) > spec.vgsMax) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: |Vgs|=${Math.abs(vgs).toFixed(2)}V exceeds its ${spec.vgsMax}V gate rating`);
+          }
+          if (Math.abs(vds) > spec.vdsMax) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: |Vds|=${Math.abs(vds).toFixed(2)}V exceeds its ${spec.vdsMax}V drain-source rating`);
+          }
+          if ((touchCount.get(uf.find(c.gate)) || 0) <= 1) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: gate is not wired to anything -- a floating gate picks up noise and can turn the switch on/off unpredictably`);
+          }
         }
         currents.set(c.id, I);
       });
@@ -695,13 +831,22 @@
       const ternaryStates = new Map();
       ternaryCells.forEach((tc) => ternaryStates.set(tc.id, this._ternaryState.get(tc.id)));
 
-      return { voltages, currents, warnings, ternaryStates, uf, groundRoot, hasCircuit: true };
+      // same idea as ternaryStates: expose the MOSFET's actual on/off
+      // decisions directly, so the Inspector (or a test) doesn't have to
+      // re-derive "is the channel on" from raw currents/voltages itself
+      const mosfetStates = new Map();
+      mosfets.forEach((f) => mosfetStates.set(f.id, {
+        channelOn: this._fetChannelState.get(f.id),
+        bodyDiodeOn: this._fetDiodeState.get(f.id),
+      }));
+
+      return { voltages, currents, warnings, ternaryStates, mosfetStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
-    AC_RINT, MTJ_RINT,
+    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;

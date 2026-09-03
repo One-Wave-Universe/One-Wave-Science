@@ -1,4 +1,6 @@
 const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 const CircuitEngine = require('../js/circuit.js');
 const { Circuit } = CircuitEngine;
 
@@ -504,6 +506,211 @@ function approx(a, b, eps, msg) {
   }
 
   console.log('Test 16 OK: ternary nerve cell resolves exactly one of hold/pos/neg, with hysteresis preventing threshold chatter and a clean Hold return on disconnect/reset');
+}
+
+// Test 17 (T-DIV): a 124k/1k divider off a 2.5V mid-rail (5V split by a
+// vgnd) must resolve to 2.520V, not snap/round to 2.500V -- proves the
+// solver actually carries millivolt-scale asymmetry riding on volts, to
+// within 1mV of the exact analytic answer.
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'N', value: 124000 },
+      { id: 'r2', type: 'resistor', a: 'N', b: 'V0', value: 1000 },
+    ],
+  };
+  const res = c.solve(els, 1 / 60);
+  const vN = res.voltages.get(res.uf.find('N'));
+  approx(vN, 2.52, 0.001, 'T-DIV: 124k/1k divider off 2.5V mid-rail must resolve to 2.520V within 1mV');
+  console.log('Test 17 OK (T-DIV): divider node =', vN.toFixed(4), 'V (expect 2.5200V)');
+}
+
+// Test 18 (T-VGND): Virtual Ground's V0 output must hold the midpoint
+// under a real 100k load to a rail, not sag like a plain resistor divider.
+{
+  const c = new Circuit();
+  const elsUnloaded = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+    ],
+  };
+  const resUnloaded = c.solve(elsUnloaded, 1 / 60);
+  const vUnloaded = resUnloaded.voltages.get(resUnloaded.uf.find('V0'));
+
+  const c2 = new Circuit();
+  const elsLoaded = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+      { id: 'r1', type: 'resistor', a: 'V0', b: 'M', value: 100000 },
+    ],
+  };
+  const resLoaded = c2.solve(elsLoaded, 1 / 60);
+  const vLoaded = resLoaded.voltages.get(resLoaded.uf.find('V0'));
+  approx(vLoaded, 2.5, 0.001, 'T-VGND: V0 under a 100k load must stay within 1mV of the unloaded midpoint');
+  console.log('Test 18 OK (T-VGND): V0 unloaded =', vUnloaded.toFixed(4), 'V, under 100k load =', vLoaded.toFixed(4), 'V');
+}
+
+// Test 19 (T-NFET-ON): a real N-MOSFET with Vgs=5V (well above its
+// threshold) must conduct, with the drain voltage set exactly by the
+// RDS(on) divider against its load resistor -- not just "some current".
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'D', value: 1000 },
+      { id: 'f1', type: 'nmos', gate: 'P', drain: 'D', source: 'M', value: 1.5 },
+    ],
+  };
+  let res;
+  for (let i = 0; i < 10; i++) res = c.solve(els, 1 / 60);
+  const spec = CircuitEngine.NMOS_PARTS[1.5];
+  const vD = res.voltages.get(res.uf.find('D'));
+  const vExpected = 5 * spec.rdsOn / (1000 + spec.rdsOn);
+  approx(vD, vExpected, 1e-4, 'T-NFET-ON: drain voltage must match I*RDS(on) exactly');
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, true, 'T-NFET-ON: channel must be reported on');
+  console.log('Test 19 OK (T-NFET-ON): Vgs=5V conducts, drain =', vD.toFixed(4), 'V (expect', vExpected.toFixed(4), 'V)');
+}
+
+// Test 20 (T-NFET-OFF): the same N-MOSFET with Vgs=0 (gate tied to source)
+// must block the channel entirely -- current through it comes only from
+// whatever the body diode allows, tested separately below.
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'D', value: 1000 },
+      // gate tied directly to source -> Vgs=0, the simplest unambiguous off case
+      { id: 'f1', type: 'nmos', gate: 'M', drain: 'D', source: 'M', value: 1.5 },
+    ],
+  };
+  let res;
+  for (let i = 0; i < 10; i++) res = c.solve(els, 1 / 60);
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, false, 'T-NFET-OFF: Vgs=0 must leave the channel off');
+  assert.strictEqual(res.mosfetStates.get('f1').bodyDiodeOn, false, 'T-NFET-OFF: reverse-biased body diode must also stay off here (drain above source)');
+  approx(res.currents.get('f1'), 0, 1e-6, 'T-NFET-OFF: current through an off FET (no forward-biased diode) must be ~0');
+  console.log('Test 20 OK (T-NFET-OFF): Vgs=0 blocks the channel, current =', res.currents.get('f1'));
+}
+
+// Test 21 (T-NFET-DIODE): a single off N-MOSFET's body diode conducts
+// source->drain past ~0.7V (forward), and blocks drain->source (reverse) --
+// the real body-diode direction that makes back-to-back pairs work.
+{
+  // forward: source pulled above drain -- body diode should conduct
+  const cFwd = new Circuit();
+  const elsFwd = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'S', b: 'D', value: 5 },
+      { id: 'f1', type: 'nmos', gate: 'S', drain: 'D', source: 'S', value: 1.5 },
+    ],
+  };
+  let resFwd;
+  for (let i = 0; i < 10; i++) resFwd = cFwd.solve(elsFwd, 1 / 60);
+  assert.strictEqual(resFwd.mosfetStates.get('f1').bodyDiodeOn, true, 'T-NFET-DIODE: source above drain must forward-bias the body diode');
+  assert.ok(resFwd.currents.get('f1') < 0, 'T-NFET-DIODE: forward body-diode current flows source->drain (negative in the drain->source convention)');
+
+  // reverse: drain pulled above source -- body diode should block
+  const cRev = new Circuit();
+  const elsRev = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'D', b: 'S', value: 5 },
+      { id: 'f1', type: 'nmos', gate: 'S', drain: 'D', source: 'S', value: 1.5 },
+    ],
+  };
+  let resRev;
+  for (let i = 0; i < 10; i++) resRev = cRev.solve(elsRev, 1 / 60);
+  assert.strictEqual(resRev.mosfetStates.get('f1').bodyDiodeOn, false, 'T-NFET-DIODE: drain above source must reverse-bias (block) the body diode');
+  approx(resRev.currents.get('f1'), 0, 1e-6, 'T-NFET-DIODE: reverse-biased body diode must pass ~0 current');
+  console.log('Test 21 OK (T-NFET-DIODE): body diode conducts source->drain, blocks drain->source');
+}
+
+// Test 22 (T-BB-PAIR): two N-MOSFETs with sources tied together and both
+// gates tied to that shared source (definitely off) must block current in
+// BOTH directions -- the real bidirectional-switch arrangement (whichever
+// way current would try to flow, one of the two body diodes opposes it).
+{
+  function bbPairCurrent(batteryA, batteryB) {
+    const c = new Circuit();
+    const els = {
+      wires: [{ a: 'G1', b: 'S' }, { a: 'G2', b: 'S' }],
+      components: [
+        { id: 'bat1', type: 'battery', a: batteryA, b: batteryB, value: 9 },
+        { id: 'f1', type: 'nmos', gate: 'G1', drain: 'D1', source: 'S', value: 1.5 },
+        { id: 'f2', type: 'nmos', gate: 'G2', drain: 'D2', source: 'S', value: 1.5 },
+      ],
+    };
+    let res;
+    for (let i = 0; i < 10; i++) res = c.solve(els, 1 / 60);
+    return { res, I: res.currents.get('bat1') };
+  }
+  const fwd = bbPairCurrent('D1', 'D2');
+  const rev = bbPairCurrent('D2', 'D1');
+  approx(fwd.I, 0, 1e-6, 'T-BB-PAIR: back-to-back pair must block current in one direction');
+  approx(rev.I, 0, 1e-6, 'T-BB-PAIR: back-to-back pair must block current in the other direction too');
+  assert.strictEqual(fwd.res.mosfetStates.get('f1').channelOn, false, 'T-BB-PAIR: both channels stay off');
+  assert.strictEqual(fwd.res.mosfetStates.get('f2').channelOn, false, 'T-BB-PAIR: both channels stay off');
+  console.log('Test 22 OK (T-BB-PAIR): 9V across the pair blocks both directions (I =', fwd.I.toExponential(2), 'A /', rev.I.toExponential(2), 'A)');
+}
+
+// Test 23 (T-RC): 150k + 100nF must rise on the real tau = R*C = 15ms
+// time constant, checked against the analytic 1-e^(-t/RC) curve at 1 tau
+// and 3 tau, not just "eventually gets there".
+{
+  const c = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'N', value: 150000 },
+      { id: 'cap1', type: 'capacitor', a: 'N', b: 'M', value: 100e-9 },
+    ],
+  };
+  const dt = 1 / 20000;
+  const tau = 150000 * 100e-9; // 15ms
+  const totalR = 150000 + CircuitEngine.BATTERY_RINT;
+  const vFinal = (5 * 150000) / totalR;
+  let res;
+  let t = 0;
+  let v1tau = null;
+  let v3tau = null;
+  const steps = Math.round((3.5 * tau) / dt);
+  for (let i = 0; i < steps; i++) {
+    res = c.solve(els, dt);
+    t += dt;
+    if (v1tau === null && t >= tau) v1tau = res.voltages.get(res.uf.find('N'));
+    if (v3tau === null && t >= 3 * tau) v3tau = res.voltages.get(res.uf.find('N'));
+  }
+  approx(v1tau, vFinal * (1 - Math.exp(-1)), vFinal * 0.02, 'T-RC: voltage at 1 tau must match the analytic RC curve');
+  approx(v3tau, vFinal * (1 - Math.exp(-3)), vFinal * 0.02, 'T-RC: voltage at 3 tau must match the analytic RC curve');
+  console.log('Test 23 OK (T-RC): 150k+100nF at 1 tau =', v1tau.toFixed(3), 'V, at 3 tau =', v3tau.toFixed(3), 'V (tau =', (tau * 1000).toFixed(1), 'ms)');
+}
+
+// Test 24 (T-NO-MACRO): the new calibration example presets in js/app.js
+// must be built from real discrete parts (nmos/pmos), not the legacy
+// ternarycell macro -- a static source check since app.js itself needs a
+// DOM and can't be required directly from this Node test.
+{
+  const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
+  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts'];
+  calPresetNames.forEach((name) => {
+    const m = appSrc.match(new RegExp('function ' + name + '\\(\\) \\{([\\s\\S]*?)\\n  \\}'));
+    assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
+    assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
+  });
+  console.log('Test 24 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

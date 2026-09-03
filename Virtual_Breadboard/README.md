@@ -5,11 +5,19 @@ solderless breadboard rendered hole-by-hole, a palette of real parts
 (resistors, LEDs, diodes, capacitors, a power supply, a switch, a momentary
 pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
 an inductor, a real AC source, an MTJ rotary angle sensor, a multi-section
-ferrite toroid transformer, a ternary nerve cell (a window-comparator-driven
-MOSFET switch pair), and jumper wires), a built-in oscilloscope,
-and a live circuit-physics engine underneath — not a toy animation. Click
-any hole to wire something into it, and the simulator solves the actual
-circuit every frame.
+ferrite toroid transformer, discrete N-/P-channel MOSFETs with real body
+diodes, and jumper wires), a built-in oscilloscope, and a live circuit-
+physics engine underneath — not a toy animation. Click any hole to wire
+something into it, and the simulator solves the actual circuit every frame.
+
+Physics honesty is a hard rule here: if a real bench build would fail or
+read a certain way, the simulator has to fail or read the same way. There
+is one legacy exception — the **Ternary Cell** (a window-comparator +
+MOSFET-pair *macro*, collapsed into one part with a built-in decision
+state machine) is kept working for old builds, but new work should use the
+discrete `nmos`/`pmos` parts to build the same behavior from real
+transistors instead of a pre-decided abstraction. See "Calibration boards"
+below for the tests that keep this claim honest.
 
 ## What makes the physics "real"
 
@@ -92,19 +100,34 @@ linear-algebra method SPICE-class simulators use:
   strongly multiple sections couple to each other. This is a linear
   inductance model — it doesn't simulate core saturation (a real ferrite's
   B-H curve) or leakage flux in detail.
-- The **Ternary Cell** models a real window-comparator-driven MOSFET switch
-  pair (a TLV3202-class comparator plus two back-to-back AO3400A-class
-  N-channel MOSFETs) — 3 terminals: `ref`, `sense`, `out`. It compares
-  `sense` against `ref` and resolves `out` to exactly one of three states:
-  driven to `ref + value` (sense reads well above ref), `ref - value` (well
-  below), or held at `ref` through a 100kΩ tie (sense within the ±`value`
-  decision window). This is one state variable, not two independently-
-  closeable switches, so the positive and negative paths can never conduct
-  simultaneously by construction. Real hysteresis (about 15% of the window)
-  keeps sensing noise sitting right at the threshold from repeatedly
-  flipping the decision, and a fresh cell (or one whose control input
-  collapses back to `ref`) always settles in Hold. Wire `ref` to a Virtual
-  Ground output for a proper bench-style reference.
+- **N-MOSFET / P-MOSFET** are real discrete transistors, 3 terminals each
+  (`gate`, `drain`, `source`). `value` picks a real part class — `1.5`
+  (AO3400A/AO3401A-class, logic-level, Vth≈1.5V) or `2.1` (2N7000/BS250-
+  class, Vth≈2.1V). The channel conducts drain-source only while Vgs
+  crosses that real threshold (a piecewise switch with a fixed RDS(on),
+  not a continuous square law), and the **body diode is always live** —
+  it conducts source→drain (N-channel; drain→source for P-channel) past
+  ~0.7V regardless of the gate, exactly like the physical part. That body
+  diode is what makes two of them wired back-to-back (sources tied, both
+  gates tied to that shared source) block current in *both* directions
+  when off — a real bidirectional-switch building block, not a scripted
+  rule. Warnings fire for a floating gate (not wired to anything), and for
+  Vgs/Vds exceeding the selected part's real rating.
+- The **Ternary Cell** (legacy) models a window-comparator-driven MOSFET
+  switch pair (a TLV3202-class comparator plus two back-to-back AO3400A-
+  class N-channel MOSFETs) as one higher-level part — 3 terminals: `ref`,
+  `sense`, `out`. It compares `sense` against `ref` and resolves `out` to
+  exactly one of three states: driven to `ref + value` (sense reads well
+  above ref), `ref - value` (well below), or held at `ref` through a 100kΩ
+  tie (sense within the ±`value` decision window). This is one state
+  variable, not two independently-closeable switches, so the positive and
+  negative paths can never conduct simultaneously by construction. Real
+  hysteresis (about 15% of the window) keeps sensing noise sitting right
+  at the threshold from repeatedly flipping the decision, and a fresh cell
+  (or one whose control input collapses back to `ref`) always settles in
+  Hold. It's kept working for existing builds, but it's a macro with a
+  built-in decision state machine — new designs should build the same
+  ref/sense/out behavior from the discrete `nmos` parts above instead.
 - The **Oscilloscope** panel below the board is fed by zero-load Scope
   Probes (like a real 10MΩ probe — they never affect the circuit) sampled
   every frame into a rolling window, so AC and quadrature signals are
@@ -258,7 +281,7 @@ fetch one.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
    Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe,
-   Ferrite Toroid, Ternary Cell).
+   Ferrite Toroid, Ternary Cell (legacy), N-MOSFET, P-MOSFET).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -283,8 +306,11 @@ fetch one.
      sections and each section's turns count in the tool panel first) —
      click that section's 2 terminal holes, then the next section's 2, and
      so on.
-   - The **Ternary Cell** takes 3 clicks: `ref` (wire this to a Virtual
-     Ground output), `sense` (the signal being compared), then `out`.
+   - The **Ternary Cell (legacy)** takes 3 clicks: `ref` (wire this to a
+     Virtual Ground output), `sense` (the signal being compared), then `out`.
+   - **N-MOSFET / P-MOSFET** take 3 clicks: `gate`, `drain`, then `source`.
+     Pick the part class (logic-level 1.5V-class or standard 2.1V-class) in
+     the tool panel before placing, or change it later in the Inspector.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it. Both
@@ -309,14 +335,52 @@ fetch one.
 6. The status bar along the bottom reports live warnings: short circuits,
    resistors dissipating more than their rating, LEDs that need a
    current-limiting resistor.
-7. Try the **Example builds** in the sidebar (LED + resistor, RC charging
-   with a switch, a short-circuit danger demo, and a ternary 3-phase drive —
-   3 Ternary Cells sharing one Virtual Ground reference, each independently
-   deciding hold/positive/negative from its own AC-driven differential and
-   feeding one section of a 3-section toroid; the scope probes tap each
-   cell's sense input to make the 120-degree phase offset visible, since a
-   small winding's own terminal voltage stays pinned near V0 even while its
-   current genuinely rotates) to see the physics in action immediately.
+7. Try the **Example builds** in the sidebar: LED + resistor, RC charging
+   with a switch, and a short-circuit danger demo, then the **Calibration
+   boards** (Cal A-E — see "Calibration boards" below) to see the discrete-
+   MOSFET physics in action immediately. A **Legacy example** section below
+   that still has the Ternary 3-phase drive (3 Ternary Cells sharing one
+   Virtual Ground reference, each independently deciding hold/positive/
+   negative from its own AC-driven differential and feeding one section of
+   a 3-section toroid; the scope probes tap each cell's sense input to make
+   the 120-degree phase offset visible, since a small winding's own
+   terminal voltage stays pinned near V0 even while its current genuinely
+   rotates) for comparison against the legacy macro.
+
+## Calibration boards
+
+Each of these proves exactly one real-physics claim about the simulator
+itself — not a demo circuit, a bench-replicable test. Wire the same thing
+on a real board with a multimeter and it should read within a few mV of
+what's shown here; that agreement is the whole point (`test/circuit.test.js`
+checks the same claims numerically as T-DIV/T-VGND/T-NFET-ON/T-NFET-OFF/
+T-NFET-DIODE/T-BB-PAIR/T-RC).
+
+- **Cal A — divider (mV proof)**: a 124kΩ/1kΩ divider off a 2.5V mid-rail
+  (from a 5V supply through a Virtual Ground) reads **2.520V**, not a
+  rounded 2.500V. If your Inspector/scope can't show that 20mV bump, you
+  can't see a real comparator's decision margin either — this is why
+  voltage readouts show 4 decimal places (0.1mV resolution).
+- **Cal B — V0 under load**: the same Virtual Ground's `V0` output under a
+  real 100kΩ load to a rail barely sags (stays within a couple mV of the
+  unloaded midpoint) — it's an active buffer, not a passive divider that
+  would droop under the same load.
+- **Cal C — N-FET switch**: one real N-MOSFET as a low-side switch, gate
+  driven through a switch (with a pulldown so it's never floating). Open =
+  drain reads ~5V (channel off, pulled up through the load resistor);
+  closed = drain clamps to a few tenths of a millivolt (channel on,
+  RDS(on) is tiny). Toggle the switch in Select mode and watch the drain
+  trace flip between the two real levels live.
+- **Cal D — back-to-back FETs**: two N-MOSFETs, sources tied together and
+  both gates tied to that shared source (definitely off). A 9V source
+  across the two drains drives ~0A regardless of polarity — whichever way
+  current would try to flow, one of the two body diodes is reverse-biased
+  and blocks it. This is the real bidirectional-switch arrangement a
+  window-comparator-driven cell would actually be built from.
+- **Cal E — RC to mid-rail**: 150kΩ + 100nF charging toward +5V, referenced
+  to a 2.5V `V0` mid-rail instead of ground — the real τ=RC=15ms time
+  constant holds regardless of what the capacitor's "zero" actually is.
+  Close the switch and watch the scope trace climb on the real curve.
 8. **Save** / **Load** keep a build in the browser's local storage;
    **Clear** wipes the board.
 
@@ -450,7 +514,16 @@ its analytic sine at specific points on the simulator's own clock, an MTJ
 sensor's sin/cos quadrature pair holding the sin²+cos²=1 identity, and a
 ferrite toroid transformer (a single winding matching a plain inductor's
 L/R curve exactly, and two coupled windings transforming an AC drive by
-their turns ratio), and a ternary nerve cell resolving exactly one of
+their turns ratio), a ternary nerve cell resolving exactly one of
 hold/positive/negative from a differential input, with hysteresis proven
 to prevent threshold-noise chatter and a clean return to Hold on control
-disconnect or reset.
+disconnect or reset, and the calibration-board claims described above:
+millivolt-scale solver resolution on a 124k/1k divider (T-DIV), a Virtual
+Ground holding its midpoint under a real 100k load (T-VGND), a discrete
+N-MOSFET's on-state RDS(on) voltage and off-state channel blocking
+(T-NFET-ON/OFF), its body diode's real one-way direction (T-NFET-DIODE),
+a back-to-back MOSFET pair blocking current in both directions
+(T-BB-PAIR), a real RC time constant checked against the analytic curve at
+1τ and 3τ (T-RC), and a static check that the calibration example presets
+are built from real discrete parts rather than the legacy ternarycell
+macro (T-NO-MACRO).

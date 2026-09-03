@@ -257,7 +257,14 @@ footer.status-bar {
         <button id="presetLed">LED + resistor</button>
         <button id="presetRC">RC charging (with switch)</button>
         <button id="presetShort">Short circuit (danger demo)</button>
-        <button id="presetTernaryDrive" title="3 ternary cells, one shared V0 reference, driving a 3-section toroid -- a rotating field with no scripted phase">Ternary 3-phase drive</button>
+        <h3>Calibration boards</h3>
+        <button id="presetCalA" title="124k/1k divider off a 2.5V mid-rail should read 2.520V, not a rounded 2.500V -- proves millivolt-scale solver resolution">Cal A: divider (mV proof)</button>
+        <button id="presetCalB" title="Virtual Ground's V0 output under a real 100k load -- should barely sag, not droop like a plain divider">Cal B: V0 under load</button>
+        <button id="presetCalC" title="One real N-MOSFET as a low-side switch -- toggle the switch and watch the drain clamp between ~5V (off) and ~0V (on)">Cal C: N-FET switch</button>
+        <button id="presetCalD" title="Two N-MOSFETs, sources+gates tied together -- a real bidirectional switch. Current should stay ~0A both directions">Cal D: back-to-back FETs</button>
+        <button id="presetCalE" title="150k + 100nF charging toward +5V from a 2.5V V0 reference -- real tau=15ms RC transient">Cal E: RC to mid-rail</button>
+        <h3>Legacy example</h3>
+        <button id="presetTernaryDrive" title="LEGACY: uses the Ternary Cell macro instead of discrete transistors. 3 ternary cells, one shared V0 reference, driving a 3-section toroid -- a rotating field with no scripted phase">Ternary 3-phase drive (legacy)</button>
       </div>
       <div id="toolboxScrollHint" class="scroll-hint" hidden aria-hidden="true">&#9662; scroll for more</div>
     </aside>
@@ -393,10 +400,35 @@ footer.status-bar {
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
+  // LEGACY: the Ternary Cell is a higher-level macro (comparator + MOSFET
+  // pair collapsed into one part with a built-in Hold/Pos/Neg state
+  // machine). Keep it working for existing builds, but new example circuits
+  // should use the discrete nmos/pmos parts below instead -- real switching
+  // built from real transistors, not a pre-decided abstraction.
   const TERNARY_ON_R = 1; // ohms, a MOSFET switch pair's RDS(on) driving the active state (e.g. AO3400A-class)
   const TERNARY_HOLD_R = 100000; // ohms, ties the output back to the reference when neither path conducts (e.g. AO3400A-class)
   const TERNARY_DELTA_DEFAULT = 0.02; // volts, default +/- state displacement from the reference (matches a 20mV first-proof margin)
   const TERNARY_HYSTERESIS_FRAC = 0.15; // fraction of delta -- a real window comparator's hysteresis, sized so ordinary sensing noise can't repeatedly flip the decision right at a threshold
+
+  // Discrete MOSFETs: real parts, real limits. "value" selects between two
+  // real part classes rather than a made-up continuous parameter -- the
+  // same idea as LED_VF picking a real forward-voltage family by color.
+  // RDS(on) here is a fixed on-resistance once the channel is on (a
+  // piecewise switch model), not a continuous Vgs-dependent square law --
+  // sufficient for "does this switch turn on/off and clamp near its rail",
+  // which is what a breadboard-level design needs to get right first.
+  const NMOS_PARTS = {
+    1.5: { name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30 },
+    2.1: { name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+  };
+  const PMOS_PARTS = {
+    1.5: { name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30 },
+    2.1: { name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+  };
+  function mosfetSpec(c) {
+    const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
+    return table[c.value] || table[1.5];
+  }
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
   // sin/cos channels -- a real sinusoid evaluated at the simulator's own
@@ -460,6 +492,8 @@ footer.status-bar {
       this._indState = new Map(); // component id -> current through it last frame
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._ternaryState = new Map(); // ternary-cell id -> 'hold' | 'pos' | 'neg', persists across frames
+      this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
+      this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -503,6 +537,7 @@ footer.status-bar {
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
         if (c.type === 'ternarycell') { uf.find(c.ref); uf.find(c.sense); uf.find(c.out); }
+        if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
@@ -512,6 +547,7 @@ footer.status-bar {
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const ternaryCells = components.filter((c) => c.type === 'ternarycell');
+      const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -523,7 +559,16 @@ footer.status-bar {
       }
 
       const roots = new Set();
-      const touch = (id) => roots.add(uf.find(id));
+      // touchCount: how many distinct pins (wires + component terminals)
+      // land on each electrical node -- used to detect a MOSFET gate that
+      // isn't wired to anything at all (a node touched exactly once, by
+      // its own gate pin and nothing else: no wire, no other component).
+      const touchCount = new Map();
+      const touch = (id) => {
+        const r = uf.find(id);
+        roots.add(r);
+        touchCount.set(r, (touchCount.get(r) || 0) + 1);
+      };
       wires.forEach((w) => {
         touch(w.a);
         touch(w.b);
@@ -546,6 +591,7 @@ footer.status-bar {
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'ternarycell') { touch(c.ref); touch(c.sense); touch(c.out); }
+        if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
       });
       roots.add(groundRoot);
 
@@ -590,6 +636,13 @@ footer.status-bar {
         // a cell with no prior history (just placed, or a fresh reset --
         // power just started) always begins in Hold, never mid-decision
         if (!this._ternaryState.has(tc.id)) this._ternaryState.set(tc.id, 'hold');
+      });
+      mosfets.forEach((f) => {
+        // a fresh MOSFET (just placed, or a fresh reset -- power just
+        // started) always begins fully off, same reasoning as the diode/LED
+        // on/off state: don't presume a decision before ever solving
+        if (!this._fetChannelState.has(f.id)) this._fetChannelState.set(f.id, false);
+        if (!this._fetDiodeState.has(f.id)) this._fetDiodeState.set(f.id, false);
       });
 
       let voltages = new Map();
@@ -691,6 +744,39 @@ footer.status-bar {
               const Ieq = g * sign * delta;
               stampI(i, Ieq);
               stampI(j, -Ieq);
+            }
+          } else if (c.type === 'nmos' || c.type === 'pmos') {
+            // a real discrete MOSFET: a channel (RDS(on) resistor between
+            // drain and source, only while gate-source crosses the real
+            // threshold) IN PARALLEL WITH a real body diode (silicon-
+            // rectifier-class one-way conduction, oriented per channel
+            // type). Both are independently on/off -- exactly like the
+            // physical part, where the body diode conducts even with the
+            // gate held off.
+            const spec = mosfetSpec(c);
+            const d = gi(uf.find(c.drain));
+            const s = gi(uf.find(c.source));
+            if (this._fetChannelState.get(c.id)) {
+              const g = 1 / spec.rdsOn;
+              stampG(d, d, g);
+              stampG(s, s, g);
+              stampG(d, s, -g);
+              stampG(s, d, -g);
+            }
+            if (this._fetDiodeState.get(c.id)) {
+              // NMOS body diode: anode at source, cathode at drain (blocks
+              // drain->source, conducts source->drain past Vf). PMOS is the
+              // complementary orientation: anode at drain, cathode at source.
+              const anode = c.type === 'nmos' ? s : d;
+              const cathode = c.type === 'nmos' ? d : s;
+              const g = 1 / DIODE_RON;
+              stampG(anode, anode, g);
+              stampG(cathode, cathode, g);
+              stampG(anode, cathode, -g);
+              stampG(cathode, anode, -g);
+              const Ieq = g * DIODE_VF;
+              stampI(anode, Ieq);
+              stampI(cathode, -Ieq);
             }
           } else if (c.type === 'battery') {
             const g = 1 / BATTERY_RINT;
@@ -930,6 +1016,37 @@ footer.status-bar {
           }
         });
 
+        mosfets.forEach((f) => {
+          const spec = mosfetSpec(f);
+          const vg = voltages.get(uf.find(f.gate));
+          const vs = voltages.get(uf.find(f.source));
+          const vd = voltages.get(uf.find(f.drain));
+          const vgs = vg - vs;
+          const channelShouldBeOn = f.type === 'nmos' ? vgs > spec.vth : vgs < spec.vth;
+          if (channelShouldBeOn !== this._fetChannelState.get(f.id)) {
+            this._fetChannelState.set(f.id, channelShouldBeOn);
+            changed = true;
+          }
+
+          // body diode: same on/off fixed-point iteration as the LED/diode
+          // model above, just with the anode/cathode assignment swapped per
+          // channel type (see the stamping comment above).
+          const anodeV = f.type === 'nmos' ? vs : vd;
+          const cathodeV = f.type === 'nmos' ? vd : vs;
+          const vDiode = anodeV - cathodeV;
+          const wasOn = this._fetDiodeState.get(f.id);
+          if (!wasOn && vDiode > DIODE_VF) {
+            this._fetDiodeState.set(f.id, true);
+            changed = true;
+          } else if (wasOn) {
+            const i = (vDiode - DIODE_VF) / DIODE_RON;
+            if (i < 0) {
+              this._fetDiodeState.set(f.id, false);
+              changed = true;
+            }
+          }
+        });
+
         if (!changed) break;
       }
 
@@ -991,6 +1108,32 @@ footer.status-bar {
           const state = this._ternaryState.get(c.id);
           const r = state === 'hold' ? TERNARY_HOLD_R : TERNARY_ON_R;
           I = (vout - vref) / r;
+        } else if (c.type === 'nmos' || c.type === 'pmos') {
+          const spec = mosfetSpec(c);
+          const vg = voltages.get(uf.find(c.gate));
+          const vs = voltages.get(uf.find(c.source));
+          const vd = voltages.get(uf.find(c.drain));
+          // total conventional current from drain to source: the channel
+          // (when on) and the body diode (when on) are two parallel paths
+          // between the same two nodes, so their currents just add.
+          I = this._fetChannelState.get(c.id) ? (vd - vs) / spec.rdsOn : 0;
+          if (this._fetDiodeState.get(c.id)) {
+            const anodeV = c.type === 'nmos' ? vs : vd;
+            const cathodeV = c.type === 'nmos' ? vd : vs;
+            const diodeI = (anodeV - cathodeV - DIODE_VF) / DIODE_RON; // anode->cathode
+            I += c.type === 'nmos' ? -diodeI : diodeI; // convert to the drain->source convention
+          }
+          const vgs = vg - vs;
+          const vds = vd - vs;
+          if (Math.abs(vgs) > spec.vgsMax) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: |Vgs|=${Math.abs(vgs).toFixed(2)}V exceeds its ${spec.vgsMax}V gate rating`);
+          }
+          if (Math.abs(vds) > spec.vdsMax) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: |Vds|=${Math.abs(vds).toFixed(2)}V exceeds its ${spec.vdsMax}V drain-source rating`);
+          }
+          if ((touchCount.get(uf.find(c.gate)) || 0) <= 1) {
+            warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: gate is not wired to anything -- a floating gate picks up noise and can turn the switch on/off unpredictably`);
+          }
         }
         currents.set(c.id, I);
       });
@@ -1022,13 +1165,22 @@ footer.status-bar {
       const ternaryStates = new Map();
       ternaryCells.forEach((tc) => ternaryStates.set(tc.id, this._ternaryState.get(tc.id)));
 
-      return { voltages, currents, warnings, ternaryStates, uf, groundRoot, hasCircuit: true };
+      // same idea as ternaryStates: expose the MOSFET's actual on/off
+      // decisions directly, so the Inspector (or a test) doesn't have to
+      // re-derive "is the channel on" from raw currents/voltages itself
+      const mosfetStates = new Map();
+      mosfets.forEach((f) => mosfetStates.set(f.id, {
+        channelOn: this._fetChannelState.get(f.id),
+        bodyDiodeOn: this._fetDiodeState.get(f.id),
+      }));
+
+      return { voltages, currents, warnings, ternaryStates, mosfetStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
-    AC_RINT, MTJ_RINT,
+    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;
@@ -1349,6 +1501,13 @@ footer.status-bar {
   // offset/hysteresis, per the G-744 one-cell bench-build reference
   const TERNARY_DELTA_VALUES = [0.005, 0.01, 0.02, 0.05, 0.1];
 
+  // Discrete MOSFET "value" selects a real part class (see circuit.js's
+  // NMOS_PARTS/PMOS_PARTS) rather than a made-up continuous parameter.
+  const MOSFET_CLASS_LABELS = {
+    1.5: 'Logic-level (AO3400A/AO3401A-class, Vth~1.5V)',
+    2.1: 'Standard (2N7000/BS250-class, Vth~2.1V)',
+  };
+
   const WIRE_COLOR_CHOICES = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7', '#e8ecf1', '#1a1a1a'];
   const WIRE_COLOR_NAMES = {
     '#2a6f4a': 'Green', '#c94a4a': 'Red', '#3f7fe0': 'Blue', '#d4af37': 'Gold',
@@ -1408,12 +1567,20 @@ footer.status-bar {
     // placement) -- app.js overrides terminalsNeeded() for this type;
     // `terminals` here is just the 1-section default.
     { type: 'toroid', label: 'Ferrite Toroid', terminals: 2, icon: '◯' },
-    // 3 pins: ref, sense, out -- a real window-comparator-driven MOSFET
-    // switch pair (TLV3202 + back-to-back AO3400A-class N-channels). Decides
-    // hold/positive/negative purely from comparing sense against ref +/-
-    // value, with hysteresis; never conducts both paths at once because it's
-    // one state variable, not two independently-closeable switches.
-    { type: 'ternarycell', label: 'Ternary Cell', terminals: 3, icon: '±0', defaultValue: 0.02 },
+    // LEGACY macro: 3 pins (ref, sense, out) collapsing a real window
+    // comparator + back-to-back MOSFET pair into one higher-level part with
+    // a built-in Hold/Pos/Neg state machine. Kept working for existing
+    // builds, but new designs should build the same behavior from the
+    // discrete nmos/pmos parts below -- real transistors, not a macro.
+    { type: 'ternarycell', label: 'Ternary Cell (legacy)', terminals: 3, icon: '±0', defaultValue: 0.02 },
+    // 3 pins: gate, drain, source -- a real discrete N-channel MOSFET
+    // (AO3400A/2N7000-class). Conducts drain-source only while Vgs is above
+    // its real threshold; its body diode conducts source->drain regardless
+    // of gate state, exactly like the physical part.
+    { type: 'nmos', label: 'N-MOSFET', terminals: 3, icon: 'N⏚', defaultValue: 1.5 },
+    // P-channel complement (AO3401A/BS250-class): conducts when Vgs is
+    // below its (negative) threshold; body diode conducts drain->source.
+    { type: 'pmos', label: 'P-MOSFET', terminals: 3, icon: 'P⏚', defaultValue: 1.5 },
   ];
 
   function resistorColorBands(value) {
@@ -1908,6 +2075,77 @@ footer.status-bar {
     ctx.restore();
   }
 
+  // t = [gate, drain, source]: a real discrete MOSFET. Border color reflects
+  // the live channel state (green when conducting, gray when off) and a
+  // small amber dot marks the body diode conducting -- the same "measured
+  // state over labels" idea as the LED glow / Ternary Cell body color.
+  const MOSFET_ON_COLOR = '#3ddc6b';
+  const MOSFET_OFF_COLOR = '#5a6178';
+  const MOSFET_DIODE_COLOR = '#e0a83f';
+  function mosfetCentroid(t) {
+    return { x: (t[0].x + t[1].x + t[2].x) / 3, y: (t[0].y + t[1].y + t[2].y) / 3 };
+  }
+  function drawMosfet(ctx, comp, t, opacity, state) {
+    const o = op(opacity);
+    const c = mosfetCentroid(t);
+    const channelOn = !!(state && state.channelOn);
+    const diodeOn = !!(state && state.bodyDiodeOn);
+    const borderColor = channelOn ? MOSFET_ON_COLOR : MOSFET_OFF_COLOR;
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    t.forEach((p) => {
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+
+    if (channelOn) {
+      ctx.globalAlpha = 0.3 * o;
+      ctx.fillStyle = borderColor;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = o;
+    }
+
+    ctx.fillStyle = '#2b2f36';
+    roundRect(ctx, c.x - 15, c.y - 12, 30, 24, 5);
+    ctx.fill();
+    ctx.strokeStyle = borderColor;
+    ctx.lineWidth = 1.4;
+    roundRect(ctx, c.x - 15, c.y - 12, 30, 24, 5);
+    ctx.stroke();
+    ctx.fillStyle = '#e8ecf1';
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(comp.type === 'pmos' ? 'P' : 'N', c.x, c.y + 4);
+    ctx.textAlign = 'left';
+
+    if (diodeOn) {
+      ctx.fillStyle = MOSFET_DIODE_COLOR;
+      ctx.beginPath();
+      ctx.arc(c.x + 11, c.y - 9, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // pin labels: g(ate)/d(rain)/s(ource), tiny, at each lead's outer end
+    ctx.globalAlpha = 0.85 * o;
+    ctx.fillStyle = '#8a93a5';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ['g', 'd', 's'].forEach((label, i) => {
+      const p = t[i];
+      const dx = p.x - c.x;
+      const dy = p.y - c.y;
+      const len = Math.hypot(dx, dy) || 1;
+      ctx.fillText(label, p.x + (dx / len) * 8, p.y + (dy / len) * 8 + 2);
+    });
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   function drawInductor(ctx, comp, x1, y1, x2, y2, opacity) {
     const o = op(opacity);
     const bodyStart = lerp(x1, y1, x2, y2, 0.25);
@@ -2171,12 +2409,13 @@ footer.status-bar {
       drawPotentiometer(ctx, Object.assign({ pos: 0.5 }, p), t, 1);
       return;
     }
-    if (type === 'vgnd' || type === 'mtjsensor' || type === 'ternarycell') {
+    if (type === 'vgnd' || type === 'mtjsensor' || type === 'ternarycell' || type === 'nmos' || type === 'pmos') {
       const t = [
         { x: cx - w * 0.26, y: cy - h * 0.18 }, { x: cx + w * 0.26, y: cy - h * 0.18 }, { x: cx, y: cy + h * 0.24 },
       ];
       if (type === 'vgnd') drawVGnd(ctx, p, t, 1);
       else if (type === 'ternarycell') drawTernaryCell(ctx, p, t, 1, null);
+      else if (type === 'nmos' || type === 'pmos') drawMosfet(ctx, Object.assign({}, p, { type }), t, 1, null);
       else drawMtjSensor(ctx, Object.assign({ freq: 1, phase: 0 }, p), t, 1, 0.15);
       return;
     }
@@ -2222,7 +2461,7 @@ footer.status-bar {
   const api = {
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES, WIRE_GAUGE_OHMS_PER_M,
-    TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING, TERNARY_DELTA_VALUES,
+    TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING, TERNARY_DELTA_VALUES, MOSFET_CLASS_LABELS,
     resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
@@ -2231,6 +2470,7 @@ footer.status-bar {
     drawScopeProbe, drawPartIcon,
     drawToroid, toroidCentroid,
     drawTernaryCell, ternaryCellCentroid,
+    drawMosfet, mosfetCentroid,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;
@@ -2309,15 +2549,26 @@ footer.status-bar {
       '                how tightly coupled the windings are to each other). One section behaves like',
       '                a plain inductor; 2+ sections are real mutual-inductance-coupled windings on',
       '                one core (an actual transformer, including turns-ratio voltage transformation).',
-      '  ternarycell   3 terminals [ref, sense, out]: a real window-comparator-driven MOSFET switch',
-      '                pair (TLV3202-class comparator + back-to-back AO3400A-class N-channels).',
+      '  ternarycell   LEGACY macro, still supported -- 3 terminals [ref, sense, out]: a window-',
+      '                comparator + back-to-back MOSFET pair collapsed into one part with a built-in',
+      '                Hold/Pos/Neg decision. Prefer nmos/pmos for new designs (build the same',
+      '                behavior from real discrete transistors instead of this pre-decided macro).',
       '                Compares "sense" against "ref" and drives "out" to exactly one of three states:',
       '                ref+value (sense reads well above ref), ref-value (well below), or held at ref',
       '                through a 100k tie (sense within +/-value of ref). "value" is the decision',
-      '                window in volts (default 0.02 for a 20mV first-proof margin). Includes real',
-      '                hysteresis so noise sitting at the threshold cannot chatter the decision. Wire',
-      '                "ref" to a vgnd output for a proper differential reference, matching a real',
-      '                bench build.',
+      '                window in volts (default 0.02 for a 20mV first-proof margin).',
+      '  nmos          3 terminals [gate, drain, source]: a real discrete N-channel MOSFET (AO3400A/',
+      '                2N7000-class). Conducts drain-source only while Vgs (gate minus source) is',
+      '                above its real threshold -- a piecewise switch with a fixed on-resistance, not',
+      '                a continuous curve. Its body diode ALWAYS conducts source->drain past ~0.7V,',
+      '                gate or no gate, exactly like the physical part -- this is what makes two of',
+      '                them back-to-back (sources tied, gates tied to that shared source) block',
+      '                current in BOTH directions when off, a real bidirectional-switch building',
+      '                block. "value" selects the part class: 1.5 (AO3400A-class, Vth~1.5V, logic-',
+      '                level) or 2.1 (2N7000-class, Vth~2.1V) -- default 1.5.',
+      '  pmos          3 terminals [gate, drain, source]: the P-channel complement (AO3401A/BS250-',
+      '                class). Conducts when Vgs is BELOW its (negative) threshold; body diode',
+      '                conducts drain->source. Same "value" class selector as nmos.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -2449,6 +2700,7 @@ footer.status-bar {
   const TERMINALS_NEEDED = {
     wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2,
     potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1, ternarycell: 3,
+    nmos: 3, pmos: 3,
   };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
@@ -2505,6 +2757,9 @@ footer.status-bar {
       if (p.type === 'ternarycell' && p.value != null && !(Number(p.value) > 0)) {
         errors.push('part ' + i + ' (ternarycell): "value" (decision window) must be a positive number if given');
       }
+      if ((p.type === 'nmos' || p.type === 'pmos') && p.value != null && p.value !== 1.5 && p.value !== 2.1) {
+        errors.push('part ' + i + ' (' + p.type + '): "value" must be 1.5 (AO3400A/AO3401A-class) or 2.1 (2N7000/BS250-class) if given');
+      }
     });
     return { ok: errors.length === 0, errors, parts };
   }
@@ -2557,6 +2812,8 @@ footer.status-bar {
       toroidSpacing: 'normal',
       toroidTurns: [10, 10, 10],
       ternarycell: 0.02,
+      nmos: 1.5,
+      pmos: 1.5,
     },
     pending: [],
     hoverHole: null,
@@ -2680,6 +2937,12 @@ footer.status-bar {
           ref: p.terminals[0].cellId, sense: p.terminals[1].cellId, out: p.terminals[2].cellId,
           value: p.value,
         });
+      } else if (p.type === 'nmos' || p.type === 'pmos') {
+        components.push({
+          id: p.id, type: p.type, label: p.id,
+          gate: p.terminals[0].cellId, drain: p.terminals[1].cellId, source: p.terminals[2].cellId,
+          value: p.value,
+        });
       } else {
         components.push({
           id: p.id, type: p.type, label: p.id,
@@ -2775,6 +3038,8 @@ footer.status-bar {
       case 'wire': case 'ywire': return { color: tv.wireColor, style: 'loop', gauge: tv.wireGauge };
       case 'toroid': return { turnsPerSection: tv.toroidTurns.slice(0, tv.toroidSections), core: tv.toroidCore, spacing: tv.toroidSpacing };
       case 'ternarycell': return { value: tv.ternarycell };
+      case 'nmos': return { type: 'nmos', value: tv.nmos };
+      case 'pmos': return { type: 'pmos', value: tv.pmos };
       default: return {};
     }
   }
@@ -2819,6 +3084,9 @@ footer.status-bar {
       }
     } else if (state.tool === 'ternarycell') {
       toolOptionsEl.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), state.toolValue.ternarycell, (v) => { state.toolValue.ternarycell = Number(v); renderToolOptions(); }));
+    } else if (state.tool === 'nmos' || state.tool === 'pmos') {
+      const key = state.tool;
+      toolOptionsEl.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), state.toolValue[key], (v) => { state.toolValue[key] = Number(v); renderToolOptions(); }));
     }
     updateToolboxScrollHint();
   }
@@ -2915,6 +3183,7 @@ footer.status-bar {
       };
     }
     if (type === 'ternarycell') return { type: 'ternarycell', terminals: holes.slice(0, 3), value: opts.ternaryDelta };
+    if (type === 'nmos' || type === 'pmos') return { type, terminals: holes.slice(0, 3), value: opts.mosfetValue };
     return null;
   }
 
@@ -2948,6 +3217,7 @@ footer.status-bar {
       toroidGauge: state.toolValue.toroidGauge,
       toroidSpacing: state.toolValue.toroidSpacing,
       ternaryDelta: state.toolValue.ternarycell,
+      mosfetValue: state.toolValue[type],
     });
     if (part) addPart(part);
   }
@@ -2992,7 +3262,7 @@ footer.status-bar {
           distToSegment(pos.x, pos.y, t[3].x, t[3].y, j2.x, j2.y) < 14
         ) return p;
       } else if (t.length === 3) {
-        const c = p.type === 'mtjsensor' ? Components.mtjCentroid(t) : Components.vgndCentroid(t);
+        const c = centroidFor3Terminal(p.type, t);
         if (Math.hypot(pos.x - c.x, pos.y - c.y) < 20) return p;
       } else if (t.length === 2) {
         if (distToSegment(pos.x, pos.y, t[0].x, t[0].y, t[1].x, t[1].y) < 14) return p;
@@ -3012,9 +3282,18 @@ footer.status-bar {
       const [j1, j2] = Components.yWireJunctions(t);
       return { x: (j1.x + j2.x) / 2, y: (j1.y + j2.y) / 2 };
     }
-    if (t.length === 3) return p.type === 'mtjsensor' ? Components.mtjCentroid(t) : Components.vgndCentroid(t);
+    if (t.length === 3) return centroidFor3Terminal(p.type, t);
     if (t.length === 1) return { x: t[0].x, y: t[0].y };
     return { x: (t[0].x + t[1].x) / 2, y: (t[0].y + t[1].y) / 2 };
+  }
+
+  // shared by hitTestPart/partCenter: every 3-terminal part type centers
+  // its selection ring/hit area the same way (the average of its 3 leads),
+  // just via each type's own centroid function in Components
+  function centroidFor3Terminal(type, t) {
+    if (type === 'mtjsensor') return Components.mtjCentroid(t);
+    if (type === 'nmos' || type === 'pmos') return Components.mosfetCentroid(t);
+    return Components.vgndCentroid(t);
   }
 
   // executor: the state changes behind a momentary pushbutton press/release
@@ -3299,6 +3578,8 @@ footer.status-bar {
       }
     } else if (part.type === 'ternarycell') {
       container.appendChild(makeSelect('Decision window (+/-)', Components.TERNARY_DELTA_VALUES.map((v) => [v, (v * 1000).toFixed(0) + ' mV']), part.value, (v) => (part.value = Number(v))));
+    } else if (part.type === 'nmos' || part.type === 'pmos') {
+      container.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), part.value, (v) => (part.value = Number(v))));
     }
   }
 
@@ -3400,6 +3681,22 @@ footer.status-bar {
         <div><span>Decision</span><b>${decisionLabel}</b></div>
       `;
       return;
+    } else if (part.type === 'nmos' || part.type === 'pmos') {
+      // the two real on/off decisions (channel, body diode) are the whole
+      // point -- show them as explicit labels next to the Vgs/Vds that
+      // actually decided them, not just the raw pin voltages
+      const vGate = va;
+      const vDrain = vb;
+      const vSource = vOf(2);
+      const mstate = state.lastResult.mosfetStates ? state.lastResult.mosfetStates.get(part.id) : undefined;
+      currentReadoutEl.innerHTML = `
+        <div><span>Vgs</span><b>${fmtV(vGate - vSource)}</b></div>
+        <div><span>Vds</span><b>${fmtV(vDrain - vSource)}</b></div>
+        <div><span>Channel</span><b>${mstate && mstate.channelOn ? 'ON' : 'off'}</b></div>
+        <div><span>Body diode</span><b>${mstate && mstate.bodyDiodeOn ? 'conducting' : 'off'}</b></div>
+        <div><span>Current (d→s)</span><b>${fmtI(I)}</b></div>
+      `;
+      return;
     } else {
       rows = `
         <div><span>V(A)</span><b>${fmtV(va)}</b></div>
@@ -3420,7 +3717,10 @@ footer.status-bar {
 
   function fmtV(v) {
     if (v == null || Number.isNaN(v)) return '—';
-    return v.toFixed(3) + ' V';
+    // 4 decimal places = 0.1mV resolution -- needed to actually see a
+    // +/-20mV ternary/comparator swing riding on a multi-volt reference,
+    // not just that something moved
+    return v.toFixed(4) + ' V';
   }
   function fmtI(i) {
     if (i == null || Number.isNaN(i)) return '—';
@@ -3702,6 +4002,84 @@ footer.status-bar {
       { type: 'wire', terminals: [H('i', 5), H('i', 20)], color: nextWireColor() },
     ];
   }
+  // Calibration boards: each one proves a single real-physics claim about
+  // the simulator itself, not a demo circuit. Wire the same one on a real
+  // bench and it should read within a few mV of what's shown here -- that's
+  // the whole point (see README's "Calibration boards" section).
+
+  // Cal A: a 124k/1k divider off a 2.5V mid-rail should read 2.520V, not a
+  // display-rounded 2.500V -- proves the solver actually resolves millivolt-
+  // scale asymmetry riding on a multi-volt reference (matches T-DIV).
+  function presetCalAParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      { type: 'resistor', terminals: [H('b', 5), H('b', 12)], value: 124000 },
+      { type: 'resistor', terminals: [H('c', 12), H('d', 8)], value: 1000 },
+      { type: 'scope', terminals: [H('a', 12)], color: nextScopeColor() },
+    ];
+  }
+  // Cal B: a Virtual Ground's V0 output should barely sag under a real
+  // 100k load to a rail, not droop like a plain resistor divider would.
+  function presetCalBParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 9 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      { type: 'resistor', terminals: [H('e', 8), H('h', 5)], value: 100000 },
+      { type: 'scope', terminals: [H('a', 8)], color: nextScopeColor() },
+    ];
+  }
+  // Cal C: one real N-MOSFET as a low-side switch. Gate held low through a
+  // pulldown -> off, drain reads near +5V through the pull-up resistor.
+  // Close the switch -> gate goes high, channel turns on, drain clamps
+  // down near 0V through RDS(on). Toggle the switch in Select mode to
+  // watch the drain scope trace flip between the two real levels.
+  function presetCalCParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'resistor', terminals: [H('b', 5), H('b', 12)], value: 1000 },
+      { type: 'switch', terminals: [H('c', 5), H('c', 16)], closed: false },
+      { type: 'resistor', terminals: [H('d', 16), H('h', 5)], value: 1000000 },
+      { type: 'nmos', terminals: [H('a', 16), H('a', 12), H('i', 5)], value: 1.5 },
+      { type: 'scope', terminals: [H('a', 12)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('a', 16)], color: nextScopeColor() },
+    ];
+  }
+  // Cal D: two N-MOSFETs, sources tied together and gates tied to that
+  // shared source (both definitely off) -- the classic bidirectional-switch
+  // body-diode arrangement. A 9V source across the two drains should drive
+  // ~0A regardless of polarity: whichever direction current would try to
+  // flow, one of the two body diodes is reverse-biased and blocks it.
+  function presetCalDParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 10), H('e', 20)], value: 9 },
+      { type: 'nmos', terminals: [H('b', 12), H('b', 10), H('b', 15)], value: 1.5 },
+      { type: 'wire', terminals: [H('c', 12), H('c', 15)], color: nextWireColor() },
+      { type: 'nmos', terminals: [H('d', 18), H('d', 20), H('d', 15)], value: 1.5 },
+      { type: 'wire', terminals: [H('e', 18), H('e', 15)], color: nextWireColor() },
+      { type: 'scope', terminals: [H('c', 10)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('c', 20)], color: nextScopeColor() },
+    ];
+  }
+  // Cal E: 150k + 100nF charging toward +5V, referenced to a 2.5V V0 mid-
+  // rail instead of ground -- proves the RC time constant (tau=15ms) is
+  // real regardless of what the capacitor's "zero" actually is. Close the
+  // switch and watch the scope trace climb from V0 on the real tau.
+  function presetCalEParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      { type: 'switch', terminals: [H('b', 5), H('b', 12)], closed: false },
+      { type: 'resistor', terminals: [H('c', 12), H('c', 16)], value: 150000 },
+      { type: 'capacitor', terminals: [H('d', 16), H('d', 8)], value: 100e-9 },
+      { type: 'scope', terminals: [H('a', 16)], color: nextScopeColor() },
+    ];
+  }
+
+  // LEGACY EXAMPLE -- kept for existing builds/comparisons, but no longer
+  // the default demo. It drives 3 Ternary Cells (a higher-level macro; see
+  // circuit.js) instead of discrete transistors. New work should look at
+  // the calibration boards above and Cal C/D's discrete nmos parts instead.
   // The full causal chain from a shared reference to a rotating field:
   // 3 AC sources (120 degrees apart, one shared V0 reference) each feed one
   // Ternary Cell's "sense" input; each cell's decision (independently
@@ -3754,6 +4132,11 @@ footer.status-bar {
   document.getElementById('presetLed').addEventListener('click', () => { applyPreset(presetLedResistorParts()); selectTool('select'); });
   document.getElementById('presetShort').addEventListener('click', () => { applyPreset(presetShortParts()); selectTool('select'); });
   document.getElementById('presetRC').addEventListener('click', () => { applyPreset(presetRCParts()); selectTool('select'); });
+  document.getElementById('presetCalA').addEventListener('click', () => { applyPreset(presetCalAParts()); selectTool('select'); });
+  document.getElementById('presetCalB').addEventListener('click', () => { applyPreset(presetCalBParts()); selectTool('select'); });
+  document.getElementById('presetCalC').addEventListener('click', () => { applyPreset(presetCalCParts()); selectTool('select'); });
+  document.getElementById('presetCalD').addEventListener('click', () => { applyPreset(presetCalDParts()); selectTool('select'); });
+  document.getElementById('presetCalE').addEventListener('click', () => { applyPreset(presetCalEParts()); selectTool('select'); });
   document.getElementById('presetTernaryDrive').addEventListener('click', () => { applyPreset(presetTernaryDriveParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------
@@ -4033,6 +4416,9 @@ footer.status-bar {
       } else if (p.type === 'ternarycell') {
         const decision = state.lastResult.ternaryStates ? state.lastResult.ternaryStates.get(p.id) : undefined;
         Components.drawTernaryCell(ctx, p, t, opacity, decision);
+      } else if (p.type === 'nmos' || p.type === 'pmos') {
+        const mstate = state.lastResult.mosfetStates ? state.lastResult.mosfetStates.get(p.id) : undefined;
+        Components.drawMosfet(ctx, p, t, opacity, mstate);
       }
 
       if (p.id === state.selectedPartId) {
@@ -4168,6 +4554,7 @@ footer.status-bar {
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
     ternaryStates: Object.fromEntries(state.lastResult.ternaryStates || []),
+    mosfetStates: Object.fromEntries(state.lastResult.mosfetStates || []),
   });
   window.__selectPartById = (id) => {
     state.selectedPartId = id;
