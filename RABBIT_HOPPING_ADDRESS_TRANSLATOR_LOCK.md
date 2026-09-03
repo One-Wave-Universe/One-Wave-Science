@@ -5,8 +5,9 @@
 - **Locked now:** purpose, packet shape, three currently declared routes,
   mandatory wrappers, route receipts, alphabet inversion, and coupled vertical
   inversion.
-- **Open:** the broader role of division. Mechanical recovery from a complete
-  receipt is tested, but no larger division theory is claimed here.
+- **Locked division rail:** sources `1–12` generate outward; addresses `12–24`
+  are read inward by division as defined below.
+- **Open:** any broader role of division outside that bounded rail.
 - **Extension rule:** there may be more route families later. None may be
   invented, merged into these three, or declared without an explicit update.
 
@@ -104,10 +105,37 @@ Reversing traversal does not silently change polarity, route family, or `K`.
 
 ## Division boundary
 
-The implementation can mechanically remove a recorded wrapper and recorded
-offset, then divide the doubled value to verify the source rank. This is only a
-receipt-integrity check. The larger job of division in Rabbit Hopping remains
-explicitly unresolved and must not be presented as locked theory.
+The declared bounded rail uses two domains:
+
+- outward source domain: `1–12`;
+- inward division-address domain: `12–24`.
+
+For an even address `X` in `12–24`, `X÷2` identifies its source. For an odd
+address, division uses the wrapper structure rather than creating a fractional
+address: `(X-1)÷2` and `(X+1)÷2` identify the two neighboring connected
+sources. Thus `13` connects back to sources `6` and `7`, while `24` returns to
+source `12`.
+
+| Outer address | Inward source address(es) |
+|---:|---:|
+| 12 | 6 |
+| 13 | 6, 7 |
+| 14 | 7 |
+| 15 | 7, 8 |
+| 16 | 8 |
+| 17 | 8, 9 |
+| 18 | 9 |
+| 19 | 9, 10 |
+| 20 | 10 |
+| 21 | 10, 11 |
+| 22 | 11 |
+| 23 | 11, 12 |
+| 24 | 12 |
+
+This rail is numerical and does not require alphabet labels. Six strings,
+twelve note classes, and twenty-four frets are a possible musical-neck adapter,
+but that physical labeling remains separate from the locked numerical rail.
+The larger job of division beyond `12–24` remains unresolved.
 
 ## Executable lock
 
@@ -125,3 +153,6 @@ The reference implementation is
 - independent polarity and traversal receipts;
 - mechanical receipt recovery without claiming a division theory.
 
+The bounded division rail is implemented in
+`One_Wave_Bench/brain/rabbit_hop_scale_rail.py` and tested in
+`One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py`.

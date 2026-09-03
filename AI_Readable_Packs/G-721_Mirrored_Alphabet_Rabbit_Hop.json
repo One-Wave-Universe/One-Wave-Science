@@ -60,11 +60,21 @@
   },
   "independent_receipt_fields": ["source identity", "alphabet orientation", "logical wrapper side", "polarity", "traversal direction", "route family", "K"],
   "division": {
-    "implemented": "mechanical source-rank recovery from a fully attributed packet",
-    "not_locked": "division's broader theoretical or translator role"
+    "implemented": [
+      "mechanical source-rank recovery from a fully attributed packet",
+      "bounded scale rail: sources 1-12 generate outward and outer addresses 12-24 divide inward"
+    ],
+    "bounded_12_24_rule": {
+      "even_address": "X/2 returns one source",
+      "odd_wrapper_address": "(X-1)/2 and (X+1)/2 return both neighboring sources",
+      "fraction_rule": "do not create half-addresses; odd addresses retain their shared-wrapper role"
+    },
+    "not_locked": "division's broader role outside the bounded 12-24 rail"
   },
   "implementation": "One_Wave_Bench/brain/rabbit_hop_alphabet.py",
+  "scale_rail_implementation": "One_Wave_Bench/brain/rabbit_hop_scale_rail.py",
   "tests": "One_Wave_Bench/brain/test_rabbit_hop_alphabet.py",
+  "scale_rail_tests": "One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py",
   "gate": "YELLOW",
   "lifecycle": "ACTIVE"
 }
