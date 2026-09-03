@@ -31,6 +31,21 @@
  *     each winding a backward-Euler branch whose equation now also carries
  *     every other winding's discretized current, plus real per-winding DC
  *     winding resistance from wire gauge and core size.
+ *   - Discrete MOSFETs conduct drain-source only past a real Vgs threshold
+ *     (fixed RDS(on) once on), and their body diode is a genuinely separate
+ *     always-live one-way path -- independent on/off fixed-point state, same
+ *     technique as the diode/LED model.
+ *   - Square-loop memory cores generalize the toroid to a NONLINEAR core: one
+ *     shared flux state B (normalized to +/-1) instead of a linear L, with a
+ *     real ampere-turns coercive threshold (Hc). Below Hc, B is frozen (real
+ *     remanence -- current can wiggle without erasing it); above Hc, B
+ *     relaxes toward +/-1 on a real (short but nonzero) switching time
+ *     constant via the same backward-Euler technique as a capacitor/inductor,
+ *     so a flip produces a genuine multi-frame induced-voltage spike on any
+ *     other winding sharing the core (Faraday's law: V = N*dPhi/dt), not an
+ *     instant step. Whether a given drive actually flips it, and what any
+ *     other winding on the same core reads, is computed by the solver from
+ *     real current and never pre-decided.
  *   - A tiny leak conductance (gmin) from every node to ground prevents the
  *     matrix from going singular when part of the board isn't wired to
  *     anything yet.
@@ -150,6 +165,7 @@
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
       this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
+      this._coreState = new Map(); // memory-core id -> normalized remanent flux B in [-1, 1], persists across frames
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -193,6 +209,7 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
+        if (c.type === 'memorycore') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
@@ -202,6 +219,7 @@
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
+      const memoryCores = components.filter((c) => c.type === 'memorycore');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -245,6 +263,7 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
+        if (c.type === 'memorycore') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
       });
       roots.add(groundRoot);
 
@@ -277,7 +296,18 @@
         });
       }
       const rowToroid = (torK, windingIdx) => toroidRowOffsets[torK] + windingIdx;
-      const size = toroidRowBase + nToroidRows;
+      const nMemCoreRows = memoryCores.reduce((s, mc) => s + mc.windings.length, 0);
+      const memCoreRowBase = toroidRowBase + nToroidRows;
+      const memCoreRowOffsets = [];
+      {
+        let off = memCoreRowBase;
+        memoryCores.forEach((mc) => {
+          memCoreRowOffsets.push(off);
+          off += mc.windings.length;
+        });
+      }
+      const rowMemCore = (mcK, windingIdx) => memCoreRowOffsets[mcK] + windingIdx;
+      const size = memCoreRowBase + nMemCoreRows;
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
 
@@ -291,6 +321,28 @@
         // on/off state: don't presume a decision before ever solving
         if (!this._fetChannelState.has(f.id)) this._fetChannelState.set(f.id, false);
         if (!this._fetDiodeState.has(f.id)) this._fetDiodeState.set(f.id, false);
+      });
+      memoryCores.forEach((mc) => {
+        // a fresh core (just placed, or a fresh reset) starts demagnetized --
+        // no history to presume a remanence from
+        if (!this._coreState.has(mc.id)) this._coreState.set(mc.id, 0);
+      });
+      // per-frame working state for the square-loop cores: coreBStart is
+      // fixed for the whole frame (this is the real physical B the core had
+      // at the start of this dt, exactly like a capacitor's/inductor's
+      // "previous" state) and is what dB/dt is measured against; coreB is
+      // the fixed-point loop's current best guess of B at the END of this
+      // same dt, refined each inner iteration exactly like a diode's on/off
+      // guess -- it never accumulates across iterations, it's recomputed
+      // from coreBStart every time using this frame's real dt, so iterating
+      // to convergence here finds the self-consistent (current, B) pair for
+      // ONE real time step, not several.
+      const coreBStart = new Map();
+      const coreB = new Map();
+      memoryCores.forEach((mc) => {
+        const b0 = this._coreState.get(mc.id);
+        coreBStart.set(mc.id, b0);
+        coreB.set(mc.id, b0);
       });
 
       let voltages = new Map();
@@ -539,6 +591,39 @@
           }
         });
 
+        // Square-loop memory core: like a toroid winding (own DC resistance,
+        // extra branch-current unknown), but the induced voltage comes from
+        // the CORE's changing magnetization (Faraday's law, V = N*dPhi/dt)
+        // instead of from this winding's own dI/dt -- every winding on the
+        // core sees the SAME dB/dt, scaled by its own turns, because they
+        // share one physical flux. dB/dt here is measured against this
+        // frame's fixed starting B (coreBStart), using the fixed-point
+        // loop's current best guess of where B will end up (coreB) -- see
+        // the coreB/coreBStart setup above for why that's correctly one
+        // real dt of physics, not several.
+        memoryCores.forEach((mc, mck) => {
+          const dtSafe = Math.max(dt, 1e-6);
+          const bStart = coreBStart.get(mc.id);
+          const bNow = coreB.get(mc.id);
+          const dBdt = (bNow - bStart) / dtSafe;
+          mc.windings.forEach((w, wi) => {
+            const row = rowMemCore(mck, wi);
+            const ia = gi(uf.find(w.a));
+            const ib = gi(uf.find(w.b));
+            if (ia >= 0) {
+              A[ia][row] += 1;
+              A[row][ia] += 1;
+            }
+            if (ib >= 0) {
+              A[ib][row] -= 1;
+              A[row][ib] -= 1;
+            }
+            A[row][row] -= w.R || 0;
+            const Vind = (w.N || 0) * (mc.phiSat || 0) * dBdt;
+            b[row] += Vind;
+          });
+        });
+
         // AC source: an ideal source like a battery, but its target value is
         // the shared sim clock's sinusoid instead of a constant.
         acsources.forEach((ac, k) => {
@@ -641,6 +726,50 @@
           }
         });
 
+        memoryCores.forEach((mc, mck) => {
+          // net ampere-turns driving this core: every winding contributes
+          // turns*current, exactly like a real multi-winding core (this is
+          // also the ENTIRE mechanism behind group memory and toward/away
+          // neighbor coupling -- there is no separate scripted logic for
+          // those; they are just more windings, wired by the user, adding
+          // their own real ampere-turns to this same sum)
+          let netAT = 0;
+          mc.windings.forEach((w, wi) => {
+            netAT += (w.N || 0) * (xSol[rowMemCore(mck, wi)] || 0);
+          });
+          const bStart = coreBStart.get(mc.id);
+          const hc = mc.hcAmpTurns > 0 ? mc.hcAmpTurns : 1;
+          let target;
+          if (netAT > hc) target = 1;
+          else if (netAT < -hc) target = -1;
+          // below the coercive threshold the core is not being driven at
+          // all -- real remanence means it stays exactly where it was,
+          // not "spring back toward zero"
+          else target = bStart;
+          const tau = mc.switchTau > 0 ? mc.switchTau : 1e-3;
+          const k = Math.max(dt, 1e-6) / tau;
+          let bTarget = (bStart + k * target) / (1 + k);
+          bTarget = Math.max(-1, Math.min(1, bTarget));
+          // under-relaxed update: a real, fast flip induces a real back-EMF
+          // (Lenz's law) that fights the very current causing the flip --
+          // jumping straight to bTarget each inner iteration lets that
+          // feedback oscillate forever (drive current flips B -> induced
+          // back-EMF chokes the drive current -> B un-flips -> back-EMF
+          // vanishes -> drive current returns -> repeat) instead of settling
+          // on the correct self-consistent answer for this one real dt. Move
+          // only partway toward bTarget per iteration -- same technique
+          // SPICE-class solvers use for damped Newton convergence -- so the
+          // fixed point this converges to is unchanged (at true convergence
+          // bTarget already equals the current guess, damping or not), it
+          // just gets there without ringing.
+          const bOld = coreB.get(mc.id);
+          const bNew = bOld + 0.25 * (bTarget - bOld);
+          if (Math.abs(bNew - bOld) > 1e-7) {
+            coreB.set(mc.id, bNew);
+            changed = true;
+          }
+        });
+
         if (!changed) break;
       }
 
@@ -665,6 +794,20 @@
         this._toroidState.set(tor.id, arr);
         arr.forEach((I, wi) => toroidCurrent.set(tor.id + ':' + wi, I));
         toroidCurrent.set(tor.id, arr[0] || 0);
+      });
+
+      // memory-core windings: report each winding's own current, same
+      // "<coreId>:<windingIndex>" convention as the toroid, and commit this
+      // frame's converged B back into persisted state -- this IS the DC
+      // memory: nothing clears it except an explicit circuit reset (a fresh
+      // board), never the fixed-point iteration or the windings' current
+      // going to zero.
+      const memCoreCurrent = new Map();
+      memoryCores.forEach((mc, mck) => {
+        const arr = mc.windings.map((w, wi) => xSol[rowMemCore(mck, wi)] || 0);
+        arr.forEach((I, wi) => memCoreCurrent.set(mc.id + ':' + wi, I));
+        memCoreCurrent.set(mc.id, arr[0] || 0);
+        this._coreState.set(mc.id, coreB.get(mc.id));
       });
 
       components.forEach((c) => {
@@ -722,10 +865,13 @@
           if ((touchCount.get(uf.find(c.gate)) || 0) <= 1) {
             warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: gate is not wired to anything -- a floating gate picks up noise and can turn the switch on/off unpredictably`);
           }
+        } else if (c.type === 'memorycore') {
+          I = memCoreCurrent.get(c.id) || 0;
         }
         currents.set(c.id, I);
       });
       toroidCurrent.forEach((I, key) => currents.set(key, I));
+      memCoreCurrent.forEach((I, key) => currents.set(key, I));
 
       batteries.forEach((bat, k) => {
         // MNA's branch-current unknown is defined flowing p->m through the
@@ -757,7 +903,14 @@
         bodyDiodeOn: this._fetDiodeState.get(f.id),
       }));
 
-      return { voltages, currents, warnings, mosfetStates, uf, groundRoot, hasCircuit: true };
+      // expose each memory core's actual remanent flux directly (the real
+      // number the solver computed, in [-1, 1]) -- any Left/Right/Hold label
+      // shown anywhere is derived FROM this after the fact, never the other
+      // way around
+      const coreStates = new Map();
+      memoryCores.forEach((mc) => coreStates.set(mc.id, this._coreState.get(mc.id)));
+
+      return { voltages, currents, warnings, mosfetStates, coreStates, uf, groundRoot, hasCircuit: true };
     }
   }
 

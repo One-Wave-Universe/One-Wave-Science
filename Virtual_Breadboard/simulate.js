@@ -102,8 +102,9 @@ function resolveTerminals(board, specParts) {
       freq: p.freq,
       phase: p.phase,
       turnsPerSection: p.type === 'toroid' ? p.turns : undefined,
-      core: p.type === 'toroid' ? (p.core || 'medium') : undefined,
-      gauge: p.type === 'toroid' ? (p.gauge || 'standard') : undefined,
+      turnsPerWinding: p.type === 'memorycore' ? p.turns : undefined,
+      core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
+      gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
       spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
       terminals,
       id: p.type[0] + (i + 1),
@@ -120,6 +121,18 @@ function toroidWindings(p) {
     a: p.terminals[i * 2].cellId,
     b: p.terminals[i * 2 + 1].cellId,
     L: coreDef.al * turns * turns,
+    R: turns * coreDef.meanTurnLen * ohmsPerM,
+  }));
+}
+
+// ported verbatim from js/app.js's memoryCoreWindings
+function memoryCoreWindings(p) {
+  const coreDef = Components.MEMORY_CORES[p.core] || Components.MEMORY_CORES.small;
+  const ohmsPerM = Components.WIRE_GAUGE_OHMS_PER_M[p.gauge] || Components.WIRE_GAUGE_OHMS_PER_M.standard;
+  return p.turnsPerWinding.map((turns, i) => ({
+    a: p.terminals[i * 2].cellId,
+    b: p.terminals[i * 2 + 1].cellId,
+    N: turns,
     R: turns * coreDef.meanTurnLen * ohmsPerM,
   }));
 }
@@ -161,6 +174,13 @@ function toEngineElements(parts) {
         windings: toroidWindings(p),
         coupling: p.turnsPerSection.length > 1 ? (Components.TOROID_SPACING_COUPLING[p.spacing] || 0.9) : 0,
       });
+    } else if (p.type === 'memorycore') {
+      const coreDef = Components.MEMORY_CORES[p.core] || Components.MEMORY_CORES.small;
+      components.push({
+        id: p.id, type: 'memorycore', label: p.id,
+        windings: memoryCoreWindings(p),
+        hcAmpTurns: coreDef.hcAmpTurns, phiSat: coreDef.phiSat, switchTau: coreDef.switchTau,
+      });
     } else {
       components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed });
     }
@@ -176,6 +196,9 @@ function snapshot(result) {
   };
   if (result && result.mosfetStates && result.mosfetStates.size) {
     out.mosfetStates = Object.fromEntries(result.mosfetStates);
+  }
+  if (result && result.coreStates && result.coreStates.size) {
+    out.coreStates = Object.fromEntries(result.coreStates);
   }
   return out;
 }

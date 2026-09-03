@@ -6,9 +6,10 @@ solderless breadboard rendered hole-by-hole, a palette of real parts
 pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
 an inductor, a real AC source, an MTJ rotary angle sensor, a multi-section
 ferrite toroid transformer, discrete N-/P-channel MOSFETs with real body
-diodes, and jumper wires), a built-in oscilloscope, and a live circuit-
-physics engine underneath — not a toy animation. Click any hole to wire
-something into it, and the simulator solves the actual circuit every frame.
+diodes, a square-loop magnetic memory core, and jumper wires), a built-in
+oscilloscope, and a live circuit-physics engine underneath — not a toy
+animation. Click any hole to wire something into it, and the simulator
+solves the actual circuit every frame.
 
 Physics honesty is a hard rule here: if a real bench build would fail or
 read a certain way, the simulator has to fail or read the same way. There
@@ -115,6 +116,34 @@ linear-algebra method SPICE-class simulators use:
   when off — a real bidirectional-switch building block, not a scripted
   rule. Warnings fire for a floating gate (not wired to anything), and for
   Vgs/Vds exceeding the selected part's real rating.
+- The **Memory Core** is a square-loop (remanent) magnetic-core component —
+  genuinely different physics from the linear Ferrite Toroid above, not a
+  reskin of it. It holds 1-3 independent windings sharing one core, each
+  with its own turns count. The core tracks one real state, its normalized
+  remanent flux `B` in `[-1, +1]`: below a real coercive ampere-turns
+  threshold (`Hc`, set by the core size), `B` is frozen exactly where it
+  was — real remanence, not a spring back toward zero — and driving current
+  through ANY winding on the core past `±Hc` flips it, relaxing toward
+  `±1` on a real switching time constant. Every winding on the core sees a
+  genuine Faraday's-law induced voltage (`N · dΦ/dt`) whenever `B` is
+  actually moving, and nothing while it's held — flip it and a sense
+  winding shows a real voltage spike; write the same direction again
+  (already saturated there) and the same winding shows almost nothing.
+  Power the driving FETs off entirely and `B` does not move: this is DC
+  memory that survives the gate closing, unlike a capacitor's sample-and-
+  hold. Because multiple windings on one core add their ampere-turns with
+  sign (which terminal is listed first), group memory (several independent
+  write circuits sharing one lock, so the last one to write wins) and
+  toward/away neighbor coupling (a center cell's write current threaded
+  through an extra winding on each neighbor core, wound the same way for
+  "toward" and reversed for "away") are never scripted logic — they fall
+  straight out of real multi-winding superposition and winding-polarity
+  (dot-convention) physics, the same way the Ferrite Toroid's transformer
+  ratio falls out of turns rather than being hard-coded. This is a
+  deliberately idealized square loop, not a full datasheet part: no
+  temperature dependence, no half-select disturb modeling, and it does not
+  replace the Ferrite Toroid's linear inductor/transformer behavior for
+  circuits that actually want that (the two are separate parts on purpose).
 - The **Oscilloscope** panel below the board is fed by zero-load Scope
   Probes (like a real 10MΩ probe — they never affect the circuit) sampled
   every frame into a rolling window, so AC and quadrature signals are
@@ -146,6 +175,12 @@ core saturation, no skin effect, and no frequency-domain/phasor analysis —
 everything is stepped forward in real time the same way the RC/RL
 transients are) — accurate enough to design and debug real low-voltage
 hobby circuits, not a replacement for SPICE on precision analog design.
+The Memory Core's square-loop remanence model carries the same kind of
+honest limit: it's an idealized `B` in `[-1,+1]` with a real coercive
+threshold and switching time constant, not a manufacturer's full B-H
+datasheet curve — no temperature coefficient, no half-select disturb
+modeling, and it leaves the Ferrite Toroid's linear transformer model
+untouched for circuits that want that instead.
 
 ## Running it
 
@@ -268,7 +303,7 @@ fetch one.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
    Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe,
-   Ferrite Toroid, N-MOSFET, P-MOSFET).
+   Ferrite Toroid, N-MOSFET, P-MOSFET, Memory Core).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
    hole then move to wherever you want the far end and click again.
@@ -296,6 +331,10 @@ fetch one.
    - **N-MOSFET / P-MOSFET** take 3 clicks: `gate`, `drain`, then `source`.
      Pick the part class (logic-level 1.5V-class or standard 2.1V-class) in
      the tool panel before placing, or change it later in the Inspector.
+   - The **Memory Core** takes 2 clicks per winding (pick 1-3 windings, its
+     core size, and wire gauge in the tool panel first) — click that
+     winding's 2 terminal holes, then the next winding's 2, and so on.
+     Multiple windings on one core share the same physical lock.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it. Both
@@ -322,8 +361,9 @@ fetch one.
    current-limiting resistor.
 7. Try the **Example builds** in the sidebar: LED + resistor, RC charging
    with a switch, and a short-circuit danger demo, then the **Calibration
-   boards** (Cal A-E and the Memory cell — see "Calibration boards" below)
-   to see the discrete-MOSFET physics in action immediately.
+   boards** (Cal A-H and the Memory cell — see "Calibration boards" below)
+   to see the discrete-MOSFET and memory-core physics in action
+   immediately.
 8. **Save** / **Load** keep a build in the browser's local storage;
    **Clear** wipes the board.
 
@@ -334,7 +374,8 @@ itself — not a demo circuit, a bench-replicable test. Wire the same thing
 on a real board with a multimeter and it should read within a few mV of
 what's shown here; that agreement is the whole point (`test/circuit.test.js`
 checks the same claims numerically as T-DIV/T-VGND/T-NFET-ON/T-NFET-OFF/
-T-NFET-DIODE/T-BB-PAIR/T-RC/T-MEM).
+T-NFET-DIODE/T-BB-PAIR/T-RC/T-MEM/T-CORE-LOCK/T-CORE-HOLD/T-GATE-MEM/
+T-TRI-DECIDE/T-GROUP-MEM/T-TOWARD-AWAY).
 
 - **Cal A — divider (mV proof)**: a 124kΩ/1kΩ divider off a 2.5V mid-rail
   (from a 5V supply through a Virtual Ground) reads **2.520V**, not a
@@ -377,6 +418,45 @@ T-NFET-DIODE/T-BB-PAIR/T-RC/T-MEM).
   of `V0`, because a 10MΩ leak resistor let the solver's own GMIN safety
   leak compete with the intended one — fixed by sizing the leak resistor
   so GMIN's contribution stays a sub-millivolt artifact, per T-MEM.)
+- **Cal F — memory core (write/flip)**: a square-loop Memory Core driven
+  through a real current-limit resistor by a manually-reversible supply —
+  two batteries and two switches standing in for a bench's polarity-
+  reversing supply (close only one at a time). Close the `+` switch: the
+  core locks to `+Br` (write). Open both: remanence holds (off). Close
+  `-` instead: a real induced-voltage spike appears on the unloaded sense
+  winding while the core flips to `-Br` (opposite-pulse spike). Toggle
+  `-` off and back on while already at `-Br`: essentially no spike at all
+  (same-way, already saturated there) — proves the sense voltage is
+  genuinely `N·dΦ/dt`, not a fixed per-write blip (matches T-CORE-LOCK/
+  T-CORE-HOLD).
+- **Cal G — gate + lock**: the nerve-gate acceptance circuit — a real
+  Virtual Ground for `V0`, a millivolt-scale bipolar "lean" pair (the same
+  manual-reversal trick as Cal F) driven through two back-to-back N-MOSFETs
+  sharing one gate signal, into a Memory Core winding referenced to `V0`.
+  Gate held low (through the pulldown): the FET pair is open, so no lean
+  reaches the core and it holds whatever it last locked. Close the gate
+  switch with `+` lean selected: the core locks Left (`+Br`) referenced to
+  `V0`, in millivolts — the same sensing precision Cal A-E prove, now
+  writing real current instead of just reading it; `-` lean locks Right.
+  Open the gate switch afterward and remanence survives — DC memory, not
+  volatile (matches T-GATE-MEM/T-TRI-DECIDE).
+- **Cal H — toward/away neighbors**: three Memory Cores sharing one drive
+  current. A center cell's own write current is also threaded through one
+  coupling winding on each of two neighbor cores — wound the *same* way on
+  the "toward" neighbor, and the *opposite* way (terminals swapped) on the
+  "away" neighbor. Select `+` (Left) and the toward neighbor locks the same
+  way while the away neighbor locks the mirror; select `-` (Right) and both
+  flip. Read each core's remanence in its Inspector — this is real winding-
+  polarity/dot-convention physics falling out of shared ampere-turns, never
+  a scripted toward/away rule (matches T-GROUP-MEM/T-TOWARD-AWAY).
+
+Cal F/G/H's windings are real milliohm-scale copper, so getting real
+current-limit-resistor and battery-current warnings from the status bar
+while they're running is expected, not a bug: developing enough real
+ampere-turns to flip a square-loop core through that little resistance
+genuinely does draw more current, and dissipate more resistor power, than
+the same-looking divider in Cal A-E ever needs to sense a voltage — the
+same honest sense-vs-write current distinction T-TRI-DECIDE documents.
 
 ## Ask AI to build it
 
@@ -517,6 +597,17 @@ a back-to-back MOSFET pair blocking current in both directions
 (T-BB-PAIR), a real RC time constant checked against the analytic curve at
 1τ and 3τ (T-RC), the memory-cell acceptance circuit sampling a millivolt
 input and then decaying toward `V0` (not absolute ground) on its real
-leak-resistor time constant (T-MEM), and a static check that the
-calibration example presets are built from real discrete parts rather
-than the legacy ternarycell macro (T-NO-MACRO).
+leak-resistor time constant (T-MEM), a square-loop memory core locking to
+real remanence past its coercive threshold with a genuine induced-voltage
+spike on flip and almost none writing the same way twice (T-CORE-LOCK), a
+sub-threshold pulse leaving remanence exactly unchanged (T-CORE-HOLD), a
+back-to-back N-MOSFET gate pair writing the core and remanence surviving
+the gates closing (T-GATE-MEM), the same gate-plus-lock cell finishing
+Left/Right/Hold purely from real millivolt-lean-plus-gate combinations
+referenced to `V0` (T-TRI-DECIDE), three independent write paths sharing
+one group memory core so the last real write naturally wins from ampere-
+turns superposition alone (T-GROUP-MEM), a center cell's write current
+coupled into a "toward" neighbor that matches it and an "away" neighbor
+(winding terminals swapped) that mirrors it (T-TOWARD-AWAY), and a static
+check that the calibration example presets are built from real discrete
+parts rather than the legacy ternarycell macro (T-NO-MACRO).
