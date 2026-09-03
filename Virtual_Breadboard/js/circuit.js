@@ -46,6 +46,16 @@
  *     instant step. Whether a given drive actually flips it, and what any
  *     other winding on the same core reads, is computed by the solver from
  *     real current and never pre-decided.
+ *   - The TLV3202 dual comparator is two independent push-pull output
+ *     stages sharing one VCC/GND pair: each output is modeled as a small
+ *     output-impedance resistor path to whichever rail the real Vin+/Vin-
+ *     comparison (offset by a real input offset voltage) currently
+ *     decides -- exactly the same on/off fixed-point technique as a
+ *     MOSFET's channel decision, just choosing between two conduction
+ *     paths (to VCC or to GND) instead of one path being on/off. No
+ *     ternary/multi-level decision is hard-coded here: this is a plain
+ *     2-level comparator, honestly modeled: whatever multi-level behavior
+ *     gets built from it has to come from real wiring around it.
  *   - A tiny leak conductance (gmin) from every node to ground prevents the
  *     matrix from going singular when part of the board isn't wired to
  *     anything yet.
@@ -78,6 +88,13 @@
   const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
+  // farads; at/above this a capacitor is a real polarized electrolytic
+  // (matches components.js's drawing threshold -- the same real part,
+  // just two different concerns needing the same number)
+  const ELECTROLYTIC_THRESHOLD = 1e-6;
+  // volts; a real electrolytic's typical absolute-max reverse-voltage
+  // rating before the dielectric breaks down -- conservative but real
+  const REVERSE_POLARITY_LIMIT = 1.0;
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
@@ -101,6 +118,22 @@
     const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
     return table[c.value] || table[1.5];
   }
+
+  // Real TLV3202 dual comparator (TI datasheet): rail-to-rail push-pull
+  // output (not open-drain -- no pull-up needed), input offset voltage a
+  // few mV, and a real minimum operating supply voltage. `outputRon` is a
+  // real push-pull output stage's small on-resistance, not an idealized
+  // zero-ohm switch -- the same "fixed on-resistance once a decision is
+  // made" idea as a MOSFET's RDS(on).
+  const COMPARATOR_SPEC = {
+    name: 'TLV3202 (dual, rail-to-rail push-pull)',
+    outputRon: 40, // ohms, approximate push-pull output impedance
+    vosTyp: 0.002, // volts, typical input offset voltage
+    vosMax: 0.01, // volts, worst-case input offset voltage (datasheet max)
+    vccMin: 2.7, // volts, minimum specified supply voltage
+    vccMax: 5.5, // volts, maximum specified supply voltage
+    cmRangeOver: 0.2, // volts, how far past either rail the real common-mode range extends
+  };
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
   // sin/cos channels -- a real sinusoid evaluated at the simulator's own
@@ -166,6 +199,7 @@
       this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
       this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
       this._coreState = new Map(); // memory-core id -> normalized remanent flux B in [-1, 1], persists across frames
+      this._compState = new Map(); // "<comparatorId>:<channel>" -> boolean (output driven HIGH toward VCC)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -210,6 +244,11 @@
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
         if (c.type === 'memorycore') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
+        if (c.type === 'comparator') {
+          uf.find(c.in1p); uf.find(c.in1m); uf.find(c.out1);
+          uf.find(c.in2p); uf.find(c.in2m); uf.find(c.out2);
+          uf.find(c.vcc); uf.find(c.gnd);
+        }
       });
 
       const batteries = components.filter((c) => c.type === 'battery');
@@ -220,6 +259,7 @@
       const toroids = components.filter((c) => c.type === 'toroid');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
       const memoryCores = components.filter((c) => c.type === 'memorycore');
+      const comparators = components.filter((c) => c.type === 'comparator');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -264,6 +304,11 @@
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
         if (c.type === 'memorycore') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
+        if (c.type === 'comparator') {
+          touch(c.in1p); touch(c.in1m); touch(c.out1);
+          touch(c.in2p); touch(c.in2m); touch(c.out2);
+          touch(c.vcc); touch(c.gnd);
+        }
       });
       roots.add(groundRoot);
 
@@ -326,6 +371,15 @@
         // a fresh core (just placed, or a fresh reset) starts demagnetized --
         // no history to presume a remanence from
         if (!this._coreState.has(mc.id)) this._coreState.set(mc.id, 0);
+      });
+      comparators.forEach((cp) => {
+        // a fresh comparator (just placed, or a fresh reset) starts with
+        // both outputs LOW -- same "don't presume a decision" reasoning as
+        // the diode/MOSFET on/off state above
+        ['1', '2'].forEach((ch) => {
+          const key = cp.id + ':' + ch;
+          if (!this._compState.has(key)) this._compState.set(key, false);
+        });
       });
       // per-frame working state for the square-loop cores: coreBStart is
       // fixed for the whole frame (this is the real physical B the core had
@@ -451,6 +505,24 @@
               stampI(anode, Ieq);
               stampI(cathode, -Ieq);
             }
+          } else if (c.type === 'comparator') {
+            // a real push-pull output stage is just two small-Ron paths,
+            // one to each rail, with exactly one active at a time -- stamp
+            // whichever one this channel's fixed-point decision currently
+            // holds, same "resistor path selected by a decision" idea as
+            // the MOSFET channel above, just choosing between two rails
+            // instead of one path being on/off.
+            const g = 1 / COMPARATOR_SPEC.outputRon;
+            const vccIdx = gi(uf.find(c.vcc));
+            const gndIdx = gi(uf.find(c.gnd));
+            [['1', c.out1], ['2', c.out2]].forEach(([ch, outPin]) => {
+              const o = gi(uf.find(outPin));
+              const target = this._compState.get(c.id + ':' + ch) ? vccIdx : gndIdx;
+              stampG(o, o, g);
+              stampG(target, target, g);
+              stampG(o, target, -g);
+              stampG(target, o, -g);
+            });
           } else if (c.type === 'battery') {
             const g = 1 / BATTERY_RINT;
             const i = gi(uf.find(batInternal(c)));
@@ -726,6 +798,23 @@
           }
         });
 
+        comparators.forEach((cp) => {
+          // real input offset voltage: the decision is Vin+ - Vin- > Vos,
+          // not a perfectly ideal zero-offset comparison -- a real part
+          // with a few mV of built-in imbalance, same honesty as the
+          // MOSFET's real Vth instead of an ideal zero-threshold switch.
+          [['1', cp.in1p, cp.in1m], ['2', cp.in2p, cp.in2m]].forEach(([ch, inP, inM]) => {
+            const vp = voltages.get(uf.find(inP));
+            const vm = voltages.get(uf.find(inM));
+            const shouldBeHigh = (vp || 0) - (vm || 0) > COMPARATOR_SPEC.vosTyp;
+            const key = cp.id + ':' + ch;
+            if (shouldBeHigh !== this._compState.get(key)) {
+              this._compState.set(key, shouldBeHigh);
+              changed = true;
+            }
+          });
+        });
+
         memoryCores.forEach((mc, mck) => {
           // net ampere-turns driving this core: every winding contributes
           // turns*current, exactly like a real multi-winding core (this is
@@ -827,6 +916,15 @@
           const vPrev = this._capState.get(c.id) || 0;
           I = (c.value * ((va - vb) - vPrev)) / Math.max(dt, 1e-6);
           this._capState.set(c.id, va - vb);
+          // an electrolytic (value >= ELECTROLYTIC_THRESHOLD) is a real
+          // polarized part -- terminals[0]/"a" is the "+" lead by the same
+          // convention as the LED/diode anode. Real electrolytics tolerate
+          // only a small reverse voltage before the dielectric breaks down
+          // (vents, sometimes violently); a ceramic disc below the
+          // threshold has no polarity at all and never warns.
+          if (c.value >= ELECTROLYTIC_THRESHOLD && va - vb < -REVERSE_POLARITY_LIMIT) {
+            warnings.push(`Electrolytic capacitor ${c.label || c.id}: reverse-biased by ${(vb - va).toFixed(2)}V -- exceeds a typical electrolytic's reverse-voltage rating and can vent or fail`);
+          }
         } else if (c.type === 'potentiometer') {
           I = 0;
         } else if (c.type === 'switch' || c.type === 'pushbutton') {
@@ -867,6 +965,40 @@
           }
         } else if (c.type === 'memorycore') {
           I = memCoreCurrent.get(c.id) || 0;
+        } else if (c.type === 'comparator') {
+          // real limits, checked against the actual solved node voltages,
+          // not assumed constants -- exactly like the MOSFET Vgs/Vds
+          // warnings above. va/vb are meaningless for this component (it
+          // has no plain a/b pins), so I is left at 0 and reported per
+          // output channel below instead.
+          const vVcc = voltages.get(uf.find(c.vcc));
+          const vGnd = voltages.get(uf.find(c.gnd));
+          const supplyV = (vVcc || 0) - (vGnd || 0);
+          if ((touchCount.get(uf.find(c.vcc)) || 0) <= 1 || (touchCount.get(uf.find(c.gnd)) || 0) <= 1) {
+            warnings.push(`${c.label || c.id} (TLV3202): VCC or GND is not wired to anything -- an unpowered comparator can't drive a real output`);
+          } else if (supplyV < COMPARATOR_SPEC.vccMin) {
+            warnings.push(`${c.label || c.id} (TLV3202): supply is ${supplyV.toFixed(2)}V -- below its ${COMPARATOR_SPEC.vccMin}V minimum operating voltage`);
+          } else if (supplyV > COMPARATOR_SPEC.vccMax) {
+            warnings.push(`${c.label || c.id} (TLV3202): supply is ${supplyV.toFixed(2)}V -- exceeds its ${COMPARATOR_SPEC.vccMax}V maximum rating`);
+          }
+          [['1', c.in1p, c.in1m], ['2', c.in2p, c.in2m]].forEach(([ch, inP, inM]) => {
+            [['+', inP], ['-', inM]].forEach(([sign, pin]) => {
+              const v = voltages.get(uf.find(pin));
+              if (v == null) return;
+              if (v > (vVcc || 0) + COMPARATOR_SPEC.cmRangeOver || v < (vGnd || 0) - COMPARATOR_SPEC.cmRangeOver) {
+                warnings.push(`${c.label || c.id} (TLV3202) ch${ch} IN${sign}: ${v.toFixed(2)}V is outside the real common-mode input range -- the comparator's decision is not guaranteed valid here`);
+              }
+            });
+          });
+          // per-channel output current, "<id>:1"/"<id>:2" -- same convention
+          // as the toroid/memory-core per-winding currents above
+          [['1', c.out1], ['2', c.out2]].forEach(([ch, outPin]) => {
+            const vOut = voltages.get(uf.find(outPin));
+            const high = this._compState.get(c.id + ':' + ch);
+            const railV = high ? vVcc : vGnd;
+            const Iout = ((vOut || 0) - (railV || 0)) / COMPARATOR_SPEC.outputRon;
+            currents.set(c.id + ':' + ch, Iout);
+          });
         }
         currents.set(c.id, I);
       });
@@ -884,6 +1016,31 @@
           warnings.push(`Short circuit at ${bat.label || bat.id}: ${Isrc.toFixed(2)} A — check your wiring`);
         }
       });
+
+      // Two ideal-ish voltage sources wired directly across the same node
+      // pair don't settle at a safe "averaged" voltage on a real bench --
+      // they fight each other through whatever tiny internal resistance
+      // each one has, and the loser sinks a large real current backward.
+      // The solver above already reflects that real physics (a real,
+      // non-singular MNA system, not a bug), but presenting the resulting
+      // number without comment risks reading as a normal, safe operating
+      // point. Call it out explicitly and specifically here, distinct from
+      // the generic overcurrent warning above.
+      for (let bi = 0; bi < batteries.length; bi++) {
+        for (let bj = bi + 1; bj < batteries.length; bj++) {
+          const b1 = batteries[bi];
+          const b2 = batteries[bj];
+          const a1 = uf.find(b1.a);
+          const g1 = uf.find(b1.b);
+          const a2 = uf.find(b2.a);
+          const g2 = uf.find(b2.b);
+          const sameOrientation = a1 === a2 && g1 === g2;
+          const reversedOrientation = a1 === g2 && g1 === a2;
+          if ((sameOrientation && b1.value !== b2.value) || reversedOrientation) {
+            warnings.push(`Conflicting power supplies: ${b1.label || b1.id} (${b1.value}V) and ${b2.label || b2.id} (${b2.value}V) are wired directly across the same two nodes -- rejected as a valid operating point. A real bench would show these fighting each other (large circulating current, neither supply's voltage), not a safe averaged voltage. Add series resistance or remove one supply.`);
+          }
+        }
+      }
 
       acsources.forEach((ac) => {
         const I = acCurrent.get(ac.id) || 0;
@@ -910,13 +1067,23 @@
       const coreStates = new Map();
       memoryCores.forEach((mc) => coreStates.set(mc.id, this._coreState.get(mc.id)));
 
-      return { voltages, currents, warnings, mosfetStates, coreStates, uf, groundRoot, hasCircuit: true };
+      // expose each comparator channel's actual HIGH/LOW decision directly
+      // -- the real Vin+/Vin-/Vos comparison computed above, never a
+      // separately invented state
+      const comparatorStates = new Map();
+      comparators.forEach((cp) => comparatorStates.set(cp.id, {
+        out1High: this._compState.get(cp.id + ':1'),
+        out2High: this._compState.get(cp.id + ':2'),
+      }));
+
+      return { voltages, currents, warnings, mosfetStates, coreStates, comparatorStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
-    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec,
+    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, COMPARATOR_SPEC,
+    ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;

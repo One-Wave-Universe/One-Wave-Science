@@ -82,6 +82,26 @@
     ];
   }
 
+  // A real 8-pin DIP-8 TLV3202 straddles the center channel exactly like a
+  // physical chip: pins 1-4 in row 'e' (the row bordering the gap),
+  // columns c..c+3, and pins 5-8 in the mirrored row 'f' directly across
+  // the gap -- but numbered going AROUND the package (real DIP pin
+  // numbering), so row f's columns run c+3..c, reversed relative to row
+  // e. Anchor must be row 'e' -- any other row can't straddle the gap the
+  // way a real DIP does. Pin order matches the datasheet:
+  // OUT1,IN1-,IN1+,GND,IN2+,IN2-,OUT2,VCC.
+  function deriveTlv3202Holes(anchor) {
+    if (anchor.row !== 'e') return null;
+    const c = anchor.col;
+    const bi = anchor.boardIdx || 0;
+    const boardMeta = board.boards[bi];
+    if (!boardMeta || c + 3 > boardMeta.cols) return null;
+    return [
+      H('e', c, bi), H('e', c + 1, bi), H('e', c + 2, bi), H('e', c + 3, bi),
+      H('f', c + 3, bi), H('f', c + 2, bi), H('f', c + 1, bi), H('f', c, bi),
+    ];
+  }
+
   function newId(prefix) {
     return prefix + (state.nextId++);
   }
@@ -127,8 +147,8 @@
     const wires = [];
     const components = [];
     state.parts.forEach((p) => {
-      if (p.type === 'scope') {
-        // a zero-load voltage tap -- never enters the circuit physics
+      if (p.type === 'scope' || p.type === 'diffscope') {
+        // zero-load voltage tap(s) -- never enter the circuit physics
       } else if (p.type === 'wire') {
         wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
       } else if (p.type === 'ywire') {
@@ -187,6 +207,13 @@
           id: p.id, type: 'memorycore', label: p.id,
           windings: memoryCoreWindings(p),
           hcAmpTurns: coreDef.hcAmpTurns, phiSat: coreDef.phiSat, switchTau: coreDef.switchTau,
+        });
+      } else if (p.type === 'comparator') {
+        const t = p.terminals;
+        components.push({
+          id: p.id, type: 'comparator', label: p.id,
+          out1: t[0].cellId, in1m: t[1].cellId, in1p: t[2].cellId, gnd: t[3].cellId,
+          in2p: t[4].cellId, in2m: t[5].cellId, out2: t[6].cellId, vcc: t[7].cellId,
         });
       } else {
         components.push({
@@ -421,7 +448,10 @@
     if (type === 'pushbutton') return { type: 'pushbutton', terminals: holes.slice(0, 2), closed: false };
     if (type === 'potentiometer') {
       const terminals = derivePotentiometerHoles(holes[0]);
-      if (!terminals) return null;
+      // the anchor is the only hole clicked so far -- validate the OTHER
+      // 5 pins of the real 6-pin footprint are actually free too, not
+      // just the one hole the click landed on
+      if (!terminals || terminals.some((h) => holeOccupied(h, false))) return null;
       return { type: 'potentiometer', terminals, value: opts.potValue, pos: 0.5 };
     }
     if (type === 'vgnd') return { type: 'vgnd', terminals: holes.slice(0, 3) };
@@ -429,6 +459,7 @@
     if (type === 'acsource') return { type: 'acsource', terminals: holes.slice(0, 2), value: opts.acValue, freq: opts.acFreq, phase: 0 };
     if (type === 'mtjsensor') return { type: 'mtjsensor', terminals: holes.slice(0, 3), value: opts.mtjValue, freq: opts.mtjFreq, phase: 0 };
     if (type === 'scope') return { type: 'scope', terminals: holes.slice(0, 1), color: opts.scopeColor, samples: [] };
+    if (type === 'diffscope') return { type: 'diffscope', terminals: holes.slice(0, 2), color: opts.scopeColor, samples: [] };
     if (type === 'toroid') {
       const sections = opts.toroidSections;
       return {
@@ -438,6 +469,13 @@
       };
     }
     if (type === 'nmos' || type === 'pmos') return { type, terminals: holes.slice(0, 3), value: opts.mosfetValue };
+    if (type === 'comparator') {
+      const terminals = deriveTlv3202Holes(holes[0]);
+      // validate the full real 8-pin DIP-8 footprint is clear, not just
+      // the one anchor hole the click landed on
+      if (!terminals || terminals.some((h) => holeOccupied(h, false))) return null;
+      return { type: 'comparator', terminals };
+    }
     if (type === 'memorycore') {
       const windings = opts.memCoreWindings;
       return {
@@ -472,7 +510,7 @@
       potValue: state.toolValue.potentiometer,
       wireColor: type === 'wire' || type === 'ywire' ? state.toolValue.wireColor : undefined,
       wireGauge: state.toolValue.wireGauge,
-      scopeColor: type === 'scope' ? nextScopeColor() : undefined,
+      scopeColor: type === 'scope' || type === 'diffscope' ? nextScopeColor() : undefined,
       toroidSections: state.toolValue.toroidSections,
       toroidTurns: state.toolValue.toroidTurns,
       toroidCore: state.toolValue.toroidCore,
@@ -484,7 +522,11 @@
       memCoreCore: state.toolValue.memCoreCore,
       memCoreGauge: state.toolValue.memCoreGauge,
     });
-    if (part) addPart(part);
+    if (part) {
+      addPart(part);
+    } else if (type === 'potentiometer' || type === 'comparator') {
+      flashStatus("Can't place there -- its full footprint needs every one of its holes clear (and on the board).");
+    }
   }
 
   // distance from a point to the nearest point on a line segment — lets
@@ -511,6 +553,12 @@
         // terminals can sit far from the ring itself (each winding's holes
         // are wherever the user clicked) -- also catch a click on a lead
         if (t.some((term) => distToSegment(pos.x, pos.y, term.x, term.y, c.x, c.y) < 10)) return p;
+      } else if (p.type === 'comparator') {
+        const left = Math.min(...t.map((h) => h.x)) - 8;
+        const right = Math.max(...t.map((h) => h.x)) + 8;
+        const top = Math.min(...t.map((h) => h.y)) - 12;
+        const bottom = Math.max(...t.map((h) => h.y)) + 12;
+        if (pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom) return p;
       } else if (t.length === 6) {
         const left = Math.min(t[0].x, t[3].x) - 10;
         const right = Math.max(t[2].x, t[5].x) + 10;
@@ -543,6 +591,7 @@
     const t = p.terminals;
     if (p.type === 'toroid') return Components.toroidCentroid(t);
     if (p.type === 'memorycore') return Components.memoryCoreCentroid(t);
+    if (p.type === 'comparator') return Components.comparatorCentroid(t);
     if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
     if (t.length === 4) {
       const [j1, j2] = Components.yWireJunctions(t);
@@ -697,9 +746,28 @@
     releaseAllPushbuttons();
   }, { passive: true });
 
-  // validator: is this hole a legal next click for the placement in progress?
-  // (rejects only re-clicking the exact same hole twice in a row)
+  // validator: is this specific physical hole already the site of another
+  // lead -- an already-placed part's, or (unless told not to check) one
+  // already claimed earlier in the placement currently in progress? Two
+  // different holes sharing the same electrical node (same cellId, e.g.
+  // two holes in the same column) is completely normal breadboard wiring;
+  // only the exact same physical hole can hold one lead, exactly like a
+  // real board where a hole is a single, small mechanical socket.
+  // `includePending` defaults to true for the click-by-click path; a
+  // 1-click derived footprint (potentiometer, comparator) passes false
+  // when checking its OWN just-derived holes, since its own anchor is
+  // still sitting in state.pending at that point and isn't a competing lead.
+  function holeOccupied(hole, includePending) {
+    const bySamePos = (t) => t.x === hole.x && t.y === hole.y;
+    if (includePending !== false && state.pending.some(bySamePos)) return true;
+    return state.parts.some((p) => p.terminals.some(bySamePos));
+  }
+
+  // validator: is this hole a legal next click for the placement in
+  // progress? Rejects a hole already occupied by another lead (real or
+  // pending), not just an immediate repeat of the last click.
   function isValidPlacement(pending, hole) {
+    if (holeOccupied(hole)) return false;
     if (!pending.length) return true;
     const last = pending[pending.length - 1];
     return !(last.x === hole.x && last.y === hole.y);
@@ -733,7 +801,10 @@
   function handlePlacementClick(pos) {
     const hole = Board.hitTest(board, pos.x, pos.y, 11);
     if (!hole) return;
-    if (!isValidPlacement(state.pending, hole)) return;
+    if (!isValidPlacement(state.pending, hole)) {
+      if (holeOccupied(hole)) flashStatus('That hole already has a lead in it -- pick a different hole on the same node instead.');
+      return;
+    }
     state.pending.push(hole);
     if (state.pending.length >= terminalsNeeded(state.tool)) {
       commitPart(state.tool, state.pending);
@@ -970,6 +1041,26 @@
         <div><span>Remanence B</span><b>${B == null ? '—' : B.toFixed(3)}</b></div>
         <div><span>Labeled state</span><b>${label}</b></div>
       ` + windingRows;
+      return;
+    } else if (part.type === 'comparator') {
+      // real pin voltages plus the real HIGH/LOW decision the solver
+      // computed for each channel -- never a value this readout decides
+      const vOut1 = va; // t[0]
+      const vIn1m = vb; // t[1]
+      const vIn1p = vOf(2);
+      const vGnd = vOf(3);
+      const vIn2p = vOf(4);
+      const vIn2m = vOf(5);
+      const vOut2 = vOf(6);
+      const vVcc = vOf(7);
+      const cstate = state.lastResult.comparatorStates ? state.lastResult.comparatorStates.get(part.id) : undefined;
+      currentReadoutEl.innerHTML = `
+        <div><span>Supply (VCC−GND)</span><b>${fmtV(vVcc - vGnd)}</b></div>
+        <div><span>Ch1: IN1+ − IN1−</span><b>${fmtV(vIn1p - vIn1m)}</b></div>
+        <div><span>Ch1 OUT1</span><b>${fmtV(vOut1)} (${cstate && cstate.out1High ? 'HIGH' : 'LOW'})</b></div>
+        <div><span>Ch2: IN2+ − IN2−</span><b>${fmtV(vIn2p - vIn2m)}</b></div>
+        <div><span>Ch2 OUT2</span><b>${fmtV(vOut2)} (${cstate && cstate.out2High ? 'HIGH' : 'LOW'})</b></div>
+      `;
       return;
     } else {
       rows = `
@@ -1461,6 +1552,74 @@
     ];
   }
 
+  // Stage 1 Real Millivolt Ternary (G-744): the first real, bench-buildable
+  // ternary cell -- a TLE2426-class V0 reference, a real TLV3202 dual-
+  // comparator window detector with two 124k/1k precision networks
+  // defining its +/-20mV window edges, a bipolar millivolt "lean" signal
+  // source (same manual-reversal trick as Cal F/G/H), and an AO3400A/
+  // AO3401A pair writing the window decision onto a 100k-held "MEM" node
+  // -- Right pulls MEM toward +5V, Left toward 0V, Hold lets the 100k
+  // leak it back to V0. A 100nF bypass cap sits right at the comparator's
+  // own VCC/GND pins, per the real datasheet's application circuit.
+  //
+  // Q2 (Left) is an N-MOSFET low-side pull to GND -- its source is a
+  // fixed rail, so it pulls cleanly all the way down. A high-side pull
+  // needs the complementary part: an N-MOSFET pulling UP is a real,
+  // honest self-limiting switch (Vgs shrinks as the source it's driving
+  // rises, since Vgs = Vgate - Vsource here), the same reason real bench
+  // designs use a P-channel device for a high-side switch instead of
+  // fighting that limit -- so Q1 (Right) is the palette's real AO3401A-
+  // class P-MOSFET, gated by channel 1 wired ACTIVE-LOW for "Right" (its
+  // inputs swapped: IN1- reads SIGNAL, IN1+ reads the +20mV reference) so
+  // a real PMOS gate-to-source relationship, not a workaround, decides it.
+  //
+  // Close only ONE of the three signal switches at a time:
+  //   swHold  (closed by default): SIGNAL = V0        -> Hold
+  //   swPlus  : SIGNAL = V0 + 40mV (twice the +20mV window edge) -> Right
+  //   swMinus : SIGNAL = V0 - 40mV                      -> Left
+  function presetStage1TernaryParts() {
+    return [
+      // supply + TLE2426-class V0 reference
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      // bridge P and GND out to where the TLV3202 and its window networks live
+      { type: 'resistor', terminals: [H('a', 5), H('a', 22)], value: 124000 }, // R1: P -> X (window-hi)
+      { type: 'wire', terminals: [H('b', 5), H('g', 20)] }, // P -> comparator VCC pin's column
+      { type: 'wire', terminals: [H('j', 5), H('a', 23)] }, // GND -> comparator GND pin's column
+      { type: 'resistor', terminals: [H('b', 22), H('a', 8)], value: 1000 }, // R2: X -> V0 (window-hi)
+      // window-lo reference: V0 -> Y -> GND
+      { type: 'resistor', terminals: [H('b', 8), H('g', 23)], value: 1000 }, // R3: V0 -> Y
+      { type: 'resistor', terminals: [H('h', 23), H('h', 5)], value: 124000 }, // R4: Y -> GND
+      // bridge V0 out to the lean-battery/hold section
+      { type: 'wire', terminals: [H('e', 8), H('a', 11)] },
+      // bipolar millivolt lean, referenced to V0 (close only one switch)
+      { type: 'battery', terminals: [H('a', 13), H('d', 8)], value: 0.04 }, // LP = V0 + 40mV
+      { type: 'battery', terminals: [H('b', 11), H('a', 16)], value: 0.04 }, // LN = V0 - 40mV
+      { type: 'switch', terminals: [H('c', 11), H('b', 21)], closed: true }, // swHold: V0 -> SIGNAL
+      { type: 'switch', terminals: [H('b', 13), H('c', 21)], closed: false }, // swPlus: LP -> SIGNAL
+      { type: 'switch', terminals: [H('b', 16), H('d', 21)], closed: false }, // swMinus: LN -> SIGNAL
+      { type: 'wire', terminals: [H('a', 21), H('g', 22)] }, // tie SIGNAL's top-bank half (col21) to IN2-'s column (col22 bottom)
+      // the real TLV3202: one anchor click's worth of real DIP-8 holes,
+      // pin order OUT1,IN1-,IN1+,GND,IN2+,IN2-,OUT2,VCC. IN1- (col21) =
+      // SIGNAL, IN1+ (col22 top) = the +20mV reference -- swapped from the
+      // "obvious" order so OUT1 reads active-LOW for Right, the signal
+      // Q1's real PMOS gate needs.
+      { type: 'comparator', terminals: deriveTlv3202Holes(H('e', 20)) },
+      // bypass cap right at the chip's own VCC/GND pins
+      { type: 'capacitor', terminals: [H('h', 20), H('b', 23)], value: 100e-9 },
+      // Q1 (AO3401A P-MOSFET, high-side): OUT1 -> gate, MEM -> drain, P -> source
+      { type: 'pmos', terminals: [H('a', 20), H('a', 28), H('c', 5)], value: 1.5 },
+      // Q2 (AO3400A N-MOSFET, low-side): OUT2 -> gate, MEM -> drain, GND -> source
+      { type: 'nmos', terminals: [H('g', 21), H('b', 28), H('i', 5)], value: 1.5 },
+      { type: 'resistor', terminals: [H('c', 28), H('d', 11)], value: 100000 }, // 100k hold/leak: MEM -> V0
+      { type: 'capacitor', terminals: [H('d', 28), H('e', 11)], value: 10e-6 }, // hold cap: MEM -> V0
+      { type: 'scope', terminals: [H('h', 22)], color: nextScopeColor() }, // SIGNAL
+      { type: 'scope', terminals: [H('b', 20)], color: nextScopeColor() }, // OUT1 (active-low Right)
+      { type: 'scope', terminals: [H('h', 21)], color: nextScopeColor() }, // OUT2 (Left)
+      { type: 'scope', terminals: [H('e', 28)], color: nextScopeColor() }, // MEM
+    ];
+  }
+
   // executor: the one place that actually clears the board and writes a
   // preset's parts into it.
   function applyPreset(parts) {
@@ -1480,6 +1639,7 @@
   document.getElementById('presetCalF').addEventListener('click', () => { applyPreset(presetCalFParts()); selectTool('select'); });
   document.getElementById('presetCalG').addEventListener('click', () => { applyPreset(presetCalGParts()); selectTool('select'); });
   document.getElementById('presetCalH').addEventListener('click', () => { applyPreset(presetCalHParts()); selectTool('select'); });
+  document.getElementById('presetStage1').addEventListener('click', () => { applyPreset(presetStage1TernaryParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------
   // Whatever provider is configured plays the same role the hardcoded
@@ -1542,17 +1702,27 @@
   // potentiometer spec gives one anchor hole; the other 5 pins of its real
   // 6-pin footprint are derived the same way a manual click derives them.
   function specPartsToBoardParts(specParts) {
-    return specParts
+    const boardParts = specParts
       .map((p) => {
+        // each terminal may carry an optional "board" (0-indexed, default
+        // board 0) naming which physical board that hole is on -- H()'s
+        // 3rd argument, threaded through exactly like a manual click
+        // already carries the real hole (and its real boardIdx) it landed
+        // on. A part assigned to board 1 must resolve to a real hole on
+        // board 1, not silently fall back to board 0.
         const terminals = p.type === 'potentiometer'
-          ? derivePotentiometerHoles(H(p.terminals[0].row, p.terminals[0].col))
-          : p.terminals.map((t) => H(t.row, t.col));
-        if (!terminals) return null;
+          ? derivePotentiometerHoles(H(p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
+          : p.type === 'comparator'
+          ? deriveTlv3202Holes(H(p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
+          : p.terminals.map((t) => H(t.row, t.col, t.board));
+        if (!terminals || terminals.some((t) => !t)) {
+          throw new Error('a "' + p.type + '" terminal does not resolve to a real hole on the current board layout (bad row/col/board, or its footprint runs off the edge)');
+        }
         const isWire = p.type === 'wire' || p.type === 'ywire';
         return {
           type: p.type,
           value: p.value,
-          color: p.type === 'scope' ? nextScopeColor() : isWire ? nextWireColor() : p.color,
+          color: p.type === 'scope' || p.type === 'diffscope' ? nextScopeColor() : isWire ? nextWireColor() : p.color,
           closed: !!p.closed,
           pos: p.type === 'potentiometer' ? 0.5 : undefined,
           style: isWire ? 'loop' : undefined,
@@ -1567,6 +1737,21 @@
         };
       })
       .filter(Boolean);
+    // one component lead per physical hole -- an AI-generated layout gets
+    // the same real-bench collision check a manual click-by-click build
+    // does, just applied once to the whole batch instead of hole by hole.
+    const seen = new Map(); // "x,y" -> part index that claimed it first
+    boardParts.forEach((p, i) => {
+      p.terminals.forEach((t) => {
+        const key = t.x + ',' + t.y;
+        const first = seen.get(key);
+        if (first != null && first !== i) {
+          throw new Error('part ' + i + ' (' + p.type + ') and part ' + first + ' (' + boardParts[first].type + ') both claim the same physical hole (' + t.cellId + ') -- a real breadboard hole only fits one lead; use a different hole on the same node instead');
+        }
+        seen.set(key, i);
+      });
+    });
+    return boardParts;
   }
 
   async function runAiBuild() {
@@ -1621,9 +1806,19 @@
   function sampleScopeProbes() {
     const uf = state.lastResult.uf;
     state.parts.forEach((p) => {
-      if (p.type !== 'scope') return;
+      if (p.type !== 'scope' && p.type !== 'diffscope') return;
       if (!p.samples) p.samples = [];
-      const v = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+      let v;
+      if (p.type === 'diffscope') {
+        // a real differential measurement: V(A) - V(B), computed from the
+        // same live per-frame voltages every other probe reads -- never a
+        // separate signal, just the difference of two zero-load taps
+        const va = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+        const vb = uf ? state.lastResult.voltages.get(uf.find(p.terminals[1].cellId)) : undefined;
+        v = va == null || vb == null ? undefined : va - vb;
+      } else {
+        v = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+      }
       p.samples.push({ t: state.animT, v: v == null ? 0 : v });
       while (p.samples.length > 1 && state.animT - p.samples[0].t > SCOPE_WINDOW) p.samples.shift();
     });
@@ -1632,7 +1827,7 @@
   function renderScope() {
     const { w, h } = scopeSize;
     scopeCtx.clearRect(0, 0, w, h);
-    const probes = state.parts.filter((p) => p.type === 'scope');
+    const probes = state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope');
 
     let vMax = 0.5;
     probes.forEach((p) => (p.samples || []).forEach((s) => { vMax = Math.max(vMax, Math.abs(s.v)); }));
@@ -1658,6 +1853,17 @@
     scopeCtx.lineTo(w, h / 2);
     scopeCtx.stroke();
 
+    // real numeric axis labels -- so a millivolt-scale trace (e.g. a
+    // -20mV/0mV/+20mV differential lean) reads as actual voltages at a
+    // glance, not just squiggly lines with no scale
+    scopeCtx.fillStyle = '#7a8598';
+    scopeCtx.font = '10px monospace';
+    scopeCtx.textAlign = 'left';
+    scopeCtx.fillText(fmtV(vMax), 4, 11);
+    scopeCtx.fillText('0 V', 4, h / 2 - 3);
+    scopeCtx.fillText(fmtV(-vMax), 4, h - 4);
+    scopeCtx.textAlign = 'left';
+
     const tNow = state.animT;
     probes.forEach((p) => {
       const samples = p.samples || [];
@@ -1677,7 +1883,10 @@
     scopeLegendEl.innerHTML = probes.length
       ? probes.map((p) => {
           const last = (p.samples && p.samples[p.samples.length - 1]) || { v: 0 };
-          return `<span class="chip"><span class="swatch-dot" style="background:${p.color}"></span>${p.id} @ ${p.terminals[0].cellId}: <b>${fmtV(last.v)}</b></span>`;
+          const where = p.type === 'diffscope'
+            ? `${p.terminals[0].cellId}−${p.terminals[1].cellId}`
+            : p.terminals[0].cellId;
+          return `<span class="chip"><span class="swatch-dot" style="background:${p.color}"></span>${p.id} @ ${where}: <b>${fmtV(last.v)}</b></span>`;
         }).join('')
       : '<span class="chip">No probes placed yet — pick the Scope Probe tool.</span>';
   }
@@ -1754,6 +1963,8 @@
         Components.drawMtjSensor(ctx, p, t, opacity, state.animT);
       } else if (p.type === 'scope') {
         Components.drawScopeProbe(ctx, p, t[0].x, t[0].y, opacity);
+      } else if (p.type === 'diffscope') {
+        Components.drawDiffScopeProbe(ctx, p, t[0].x, t[0].y, t[1].x, t[1].y, opacity);
       } else if (p.type === 'toroid') {
         Components.drawToroid(ctx, p, t, opacity);
       } else if (p.type === 'nmos' || p.type === 'pmos') {
@@ -1762,6 +1973,9 @@
       } else if (p.type === 'memorycore') {
         const B = state.lastResult.coreStates ? state.lastResult.coreStates.get(p.id) : 0;
         Components.drawMemoryCore(ctx, p, t, opacity, B || 0);
+      } else if (p.type === 'comparator') {
+        const cstate = state.lastResult.comparatorStates ? state.lastResult.comparatorStates.get(p.id) : undefined;
+        Components.drawComparatorChip(ctx, p, t, opacity, cstate);
       }
 
       if (p.id === state.selectedPartId) {
@@ -1898,6 +2112,7 @@
     warnings: state.lastResult.warnings,
     mosfetStates: Object.fromEntries(state.lastResult.mosfetStates || []),
     coreStates: Object.fromEntries(state.lastResult.coreStates || []),
+    comparatorStates: Object.fromEntries(state.lastResult.comparatorStates || []),
   });
   window.__selectPartById = (id) => {
     state.selectedPartId = id;
