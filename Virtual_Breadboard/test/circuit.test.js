@@ -636,19 +636,273 @@ function approx(a, b, eps, msg) {
   console.log('Test 23 OK (T-MEM): sampled mem-V0 =', ((vMemSampled - vV0Sampled) * 1000).toFixed(2), 'mV, decays to', (vAt1Tau * 1000).toFixed(2), 'mV at 1 tau, settles to', (vMemFinal * 1000).toFixed(3), 'mV');
 }
 
-// Test 24 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Shared small-core parameters for the memory-core tests below -- a real
+// winding-resistance figure (turns * mean-turn-length * copper ohms/m for
+// standard-gauge wire, the same formula the toroid uses) rather than a
+// made-up round number.
+const SMALL_CORE = { hcAmpTurns: 2, phiSat: 4e-6, switchTau: 0.002 };
+function windingR(turns, meanTurnLen) {
+  const ohmsPerMStandardGauge = 0.0531;
+  return turns * meanTurnLen * ohmsPerMStandardGauge;
+}
+
+// Test 25 (T-CORE-LOCK): a square-loop memory core, driven past its real
+// ampere-turns coercive threshold, must lock to +Br; driven the opposite
+// way, it must show a real (nonzero, decaying) induced-voltage spike on a
+// separate sense winding while flipping to -Br; driven the same way again
+// (already saturated there) must show essentially no spike at all.
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(driveV) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'GND', value: driveV },
+        { id: 'r1', type: 'resistor', a: 'P', b: 'DA', value: 10 },
+        {
+          id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau,
+          windings: [
+            { a: 'DA', b: 'GND', N, R }, // drive winding
+            { a: 'SA', b: 'SB', N, R }, // sense winding, unloaded
+          ],
+        },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 40; i++) res = c.solve(build(2), dt);
+  approx(res.coreStates.get('mc1'), 1, 0.01, 'T-CORE-LOCK: write +I must lock the core to +Br');
+
+  let maxSpikeFlip = 0;
+  for (let i = 0; i < 80; i++) {
+    res = c.solve(build(-2), dt);
+    const vSense = res.voltages.get(res.uf.find('SA')) - res.voltages.get(res.uf.find('SB'));
+    if (Math.abs(vSense) > Math.abs(maxSpikeFlip)) maxSpikeFlip = vSense;
+  }
+  approx(res.coreStates.get('mc1'), -1, 0.01, 'T-CORE-LOCK: write -I must flip the core to -Br');
+  assert.ok(Math.abs(maxSpikeFlip) > 0.005, 'T-CORE-LOCK: flipping must produce a real sense-winding voltage spike (saw ' + maxSpikeFlip + ')');
+
+  let maxSpikeRepeat = 0;
+  for (let i = 0; i < 40; i++) {
+    res = c.solve(build(-2), dt);
+    const vSense = res.voltages.get(res.uf.find('SA')) - res.voltages.get(res.uf.find('SB'));
+    if (Math.abs(vSense) > Math.abs(maxSpikeRepeat)) maxSpikeRepeat = vSense;
+  }
+  approx(res.coreStates.get('mc1'), -1, 0.001, 'T-CORE-LOCK: writing -I again must leave the core at -Br');
+  assert.ok(Math.abs(maxSpikeRepeat) < Math.abs(maxSpikeFlip) / 20, 'T-CORE-LOCK: writing the SAME direction again (already saturated there) must show almost no spike (saw ' + maxSpikeRepeat + ' vs ' + maxSpikeFlip + ' for the real flip)');
+  console.log('Test 25 OK (T-CORE-LOCK): lock=+Br, flip spike=', maxSpikeFlip.toFixed(4), 'V, repeat spike=', maxSpikeRepeat.toFixed(6), 'V');
+}
+
+// Test 26 (T-CORE-HOLD): a pulse that never crosses the coercive threshold
+// must leave remanence completely unchanged -- real "spring back", not a
+// small nudge toward zero.
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(driveV) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'GND', value: driveV },
+        { id: 'r1', type: 'resistor', a: 'P', b: 'DA', value: 10 },
+        { id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'DA', b: 'GND', N, R }] },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 40; i++) res = c.solve(build(-2), dt);
+  const bBefore = res.coreStates.get('mc1');
+  approx(bBefore, -1, 0.01, 'T-CORE-HOLD: setup -- core must start locked at -Br');
+  for (let i = 0; i < 30; i++) res = c.solve(build(0.05), dt); // well below Hc
+  approx(res.coreStates.get('mc1'), bBefore, 1e-5, 'T-CORE-HOLD: a sub-threshold pulse must leave remanence exactly unchanged');
+  console.log('Test 26 OK (T-CORE-HOLD): sub-Hc pulse left B at', res.coreStates.get('mc1').toFixed(6), '(unchanged from', bBefore.toFixed(6), ')');
+}
+
+// Test 27 (T-GATE-MEM): a real back-to-back N-MOSFET pair (the same
+// bidirectional switch T-BB-PAIR proves) dumps write current through a
+// memory-core winding while its gates are driven on, then the gates go off
+// -- remanence must survive the gate closing (DC memory, not volatile).
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(gateV, leanV) {
+    return {
+      wires: [],
+      components: [
+        { id: 'ctrl', type: 'battery', a: 'GATE', b: 'GND', value: gateV },
+        { id: 'lean', type: 'battery', a: 'D1', b: 'GND', value: leanV },
+        { id: 'f1', type: 'nmos', gate: 'GATE', drain: 'D1', source: 'S', value: 1.5 },
+        { id: 'f2', type: 'nmos', gate: 'GATE', drain: 'D2', source: 'S', value: 1.5 },
+        { id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'D2', b: 'GND', N, R }] },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 40; i++) res = c.solve(build(5, 2), dt); // gates ON, dump +2V
+  approx(res.coreStates.get('mc1'), 1, 0.01, 'T-GATE-MEM: dumping through the open gate pair must lock the core');
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, true, 'T-GATE-MEM: gates must actually be on during the dump');
+  for (let i = 0; i < 20; i++) res = c.solve(build(0, 2), dt); // gates OFF, lean still present
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, false, 'T-GATE-MEM: gates must be off afterward');
+  assert.strictEqual(res.mosfetStates.get('f2').channelOn, false, 'T-GATE-MEM: gates must be off afterward');
+  approx(res.coreStates.get('mc1'), 1, 0.001, 'T-GATE-MEM: remanence must survive the gate pair opening');
+  console.log('Test 27 OK (T-GATE-MEM): locked through the gate pair, survives gates opening, B=', res.coreStates.get('mc1').toFixed(4));
+}
+
+// Test 28 (T-TRI-DECIDE): the same cell (one gate pair + one memory core)
+// must be able to finish Left, Right, or Hold depending purely on a
+// millivolt-scale write lean and whether the gate ever opened -- four
+// cases: +lean/open -> Left, -lean/open -> Right, any lean/closed -> Hold
+// (never opened), and a lean too weak to cross Hc even with the gate open
+// -> Hold. The write lean here (needed to actually push real current
+// through a sub-ohm winding) is a few hundred millivolts -- still
+// millivolt-scale, distinct from the microvolt/20mV SENSING resolution
+// Cal A-E prove, because writing real amp-turns and sensing a comparator
+// margin are different jobs with different real current/impedance needs.
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(leanV, gateOn) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+        { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+        { id: 'lean', type: 'battery', a: 'LEAN', b: 'V0', value: leanV },
+        { id: 'gatectrl', type: 'battery', a: 'GATE', b: 'M', value: gateOn ? 5 : 0 },
+        { id: 'f1', type: 'nmos', gate: 'GATE', drain: 'LEAN', source: 'S', value: 1.5 },
+        { id: 'f2', type: 'nmos', gate: 'GATE', drain: 'WRITE', source: 'S', value: 1.5 },
+        { id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'WRITE', b: 'V0', N, R }] },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  let res;
+
+  const cLeft = new Circuit();
+  for (let i = 0; i < 60; i++) res = cLeft.solve(build(0.2, true), dt);
+  approx(res.coreStates.get('mc1'), 1, 0.01, 'T-TRI-DECIDE: +lean with gate open must finish Left (+Br)');
+
+  const cRight = new Circuit();
+  for (let i = 0; i < 60; i++) res = cRight.solve(build(-0.2, true), dt);
+  approx(res.coreStates.get('mc1'), -1, 0.01, 'T-TRI-DECIDE: -lean with gate open must finish Right (-Br)');
+
+  const cClosed = new Circuit();
+  for (let i = 0; i < 40; i++) res = cClosed.solve(build(0.2, false), dt);
+  approx(res.coreStates.get('mc1'), 0, 1e-4, 'T-TRI-DECIDE: gate never opened must finish Hold regardless of lean');
+
+  const cWeak = new Circuit();
+  for (let i = 0; i < 40; i++) res = cWeak.solve(build(0.005, true), dt);
+  approx(res.coreStates.get('mc1'), 0, 1e-4, 'T-TRI-DECIDE: a lean too weak to cross Hc must finish Hold even with the gate open');
+
+  console.log('Test 28 OK (T-TRI-DECIDE): same cell finishes Left/Right/Hold from real lean+gate combinations, all vs V0');
+}
+
+// Test 29 (T-GROUP-MEM): three cells, each with its own independent write
+// path, all threaded through ONE shared group memory core (extra write
+// windings, not a scripted "remember the last decision" mechanism). Only
+// the currently-dumping cell contributes real current at any moment, so
+// the group core's remanence naturally ends up matching whichever cell
+// dumped LAST -- that "last write wins" behavior is not implemented
+// anywhere, it falls straight out of real ampere-turns superposition.
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(activeCell, sign) {
+    const comps = [0, 1, 2].map((i) => ({
+      id: 'lean' + i, type: 'battery', a: 'W' + i, b: 'GND', value: i === activeCell ? sign * 0.2 : 0,
+    }));
+    return {
+      wires: [],
+      components: [
+        ...comps,
+        {
+          id: 'grp', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau,
+          windings: [0, 1, 2].map((i) => ({ a: 'W' + i, b: 'GND', N, R })),
+        },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 40; i++) res = c.solve(build(0, 1), dt); // cell 0 dumps Pos
+  approx(res.coreStates.get('grp'), 1, 0.01, 'T-GROUP-MEM: first dump (cell 0, Pos) must set the group core');
+  for (let i = 0; i < 40; i++) res = c.solve(build(1, -1), dt); // cell 1 dumps Neg
+  approx(res.coreStates.get('grp'), -1, 0.01, 'T-GROUP-MEM: a later dump (cell 1, Neg) must overwrite the group core');
+  for (let i = 0; i < 40; i++) res = c.solve(build(2, 1), dt); // cell 2 dumps Pos -- the LAST dump
+  approx(res.coreStates.get('grp'), 1, 0.01, 'T-GROUP-MEM: group remanence must match the LAST cell to dump (cell 2, Pos)');
+  for (let i = 0; i < 20; i++) res = c.solve(build(-1, 0), dt); // all quiet
+  approx(res.coreStates.get('grp'), 1, 0.001, 'T-GROUP-MEM: with all cells quiet, group remanence must hold (Hold)');
+  console.log('Test 29 OK (T-GROUP-MEM): group core remanence tracks the last agreed trit, holds when quiet');
+}
+
+// Test 30 (T-TOWARD-AWAY): a center cell's own write current is ALSO
+// threaded through one coupling winding on each of two neighbor cores --
+// wound the SAME way on one neighbor (toward) and the OPPOSITE way on the
+// other (away, terminals swapped -- real winding-polarity/dot-convention
+// physics, not a scripted rule). When center locks Left, toward must match
+// and away must be mirrored; when center locks Right, both flip.
+{
+  const N = 20;
+  const R = windingR(N, 0.03);
+  function build(leanV) {
+    return {
+      wires: [],
+      components: [
+        { id: 'lean', type: 'battery', a: 'IN', b: 'GND', value: leanV },
+        { id: 'r1', type: 'resistor', a: 'IN', b: 'DRIVE', value: 2 },
+        { id: 'mcC', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'DRIVE', b: 'GND', N, R: R * 2 }] },
+        { id: 'mcL', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'DRIVE', b: 'LMID', N, R }] },
+        // 'away': terminals swapped relative to the physical current path
+        { id: 'mcR', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'RMID', b: 'LMID', N, R }] },
+        { id: 'r2', type: 'resistor', a: 'RMID', b: 'GND', value: 0.001 },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  let res;
+
+  const cLeft = new Circuit();
+  for (let i = 0; i < 100; i++) res = cLeft.solve(build(5), dt);
+  approx(res.coreStates.get('mcC'), 1, 0.01, 'T-TOWARD-AWAY: center must lock Left');
+  approx(res.coreStates.get('mcL'), 1, 0.01, 'T-TOWARD-AWAY: toward neighbor must match center (Left)');
+  approx(res.coreStates.get('mcR'), -1, 0.01, 'T-TOWARD-AWAY: away neighbor must mirror center (Left -> away locks Right)');
+
+  const cRight = new Circuit();
+  for (let i = 0; i < 100; i++) res = cRight.solve(build(-5), dt);
+  approx(res.coreStates.get('mcC'), -1, 0.01, 'T-TOWARD-AWAY: center must lock Right');
+  approx(res.coreStates.get('mcL'), -1, 0.01, 'T-TOWARD-AWAY: toward neighbor must match center (Right)');
+  approx(res.coreStates.get('mcR'), 1, 0.01, 'T-TOWARD-AWAY: away neighbor must mirror center (Right -> away locks Left)');
+
+  const cHold = new Circuit();
+  for (let i = 0; i < 40; i++) res = cHold.solve(build(0.001), dt); // far too weak to cross Hc anywhere
+  approx(res.coreStates.get('mcC'), 0, 1e-4, 'T-TOWARD-AWAY: Hold -- center must not lock');
+  approx(res.coreStates.get('mcL'), 0, 1e-4, 'T-TOWARD-AWAY: Hold -- neither neighbor is written');
+  approx(res.coreStates.get('mcR'), 0, 1e-4, 'T-TOWARD-AWAY: Hold -- neither neighbor is written');
+
+  console.log('Test 30 OK (T-TOWARD-AWAY): toward matches center, away mirrors center, both directions, Hold leaves neighbors untouched');
+}
+
+// Test 31 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
 {
   const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
-  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts', 'presetMemoryCellParts'];
+  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts', 'presetMemoryCellParts', 'presetCalFParts', 'presetCalGParts', 'presetCalHParts'];
   calPresetNames.forEach((name) => {
     const m = appSrc.match(new RegExp('function ' + name + '\\(\\) \\{([\\s\\S]*?)\\n  \\}'));
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 24 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 31 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

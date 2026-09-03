@@ -49,6 +49,9 @@
         <button id="presetCalD" title="Two N-MOSFETs, sources+gates tied together -- a real bidirectional switch. Current should stay ~0A both directions">Cal D: back-to-back FETs</button>
         <button id="presetCalE" title="150k + 100nF charging toward +5V from a 2.5V V0 reference -- real tau=15ms RC transient">Cal E: RC to mid-rail</button>
         <button id="presetMemCell" title="Supply + vgnd + two back-to-back N-FETs + a cap + a leak resistor. Close the switch to sample (mem tracks +20mV above V0); open it to hold, and watch mem decay on a real tau=1s -- probe mem vs V0 in millivolts">Memory cell (sample &amp; hold)</button>
+        <button id="presetCalF" title="A square-loop memory core driven by a manually-reversible supply -- close one switch to write/lock, the other to flip it and see a real induced-voltage spike on the sense winding">Cal F: memory core (write/flip)</button>
+        <button id="presetCalG" title="The nerve gate: a millivolt lean through back-to-back N-FETs into a memory-core winding referenced to V0 -- lock Left/Right through the gate, then watch remanence survive the gate closing">Cal G: gate + lock</button>
+        <button id="presetCalH" title="Three memory cells sharing one drive current -- a toward neighbor locks the same way as the center, an away neighbor (winding terminals swapped) mirrors it, from real ampere-turns alone">Cal H: toward/away neighbors</button>
       </div>
       <div id="toolboxScrollHint" class="scroll-hint" hidden aria-hidden="true">&#9662; scroll for more</div>
     </aside>

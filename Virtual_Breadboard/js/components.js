@@ -56,6 +56,25 @@
   // coupling coefficient between windings sharing one core, as a function of
   // how tightly the sections are wound relative to each other
   const TOROID_SPACING_COUPLING = { tight: 0.97, normal: 0.9, wide: 0.75 };
+
+  // Square-loop / remanent memory cores: an idealized nonlinear core (see
+  // circuit.js) instead of the toroid's linear one. hcAmpTurns is the real
+  // ampere-turns coercive threshold that must be exceeded to flip the core's
+  // magnetization -- "small" is deliberately a low-coercivity material
+  // (real premium square-loop tape cores, e.g. Supermalloy/Metglas-class,
+  // genuinely go this low), sized so a real millivolt-scale write current
+  // through real MOSFET RDS(on) + winding resistance can actually flip it.
+  // phiSat is the core's total flux capacity at saturation (shared by every
+  // winding on it: Faraday's law says each winding's induced voltage is
+  // turns * phiSat * dB/dt). switchTau is how long the flip itself takes
+  // once past threshold -- small but nonzero, so it shows up as a real,
+  // finite induced-voltage spike on a sense winding instead of a step.
+  const MEMORY_CORES = {
+    small: { hcAmpTurns: 2, phiSat: 4e-6, meanTurnLen: 0.03, switchTau: 0.002, label: 'Small (low-coercivity)' },
+    medium: { hcAmpTurns: 5, phiSat: 1e-5, meanTurnLen: 0.05, switchTau: 0.004, label: 'Medium' },
+    large: { hcAmpTurns: 10, phiSat: 2.5e-5, meanTurnLen: 0.08, switchTau: 0.008, label: 'Large' },
+  };
+  const MEMORY_CORE_TURNS_VALUES = [5, 10, 20, 50, 100, 200];
   // matches a typical 4-channel scope's trace colors (yellow/CH1, green/CH2, ...)
   const SCOPE_COLORS = ['#f4d35e', '#3ddc6b', '#4d8dff', '#ff6ec7'];
 
@@ -100,6 +119,14 @@
     // P-channel complement (AO3401A/BS250-class): conducts when Vgs is
     // below its (negative) threshold; body diode conducts drain->source.
     { type: 'pmos', label: 'P-MOSFET', terminals: 3, icon: 'P⏚', defaultValue: 1.5 },
+    // terminal count is variable (2 per winding, 1-3 windings, chosen
+    // before placement) -- app.js overrides terminalsNeeded() for this
+    // type, same as the toroid. A real nonlinear square-loop core: DC
+    // magnetic memory (remanence) instead of the toroid's linear
+    // inductance. Extra windings ARE the group-memory / toward-away-
+    // neighbor mechanism -- just more real ampere-turns summed onto the
+    // same shared flux, wired by the user, not a scripted state machine.
+    { type: 'memorycore', label: 'Memory Core (square-loop)', terminals: 2, icon: 'B±' },
   ];
 
   function resistorColorBands(value) {
@@ -846,6 +873,85 @@
     ctx.restore();
   }
 
+  // t = terminal points, 2 per winding, in order [w0a,w0b, w1a,w1b, ...].
+  // A square-loop memory core: visually similar to the toroid (a ring, one
+  // color per winding), but the ring's fill color reflects the REAL solved
+  // remanence B (in [-1, 1]) -- amber toward +1, blue toward -1, neutral
+  // gray near 0 -- the same "measured state, not a label" idea as the LED
+  // glow / MOSFET channel-on halo. This is a readout of a real number the
+  // solver computed, never a value this function decides on its own.
+  function memoryCoreCentroid(t) {
+    const x = t.reduce((s, p) => s + p.x, 0) / t.length;
+    const y = t.reduce((s, p) => s + p.y, 0) / t.length;
+    return { x, y };
+  }
+  function drawMemoryCore(ctx, comp, t, opacity, B) {
+    const o = op(opacity);
+    const c = memoryCoreCentroid(t);
+    const windings = comp.turnsPerWinding ? comp.turnsPerWinding.length : t.length / 2;
+    const spread = Math.max(...t.map((p) => Math.hypot(p.x - c.x, p.y - c.y)));
+    const outerR = Math.min(24, Math.max(10, spread * 0.85));
+    const innerR = outerR * 0.54;
+    const b = B == null ? 0 : Math.max(-1, Math.min(1, B));
+    // blend gray (Hold, b=0) toward amber (+1) or blue (-1)
+    const pos = [0xe0, 0xa8, 0x3f];
+    const neg = [0x4d, 0x8d, 0xff];
+    const hold = [0x5a, 0x61, 0x78];
+    const target = b >= 0 ? pos : neg;
+    const mix = Math.abs(b);
+    const rgb = hold.map((h, i) => Math.round(h + (target[i] - h) * mix));
+    const ringColor = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    t.forEach((p) => {
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(c.x, c.y);
+    });
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.94 * o;
+    ctx.fillStyle = '#2b2b2e';
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, outerR, 0, Math.PI * 2);
+    ctx.arc(c.x, c.y, innerR, 0, Math.PI * 2, true);
+    ctx.fill('evenodd');
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = ringColor;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, outerR, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, innerR, 0, Math.PI * 2);
+    ctx.stroke();
+
+    const arcSpan = (Math.PI * 2) / windings / 1.6;
+    for (let s = 0; s < windings; s++) {
+      const turns = comp.turnsPerWinding ? comp.turnsPerWinding[s] : 20;
+      const loops = Math.max(3, Math.min(14, Math.round(turns / 4)));
+      const baseAngle = (Math.PI * 2 * s) / windings - Math.PI / 2;
+      ctx.strokeStyle = TOROID_SECTION_COLORS[s % TOROID_SECTION_COLORS.length];
+      ctx.lineWidth = 1.4;
+      for (let i = 0; i < loops; i++) {
+        const ang = baseAngle + (arcSpan * i) / Math.max(1, loops - 1) - arcSpan / 2;
+        ctx.beginPath();
+        ctx.ellipse(c.x + Math.cos(ang) * (outerR + innerR) / 2, c.y + Math.sin(ang) * (outerR + innerR) / 2, 4.5, (outerR - innerR) / 2 + 2.5, ang + Math.PI / 2, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    ctx.fillStyle = ringColor;
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(b.toFixed(2), c.x, c.y + 3);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   // A canonical, centered rendering of any part type into a small square --
   // used by the preview card in the toolbox/Inspector, so a part looks the
   // same whether you're still choosing its value or it's already on the
@@ -903,6 +1009,17 @@
       drawToroid(ctx, Object.assign({ turnsPerSection: [10], core: 'medium', spacing: 'normal' }, p), t, 1);
       return;
     }
+    if (type === 'memorycore') {
+      const windings = p.turnsPerWinding ? p.turnsPerWinding.length : 1;
+      const t = [];
+      for (let s = 0; s < windings; s++) {
+        const ang = (Math.PI * 2 * s) / windings;
+        t.push({ x: cx + Math.cos(ang) * w * 0.4, y: cy + Math.sin(ang) * h * 0.35 - 4 });
+        t.push({ x: cx + Math.cos(ang) * w * 0.4, y: cy + Math.sin(ang) * h * 0.35 + 4 });
+      }
+      drawMemoryCore(ctx, Object.assign({ turnsPerWinding: [20], core: 'small' }, p), t, 1, 0);
+      return;
+    }
     // every remaining type is a plain 2-terminal horizontal part
     const x1 = w * 0.14;
     const x2 = w * 0.86;
@@ -931,6 +1048,7 @@
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES, WIRE_GAUGE_OHMS_PER_M,
     TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING, MOSFET_CLASS_LABELS,
+    MEMORY_CORES, MEMORY_CORE_TURNS_VALUES,
     resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
@@ -939,6 +1057,7 @@
     drawScopeProbe, drawPartIcon,
     drawToroid, toroidCentroid,
     drawMosfet, mosfetCentroid,
+    drawMemoryCore, memoryCoreCentroid,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

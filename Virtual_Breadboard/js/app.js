@@ -39,6 +39,10 @@
       toroidTurns: [10, 10, 10],
       nmos: 1.5,
       pmos: 1.5,
+      memCoreWindings: 1,
+      memCoreCore: 'small',
+      memCoreGauge: 'standard',
+      memCoreTurns: [20, 20, 20],
     },
     pending: [],
     hoverHole: null,
@@ -104,6 +108,21 @@
     }));
   }
 
+  // generator: same idea as toroidWindings, but a memory core has no self-
+  // inductance L to report (it's a nonlinear remanent-flux element handled
+  // entirely by circuit.js's B-state solver) -- just turns and real DC
+  // winding resistance per winding.
+  function memoryCoreWindings(p) {
+    const coreDef = Components.MEMORY_CORES[p.core] || Components.MEMORY_CORES.small;
+    const ohmsPerM = Components.WIRE_GAUGE_OHMS_PER_M[p.gauge] || Components.WIRE_GAUGE_OHMS_PER_M.standard;
+    return p.turnsPerWinding.map((turns, i) => ({
+      a: p.terminals[i * 2].cellId,
+      b: p.terminals[i * 2 + 1].cellId,
+      N: turns,
+      R: turns * coreDef.meanTurnLen * ohmsPerM,
+    }));
+  }
+
   function toEngineElements() {
     const wires = [];
     const components = [];
@@ -161,6 +180,13 @@
           id: p.id, type: p.type, label: p.id,
           gate: p.terminals[0].cellId, drain: p.terminals[1].cellId, source: p.terminals[2].cellId,
           value: p.value,
+        });
+      } else if (p.type === 'memorycore') {
+        const coreDef = Components.MEMORY_CORES[p.core] || Components.MEMORY_CORES.small;
+        components.push({
+          id: p.id, type: 'memorycore', label: p.id,
+          windings: memoryCoreWindings(p),
+          hcAmpTurns: coreDef.hcAmpTurns, phiSat: coreDef.phiSat, switchTau: coreDef.switchTau,
         });
       } else {
         components.push({
@@ -258,6 +284,7 @@
       case 'toroid': return { turnsPerSection: tv.toroidTurns.slice(0, tv.toroidSections), core: tv.toroidCore, spacing: tv.toroidSpacing };
       case 'nmos': return { type: 'nmos', value: tv.nmos };
       case 'pmos': return { type: 'pmos', value: tv.pmos };
+      case 'memorycore': return { turnsPerWinding: tv.memCoreTurns.slice(0, tv.memCoreWindings), core: tv.memCoreCore };
       default: return {};
     }
   }
@@ -303,6 +330,14 @@
     } else if (state.tool === 'nmos' || state.tool === 'pmos') {
       const key = state.tool;
       toolOptionsEl.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), state.toolValue[key], (v) => { state.toolValue[key] = Number(v); renderToolOptions(); }));
+    } else if (state.tool === 'memorycore') {
+      const tv = state.toolValue;
+      toolOptionsEl.appendChild(makeSelect('Core', Object.entries(Components.MEMORY_CORES).map(([k, v]) => [k, v.label]), tv.memCoreCore, (v) => { tv.memCoreCore = v; renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Wire gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), tv.memCoreGauge, (v) => { tv.memCoreGauge = v; renderToolOptions(); }));
+      toolOptionsEl.appendChild(makeSelect('Windings', [1, 2, 3].map((n) => [n, n]), tv.memCoreWindings, (v) => { tv.memCoreWindings = Number(v); renderToolOptions(); }));
+      for (let s = 0; s < tv.memCoreWindings; s++) {
+        toolOptionsEl.appendChild(makeSelect('Turns (winding ' + (s + 1) + ')', Components.MEMORY_CORE_TURNS_VALUES.map((n) => [n, n]), tv.memCoreTurns[s], (v) => { tv.memCoreTurns[s] = Number(v); renderToolOptions(); }));
+      }
     }
     updateToolboxScrollHint();
   }
@@ -362,6 +397,10 @@
     // a toroid's terminal count depends on how many winding sections were
     // chosen in the tool options (2 per section) -- not a fixed PALETTE value
     if (type === 'toroid') return state.toolValue.toroidSections * 2;
+    // a memory core's terminal count depends on how many windings were
+    // chosen in the tool options (2 per winding) -- same variable-terminal
+    // pattern as the toroid above.
+    if (type === 'memorycore') return state.toolValue.memCoreWindings * 2;
     const def = Components.PALETTE.find((p) => p.type === type);
     return def ? def.terminals : 2;
   }
@@ -399,6 +438,14 @@
       };
     }
     if (type === 'nmos' || type === 'pmos') return { type, terminals: holes.slice(0, 3), value: opts.mosfetValue };
+    if (type === 'memorycore') {
+      const windings = opts.memCoreWindings;
+      return {
+        type: 'memorycore', terminals: holes.slice(0, windings * 2),
+        turnsPerWinding: opts.memCoreTurns.slice(0, windings),
+        core: opts.memCoreCore, gauge: opts.memCoreGauge,
+      };
+    }
     return null;
   }
 
@@ -432,6 +479,10 @@
       toroidGauge: state.toolValue.toroidGauge,
       toroidSpacing: state.toolValue.toroidSpacing,
       mosfetValue: state.toolValue[type],
+      memCoreWindings: state.toolValue.memCoreWindings,
+      memCoreTurns: state.toolValue.memCoreTurns,
+      memCoreCore: state.toolValue.memCoreCore,
+      memCoreGauge: state.toolValue.memCoreGauge,
     });
     if (part) addPart(part);
   }
@@ -454,10 +505,10 @@
     for (let i = state.parts.length - 1; i >= 0; i--) {
       const p = state.parts[i];
       const t = p.terminals;
-      if (p.type === 'toroid') {
-        const c = Components.toroidCentroid(t);
+      if (p.type === 'toroid' || p.type === 'memorycore') {
+        const c = p.type === 'toroid' ? Components.toroidCentroid(t) : Components.memoryCoreCentroid(t);
         if (Math.hypot(pos.x - c.x, pos.y - c.y) < 28) return p;
-        // terminals can sit far from the ring itself (each section's holes
+        // terminals can sit far from the ring itself (each winding's holes
         // are wherever the user clicked) -- also catch a click on a lead
         if (t.some((term) => distToSegment(pos.x, pos.y, term.x, term.y, c.x, c.y) < 10)) return p;
       } else if (t.length === 6) {
@@ -491,6 +542,7 @@
   function partCenter(p) {
     const t = p.terminals;
     if (p.type === 'toroid') return Components.toroidCentroid(t);
+    if (p.type === 'memorycore') return Components.memoryCoreCentroid(t);
     if (t.length === 6) return { x: (t[1].x + t[4].x) / 2, y: (t[1].y + t[4].y) / 2 };
     if (t.length === 4) {
       const [j1, j2] = Components.yWireJunctions(t);
@@ -792,6 +844,12 @@
       }
     } else if (part.type === 'nmos' || part.type === 'pmos') {
       container.appendChild(makeSelect('Part class', Object.entries(Components.MOSFET_CLASS_LABELS).map(([k, v]) => [k, v]), part.value, (v) => (part.value = Number(v))));
+    } else if (part.type === 'memorycore') {
+      container.appendChild(makeSelect('Core', Object.entries(Components.MEMORY_CORES).map(([k, v]) => [k, v.label]), part.core, (v) => { part.core = v; notify(); }));
+      container.appendChild(makeSelect('Wire gauge', Object.entries(Components.WIRE_GAUGES).map(([k, v]) => [k, v]), part.gauge, (v) => { part.gauge = v; notify(); }));
+      part.turnsPerWinding.forEach((turns, s) => {
+        container.appendChild(makeSelect('Turns (winding ' + (s + 1) + ')', Components.MEMORY_CORE_TURNS_VALUES.map((n) => [n, n]), turns, (v) => { part.turnsPerWinding[s] = Number(v); notify(); }));
+      });
     }
   }
 
@@ -893,6 +951,25 @@
         <div><span>Body diode</span><b>${mstate && mstate.bodyDiodeOn ? 'conducting' : 'off'}</b></div>
         <div><span>Current (d→s)</span><b>${fmtI(I)}</b></div>
       `;
+      return;
+    } else if (part.type === 'memorycore') {
+      // the real solved remanence B is the whole point -- Left/Right/Hold
+      // here is just a LABEL derived from that number for readability
+      // (per R4: the solver decides, the UI never forces the decision)
+      const B = state.lastResult.coreStates ? state.lastResult.coreStates.get(part.id) : undefined;
+      const label = B == null ? '—' : B > 0.5 ? 'Left (+Br)' : B < -0.5 ? 'Right (−Br)' : 'Hold';
+      const windingRows = part.turnsPerWinding.map((turns, s) => {
+        const vs = vOf(s * 2) - vOf(s * 2 + 1);
+        const Is = state.lastResult.currents.get(part.id + ':' + s);
+        return `
+          <div><span>V(winding ${s + 1})</span><b>${fmtV(vs)}</b></div>
+          <div><span>I(winding ${s + 1})</span><b>${fmtI(Is)}</b></div>
+        `;
+      }).join('');
+      currentReadoutEl.innerHTML = `
+        <div><span>Remanence B</span><b>${B == null ? '—' : B.toFixed(3)}</b></div>
+        <div><span>Labeled state</span><b>${label}</b></div>
+      ` + windingRows;
       return;
     } else {
       rows = `
@@ -1304,6 +1381,86 @@
     ];
   }
 
+  // Cal F: a square-loop memory core, driven through a real current-limit
+  // resistor by a manually-reversible supply (two batteries + two switches
+  // standing in for a bench's polarity-reversing supply -- close only one
+  // switch at a time). Close the "+" switch: the core locks to +Br (write).
+  // Open both: remanence holds (off). Close "-" instead: a real induced-
+  // voltage spike appears on the unloaded sense winding while the core
+  // flips to -Br (opposite-pulse spike). Toggle "-" off/on again while
+  // already at -Br: essentially no spike (same-way, already saturated
+  // there) -- proves the induced voltage is genuinely dB/dt, not a fixed
+  // per-write blip.
+  function presetCalFParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'battery', terminals: [H('g', 5), H('g', 15)], value: 5 },
+      { type: 'switch', terminals: [H('b', 5), H('b', 10)], closed: true },
+      { type: 'switch', terminals: [H('h', 15), H('c', 10)], closed: false },
+      { type: 'resistor', terminals: [H('d', 10), H('d', 14)], value: 10 },
+      {
+        type: 'memorycore', terminals: [H('e', 14), H('h', 5), H('b', 20), H('b', 24)],
+        turnsPerWinding: [20, 20], core: 'small', gauge: 'standard',
+      },
+      { type: 'scope', terminals: [H('a', 14)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('a', 20)], color: nextScopeColor() },
+    ];
+  }
+  // Cal G: the nerve gate (T-GATE-MEM/T-TRI-DECIDE acceptance circuit) --
+  // a real virtual ground for V0, a millivolt-scale bipolar "lean" pair
+  // (same manual-reversal trick as Cal F) driven through two back-to-back
+  // N-MOSFETs sharing one gate signal, into a memory-core winding
+  // referenced to V0. Gate held low (via the pulldown) -> the gate pair
+  // is open, so no lean reaches the core and it holds whatever it last
+  // locked. Close the gate switch with the "+" lean selected -> the core
+  // locks Left (+Br) referenced to V0, in millivolts, exactly like Cal
+  // A-E's sensing precision but now writing real current instead of just
+  // reading it. Open the gate switch afterward: remanence survives (DC
+  // memory, not volatile) -- select "-" lean instead to lock Right.
+  function presetCalGParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      { type: 'resistor', terminals: [H('b', 10), H('h', 5)], value: 1000000 },
+      { type: 'switch', terminals: [H('a', 5), H('c', 10)], closed: false },
+      { type: 'battery', terminals: [H('b', 14), H('d', 8)], value: 0.2 },
+      { type: 'battery', terminals: [H('e', 8), H('h', 16)], value: 0.2 },
+      { type: 'switch', terminals: [H('c', 14), H('b', 20)], closed: true },
+      { type: 'switch', terminals: [H('i', 16), H('c', 20)], closed: false },
+      { type: 'nmos', terminals: [H('d', 10), H('e', 20), H('b', 24)], value: 1.5 },
+      { type: 'nmos', terminals: [H('e', 10), H('d', 28), H('c', 24)], value: 1.5 },
+      { type: 'memorycore', terminals: [H('b', 28), H('a', 8)], turnsPerWinding: [20], core: 'small', gauge: 'standard' },
+      { type: 'scope', terminals: [H('a', 20)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('a', 28)], color: nextScopeColor() },
+    ];
+  }
+  // Cal H: three memory cells sharing one drive current -- a center cell's
+  // own write current is ALSO threaded through one coupling winding on
+  // each of two neighbor cores (extra windings, not a scripted rule):
+  // wound the SAME way on the "toward" neighbor and the OPPOSITE way
+  // (terminals swapped) on the "away" neighbor. Select "+" (Left) and
+  // watch (via each core's Inspector remanence readout) the toward
+  // neighbor lock the same way and the away neighbor lock the mirror;
+  // select "-" (Right) and both flip. This is real winding-polarity/
+  // dot-convention physics falling out of shared ampere-turns, not a
+  // scripted toward/away decision.
+  function presetCalHParts() {
+    return [
+      { type: 'battery', terminals: [H('a', 5), H('f', 5)], value: 5 },
+      { type: 'battery', terminals: [H('g', 5), H('h', 8)], value: 5 },
+      { type: 'switch', terminals: [H('b', 5), H('b', 10)], closed: true },
+      { type: 'switch', terminals: [H('i', 8), H('c', 10)], closed: false },
+      { type: 'resistor', terminals: [H('d', 10), H('a', 14)], value: 2 },
+      { type: 'memorycore', terminals: [H('b', 14), H('h', 5)], turnsPerWinding: [20], core: 'small', gauge: 'standard' },
+      { type: 'memorycore', terminals: [H('c', 14), H('b', 18)], turnsPerWinding: [20], core: 'small', gauge: 'standard' },
+      { type: 'memorycore', terminals: [H('b', 22), H('c', 18)], turnsPerWinding: [20], core: 'small', gauge: 'standard' },
+      { type: 'resistor', terminals: [H('c', 22), H('i', 5)], value: 0.1 },
+      { type: 'scope', terminals: [H('d', 14)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('d', 18)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('d', 22)], color: nextScopeColor() },
+    ];
+  }
+
   // executor: the one place that actually clears the board and writes a
   // preset's parts into it.
   function applyPreset(parts) {
@@ -1320,6 +1477,9 @@
   document.getElementById('presetCalD').addEventListener('click', () => { applyPreset(presetCalDParts()); selectTool('select'); });
   document.getElementById('presetCalE').addEventListener('click', () => { applyPreset(presetCalEParts()); selectTool('select'); });
   document.getElementById('presetMemCell').addEventListener('click', () => { applyPreset(presetMemoryCellParts()); selectTool('select'); });
+  document.getElementById('presetCalF').addEventListener('click', () => { applyPreset(presetCalFParts()); selectTool('select'); });
+  document.getElementById('presetCalG').addEventListener('click', () => { applyPreset(presetCalGParts()); selectTool('select'); });
+  document.getElementById('presetCalH').addEventListener('click', () => { applyPreset(presetCalHParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------
   // Whatever provider is configured plays the same role the hardcoded
@@ -1399,8 +1559,9 @@
           freq: p.freq,
           phase: p.phase,
           turnsPerSection: p.type === 'toroid' ? p.turns : undefined,
-          core: p.type === 'toroid' ? (p.core || 'medium') : undefined,
-          gauge: p.type === 'toroid' ? (p.gauge || 'standard') : undefined,
+          turnsPerWinding: p.type === 'memorycore' ? p.turns : undefined,
+          core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
+          gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
           spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
           terminals,
         };
@@ -1598,6 +1759,9 @@
       } else if (p.type === 'nmos' || p.type === 'pmos') {
         const mstate = state.lastResult.mosfetStates ? state.lastResult.mosfetStates.get(p.id) : undefined;
         Components.drawMosfet(ctx, p, t, opacity, mstate);
+      } else if (p.type === 'memorycore') {
+        const B = state.lastResult.coreStates ? state.lastResult.coreStates.get(p.id) : 0;
+        Components.drawMemoryCore(ctx, p, t, opacity, B || 0);
       }
 
       if (p.id === state.selectedPartId) {
@@ -1728,11 +1892,12 @@
   // debug/test hook (harmless, purely introspective — used by the automated
   // test harness and handy in the browser console while developing)
   window.__debugState = () => ({
-    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, gauge: p.gauge, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, turnsPerSection: p.turnsPerSection, core: p.core, spacing: p.spacing, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
+    parts: state.parts.map((p) => ({ id: p.id, type: p.type, value: p.value, color: p.color, gauge: p.gauge, closed: p.closed, pos: p.pos, style: p.style, freq: p.freq, phase: p.phase, turnsPerSection: p.turnsPerSection, turnsPerWinding: p.turnsPerWinding, core: p.core, spacing: p.spacing, terminals: p.terminals.map((t) => ({ x: t.x, y: t.y, cellId: t.cellId })) })),
     voltages: Object.fromEntries(state.lastResult.voltages || []),
     currents: Object.fromEntries(state.lastResult.currents || []),
     warnings: state.lastResult.warnings,
     mosfetStates: Object.fromEntries(state.lastResult.mosfetStates || []),
+    coreStates: Object.fromEntries(state.lastResult.coreStates || []),
   });
   window.__selectPartById = (id) => {
     state.selectedPartId = id;

@@ -80,6 +80,20 @@
       '  pmos          3 terminals [gate, drain, source]: the P-channel complement (AO3401A/BS250-',
       '                class). Conducts when Vgs is BELOW its (negative) threshold; body diode',
       '                conducts drain->source. Same "value" class selector as nmos.',
+      '  memorycore    A square-loop (remanent) magnetic memory core -- real DC memory that survives',
+      '                its drive current going to zero, NOT a linear inductor/toroid. Terminals = 2',
+      '                per winding (1-3 windings): [w1a,w1b] or [w1a,w1b,w2a,w2b] etc. Needs a "turns"',
+      '                array, one positive integer per winding. Multiple windings on ONE memorycore',
+      '                part share the SAME physical core -- their ampere-turns add (with sign from',
+      '                which terminal is listed first), so several independent write circuits, or a',
+      '                "toward/away" neighbor-coupling winding, are just extra windings on the same',
+      '                part, never a separate scripted rule. Optional "core": "small"/"medium"/"large"',
+      '                (default "small", bigger = higher coercive threshold, harder to flip), "gauge":',
+      '                "thin"/"standard"/"thick" (default "standard"). The core remembers +Br, -Br, or',
+      '                whatever it last held (real remanence, springs back unchanged below threshold)',
+      '                -- it never resets to zero on its own. Sense a core\'s state by reading a',
+      '                winding\'s induced voltage (nonzero only while it is actively flipping) or by',
+      '                inspecting the part\'s reported remanence in the simulator.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -237,6 +251,24 @@
         const needT = turns.length * 2;
         if (!Array.isArray(p.terminals) || p.terminals.length !== needT) {
           errors.push('part ' + i + ' (toroid): needs ' + needT + ' terminals (2 per winding section), got ' + (p.terminals ? p.terminals.length : 0));
+          return;
+        }
+        p.terminals.forEach((t, j) => {
+          if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
+          if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
+        });
+        return;
+      }
+      if (p && p.type === 'memorycore') {
+        const turns = Array.isArray(p.turns) ? p.turns : null;
+        if (!turns || !turns.length || turns.length > 3) {
+          errors.push('part ' + i + ' (memorycore): needs a "turns" array of 1-3 positive integers (one per winding)');
+          return;
+        }
+        if (turns.some((n) => !(Number(n) > 0))) errors.push('part ' + i + ' (memorycore): all turns counts must be positive');
+        const needM = turns.length * 2;
+        if (!Array.isArray(p.terminals) || p.terminals.length !== needM) {
+          errors.push('part ' + i + ' (memorycore): needs ' + needM + ' terminals (2 per winding), got ' + (p.terminals ? p.terminals.length : 0));
           return;
         }
         p.terminals.forEach((t, j) => {
