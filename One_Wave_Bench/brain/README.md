@@ -84,10 +84,22 @@ Threshold bands are preserved exactly as declared: `100–90`, `85–75`,
 odd side `s`, forward or inverted alphabet rank, and independent polarity. It
 retains the shared odd bridge instead of trying to decode it without its anchor.
 
+## Rabbit-hop constellation reconstruction
+
+`constellation_memory.py` is the first executable end-to-end reconstruction
+slice. It stores overlapping memories as distinct constellation nodes, enters a
+cue-linked neighborhood, traverses recorded G-721 odd connectors, performs
+deterministic Hopfield-style completion, uses seeded bounded Boltzmann selection
+only when ambiguity remains, and returns a context-validation receipt. The
+receipt records the exact invertible route and marks probabilistically supplied
+features uncertain. A matched flat baseline verifies when the route and
+constellation actually improve recall instead of merely adding machinery.
+
 ## Test
 
 ```bash
 python -m unittest One_Wave_Bench.brain.test_command_memory
+python -m unittest One_Wave_Bench.brain.test_constellation_memory
 ```
 
 ## Install on Jetson Orin
