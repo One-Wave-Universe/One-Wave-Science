@@ -327,8 +327,13 @@ via PR #13):** A runnable Electron/browser circuit simulator with a real
 modified-nodal-analysis solver (not a scripted animation) — resistors,
 diodes/LEDs, capacitors, inductors, AC sources, an MTJ quadrature sensor, a
 ferrite toroid with real mutual inductance, a virtual-ground rail splitter,
-and a Ternary Cell implementing Node G-744's window-comparator + MOSFET
-switch-pair primitive with hysteresis. Includes a live oscilloscope, an
+and discrete N-/P-channel MOSFETs (real Vgs threshold, RDS(on), and an
+always-on body diode). It deliberately does NOT include any pre-built
+comparator/decision part for Node G-744's window-comparator primitive — an
+earlier "Ternary Cell" macro that hard-coded that decision was removed, so
+the hold/positive/negative behavior has to be discovered and proven by
+wiring the discrete MOSFETs, same as on a real bench (see the Memory-cell
+and Cal C/D calibration boards). Includes a live oscilloscope, an
 AI-assisted circuit-build panel, a headless `simulate.js` CLI (`node
 Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
 automation, and a physics regression suite (`node

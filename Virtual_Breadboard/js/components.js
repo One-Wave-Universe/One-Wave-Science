@@ -25,11 +25,13 @@
   const ELECTROLYTIC_THRESHOLD = 1e-6; // farads; at/above this a cap is drawn as an electrolytic can, below as a ceramic disc
   const INDUCTOR_VALUES = [1e-6, 10e-6, 100e-6, 1e-3, 10e-3, 100e-3, 1];
   const AC_FREQ_VALUES = [0.1, 0.5, 1, 2, 5, 10, 60, 100];
-  // +/- state displacement from the reference for a ternary nerve cell's
-  // decision window -- matches the millivolt-scale margins a real window
-  // comparator (e.g. TLV3202-class) is meant to resolve well above its own
-  // offset/hysteresis, per the G-744 one-cell bench-build reference
-  const TERNARY_DELTA_VALUES = [0.005, 0.01, 0.02, 0.05, 0.1];
+
+  // Discrete MOSFET "value" selects a real part class (see circuit.js's
+  // NMOS_PARTS/PMOS_PARTS) rather than a made-up continuous parameter.
+  const MOSFET_CLASS_LABELS = {
+    1.5: 'Logic-level (AO3400A/AO3401A-class, Vth~1.5V)',
+    2.1: 'Standard (2N7000/BS250-class, Vth~2.1V)',
+  };
 
   const WIRE_COLOR_CHOICES = ['#2a6f4a', '#c94a4a', '#3f7fe0', '#d4af37', '#7a4a2a', '#a855f7', '#e8ecf1', '#1a1a1a'];
   const WIRE_COLOR_NAMES = {
@@ -90,12 +92,14 @@
     // placement) -- app.js overrides terminalsNeeded() for this type;
     // `terminals` here is just the 1-section default.
     { type: 'toroid', label: 'Ferrite Toroid', terminals: 2, icon: '◯' },
-    // 3 pins: ref, sense, out -- a real window-comparator-driven MOSFET
-    // switch pair (TLV3202 + back-to-back AO3400A-class N-channels). Decides
-    // hold/positive/negative purely from comparing sense against ref +/-
-    // value, with hysteresis; never conducts both paths at once because it's
-    // one state variable, not two independently-closeable switches.
-    { type: 'ternarycell', label: 'Ternary Cell', terminals: 3, icon: '±0', defaultValue: 0.02 },
+    // 3 pins: gate, drain, source -- a real discrete N-channel MOSFET
+    // (AO3400A/2N7000-class). Conducts drain-source only while Vgs is above
+    // its real threshold; its body diode conducts source->drain regardless
+    // of gate state, exactly like the physical part.
+    { type: 'nmos', label: 'N-MOSFET', terminals: 3, icon: 'N⏚', defaultValue: 1.5 },
+    // P-channel complement (AO3401A/BS250-class): conducts when Vgs is
+    // below its (negative) threshold; body diode conducts drain->source.
+    { type: 'pmos', label: 'P-MOSFET', terminals: 3, icon: 'P⏚', defaultValue: 1.5 },
   ];
 
   function resistorColorBands(value) {
@@ -541,19 +545,22 @@
     ctx.restore();
   }
 
-  // t = [ref, sense, out]: a window-comparator-driven MOSFET switch pair
-  // (real hardware: TLV3202 + back-to-back AO3400A-class N-channels). Body
-  // color reflects the live decision -- neutral gray when Hold, amber when
-  // driving the positive path, blue when driving the negative path -- the
-  // same "measured waveforms over labels" idea as an LED's glow.
-  const TERNARY_DECISION_COLOR = { pos: '#e0a83f', neg: '#4d8dff', hold: '#5a6178' };
-  function ternaryCellCentroid(t) {
+  // t = [gate, drain, source]: a real discrete MOSFET. Border color reflects
+  // the live channel state (green when conducting, gray when off) and a
+  // small amber dot marks the body diode conducting -- the same "measured
+  // state over labels" idea as the LED glow.
+  const MOSFET_ON_COLOR = '#3ddc6b';
+  const MOSFET_OFF_COLOR = '#5a6178';
+  const MOSFET_DIODE_COLOR = '#e0a83f';
+  function mosfetCentroid(t) {
     return { x: (t[0].x + t[1].x + t[2].x) / 3, y: (t[0].y + t[1].y + t[2].y) / 3 };
   }
-  function drawTernaryCell(ctx, comp, t, opacity, decision) {
+  function drawMosfet(ctx, comp, t, opacity, state) {
     const o = op(opacity);
-    const c = ternaryCellCentroid(t);
-    const bodyColor = TERNARY_DECISION_COLOR[decision] || TERNARY_DECISION_COLOR.hold;
+    const c = mosfetCentroid(t);
+    const channelOn = !!(state && state.channelOn);
+    const diodeOn = !!(state && state.bodyDiodeOn);
+    const borderColor = channelOn ? MOSFET_ON_COLOR : MOSFET_OFF_COLOR;
     ctx.save();
     ctx.globalAlpha = o;
     ctx.strokeStyle = '#b5b5b0';
@@ -565,27 +572,46 @@
     });
     ctx.stroke();
 
-    if (decision && decision !== 'hold') {
+    if (channelOn) {
       ctx.globalAlpha = 0.3 * o;
-      ctx.fillStyle = bodyColor;
+      ctx.fillStyle = borderColor;
       ctx.beginPath();
       ctx.arc(c.x, c.y, 20, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = o;
     }
 
-    ctx.fillStyle = '#3a3f4d';
-    roundRect(ctx, c.x - 16, c.y - 11, 32, 22, 5);
+    ctx.fillStyle = '#2b2f36';
+    roundRect(ctx, c.x - 15, c.y - 12, 30, 24, 5);
     ctx.fill();
-    ctx.strokeStyle = bodyColor;
+    ctx.strokeStyle = borderColor;
     ctx.lineWidth = 1.4;
-    roundRect(ctx, c.x - 16, c.y - 11, 32, 22, 5);
+    roundRect(ctx, c.x - 15, c.y - 12, 30, 24, 5);
     ctx.stroke();
-    ctx.fillStyle = bodyColor;
-    ctx.font = 'bold 9px monospace';
+    ctx.fillStyle = '#e8ecf1';
+    ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
-    const label = decision === 'pos' ? '+1' : decision === 'neg' ? '-1' : '±0';
-    ctx.fillText(label, c.x, c.y + 4);
+    ctx.fillText(comp.type === 'pmos' ? 'P' : 'N', c.x, c.y + 4);
+    ctx.textAlign = 'left';
+
+    if (diodeOn) {
+      ctx.fillStyle = MOSFET_DIODE_COLOR;
+      ctx.beginPath();
+      ctx.arc(c.x + 11, c.y - 9, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // pin labels: g(ate)/d(rain)/s(ource), tiny, at each lead's outer end
+    ctx.globalAlpha = 0.85 * o;
+    ctx.fillStyle = '#8a93a5';
+    ctx.font = '7px monospace';
+    ctx.textAlign = 'center';
+    ['g', 'd', 's'].forEach((label, i) => {
+      const p = t[i];
+      const dx = p.x - c.x;
+      const dy = p.y - c.y;
+      const len = Math.hypot(dx, dy) || 1;
+      ctx.fillText(label, p.x + (dx / len) * 8, p.y + (dy / len) * 8 + 2);
+    });
     ctx.textAlign = 'left';
     ctx.restore();
   }
@@ -853,12 +879,12 @@
       drawPotentiometer(ctx, Object.assign({ pos: 0.5 }, p), t, 1);
       return;
     }
-    if (type === 'vgnd' || type === 'mtjsensor' || type === 'ternarycell') {
+    if (type === 'vgnd' || type === 'mtjsensor' || type === 'nmos' || type === 'pmos') {
       const t = [
         { x: cx - w * 0.26, y: cy - h * 0.18 }, { x: cx + w * 0.26, y: cy - h * 0.18 }, { x: cx, y: cy + h * 0.24 },
       ];
       if (type === 'vgnd') drawVGnd(ctx, p, t, 1);
-      else if (type === 'ternarycell') drawTernaryCell(ctx, p, t, 1, null);
+      else if (type === 'nmos' || type === 'pmos') drawMosfet(ctx, Object.assign({}, p, { type }), t, 1, null);
       else drawMtjSensor(ctx, Object.assign({ freq: 1, phase: 0 }, p), t, 1, 0.15);
       return;
     }
@@ -904,7 +930,7 @@
   const api = {
     PALETTE, RESISTOR_VALUES, CAPACITOR_VALUES, LED_COLORS, LED_HEX, BATTERY_VALUES, ELECTROLYTIC_THRESHOLD, WIRE_COLOR_CHOICES,
     INDUCTOR_VALUES, AC_FREQ_VALUES, SCOPE_COLORS, WIRE_GAUGES, WIRE_COLOR_NAMES, WIRE_GAUGE_OHMS_PER_M,
-    TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING, TERNARY_DELTA_VALUES,
+    TOROID_CORES, TOROID_TURNS_VALUES, TOROID_SPACING_COUPLING, MOSFET_CLASS_LABELS,
     resistorColorBands, formatOhms, formatFarads, formatHenries,
     drawResistor, drawLed, drawDiode, drawCapacitor, drawBattery,
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
@@ -912,7 +938,7 @@
     drawInductor, drawAcSource, drawMtjSensor, mtjCentroid,
     drawScopeProbe, drawPartIcon,
     drawToroid, toroidCentroid,
-    drawTernaryCell, ternaryCellCentroid,
+    drawMosfet, mosfetCentroid,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

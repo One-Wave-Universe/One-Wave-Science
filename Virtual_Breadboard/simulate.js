@@ -149,8 +149,8 @@ function toEngineElements(parts) {
       });
     } else if (p.type === 'vgnd') {
       components.push({ id: p.id, type: 'vgnd', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, out: p.terminals[2].cellId });
-    } else if (p.type === 'ternarycell') {
-      components.push({ id: p.id, type: 'ternarycell', label: p.id, ref: p.terminals[0].cellId, sense: p.terminals[1].cellId, out: p.terminals[2].cellId, value: p.value });
+    } else if (p.type === 'nmos' || p.type === 'pmos') {
+      components.push({ id: p.id, type: p.type, label: p.id, gate: p.terminals[0].cellId, drain: p.terminals[1].cellId, source: p.terminals[2].cellId, value: p.value });
     } else if (p.type === 'acsource') {
       components.push({ id: p.id, type: 'acsource', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, freq: p.freq || 1, phase: p.phase || 0 });
     } else if (p.type === 'mtjsensor') {
@@ -174,8 +174,8 @@ function snapshot(result) {
     currents: Object.fromEntries((result && result.currents) || []),
     warnings: (result && result.warnings) || [],
   };
-  if (result && result.ternaryStates && result.ternaryStates.size) {
-    out.ternaryStates = Object.fromEntries(result.ternaryStates);
+  if (result && result.mosfetStates && result.mosfetStates.size) {
+    out.mosfetStates = Object.fromEntries(result.mosfetStates);
   }
   return out;
 }

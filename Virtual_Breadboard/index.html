@@ -42,7 +42,13 @@
         <button id="presetLed">LED + resistor</button>
         <button id="presetRC">RC charging (with switch)</button>
         <button id="presetShort">Short circuit (danger demo)</button>
-        <button id="presetTernaryDrive" title="3 ternary cells, one shared V0 reference, driving a 3-section toroid -- a rotating field with no scripted phase">Ternary 3-phase drive</button>
+        <h3>Calibration boards</h3>
+        <button id="presetCalA" title="124k/1k divider off a 2.5V mid-rail should read 2.520V, not a rounded 2.500V -- proves millivolt-scale solver resolution">Cal A: divider (mV proof)</button>
+        <button id="presetCalB" title="Virtual Ground's V0 output under a real 100k load -- should barely sag, not droop like a plain divider">Cal B: V0 under load</button>
+        <button id="presetCalC" title="One real N-MOSFET as a low-side switch -- toggle the switch and watch the drain clamp between ~5V (off) and ~0V (on)">Cal C: N-FET switch</button>
+        <button id="presetCalD" title="Two N-MOSFETs, sources+gates tied together -- a real bidirectional switch. Current should stay ~0A both directions">Cal D: back-to-back FETs</button>
+        <button id="presetCalE" title="150k + 100nF charging toward +5V from a 2.5V V0 reference -- real tau=15ms RC transient">Cal E: RC to mid-rail</button>
+        <button id="presetMemCell" title="Supply + vgnd + two back-to-back N-FETs + a cap + a leak resistor. Close the switch to sample (mem tracks +20mV above V0); open it to hold, and watch mem decay on a real tau=1s -- probe mem vs V0 in millivolts">Memory cell (sample &amp; hold)</button>
       </div>
       <div id="toolboxScrollHint" class="scroll-hint" hidden aria-hidden="true">&#9662; scroll for more</div>
     </aside>
