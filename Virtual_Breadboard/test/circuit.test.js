@@ -890,19 +890,224 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 30 OK (T-TOWARD-AWAY): toward matches center, away mirrors center, both directions, Hold leaves neighbors untouched');
 }
 
-// Test 31 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 31 (T-WINDOW-3STATE): a real TLV3202-class dual comparator, wired
+// as a window detector (channel 1 active-low for "above the window",
+// channel 2 active-high for "below the window", the same topology as the
+// Stage 1 Real Millivolt Ternary preset), must distinguish all three of
+// -20mV, 0mV, and +20mV relative to V0 by its two real HIGH/LOW outputs
+// -- no third output pin, no invented trit value, just two real 2-level
+// decisions whose combination happens to carry 3 distinguishable states.
+{
+  const hcRef = 0.01; // window edges at +/-10mV, so a +/-20mV test signal has real margin over the comparator's own ~2mV offset
+  function build(signalV) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'VCC', b: 'GND', value: 5 },
+        { id: 'batX', type: 'battery', a: 'X', b: 'GND', value: 2.5 + hcRef },
+        { id: 'batY', type: 'battery', a: 'Y', b: 'GND', value: 2.5 - hcRef },
+        { id: 'batSig', type: 'battery', a: 'SIGNAL', b: 'GND', value: 2.5 + signalV },
+        {
+          id: 'cmp', type: 'comparator',
+          in1p: 'X', in1m: 'SIGNAL', out1: 'OUT1', // active-low for "above the window" (Right)
+          in2p: 'Y', in2m: 'SIGNAL', out2: 'OUT2', // active-high for "below the window" (Left)
+          vcc: 'VCC', gnd: 'GND',
+        },
+      ],
+    };
+  }
+  const dt = 1 / 2000;
+  let res;
+
+  const cRight = new Circuit();
+  for (let i = 0; i < 20; i++) res = cRight.solve(build(0.02), dt); // SIGNAL = V0 + 20mV
+  assert.strictEqual(res.comparatorStates.get('cmp').out1High, false, 'T-WINDOW-3STATE: +20mV must read OUT1 LOW (above the window)');
+  assert.strictEqual(res.comparatorStates.get('cmp').out2High, false, 'T-WINDOW-3STATE: +20mV must read OUT2 LOW');
+
+  const cHold = new Circuit();
+  for (let i = 0; i < 20; i++) res = cHold.solve(build(0), dt); // SIGNAL = V0
+  assert.strictEqual(res.comparatorStates.get('cmp').out1High, true, 'T-WINDOW-3STATE: 0mV must read OUT1 HIGH (inside the window)');
+  assert.strictEqual(res.comparatorStates.get('cmp').out2High, false, 'T-WINDOW-3STATE: 0mV must read OUT2 LOW');
+
+  const cLeft = new Circuit();
+  for (let i = 0; i < 20; i++) res = cLeft.solve(build(-0.02), dt); // SIGNAL = V0 - 20mV
+  assert.strictEqual(res.comparatorStates.get('cmp').out1High, true, 'T-WINDOW-3STATE: -20mV must read OUT1 HIGH');
+  assert.strictEqual(res.comparatorStates.get('cmp').out2High, true, 'T-WINDOW-3STATE: -20mV must read OUT2 HIGH (below the window)');
+
+  console.log('Test 31 OK (T-WINDOW-3STATE): -20mV/0mV/+20mV all give distinct (OUT1,OUT2) combinations');
+}
+
+// Test 32 (T-DIFFSCOPE): js/app.js's Differential Scope probe must sample
+// V(A) - V(B) from the same live per-frame voltages every other probe
+// reads (a real subtraction of two real node voltages, never a separate
+// signal) -- checked two ways: a static check that the actual sampling
+// code computes exactly that difference for a 2-terminal diffscope probe,
+// and a numeric check (via the real solver) that the two nodes it would
+// read really do differ by the expected real voltage.
+{
+  const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
+  assert.ok(/p\.type !== 'scope' && p\.type !== 'diffscope'/.test(appSrc), 'T-DIFFSCOPE: sampleScopeProbes must handle diffscope probes');
+  const diffSampleMatch = appSrc.match(/if \(p\.type === 'diffscope'\) \{([\s\S]*?)\}/);
+  assert.ok(diffSampleMatch, 'T-DIFFSCOPE: could not find the diffscope sampling branch in sampleScopeProbes');
+  assert.ok(/va - vb/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must compute va - vb (terminal 0 minus terminal 1), not something else');
+  assert.ok(/terminals\[0\]\.cellId/.test(diffSampleMatch[1]) && /terminals\[1\]\.cellId/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must read its own two terminals, not e.g. terminal 0 twice');
+
+  // numeric check: the same 2.5V split a diffscope on this preset would show
+  const c = new Circuit();
+  const dt = 1 / 2000;
+  let res;
+  for (let i = 0; i < 10; i++) {
+    res = c.solve({
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'GND', value: 5 },
+        { id: 'vg1', type: 'vgnd', a: 'P', b: 'GND', out: 'V0' },
+      ],
+    }, dt);
+  }
+  const vDiff = res.voltages.get(res.uf.find('P')) - res.voltages.get(res.uf.find('V0'));
+  approx(vDiff, 2.5, 0.01, 'T-DIFFSCOPE: V(P) - V(V0) must be a real 2.5V difference for a diffscope to show correctly');
+  console.log('Test 32 OK (T-DIFFSCOPE): sampling code computes a real terminals[0]-terminals[1] difference, verified against a real 2.5V split');
+}
+
+// Test 33 (T-HOLE-COLLIDE): only one component lead may occupy a
+// breadboard hole. simulate.js's resolveTerminals() runs the same
+// collision check js/app.js's manual-click and AI-build paths do --
+// checked here directly against the real Board geometry, since it's a
+// pure function with no DOM.
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+
+  // two different parts both claiming the exact same physical hole (e,5) -- must be rejected
+  const collidingSpec = [
+    { type: 'battery', value: 5, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+    { type: 'resistor', value: 220, terminals: [{ row: 'e', col: 5 }, { row: 'e', col: 10 }] },
+  ];
+  const { errors: collideErrors } = Sim.resolveTerminals(board, collidingSpec);
+  assert.ok(collideErrors.length > 0, 'T-HOLE-COLLIDE: two parts sharing the exact same physical hole must be rejected');
+  assert.ok(/same physical hole/.test(collideErrors[0]), 'T-HOLE-COLLIDE: the rejection must explain it is a hole collision');
+
+  // a DIFFERENT hole on the SAME electrical node (same column, different row) must be accepted
+  const okSpec = [
+    { type: 'battery', value: 5, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+    { type: 'resistor', value: 220, terminals: [{ row: 'a', col: 5 }, { row: 'e', col: 10 }] },
+  ];
+  const { errors: okErrors } = Sim.resolveTerminals(board, okSpec);
+  assert.strictEqual(okErrors.length, 0, 'T-HOLE-COLLIDE: a different hole on the same electrical node must NOT be rejected (' + okErrors.join('; ') + ')');
+
+  console.log('Test 33 OK (T-HOLE-COLLIDE): same physical hole rejected, different hole on the same node accepted');
+}
+
+// Test 34 (T-BOARD2): a part whose terminal names board 1 (the 2nd
+// physical board, 0-indexed) must resolve to a real hole on board 1 and
+// stay there through resolution and simulation -- not silently fall back
+// to board 0. Checked on the same headless path an external harness uses.
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['2large']);
+  board.layoutKey = '2large';
+
+  const spec = [
+    { type: 'battery', value: 5, terminals: [{ row: 'e', col: 5, board: 1 }, { row: 'f', col: 5, board: 1 }] },
+    { type: 'resistor', value: 1000, terminals: [{ row: 'a', col: 5, board: 1 }, { row: 'e', col: 10, board: 1 }] },
+  ];
+  const { parts, errors } = Sim.resolveTerminals(board, spec);
+  assert.strictEqual(errors.length, 0, 'T-BOARD2: a well-formed board-1 spec must resolve cleanly (' + errors.join('; ') + ')');
+  parts.forEach((p) => {
+    p.terminals.forEach((t) => {
+      assert.ok(t.cellId.startsWith('b1:'), 'T-BOARD2: terminal ' + t.cellId + ' must be on board 1 ("b1:..."), not silently on board 0');
+    });
+  });
+
+  // and the resulting circuit actually solves on board 1's nodes
+  const elements = Sim.toEngineElements(parts);
+  const c = new Circuit();
+  const res = c.solve(elements, 0.001);
+  assert.ok(res.voltages.has(res.uf.find('b1:T5')), 'T-BOARD2: the solved circuit must contain board 1\'s own node');
+
+  console.log('Test 34 OK (T-BOARD2): a board-1 terminal resolves to a real board-1 hole and solves on board-1\'s own node');
+}
+
+// Test 35 (T-SUPPLY-CONFLICT): two ideal-ish voltage sources wired
+// directly across the same two nodes must be flagged as a conflict --
+// not silently accepted as though the resulting midpoint voltage were a
+// safe, intended operating point. The solver still reports the real
+// physics (a genuine circulating current between them), but the warning
+// must name it as a conflicting-supply condition specifically.
+{
+  const c = new Circuit();
+  const res = c.solve({
+    wires: [],
+    components: [
+      { id: 'b1', type: 'battery', a: 'P', b: 'GND', value: 5 },
+      { id: 'b2', type: 'battery', a: 'P', b: 'GND', value: 9 },
+    ],
+  }, 0.001);
+  const conflictWarning = res.warnings.find((w) => /Conflicting power supplies/.test(w));
+  assert.ok(conflictWarning, 'T-SUPPLY-CONFLICT: two different-valued batteries directly across the same nodes must warn "Conflicting power supplies", got: ' + JSON.stringify(res.warnings));
+  approx(res.voltages.get(res.uf.find('P')), 7, 0.1, 'T-SUPPLY-CONFLICT: the real (not silently hidden) result is still the physically correct averaged-by-internal-resistance voltage');
+
+  // two batteries that AGREE (same value, same orientation) must NOT warn -- that's just two supplies in parallel, not a conflict
+  const c2 = new Circuit();
+  const res2 = c2.solve({
+    wires: [],
+    components: [
+      { id: 'b1', type: 'battery', a: 'P', b: 'GND', value: 5 },
+      { id: 'b2', type: 'battery', a: 'P', b: 'GND', value: 5 },
+    ],
+  }, 0.001);
+  assert.ok(!res2.warnings.some((w) => /Conflicting power supplies/.test(w)), 'T-SUPPLY-CONFLICT: two agreeing batteries must not be flagged as conflicting');
+
+  console.log('Test 35 OK (T-SUPPLY-CONFLICT): conflicting supplies explicitly flagged, agreeing supplies are not');
+}
+
+// Test 36 (T-CAP-POLARITY): a real electrolytic capacitor (value at/above
+// the electrolytic threshold) that ends up reverse-biased beyond a real
+// part's reverse-voltage rating must warn -- a ceramic (below the
+// threshold) at the same reverse voltage must not, since it has no
+// polarity to violate.
+{
+  function buildReverse(value) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'HI', b: 'GND', value: 5 },
+        // capacitor wired backwards: its "+" lead (a) ties to GND, "-" lead (b) to the +5V node --
+        // this reverse-biases it by the full 5V once charged
+        { id: 'cap1', type: 'capacitor', a: 'GND', b: 'HI', value },
+      ],
+    };
+  }
+  const dt = 0.05;
+  const cElectro = new Circuit();
+  let res;
+  for (let i = 0; i < 20; i++) res = cElectro.solve(buildReverse(10e-6), dt); // 10uF: electrolytic
+  assert.ok(res.warnings.some((w) => /reverse-biased/.test(w) && /Electrolytic/.test(w)), 'T-CAP-POLARITY: a reverse-biased electrolytic must warn, got: ' + JSON.stringify(res.warnings));
+
+  const cCeramic = new Circuit();
+  for (let i = 0; i < 20; i++) res = cCeramic.solve(buildReverse(100e-9), dt); // 100nF: ceramic, no polarity
+  assert.ok(!res.warnings.some((w) => /reverse-biased/.test(w)), 'T-CAP-POLARITY: a non-polarized ceramic at the same reverse voltage must not warn');
+
+  console.log('Test 36 OK (T-CAP-POLARITY): reverse-biased electrolytic warns, reverse-biased ceramic does not');
+}
+
+// Test 37 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
 {
   const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
-  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts', 'presetMemoryCellParts', 'presetCalFParts', 'presetCalGParts', 'presetCalHParts'];
+  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts', 'presetMemoryCellParts', 'presetCalFParts', 'presetCalGParts', 'presetCalHParts', 'presetStage1TernaryParts'];
   calPresetNames.forEach((name) => {
     const m = appSrc.match(new RegExp('function ' + name + '\\(\\) \\{([\\s\\S]*?)\\n  \\}'));
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 31 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 37 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

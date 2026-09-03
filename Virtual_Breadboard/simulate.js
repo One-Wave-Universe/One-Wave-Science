@@ -78,17 +78,37 @@ function derivePotentiometerHoles(board, anchor) {
   ];
 }
 
+// ported from js/app.js's deriveTlv3202Holes -- a real 8-pin DIP-8
+// straddling the center channel, pins numbered going around the package
+function deriveTlv3202Holes(board, anchor) {
+  if (!anchor || anchor.row !== 'e') return null;
+  const c = anchor.col;
+  const bi = anchor.boardIdx || 0;
+  const boardMeta = board.boards[bi];
+  if (!boardMeta || c + 3 > boardMeta.cols) return null;
+  return [
+    H(board, 'e', c, bi), H(board, 'e', c + 1, bi), H(board, 'e', c + 2, bi), H(board, 'e', c + 3, bi),
+    H(board, 'f', c + 3, bi), H(board, 'f', c + 2, bi), H(board, 'f', c + 1, bi), H(board, 'f', c, bi),
+  ];
+}
+
 // ported from js/app.js's specPartsToBoardParts -- turns a validated AI
-// spec's {row,col} terminal references into real holes on this board, and
-// renames/defaults fields exactly like the in-app AI-build path does (the
-// AI spec's toroid "turns" becomes the board part's "turnsPerSection", with
-// core/gauge/spacing defaulted when the AI left them out)
+// spec's {row,col,board} terminal references into real holes on this
+// board, and renames/defaults fields exactly like the in-app AI-build path
+// does (the AI spec's toroid "turns" becomes the board part's
+// "turnsPerSection", with core/gauge/spacing defaulted when the AI left
+// them out). "board" on a terminal (0-indexed, default board 0) is
+// threaded straight through to H()'s boardIdx argument -- a part assigned
+// to board 1 must resolve to a real hole on board 1, not silently fall
+// back to board 0.
 function resolveTerminals(board, specParts) {
   const errors = [];
   const parts = specParts.map((p, i) => {
     const terminals = p.type === 'potentiometer'
-      ? derivePotentiometerHoles(board, H(board, p.terminals[0].row, p.terminals[0].col))
-      : p.terminals.map((t) => H(board, t.row, t.col));
+      ? derivePotentiometerHoles(board, H(board, p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
+      : p.type === 'comparator'
+      ? deriveTlv3202Holes(board, H(board, p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
+      : p.terminals.map((t) => H(board, t.row, t.col, t.board));
     if (!terminals || terminals.some((t) => !t)) {
       errors.push('part ' + i + ' (' + p.type + '): a terminal does not resolve to a real hole on layout "' + (board.layoutKey || '') + '"');
       return null;
@@ -110,7 +130,22 @@ function resolveTerminals(board, specParts) {
       id: p.type[0] + (i + 1),
     };
   });
-  return { parts: parts.filter(Boolean), errors };
+  const resolved = parts.filter(Boolean);
+  // one component lead per physical hole -- same real-bench collision
+  // check js/app.js's specPartsToBoardParts applies to an AI-generated
+  // layout, ported here so a headless spec gets the identical validation.
+  const seen = new Map(); // "x,y" -> part index (into `resolved`) that claimed it first
+  resolved.forEach((p, i) => {
+    p.terminals.forEach((t) => {
+      const key = t.x + ',' + t.y;
+      const first = seen.get(key);
+      if (first != null && first !== i) {
+        errors.push('part ' + i + ' (' + p.type + ') and part ' + first + ' (' + resolved[first].type + ') both claim the same physical hole (' + t.cellId + ') -- a real breadboard hole only fits one lead');
+      }
+      seen.set(key, i);
+    });
+  });
+  return { parts: resolved, errors };
 }
 
 // ported verbatim from js/app.js's toroidWindings/toEngineElements
@@ -141,8 +176,8 @@ function toEngineElements(parts) {
   const wires = [];
   const components = [];
   parts.forEach((p) => {
-    if (p.type === 'scope') {
-      // zero-load probe, never enters the physics
+    if (p.type === 'scope' || p.type === 'diffscope') {
+      // zero-load probe(s), never enter the physics
     } else if (p.type === 'wire') {
       wires.push({ a: p.terminals[0].cellId, b: p.terminals[1].cellId });
     } else if (p.type === 'ywire') {
@@ -174,6 +209,13 @@ function toEngineElements(parts) {
         windings: toroidWindings(p),
         coupling: p.turnsPerSection.length > 1 ? (Components.TOROID_SPACING_COUPLING[p.spacing] || 0.9) : 0,
       });
+    } else if (p.type === 'comparator') {
+      const t = p.terminals;
+      components.push({
+        id: p.id, type: 'comparator', label: p.id,
+        out1: t[0].cellId, in1m: t[1].cellId, in1p: t[2].cellId, gnd: t[3].cellId,
+        in2p: t[4].cellId, in2m: t[5].cellId, out2: t[6].cellId, vcc: t[7].cellId,
+      });
     } else if (p.type === 'memorycore') {
       const coreDef = Components.MEMORY_CORES[p.core] || Components.MEMORY_CORES.small;
       components.push({
@@ -199,6 +241,9 @@ function snapshot(result) {
   }
   if (result && result.coreStates && result.coreStates.size) {
     out.coreStates = Object.fromEntries(result.coreStates);
+  }
+  if (result && result.comparatorStates && result.comparatorStates.size) {
+    out.comparatorStates = Object.fromEntries(result.comparatorStates);
   }
   return out;
 }
@@ -251,4 +296,12 @@ function main() {
   console.log(JSON.stringify(out, null, 2));
 }
 
-main();
+// run as a CLI when invoked directly (`node simulate.js`); when required
+// as a module (the automated test suite does this) just export the
+// internals below and skip reading stdin/argv or printing to stdout.
+if (require.main === module) main();
+
+module.exports = {
+  LAYOUT_PRESETS, H, derivePotentiometerHoles, deriveTlv3202Holes,
+  resolveTerminals, memoryCoreWindings, toEngineElements, snapshot, main,
+};

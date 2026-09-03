@@ -6,10 +6,11 @@ solderless breadboard rendered hole-by-hole, a palette of real parts
 pushbutton, a real 6-pin potentiometer, a virtual-ground rail splitter,
 an inductor, a real AC source, an MTJ rotary angle sensor, a multi-section
 ferrite toroid transformer, discrete N-/P-channel MOSFETs with real body
-diodes, a square-loop magnetic memory core, and jumper wires), a built-in
-oscilloscope, and a live circuit-physics engine underneath — not a toy
-animation. Click any hole to wire something into it, and the simulator
-solves the actual circuit every frame.
+diodes, a square-loop magnetic memory core, a real TLV3202 dual comparator,
+and jumper wires), a built-in oscilloscope (with a differential-probe
+mode), and a live circuit-physics engine underneath — not a toy animation.
+Click any hole to wire something into it, and the simulator solves the
+actual circuit every frame.
 
 Physics honesty is a hard rule here: if a real bench build would fail or
 read a certain way, the simulator has to fail or read the same way. There
@@ -52,11 +53,19 @@ linear-algebra method SPICE-class simulators use:
   row `c` mirrors to row `h`). Electrically the mirrored legs are just wired
   to their partners (a real trimmer's two rows are joined internally for
   mechanical stability), modeled as three ordinary jumper connections rather
-  than touching the resistor-divider math itself. In Select mode, click and
-  drag the knob directly on the canvas to turn it (a 270-degree sweep, like
-  a real trimmer), or use the Inspector's slider — it moves in 0.1% steps
-  (1000 positions) rather than a coarse 1%, fine enough to dial in a
-  specific millivolt-scale lean for asymmetric-voltage testing.
+  than touching the resistor-divider math itself. **This is one gang, not
+  two independent ones**: all 6 physical pins collapse to the same 3
+  electrical nodes (`a`, wiper, `b`) — like a common single-turn cermet
+  trimmer (e.g. a Bourns 3296W), not a dual-gang stereo-volume-style part
+  with two separate resistive elements on one shaft. Placement validates
+  the *entire* 6-hole footprint is clear before committing, the same rule
+  every other part's leads follow (one lead per physical hole) — a real
+  trimmer can't straddle the gap if either row is already occupied. In
+  Select mode, click and drag the knob directly on the canvas to turn it
+  (a 270-degree sweep, like a real trimmer), or use the Inspector's slider
+  — it moves in 0.1% steps (1000 positions) rather than a coarse 1%, fine
+  enough to dial in a specific millivolt-scale lean for asymmetric-voltage
+  testing.
 - **Virtual Ground** is a rail-splitter: a 3-terminal part whose output node
   is forced to the exact midpoint voltage between the two rails/nodes it's
   connected to — e.g. split a single 9V supply into a `+4.5V` / `V0 (0V
@@ -144,10 +153,35 @@ linear-algebra method SPICE-class simulators use:
   temperature dependence, no half-select disturb modeling, and it does not
   replace the Ferrite Toroid's linear inductor/transformer behavior for
   circuits that actually want that (the two are separate parts on purpose).
+- The **TLV3202 Dual Comparator** is a real 8-pin DIP-8 chip, not an
+  invented decision-making part: two independent rail-to-rail push-pull
+  comparators (`value = Vin+ − Vin− > Vos` decides HIGH/LOW, each output a
+  small-output-impedance path to whichever rail that real comparison
+  currently picks — no pull-up resistor needed, unlike an open-drain
+  comparator) sharing one VCC/GND pair, with a real ~2mV input offset
+  voltage and a real minimum/maximum supply voltage. It never decides more
+  than HIGH or LOW on its own: any multi-level (ternary) behavior has to
+  come from real parts wired around it, the same rule the whole palette
+  follows. Warnings fire for an unpowered chip (VCC/GND not wired), a
+  supply outside its rated range, and an input outside the real common-
+  mode range (checked against the chip's *actual* solved VCC/GND, not an
+  assumed 5V). Placement is one click, like the Potentiometer: the anchor
+  must be row `e` (bordering the center channel), and the simulator places
+  the other 7 pins for you in the real DIP-8 layout — 4 columns wide,
+  straddling the gap exactly like a physical chip on a breadboard, pin 1
+  marked with a real DIP notch.
 - The **Oscilloscope** panel below the board is fed by zero-load Scope
   Probes (like a real 10MΩ probe — they never affect the circuit) sampled
   every frame into a rolling window, so AC and quadrature signals are
-  actually visible moving, not just a single readout number.
+  actually visible moving, not just a single readout number. A
+  **Differential Scope** probe reads two such taps at once and plots
+  `V(A) − V(B)` as one trace — the natural way to watch a millivolt-scale
+  lean relative to a reference (e.g. `V0`) instead of subtracting two
+  absolute readings by hand. The panel's y-axis is labeled in real volts
+  at the top, middle (`0 V`), and bottom, and the legend shows each
+  probe's live value to 4 decimal places (0.1mV resolution) — enough to
+  tell `-20mV`, `0mV`, and `+20mV` apart at a glance, not just "some
+  wiggly line."
 - The breadboard's electrical grouping is modeled exactly like a real
   board: each column's five holes in the top bank (rows a-e) are one node,
   each column's five holes in the bottom bank (rows f-j) are a separate
@@ -166,7 +200,12 @@ linear-algebra method SPICE-class simulators use:
   never touches another board's), exactly like separate physical boards —
   bridge two boards' nodes (or share a supply across them) the same way
   you'd bridge two points on one board: an ordinary jumper wire, clicking
-  a hole on one board then a hole on another.
+  a hole on one board then a hole on another. Board addressing is
+  consistent everywhere a part can come from: manual clicks, **Ask AI to
+  build it** (each terminal may name an optional `"board"` index), a
+  saved/loaded build, and the headless `simulate.js` CLI all resolve a
+  part assigned to board 2 to a real hole on board 2, not silently back to
+  board 1.
 
 This is deliberately a simplified analog model (piecewise-linear diodes,
 not a full Shockley exponential; real time-domain AC sources, inductors,
@@ -303,10 +342,16 @@ fetch one.
 1. Pick a tool from the left palette (Jumper Wire, Y-Split Wire, Resistor,
    LED, Diode, Capacitor, Power Supply, Switch, Pushbutton, Potentiometer,
    Virtual Ground, Inductor, AC Source, MTJ Angle Sensor, Scope Probe,
-   Ferrite Toroid, N-MOSFET, P-MOSFET, Memory Core).
+   Differential Scope, Ferrite Toroid, N-MOSFET, P-MOSFET, Memory Core,
+   TLV3202 Dual Comparator).
 2. Click a hole to start placing; click a second hole to drop most parts —
    the wire's other end snaps wherever you click next, so click the first
-   hole then move to wherever you want the far end and click again.
+   hole then move to wherever you want the far end and click again. Every
+   hole fits exactly one lead, like a real board — clicking a hole another
+   part's lead already occupies is rejected (with a status-bar message),
+   even though a *different* hole on the same electrical node works fine;
+   a multi-hole footprint (Potentiometer, TLV3202) validates every one of
+   its holes this way before it commits, not just the one you clicked.
    - The **Potentiometer** is different — it's a real 6-pin trimmer, so one
      click on an anchor hole (any strip row, not a rail) places all 6 legs,
      straddling the center channel automatically.
@@ -324,6 +369,8 @@ fetch one.
      sin-out pin, then the cos-out pin.
    - The **Scope Probe** takes 1 click — it taps whatever node it lands on
      and adds a live trace to the Oscilloscope panel below the board.
+   - The **Differential Scope** takes 2 clicks (A, then B) and adds one
+     `V(A) − V(B)` trace instead of two absolute ones.
    - The **Ferrite Toroid** takes 2 clicks per winding section (pick 1-3
      sections and each section's turns count in the tool panel first) —
      click that section's 2 terminal holes, then the next section's 2, and
@@ -335,6 +382,9 @@ fetch one.
      core size, and wire gauge in the tool panel first) — click that
      winding's 2 terminal holes, then the next winding's 2, and so on.
      Multiple windings on one core share the same physical lock.
+   - The **TLV3202 Dual Comparator** is one click, like the Potentiometer —
+     the anchor must land on row `e` (bordering the center channel), and
+     the simulator places the other 7 pins of the real 8-pin DIP-8 for you.
 3. Switch to **Select / Toggle** to click a placed switch to open/close it,
    hold down a pushbutton to close it only while held, click and drag a
    potentiometer's knob to turn it, or click any part to inspect it. Both
@@ -458,6 +508,56 @@ genuinely does draw more current, and dissipate more resistor power, than
 the same-looking divider in Cal A-E ever needs to sense a voltage — the
 same honest sense-vs-write current distinction T-TRI-DECIDE documents.
 
+## Ternary cell (G-744): Stage 1 Real Millivolt Ternary
+
+This is the first real, bench-buildable ternary cell — not another
+calibration proof, but the actual G-744 circuit: a TLE2426-class `V0`
+reference, a real TLV3202 window comparator with two 124kΩ/1kΩ precision
+networks defining its `V0 ± 20mV` window edges, a bipolar millivolt
+"lean" signal source (the same manual-reversal switch trick as Cal F/G/H),
+and an AO3400A/AO3401A MOSFET pair writing the window decision onto a
+100kΩ-held `MEM` node.
+
+- **Channel 1** (window-hi) has its inputs deliberately swapped from the
+  "obvious" order — `IN1-` reads the signal, `IN1+` reads the `+20mV`
+  reference — so `OUT1` comes out **active-low for Right**. That is not
+  an arbitrary choice: `Q1` (the high-side pull to `+5V`) is a real
+  P-MOSFET, and a PMOS's own gate-to-source relationship needs a LOW gate
+  to turn on with its source pinned to the rail. Driving it any other way
+  would need an inverter that doesn't exist on this board.
+- **Q2** (Left, low-side pull to `GND`) is an ordinary N-MOSFET — a
+  low-side switch's source is a fixed rail, so it pulls cleanly all the
+  way down with no such complication.
+- **Why not two N-MOSFETs?** An N-MOSFET used as a *high-side* pull-up is
+  a real, honest self-limiting switch: `Vgs = Vgate − Vsource`, and here
+  the source is the very node being pulled up, so `Vgs` shrinks as `MEM`
+  rises and the channel chokes itself off before reaching the rail (an
+  earlier draft of this board tried exactly that and `MEM` stalled around
+  1.7-3.5V instead of ~5V — a real MOSFET limit, not a solver bug). Real
+  bench designs reach for a P-channel device for a high-side switch for
+  exactly this reason; this board does the same.
+- A 100nF bypass capacitor sits right at the TLV3202's own VCC/GND pins,
+  the way the real datasheet's application circuit calls for it.
+
+Close only **one** of the three signal switches at a time:
+
+- **Hold** (closed by default): `SIGNAL = V0` → both comparator outputs
+  read their non-decided level → `MEM` settles at `V0` (~2.500V) through
+  the 100kΩ leak, with neither MOSFET driving it.
+- **Right**: `SIGNAL = V0 + 40mV` (twice the window's `+20mV` edge, for
+  comfortable margin) → `OUT1` goes LOW → `Q1` pulls `MEM` to ~5V.
+- **Left**: `SIGNAL = V0 − 40mV` → `OUT2` goes HIGH → `Q2` pulls `MEM` to
+  ~0V.
+
+Four scope probes are pre-placed on `SIGNAL`, `OUT1`, `OUT2`, and `MEM` so
+all three states — and the real transition between them — are visible
+live. See **[`STAGE1_PHYSICAL_BUILD.md`](STAGE1_PHYSICAL_BUILD.md)** for
+the exact breadboard holes, real IC pin orientations, a full BOM, jumper
+list, test points and expected voltages, and — importantly — which parts
+(the TLV3202, the AO3400A/AO3401A, and the millivolt "lean" source) are
+not simple through-hole components you can just drop in, with what to use
+instead.
+
 ## Ask AI to build it
 
 The right-hand panel has a dialogue box: describe a circuit in plain
@@ -504,6 +604,8 @@ js/board.js           breadboard geometry, hole layout, hit-testing
 js/components.js      part definitions, defaults, canvas drawing
 js/app.js             toolbox, placement, simulation loop, UI wiring
 js/ai.js               pluggable AI provider layer + circuit-spec validator
+simulate.js            headless CLI: run a spec through the real physics with no browser
+STAGE1_PHYSICAL_BUILD.md  bench build sheet for the Stage 1 ternary cell (BOM, holes, pinouts)
 test/circuit.test.js  standalone physics tests (`npm test` / `node test/circuit.test.js`)
 build-standalone.js   bundles everything into one HTML file (`npm run bundle`)
 main.js               Electron desktop wrapper

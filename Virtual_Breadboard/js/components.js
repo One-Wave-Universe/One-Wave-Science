@@ -107,6 +107,12 @@
     // a zero-load voltage tap, like a real scope probe -- never enters the
     // circuit physics itself, just reads whatever node it's touching.
     { type: 'scope', label: 'Scope Probe', terminals: 1, icon: 'CH' },
+    // 2 zero-load taps (A, B) plotted as ONE trace: V(A) - V(B). Same
+    // never-loads-the-circuit philosophy as the plain Scope Probe, just
+    // reporting a difference instead of one node's voltage -- for reading
+    // a millivolt-scale lean relative to a reference (e.g. V0) directly,
+    // instead of subtracting two absolute readings by hand.
+    { type: 'diffscope', label: 'Differential Scope (A−B)', terminals: 2, icon: 'ΔCH' },
     // terminal count is variable (2 per winding section, chosen before
     // placement) -- app.js overrides terminalsNeeded() for this type;
     // `terminals` here is just the 1-section default.
@@ -127,6 +133,13 @@
     // neighbor mechanism -- just more real ampere-turns summed onto the
     // same shared flux, wired by the user, not a scripted state machine.
     { type: 'memorycore', label: 'Memory Core (square-loop)', terminals: 2, icon: 'B±' },
+    // 1 click: the pin-1 anchor hole (must be row 'e', the row bordering
+    // the center channel). The other 7 pins of a real 8-pin DIP-8 TLV3202
+    // dual comparator are derived from it -- 4 columns wide, straddling
+    // the gap, exactly how a real DIP chip sits on a breadboard. Pin
+    // order matches the real datasheet: OUT1,IN1-,IN1+,GND,IN2+,IN2-,
+    // OUT2,VCC.
+    { type: 'comparator', label: 'TLV3202 Dual Comparator', terminals: 1, icon: 'IC' },
   ];
 
   function resistorColorBands(value) {
@@ -794,6 +807,33 @@
     ctx.restore();
   }
 
+  // A differential probe: two ordinary zero-load taps (same real 10MΩ-
+  // probe philosophy as drawScopeProbe -- never affects the circuit),
+  // joined by a dashed line and a "Δ" marker so it reads visually as ONE
+  // A-minus-B measurement, not two independent channels.
+  function drawDiffScopeProbe(ctx, comp, x1, y1, x2, y2, opacity) {
+    const o = op(opacity);
+    const color = comp.color || SCOPE_COLORS[0];
+    drawScopeProbe(ctx, comp, x1, y1, opacity);
+    drawScopeProbe(ctx, comp, x2, y2, opacity);
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1 - 22);
+    ctx.lineTo(x2, y2 - 22);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.font = 'bold 10px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Δ', (x1 + x2) / 2, Math.min(y1, y2) - 26);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   const TOROID_SECTION_COLORS = ['#d4af37', '#4d8dff', '#3ddc6b'];
 
   // t = terminal points, 2 per winding section in order [s0a,s0b, s1a,s1b, ...]
@@ -952,6 +992,75 @@
     ctx.restore();
   }
 
+  // A real 8-pin DIP-8 straddling the center channel: pins 1-4 in one row
+  // (the datasheet's OUT1,IN1-,IN1+,GND), pins 5-8 in the mirrored row
+  // directly across the gap (IN2+,IN2-,OUT2,VCC) -- exactly how a real
+  // DIP chip sits on a breadboard, and exactly the hole layout app.js's
+  // deriveTlv3202Holes() produces from one anchor click. The two output
+  // leads glow amber only while the solver's real comparatorStates says
+  // that channel is actually driven HIGH -- never decided here.
+  function comparatorCentroid(t) {
+    const x = t.reduce((s, p) => s + p.x, 0) / t.length;
+    const y = t.reduce((s, p) => s + p.y, 0) / t.length;
+    return { x, y };
+  }
+  function drawComparatorChip(ctx, comp, t, opacity, states) {
+    const o = op(opacity);
+    if (!t || t.length < 8) return;
+    const top = t.slice(0, 4); // pins 1-4: OUT1, IN1-, IN1+, GND
+    const bottom = t.slice(4, 8); // pins 5-8: IN2+, IN2-, OUT2, VCC
+    const minX = Math.min(...t.map((p) => p.x));
+    const maxX = Math.max(...t.map((p) => p.x));
+    const topY = top[0].y;
+    const botY = bottom[0].y;
+    const midY = (topY + botY) / 2;
+    ctx.save();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#b5b5b0';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    top.forEach((p) => { ctx.moveTo(p.x, p.y); ctx.lineTo(p.x, midY - 6); });
+    bottom.forEach((p) => { ctx.moveTo(p.x, p.y); ctx.lineTo(p.x, midY + 6); });
+    ctx.stroke();
+
+    const bodyPad = 5;
+    const bx = minX - bodyPad;
+    const by = topY - 6;
+    const bw = (maxX - minX) + bodyPad * 2;
+    const bh = (botY - topY) + 12;
+    ctx.globalAlpha = 0.96 * o;
+    ctx.fillStyle = '#1f2430';
+    roundRect(ctx, bx, by, bw, bh, 3);
+    ctx.fill();
+    ctx.globalAlpha = o;
+    ctx.strokeStyle = '#5a6178';
+    ctx.lineWidth = 1.2;
+    roundRect(ctx, bx, by, bw, bh, 3);
+    ctx.stroke();
+    // pin-1 orientation notch, real DIP convention
+    ctx.beginPath();
+    ctx.arc(bx, midY, 4, -Math.PI / 2, Math.PI / 2);
+    ctx.stroke();
+
+    const out1High = !!(states && states.out1High);
+    const out2High = !!(states && states.out2High);
+    ctx.fillStyle = out1High ? '#e0a83f' : '#4d5566';
+    ctx.beginPath();
+    ctx.arc(top[0].x, midY - 6, 2.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = out2High ? '#e0a83f' : '#4d5566';
+    ctx.beginPath();
+    ctx.arc(bottom[2].x, midY + 6, 2.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#c7ccd6';
+    ctx.font = 'bold 8px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('TLV3202', bx + bw / 2, midY + 3);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+
   // A canonical, centered rendering of any part type into a small square --
   // used by the preview card in the toolbox/Inspector, so a part looks the
   // same whether you're still choosing its value or it's already on the
@@ -998,6 +1107,10 @@
       drawScopeProbe(ctx, Object.assign({ color: SCOPE_COLORS[0] }, p), cx, h * 0.78, 1);
       return;
     }
+    if (type === 'diffscope') {
+      drawDiffScopeProbe(ctx, Object.assign({ color: SCOPE_COLORS[0] }, p), w * 0.3, h * 0.78, w * 0.7, h * 0.78, 1);
+      return;
+    }
     if (type === 'toroid') {
       const sections = p.turnsPerSection ? p.turnsPerSection.length : 1;
       const t = [];
@@ -1018,6 +1131,18 @@
         t.push({ x: cx + Math.cos(ang) * w * 0.4, y: cy + Math.sin(ang) * h * 0.35 + 4 });
       }
       drawMemoryCore(ctx, Object.assign({ turnsPerWinding: [20], core: 'small' }, p), t, 1, 0);
+      return;
+    }
+    if (type === 'comparator') {
+      const colSpacing = w * 0.16;
+      const startX = cx - colSpacing * 1.5;
+      const topY = cy - h * 0.16;
+      const botY = cy + h * 0.16;
+      const t = [
+        { x: startX, y: topY }, { x: startX + colSpacing, y: topY }, { x: startX + colSpacing * 2, y: topY }, { x: startX + colSpacing * 3, y: topY },
+        { x: startX + colSpacing * 3, y: botY }, { x: startX + colSpacing * 2, y: botY }, { x: startX + colSpacing, y: botY }, { x: startX, y: botY },
+      ];
+      drawComparatorChip(ctx, p, t, 1, { out1High: false, out2High: false });
       return;
     }
     // every remaining type is a plain 2-terminal horizontal part
@@ -1054,10 +1179,11 @@
     drawSwitch, drawPushbutton, drawPotentiometer, drawWire, drawYWire, yWireJunctions, drawVGnd, vgndCentroid, roundRect, lerp,
     potCentroid, potPosToAngle, potAngleToPos,
     drawInductor, drawAcSource, drawMtjSensor, mtjCentroid,
-    drawScopeProbe, drawPartIcon,
+    drawScopeProbe, drawDiffScopeProbe, drawPartIcon,
     drawToroid, toroidCentroid,
     drawMosfet, mosfetCentroid,
     drawMemoryCore, memoryCoreCentroid,
+    drawComparatorChip, comparatorCentroid,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Components = api;

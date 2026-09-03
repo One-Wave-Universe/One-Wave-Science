@@ -21,6 +21,14 @@
       '  railTP, railTM  top power rails (+ and -). Each rail is ONE node for its ENTIRE length, any column.',
       '  railBP, railBM  bottom power rails (+ and -), same rule.',
       '',
+      'If the request needs more than one physical board, each terminal may carry an optional "board"',
+      '(0-indexed integer, default 0 when omitted) naming which physical board that hole is on --',
+      'e.g. {"row":"c","col":10,"board":1} for board 2. Boards are electrically separate: nothing on',
+      'board 0 shares a node with board 1 unless a part explicitly bridges a terminal on each (a jumper',
+      'wire with one {"row",...,"board":0} terminal and one {"row",...,"board":1} terminal is how you',
+      'bridge them, the same way you would bridge two points on one board). Only use "board" values the',
+      'user\'s layout actually has.',
+      '',
       "Given the user's request, reply with ONLY a JSON object, no prose and no markdown code fences, of exactly this shape:",
       '{"parts": [ {"type": "resistor", "value": 220, "terminals": [{"row":"c","col":10},{"row":"c","col":15}]} ]}',
       '',
@@ -58,6 +66,11 @@
       '                proper bipolar sensor reference.',
       '  scope         1 terminal: a zero-load probe tap for visualizing a node on the Oscilloscope',
       '                panel. Never affects the circuit. No value needed.',
+      '  diffscope     2 terminals [A, B]: a zero-load DIFFERENTIAL probe -- plots V(A) - V(B) as one',
+      '                trace on the Oscilloscope, instead of one absolute voltage. Use this whenever',
+      '                the user wants to see a millivolt-scale signal relative to a reference (e.g. a',
+      '                lean relative to V0) rather than two absolute readings to subtract by hand. Never',
+      '                affects the circuit. No value needed.',
       '  toroid        A ferrite-core inductor/transformer. Terminals = 2 per winding "section"',
       '                (1-3 sections): [s1a,s1b] or [s1a,s1b,s2a,s2b] etc. Needs a "turns" array,',
       '                one positive integer per section (e.g. [10,20] for a 1:2-turns-ratio',
@@ -94,6 +107,15 @@
       '                -- it never resets to zero on its own. Sense a core\'s state by reading a',
       '                winding\'s induced voltage (nonzero only while it is actively flipping) or by',
       '                inspecting the part\'s reported remanence in the simulator.',
+      '  comparator    1 terminal: an anchor hole in row "e" only (the row bordering the center',
+      '                channel), column 1-60. A real TLV3202 dual comparator, an 8-pin DIP-8 chip: the',
+      '                simulator places the other 7 pins for you, straddling the channel exactly like a',
+      '                real DIP-8 (4 columns wide), so leave those 8 holes clear. No value needed --',
+      '                there is one real part modeled. Rail-to-rail push-pull outputs (no pull-up',
+      '                needed), a few mV of real input offset voltage, and a real minimum/maximum',
+      '                supply voltage -- wire VCC and GND or it cannot drive a real output. This is a',
+      '                plain 2-level comparator: it never decides more than HIGH or LOW on its own, so',
+      '                any multi-level (e.g. ternary) behavior must come from real parts wired around it.',
       '',
       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
       'Use wires to connect parts that do not already share a node.',
@@ -225,12 +247,26 @@
   const TERMINALS_NEEDED = {
     wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2,
     potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1,
-    nmos: 3, pmos: 3,
+    nmos: 3, pmos: 3, comparator: 1, diffscope: 2,
   };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
   const LED_COLORS = new Set(['red', 'yellow', 'green', 'blue', 'white']);
   const NUMERIC_TYPES = new Set(['resistor', 'capacitor', 'battery', 'potentiometer', 'inductor', 'acsource', 'mtjsensor']);
+
+  // shared by every terminal-shape check below: row/col are always
+  // required; "board" is optional (0-indexed, default board 0 downstream)
+  // but if given must be a real non-negative integer -- which physical
+  // board layout actually has that index is the simulator's job to check
+  // once it resolves real holes, not something this shape-only validator
+  // can know.
+  function checkTerminal(t, i, j, errors) {
+    if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
+    if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
+    if (t && t.board != null && (!Number.isInteger(t.board) || t.board < 0)) {
+      errors.push('part ' + i + ' terminal ' + j + ': bad board ' + t.board + ' (must be a non-negative integer)');
+    }
+  }
 
   // evaluator: is this a structurally legal circuit spec? This checks shape
   // and range only — whether the resulting circuit is safe/complete is the
@@ -253,10 +289,7 @@
           errors.push('part ' + i + ' (toroid): needs ' + needT + ' terminals (2 per winding section), got ' + (p.terminals ? p.terminals.length : 0));
           return;
         }
-        p.terminals.forEach((t, j) => {
-          if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
-          if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
-        });
+        p.terminals.forEach((t, j) => checkTerminal(t, i, j, errors));
         return;
       }
       if (p && p.type === 'memorycore') {
@@ -271,10 +304,7 @@
           errors.push('part ' + i + ' (memorycore): needs ' + needM + ' terminals (2 per winding), got ' + (p.terminals ? p.terminals.length : 0));
           return;
         }
-        p.terminals.forEach((t, j) => {
-          if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
-          if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
-        });
+        p.terminals.forEach((t, j) => checkTerminal(t, i, j, errors));
         return;
       }
       const need = TERMINALS_NEEDED[p && p.type];
@@ -286,10 +316,7 @@
         errors.push('part ' + i + ' (' + p.type + '): needs ' + need + ' terminals, got ' + (p.terminals ? p.terminals.length : 0));
         return;
       }
-      p.terminals.forEach((t, j) => {
-        if (!t || !VALID_ROWS.has(t.row)) errors.push('part ' + i + ' terminal ' + j + ': bad row "' + (t && t.row) + '"');
-        if (!t || !Number.isInteger(t.col) || t.col < 1 || t.col > 63) errors.push('part ' + i + ' terminal ' + j + ': bad col ' + (t && t.col));
-      });
+      p.terminals.forEach((t, j) => checkTerminal(t, i, j, errors));
       if (p.type === 'led' && p.color && !LED_COLORS.has(p.color)) errors.push('part ' + i + ': bad led color "' + p.color + '"');
       if (NUMERIC_TYPES.has(p.type) && !(Number(p.value) > 0)) errors.push('part ' + i + ' (' + p.type + '): needs a positive numeric value');
       if (p.type === 'potentiometer') {
@@ -299,6 +326,11 @@
       }
       if ((p.type === 'nmos' || p.type === 'pmos') && p.value != null && p.value !== 1.5 && p.value !== 2.1) {
         errors.push('part ' + i + ' (' + p.type + '): "value" must be 1.5 (AO3400A/AO3401A-class) or 2.1 (2N7000/BS250-class) if given');
+      }
+      if (p.type === 'comparator') {
+        const t = p.terminals[0];
+        if (t && t.row !== 'e') errors.push('part ' + i + ' (comparator): anchor must be row "e" (bordering the center channel) so the DIP-8 can straddle it');
+        if (t && Number.isInteger(t.col) && t.col > 60) errors.push('part ' + i + ' (comparator): anchor column ' + t.col + ' leaves no room for its other 3 columns (max 60)');
       }
     });
     return { ok: errors.length === 0, errors, parts };
