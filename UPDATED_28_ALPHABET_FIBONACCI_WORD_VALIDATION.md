@@ -4,7 +4,7 @@
 
 Fibonacci number properties and golden-ratio metrics are attached specifically to the mirrored alphabet rabbit-hop algorithm. They are not filed as universal lattice or cross-dimensional validators.
 
-The architecture is now:
+The G-721a Fibonacci validator uses this bounded historical slice:
 
 \[
 \boxed{C_{\pm}(n;j,s)=\pm(n,2(n+j),2(n+j)+s)}
@@ -21,6 +21,12 @@ The architecture is now:
 \[
 \boxed{\text{branch trace}\rightarrow\text{Fibonacci-word validation}\rightarrow\varphi\text{ convergence metrics}}
 \]
+
+This is not the complete G-721 ladder. The complete grammar is locked in
+`RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`: the separate original `N×2` route
+plus ascending `(N×2)+K` and `(N+K)×2` routes for `K=1,2,3,...`. Every top has
+both mandatory `-1` and `+1` wrapper packets. This Fibonacci validator remains
+a bounded historical slice and must not redefine that core grammar.
 
 ## Added
 

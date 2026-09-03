@@ -25,7 +25,8 @@ from One_Wave_Bench.brain.rabbit_hop_alphabet import (
     AlphabetOrientation,
     MirrorPolarity,
     RabbitHopCoordinate,
-    coordinate_family,
+    RouteFamily,
+    wrapper_pair,
 )
 
 
@@ -56,13 +57,16 @@ class RabbitHopStep:
 
     @property
     def connector(self) -> int:
-        if self.source.odd != self.target.odd:
-            raise ValueError("rabbit-hop step does not share an odd connector")
-        return self.source.odd
+        if self.source.wrapper_address != self.target.wrapper_address:
+            raise ValueError("rabbit-hop step does not share a wrapper address")
+        return self.source.wrapper_address
 
     def reversed(self) -> "RabbitHopStep":
         return RabbitHopStep(
-            self.target_memory, self.source_memory, self.target, self.source
+            self.target_memory,
+            self.source_memory,
+            self.target.opposed(),
+            self.source.opposed(),
         )
 
 
@@ -111,8 +115,8 @@ class ConstellationMemory:
             raise ValueError(f"duplicate memory_id: {node.memory_id}")
         if address in self._addresses:
             raise ValueError(f"duplicate rabbit-hop address: {address}")
-        # coordinate_family performs the canonical A-Z validation.
-        coordinate_family(address)
+        # wrapper_pair performs the canonical A-Z validation.
+        wrapper_pair(address)
         normalized = MemoryNode(
             node.memory_id,
             address,
@@ -126,20 +130,29 @@ class ConstellationMemory:
     def _shared_step(
         source: MemoryNode,
         target: MemoryNode,
-        orientation: AlphabetOrientation,
+        alphabet_orientation: AlphabetOrientation,
         polarity: MirrorPolarity,
     ) -> RabbitHopStep | None:
-        source_family = coordinate_family(
-            source.address, orientation=orientation, polarity=polarity
+        source_pair = wrapper_pair(
+            source.address,
+            alphabet_orientation=alphabet_orientation,
+            polarity=polarity,
+            route_family=RouteFamily.ORIGINAL,
+            k=0,
         )
-        target_family = coordinate_family(
-            target.address, orientation=orientation, polarity=polarity
+        target_pair = wrapper_pair(
+            target.address,
+            alphabet_orientation=alphabet_orientation,
+            polarity=polarity,
+            route_family=RouteFamily.ORIGINAL,
+            k=0,
         )
-        for source_coordinate in source_family:
-            for target_coordinate in target_family:
+        for source_coordinate in source_pair:
+            for target_coordinate in target_pair:
                 if (
-                    source_coordinate.odd == target_coordinate.odd
-                    and source_coordinate.identity != target_coordinate.identity
+                    source_coordinate.wrapper_address
+                    == target_coordinate.wrapper_address
+                    and source_coordinate.source_rank != target_coordinate.source_rank
                 ):
                     return RabbitHopStep(
                         source.memory_id,
@@ -153,7 +166,7 @@ class ConstellationMemory:
         self,
         memory_id: str,
         *,
-        orientation: AlphabetOrientation = AlphabetOrientation.A_TO_Z,
+        alphabet_orientation: AlphabetOrientation = AlphabetOrientation.NORMAL,
         polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
     ) -> tuple[RabbitHopStep, ...]:
         source = self._nodes[memory_id]
@@ -161,7 +174,9 @@ class ConstellationMemory:
             step
             for target in self._nodes.values()
             if target.memory_id != memory_id
-            for step in (self._shared_step(source, target, orientation, polarity),)
+            for step in (
+                self._shared_step(source, target, alphabet_orientation, polarity),
+            )
             if step is not None
         )
         return tuple(sorted(steps, key=lambda step: step.target_memory))
@@ -170,7 +185,7 @@ class ConstellationMemory:
         self,
         start: str,
         target: str,
-        orientation: AlphabetOrientation,
+        alphabet_orientation: AlphabetOrientation,
         polarity: MirrorPolarity,
     ) -> tuple[RabbitHopStep, ...] | None:
         if start == target:
@@ -180,7 +195,9 @@ class ConstellationMemory:
         while queue:
             current, route = queue.popleft()
             for step in self.rabbit_neighbors(
-                current, orientation=orientation, polarity=polarity
+                current,
+                alphabet_orientation=alphabet_orientation,
+                polarity=polarity,
             ):
                 if step.target_memory in visited:
                     continue
@@ -255,7 +272,7 @@ class ConstellationMemory:
         *,
         route_handle: str | None = None,
         context: str | None = None,
-        orientation: AlphabetOrientation = AlphabetOrientation.A_TO_Z,
+        alphabet_orientation: AlphabetOrientation = AlphabetOrientation.NORMAL,
         polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
         temperature: float = 0.35,
         seed: int = 0,
@@ -276,7 +293,7 @@ class ConstellationMemory:
             routes = []
             for node in neighborhood:
                 route = self._route(
-                    start_id, node.memory_id, orientation, polarity
+                    start_id, node.memory_id, alphabet_orientation, polarity
                 )
                 # A hop handle opens another location; it is not the routine itself.
                 if route:
@@ -312,7 +329,7 @@ class ConstellationMemory:
         route = ()
         if selected is not None and start_id is not None:
             route = self._route(
-                start_id, selected.memory_id, orientation, polarity
+                start_id, selected.memory_id, alphabet_orientation, polarity
             ) or ()
 
         missing = () if selected is None else tuple(sorted(selected.features - cue_set))

@@ -1,14 +1,23 @@
 # Rabbit Hopping and Recursive Scale Translator
 
-Status: working architecture record. This file separates the locked arithmetic grammar from domain-level hypotheses so later agents do not collapse route math, memory, movement, or physics into one claim.
+Status: working architecture record. `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+is the authoritative core grammar and supersedes any older shorthand here.
 
 ## Locked N-based translator grammar
 
-Rabbit hopping uses N as the base address. The grammar has two operation-order families, a parity wrapper, signed mirroring, alphabet inversion, opposing traversal, and exact divide-by-2 reconstruction.
+Rabbit Hopping is both an addressing system and a system-communication
+translator. It has three currently declared routes: the separate original
+`N×2` route, ascending-after `(N×2)+K`, and ascending-before `(N+K)×2`.
+Both ascending routes use `K=1,2,3,...`. Every top has mandatory `-1` and `+1`
+wrapper packets.
 
-### 1. Double-first family
+`N` remains the source identity. A generated number is a top coordinate attached
+to that identity; it does not replace the identity or assert that the letter is
+equal to the top coordinate.
 
-Double N, then shift:
+### 1. Original route and ascending-after family
+
+Retain `2N` as the separate original route, then ascend after doubling:
 
 `2N, 2N+1, 2N+2, 2N+3, 2N+4, ...`
 
@@ -16,7 +25,7 @@ General form:
 
 `R_after(N,m) = 2N + m`
 
-where `m` is an integer offset.
+where ascending `m` begins at `1`; `m=0` remains the separate original receipt.
 
 ### 2. Shift-first family
 
@@ -36,9 +45,14 @@ This is intentionally treated as two routes to one address. A reversible receipt
 
 ### 3. Opposite-parity ±1 wrapper
 
-Any chosen center `X` is wrapped as:
+Every chosen top address `X` produces both complete three-address packets:
 
-`X-1, X, X+1`
+`N | X | X-1`
+
+`N | X | X+1`
+
+The final address is mandatory. A bare `N | X` pair is not a complete
+rabbit-hop packet, and `N | X | X` is not a third packet form.
 
 If X is even, its wrapper is odd. If X is odd, its wrapper is even.
 
@@ -69,6 +83,9 @@ The wrapper exists to preserve connection between neighboring nested addresses a
 
 These operations may be composed, but they are not synonyms.
 
+Alphabet inversion is coupled to vertical inversion: reversing the alphabet
+axis also swaps which numeric `-1/+1` side is logical lower/upper.
+
 ### 5. Alphabet map
 
 Forward:
@@ -93,9 +110,11 @@ Both route families may be mirrored across zero:
 
 Sign does not silently change alphabet orientation or route direction.
 
-### 7. Division is reconstruction
+### 7. Division boundary remains open
 
-Division by two is the inverse of the doubled route after the declared wrapper/offset is removed.
+The division identities below only mechanically verify a complete receipt after
+the declared wrapper and offset are removed. The broader role of division in
+Rabbit Hopping remains unresolved.
 
 For:
 
@@ -150,7 +169,7 @@ Every accepted translation must preserve enough information to reconstruct its o
 - sign/polarity;
 - route family: double-first or shift-first;
 - integer offset;
-- wrapper side: -1, 0, or +1;
+- wrapper side: -1 or +1 (required on every packet);
 - resulting address;
 - traversal direction;
 - parent/source reference when nested across scale.

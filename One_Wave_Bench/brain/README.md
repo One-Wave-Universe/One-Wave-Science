@@ -79,10 +79,16 @@ Threshold bands are preserved exactly as declared: `100–90`, `85–75`,
 
 ## Rabbit-hop alphabet coordinates
 
-`rabbit_hop_alphabet.py` implements the complete G-721 family
-`±(n,2(n+j),2(n+j)+s)` with current/next even anchor `j`, lower/upper
-odd side `s`, forward or inverted alphabet rank, and independent polarity. It
-retains the shared odd bridge instead of trying to decode it without its anchor.
+`rabbit_hop_alphabet.py` implements the three currently declared G-721 routes:
+the original `N×2`, ascending-after `(N×2)+K`, and ascending-before `(N+K)×2`.
+The original is a separate receipt; both ascending ladders use `K=1,2,3,...`.
+Every top produces both mandatory wrapper packets `top-1` and `top+1`; there is
+no bare or zero-wrapper packet. Odd tops receive even wrappers and even tops
+receive odd wrappers. Alphabet orientation supports `A→Z:1→26` and
+`Z→A:1→26`; inverting that side-to-side axis also inverts logical up/down.
+Polarity, route family, offset, wrapper side, orientation, and traversal remain
+separate receipt fields. The authoritative grammar and examples are locked in
+`RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
 
 ## Rabbit-hop constellation reconstruction
 
@@ -100,6 +106,7 @@ constellation actually improve recall instead of merely adding machinery.
 ```bash
 python -m unittest One_Wave_Bench.brain.test_command_memory
 python -m unittest One_Wave_Bench.brain.test_constellation_memory
+python -m unittest One_Wave_Bench.brain.test_rabbit_hop_alphabet
 ```
 
 ## Install on Jetson Orin

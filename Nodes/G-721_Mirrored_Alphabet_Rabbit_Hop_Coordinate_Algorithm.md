@@ -11,6 +11,11 @@ metadata_standard: "I-06"
 
 # Node G-721: Mirrored Alphabet Rabbit-Hop Coordinate Algorithm
 
+> **Authoritative lock:** `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`. Rabbit
+> Hopping is both an addressing system and a system-communication translator.
+> Its three-route grammar, mandatory wrappers, coupled alphabet/vertical
+> inversion, and open division boundary supersede older shorthand in this node.
+
 **Dependencies**  
 Upstream: A-101 Ground / Zero, A-103 Differential, A-111 Recursion, B-205 Mirror, B-222 Oscillation Center, B-223 Three Moves, G-716 One-Wave Conversion Grammar  
 Lateral: E-510 Music Clock / Harmonic Oscillation, G-719 Neural System Functional Analogy Map, G-720 No Control But Self-Control  
@@ -60,13 +65,18 @@ For any forward rank \(N\in\{1,\ldots,26\}\), the inverted rank is
 
 Thus A is 1 forward and 26 inverted; Z is 26 forward and 1 inverted.
 
+These are alphabet ranks used as source addresses. A later generated top
+coordinate belongs to that source address; it does not make the letter equal to
+the top coordinate.
+
 ## N-Only Rabbit-Hop Grammar
 
 The canonical arithmetic is written only in terms of \(N\) and literal offsets. No auxiliary anchor symbols are required.
 
-### 1. Double-first ladder
+### 1. Original route and ascending-after ladder
 
-Starting from \(N\), double first and then move by an integer offset:
+The original `N×2` route stays a separate receipt. The ascending-after route
+uses positive `K=1,2,3,...` after doubling:
 
 \[
 \boxed{2N,\;2N+1,\;2N+2,\;2N+3,\;2N+4,\;2N+5,\ldots}
@@ -75,12 +85,12 @@ Starting from \(N\), double first and then move by an integer offset:
 In general:
 
 \[
-\boxed{R_{after}(N,m)=2N+m},\qquad m\in\mathbb Z.
+\boxed{R_{after}(N,K)=2N+K},\qquad K\in\{1,2,3,\ldots\}.
 \]
 
-### 2. Shift-first ladder
+### 2. Ascending-before ladder
 
-Move the input first and then double:
+Move the input first by positive `K`, then double:
 
 \[
 \boxed{2N,\;2(N+1),\;2(N+2),\;2(N+3),\;2(N+4),\ldots}
@@ -89,7 +99,7 @@ Move the input first and then double:
 In general:
 
 \[
-\boxed{R_{before}(N,m)=2(N+m)}.
+\boxed{R_{before}(N,K)=2(N+K)},\qquad K\in\{1,2,3,\ldots\}.
 \]
 
 These two ladders can reach the same address by different operation orderings. The exact identity is
@@ -102,11 +112,17 @@ This identity is the canonical "two ways to get to the same thing" relation. A r
 
 ### 3. Opposite-parity wrapper
 
-Any selected center \(X\) is connected to the opposite parity by
+Every selected top address \(X\) is connected to the opposite parity by both
+complete packets:
 
 \[
-\boxed{X-1,\;X,\;X+1}.
+\boxed{N,\;X,\;X-1}
+\qquad\text{or}\qquad
+\boxed{N,\;X,\;X+1}.
 \]
+
+The final wrapper is mandatory. The bare top address is used to calculate the
+packet but is not a third wrapper choice.
 
 If \(X\) is even, \(X\pm1\) are odd. If \(X\) is odd, \(X\pm1\) are even.
 
@@ -188,9 +204,15 @@ Three operations must remain distinguishable:
 
 They may be composed, but none is silently substituted for another.
 
-## Reversible Division / Reconstruction
+Inverting the alphabet axis also inverts logical up/down: the numeric
+`-1/+1` sides assigned to logical lower/upper swap together with the alphabet
+orientation.
 
-Division by two is the inverse path for a doubled route. It is reconstruction, not a separate unrelated arithmetic rule.
+## Mechanical Division Check / Broader Role Open
+
+The identities below mechanically verify a fully attributed receipt. The
+broader role of division is unresolved and must not be described as locked
+Rabbit Hopping theory.
 
 For the double-first family
 
@@ -246,7 +268,7 @@ A reversible receipt therefore stores at minimum:
 - sign/polarity;
 - whether the route was double-first or shift-first;
 - integer offset \(m\);
-- wrapper side \(s\in\{-1,+1\}\), or 0 when unwrapped;
+- wrapper side \(s\in\{-1,+1\}\), required on every packet;
 - resulting address.
 
 Without those route facts, equal numerical destinations such as \(2N+2m=2(N+m)\) cannot reveal which path produced them.
@@ -270,7 +292,7 @@ For a word, first map each letter to its declared forward or inverted alphabet r
 - polarity \(\sigma_t\in\{-1,+1\}\);
 - route family: double-first or shift-first;
 - integer offset \(m_t\);
-- wrapper \(s_t\in\{-1,0,+1\}\).
+- wrapper \(s_t\in\{-1,+1\}\).
 
 Double-first:
 
@@ -318,14 +340,15 @@ A valid implementation of this generalized grammar must verify:
 3. double-first addresses obey \(X=2N+m\);
 4. shift-first addresses obey \(X=2(N+m)\);
 5. equal-destination cases obey \(2N+2m=2(N+m)\);
-6. every wrapper is exactly \(-1\), 0, or \(+1\) around the declared center;
+6. every packet ends in exactly a \(-1\) or \(+1\) wrapper around its declared
+   top address;
 7. wrapper parity is opposite the center parity when \(s=\pm1\);
 8. adjacent declared nests preserve their shared boundary when one exists;
 9. positive and negative forms are exact sign mirrors;
 10. mirror, inversion, and opposing traversal remain separately declared;
 11. the declared inverse division reconstructs the original \(N\) exactly;
 12. receipts preserve route family and offset so equal numerical destinations remain distinguishable;
-13. Mirror-Gate zero is never confused with route token zero or an unwrapped center;
+13. Mirror-Gate zero is never confused with route token zero or a top address;
 14. alphabet, memory, wheel, and live-choice systems remain separate layers.
 
 ## Failure Conditions

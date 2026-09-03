@@ -92,11 +92,28 @@ The first is a model mapping. The second claims experimental closure that does n
 
 ## Mirrored Alphabet Rabbit-Hop Grammar
 
-Each letter index `n = 1..26` carries the signed coordinate packet
+Each letter source rank `N = 1..26` carries one of three currently declared,
+signed, fully wrapped route receipts:
 
 \[
-C_{\pm}(n)=\pm(n,2n,2n+1).
+C_{\sigma,original}(N,s)=\sigma(N,2N,2N+s),
 \]
+
+\[
+C_{\sigma,after}(N,k,s)=\sigma(N,2N+k,2N+k+s),
+\]
+
+\[
+C_{\sigma,before}(N,k,s)=\sigma(N,2(N+k),2(N+k)+s),
+\]
+
+where the original retains `k=0`, each ascending route uses
+`k = 1,2,3,...`, `s = -1 or +1`, and `sigma = -1 or +1`.
+The third address always wraps the second address; no complete packet omits it.
+Rabbit Hopping is both an addressing system and a system-communication
+translator. `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md` is authoritative.
+Side-to-side alphabet inversion also inverts logical up/down wrapper
+orientation. Division beyond mechanical receipt checking remains open.
 
 The alphabet algorithm is a symbolic coordinate and route compiler. It is not the Hopfield/Boltzmann memory system, the wheel-of-fifths movement system, or the foundational `-1(0)+1` chooser.
 
