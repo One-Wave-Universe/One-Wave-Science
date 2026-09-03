@@ -698,19 +698,77 @@ function approx(a, b, eps, msg) {
   console.log('Test 23 OK (T-RC): 150k+100nF at 1 tau =', v1tau.toFixed(3), 'V, at 3 tau =', v3tau.toFixed(3), 'V (tau =', (tau * 1000).toFixed(1), 'ms)');
 }
 
-// Test 24 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 24 (T-MEM): the actual acceptance circuit -- supply, vgnd, two
+// N-MOSFETs back-to-back (sources tied, gates driven by a shared control
+// signal), a cap, and a leak resistor. Closing the shared gate control
+// (SAMPLE) must let "mem" track a real millivolt-scale input; opening it
+// (HOLD) must isolate mem so it only relaxes toward V0 on the deliberate
+// leak resistor's real RC time constant -- not toward absolute ground, and
+// not diverging -- while staying within a few mV of V0 the whole time.
+{
+  function build(gateV, leakOhms, capFarads) {
+    return {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+        { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+        { id: 'r1', type: 'resistor', a: 'P', b: 'IN', value: 124000 },
+        { id: 'r2', type: 'resistor', a: 'IN', b: 'V0', value: 1000 },
+        { id: 'gatesrc', type: 'battery', a: 'G', b: 'M', value: gateV },
+        { id: 'f1', type: 'nmos', gate: 'G', drain: 'IN', source: 'S', value: 1.5 },
+        { id: 'f2', type: 'nmos', gate: 'G', drain: 'MEM', source: 'S', value: 1.5 },
+        { id: 'cap1', type: 'capacitor', a: 'MEM', b: 'V0', value: capFarads },
+        { id: 'leak1', type: 'resistor', a: 'MEM', b: 'V0', value: leakOhms },
+      ],
+    };
+  }
+  const leakOhms = 100000;
+  const capFarads = 10e-6; // tau = R*C = 1s
+  const dt = 1 / 2000;
+  const c = new Circuit();
+
+  // SAMPLE: gate high -> both FETs on -> mem must track IN (~V0+20mV)
+  let res;
+  for (let i = 0; i < 200; i++) res = c.solve(build(5, leakOhms, capFarads), dt);
+  const vIn = res.voltages.get(res.uf.find('IN'));
+  const vMemSampled = res.voltages.get(res.uf.find('MEM'));
+  const vV0Sampled = res.voltages.get(res.uf.find('V0'));
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, true, 'T-MEM: SAMPLE must turn both channels on');
+  approx(vMemSampled, vIn, 0.001, 'T-MEM: SAMPLE must let mem track the input within 1mV');
+  approx(vMemSampled - vV0Sampled, 0.02, 0.001, 'T-MEM: sampled mem must sit ~20mV above V0');
+
+  // HOLD: gate low -> both FETs off -> mem decays toward V0 (NOT toward 0V,
+  // and NOT diverging) on the real tau = leakOhms * capFarads
+  const elsHold = build(0, leakOhms, capFarads);
+  const tau = leakOhms * capFarads;
+  let vAt1Tau = null;
+  const steps = Math.round((4 * tau) / dt);
+  for (let i = 0; i < steps; i++) {
+    res = c.solve(elsHold, dt);
+    if (vAt1Tau === null && i * dt >= tau) vAt1Tau = res.voltages.get(res.uf.find('MEM')) - res.voltages.get(res.uf.find('V0'));
+  }
+  assert.strictEqual(res.mosfetStates.get('f1').channelOn, false, 'T-MEM: HOLD must turn both channels off');
+  assert.strictEqual(res.mosfetStates.get('f2').channelOn, false, 'T-MEM: HOLD must turn both channels off');
+  // analytic single-pole decay from +20mV toward ~0 (V0): e^-1 ~ 36.8% remains at 1 tau
+  approx(vAt1Tau, 0.02 * Math.exp(-1), 0.002, 'T-MEM: mem must decay toward V0 on the real leak*cap tau, not toward absolute ground');
+  const vMemFinal = res.voltages.get(res.uf.find('MEM')) - res.voltages.get(res.uf.find('V0'));
+  assert.ok(Math.abs(vMemFinal) < 0.005, 'T-MEM: after several tau, mem must settle within a few mV of V0, not diverge past it');
+  console.log('Test 24 OK (T-MEM): sampled mem-V0 =', ((vMemSampled - vV0Sampled) * 1000).toFixed(2), 'mV, decays to', (vAt1Tau * 1000).toFixed(2), 'mV at 1 tau, settles to', (vMemFinal * 1000).toFixed(3), 'mV');
+}
+
+// Test 25 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
 {
   const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
-  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts'];
+  const calPresetNames = ['presetCalAParts', 'presetCalBParts', 'presetCalCParts', 'presetCalDParts', 'presetCalEParts', 'presetMemoryCellParts'];
   calPresetNames.forEach((name) => {
     const m = appSrc.match(new RegExp('function ' + name + '\\(\\) \\{([\\s\\S]*?)\\n  \\}'));
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 24 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 25 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

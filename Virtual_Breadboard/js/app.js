@@ -1302,6 +1302,37 @@
     ];
   }
 
+  // Memory cell (sample & hold): this is the actual acceptance circuit --
+  // supply, vgnd, two N-MOSFETs back-to-back, a cap, and a leak resistor,
+  // probing "mem" against V0 in millivolts. A shared control signal
+  // (the switch) drives both gates: closed = SAMPLE (both FETs on, "mem"
+  // tracks the +20mV input through the transistor pair), open = HOLD
+  // (both FETs off -- the same body-diode blocking Cal D proves -- so
+  // "mem" is isolated except for the deliberate 100k leak resistor, which
+  // discharges the stored +20mV back toward V0 on a real tau = R*C = 1s).
+  // Toggle the switch in Select mode: closing it snaps mem to the input
+  // level; opening it lets you watch the millivolt-scale decay live, on
+  // the scope and in the Inspector (select the capacitor to read mem-V0
+  // directly as its ΔV). The leak resistor is sized (100k, not megohms)
+  // so the simulator's own GMIN safety leak-to-ground stays a sub-mV
+  // artifact next to it rather than competing with the real decay target.
+  function presetMemoryCellParts() {
+    return [
+      { type: 'battery', terminals: [H('e', 5), H('f', 5)], value: 5 },
+      { type: 'vgnd', terminals: [H('d', 5), H('g', 5), H('c', 8)] },
+      { type: 'resistor', terminals: [H('b', 5), H('b', 12)], value: 124000 },
+      { type: 'resistor', terminals: [H('c', 12), H('d', 8)], value: 1000 },
+      { type: 'switch', terminals: [H('c', 5), H('c', 16)], closed: false },
+      { type: 'resistor', terminals: [H('d', 16), H('h', 5)], value: 1000000 },
+      { type: 'nmos', terminals: [H('e', 16), H('e', 12), H('a', 20)], value: 1.5 },
+      { type: 'nmos', terminals: [H('b', 16), H('b', 24), H('b', 20)], value: 1.5 },
+      { type: 'capacitor', terminals: [H('c', 24), H('d', 8)], value: 10e-6 },
+      { type: 'resistor', terminals: [H('d', 24), H('e', 8)], value: 100000 },
+      { type: 'scope', terminals: [H('a', 24)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('a', 12)], color: nextScopeColor() },
+    ];
+  }
+
   // LEGACY EXAMPLE -- kept for existing builds/comparisons, but no longer
   // the default demo. It drives 3 Ternary Cells (a higher-level macro; see
   // circuit.js) instead of discrete transistors. New work should look at
@@ -1363,6 +1394,7 @@
   document.getElementById('presetCalC').addEventListener('click', () => { applyPreset(presetCalCParts()); selectTool('select'); });
   document.getElementById('presetCalD').addEventListener('click', () => { applyPreset(presetCalDParts()); selectTool('select'); });
   document.getElementById('presetCalE').addEventListener('click', () => { applyPreset(presetCalEParts()); selectTool('select'); });
+  document.getElementById('presetMemCell').addEventListener('click', () => { applyPreset(presetMemoryCellParts()); selectTool('select'); });
   document.getElementById('presetTernaryDrive').addEventListener('click', () => { applyPreset(presetTernaryDriveParts()); selectTool('select'); });
 
   // ---------------- AI build (pluggable generator) ----------------

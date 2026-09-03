@@ -337,15 +337,17 @@ fetch one.
    current-limiting resistor.
 7. Try the **Example builds** in the sidebar: LED + resistor, RC charging
    with a switch, and a short-circuit danger demo, then the **Calibration
-   boards** (Cal A-E — see "Calibration boards" below) to see the discrete-
-   MOSFET physics in action immediately. A **Legacy example** section below
-   that still has the Ternary 3-phase drive (3 Ternary Cells sharing one
-   Virtual Ground reference, each independently deciding hold/positive/
-   negative from its own AC-driven differential and feeding one section of
-   a 3-section toroid; the scope probes tap each cell's sense input to make
-   the 120-degree phase offset visible, since a small winding's own
-   terminal voltage stays pinned near V0 even while its current genuinely
-   rotates) for comparison against the legacy macro.
+   boards** (Cal A-E and the Memory cell — see "Calibration boards" below)
+   to see the discrete-MOSFET physics in action immediately. A **Legacy
+   example** section below that still has the Ternary 3-phase drive (3
+   Ternary Cells sharing one Virtual Ground reference, each independently
+   deciding hold/positive/negative from its own AC-driven differential and
+   feeding one section of a 3-section toroid; the scope probes tap each
+   cell's sense input to make the 120-degree phase offset visible, since a
+   small winding's own terminal voltage stays pinned near V0 even while its
+   current genuinely rotates) for comparison against the legacy macro.
+8. **Save** / **Load** keep a build in the browser's local storage;
+   **Clear** wipes the board.
 
 ## Calibration boards
 
@@ -354,7 +356,7 @@ itself — not a demo circuit, a bench-replicable test. Wire the same thing
 on a real board with a multimeter and it should read within a few mV of
 what's shown here; that agreement is the whole point (`test/circuit.test.js`
 checks the same claims numerically as T-DIV/T-VGND/T-NFET-ON/T-NFET-OFF/
-T-NFET-DIODE/T-BB-PAIR/T-RC).
+T-NFET-DIODE/T-BB-PAIR/T-RC/T-MEM).
 
 - **Cal A — divider (mV proof)**: a 124kΩ/1kΩ divider off a 2.5V mid-rail
   (from a 5V supply through a Virtual Ground) reads **2.520V**, not a
@@ -381,8 +383,22 @@ T-NFET-DIODE/T-BB-PAIR/T-RC).
   to a 2.5V `V0` mid-rail instead of ground — the real τ=RC=15ms time
   constant holds regardless of what the capacitor's "zero" actually is.
   Close the switch and watch the scope trace climb on the real curve.
-8. **Save** / **Load** keep a build in the browser's local storage;
-   **Clear** wipes the board.
+- **Memory cell (sample & hold)** — the actual acceptance circuit: supply,
+  vgnd, two N-MOSFETs back-to-back, a cap, and a leak resistor, probing
+  `mem` against `V0` in millivolts. A shared switch drives both gates:
+  closed = **SAMPLE** (both channels on — the same physics Cal C proves —
+  so `mem` tracks a +20mV input through the transistor pair); open =
+  **HOLD** (both channels off — the same body-diode blocking Cal D proves —
+  so `mem` is isolated except for the deliberate 100kΩ leak resistor, which
+  bleeds the stored +20mV back toward `V0` on a real τ=R·C=1s). Select the
+  capacitor in the Inspector to read `mem − V0` directly as its ΔV: ~20mV
+  right after sampling, decaying to a few tenths of a millivolt after a few
+  seconds of Hold — this is the actual analog memory a real window-
+  comparator cell's Hold state would be built from, not a placeholder.
+  (An earlier version of this board leaked toward absolute ground instead
+  of `V0`, because a 10MΩ leak resistor let the solver's own GMIN safety
+  leak compete with the intended one — fixed by sizing the leak resistor
+  so GMIN's contribution stays a sub-millivolt artifact, per T-MEM.)
 
 ## Ask AI to build it
 
@@ -524,6 +540,8 @@ N-MOSFET's on-state RDS(on) voltage and off-state channel blocking
 (T-NFET-ON/OFF), its body diode's real one-way direction (T-NFET-DIODE),
 a back-to-back MOSFET pair blocking current in both directions
 (T-BB-PAIR), a real RC time constant checked against the analytic curve at
-1τ and 3τ (T-RC), and a static check that the calibration example presets
-are built from real discrete parts rather than the legacy ternarycell
-macro (T-NO-MACRO).
+1τ and 3τ (T-RC), the memory-cell acceptance circuit sampling a millivolt
+input and then decaying toward `V0` (not absolute ground) on its real
+leak-resistor time constant (T-MEM), and a static check that the
+calibration example presets are built from real discrete parts rather
+than the legacy ternarycell macro (T-NO-MACRO).
