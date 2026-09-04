@@ -260,8 +260,11 @@ function approx(a, b, eps, msg) {
   const dt = 1 / 2000;
   let res;
   for (let i = 0; i < 2000; i++) res = c.solve(els, dt); // 1 second
-  // steady state: R includes the battery's own internal resistance too
-  const totalR = 100 + CircuitEngine.BATTERY_RINT;
+  // steady state: R includes the battery's own internal resistance AND
+  // the inductor's own real winding resistance (DCR) -- a real 100mH
+  // inductor is never a bare L, so both real series resistances set the
+  // actual L/R time constant, not just the resistor the user placed.
+  const totalR = 100 + CircuitEngine.BATTERY_RINT + CircuitEngine.inductorDCR(0.1);
   const iSteady = 5 / totalR;
   const tau = 0.1 / totalR;
   const iExpected = iSteady * (1 - Math.exp(-1 / tau));
@@ -727,6 +730,16 @@ function windingR(turns, meanTurnLen) {
 // bidirectional switch T-BB-PAIR proves) dumps write current through a
 // memory-core winding while its gates are driven on, then the gates go off
 // -- remanence must survive the gate closing (DC memory, not volatile).
+// Now that the MOSFET model includes real gate input capacitance (Ciss),
+// the pair's shared source node -- otherwise connected to nothing else --
+// would be a genuinely floating node once both channels cut off, exactly
+// like a real back-to-back analog-switch IC's internal node: with no real
+// DC path, real parasitic Cgs charge from the ON phase has nothing to
+// discharge through and the switch can't be relied on to reach a clean
+// off state. Any real bench build of this topology needs a defined bias
+// path on that node for exactly this reason (a standard real design
+// practice for anti-series MOSFET switches) -- sbias is that real, high-
+// value (so it doesn't load real signal current) bias resistor.
 {
   const N = 20;
   const R = windingR(N, 0.03);
@@ -738,6 +751,7 @@ function windingR(turns, meanTurnLen) {
         { id: 'lean', type: 'battery', a: 'D1', b: 'GND', value: leanV },
         { id: 'f1', type: 'nmos', gate: 'GATE', drain: 'D1', source: 'S', value: 1.5 },
         { id: 'f2', type: 'nmos', gate: 'GATE', drain: 'D2', source: 'S', value: 1.5 },
+        { id: 'sbias', type: 'resistor', a: 'S', b: 'GND', value: 1e6 },
         { id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'D2', b: 'GND', N, R }] },
       ],
     };
@@ -1095,7 +1109,49 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 36 OK (T-CAP-POLARITY): reverse-biased electrolytic warns, reverse-biased ceramic does not');
 }
 
-// Test 37 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 37 (T-MONTE-CARLO): simulate.js's tolerance/Monte-Carlo mode must
+// actually perturb real component values within their real, honest
+// manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE) -- not just
+// report the one perfect nominal case -- and the resulting spread on a
+// plain resistor divider must land inside what real +/-5% resistors and a
+// real +/-2% supply can actually produce, checked against the analytic
+// worst-case bound, not just "some nonzero spread happened".
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+
+  // same seed twice must reproduce identically -- a real tolerance run has
+  // to be reproducible for a design review, not a new answer every time
+  const spec = [
+    { type: 'battery', value: 9, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+    { type: 'resistor', value: 1000, terminals: [{ row: 'c', col: 5 }, { row: 'c', col: 10 }] },
+    { type: 'resistor', value: 1000, terminals: [{ row: 'd', col: 10 }, { row: 'h', col: 10 }] },
+    { type: 'wire', terminals: [{ row: 'i', col: 5 }, { row: 'i', col: 10 }] },
+  ];
+  const { parts } = Sim.resolveTerminals(board, spec);
+  const sim = { seconds: 0.02, dt: 0.001 };
+
+  const reportA = Sim.runMonteCarlo(parts, sim, { trials: 300, seed: 42, watch: [{ label: 'mid', path: 'voltages.b0:T10' }] });
+  const reportB = Sim.runMonteCarlo(parts, sim, { trials: 300, seed: 42, watch: [{ label: 'mid', path: 'voltages.b0:T10' }] });
+  assert.deepStrictEqual(reportA.summary.mid, reportB.summary.mid, 'T-MONTE-CARLO: the same seed must reproduce the exact same trial statistics');
+
+  // an even 1k/1k divider off a 9V supply sits at 4.5V nominal; two
+  // independent +/-5% resistors plus a +/-2% supply can worst-case push
+  // the midpoint roughly +/-(5%+2.5%+2%) ~= +/-9.5% of 4.5V -- real
+  // sampled trials must fall well inside that bound and must NOT all be
+  // exactly 4.5V (that would mean tolerance isn't actually being applied)
+  const { min, max, stdev } = reportA.summary.mid;
+  const nominal = 4.5;
+  assert.ok(stdev > 0.01, 'T-MONTE-CARLO: trials must show real spread from part tolerance, not all land on the exact nominal value');
+  assert.ok(min > nominal * 0.85 && max < nominal * 1.15, 'T-MONTE-CARLO: spread must stay within the real worst-case bound for +/-5% resistors and a +/-2% supply, got min=' + min + ' max=' + max);
+  assert.strictEqual(reportA.trials, 300, 'T-MONTE-CARLO: must run exactly the requested trial count');
+
+  console.log('Test 37 OK (T-MONTE-CARLO): 300 seeded trials reproduce identically, midpoint spread', min.toFixed(3), '-', max.toFixed(3), 'V (nominal', nominal, 'V) from real part tolerance');
+}
+
+// Test 38 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
@@ -1107,7 +1163,7 @@ function windingR(turns, meanTurnLen) {
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 37 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 38 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

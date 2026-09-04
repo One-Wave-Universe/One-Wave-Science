@@ -95,7 +95,80 @@
   // volts; a real electrolytic's typical absolute-max reverse-voltage
   // rating before the dielectric breaks down -- conservative but real
   const REVERSE_POLARITY_LIMIT = 1.0;
+
+  // A plain Inductor doesn't expose turns/gauge/core the way the Ferrite
+  // Toroid does, so it can't compute a winding resistance from first
+  // principles the same way -- but a real inductor is never a bare L
+  // either. This is an honest order-of-magnitude estimate (DCR ~ sqrt(L),
+  // the real trend across a typical small commercial radial-inductor
+  // product family: more turns for more inductance, but also thicker
+  // wire/larger cores at the high end), not a specific part's datasheet
+  // number -- real DCR for a specific inductor varies with its physical
+  // size and should be checked against that part's own datasheet.
+  function inductorDCR(L) {
+    return 0.5 * Math.sqrt(Math.max(L, 1e-9) * 1000);
+  }
+
+  // Real capacitors are not pure C: every real part has a real series ESR
+  // (dominated by electrolyte/foil resistance for electrolytics, by
+  // termination + dielectric loss for ceramics) and a real parallel
+  // leakage/self-discharge resistance (dielectric absorption current).
+  // Both are genuine, measurable, datasheet-relevant numbers, not
+  // decoration -- an electrolytic's ESR is often the single biggest real
+  // limit on how fast it can actually deliver current, and its leakage
+  // is exactly why a "held" sample doesn't stay held forever even with a
+  // perfect external circuit.
+  function capacitorESR(c) {
+    if (c.value >= ELECTROLYTIC_THRESHOLD) {
+      // real small-signal electrolytics commonly run from a few ohms at
+      // 1uF-class down to well under 0.1 ohm at 1000uF-class -- an
+      // empirical ESR ~ 1/C trend (not exact for any one part number,
+      // but the right order of magnitude across the range this
+      // simulator's CAPACITOR_VALUES actually offers)
+      return Math.max(0.05, 2e-5 / c.value);
+    }
+    // ceramics: dominated by termination/lead resistance, real but tiny
+    return 0.05;
+  }
+  function capacitorLeakageR(c) {
+    if (c.value >= ELECTROLYTIC_THRESHOLD) {
+      // real electrolytics self-discharge on the order of tens of
+      // minutes to an hour open-circuit -- a real, commonly-cited rule of
+      // thumb is a leakage time constant (R_leak * C) around 1800s (30
+      // minutes); R_leak = tau / C follows directly from that
+      return 1800 / c.value;
+    }
+    // ceramics: leakage is real but many orders of magnitude smaller --
+    // a self-discharge time constant this long is effectively "never" at
+    // any timescale this simulator runs, which is the honest real answer
+    return 1e11;
+  }
+  // Real off-the-shelf parts don't hit their nominal value exactly -- these
+  // are standard, honest manufacturing tolerance bands for each part
+  // class (not tuned per-circuit), used by a Monte Carlo tolerance run
+  // (simulate.js's `monteCarlo` mode) to sample each part's real value
+  // within its real spread, so a design has to keep working across real
+  // part variation instead of one perfect nominal case.
+  const COMPONENT_TOLERANCE = {
+    resistor: 0.05, // +/-5%, standard through-hole metal-film resistor (E24 series)
+    capacitor: 0.10, // +/-10%, typical ceramic/film cap
+    battery: 0.02, // +/-2%, typical fresh-cell/regulated-supply voltage spread
+    inductor: 0.10, // +/-10%, typical wound-inductor tolerance
+  };
+  function capacitorToleranceFor(c) {
+    // electrolytics ship with a much wider band than ceramics/film --
+    // +/-20% is a common real datasheet figure (some are -20%/+80%, but
+    // +/-20% is the honest symmetric approximation this simulator uses)
+    return c.value >= ELECTROLYTIC_THRESHOLD ? 0.20 : COMPONENT_TOLERANCE.capacitor;
+  }
   const VGND_RINT = 2; // ohms, output impedance of a rail-splitter / virtual-ground buffer (e.g. TLE2426-class)
+  // amps; a real TLE2426-class rail splitter is only rated to source/sink
+  // a real, finite output current (the datasheet's typical continuous
+  // rating) before it can no longer hold the midpoint under load -- past
+  // that, real load regulation (VGND_RINT) breaks down and the part just
+  // can't supply more current, so V(out) sags hard instead of following
+  // Ohm's law forever.
+  const VGND_MAX_CURRENT = 0.02;
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
 
@@ -106,13 +179,20 @@
   // piecewise switch model), not a continuous Vgs-dependent square law --
   // sufficient for "does this switch turn on/off and clamp near its rail",
   // which is what a breadboard-level design needs to get right first.
+  // ciss (input capacitance, Cgs+Cgd) is the textbook-typical datasheet
+  // figure for each named part class, used as an approximate lumped
+  // gate-to-source capacitance for real switching-delay purposes -- it is
+  // NOT a full nonlinear Cgs/Cgd/Crss model, just the honest order-of-
+  // magnitude real gate charge a driving source actually has to slew
+  // through before the channel can respond, instead of an idealized
+  // instant-response gate.
   const NMOS_PARTS = {
-    1.5: { name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30 },
-    2.1: { name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+    1.5: { name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30, ciss: 300e-12 },
+    2.1: { name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 24e-12 },
   };
   const PMOS_PARTS = {
-    1.5: { name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30 },
-    2.1: { name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60 },
+    1.5: { name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30, ciss: 470e-12 },
+    2.1: { name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 40e-12 },
   };
   function mosfetSpec(c) {
     const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
@@ -133,6 +213,21 @@
     vccMin: 2.7, // volts, minimum specified supply voltage
     vccMax: 5.5, // volts, maximum specified supply voltage
     cmRangeOver: 0.2, // volts, how far past either rail the real common-mode range extends
+    // seconds; a real fast low-power comparator of this class -- the
+    // output does not flip the instant Vin crosses Vos, it flips
+    // propDelay later. At this simulator's typical frame dt (ms-scale)
+    // this resolves within the same frame almost always (honest: it's
+    // genuinely this fast on a real bench too), but it becomes real and
+    // testable the moment dt is pushed small enough to matter (a fast
+    // headless run, or a tight feedback loop with its own short time
+    // constant) -- exactly the regime where an idealized zero-delay
+    // comparator could hide a real oscillation or race.
+    propDelay: 4e-8,
+    // amps; a real small-signal CMOS push-pull output stage's typical
+    // rated output current -- beyond this the real part can't swing
+    // further, so a hard current-limited output (like the vgnd rail-
+    // splitter above) replaces the soft outputRon-only limit.
+    outputMaxCurrent: 0.008,
   };
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
@@ -198,8 +293,15 @@
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
       this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
+      this._fetGateV = new Map(); // mosfet id -> Vgs last frame (real gate capacitance charge state)
       this._coreState = new Map(); // memory-core id -> normalized remanent flux B in [-1, 1], persists across frames
-      this._compState = new Map(); // "<comparatorId>:<channel>" -> boolean (output driven HIGH toward VCC)
+      this._compState = new Map(); // "<comparatorId>:<channel>" -> boolean (LATCHED output actually driven HIGH toward VCC, after propagation delay)
+      this._compDesired = new Map(); // "<comparatorId>:<channel>" -> boolean (what the raw Vin+/Vin- comparison currently says, before delay)
+      this._compDesiredSince = new Map(); // "<comparatorId>:<channel>" -> sim-clock time the desired value last changed
+      this._compOutLimited = new Map(); // "<comparatorId>:<channel>" -> boolean (output current-limited, real push-pull stage can't swing further)
+      this._compOutLimitDir = new Map(); // "<comparatorId>:<channel>" -> +1/-1, which way it was sourcing/sinking when it hit the limit
+      this._vgndLimited = new Map(); // vgnd id -> boolean (output current-limited, can't hold the midpoint under this load)
+      this._vgndLimitDir = new Map(); // vgnd id -> +1/-1, which way it was sourcing/sinking when it hit the limit
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -366,6 +468,7 @@
         // on/off state: don't presume a decision before ever solving
         if (!this._fetChannelState.has(f.id)) this._fetChannelState.set(f.id, false);
         if (!this._fetDiodeState.has(f.id)) this._fetDiodeState.set(f.id, false);
+        if (!this._fetGateV.has(f.id)) this._fetGateV.set(f.id, 0);
       });
       memoryCores.forEach((mc) => {
         // a fresh core (just placed, or a fresh reset) starts demagnetized --
@@ -379,7 +482,16 @@
         ['1', '2'].forEach((ch) => {
           const key = cp.id + ':' + ch;
           if (!this._compState.has(key)) this._compState.set(key, false);
+          if (!this._compDesired.has(key)) this._compDesired.set(key, false);
+          if (!this._compDesiredSince.has(key)) this._compDesiredSince.set(key, t);
+          if (!this._compOutLimited.has(key)) this._compOutLimited.set(key, false);
+          if (!this._compOutLimitDir.has(key)) this._compOutLimitDir.set(key, 1);
         });
+      });
+      vgnds.forEach((v) => {
+        // a fresh rail splitter starts un-limited -- no load history yet
+        if (!this._vgndLimited.has(v.id)) this._vgndLimited.set(v.id, false);
+        if (!this._vgndLimitDir.has(v.id)) this._vgndLimitDir.set(v.id, 1);
       });
       // per-frame working state for the square-loop cores: coreBStart is
       // fixed for the whole frame (this is the real physical B the core had
@@ -447,7 +559,14 @@
             stampG(ib, iw, -g2);
             stampG(iw, ib, -g2);
           } else if (c.type === 'capacitor') {
-            const gC = c.value / Math.max(dt, 1e-6);
+            // real series ESR folds straight into the backward-Euler
+            // companion resistance (Rs + dt/C in series is still just one
+            // resistance), so this is the SAME Norton-source technique as
+            // an ideal cap, just with a real Rs added before inverting --
+            // vPrev here is the voltage across the ideal-C portion alone
+            // (see the state-update comment below for why that matters).
+            const esr = capacitorESR(c);
+            const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
             const vPrev = this._capState.get(c.id) || 0;
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
@@ -458,6 +577,14 @@
             const Ieq = gC * vPrev;
             stampI(i, Ieq);
             stampI(j, -Ieq);
+            // real parallel leakage/self-discharge path, straight across
+            // the external leads (the standard simplified real-capacitor
+            // leakage model) -- independent of the ESR+C branch above
+            const gLeak = 1 / capacitorLeakageR(c);
+            stampG(i, i, gLeak);
+            stampG(j, j, gLeak);
+            stampG(i, j, -gLeak);
+            stampG(j, i, -gLeak);
           } else if (c.type === 'led' || c.type === 'diode') {
             if (this._ledState.get(c.id)) {
               const vf = forwardVoltage(c);
@@ -483,6 +610,25 @@
             const spec = mosfetSpec(c);
             const d = gi(uf.find(c.drain));
             const s = gi(uf.find(c.source));
+            const g_ = gi(uf.find(c.gate));
+            // real gate input capacitance (Ciss, gate to source): the same
+            // backward-Euler companion-source technique as an ideal
+            // capacitor, with no series ESR of its own -- whatever real
+            // impedance is driving the gate (a comparator's outputRon, a
+            // resistor, etc.) already supplies the series resistance that
+            // sets the real RC charge time, exactly like a real gate driver
+            // circuit. This is what turns an idealized instant Vgs flip
+            // into a real switching delay when the driving impedance and
+            // dt are both small enough for it to show up.
+            const gGate = 1 / (Math.max(dt, 1e-6) / spec.ciss);
+            const vgPrev = this._fetGateV.get(c.id) || 0;
+            stampG(g_, g_, gGate);
+            stampG(s, s, gGate);
+            stampG(g_, s, -gGate);
+            stampG(s, g_, -gGate);
+            const IeqGate = gGate * vgPrev;
+            stampI(g_, IeqGate);
+            stampI(s, -IeqGate);
             if (this._fetChannelState.get(c.id)) {
               const g = 1 / spec.rdsOn;
               stampG(d, d, g);
@@ -511,17 +657,28 @@
             // whichever one this channel's fixed-point decision currently
             // holds, same "resistor path selected by a decision" idea as
             // the MOSFET channel above, just choosing between two rails
-            // instead of one path being on/off.
+            // instead of one path being on/off. Below outputMaxCurrent this
+            // stays a stiff outputRon path; at the real part's output
+            // current rating it switches to a fixed-current-source stamp
+            // instead, the same "which real regime are we in" fixed-point
+            // choice used for the vgnd rail-splitter above.
             const g = 1 / COMPARATOR_SPEC.outputRon;
             const vccIdx = gi(uf.find(c.vcc));
             const gndIdx = gi(uf.find(c.gnd));
             [['1', c.out1], ['2', c.out2]].forEach(([ch, outPin]) => {
               const o = gi(uf.find(outPin));
-              const target = this._compState.get(c.id + ':' + ch) ? vccIdx : gndIdx;
-              stampG(o, o, g);
-              stampG(target, target, g);
-              stampG(o, target, -g);
-              stampG(target, o, -g);
+              const key = c.id + ':' + ch;
+              const target = this._compState.get(key) ? vccIdx : gndIdx;
+              if (this._compOutLimited.get(key)) {
+                const dir = this._compOutLimitDir.get(key) || 1;
+                stampI(o, dir * COMPARATOR_SPEC.outputMaxCurrent);
+                stampI(target, -dir * COMPARATOR_SPEC.outputMaxCurrent);
+              } else {
+                stampG(o, o, g);
+                stampG(target, target, g);
+                stampG(o, target, -g);
+                stampG(target, o, -g);
+              }
             });
           } else if (c.type === 'battery') {
             const g = 1 / BATTERY_RINT;
@@ -532,13 +689,26 @@
             stampG(i, j, -g);
             stampG(j, i, -g);
           } else if (c.type === 'vgnd') {
-            const g = 1 / VGND_RINT;
+            // real load regulation up to a real output current limit: below
+            // the limit this is a stiff low-impedance buffer (VGND_RINT);
+            // at/beyond it, the real part just can't supply more current,
+            // so it stamps as a fixed current source instead -- the same
+            // "which real regime are we in" fixed-point decision as a
+            // diode/MOSFET on/off state, just choosing between a resistor
+            // and a current source instead of on/off.
             const i = gi(uf.find(vgndInternal(c)));
             const j = gi(uf.find(c.out));
-            stampG(i, i, g);
-            stampG(j, j, g);
-            stampG(i, j, -g);
-            stampG(j, i, -g);
+            if (this._vgndLimited.get(c.id)) {
+              const dir = this._vgndLimitDir.get(c.id) || 1;
+              stampI(j, dir * VGND_MAX_CURRENT);
+              stampI(i, -dir * VGND_MAX_CURRENT);
+            } else {
+              const g = 1 / VGND_RINT;
+              stampG(i, i, g);
+              stampG(j, j, g);
+              stampG(i, j, -g);
+              stampG(j, i, -g);
+            }
           } else if (c.type === 'acsource') {
             const g = 1 / AC_RINT;
             const i = gi(uf.find(acInternal(c)));
@@ -605,10 +775,15 @@
         // inductor: dual of the capacitor's backward-Euler model. Its own
         // current is a state variable (can't be read off node voltages
         // alone), so it gets an extra branch-current unknown like an ideal
-        // source: V(a) - V(b) - (L/dt)*iL = -(L/dt)*iL_prev.
+        // source: V(a) - V(b) - R*iL - (L/dt)*iL = -(L/dt)*iL_prev. The
+        // real winding DCR just adds straight into that same coefficient
+        // -- an inductor's coil is a resistor and an inductor in series,
+        // and backward-Euler already treats L as a resistance (L/dt) plus
+        // a series source, so R and L/dt simply add.
         inductors.forEach((ind, k) => {
           const row = rowInd(k);
           const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-6);
+          const dcr = inductorDCR(ind.value);
           const iPrev = this._indState.get(ind.id) || 0;
           const ia = gi(uf.find(ind.a));
           const ib = gi(uf.find(ind.b));
@@ -620,7 +795,7 @@
             A[ib][row] -= 1;
             A[row][ib] -= 1;
           }
-          A[row][row] -= Ldt;
+          A[row][row] -= (Ldt + dcr);
           b[row] += -Ldt * iPrev;
         });
 
@@ -799,6 +974,36 @@
         });
 
         comparators.forEach((cp) => {
+          // output current limit first, using the LATCHED state exactly as
+          // it was stamped for the solve we just ran -- same on/off-style
+          // fixed-point decision as the vgnd rail above: while un-limited,
+          // check whether the low-impedance outputRon path this iteration
+          // just solved would actually demand more current than the real
+          // push-pull stage can source/sink; while limited, check whether
+          // the load has eased enough that outputRon would stay within the
+          // rating. This must run BEFORE the propagation-delay block below
+          // changes _compState for next iteration -- checking against a
+          // target that doesn't match what was actually stamped this solve
+          // would compare an old vOut to a new rail and read a huge fake
+          // overcurrent that was never really demanded of the part.
+          [['1', cp.out1], ['2', cp.out2]].forEach(([ch, outPin]) => {
+            const key = cp.id + ':' + ch;
+            const vccV = voltages.get(uf.find(cp.vcc));
+            const gndV = voltages.get(uf.find(cp.gnd));
+            const vOut = voltages.get(uf.find(outPin));
+            const targetV = this._compState.get(key) ? (vccV || 0) : (gndV || 0);
+            const iIfNormal = (targetV - (vOut || 0)) / COMPARATOR_SPEC.outputRon;
+            const limited = this._compOutLimited.get(key);
+            if (!limited && Math.abs(iIfNormal) > COMPARATOR_SPEC.outputMaxCurrent) {
+              this._compOutLimited.set(key, true);
+              this._compOutLimitDir.set(key, iIfNormal >= 0 ? 1 : -1);
+              changed = true;
+            } else if (limited && Math.abs(iIfNormal) <= COMPARATOR_SPEC.outputMaxCurrent) {
+              this._compOutLimited.set(key, false);
+              changed = true;
+            }
+          });
+
           // real input offset voltage: the decision is Vin+ - Vin- > Vos,
           // not a perfectly ideal zero-offset comparison -- a real part
           // with a few mV of built-in imbalance, same honesty as the
@@ -808,11 +1013,43 @@
             const vm = voltages.get(uf.find(inM));
             const shouldBeHigh = (vp || 0) - (vm || 0) > COMPARATOR_SPEC.vosTyp;
             const key = cp.id + ':' + ch;
-            if (shouldBeHigh !== this._compState.get(key)) {
+            if (shouldBeHigh !== this._compDesired.get(key)) {
+              this._compDesired.set(key, shouldBeHigh);
+              this._compDesiredSince.set(key, t);
+            }
+            // the real output only actually flips propDelay after the
+            // real input comparison changed -- at typical frame dt this
+            // resolves within the same frame (t doesn't advance again
+            // until the next solve()), but a small enough dt genuinely
+            // spans multiple frames before the output catches up, exactly
+            // like a real bench measurement would show.
+            const since = this._compDesiredSince.get(key) ?? t;
+            if (shouldBeHigh !== this._compState.get(key) && t - since >= COMPARATOR_SPEC.propDelay) {
               this._compState.set(key, shouldBeHigh);
               changed = true;
             }
           });
+        });
+
+        vgnds.forEach((v) => {
+          // same on/off-style fixed-point decision as a diode: while
+          // un-limited, check whether the low-impedance path this
+          // iteration just solved would actually demand more current than
+          // the real part can supply; while limited, check whether the
+          // load has lightened enough that the low-impedance path would
+          // now stay within the real rating.
+          const vInt = voltages.get(uf.find(vgndInternal(v)));
+          const vOut = voltages.get(uf.find(v.out));
+          const iIfNormal = ((vInt || 0) - (vOut || 0)) / VGND_RINT;
+          const limited = this._vgndLimited.get(v.id);
+          if (!limited && Math.abs(iIfNormal) > VGND_MAX_CURRENT) {
+            this._vgndLimited.set(v.id, true);
+            this._vgndLimitDir.set(v.id, iIfNormal >= 0 ? 1 : -1);
+            changed = true;
+          } else if (limited && Math.abs(iIfNormal) <= VGND_MAX_CURRENT) {
+            this._vgndLimited.set(v.id, false);
+            changed = true;
+          }
         });
 
         memoryCores.forEach((mc, mck) => {
@@ -913,9 +1150,20 @@
           if (c.type === 'led' && I > 0.03) warnings.push(`LED ${c.label || c.id}: ${(I * 1000).toFixed(0)} mA — add a current-limiting resistor`);
           if (c.type === 'diode' && I > 1.0) warnings.push(`Diode ${c.label || c.id}: ${I.toFixed(2)} A — exceeds a typical small rectifier's rating`);
         } else if (c.type === 'capacitor') {
+          // vPrev is the ideal-C-only voltage from last frame (see the
+          // stamping comment above); the branch current is whatever the
+          // solved terminal voltage and that companion source imply...
+          const esr = capacitorESR(c);
+          const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
+          const gLeak = 1 / capacitorLeakageR(c);
           const vPrev = this._capState.get(c.id) || 0;
-          I = (c.value * ((va - vb) - vPrev)) / Math.max(dt, 1e-6);
-          this._capState.set(c.id, va - vb);
+          const capBranchI = gC * ((va - vb) - vPrev);
+          const leakI = gLeak * (va - vb);
+          I = capBranchI + leakI; // total current the part draws, ESR branch + leakage, same convention as every other component's a->b current
+          // ...and THAT current is what actually charges the ideal C this
+          // frame (real ESR drops some of (va-vb) across itself first;
+          // only the current through the ideal-C branch moves its charge)
+          this._capState.set(c.id, vPrev + (capBranchI * Math.max(dt, 1e-6)) / c.value);
           // an electrolytic (value >= ELECTROLYTIC_THRESHOLD) is a real
           // polarized part -- terminals[0]/"a" is the "+" lead by the same
           // convention as the LED/diode anode. Real electrolytics tolerate
@@ -925,12 +1173,36 @@
           if (c.value >= ELECTROLYTIC_THRESHOLD && va - vb < -REVERSE_POLARITY_LIMIT) {
             warnings.push(`Electrolytic capacitor ${c.label || c.id}: reverse-biased by ${(vb - va).toFixed(2)}V -- exceeds a typical electrolytic's reverse-voltage rating and can vent or fail`);
           }
+          // real ESR self-heating: a small ESR times a real ripple/charge
+          // current is genuine dissipated power, exactly the mechanism
+          // that limits how much current a real electrolytic can actually
+          // deliver (this is why Cal F/G/H-style low-impedance writes into
+          // a hold cap are a real design tradeoff, not a free lunch)
+          const capP = capBranchI * capBranchI * esr;
+          if (capP > 0.1) {
+            warnings.push(`Capacitor ${c.label || c.id}: ${capP.toFixed(2)} W in its own ESR (${(esr * 1000).toFixed(1)}mΩ) -- real self-heating, check the part's ripple-current rating`);
+          }
         } else if (c.type === 'potentiometer') {
           I = 0;
         } else if (c.type === 'switch' || c.type === 'pushbutton') {
           I = 0;
+        } else if (c.type === 'vgnd') {
+          // the real output current the buffer is actually sourcing/
+          // sinking into "out" -- exactly VGND_MAX_CURRENT once real load
+          // regulation has broken down, not whatever Ohm's law over
+          // VGND_RINT would otherwise imply
+          const vInt = voltages.get(uf.find(vgndInternal(c)));
+          const vOut = voltages.get(uf.find(c.out));
+          I = this._vgndLimited.get(c.id)
+            ? (this._vgndLimitDir.get(c.id) || 1) * VGND_MAX_CURRENT
+            : ((vInt || 0) - (vOut || 0)) / VGND_RINT;
+          if (this._vgndLimited.get(c.id)) {
+            warnings.push(`Virtual Ground ${c.label || c.id}: current-limited at ${(VGND_MAX_CURRENT * 1000).toFixed(0)}mA -- can no longer hold V0 under this load, a real load-regulation limit`);
+          }
         } else if (c.type === 'inductor') {
           I = indCurrent.get(c.id) || 0;
+          const dcrP = I * I * inductorDCR(c.value);
+          if (dcrP > 0.25) warnings.push(`Inductor ${c.label || c.id}: ${dcrP.toFixed(2)} W in its real winding resistance -- exceeds a typical small inductor's rating`);
         } else if (c.type === 'acsource') {
           I = acCurrent.get(c.id) || 0;
         } else if (c.type === 'mtjsensor') {
@@ -954,6 +1226,11 @@
           }
           const vgs = vg - vs;
           const vds = vd - vs;
+          // commit this frame's converged gate charge (no ESR here, so the
+          // ideal-C voltage is just the solved terminal Vgs directly, no
+          // branch-current back-out needed like the real capacitor's ESR
+          // case above)
+          this._fetGateV.set(c.id, vgs);
           if (Math.abs(vgs) > spec.vgsMax) {
             warnings.push(`${c.type.toUpperCase()} ${c.label || c.id}: |Vgs|=${Math.abs(vgs).toFixed(2)}V exceeds its ${spec.vgsMax}V gate rating`);
           }
@@ -993,11 +1270,19 @@
           // per-channel output current, "<id>:1"/"<id>:2" -- same convention
           // as the toroid/memory-core per-winding currents above
           [['1', c.out1], ['2', c.out2]].forEach(([ch, outPin]) => {
+            const key = c.id + ':' + ch;
             const vOut = voltages.get(uf.find(outPin));
-            const high = this._compState.get(c.id + ':' + ch);
+            const high = this._compState.get(key);
             const railV = high ? vVcc : vGnd;
-            const Iout = ((vOut || 0) - (railV || 0)) / COMPARATOR_SPEC.outputRon;
-            currents.set(c.id + ':' + ch, Iout);
+            let Iout;
+            if (this._compOutLimited.get(key)) {
+              const dir = this._compOutLimitDir.get(key) || 1;
+              Iout = -dir * COMPARATOR_SPEC.outputMaxCurrent;
+              warnings.push(`${c.label || c.id} (TLV3202) ch${ch} OUT: output current-limited at its ${(COMPARATOR_SPEC.outputMaxCurrent * 1000).toFixed(1)}mA rating -- the real push-pull stage can't drive this load any harder`);
+            } else {
+              Iout = ((vOut || 0) - (railV || 0)) / COMPARATOR_SPEC.outputRon;
+            }
+            currents.set(key, Iout);
           });
         }
         currents.set(c.id, I);
@@ -1083,7 +1368,8 @@
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
     AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, COMPARATOR_SPEC,
-    ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT,
+    ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
+    COMPONENT_TOLERANCE, capacitorToleranceFor,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;

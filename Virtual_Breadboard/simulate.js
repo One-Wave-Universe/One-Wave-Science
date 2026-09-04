@@ -27,6 +27,22 @@
  *   }
  * Output shape (failure -- bad spec or unresolvable terminal), exit code 1:
  *   { "ok": false, "errors": [ "..." ] }
+ *
+ * Monte Carlo tolerance mode: add a "monteCarlo" key to the input --
+ *   "monteCarlo": {
+ *     "trials": 200,               // how many randomized runs, default 100
+ *     "seed": 12345,                // optional, for a reproducible sequence
+ *     "watch": [                    // optional, values to collect stats on
+ *       { "label": "MEM", "path": "voltages.<cellId>" },
+ *       { "label": "core", "path": "coreStates.mc1" }
+ *     ]
+ *   }
+ * Each trial re-samples every resistor/capacitor/battery/inductor value
+ * within its real manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE
+ * -- honest datasheet-typical bands, not tuned per-circuit) and re-runs the
+ * full sim, so a design has to hold up across real part variation instead
+ * of one perfect nominal case. Output is a { warningRate, summary } report,
+ * not a per-trial dump -- see runMonteCarlo below.
  */
 const fs = require('fs');
 
@@ -248,6 +264,94 @@ function snapshot(result) {
   return out;
 }
 
+// deterministic PRNG (mulberry32) so a seeded Monte Carlo run is
+// reproducible run-to-run -- real randomness isn't the point here, real
+// part-to-part variation is
+function mulberry32(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// real per-type manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE)
+// -- only part types with a modeled real value spread are perturbed; a
+// type with no entry here (MOSFETs' discrete part-class selection,
+// comparator, memorycore/toroid core material, etc.) is left at its
+// nominal value rather than inventing an untethered tolerance for it.
+function toleranceFor(part) {
+  if (part.type === 'resistor') return CircuitEngine.COMPONENT_TOLERANCE.resistor;
+  if (part.type === 'capacitor') return CircuitEngine.capacitorToleranceFor(part);
+  if (part.type === 'battery') return CircuitEngine.COMPONENT_TOLERANCE.battery;
+  if (part.type === 'inductor') return CircuitEngine.COMPONENT_TOLERANCE.inductor;
+  return null;
+}
+
+function perturbParts(parts, rng) {
+  return parts.map((p) => {
+    const tol = toleranceFor(p);
+    if (tol == null || typeof p.value !== 'number') return p;
+    const frac = 1 + (rng() * 2 - 1) * tol; // uniform in [1-tol, 1+tol]
+    return Object.assign({}, p, { value: p.value * frac });
+  });
+}
+
+function getPath(snap, path) {
+  let v = snap;
+  for (const key of path.split('.')) {
+    if (v == null) return undefined;
+    v = v[key];
+  }
+  return v;
+}
+
+function runOneTrial(parts, sim) {
+  const elements = toEngineElements(parts);
+  const circuit = new CircuitEngine.Circuit();
+  const seconds = sim.seconds != null ? sim.seconds : 1;
+  const dt = sim.dt != null ? sim.dt : 0.001;
+  const steps = Math.max(1, Math.round(seconds / dt));
+  let lastResult = null;
+  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt);
+  return lastResult;
+}
+
+function runMonteCarlo(resolvedParts, sim, mc) {
+  const trials = mc.trials || 100;
+  const rng = mulberry32(mc.seed != null ? mc.seed : 12345);
+  const watch = mc.watch || [];
+  const watchStats = watch.map((w) => ({ label: w.label || w.path, path: w.path, values: [] }));
+  let warningTrials = 0;
+  const warningsSample = [];
+  for (let i = 0; i < trials; i++) {
+    const parts = perturbParts(resolvedParts, rng);
+    const snap = snapshot(runOneTrial(parts, sim));
+    if (snap.warnings.length) {
+      warningTrials++;
+      if (warningsSample.length < 5 && !warningsSample.includes(snap.warnings[0])) warningsSample.push(snap.warnings[0]);
+    }
+    watchStats.forEach((ws) => {
+      const v = getPath(snap, ws.path);
+      if (typeof v === 'number') ws.values.push(v);
+    });
+  }
+  const summary = {};
+  watchStats.forEach((ws) => {
+    if (!ws.values.length) {
+      summary[ws.label] = { note: 'no numeric value found at "' + ws.path + '" in any trial -- check the path' };
+      return;
+    }
+    const n = ws.values.length;
+    const mean = ws.values.reduce((a, b) => a + b, 0) / n;
+    const variance = ws.values.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+    summary[ws.label] = { min: Math.min(...ws.values), max: Math.max(...ws.values), mean, stdev: Math.sqrt(variance), n };
+  });
+  return { trials, warningTrials, warningRate: warningTrials / trials, warningsSample, summary };
+}
+
 function main() {
   let input;
   try {
@@ -269,10 +373,16 @@ function main() {
   const { parts, errors: holeErrors } = resolveTerminals(board, validatedParts);
   if (holeErrors.length) return fail(holeErrors);
 
+  const sim = input.sim || {};
+
+  if (input.monteCarlo) {
+    const mcReport = runMonteCarlo(parts, sim, input.monteCarlo);
+    console.log(JSON.stringify({ ok: true, errors: [], monteCarlo: mcReport }, null, 2));
+    return;
+  }
+
   const elements = toEngineElements(parts);
   const circuit = new CircuitEngine.Circuit();
-
-  const sim = input.sim || {};
   const seconds = sim.seconds != null ? sim.seconds : 1;
   const dt = sim.dt != null ? sim.dt : 0.001;
   const sampleEvery = sim.sampleEvery || null;
@@ -304,4 +414,5 @@ if (require.main === module) main();
 module.exports = {
   LAYOUT_PRESETS, H, derivePotentiometerHoles, deriveTlv3202Holes,
   resolveTerminals, memoryCoreWindings, toEngineElements, snapshot, main,
+  mulberry32, toleranceFor, perturbParts, getPath, runOneTrial, runMonteCarlo,
 };
