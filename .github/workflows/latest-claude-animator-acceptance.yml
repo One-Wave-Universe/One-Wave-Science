@@ -1,0 +1,60 @@
+name: Latest Claude Animator Acceptance
+
+on:
+  push:
+    branches:
+      - agent-host/mvp-shared-loop
+    paths:
+      - .github/workflows/latest-claude-animator-acceptance.yml
+  workflow_dispatch:
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout latest Claude animator branch
+        uses: actions/checkout@v4
+        with:
+          repository: One-Wave-Universe/Chats-Animatateo
+          ref: animator/testable-working-model-01
+          path: animator
+
+      - name: Show exact animator commit
+        working-directory: animator
+        run: git rev-parse HEAD
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: animator/package-lock.json
+
+      - name: Install dependencies
+        working-directory: animator
+        run: npm ci
+
+      - name: Install Chromium for real browser playback
+        working-directory: animator
+        run: npx playwright install --with-deps chromium
+
+      - name: Build animator
+        working-directory: animator
+        run: npm run build
+
+      - name: T-A01 real playback
+        working-directory: animator
+        run: npm run test-animation
+
+      - name: T-A02 real walk and reject sliding-still fake
+        working-directory: animator
+        run: npm run test-animation-walk
+
+      - name: Upload measured outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-claude-animator-output
+          path: animator/test_outputs/
+          if-no-files-found: warn
