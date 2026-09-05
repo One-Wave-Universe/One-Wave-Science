@@ -15,7 +15,6 @@ from dataclasses import asdict, dataclass, field
 from enum import Enum
 import json
 from pathlib import Path
-import shlex
 import subprocess
 from typing import Any
 
@@ -136,6 +135,7 @@ class ToolBroker:
         "rm -rf /",
         "git push",
         "git reset --hard",
+        "git commit",
         "mkfs",
         ":(){:|:&};:",
     )
@@ -155,6 +155,9 @@ class ToolBroker:
 
     def execute(self, action: ToolAction) -> ToolResult:
         kind = action.kind.lower().strip()
+        if kind == "yield":
+            return ToolResult(True, kind, "Dream yielded this BUILD without another source change.")
+
         if kind == "read":
             path = self._path(action.path)
             return ToolResult(True, kind, path.read_text(encoding="utf-8"))
@@ -183,6 +186,16 @@ class ToolBroker:
             before = path.read_text(encoding="utf-8") if path.exists() else None
             path.write_text(action.content, encoding="utf-8")
             return ToolResult(True, kind, str(path.relative_to(self.workspace)), before != action.content)
+
+        if kind == "replace":
+            path = self._path(action.path)
+            before = path.read_text(encoding="utf-8")
+            count = before.count(action.query)
+            if count != 1:
+                return ToolResult(False, kind, f"exact replace requires one match; found {count}")
+            after = before.replace(action.query, action.content, 1)
+            path.write_text(after, encoding="utf-8")
+            return ToolResult(True, kind, str(path.relative_to(self.workspace)), changed=True)
 
         if kind == "command":
             command = action.command.strip()
@@ -237,7 +250,7 @@ class M4Host:
         self._persist()
 
     def dream_tool(self, action: ToolAction) -> ToolResult:
-        """Allow inspection in BUILD; first mutating action advances the macro loop."""
+        """Allow inspection in BUILD; a bounded edit/yield advances the macro loop."""
 
         if self.state.step not in (LoopStep.BUILD_1, LoopStep.BUILD_2):
             raise RuntimeError(f"Dream tools are only available in BUILD, not {self.state.step.value}")
@@ -247,10 +260,19 @@ class M4Host:
             action=asdict(action),
             result={"ok": result.ok, "kind": result.kind, "output": result.output[-4000:], "changed": result.changed},
         )
-        mutating = action.kind.lower() in {"write", "command"}
-        if mutating:
+        boundary = action.kind.lower() in {"write", "replace", "yield"}
+        if boundary and result.ok:
             self.state.step = LoopStep.HOLD if self.state.step is LoopStep.BUILD_1 else LoopStep.BREAK
             self._persist()
+        return result
+
+    def measure(self, command: str) -> ToolResult:
+        """Host-owned reality check available only at HOLD or BREAK."""
+
+        if self.state.step not in (LoopStep.HOLD, LoopStep.BREAK):
+            raise RuntimeError(f"measurement requires HOLD/BREAK, current step is {self.state.step.value}")
+        result = self.tools.execute(ToolAction(kind="command", command=command))
+        self._receipt("measurement_command", command=command, result=result.output[-4000:])
         return result
 
     def hold(self, measurement: str, admin: AdminDecision) -> None:
