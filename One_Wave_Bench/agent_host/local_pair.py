@@ -60,18 +60,20 @@ def _extract_json(text: str) -> dict[str, Any]:
 DREAM_SYSTEM = """You are the Dream coding role inside a deterministic One-Wave host.
 The root reference is immutable. You do not declare success and you do not
 change the target. During BUILD, inspect only what is needed, then make one
-bounded code change. Return JSON only:
+bounded code change or yield if the measured state already needs no source
+change. Return JSON only:
 {
   "action": {
-    "kind": "read" | "search" | "write",
+    "kind": "read" | "search" | "replace" | "write" | "yield",
     "path": "relative/path",
-    "query": "search text",
-    "content": "complete UTF-8 file contents for write",
+    "query": "search text, or exact old text for replace",
+    "content": "replacement text, or complete file contents for write",
     "note": "short reason"
   }
 }
-Use read/search until you have enough evidence. Use write for one concrete
-change. Never invent a different target because it is easier.
+Prefer exact replace over rewriting a whole file. Use read/search until you have
+enough evidence. Use yield only when another source edit would be pointless.
+Never invent a different target because it is easier.
 """
 
 
@@ -122,25 +124,24 @@ class LocalPairRunner:
                 content=str(action_data.get("content", "")),
                 note=str(action_data.get("note", "")),
             )
-            if action.kind not in {"read", "search", "write"}:
+            if action.kind not in {"read", "search", "replace", "write", "yield"}:
                 raise ValueError(f"Dream returned unsupported action {action.kind!r}")
             result = self.host.dream_tool(action)
             last_tool_result = result.output
-            if action.kind == "write":
+            if action.kind in {"replace", "write", "yield"} and result.ok:
                 return
-        raise RuntimeError("Dream exhausted inspection budget without making a bounded change")
+        raise RuntimeError("Dream exhausted inspection budget without making or yielding a bounded change")
 
     def _measure(self) -> str:
-        # Measurement is a host-owned operation; the AI cannot substitute its opinion.
-        result = self.host.tools.execute(ToolAction(kind="command", command=self.check_command))
-        return result.output
+        # Measurement is host-owned; Dream cannot substitute its opinion.
+        return self.host.measure(self.check_command).output
 
     def _admin(self, measurement: str) -> AdminDecision:
         packet = self.host.state.admin_view()
         packet["measured_consequence"] = measurement[-7000:]
         response, tokens = self.admin.ask(ADMIN_SYSTEM, packet)
         self.host.add_token_use("oversight", tokens)
-        return AdminDecision(
+        decision = AdminDecision(
             direction=str(response.get("direction", "0")),
             relation=str(response.get("relation", "")),
             dimensional_view=str(response.get("dimensional_view", "")),
@@ -148,6 +149,9 @@ class LocalPairRunner:
             override=bool(response.get("override", False)),
             override_instruction=str(response.get("override_instruction", "")),
         )
+        if decision.override:
+            self.host.add_token_use("override", tokens)
+        return decision
 
     def run_one_loop(self) -> SharedState:
         state = self.host.state
