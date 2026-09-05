@@ -20,6 +20,19 @@ The target primitive therefore combines:
 state + memory + computation + routing
 ```
 
+The return path is state-advancing, not an automatic reset:
+
+```text
+old local state
+ -> local decision / differential
+ -> higher conditioning or Override if required
+ -> lower configuration changes
+ -> conditioning returns / releases
+ -> resulting configuration remains
+ -> resulting configuration is the NEW local state
+ -> new state becomes the next upward relation
+```
+
 This is an architectural target, not an experimental fact until retention/read/rewrite tests are passed. If magnetic persistence is claimed, the proof must show write, retain, read with acceptable disturbance, rewrite, and propagation into another identical stage.
 
 ## 2. Local Ternary vs. Sparse Binary Oversight
@@ -40,10 +53,10 @@ Higher supervisory controller:
 
 ```text
 0 = no intervention / let local network resolve
-1 = intervene / trigger / reroute / reset
+1 = intervene / trigger / reroute / Override
 ```
 
-The controller does not need to encode every local ternary state if the local network can resolve and retain those states itself.
+The controller does not need to encode every local ternary state if the local network can resolve and retain those states itself. A released Override does not imply restoration of the old local state; the resulting local configuration is read forward as the next state.
 
 ## 3. Field / Void Processor-Scale Split
 
@@ -81,9 +94,33 @@ Hard scaling rule:
 
 > The output relation of level n must be a valid input relation for level n+1, and the same contract must work downward when a higher relation conditions a lower region.
 
+The downward relation must close back into a resulting local state that can travel upward again:
+
+```text
+UP -> higher relation -> DOWN -> NEW UP
+```
+
 If every scale requires a new decoder/controller species, recursion has failed.
 
-## 5. Scale Up and Scale Down
+## 5. Brain-First Boundary
+
+The first machine target is the brain/computer without a body.
+
+The following must run with local or simulated endpoints only:
+
+```text
+persistent state
+ -> upward relation
+ -> higher resolution / Oversight
+ -> downward relation / Override where required
+ -> local physical transition
+ -> new persistent state
+ -> next upward relation
+```
+
+Sensors, motors, actuators, body feedback, proximity, tilt, temperature, and other Android interfaces are later adapters. They may plug into the same relational interface, but the brain kernel must not require them in order to close its own recurrence.
+
+## 6. Scale Up and Scale Down
 
 Upward aggregation:
 
@@ -104,11 +141,12 @@ higher Field/Void relation
  -> cluster
  -> triad
  -> local state transition
+ -> resulting state remains locally available
 ```
 
 Most activity should remain local; only resolved relations/events need travel upward.
 
-## 6. Connected Cube Machine
+## 7. Connected Cube Machine
 
 The mature machine is a lattice of connected cube modules, not one endlessly enlarged monolith.
 
@@ -143,7 +181,7 @@ Scale example:
 
 Computational usefulness should come primarily from increasing cell density inside cubes, not from requiring huge hand-sized cube counts.
 
-## 7. 3-of-3 Geometry
+## 8. 3-of-3 Geometry and Mirrored Six
 
 Current structural recursion:
 
@@ -155,7 +193,15 @@ Current structural recursion:
 
 Three physical Mirror Gates traversed in two orientations/phases still provide the six logical positions of the current VTC interpretation. Do not silently turn this back into six separate physical Mirror Gates.
 
-## 8. Current Signal / Action Interpretation
+The mirrored logical positions may be read as:
+
+```text
+1/6 -> 2/5 -> 3/4 | 4/3 -> 5/2 -> 6/1
+```
+
+`/` denotes one simultaneous mirrored pair. The `3/4 <-> 4/3` relation is the central reversal. The two sides each have their corresponding `6`; the two `6` positions are mirrored counterparts rather than one serial endpoint. This notation is explanatory and must remain consistent with the canonical Field/Void six-pair oscillator.
+
+## 9. Current Signal / Action Interpretation
 
 ```text
 INWARD
@@ -190,7 +236,39 @@ Reference
 
 Do not rename the Four Actions back into Views.
 
-## 9. First Compute Proof
+The hardware hypothesis in G-741 now tests a more specific sequence:
+
+```text
+shared local V0
+ -> first binary millivolt lean
+ -> second-loop admission
+ -> coupled AC recurrence
+ -> ternary Left / Stay / Right routing
+ -> mirrored six-position processing
+ -> Views up
+ -> Actions / Override down
+ -> resulting NEW state up
+```
+
+This sequence is not canonical fact until bench measurements support it.
+
+## 10. Physical Role Separation
+
+Do not collapse decision, memory, and connection hardware into one label unless the physical build proves they are the same mechanism.
+
+Current working separation:
+
+```text
+local differential / voltage swing relative to V0 = decision/state variable
+persistent magnetic or oscillatory state = processing-memory candidate
+bidirectional switching element = nerve-gate / connection candidate
+```
+
+Back-to-back MOSFETs or other true bidirectional devices are candidates for the connection role. SiC MOSFETs may be tested in that role where their switching, endurance, thermal, or power-domain properties are useful. This does not establish direct millivolt gate control; the gate-drive interface remains an engineering variable to measure.
+
+One higher Override coordinating three lower nerve-gate flips is a current physical hypothesis. It must remain labeled experimental until one event is shown to cause three reproducible measured transitions without adding hidden decision stages.
+
+## 11. First Compute Proof
 
 The first meaningful computation target remains balanced-ternary arithmetic.
 
@@ -208,11 +286,13 @@ The important proof is not that ternary arithmetic exists historically. It is th
 2. participate in a local computation;
 3. leave the result stored locally;
 4. drive another identical stage;
-5. recurse without an expanding translation layer.
+5. accept a downward relation and settle into a distinguishable new state;
+6. emit that new state upward without restoring the previous state; and
+7. recurse without an expanding translation layer.
 
-## 10. Breadboard to True Microfabrication
+## 12. Breadboard to True Microfabrication
 
-Immediate bench proof uses the available six-pin mechanically ganged pots, op-amps/comparators as appropriate, passive parts, indicators and oscilloscope.
+Immediate bench proof uses the available six-pin mechanically ganged pots, passive parts, indicators, oscilloscope, and whatever threshold / switching devices are required by the specific experiment. Device choice must not be treated as proof of the architecture.
 
 The long-term micro version is not a PCB shrink. It is a true microfabricated mixed-signal/magnetic implementation, potentially using patterned thin-film magnetic or magnetoresistive elements, semiconductor differential devices, stacked dies/wafer bonding and vertical interconnects.
 
@@ -229,7 +309,7 @@ breadboard measured primitive
 
 The first custom wafer/test die should characterize many primitive variants before attempting a dense final cube.
 
-## 11. Information vs. Addressing Reach
+## 13. Information vs. Addressing Reach
 
 One balanced ternary trit always contains three possible values and therefore approximately:
 
@@ -239,7 +319,7 @@ log2(3) ~= 1.585 bits
 
 Recursive reach is different. `n` ternary routing decisions can address `3^n` endpoints. Do not claim one trit contains millions of bits because it can control a hierarchy containing many endpoints.
 
-## 12. What Would Make This Architecture Distinct
+## 14. What Would Make This Architecture Distinct
 
 The novelty claim is not "ternary exists" or "magnetic memory exists." Those are established categories.
 
@@ -250,6 +330,8 @@ state = memory
 state transition = processing
 local differential = decision
 shared differential = routing
+downward relation = conditioning / Override
+resulting state = next upward signal
 cluster output = next-scale input
 ```
 
