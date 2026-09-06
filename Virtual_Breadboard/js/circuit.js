@@ -202,6 +202,16 @@
   // can't supply more current, so V(out) sags hard instead of following
   // Ohm's law forever.
   const VGND_MAX_CURRENT = 0.02;
+  // volts; once current-limited, a real output stage still physically
+  // cannot swing its pin past its own supply rails -- the pass
+  // transistors (and/or their substrate/ESD protection diodes) sit
+  // between those rails. This is the real saturation/protection headroom
+  // beyond a rail before that path clamps, same real-diode-clamp idea as
+  // a MOSFET's body diode, not a per-part-number datasheet figure. Used
+  // by both the vgnd rail-splitter and the comparator's push-pull output
+  // (with its own smaller, rail-to-rail-appropriate headroom below).
+  const RAIL_CLAMP_VF = 0.3;
+  const RAIL_CLAMP_RON = 5; // ohms, real forward resistance of that clamp path
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
 
@@ -261,6 +271,10 @@
     // further, so a hard current-limited output (like the vgnd rail-
     // splitter above) replaces the soft outputRon-only limit.
     outputMaxCurrent: 0.008,
+    // volts; a real rail-to-rail output stage saturates much closer to
+    // its rails than a generic (non-rail-to-rail) part -- a small,
+    // honest headroom, not RAIL_CLAMP_VF's more generic default.
+    clampVf: 0.1,
   };
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
@@ -335,6 +349,12 @@
       this._compOutLimitDir = new Map(); // "<comparatorId>:<channel>" -> +1/-1, which way it was sourcing/sinking when it hit the limit
       this._vgndLimited = new Map(); // vgnd id -> boolean (output current-limited, can't hold the midpoint under this load)
       this._vgndLimitDir = new Map(); // vgnd id -> +1/-1, which way it was sourcing/sinking when it hit the limit
+      // real output/protection clamp-diode on/off state, keyed by a
+      // descriptive string per clamp path (see the stamping code) --
+      // shared by the vgnd rail-splitter's output and the comparator's
+      // push-pull outputs, since both need the exact same real "this pin
+      // physically cannot swing past its own supply rails" constraint
+      this._railClampState = new Map();
       this._diffNoiseRng = new Map(); // diffsource id -> its own seeded PRNG (a real independent noise sequence over time)
       this._diffNoiseSample = new Map(); // diffsource id -> this frame's sampled noise volts (resampled once per new sim-clock tick, not per fixed-point iteration)
       this._diffNoiseAtT = new Map(); // diffsource id -> sim-clock time the cached sample was drawn at
@@ -597,6 +617,21 @@
         const stampI = (i, val) => {
           if (i >= 0) b[i] += val;
         };
+        // real output/protection clamp diode: same on/off ideal-diode
+        // stamp as the LED/rectifier and MOSFET body-diode models above,
+        // just reused here for "this pin cannot swing past its own supply
+        // rail" instead of a discrete part's own two leads.
+        const stampClampDiode = (anode, cathode, on, vf, ron) => {
+          if (!on) return;
+          const g = 1 / ron;
+          stampG(anode, anode, g);
+          stampG(cathode, cathode, g);
+          stampG(anode, cathode, -g);
+          stampG(cathode, anode, -g);
+          const Ieq = g * vf;
+          stampI(anode, Ieq);
+          stampI(cathode, -Ieq);
+        };
 
         for (const r of roots) {
           if (r === groundRoot) continue;
@@ -752,6 +787,14 @@
                 stampG(o, target, -g);
                 stampG(target, o, -g);
               }
+              // real output-pin protection, same reasoning as the vgnd
+              // rail-splitter's clamp above: a rail-to-rail push-pull
+              // output still physically cannot swing past VCC/GND by
+              // more than its own real (small) saturation headroom, no
+              // matter what the current-limited path above would
+              // otherwise imply into a weak external load.
+              stampClampDiode(o, vccIdx, this._railClampState.get(key + ':hi') || false, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
+              stampClampDiode(gndIdx, o, this._railClampState.get(key + ':lo') || false, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
             });
           } else if (c.type === 'battery' || c.type === 'diffsource') {
             const g = 1 / sourceRFor(c);
@@ -781,6 +824,26 @@
               stampG(j, j, g);
               stampG(i, j, -g);
               stampG(j, i, -g);
+            }
+            // real output-pin protection: "out" physically cannot swing
+            // past its own supply rails by more than a real clamp-diode
+            // drop, no matter what the current-limited path above would
+            // otherwise imply into a weak external load. A rail splitter's
+            // two supply pins have a fixed real role -- "a" is always the
+            // higher/positive rail, "b" the lower/ground rail (exactly
+            // like this component is wired everywhere in this codebase,
+            // matching a real part's labeled V+/GND pins) -- so only 2
+            // directional clamps are needed, not 4: out can't rise above
+            // "a", and can't fall below "b". Under normal (non-limited)
+            // operation, out sits between the rails and neither conducts;
+            // they only matter once something is pushing "out" toward or
+            // past a rail.
+            {
+              const ia = gi(uf.find(c.a));
+              const ib = gi(uf.find(c.b));
+              const key = c.id;
+              stampClampDiode(j, ia, this._railClampState.get(key + ':hi') || false, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
+              stampClampDiode(ib, j, this._railClampState.get(key + ':lo') || false, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
             }
           } else if (c.type === 'acsource') {
             const g = 1 / AC_RINT;
@@ -997,6 +1060,25 @@
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
         let changed = false;
+        // same on/off ideal-diode fixed-point decision as the LED/diode
+        // and MOSFET body-diode blocks below, reused for the vgnd/
+        // comparator rail-clamp paths: turn on once the real forward
+        // voltage is exceeded, turn off once the clamp's own computed
+        // current would go negative (load eased, rail no longer pinned).
+        const updateClampDiode = (key, anodeV, cathodeV, vf, ron) => {
+          const vd = (anodeV || 0) - (cathodeV || 0);
+          const wasOn = this._railClampState.get(key) || false;
+          if (!wasOn && vd > vf) {
+            this._railClampState.set(key, true);
+            changed = true;
+          } else if (wasOn) {
+            const i = (vd - vf) / ron;
+            if (i < 0) {
+              this._railClampState.set(key, false);
+              changed = true;
+            }
+          }
+        };
         diodes.forEach((d) => {
           const va = voltages.get(uf.find(d.a));
           const vb = voltages.get(uf.find(d.b));
@@ -1075,6 +1157,8 @@
               this._compOutLimited.set(key, false);
               changed = true;
             }
+            updateClampDiode(key + ':hi', vOut, vccV, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
+            updateClampDiode(key + ':lo', gndV, vOut, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
           });
 
           // real input offset voltage: the decision is Vin+ - Vin- > Vos,
@@ -1128,6 +1212,10 @@
             this._vgndLimited.set(v.id, false);
             changed = true;
           }
+          const vA = voltages.get(uf.find(v.a));
+          const vB = voltages.get(uf.find(v.b));
+          updateClampDiode(v.id + ':hi', vOut, vA, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
+          updateClampDiode(v.id + ':lo', vB, vOut, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
         });
 
         memoryCores.forEach((mc, mck) => {
