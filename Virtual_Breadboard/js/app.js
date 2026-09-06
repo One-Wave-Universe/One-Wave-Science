@@ -53,8 +53,21 @@
     wireColorIdx: 0,
     scopeColorIdx: 0,
     draggingPot: null,
+    scope: {
+      sampleRateHz: 0, // 0 = every frame (~60Hz); otherwise decimate to this real ADC-style rate
+      lastSampleT: 0,
+      bwLimit: false, // real scope front-ends have finite analog bandwidth -- a simple single-pole low-pass on the displayed trace
+      trigger: { enabled: false, channelId: null, level: 2.5, edge: 'rising', armed: true, triggered: false, prevAboveLevel: null },
+      cursors: {
+        time: { enabled: false, t1: 1.0, t2: 2.0 },
+        voltage: { enabled: false, v1: 1.0, v2: -1.0 },
+      },
+      dragging: null, // {kind:'time'|'voltage', which:1|2}
+    },
   };
   const SCOPE_WINDOW = 3; // seconds of history each probe trace keeps
+  const SCOPE_BW_ALPHA = 0.35; // 0..1, lower = more filtering (finite-bandwidth low-pass on the sampled value)
+  const SCOPE_AC_TAU = 0.5; // seconds, real high-pass-style DC-block time constant for AC coupling's running mean
 
   // boardIdx defaults to 0 (the primary/first board) -- row+col alone is
   // ambiguous once more than one board is on the workspace, since every
@@ -1790,6 +1803,18 @@
   const scopeCanvas = document.getElementById('scopeCanvas');
   const scopeCtx = scopeCanvas.getContext('2d');
   const scopeLegendEl = document.getElementById('scopeLegend');
+  const scopeSampleRateEl = document.getElementById('scopeSampleRate');
+  const scopeBwLimitEl = document.getElementById('scopeBwLimit');
+  const scopeTriggerEnabledEl = document.getElementById('scopeTriggerEnabled');
+  const scopeTriggerChannelEl = document.getElementById('scopeTriggerChannel');
+  const scopeTriggerLevelEl = document.getElementById('scopeTriggerLevel');
+  const scopeTriggerEdgeEl = document.getElementById('scopeTriggerEdge');
+  const scopeTriggerRearmEl = document.getElementById('scopeTriggerRearm');
+  const scopeTriggerStatusEl = document.getElementById('scopeTriggerStatus');
+  const scopeCursorsTimeEl = document.getElementById('scopeCursorsTime');
+  const scopeCursorsVoltageEl = document.getElementById('scopeCursorsVoltage');
+  const scopeCursorReadoutEl = document.getElementById('scopeCursorReadout');
+  const scopeExportCsvEl = document.getElementById('scopeExportCsv');
   let scopeSize = { w: 600, h: 150 };
   function setupScopeCanvas() {
     const dpr = window.devicePixelRatio || 1;
@@ -1803,23 +1828,80 @@
   setupScopeCanvas();
   window.addEventListener('resize', setupScopeCanvas);
 
-  function sampleScopeProbes() {
-    const uf = state.lastResult.uf;
-    state.parts.forEach((p) => {
-      if (p.type !== 'scope' && p.type !== 'diffscope') return;
-      if (!p.samples) p.samples = [];
-      let v;
-      if (p.type === 'diffscope') {
-        // a real differential measurement: V(A) - V(B), computed from the
-        // same live per-frame voltages every other probe reads -- never a
-        // separate signal, just the difference of two zero-load taps
-        const va = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
-        const vb = uf ? state.lastResult.voltages.get(uf.find(p.terminals[1].cellId)) : undefined;
-        v = va == null || vb == null ? undefined : va - vb;
-      } else {
-        v = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+  // real raw voltage this instant, before any display-side coupling/
+  // bandwidth processing -- used both for the actual trace value and for
+  // trigger-edge detection (a real scope's trigger comparator taps the
+  // signal before its own display filtering, not after)
+  function rawScopeValue(p, uf) {
+    if (p.type === 'diffscope') {
+      const va = uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+      const vb = uf ? state.lastResult.voltages.get(uf.find(p.terminals[1].cellId)) : undefined;
+      return va == null || vb == null ? undefined : va - vb;
+    }
+    return uf ? state.lastResult.voltages.get(uf.find(p.terminals[0].cellId)) : undefined;
+  }
+
+  // AC/DC coupling + finite-bandwidth low-pass, applied per probe -- real,
+  // stateful per-channel front-end processing, not just a raw value.
+  // AC coupling subtracts a slow running mean (a real DC-blocking high-
+  // pass's effect); BW limit is a real single-pole low-pass on top.
+  function processedScopeValue(p, rawV, dt) {
+    let v = rawV;
+    if (p.coupling === 'AC') {
+      const k = Math.min(1, Math.max(dt, 1e-6) / SCOPE_AC_TAU);
+      p._acMean = p._acMean == null ? v : p._acMean + k * (v - p._acMean);
+      v = v - p._acMean;
+    } else {
+      p._acMean = null;
+    }
+    if (state.scope.bwLimit) {
+      p._bwFiltered = p._bwFiltered == null ? v : p._bwFiltered + SCOPE_BW_ALPHA * (v - p._bwFiltered);
+      v = p._bwFiltered;
+    } else {
+      p._bwFiltered = null;
+    }
+    return v;
+  }
+
+  function checkTrigger(probes, uf) {
+    const tr = state.scope.trigger;
+    if (!tr.enabled || tr.triggered) return;
+    const chan = probes.find((p) => p.id === tr.channelId) || probes[0];
+    if (!chan) return;
+    const raw = rawScopeValue(chan, uf);
+    if (raw == null) return;
+    const above = raw >= tr.level;
+    if (tr.prevAboveLevel != null) {
+      const crossedUp = !tr.prevAboveLevel && above;
+      const crossedDown = tr.prevAboveLevel && !above;
+      if ((tr.edge === 'rising' && crossedUp) || (tr.edge === 'falling' && crossedDown)) {
+        tr.triggered = true;
+        tr.armed = false;
       }
-      p.samples.push({ t: state.animT, v: v == null ? 0 : v });
+    }
+    tr.prevAboveLevel = above;
+  }
+
+  function sampleScopeProbes(dt) {
+    const uf = state.lastResult.uf;
+    const probes = state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope');
+    checkTrigger(probes, uf);
+    // a triggered, un-rearmed capture holds its display frozen -- exactly
+    // a real scope's single-shot-style triggered stop, not a live-forever
+    // trace -- so no new samples are pushed anywhere while it holds
+    if (state.scope.trigger.enabled && state.scope.trigger.triggered) return;
+
+    const rate = state.scope.sampleRateHz;
+    const interval = rate > 0 ? 1 / rate : 0;
+    const due = interval === 0 || state.animT - state.scope.lastSampleT >= interval;
+    if (!due) return;
+    state.scope.lastSampleT = state.animT;
+
+    probes.forEach((p) => {
+      if (!p.samples) p.samples = [];
+      const raw = rawScopeValue(p, uf);
+      const v = raw == null ? 0 : processedScopeValue(p, raw, dt);
+      p.samples.push({ t: state.animT, v });
       while (p.samples.length > 1 && state.animT - p.samples[0].t > SCOPE_WINDOW) p.samples.shift();
     });
   }
@@ -1880,16 +1962,181 @@
       scopeCtx.stroke();
     });
 
+    // real draggable time/voltage cursors (click-drag on the canvas moves
+    // the nearest one -- see the mouse handlers below) with a live delta
+    // readout, the same measurement a real bench scope's cursor pair gives
+    const cur = state.scope.cursors;
+    scopeCtx.setLineDash([4, 3]);
+    scopeCtx.lineWidth = 1;
+    if (cur.time.enabled) {
+      scopeCtx.strokeStyle = '#d4af37';
+      [cur.time.t1, cur.time.t2].forEach((t) => {
+        const x = w * (1 - t / SCOPE_WINDOW);
+        scopeCtx.beginPath();
+        scopeCtx.moveTo(x, 0);
+        scopeCtx.lineTo(x, h);
+        scopeCtx.stroke();
+      });
+    }
+    if (cur.voltage.enabled) {
+      scopeCtx.strokeStyle = '#4d8dff';
+      [cur.voltage.v1, cur.voltage.v2].forEach((v) => {
+        const y = h / 2 - (v / vMax) * (h / 2 - 6);
+        scopeCtx.beginPath();
+        scopeCtx.moveTo(0, y);
+        scopeCtx.lineTo(w, y);
+        scopeCtx.stroke();
+      });
+    }
+    scopeCtx.setLineDash([]);
+
+    const readoutParts = [];
+    if (cur.time.enabled) {
+      const dtc = Math.abs(cur.time.t2 - cur.time.t1);
+      readoutParts.push(`Δt = ${dtc.toFixed(3)}s${dtc > 0 ? ` (${(1 / dtc).toFixed(2)}Hz)` : ''}`);
+    }
+    if (cur.voltage.enabled) readoutParts.push(`ΔV = ${fmtV(Math.abs(cur.voltage.v2 - cur.voltage.v1))}`);
+    scopeCursorReadoutEl.textContent = readoutParts.join('   ');
+
+    // trigger status badge -- a real scope shows armed/triggered state
+    // explicitly rather than leaving it implicit
+    const tr = state.scope.trigger;
+    scopeTriggerStatusEl.textContent = !tr.enabled ? '' : tr.triggered ? 'TRIGGERED (held)' : 'Armed';
+    scopeTriggerStatusEl.className = 'scope-trigger-status' + (!tr.enabled ? '' : tr.triggered ? ' triggered' : ' armed');
+
+    // keep the trigger-channel picker in sync with whatever probes
+    // actually exist right now, without clobbering the user's selection
+    const existingOptions = Array.from(scopeTriggerChannelEl.options).map((o) => o.value);
+    const currentIds = probes.map((p) => p.id);
+    if (existingOptions.join(',') !== currentIds.join(',')) {
+      const prevVal = scopeTriggerChannelEl.value;
+      scopeTriggerChannelEl.innerHTML = probes.map((p) => `<option value="${p.id}">${p.id}</option>`).join('');
+      if (currentIds.includes(prevVal)) scopeTriggerChannelEl.value = prevVal;
+      else if (currentIds.length) { scopeTriggerChannelEl.value = currentIds[0]; tr.channelId = currentIds[0]; }
+    }
+
     scopeLegendEl.innerHTML = probes.length
       ? probes.map((p) => {
           const last = (p.samples && p.samples[p.samples.length - 1]) || { v: 0 };
           const where = p.type === 'diffscope'
             ? `${p.terminals[0].cellId}−${p.terminals[1].cellId}`
             : p.terminals[0].cellId;
-          return `<span class="chip"><span class="swatch-dot" style="background:${p.color}"></span>${p.id} @ ${where}: <b>${fmtV(last.v)}</b></span>`;
+          const coupling = p.coupling === 'AC' ? 'AC' : 'DC';
+          return `<span class="chip" data-probe-id="${p.id}" title="Click to toggle AC/DC coupling"><span class="swatch-dot" style="background:${p.color}"></span>${p.id} @ ${where}: <b>${fmtV(last.v)}</b><span class="coupling-tag">${coupling}</span></span>`;
         }).join('')
       : '<span class="chip">No probes placed yet — pick the Scope Probe tool.</span>';
   }
+  scopeLegendEl.addEventListener('click', (e) => {
+    const chip = e.target.closest('.chip[data-probe-id]');
+    if (!chip) return;
+    const p = state.parts.find((pt) => pt.id === chip.dataset.probeId);
+    if (!p) return;
+    p.coupling = p.coupling === 'AC' ? 'DC' : 'AC';
+  });
+
+  scopeSampleRateEl.addEventListener('change', () => {
+    state.scope.sampleRateHz = Number(scopeSampleRateEl.value) || 0;
+  });
+  scopeBwLimitEl.addEventListener('change', () => {
+    state.scope.bwLimit = scopeBwLimitEl.checked;
+  });
+  scopeTriggerEnabledEl.addEventListener('change', () => {
+    const tr = state.scope.trigger;
+    tr.enabled = scopeTriggerEnabledEl.checked;
+    tr.triggered = false;
+    tr.armed = true;
+    tr.prevAboveLevel = null;
+  });
+  scopeTriggerChannelEl.addEventListener('change', () => {
+    state.scope.trigger.channelId = scopeTriggerChannelEl.value;
+  });
+  scopeTriggerLevelEl.addEventListener('input', () => {
+    const v = Number(scopeTriggerLevelEl.value);
+    if (Number.isFinite(v)) state.scope.trigger.level = v;
+  });
+  scopeTriggerEdgeEl.addEventListener('change', () => {
+    state.scope.trigger.edge = scopeTriggerEdgeEl.value;
+  });
+  scopeTriggerRearmEl.addEventListener('click', () => {
+    const tr = state.scope.trigger;
+    tr.triggered = false;
+    tr.armed = true;
+    tr.prevAboveLevel = null;
+  });
+  scopeCursorsTimeEl.addEventListener('change', () => {
+    state.scope.cursors.time.enabled = scopeCursorsTimeEl.checked;
+  });
+  scopeCursorsVoltageEl.addEventListener('change', () => {
+    state.scope.cursors.voltage.enabled = scopeCursorsVoltageEl.checked;
+  });
+
+  // drag the nearest enabled cursor line under the mouse -- a real bench
+  // scope's cursors are moved the same way, by grabbing the line itself
+  function scopeMousePos(e) {
+    const rect = scopeCanvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+  scopeCanvas.addEventListener('mousedown', (e) => {
+    const { w, h } = scopeSize;
+    const { x, y } = scopeMousePos(e);
+    const cur = state.scope.cursors;
+    const HIT = 6;
+    if (cur.time.enabled) {
+      for (const which of [1, 2]) {
+        const t = which === 1 ? cur.time.t1 : cur.time.t2;
+        const cx = w * (1 - t / SCOPE_WINDOW);
+        if (Math.abs(x - cx) <= HIT) { state.scope.dragging = { kind: 'time', which }; return; }
+      }
+    }
+    if (cur.voltage.enabled) {
+      let vMax = 0.5;
+      state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope').forEach((p) => (p.samples || []).forEach((s) => { vMax = Math.max(vMax, Math.abs(s.v)); }));
+      vMax *= 1.15;
+      for (const which of [1, 2]) {
+        const v = which === 1 ? cur.voltage.v1 : cur.voltage.v2;
+        const cy = h / 2 - (v / vMax) * (h / 2 - 6);
+        if (Math.abs(y - cy) <= HIT) { state.scope.dragging = { kind: 'voltage', which, vMax }; return; }
+      }
+    }
+  });
+  window.addEventListener('mousemove', (e) => {
+    const drag = state.scope.dragging;
+    if (!drag) return;
+    const { w, h } = scopeSize;
+    const { x, y } = scopeMousePos(e);
+    const cur = state.scope.cursors;
+    if (drag.kind === 'time') {
+      const t = Math.min(SCOPE_WINDOW, Math.max(0, (1 - x / w) * SCOPE_WINDOW));
+      if (drag.which === 1) cur.time.t1 = t; else cur.time.t2 = t;
+    } else {
+      const v = ((h / 2 - y) / (h / 2 - 6)) * drag.vMax;
+      if (drag.which === 1) cur.voltage.v1 = v; else cur.voltage.v2 = v;
+    }
+  });
+  window.addEventListener('mouseup', () => { state.scope.dragging = null; });
+
+  scopeExportCsvEl.addEventListener('click', () => {
+    const probes = state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope');
+    // long format (probe,t,v) rather than one shared time axis -- each
+    // probe can have its own sample-rate decimation/history length, so
+    // forcing them into aligned rows would either fabricate values or
+    // silently drop real ones; this keeps every real recorded sample.
+    const rows = [['probe', 'label', 't_seconds', 'voltage']];
+    probes.forEach((p) => {
+      const where = p.type === 'diffscope' ? `${p.terminals[0].cellId}-${p.terminals[1].cellId}` : p.terminals[0].cellId;
+      (p.samples || []).forEach((s) => rows.push([p.id, where, s.t.toFixed(6), s.v.toFixed(6)]));
+    });
+    const csv = rows.map((r) => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'scope-capture.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
 
   // ---------------- main loop ----------------
   let lastT = performance.now();
@@ -1901,7 +2148,7 @@
 
     const elements = toEngineElements();
     state.lastResult = circuit.solve(elements, dt);
-    sampleScopeProbes();
+    sampleScopeProbes(dt);
 
     render(dt);
     renderScope();
@@ -2113,6 +2360,8 @@
     mosfetStates: Object.fromEntries(state.lastResult.mosfetStates || []),
     coreStates: Object.fromEntries(state.lastResult.coreStates || []),
     comparatorStates: Object.fromEntries(state.lastResult.comparatorStates || []),
+    scope: state.scope,
+    scopeSamples: Object.fromEntries(state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope').map((p) => [p.id, (p.samples || []).length])),
   });
   window.__selectPartById = (id) => {
     state.selectedPartId = id;

@@ -102,8 +102,36 @@
       <h3>Oscilloscope</h3>
       <div id="scopeLegend" class="scope-legend"></div>
     </div>
+    <div class="scope-controls">
+      <label>Sample rate
+        <select id="scopeSampleRate">
+          <option value="0">Every frame (~60Hz)</option>
+          <option value="30">30 Hz</option>
+          <option value="10">10 Hz</option>
+          <option value="5">5 Hz</option>
+          <option value="1">1 Hz</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="scopeBwLimit"> BW limit</label>
+      <span class="scope-ctrl-sep"></span>
+      <label><input type="checkbox" id="scopeTriggerEnabled"> Trigger</label>
+      <select id="scopeTriggerChannel"></select>
+      <label>level <input type="number" id="scopeTriggerLevel" value="2.5" step="0.1"></label>
+      <select id="scopeTriggerEdge">
+        <option value="rising">Rising</option>
+        <option value="falling">Falling</option>
+      </select>
+      <button id="scopeTriggerRearm" type="button">Re-arm</button>
+      <span id="scopeTriggerStatus" class="scope-trigger-status"></span>
+      <span class="scope-ctrl-sep"></span>
+      <label><input type="checkbox" id="scopeCursorsTime"> Time cursors</label>
+      <label><input type="checkbox" id="scopeCursorsVoltage"> Voltage cursors</label>
+      <span id="scopeCursorReadout" class="scope-cursor-readout"></span>
+      <span class="scope-ctrl-sep"></span>
+      <button id="scopeExportCsv" type="button">Export CSV</button>
+    </div>
     <canvas id="scopeCanvas" height="150"></canvas>
-    <p class="hint">Use the <b>Scope Probe</b> tool to tap a hole — zero-load, like a real 10MΩ probe. Each probe gets its own trace here, live, so you can check AC/quadrature signals actually look right (and compare against a real scope).</p>
+    <p class="hint">Use the <b>Scope Probe</b> tool to tap a hole — zero-load, like a real 10MΩ probe. Each probe gets its own trace here, live, so you can check AC/quadrature signals actually look right (and compare against a real scope). Click a probe's legend chip to toggle AC/DC coupling.</p>
   </section>
 
   <footer class="status-bar">

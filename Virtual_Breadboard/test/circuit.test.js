@@ -963,9 +963,12 @@ function windingR(turns, meanTurnLen) {
 // read really do differ by the expected real voltage.
 {
   const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
-  assert.ok(/p\.type !== 'scope' && p\.type !== 'diffscope'/.test(appSrc), 'T-DIFFSCOPE: sampleScopeProbes must handle diffscope probes');
-  const diffSampleMatch = appSrc.match(/if \(p\.type === 'diffscope'\) \{([\s\S]*?)\}/);
-  assert.ok(diffSampleMatch, 'T-DIFFSCOPE: could not find the diffscope sampling branch in sampleScopeProbes');
+  assert.ok(/p\.type === 'scope' \|\| p\.type === 'diffscope'/.test(appSrc), 'T-DIFFSCOPE: the scope-probe sampling path must handle diffscope probes');
+  // the diffscope va-vb computation lives in rawScopeValue (a shared
+  // helper the trigger detector and the coupling/bandwidth pipeline both
+  // read from, rather than duplicated inline in sampleScopeProbes itself)
+  const diffSampleMatch = appSrc.match(/if \(p\.type === 'diffscope'\) \{([\s\S]*?)\n    \}/);
+  assert.ok(diffSampleMatch, 'T-DIFFSCOPE: could not find the diffscope sampling branch');
   assert.ok(/va - vb/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must compute va - vb (terminal 0 minus terminal 1), not something else');
   assert.ok(/terminals\[0\]\.cellId/.test(diffSampleMatch[1]) && /terminals\[1\]\.cellId/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must read its own two terminals, not e.g. terminal 0 twice');
 
