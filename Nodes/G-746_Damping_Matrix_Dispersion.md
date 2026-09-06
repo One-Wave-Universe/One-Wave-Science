@@ -1,40 +1,41 @@
 ---
 id: G-746
-title: Damping-Matrix Dispersion and Dual E1 Problems
-status: yellow-math-trail
-tier: yellow
-claim_boundary: exact linear algebra for declared models; not a vacuum derivation; not an a0 closure; not Mass Effect
+title: E1 Scalar Dual Problem and Matrix Handoff
+status: split-gate
+claim_boundary: GREEN only for the assumed scalar PDE; YELLOW for lattice identity, matrix physics, and E5
 ---
 
-# G-746 — Damping-Matrix Dispersion
+# G-746 / E1 — Scalar Dual Problem
 
-**Brick:** Yellow
-**Advances:** G-728 E1 (scalar exact + dual problem + matrix characteristic)
-**Does not close:** E5, F5, C-322, Hoyle, a0
-
-## 1. Scalar continuum (exact for this PDE)
-
-Model:
+Assumed scalar PDE (not asserted to be the One-Wave lattice branch):
 
 \[
 \partial_t^2\psi+\gamma\partial_t\psi-c_{\mathrm{eff}}^2\nabla^2\psi+\omega_0^2\psi=0.
 \]
 
-Ansatz \(\psi\propto e^{i(kx-\omega t)}\).
+## GREEN / EXACT FOR THE ASSUMED SCALAR PDE
 
-Temporal problem (real \(k\)):
+Temporal characteristic (real \(k\)):
 
 \[
 \omega^2+i\gamma\omega-\Omega_k^2=0,
 \qquad
-\Omega_k^2=c_{\mathrm{eff}}^2k^2+\omega_0^2,
+\Omega_k^2=c_{\mathrm{eff}}^2k^2+\omega_0^2.
 \]
+
+Exact roots:
 
 \[
-\omega_\pm=-\frac{i\gamma}{2}\pm\sqrt{\Omega_k^2-\gamma^2/4}.
+\omega_\pm(k)=-\frac{i\gamma}{2}\pm\sqrt{c_{\mathrm{eff}}^2k^2+\omega_0^2-\frac{\gamma^2}{4}}.
 \]
 
-If \(\Omega_k^2>\gamma^2/4\) the mode oscillates and decays. If \(\Omega_k^2<\gamma^2/4\) it is overdamped **in time**. That is not spatial evanescence.
+Temporal boundaries:
+
+- underdamped: \(\Omega_k^2>\gamma^2/4\)
+- critical: \(\Omega_k^2=\gamma^2/4\)
+- overdamped: \(\Omega_k^2<\gamma^2/4\)
+
+Overdamped means \(\omega\) is imaginary at real \(k\). It is not spatial evanescence.
 
 Spatial problem (real \(\omega\)):
 
@@ -44,75 +45,43 @@ k(\omega)=\pm\frac{1}{c_{\mathrm{eff}}}\sqrt{\omega^2+i\gamma\omega-\omega_0^2},
 \ell_{\mathrm{att}}=\frac{1}{|\mathrm{Im}\,k|}.
 \]
 
-Group velocity of a propagating branch:
+Underdamped propagating region, analytic group velocity:
 
 \[
-v_g=\frac{d}{dk}\mathrm{Re}\,\omega_+(k).
+v_g=\frac{d\,\mathrm{Re}\,\omega}{dk}
+=\frac{c_{\mathrm{eff}}^2k}{\sqrt{c_{\mathrm{eff}}^2k^2+\omega_0^2-\gamma^2/4}}.
 \]
 
-Critical surfaces: underdamped / critical / overdamped in time; propagating / cutoff in space. Code emits all four receipts separately.
+These six items are exact inside this linear scalar model. They are a completed scalar benchmark.
 
-## 2. A-114 discrete update (exact quadratic, general gamma)
+## YELLOW / NOT YET PHYSICAL CLOSURE
 
-A-114 already has the exact characteristic for the 1-D core update and only expanded it for small \(k\), small \(\gamma\). The exact statement is
+- whether this scalar PDE is the correct One-Wave lattice branch
+- Field/Void matrix structure
+- branch coupling
+- microscopic origin of \(\gamma\), \(c_{\mathrm{eff}}\), \(\omega_0\)
+
+Matrix handoff (Yellow, not a completed lattice):
 
 \[
-z^2-(2-\gamma+C)z+(1-\gamma)=0,
-\qquad
-C=\beta(\cos(k\,dx)-1),
-\qquad
-z=e^{-i\omega\,dt}.
+\det\!\left[-\omega^2 I-i\omega\Gamma+D(k)\right]=0.
 \]
 
-Roots \(z_\pm\) are exact for that linear discrete rule. \(\omega=i\log(z)/dt\) is in general complex. Persistent Mode (A-112) is the non-decaying case \(|z|=1\), which forces \(\gamma=0\) in this linear model. Finite \(\gamma\) is dissipation into an undeclared bath. That is why E5 may not assign \(\tfrac12\hbar\mathrm{Re}\,\omega\) without extra work.
+Two-component candidate wrappers exist in code. They do not promote the scalar PDE into the invariant engine.
 
-## 3. Matrix continuum (Field/Void capable)
+A-114 discrete quadratic at general \(\gamma\) remains available as a separate exact statement for the 1-D core update rule. Finite \(\gamma\) still implies an undeclared bath.
 
-\[
-\ddot{\boldsymbol\psi}+\Gamma\dot{\boldsymbol\psi}+D(k)\boldsymbol\psi=0.
-\]
+## E5 remains YELLOW
 
-Plane wave \(\boldsymbol\psi\propto e^{\lambda t}e^{ikx}\) with \(\lambda=-i\omega\):
+Blocked by:
 
-\[
-\boxed{\det(\lambda^2 I+\lambda\Gamma+D(k))=0.}
-\]
+1. completed multi-branch / matrix dispersion as physics, not just algebra
+2. rigorous treatment of damping / open-system energy
+3. independently derived invariant \(I_0\)
+4. closure that fixes \(a_0\) without 125 GeV or Hoyle back-fitting
 
-Equivalent \(\omega\) form:
-
-\[
-\det(-\omega^2 I-i\omega\Gamma+D(k))=0.
-\]
-
-Two-component Field/Void candidate (real symmetric coupling):
-
-\[
-\Gamma=
-\begin{pmatrix}\gamma_F&\gamma_\times\\ \gamma_\times&\gamma_V\end{pmatrix},
-\qquad
-D(k)=
-\begin{pmatrix}c_F^2k^2+\omega_F^2&\kappa\\ \kappa&c_V^2k^2+\omega_V^2\end{pmatrix}.
-\]
-
-Characteristic polynomial in \(\lambda\):
-
-\[
-\lambda^4+(\gamma_F+\gamma_V)\lambda^3
-+(d_F+d_V+\gamma_F\gamma_V-\gamma_\times^2)\lambda^2
-+(\gamma_F d_V+\gamma_V d_F-2\gamma_\times\kappa)\lambda
-+(d_F d_V-\kappa^2)=0.
-\]
-
-Decoupled limit \(\gamma_\times=\kappa=0\) recovers two independent scalar E1 roots. Coupled limit splits branches; avoided crossings are allowed. No seventh route is created. Two fields × temporal roots are branches of one linear system, not new kernel addresses.
-
-## 4. What this does not do
-
-- Does not fix \(c_{\mathrm{eff}},\omega_0,\gamma,\beta\).
-- Does not identify 125 GeV with a zone edge (G-745).
-- Does not close E5. Vacuum-mode integrals and Einstein-prefactor closures remain forbidden until an independent \(I_0\) exists and dissipation has a bath model.
-- Does not replace Field/Void ontology with matrix entries. \(\Gamma\) and \(D\) are wrappers over the invariant engine.
+No vacuum-mode integral. No \(c^4\mathcal{R}/(8\pi G)\). No G-745 conversion promoted. G-745 quarantine stands.
 
 ## Executable
 
 `One_Wave_Bench/logic_core/damping_matrix_dispersion.py`
-`One_Wave_Bench/logic_core/test_damping_matrix_dispersion.py`

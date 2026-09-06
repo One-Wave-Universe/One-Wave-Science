@@ -1,6 +1,7 @@
-"""G-746 damping-matrix dispersion.
+"""G-746 / E1 scalar dual problem.
 
-Exact linear algebra for declared models. Not an a0 or vacuum derivation.
+GREEN: exact formulas for the assumed scalar PDE.
+YELLOW: matrix wrapper and physical closure.
 """
 
 from __future__ import annotations
@@ -10,6 +11,10 @@ import math
 from typing import Dict, List, Tuple
 
 import numpy as np
+
+SCALAR_GATE = "GREEN"
+MATRIX_GATE = "YELLOW"
+E5_GATE = "YELLOW"
 
 
 def omega_temporal_scalar(k: float, c_eff: float, omega0: float, gamma: float) -> Tuple[complex, complex]:
@@ -44,10 +49,11 @@ def attenuation_length(omega: float, c_eff: float, omega0: float, gamma: float) 
     return 1.0 / im
 
 
-def group_velocity_real(k: float, c_eff: float, omega0: float, gamma: float, dk: float = 1e-6) -> float:
-    w1, _ = omega_temporal_scalar(k + dk, c_eff, omega0, gamma)
-    w0, _ = omega_temporal_scalar(k - dk, c_eff, omega0, gamma)
-    return ((w1.real - w0.real) / (2.0 * dk))
+def group_velocity_analytic(k: float, c_eff: float, omega0: float, gamma: float) -> float:
+    disc = c_eff * c_eff * k * k + omega0 * omega0 - 0.25 * gamma * gamma
+    if disc <= 0:
+        return 0.0
+    return (c_eff * c_eff * k) / math.sqrt(disc)
 
 
 def a114_z_roots(k: float, dx: float, beta: float, gamma: float) -> Tuple[complex, complex]:
@@ -57,15 +63,6 @@ def a114_z_roots(k: float, dx: float, beta: float, gamma: float) -> Tuple[comple
     disc = b * b - 4.0 * c
     root = cmath.sqrt(disc)
     return ((-b + root) / 2.0, (-b - root) / 2.0)
-
-
-def a114_omega(k: float, dx: float, dt: float, beta: float, gamma: float) -> Tuple[complex, complex]:
-    z1, z2 = a114_z_roots(k, dx, beta, gamma)
-    def w(z: complex) -> complex:
-        if z == 0:
-            return complex("nan")
-        return 1j * cmath.log(z) / dt
-    return (w(z1), w(z2))
 
 
 def matrix_poly_lambda(k: float, cF: float, cV: float, wF: float, wV: float, gF: float, gV: float, gx: float, kappa: float) -> List[complex]:
@@ -94,7 +91,6 @@ def decoupled_matches_scalar(k: float, c_eff: float, omega0: float, gamma: float
     mat = matrix_omega_roots(
         k, cF=c_eff, cV=c_eff, wF=omega0, wV=omega0, gF=gamma, gV=gamma, gx=0.0, kappa=0.0
     )
-    # two copies of the same scalar pair
     snapped = set(_snap(mat))
     return scalar <= snapped
 
@@ -109,13 +105,15 @@ def _snap(vals) -> Tuple[complex, ...]:
 def receipt_scalar(k: float, c_eff: float, omega0: float, gamma: float) -> Dict[str, object]:
     wp, wm = omega_temporal_scalar(k, c_eff, omega0, gamma)
     return {
-        "brick": "Yellow",
-        "model": "scalar_damped_kg",
+        "scalar_gate": SCALAR_GATE,
+        "matrix_gate": MATRIX_GATE,
+        "e5_gate": E5_GATE,
+        "model": "assumed_scalar_damped_kg",
         "k": k,
         "omega_plus": wp,
         "omega_minus": wm,
         "temporal_regime": temporal_regime(k, c_eff, omega0, gamma),
-        "vg_plus": group_velocity_real(k, c_eff, omega0, gamma),
+        "vg_plus": group_velocity_analytic(k, c_eff, omega0, gamma),
         "derived_a0": False,
         "closes_E5": False,
     }

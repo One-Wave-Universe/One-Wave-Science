@@ -1,8 +1,9 @@
-# Updated 47 — Damping-matrix dispersion (E1 expansion)
+# Updated 47 — G-746 / E1 scalar dual problem
 
 **Date:** 2026-09-05
-**Brick:** Yellow
 
-Added G-746. Scalar continuum dual problems \(\omega(k)\) and \(k(\omega)\) are exact for the linear damped KG-like PDE. A-114 discrete quadratic is solved for general gamma. 2x2 Field/Void matrix characteristic polynomial is implemented.
+Split gate locked:
 
-E5 is not cleared. G-745 a0 quarantine stands.
+- GREEN: exact scalar dual problem on the assumed damped KG-like PDE, including analytic \(v_g\).
+- YELLOW: whether that PDE is the One-Wave lattice, matrix structure, coupling, parameter origins.
+- E5 remains YELLOW with four explicit blockers. G-745 stands.

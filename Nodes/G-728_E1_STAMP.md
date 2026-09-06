@@ -1,26 +1,16 @@
 ---
 id: G-728-E1-STAMP
-title: Official E1 partial stamp
-status: yellow
+title: Official E1 split stamp
 ---
 
 # G-728 E1 stamp (2026-09-05)
 
-**E1 scalar + dual problem + 2x2 matrix characteristic: PARTIAL, Yellow.**
+**G-746 / E1 scalar dual problem.**
 
-Closed for the declared linear models:
-- continuum damped KG-like \(\omega(k)\) and \(k(\omega)\)
-- \(v_g\), \(\ell_{\rm att}\), temporal regime labels
-- A-114 exact discrete quadratic at general \(\gamma\)
-- Field/Void 2x2 \(\det(\lambda^2 I+\lambda\Gamma+D(k))=0\)
+GREEN / exact for the assumed scalar PDE: temporal characteristic, \(\omega_\pm(k)\), under/critical/overdamped boundaries, real-\(\omega\) \(k(\omega)\), \(\ell_{\mathrm{att}}\), analytic \(v_g\).
+
+YELLOW: lattice-branch identity, Field/Void matrix, coupling, origin of \((\gamma,c_{\mathrm{eff}},\omega_0)\).
+
+E5 YELLOW, blocked by matrix-as-physics, open-system energy, independent \(I_0\), no-125/no-Hoyle closure.
 
 Artifact: `Nodes/G-746_Damping_Matrix_Dispersion.md`
-Code: `One_Wave_Bench/logic_core/damping_matrix_dispersion.py`
-
-Still open inside E1 family:
-- measured \(\Gamma, D\) from a physical lattice
-- N>2 branches
-- preferred-frame / Lorentz honesty (E4)
-- numerical stencil dispersion (E3)
-
-**E5 is not stamped.** No vacuum integral, no Einstein prefactor, no a0, no Hoyle.
