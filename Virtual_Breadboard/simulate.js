@@ -257,6 +257,39 @@ function toEngineElements(parts) {
         windings: memoryCoreWindings(p),
         hcAmpTurns: coreDef.hcAmpTurns, phiSat: coreDef.phiSat, switchTau: coreDef.switchTau,
       });
+    } else if (p.type === 'latchrelay') {
+      // one real coil (electrically identical to a single-winding
+      // memorycore -- the engine's `memoryCores` filter picks up either
+      // type by matching on c.windings) plus a genuinely separate
+      // mechanical contact pair; N=1 because this is a fixed real part
+      // (TQ2-L-5V-class), not a user-wound toroid/core.
+      const t = p.terminals;
+      const lrSpec = CircuitEngine.LATCHRELAY_SPEC;
+      components.push({
+        id: p.id, type: 'latchrelay', label: p.id,
+        windings: [{ a: t[0].cellId, b: t[1].cellId, N: 1, R: lrSpec.coilR }],
+        contactA: t[2].cellId, contactB: t[3].cellId,
+        // the shared magnetic-dynamics loop (memoryCores.forEach in
+        // circuit.js) reads these three fields straight off the component,
+        // exactly like a memorycore's -- latchRelaySpec()'s own defaults
+        // merge is used elsewhere (armature/contact logic) but does NOT
+        // feed this loop, so they must be set here too or the core never
+        // sees a real coercive threshold.
+        hcAmpTurns: lrSpec.hcAmpTurns, phiSat: lrSpec.phiSat, switchTau: lrSpec.switchTau,
+      });
+    } else if (p.type === 'hbridge') {
+      const t = p.terminals;
+      components.push({
+        id: p.id, type: 'hbridge', label: p.id,
+        in1: t[0].cellId, in2: t[1].cellId, vm: t[2].cellId, gnd: t[3].cellId,
+        out1: t[4].cellId, out2: t[5].cellId,
+      });
+    } else if (p.type === 'schmitt') {
+      const t = p.terminals;
+      components.push({
+        id: p.id, type: 'schmitt', label: p.id,
+        in: t[0].cellId, out: t[1].cellId, vcc: t[2].cellId, gnd: t[3].cellId,
+      });
     } else {
       components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed });
     }
@@ -480,10 +513,35 @@ function valueFor(lastResult, nodeNameCellIds, measurementsSpec, ref) {
 // state (memory-core remanence, capacitor charge, comparator latch, etc.)
 // genuinely carries across stages -- releasing a drive and continuing
 // the solve is not a reset.
+// per-stage trace statistics for one declared signal (a named node, a
+// named measurement/difference, or a core's B/flux): real min/max/peak
+// over the stage, and a real settling time -- the LATEST time within the
+// stage the value was still outside a real tolerance band around the
+// stage's own final value, i.e. "how long until it stopped moving",
+// not a single end-of-stage sample. A signal that never leaves the band
+// settles instantly (settledAt = the stage's own start time).
+function traceStatsFromSamples(samples, settleBandFrac) {
+  if (!samples.length) return null;
+  const values = samples.map((s) => s.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const final = values[values.length - 1];
+  const band = Math.max(Math.abs(final) * (settleBandFrac || 0.02), 1e-9);
+  let settledAt = samples[0].t;
+  for (let i = samples.length - 1; i >= 0; i--) {
+    if (Math.abs(samples[i].value - final) > band) {
+      settledAt = i + 1 < samples.length ? samples[i + 1].t : samples[i].t;
+      break;
+    }
+  }
+  return { min, max, peak: Math.max(Math.abs(min), Math.abs(max)), final, settledAt };
+}
+
 function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   const stages = experimentSpec.stages || [];
   const eventsSpec = experimentSpec.events || [];
   const persistenceSpec = experimentSpec.persistence || null;
+  const tracesSpec = experimentSpec.traces || [];
   const nodeNameCellIds = snapOpts.nodeNameCellIds;
   const measurementsSpec = snapOpts.measurements;
   const errors = [];
@@ -514,10 +572,16 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
     const seconds = stage.seconds != null ? stage.seconds : 0.01;
     const steps = Math.max(1, Math.round(seconds / dt));
     const stageStartT = t;
+    const traceSamples = new Map(tracesSpec.map((tr) => [tr.label, []]));
 
     for (let i = 0; i < steps; i++) {
       t += dt;
       lastResult = circuit.solve(elements, dt);
+
+      tracesSpec.forEach((tr) => {
+        const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, tr);
+        if (val != null) traceSamples.get(tr.label).push({ t, value: val });
+      });
 
       eventsSpec.forEach((ev) => {
         const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, ev);
@@ -545,11 +609,18 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
       }
     }
 
+    const traces = {};
+    tracesSpec.forEach((tr) => {
+      const stats = traceStatsFromSamples(traceSamples.get(tr.label), tr.settleBandFrac);
+      if (stats) traces[tr.label] = stats;
+    });
+
     stageLog.push({
       name: stage.name,
       startT: Number(stageStartT.toFixed(9)),
       endT: Number(t.toFixed(9)),
       snapshot: snapshot(lastResult, snapOpts),
+      traces,
     });
   });
 
@@ -683,5 +754,5 @@ module.exports = {
   mulberry32, toleranceFor, perturbParts, getPath, runOneTrial, runMonteCarlo,
   resolveNodeNames, namedVoltagesFrom, measurementsFrom,
   buildSweepValues, applySweepValue, runSweep,
-  valueFor, runExperiment,
+  valueFor, runExperiment, traceStatsFromSamples,
 };

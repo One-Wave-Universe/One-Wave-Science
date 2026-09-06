@@ -1,0 +1,260 @@
+{
+  "_readme": [
+    "PROTOTYPE_001 -- the first serious breadboard prototype from the user's",
+    "hardware-scaling plan: two independent Field/Void magnetic memory state",
+    "machines (A and B, each a real TQ2-L-5V-class latching relay driven by",
+    "its own DRV8833-class H-bridge half), an M4-style router that issues",
+    "GPIO-level write commands but does NOT own the magnetic memory itself,",
+    "real physical contact readback (never assumed from the command that was",
+    "issued), and a fast/oversight/override timing chain built from real RC",
+    "delays feeding SN74HC14-class Schmitt-trigger gates. Run with:",
+    "  node simulate.js experiments/prototype_001.json",
+    "",
+    "Every part here is an ordinary, already-validated real component from",
+    "js/circuit.js (battery, resistor, capacitor, wire, diffsource,",
+    "hbridge, latchrelay, schmitt) -- the solver has no idea this board is",
+    "called PROTOTYPE_001 or that a node means 'SENSEA'; those are labels",
+    "declared in nodeNames/measurements purely for this file's own",
+    "readability and for the events/persistence/traces checks to refer to.",
+    "",
+    "Circuit:",
+    "  - bat1: one 5V rail pair (railTP/railBM) shared by everything, exactly",
+    "    like a real breadboard power rail spanning the whole board.",
+    "  - in1A/in2A/in1B/in2B: four diffsource parts standing in for M4's real",
+    "    GPIO-class logic outputs (5V/0V, 100ohm source impedance -- a real",
+    "    push-pull digital driver's output impedance, not an ideal voltage",
+    "    source). M4 only ever touches these four lines -- it has no other",
+    "    electrical connection to the magnetic memory, matching the",
+    "    requirement that M4 route without owning the memory.",
+    "  - hbA/hbB: one DRV8833-class H-bridge channel per relay coil, each",
+    "    with real body-diode flyback, real propagation delay, real input",
+    "    threshold, and real undervoltage lockout.",
+    "  - lrA/lrB: the two real latching relays. Each coil is electrically a",
+    "    single-winding memorycore (same square-loop Hc/remanence/switchTau",
+    "    dynamics, the same code path, not a special case), and each has a",
+    "    genuinely separate mechanical contact pair.",
+    "  - Real contact-sense circuit (never assume the command = success):",
+    "    each relay's COM contact is wired straight to the +5V rail, and its",
+    "    NO contact is pulled down to GND through a 100k resistor. Closed",
+    "    (Field/set) pulls the sense node to ~5V through the real ~0.05ohm",
+    "    contact; open (Void/reset) leaves it pulled to ~0V by the 100k --",
+    "    a real logic-level swing that genuinely depends on the mechanical",
+    "    armature having actually moved, not on what was commanded.",
+    "  - Fast/Oversight/Override timing chain (tapped off SENSEA as ONE",
+    "    representative channel -- duplicating the same RC+Schmitt pattern",
+    "    per channel, or building a true analog differential front end",
+    "    before the taps, is the same pattern repeated and is deferred for",
+    "    scope, noted honestly rather than faked):",
+    "      Fast:      SENSEA -> sgFast directly (bounded only by the",
+    "                 Schmitt's own ~15ns propagation delay -- 'fast' here",
+    "                 really means 'no deliberate added delay', the actual",
+    "                 floor is the relay's own ms-scale switching time).",
+    "      Oversight: FAST_OUT -> 10k/1uF RC (tau=10ms) -> sgOversight.",
+    "      Override:  FAST_OUT -> 25k/1uF RC (tau=25ms) -> sgOverride, a",
+    "                 real, larger, separately visible delay before the",
+    "                 override tap agrees with the fast path.",
+    "    Real problem found (and fixed) while building this, kept here as",
+    "    an honest record rather than quietly corrected away: the first",
+    "    version tapped both RC networks directly off the raw SENSEA node",
+    "    (no buffer). Real capacitor charge from the 10k/25k RC legs then",
+    "    fed back INTO the sense node itself, capacitively loading it and",
+    "    slowing even the 'fast' path's own transition to ~100ms+ instead",
+    "    of the relay's real few-ms mechanical time -- a genuine hardware",
+    "    mistake a real bench build could make, not a solver bug (proven",
+    "    by tracing the exact 10k/1uF and 25k/1uF time constants bleeding",
+    "    back onto SENSEA). Fixed by tapping the oversight/override RC legs",
+    "    off FAST_OUT (the Schmitt gate's own low-impedance push-pull",
+    "    output) instead of the raw mechanical contact -- a real buffer,",
+    "    exactly what a bench build needs here too.",
+    "",
+    "IMPORTANT, disproving result found by actually running this (not",
+    "papered over): the 'Diff' measurement (SENSEA - SENSEB) that a",
+    "differential readout would naturally reach for CANNOT distinguish real",
+    "Void/Void (both relays open, Diff~0V) from real Field/Field conflict",
+    "(both relays closed, Diff~0V) -- a plain difference silently coerces",
+    "conflict into 'center'. Real conflict detection needs both sense lines",
+    "read independently (e.g. 'both high' vs 'both low' are different",
+    "physical states even though they subtract to the same number), which",
+    "is why this file's events list watches SENSEA and SENSEB separately",
+    "in addition to declaring the Diff measurement, and the conflict stages",
+    "at the end exist specifically to surface this rather than assume it.",
+    "",
+    "Explicitly NOT implemented in this pass (deferred, not hidden):",
+    "  - A true analog differential front end or per-channel oversight/",
+    "    override taps for BOTH relays (only SENSEA's chain is built; SENSEB",
+    "    is read directly as a named node for the conflict check above).",
+    "  - Override actually reversing/cancelling a route in closed-loop",
+    "    fashion -- this file only proves the override tap sees the real",
+    "    delayed readback; using that to command a reversal is a follow-up.",
+    "  - Contact bounce / coil-heating / temperature evolution over the",
+    "    experiment's real timescale (the underlying components model these",
+    "    already -- see LATCHRELAY_SPEC/HBRIDGE_SPEC in circuit.js -- this",
+    "    experiment's dt/duration were not specifically tuned to surface them).",
+    "  - The 100+ cycle repeated-run statistics harness (separate task).",
+    "",
+    "Every write stage is followed by a real coast (no-drive) hold stage --",
+    "the magnetic state during the hold is held by real remanence alone,",
+    "not by sustained drive current, which is the actual persistence claim",
+    "being tested (see the 'persistence' block below)."
+  ],
+  "layout": "1large",
+  "nodeNames": {
+    "IN1A": { "row": "a", "col": 5 },
+    "IN2A": { "row": "a", "col": 8 },
+    "IN1B": { "row": "a", "col": 11 },
+    "IN2B": { "row": "a", "col": 14 },
+    "SENSEA": { "row": "a", "col": 31 },
+    "SENSEB": { "row": "a", "col": 33 },
+    "OVERSIGHT_RC": { "row": "a", "col": 42 },
+    "OVERRIDE_RC": { "row": "a", "col": 46 },
+    "FAST_OUT": { "row": "a", "col": 40 },
+    "OVERSIGHT_OUT": { "row": "a", "col": 44 },
+    "OVERRIDE_OUT": { "row": "a", "col": 48 }
+  },
+  "parts": [
+    { "id": "bat1", "type": "battery", "value": 5, "terminals": [{ "row": "railTP", "col": 1 }, { "row": "railBM", "col": 1 }] },
+
+    { "id": "in1A", "type": "diffsource", "value": 0, "sourceR": 100, "terminals": [{ "row": "a", "col": 5 }, { "row": "railBM", "col": 6 }] },
+    { "id": "in2A", "type": "diffsource", "value": 5, "sourceR": 100, "terminals": [{ "row": "a", "col": 8 }, { "row": "railBM", "col": 9 }] },
+    { "id": "in1B", "type": "diffsource", "value": 0, "sourceR": 100, "terminals": [{ "row": "a", "col": 11 }, { "row": "railBM", "col": 12 }] },
+    { "id": "in2B", "type": "diffsource", "value": 5, "sourceR": 100, "terminals": [{ "row": "a", "col": 14 }, { "row": "railBM", "col": 15 }] },
+
+    { "id": "hbA", "type": "hbridge", "terminals": [
+      { "row": "b", "col": 5 }, { "row": "b", "col": 8 },
+      { "row": "railTP", "col": 20 }, { "row": "railBM", "col": 20 },
+      { "row": "a", "col": 25 }, { "row": "a", "col": 26 }
+    ] },
+    { "id": "hbB", "type": "hbridge", "terminals": [
+      { "row": "b", "col": 11 }, { "row": "b", "col": 14 },
+      { "row": "railTP", "col": 21 }, { "row": "railBM", "col": 21 },
+      { "row": "a", "col": 27 }, { "row": "a", "col": 28 }
+    ] },
+
+    { "id": "lrA", "type": "latchrelay", "terminals": [
+      { "row": "b", "col": 25 }, { "row": "b", "col": 26 },
+      { "row": "a", "col": 30 }, { "row": "a", "col": 31 }
+    ] },
+    { "id": "lrB", "type": "latchrelay", "terminals": [
+      { "row": "b", "col": 27 }, { "row": "b", "col": 28 },
+      { "row": "a", "col": 32 }, { "row": "a", "col": 33 }
+    ] },
+
+    { "type": "wire", "terminals": [{ "row": "c", "col": 30 }, { "row": "railTP", "col": 30 }] },
+    { "type": "wire", "terminals": [{ "row": "c", "col": 32 }, { "row": "railTP", "col": 32 }] },
+
+    { "id": "rA_pd", "type": "resistor", "value": 100000, "terminals": [{ "row": "b", "col": 31 }, { "row": "railBM", "col": 31 }] },
+    { "id": "rB_pd", "type": "resistor", "value": 100000, "terminals": [{ "row": "b", "col": 33 }, { "row": "railBM", "col": 33 }] },
+
+    { "id": "sgFast", "type": "schmitt", "terminals": [
+      { "row": "c", "col": 31 }, { "row": "a", "col": 40 },
+      { "row": "railTP", "col": 40 }, { "row": "railBM", "col": 40 }
+    ] },
+
+    { "id": "rOversight", "type": "resistor", "value": 10000, "terminals": [{ "row": "b", "col": 40 }, { "row": "a", "col": 42 }] },
+    { "id": "cOversight", "type": "capacitor", "value": 1e-6, "terminals": [{ "row": "b", "col": 42 }, { "row": "railBM", "col": 42 }] },
+    { "id": "sgOversight", "type": "schmitt", "terminals": [
+      { "row": "c", "col": 42 }, { "row": "a", "col": 44 },
+      { "row": "railTP", "col": 44 }, { "row": "railBM", "col": 44 }
+    ] },
+
+    { "id": "rOverride", "type": "resistor", "value": 25000, "terminals": [{ "row": "c", "col": 40 }, { "row": "a", "col": 46 }] },
+    { "id": "cOverride", "type": "capacitor", "value": 1e-6, "terminals": [{ "row": "b", "col": 46 }, { "row": "railBM", "col": 46 }] },
+    { "id": "sgOverride", "type": "schmitt", "terminals": [
+      { "row": "c", "col": 46 }, { "row": "a", "col": 48 },
+      { "row": "railTP", "col": 48 }, { "row": "railBM", "col": 48 }
+    ] }
+  ],
+  "measurements": [
+    { "label": "Diff", "a": "SENSEA", "b": "SENSEB" }
+  ],
+  "experiment": {
+    "stages": [
+      { "name": "s00_init_void_A", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 5 },
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s01_init_void_B", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 },
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 5 }
+      ] },
+      { "name": "s02_center_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 },
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s03_left_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 5 }, { "partId": "in2A", "field": "value", "value": 0 }
+      ] },
+      { "name": "s04_left_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 }
+      ] },
+      { "name": "s05_center_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 5 }
+      ] },
+      { "name": "s06_center_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 }
+      ] },
+      { "name": "s07_right_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 5 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s08_right_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s09_center_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 5 }
+      ] },
+      { "name": "s10_center_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s11_left_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 5 }, { "partId": "in2A", "field": "value", "value": 0 }
+      ] },
+      { "name": "s12_left_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 }
+      ] },
+      { "name": "s13_right_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 5 },
+        { "partId": "in1B", "field": "value", "value": 5 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s14_right_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 },
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s15_center_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 5 }
+      ] },
+      { "name": "s16_center_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s17_conflict_write", "seconds": 0.02, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 5 }, { "partId": "in2A", "field": "value", "value": 0 },
+        { "partId": "in1B", "field": "value", "value": 5 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] },
+      { "name": "s18_conflict_hold", "seconds": 0.15, "dt": 0.001, "set": [
+        { "partId": "in1A", "field": "value", "value": 0 }, { "partId": "in2A", "field": "value", "value": 0 },
+        { "partId": "in1B", "field": "value", "value": 0 }, { "partId": "in2B", "field": "value", "value": 0 }
+      ] }
+    ],
+    "events": [
+      { "label": "A_field_lock", "core": "lrA", "threshold": 0.5, "direction": "rising" },
+      { "label": "A_void_lock", "core": "lrA", "threshold": -0.5, "direction": "falling" },
+      { "label": "B_field_lock", "core": "lrB", "threshold": 0.5, "direction": "rising" },
+      { "label": "B_void_lock", "core": "lrB", "threshold": -0.5, "direction": "falling" },
+      { "label": "senseA_closed", "node": "SENSEA", "threshold": 2.5, "direction": "rising" },
+      { "label": "senseA_open", "node": "SENSEA", "threshold": 2.5, "direction": "falling" },
+      { "label": "senseB_closed", "node": "SENSEB", "threshold": 2.5, "direction": "rising" },
+      { "label": "senseB_open", "node": "SENSEB", "threshold": 2.5, "direction": "falling" },
+      { "label": "fast_falls", "node": "FAST_OUT", "threshold": 2.5, "direction": "falling" },
+      { "label": "fast_rises", "node": "FAST_OUT", "threshold": 2.5, "direction": "rising" },
+      { "label": "oversight_falls", "node": "OVERSIGHT_OUT", "threshold": 2.5, "direction": "falling" },
+      { "label": "oversight_rises", "node": "OVERSIGHT_OUT", "threshold": 2.5, "direction": "rising" },
+      { "label": "override_falls", "node": "OVERRIDE_OUT", "threshold": 2.5, "direction": "falling" },
+      { "label": "override_rises", "node": "OVERRIDE_OUT", "threshold": 2.5, "direction": "rising" }
+    ],
+    "persistence": { "label": "LeftHoldsWithoutDrive", "measurement": "Diff", "baselineStage": "s02_center_hold", "holdStage": "s04_left_hold", "minDelta": 3.0 },
+    "traces": [
+      { "label": "Diff", "measurement": "Diff", "settleBandFrac": 0.05 },
+      { "label": "OversightRC", "node": "OVERSIGHT_RC", "settleBandFrac": 0.02 },
+      { "label": "OverrideRC", "node": "OVERRIDE_RC", "settleBandFrac": 0.02 }
+    ]
+  }
+}

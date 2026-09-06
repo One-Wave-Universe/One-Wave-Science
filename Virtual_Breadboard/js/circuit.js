@@ -215,6 +215,31 @@
   const AC_RINT = 1; // ohms, output impedance of an ideal AC/function-generator source
   const MTJ_RINT = 200; // ohms, buffered analog-output impedance of a real MTJ/TMR angle-sensor IC's sin/cos pins
 
+  // Single-coil magnetic latching relay (e.g. Panasonic TQ2-L-5V class):
+  // reverse the coil drive polarity to set/reset, the contact state is
+  // held by real remanence after the drive pulse disappears. Electrically
+  // this is a real coil (resistance + the SAME square-loop magnetic
+  // dynamics the memorycore already models -- polarity-sensitive
+  // set/reset, real coercive threshold, real finite switching time,
+  // genuine incomplete-switching if the drive pulse doesn't supply enough
+  // current for long enough) driving a real mechanical contact. Values
+  // below are honest order-of-magnitude approximations for this part
+  // class from public datasheet figures, not one specific lot's spec.
+  const LATCHRELAY_SPEC = {
+    coilR: 139, // ohms, 5V-coil-class winding resistance
+    hcAmpTurns: 0.02, // amps (turns=1 for a lumped single coil, so this IS the real "must-operate" current) -- comfortably below a nominal 5V/139ohm~=36mA drive, comfortably above real coil leakage, so a weak/marginal drive genuinely fails to switch
+    phiSat: 4e-6, // Weber-equivalent, sized for a modest, real-scale induced-voltage kick on switching -- relay datasheets don't publish this directly, approximate
+    switchTau: 0.003, // seconds, real small-latching-relay operate/release time
+    contactR: 0.05, // ohms, real closed-contact resistance for a small signal relay
+    contactOpenR: 1e9, // ohms, effectively open
+    armatureThreshold: 0.5, // fraction of full remanence; the mechanical armature is a real snap-action mechanism, not proportional -- it only actually moves once driven this far past center, then holds (hysteretic) until driven the other way
+    bounceDuration: 0.005, // seconds, real mechanical contact bounce/settling window after an actual armature transition
+    bounceRFrac: 3, // contact resistance during bounce is noisy and elevated by roughly this factor over nominal, real for a bouncing mechanical contact
+  };
+  function latchRelaySpec(c) {
+    return Object.assign({}, LATCHRELAY_SPEC, c && c.spec);
+  }
+
   // Discrete MOSFETs: real parts, real limits. "value" selects between two
   // real part classes rather than a made-up continuous parameter -- the
   // same idea as LED_VF picking a real forward-voltage family by color.
@@ -276,6 +301,60 @@
     // honest headroom, not RAIL_CLAMP_VF's more generic default.
     clampVf: 0.1,
   };
+
+  // Reversible inductive H-bridge driver (DRV8833-class; one component
+  // instance is ONE bridge/channel -- a real DRV8833 packages two of
+  // these). Real logic-level control inputs (in1/in2) select a real
+  // 4-state truth table (coast/forward/reverse/brake), and real body
+  // diodes on both outputs (present regardless of FET state, exactly like
+  // a real MOSFET's own body diode) provide the real flyback/recirculation
+  // path an inductive load needs -- an ideal bridge that could reverse
+  // inductor current instantaneously is not physically possible.
+  const HBRIDGE_SPEC = {
+    name: 'DRV8833-class H-bridge (one channel)',
+    ronHS: 0.15, // ohms, real high-side FET RDS(on)
+    ronLS: 0.15, // ohms, real low-side FET RDS(on)
+    bodyDiodeVf: 0.7, // volts, real body-diode forward drop (silicon)
+    bodyDiodeRon: 5, // ohms, real body-diode forward resistance
+    // seconds; real logic-to-output propagation delay, INCLUDING this
+    // part's real internal shoot-through-prevention dead time -- a
+    // datasheet's propagation-delay figure already reflects that the part
+    // never has both FETs on the same output conducting at once, so this
+    // single delay is an honest simplification of "current can't reverse
+    // instantaneously and switching isn't infinitely fast", not a
+    // separate two-stage dead-time model.
+    propDelay: 3e-7,
+    inputThreshold: 1.3, // volts, real logic input threshold (CMOS/TTL-class)
+    vmMin: 2.7, // volts, real minimum motor-supply voltage (below this, real undervoltage lockout forces outputs off)
+    vmMax: 10.8, // volts, real maximum motor-supply voltage
+    currentLimit: 1.5, // amps, real per-channel continuous output current rating
+  };
+  function hbridgeSpec(c) {
+    return Object.assign({}, HBRIDGE_SPEC, c && c.spec);
+  }
+
+  // Single Schmitt-trigger inverter (SN74HC14-class, one of its six
+  // gates). Real hysteresis: the input has TWO thresholds, not one -- it
+  // has to rise past the higher one to register HIGH, then fall past the
+  // LOWER one to register LOW again, holding its prior decision anywhere
+  // in between. That gap is exactly what a noisy signal near a single
+  // fixed threshold needs to avoid chattering; a plain comparator (single
+  // threshold plus a fixed offset) cannot provide it. Real HC-family
+  // thresholds scale with supply voltage rather than being fixed volts,
+  // so they're specified here as fractions of VCC.
+  const SCHMITT_SPEC = {
+    name: 'SN74HC14 (hex Schmitt-trigger inverter, one gate)',
+    vtPlusFrac: 0.58, // fraction of VCC; input must rise above this to register HIGH (real HC-family ~2.9V typ at VCC=5V)
+    vtMinusFrac: 0.34, // fraction of VCC; input must fall below this to register LOW again (real HC-family ~1.7V typ at VCC=5V)
+    outputRon: 45, // ohms, real push-pull output impedance for this logic family
+    propDelay: 15e-9, // seconds, real gate propagation delay
+    vccMin: 2, // volts
+    vccMax: 6, // volts
+    clampVf: 0.3, // volts, real output protection headroom past the rails (not rail-to-rail like the comparator)
+  };
+  function schmittSpec(c) {
+    return Object.assign({}, SCHMITT_SPEC, c && c.spec);
+  }
 
   // shared time-domain waveform used by AC sources and the MTJ sensor's
   // sin/cos channels -- a real sinusoid evaluated at the simulator's own
@@ -358,6 +437,19 @@
       this._diffNoiseRng = new Map(); // diffsource id -> its own seeded PRNG (a real independent noise sequence over time)
       this._diffNoiseSample = new Map(); // diffsource id -> this frame's sampled noise volts (resampled once per new sim-clock tick, not per fixed-point iteration)
       this._diffNoiseAtT = new Map(); // diffsource id -> sim-clock time the cached sample was drawn at
+      this._latchContactClosed = new Map(); // latchrelay id -> boolean (real mechanical armature position -- a snap-action mechanism, not proportional to B)
+      this._latchLastFlipT = new Map(); // latchrelay id -> sim-clock time the contact last actually moved (drives the real post-transition bounce/unsettled window)
+      this._latchBounceRng = new Map(); // latchrelay id -> its own seeded PRNG for real bounce-noise contact resistance
+      this._latchBounceSample = new Map(); // latchrelay id -> this frame's sampled bounce noise factor
+      this._latchBounceAtT = new Map(); // latchrelay id -> sim-clock time the cached bounce sample was drawn at
+      this._hbridgeDesired = new Map(); // hbridge id -> 'coast'|'forward'|'reverse'|'brake', what the real IN1/IN2 comparison currently says
+      this._hbridgeDesiredSince = new Map(); // hbridge id -> sim-clock time the desired mode last changed
+      this._hbridgeMode = new Map(); // hbridge id -> the LATCHED mode actually driving the outputs, after real propagation delay
+      this._hbridgeDiodeState = new Map(); // "<id>:<out1|out2>:<hi|lo>" -> boolean, the real body-diode flyback paths, on/off exactly like a MOSFET's body diode
+      this._schmittInputHigh = new Map(); // schmitt id -> boolean, the real hysteretic input-side decision (updates instantly on threshold crossing, no propagation delay -- that's a real internal analog comparator, separate from the output stage)
+      this._schmittDesired = new Map(); // schmitt id -> boolean, the INVERTED output value the input-side decision currently implies, before propagation delay
+      this._schmittDesiredSince = new Map(); // schmitt id -> sim-clock time the desired output last changed
+      this._schmittState = new Map(); // schmitt id -> boolean, the LATCHED output actually driven, after real propagation delay
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -398,6 +490,32 @@
         return this._diffNoiseSample.get(c.id) || 0;
       };
       const effectiveSourceValue = (c) => (c.type === 'diffsource' ? c.value + diffNoiseSample(c) : c.value);
+
+      // real relay contact resistance: nominal closed/open value, except
+      // for a real, bounded window right after the armature actually moved
+      // (this frame's t vs the last real flip time -- see the armature
+      // decision above) where a real mechanical contact bounces, making
+      // and breaking intermittently -- modeled honestly here as noisy,
+      // elevated resistance rather than simulating literal chatter events.
+      // Resampled once per new sim-clock tick, not per fixed-point
+      // iteration, for the same reason diffsource's noise is.
+      const latchContactResistance = (lr) => {
+        const spec = latchRelaySpec(lr);
+        const closed = this._latchContactClosed.get(lr.id) || false;
+        const base = closed ? spec.contactR : spec.contactOpenR;
+        const lastFlip = this._latchLastFlipT.get(lr.id);
+        if (lastFlip == null || t - lastFlip >= spec.bounceDuration) return base;
+        if (this._latchBounceAtT.get(lr.id) !== t) {
+          if (!this._latchBounceRng.has(lr.id)) {
+            this._latchBounceRng.set(lr.id, mulberry32(hashSeed(lr.id + ':bounce')));
+          }
+          const rng = this._latchBounceRng.get(lr.id);
+          const factor = 1 + Math.abs(gaussianSample(rng)) * (spec.bounceRFrac - 1);
+          this._latchBounceSample.set(lr.id, factor);
+          this._latchBounceAtT.set(lr.id, t);
+        }
+        return base * (this._latchBounceSample.get(lr.id) || 1);
+      };
       const vgndInternal = (c) => '__vgndint__' + c.id;
       const acInternal = (c) => '__acint__' + c.id;
       const mtjSinInternal = (c) => '__mtjsin__' + c.id;
@@ -423,11 +541,19 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
-        if (c.type === 'memorycore') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
+        if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
+        if (c.type === 'latchrelay') { uf.find(c.contactA); uf.find(c.contactB); }
         if (c.type === 'comparator') {
           uf.find(c.in1p); uf.find(c.in1m); uf.find(c.out1);
           uf.find(c.in2p); uf.find(c.in2m); uf.find(c.out2);
           uf.find(c.vcc); uf.find(c.gnd);
+        }
+        if (c.type === 'hbridge') {
+          uf.find(c.in1); uf.find(c.in2); uf.find(c.vm); uf.find(c.gnd);
+          uf.find(c.out1); uf.find(c.out2);
+        }
+        if (c.type === 'schmitt') {
+          uf.find(c.in); uf.find(c.out); uf.find(c.vcc); uf.find(c.gnd);
         }
       });
 
@@ -447,8 +573,16 @@
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
-      const memoryCores = components.filter((c) => c.type === 'memorycore');
+      // a latchrelay's coil is, electrically, exactly a one-winding
+      // memorycore (real winding resistance + the same square-loop
+      // magnetic dynamics) -- folding it into the same array reuses all
+      // of that already-proven extra-unknown-row machinery unmodified.
+      // Its separate mechanical contact is stamped independently below,
+      // as an ordinary resistor whose value depends on the persisted B.
+      const memoryCores = components.filter((c) => c.type === 'memorycore' || c.type === 'latchrelay');
       const comparators = components.filter((c) => c.type === 'comparator');
+      const hbridges = components.filter((c) => c.type === 'hbridge');
+      const schmitts = components.filter((c) => c.type === 'schmitt');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -492,11 +626,19 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
-        if (c.type === 'memorycore') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
+        if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
+        if (c.type === 'latchrelay') { touch(c.contactA); touch(c.contactB); }
         if (c.type === 'comparator') {
           touch(c.in1p); touch(c.in1m); touch(c.out1);
           touch(c.in2p); touch(c.in2m); touch(c.out2);
           touch(c.vcc); touch(c.gnd);
+        }
+        if (c.type === 'hbridge') {
+          touch(c.in1); touch(c.in2); touch(c.vm); touch(c.gnd);
+          touch(c.out1); touch(c.out2);
+        }
+        if (c.type === 'schmitt') {
+          touch(c.in); touch(c.out); touch(c.vcc); touch(c.gnd);
         }
       });
       roots.add(groundRoot);
@@ -586,6 +728,21 @@
         if (!this._vgndLimited.has(v.id)) this._vgndLimited.set(v.id, false);
         if (!this._vgndLimitDir.has(v.id)) this._vgndLimitDir.set(v.id, 1);
       });
+      hbridges.forEach((hb) => {
+        // a fresh bridge starts coasting -- same "don't presume a decision"
+        // reasoning as every other on/off state above
+        if (!this._hbridgeDesired.has(hb.id)) this._hbridgeDesired.set(hb.id, 'coast');
+        if (!this._hbridgeDesiredSince.has(hb.id)) this._hbridgeDesiredSince.set(hb.id, t - dt);
+        if (!this._hbridgeMode.has(hb.id)) this._hbridgeMode.set(hb.id, 'coast');
+      });
+      schmitts.forEach((sg) => {
+        // a fresh gate starts with input LOW (a real gate at power-up has
+        // no history to presume from) -- so its inverted output starts HIGH
+        if (!this._schmittInputHigh.has(sg.id)) this._schmittInputHigh.set(sg.id, false);
+        if (!this._schmittDesired.has(sg.id)) this._schmittDesired.set(sg.id, true);
+        if (!this._schmittDesiredSince.has(sg.id)) this._schmittDesiredSince.set(sg.id, t - dt);
+        if (!this._schmittState.has(sg.id)) this._schmittState.set(sg.id, true);
+      });
       // per-frame working state for the square-loop cores: coreBStart is
       // fixed for the whole frame (this is the real physical B the core had
       // at the start of this dt, exactly like a capacitor's/inductor's
@@ -602,6 +759,26 @@
         const b0 = this._coreState.get(mc.id);
         coreBStart.set(mc.id, b0);
         coreB.set(mc.id, b0);
+      });
+
+      // real mechanical armature: a snap-action mechanism, not proportional
+      // to B -- it only actually moves once driven a real distance past
+      // center, then HOLDS there (hysteretic) regardless of small wiggles
+      // in B, exactly like a real relay's spring-loaded armature. Decided
+      // once per frame from bStart (fixed for the whole solve() call), same
+      // reasoning as a mechanical part that cannot move within zero time.
+      const latchrelays = components.filter((c) => c.type === 'latchrelay');
+      latchrelays.forEach((lr) => {
+        const spec = latchRelaySpec(lr);
+        const bStart = coreBStart.get(lr.id) || 0;
+        const wasClosed = this._latchContactClosed.get(lr.id) || false;
+        let nowClosed = wasClosed;
+        if (!wasClosed && bStart > spec.armatureThreshold) nowClosed = true;
+        else if (wasClosed && bStart < -spec.armatureThreshold) nowClosed = false;
+        if (nowClosed !== wasClosed) {
+          this._latchContactClosed.set(lr.id, nowClosed);
+          this._latchLastFlipT.set(lr.id, t);
+        }
       });
 
       let voltages = new Map();
@@ -644,6 +821,20 @@
             const g = 1 / Math.max(c.value, 1e-6);
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
+            stampG(i, i, g);
+            stampG(j, j, g);
+            stampG(i, j, -g);
+            stampG(j, i, -g);
+          } else if (c.type === 'latchrelay') {
+            // the real mechanical contact: an ordinary resistor whose real
+            // value depends on the armature position decided once per
+            // frame above -- this is NOT the coil (the coil's own
+            // resistance + magnetic dynamics are stamped by the shared
+            // memoryCores extra-unknown-row block, since a latchrelay's
+            // coil electrically IS a one-winding memorycore).
+            const g = 1 / latchContactResistance(c);
+            const i = gi(uf.find(c.contactA));
+            const j = gi(uf.find(c.contactB));
             stampG(i, i, g);
             stampG(j, j, g);
             stampG(i, j, -g);
@@ -796,6 +987,66 @@
               stampClampDiode(o, vccIdx, this._railClampState.get(key + ':hi') || false, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
               stampClampDiode(gndIdx, o, this._railClampState.get(key + ':lo') || false, COMPARATOR_SPEC.clampVf, RAIL_CLAMP_RON);
             });
+          } else if (c.type === 'hbridge') {
+            // real reversible drive: each output gets whichever real FET
+            // path (high-side to VM, low-side to GND) the LATCHED mode
+            // currently calls for, exactly the same "resistor path
+            // selected by a decision" idea as the comparator/MOSFET above.
+            // Real body diodes on BOTH outputs to BOTH rails are stamped
+            // UNCONDITIONALLY (a real body diode exists whether or not its
+            // FET is on) -- this is what gives an inductive load (the
+            // latching relay coil) a real path to recirculate current
+            // through instead of an impossible instantaneous reversal,
+            // and what makes "coast" a real Hi-Z-except-for-flyback state
+            // rather than a true open circuit.
+            const spec = hbridgeSpec(c);
+            const vmIdx = gi(uf.find(c.vm));
+            const gndIdx = gi(uf.find(c.gnd));
+            // (UVLO is folded into the tracked mode decision itself, below
+            // -- not read fresh here, since this stamp runs BEFORE this
+            // iteration's own solve and would only see stale/empty
+            // voltages on a fixed point loop's first pass, with no
+            // "changed" signal to force a retry once real voltages exist)
+            const mode = this._hbridgeMode.get(c.id) || 'coast';
+            [['out1', c.out1, 1], ['out2', c.out2, 2]].forEach(([tag, outPin, outNum]) => {
+              const o = gi(uf.find(outPin));
+              const highOn = (mode === 'forward' && outNum === 1) || (mode === 'reverse' && outNum === 2);
+              const lowOn = (mode === 'forward' && outNum === 2) || (mode === 'reverse' && outNum === 1) || mode === 'brake';
+              if (highOn) {
+                const g = 1 / spec.ronHS;
+                stampG(o, o, g);
+                stampG(vmIdx, vmIdx, g);
+                stampG(o, vmIdx, -g);
+                stampG(vmIdx, o, -g);
+              }
+              if (lowOn) {
+                const g = 1 / spec.ronLS;
+                stampG(o, o, g);
+                stampG(gndIdx, gndIdx, g);
+                stampG(o, gndIdx, -g);
+                stampG(gndIdx, o, -g);
+              }
+              const hiKey = c.id + ':' + tag + ':hi';
+              const loKey = c.id + ':' + tag + ':lo';
+              stampClampDiode(o, vmIdx, this._hbridgeDiodeState.get(hiKey) || false, spec.bodyDiodeVf, spec.bodyDiodeRon);
+              stampClampDiode(gndIdx, o, this._hbridgeDiodeState.get(loKey) || false, spec.bodyDiodeVf, spec.bodyDiodeRon);
+            });
+          } else if (c.type === 'schmitt') {
+            // a real push-pull output stage to whichever rail the LATCHED
+            // (propagation-delayed) decision holds -- same "resistor path
+            // selected by a decision" idea as the comparator's output.
+            const spec = schmittSpec(c);
+            const g = 1 / spec.outputRon;
+            const o = gi(uf.find(c.out));
+            const vccIdx = gi(uf.find(c.vcc));
+            const gndIdx = gi(uf.find(c.gnd));
+            const target = this._schmittState.get(c.id) ? vccIdx : gndIdx;
+            stampG(o, o, g);
+            stampG(target, target, g);
+            stampG(o, target, -g);
+            stampG(target, o, -g);
+            stampClampDiode(o, vccIdx, this._railClampState.get(c.id + ':hi') || false, spec.clampVf, RAIL_CLAMP_RON);
+            stampClampDiode(gndIdx, o, this._railClampState.get(c.id + ':lo') || false, spec.clampVf, RAIL_CLAMP_RON);
           } else if (c.type === 'battery' || c.type === 'diffsource') {
             const g = 1 / sourceRFor(c);
             const i = gi(uf.find(batInternal(c)));
@@ -1193,6 +1444,84 @@
           });
         });
 
+        hbridges.forEach((hb) => {
+          const spec = hbridgeSpec(hb);
+          // real logic-level input decision (a comparison against a real
+          // threshold, not an idealized digital 0/1) selects the real
+          // 4-state truth table this part class actually implements.
+          const v1 = voltages.get(uf.find(hb.in1));
+          const v2 = voltages.get(uf.find(hb.in2));
+          const in1High = (v1 || 0) > spec.inputThreshold;
+          const in2High = (v2 || 0) > spec.inputThreshold;
+          // real undervoltage lockout: below its minimum motor supply, the
+          // part genuinely cannot drive its outputs -- folded into the
+          // same tracked, "changed"-participating decision as the mode
+          // itself (not a raw same-iteration voltage read at stamp time,
+          // which would see stale/empty voltages on a fixed-point loop's
+          // first pass with no way to signal a retry once real ones exist)
+          const vmNow = voltages.get(uf.find(hb.vm));
+          const belowUvlo = (vmNow || 0) < spec.vmMin;
+          const desired = belowUvlo ? 'coast' : in1High && in2High ? 'brake' : in1High ? 'forward' : in2High ? 'reverse' : 'coast';
+          if (desired !== this._hbridgeDesired.get(hb.id)) {
+            this._hbridgeDesired.set(hb.id, desired);
+            // "since t-dt", not "since t" -- same reasoning as the
+            // comparator's propagation-delay fix above
+            this._hbridgeDesiredSince.set(hb.id, t - dt);
+          }
+          const since = this._hbridgeDesiredSince.get(hb.id) ?? t;
+          if (desired !== this._hbridgeMode.get(hb.id) && t - since >= spec.propDelay) {
+            this._hbridgeMode.set(hb.id, desired);
+            changed = true;
+          }
+
+          // real body-diode flyback paths: same on/off ideal-diode
+          // fixed-point decision as a MOSFET's body diode, independent of
+          // whatever the FET-path decision above is doing, since a real
+          // diode conducts whenever it's forward biased regardless of
+          // gate state.
+          const vmV = voltages.get(uf.find(hb.vm));
+          const gndV = voltages.get(uf.find(hb.gnd));
+          [['out1', hb.out1], ['out2', hb.out2]].forEach(([tag, outPin]) => {
+            const vOut = voltages.get(uf.find(outPin));
+            updateClampDiode(hb.id + ':' + tag + ':hi', vOut, vmV, spec.bodyDiodeVf, spec.bodyDiodeRon);
+            updateClampDiode(hb.id + ':' + tag + ':lo', gndV, vOut, spec.bodyDiodeVf, spec.bodyDiodeRon);
+          });
+        });
+
+        schmitts.forEach((sg) => {
+          const spec = schmittSpec(sg);
+          const vcc = voltages.get(uf.find(sg.vcc)) || 0;
+          const vIn = voltages.get(uf.find(sg.in));
+          const vtPlus = spec.vtPlusFrac * vcc;
+          const vtMinus = spec.vtMinusFrac * vcc;
+          // the real hysteretic input-side decision -- an internal analog
+          // comparator with two thresholds, not delayed itself (the delay
+          // belongs to the OUTPUT stage below); holds its prior decision
+          // anywhere between the two thresholds, exactly what gives a
+          // noisy signal real chatter immunity.
+          let inputHigh = this._schmittInputHigh.get(sg.id) || false;
+          if ((vIn || 0) > vtPlus) inputHigh = true;
+          else if ((vIn || 0) < vtMinus) inputHigh = false;
+          if (inputHigh !== this._schmittInputHigh.get(sg.id)) {
+            this._schmittInputHigh.set(sg.id, inputHigh);
+            changed = true;
+          }
+          const desiredOutHigh = !inputHigh; // inverter
+          if (desiredOutHigh !== this._schmittDesired.get(sg.id)) {
+            this._schmittDesired.set(sg.id, desiredOutHigh);
+            this._schmittDesiredSince.set(sg.id, t - dt);
+          }
+          const since = this._schmittDesiredSince.get(sg.id) ?? t;
+          if (desiredOutHigh !== this._schmittState.get(sg.id) && t - since >= spec.propDelay) {
+            this._schmittState.set(sg.id, desiredOutHigh);
+            changed = true;
+          }
+          const vOut = voltages.get(uf.find(sg.out));
+          const gndV = voltages.get(uf.find(sg.gnd));
+          updateClampDiode(sg.id + ':hi', vOut, vcc, spec.clampVf, RAIL_CLAMP_RON);
+          updateClampDiode(sg.id + ':lo', gndV, vOut, spec.clampVf, RAIL_CLAMP_RON);
+        });
+
         vgnds.forEach((v) => {
           // same on/off-style fixed-point decision as a diode: while
           // un-limited, check whether the low-impedance path this
@@ -1408,6 +1737,21 @@
           }
         } else if (c.type === 'memorycore') {
           I = memCoreCurrent.get(c.id) || 0;
+        } else if (c.type === 'latchrelay') {
+          // the coil's own current (its magnetic dynamics are stamped by
+          // the shared memoryCores block) is reported separately from the
+          // real mechanical contact's current, since they're electrically
+          // two entirely different circuits joined only by the armature
+          currents.set(c.id + ':coil', memCoreCurrent.get(c.id) || 0);
+          const vA = voltages.get(uf.find(c.contactA));
+          const vB = voltages.get(uf.find(c.contactB));
+          I = ((vA || 0) - (vB || 0)) / latchContactResistance(c);
+          const spec = latchRelaySpec(c);
+          const contactP = I * I * latchContactResistance(c);
+          if (contactP > 0.1) warnings.push(`${c.label || c.id} (latching relay): contact dissipating ${contactP.toFixed(2)} W -- exceeds a typical small signal relay's real contact rating`);
+          const coilI = memCoreCurrent.get(c.id) || 0;
+          const coilP = coilI * coilI * (spec.coilR || 0);
+          if (coilP > 0.5) warnings.push(`${c.label || c.id} (latching relay): coil dissipating ${coilP.toFixed(2)} W -- real continuous coil heating exceeds a typical small relay's rating`);
         } else if (c.type === 'comparator') {
           // real limits, checked against the actual solved node voltages,
           // not assumed constants -- exactly like the MOSFET Vgs/Vds
@@ -1450,11 +1794,70 @@
             }
             currents.set(key, Iout);
           });
+        } else if (c.type === 'hbridge') {
+          const spec = hbridgeSpec(c);
+          const vmV = voltages.get(uf.find(c.vm)) || 0;
+          const gndV = voltages.get(uf.find(c.gnd)) || 0;
+          const supplyV = vmV - gndV;
+          if ((touchCount.get(uf.find(c.vm)) || 0) <= 1 || (touchCount.get(uf.find(c.gnd)) || 0) <= 1) {
+            warnings.push(`${c.label || c.id} (H-bridge): VM or GND is not wired to anything -- an unpowered bridge can't drive a real load`);
+          } else if (supplyV < spec.vmMin) {
+            warnings.push(`${c.label || c.id} (H-bridge): VM is ${supplyV.toFixed(2)}V -- below its ${spec.vmMin}V undervoltage lockout, outputs are forced to coast`);
+          } else if (supplyV > spec.vmMax) {
+            warnings.push(`${c.label || c.id} (H-bridge): VM is ${supplyV.toFixed(2)}V -- exceeds its ${spec.vmMax}V maximum rating`);
+          }
+          // per-output current, "<id>:out1"/"<id>:out2" -- the current
+          // actually flowing INTO the load from each output pin (through
+          // whichever real path, FET or flyback diode, is conducting)
+          [['out1', c.out1], ['out2', c.out2]].forEach(([tag, outPin]) => {
+            const vOut = voltages.get(uf.find(outPin)) || 0;
+            const key = c.id + ':' + tag;
+            const iToVm = (vmV - vOut) / spec.ronHS;
+            const iToGnd = (vOut - gndV) / spec.ronLS;
+            // whichever real path is actually the active one dominates;
+            // report the FET-path current when that FET is on, otherwise
+            // whatever the flyback diode is carrying
+            const mode = this._hbridgeMode.get(c.id);
+            const outNum = tag === 'out1' ? 1 : 2;
+            const highOn = (mode === 'forward' && outNum === 1) || (mode === 'reverse' && outNum === 2);
+            const lowOn = (mode === 'forward' && outNum === 2) || (mode === 'reverse' && outNum === 1) || mode === 'brake';
+            const Iout = highOn ? iToVm : lowOn ? -iToGnd : (this._hbridgeDiodeState.get(key + ':hi') ? iToVm : this._hbridgeDiodeState.get(key + ':lo') ? -iToGnd : 0);
+            if (Math.abs(Iout) > spec.currentLimit) {
+              warnings.push(`${c.label || c.id} (H-bridge) ${tag}: ${(Iout * 1000).toFixed(0)}mA -- exceeds its ${(spec.currentLimit * 1000).toFixed(0)}mA real continuous current rating`);
+            }
+            currents.set(key, Iout);
+          });
+        } else if (c.type === 'schmitt') {
+          const spec = schmittSpec(c);
+          const vcc = voltages.get(uf.find(c.vcc));
+          const gnd = voltages.get(uf.find(c.gnd));
+          const supplyV = (vcc || 0) - (gnd || 0);
+          if ((touchCount.get(uf.find(c.vcc)) || 0) <= 1 || (touchCount.get(uf.find(c.gnd)) || 0) <= 1) {
+            warnings.push(`${c.label || c.id} (SN74HC14): VCC or GND is not wired to anything -- an unpowered gate can't drive a real output`);
+          } else if (supplyV < spec.vccMin) {
+            warnings.push(`${c.label || c.id} (SN74HC14): supply is ${supplyV.toFixed(2)}V -- below its ${spec.vccMin}V minimum operating voltage`);
+          } else if (supplyV > spec.vccMax) {
+            warnings.push(`${c.label || c.id} (SN74HC14): supply is ${supplyV.toFixed(2)}V -- exceeds its ${spec.vccMax}V maximum rating`);
+          }
+          const vOut = voltages.get(uf.find(c.out));
+          const high = this._schmittState.get(c.id);
+          const railV = high ? vcc : gnd;
+          I = ((vOut || 0) - (railV || 0)) / spec.outputRon;
         }
         currents.set(c.id, I);
       });
       toroidCurrent.forEach((I, key) => currents.set(key, I));
       memCoreCurrent.forEach((I, key) => currents.set(key, I));
+      // memCoreCurrent's generic pass above just overwrote each
+      // latchrelay's plain id with its COIL current (since a latchrelay's
+      // coil is folded into the same memoryCores bookkeeping) -- restore
+      // the real mechanical contact current there instead; the coil's own
+      // current stays separately available under "<id>:coil".
+      latchrelays.forEach((lr) => {
+        const vA = voltages.get(uf.find(lr.contactA));
+        const vB = voltages.get(uf.find(lr.contactB));
+        currents.set(lr.id, ((vA || 0) - (vB || 0)) / latchContactResistance(lr));
+      });
 
       batteries.forEach((bat, k) => {
         // MNA's branch-current unknown is defined flowing p->m through the
@@ -1526,6 +1929,32 @@
       const coreFlux = new Map();
       memoryCores.forEach((mc) => coreFlux.set(mc.id, this._coreState.get(mc.id) * (mc.phiSat || 0)));
 
+      // command must never be silently equated with a successful physical
+      // transition: requestedState is only "what the coil current says
+      // right now", actualState is the real persisted remanence, and
+      // transitioning/fault are both derived honestly from that real
+      // state, never from whether a command was merely issued.
+      const latchStates = new Map();
+      latchrelays.forEach((lr) => {
+        const spec = latchRelaySpec(lr);
+        const coilI = memCoreCurrent.get(lr.id) || 0;
+        const actual = this._coreState.get(lr.id) || 0;
+        const driveThresh = spec.hcAmpTurns * 0.1;
+        const requestedState = coilI > driveThresh ? 'set' : coilI < -driveThresh ? 'reset' : 'none';
+        const transitioning = Math.abs(actual) < 0.95;
+        latchStates.set(lr.id, {
+          requestedState,
+          actualState: actual >= 0 ? 'field' : 'void',
+          actualB: actual,
+          contactClosed: this._latchContactClosed.get(lr.id) || false,
+          transitioning,
+          // a real fault: still mid-transition with no drive present to
+          // finish the job -- the pulse that was applied didn't carry
+          // enough current/duration to complete the switch
+          fault: transitioning && requestedState === 'none',
+        });
+      });
+
       // expose each comparator channel's actual HIGH/LOW decision directly
       // -- the real Vin+/Vin-/Vos comparison computed above, never a
       // separately invented state
@@ -1535,7 +1964,22 @@
         out2High: this._compState.get(cp.id + ':2'),
       }));
 
-      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, uf, groundRoot, hasCircuit: true };
+      // expose the real committed drive mode directly -- never inferred
+      // from the IN1/IN2 command alone, since real propagation delay
+      // means the outputs haven't necessarily caught up yet
+      const hbridgeStates = new Map();
+      hbridges.forEach((hb) => hbridgeStates.set(hb.id, { mode: this._hbridgeMode.get(hb.id) || 'coast' }));
+
+      // expose the real latched (propagation-delayed) output decision
+      // directly, plus the raw hysteretic input-side state for diagnosing
+      // whether a noisy input is actually being held by hysteresis
+      const schmittStates = new Map();
+      schmitts.forEach((sg) => schmittStates.set(sg.id, {
+        outHigh: this._schmittState.get(sg.id),
+        inputHigh: this._schmittInputHigh.get(sg.id),
+      }));
+
+      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
@@ -1544,6 +1988,9 @@
     AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
+    LATCHRELAY_SPEC, latchRelaySpec,
+    HBRIDGE_SPEC, hbridgeSpec,
+    SCHMITT_SPEC, schmittSpec,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;
