@@ -8,6 +8,7 @@
   "scripts": {
     "start": "electron .",
     "test": "node test/circuit.test.js",
+    "test:qualification": "node test/qualification.test.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
     "dist:appimage": "electron-builder --linux AppImage",

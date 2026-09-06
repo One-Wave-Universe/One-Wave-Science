@@ -576,7 +576,7 @@
       const updateTemp = (id, powerW, spec) => {
         const told = tempOf(id);
         const target = ambient + powerW * spec.rTh;
-        const k = Math.max(dt, 1e-6) / spec.tau;
+        const k = Math.max(dt, 1e-12) / spec.tau;
         this._temp.set(id, (told + k * target) / (1 + k));
       };
 
@@ -1001,7 +1001,7 @@
             // vPrev here is the voltage across the ideal-C portion alone
             // (see the state-update comment below for why that matters).
             const esr = capacitorESR(c);
-            const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
+            const gC = 1 / (esr + Math.max(dt, 1e-12) / c.value);
             const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
@@ -1055,7 +1055,7 @@
             // circuit. This is what turns an idealized instant Vgs flip
             // into a real switching delay when the driving impedance and
             // dt are both small enough for it to show up.
-            const gGate = 1 / (Math.max(dt, 1e-6) / spec.ciss);
+            const gGate = 1 / (Math.max(dt, 1e-12) / spec.ciss);
             const vgPrev = this._fetGateV.get(c.id) || 0;
             stampG(g_, g_, gGate);
             stampG(s, s, gGate);
@@ -1341,7 +1341,7 @@
         // a series source, so R and L/dt simply add.
         inductors.forEach((ind, k) => {
           const row = rowInd(k);
-          const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-6);
+          const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-12);
           const dcr = inductorDCR(ind.value);
           const iPrev = this._indState.get(ind.id) || 0;
           const ia = gi(uf.find(ind.a));
@@ -1368,7 +1368,7 @@
         // mutual inductance k*sqrt(L_i*L_j) from sharing the same core.
         toroids.forEach((tor, tk) => {
           const n = tor.windings.length;
-          const dtSafe = Math.max(dt, 1e-6);
+          const dtSafe = Math.max(dt, 1e-12);
           const prev = this._toroidState.get(tor.id) || new Array(n).fill(0);
           const k = tor.coupling || 0;
           const Lself = tor.windings.map((w) => Math.max(w.L, 1e-12));
@@ -1408,7 +1408,7 @@
         // the coreB/coreBStart setup above for why that's correctly one
         // real dt of physics, not several.
         memoryCores.forEach((mc, mck) => {
-          const dtSafe = Math.max(dt, 1e-6);
+          const dtSafe = Math.max(dt, 1e-12);
           const bStart = coreBStart.get(mc.id);
           const bNow = coreB.get(mc.id);
           const dBdt = (bNow - bStart) / dtSafe;
@@ -1775,7 +1775,7 @@
           // not "spring back toward zero"
           else target = bStart;
           const tau = mc.switchTau > 0 ? mc.switchTau : 1e-3;
-          const k = Math.max(dt, 1e-6) / tau;
+          const k = Math.max(dt, 1e-12) / tau;
           let bTarget = (bStart + k * target) / (1 + k);
           bTarget = Math.max(-1, Math.min(1, bTarget));
           // under-relaxed update: a real, fast flip induces a real back-EMF
@@ -1867,7 +1867,7 @@
           // stamping comment above); the branch current is whatever the
           // solved terminal voltage and that companion source imply...
           const esr = capacitorESR(c);
-          const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
+          const gC = 1 / (esr + Math.max(dt, 1e-12) / c.value);
           const gLeak = 1 / capacitorLeakageR(c);
           const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
           const capBranchI = gC * ((va - vb) - vPrev);
@@ -1876,7 +1876,7 @@
           // ...and THAT current is what actually charges the ideal C this
           // frame (real ESR drops some of (va-vb) across itself first;
           // only the current through the ideal-C branch moves its charge)
-          this._capState.set(c.id, vPrev + (capBranchI * Math.max(dt, 1e-6)) / c.value);
+          this._capState.set(c.id, vPrev + (capBranchI * Math.max(dt, 1e-12)) / c.value);
           // an electrolytic (value >= ELECTROLYTIC_THRESHOLD) is a real
           // polarized part -- terminals[0]/"a" is the "+" lead by the same
           // convention as the LED/diode anode. Real electrolytics tolerate
