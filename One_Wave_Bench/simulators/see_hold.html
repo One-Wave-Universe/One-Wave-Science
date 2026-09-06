@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>One-Wave — see the hold</title>
+<style>
+  html,body{margin:0;height:100%;background:#120e0a;color:#e8c99a;font:14px/1.4 ui-sans-serif,system-ui;}
+  #c{display:block;margin:0 auto;background:#0b0907;}
+  .hud{position:fixed;left:16px;bottom:16px;max-width:420px;opacity:.85;}
+  button,input{background:#2a2118;color:#e8c99a;border:1px solid #6a4e2a;padding:6px 10px;}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud">
+  <div>Toy hold. Not C-322. Not 125 GeV.</div>
+  <div>theta <span id="th"></span> &nbsp; E <span id="ee"></span></div>
+  <button id="shove">shove toward gate</button>
+  <button id="reset">hold</button>
+</div>
+<script>
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+function resize(){cv.width=innerWidth;cv.height=innerHeight;} resize(); addEventListener('resize',resize);
+let th=0.12, v=0, shoving=false;
+function E(t){return 0.35*Math.sin(t)**2;}
+function dE(t){return 0.35*Math.sin(2*t);}
+const gates=['Begin','Build','Hold','Build','Break','Loop'];
+document.getElementById('shove').onclick=()=>{shoving=true;v+=0.08;};
+document.getElementById('reset').onclick=()=>{th=0.12;v=0;shoving=false;};
+function hexes(cx,cy,r){
+  const pts=[];
+  for(let i=0;i<6;i++){
+    const a=-Math.PI/2+i*Math.PI/3;
+    pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);
+  }
+  return pts;
+}
+function frame(t){
+  const w=cv.width,h=cv.height,cx=w/2,cy=h*0.48;
+  ctx.fillStyle='#0b0907'; ctx.fillRect(0,0,w,h);
+  const acc=-dE(th)-0.08*v+(shoving?0.10:0);
+  v+=acc*0.016; th+=v*0.016;
+  if(th>Math.PI) th-=2*Math.PI;
+  if(th<-Math.PI) th+=2*Math.PI;
+  if(Math.abs(v)<0.002 && Math.abs(Math.sin(th))<0.04) shoving=false;
+  const pts=hexes(cx,cy,Math.min(w,h)*0.22);
+  ctx.strokeStyle='#5a3f22'; ctx.lineWidth=2;
+  ctx.beginPath();
+  pts.forEach((p,i)=>{i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);});
+  ctx.closePath(); ctx.stroke();
+  pts.forEach((p,i)=>{
+    const lit=(Math.floor(((th+Math.PI)/(2*Math.PI))*6+6)%6)===i;
+    ctx.beginPath(); ctx.arc(p[0],p[1],lit?10:6,0,6.28);
+    ctx.fillStyle=lit?'#f0c36a':'#3a2a18'; ctx.fill();
+    ctx.fillStyle='#c9a36a'; ctx.fillText(gates[i],p[0]+12,p[1]);
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p[0],p[1]);
+    ctx.strokeStyle='#2a1e12'; ctx.stroke();
+  });
+  ctx.beginPath(); ctx.arc(cx,cy,8,0,6.28); ctx.fillStyle='#edd5a8'; ctx.fill();
+  const wellX=cx+Math.min(w,h)*0.32*Math.sin(th);
+  const wellY=cy+40+80*Math.sin(th)*Math.sin(th);
+  ctx.beginPath(); ctx.arc(wellX,wellY,7,0,6.28);
+  ctx.fillStyle=th>1.2&&th<2.0?'#fff3c8':'#d4893a'; ctx.fill();
+  document.getElementById('th').textContent=th.toFixed(2);
+  document.getElementById('ee').textContent=E(th).toFixed(3);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
