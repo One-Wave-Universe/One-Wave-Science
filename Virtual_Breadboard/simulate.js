@@ -537,11 +537,67 @@ function traceStatsFromSamples(samples, settleBandFrac) {
   return { min, max, peak: Math.max(Math.abs(min), Math.abs(max)), final, settledAt };
 }
 
+// Scale-boundary output (item 19 of the hardware-scaling directive): turns
+// a real two-cell differential readback into the {sign, magnitude,
+// confidence, settled, timestamp} interface the next recursion level
+// (Point -> Path -> Field -> next Point) would consume. This reads only
+// already-solved, real values (cellA/cellB are ordinary valueFor refs --
+// a sense-line voltage, a core state, whatever the experiment actually
+// wired up) and asserts nothing about what a valid combination means: a
+// Field/Field (both "closed") reading is reported as conflict:true,
+// sign:null -- never coerced into -1/0/+1. "settled" is only computed if
+// the experiment names both a fast-path and a slow-path (e.g. override)
+// readback to compare; it reports whether the slowest confirming signal
+// already agrees with the fastest one, not a fixed timer guess.
+function resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, spec, t) {
+  const va = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.cellA);
+  const vb = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.cellB);
+  if (va == null || vb == null) return null;
+  const closedMin = spec.closedMin != null ? spec.closedMin : 4.0;
+  const openMax = spec.openMax != null ? spec.openMax : 1.0;
+  const classify = (v) => (v >= closedMin ? 'closed' : v <= openMax ? 'open' : 'ambiguous');
+  const a = classify(va);
+  const b = classify(vb);
+  let sign = null;
+  let conflict = false;
+  if (a === 'open' && b === 'open') sign = 0;
+  else if (a === 'closed' && b === 'open') sign = -1;
+  else if (a === 'open' && b === 'closed') sign = 1;
+  else if (a === 'closed' && b === 'closed') conflict = true;
+  // else: at least one cell is genuinely ambiguous (mid-transition/fault)
+  // -- sign stays null and conflict stays false, a real third kind of
+  // "not resolved yet" distinct from a real Field/Field conflict.
+  const scale = spec.scale != null ? spec.scale : 5;
+  const magnitude = Number((Math.abs(va - vb) / scale).toFixed(6));
+  const confidence = conflict ? 0 : a !== 'ambiguous' && b !== 'ambiguous' ? 1 : 0.5;
+  // "settled" compares two already-built taps (e.g. the fast path and the
+  // slowest/override path) to see whether the slow one has caught up with
+  // the fast one -- but it must NOT assume they land at the same logic
+  // polarity. An inverting gate (a real Schmitt trigger is one) flips
+  // polarity once per stage it passes through, so two taps built from a
+  // different number of inverting stages are EXPECTED to disagree even
+  // once both are fully settled. `settleInverted` names that known,
+  // real wiring fact explicitly (the same way an event spec names its own
+  // "rising"/"falling" direction) rather than the generic comparison here
+  // guessing at it.
+  let settled = null;
+  if (spec.settleA && spec.settleB) {
+    const fa = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.settleA);
+    const fb = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.settleB);
+    if (fa != null && fb != null) {
+      const agree = (fa >= scale / 2) === (fb >= scale / 2);
+      settled = spec.settleInverted ? !agree : agree;
+    }
+  }
+  return { sign, magnitude, confidence, conflict, settled, timestamp: Number(t.toFixed(9)) };
+}
+
 function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   const stages = experimentSpec.stages || [];
   const eventsSpec = experimentSpec.events || [];
   const persistenceSpec = experimentSpec.persistence || null;
   const tracesSpec = experimentSpec.traces || [];
+  const resolvedOutputSpec = experimentSpec.resolvedOutput || null;
   const nodeNameCellIds = snapOpts.nodeNameCellIds;
   const measurementsSpec = snapOpts.measurements;
   const errors = [];
@@ -621,10 +677,12 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
       endT: Number(t.toFixed(9)),
       snapshot: snapshot(lastResult, snapOpts),
       traces,
+      resolvedOutput: resolvedOutputSpec ? resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, resolvedOutputSpec, t) : undefined,
     });
   });
 
   const out = { errors, stages: stageLog, events: detectedEvents, final: snapshot(lastResult, snapOpts) };
+  if (resolvedOutputSpec) out.finalResolvedOutput = resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, resolvedOutputSpec, t);
   if (persistenceSpec) {
     const observed = persistenceState.minAbsDelta === Infinity ? null : persistenceState.minAbsDelta;
     out.persistence = {
@@ -754,5 +812,5 @@ module.exports = {
   mulberry32, toleranceFor, perturbParts, getPath, runOneTrial, runMonteCarlo,
   resolveNodeNames, namedVoltagesFrom, measurementsFrom,
   buildSweepValues, applySweepValue, runSweep,
-  valueFor, runExperiment, traceStatsFromSamples,
+  valueFor, runExperiment, traceStatsFromSamples, resolvedOutputFrom,
 };

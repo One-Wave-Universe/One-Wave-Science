@@ -1405,4 +1405,45 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 43 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
+// Test 44 (T-RESOLVED-OUTPUT): simulate.js's resolvedOutputFrom -- the
+// scale-boundary {sign,magnitude,confidence,conflict,settled,timestamp}
+// interface -- must read a real two-cell differential without coercing an
+// invalid (both-closed) reading into a valid ternary sign, and its
+// "settled" comparison must respect an explicitly-declared inversion
+// parity between the two taps being compared rather than assuming they
+// agree at steady state.
+{
+  const Sim = require('../simulate.js');
+  const fakeResult = { voltages: new Map(), currents: new Map(), warnings: [], uf: { find: (x) => x } };
+  const names = { A: 'a', B: 'b', FAST: 'fast', SLOW: 'slow' };
+  const spec = { cellA: { node: 'A' }, cellB: { node: 'B' }, settleA: { node: 'FAST' }, settleB: { node: 'SLOW' }, settleInverted: true, closedMin: 4, openMax: 1, scale: 5 };
+
+  // Void/Field: B closed, A open -- a real, valid +1 reading
+  fakeResult.voltages.set('a', 0.2);
+  fakeResult.voltages.set('b', 4.9);
+  fakeResult.voltages.set('fast', 0); // fast tap already low
+  fakeResult.voltages.set('slow', 5); // slow tap (inverted-parity) already high -- agrees once inversion is accounted for
+  let out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 1.0);
+  assert.strictEqual(out.sign, 1, 'T-RESOLVED-OUTPUT: Void/Field must resolve to sign +1');
+  assert.strictEqual(out.conflict, false, 'T-RESOLVED-OUTPUT: a valid single-cell-closed reading must not be flagged as conflict');
+  assert.strictEqual(out.settled, true, 'T-RESOLVED-OUTPUT: settleInverted must treat opposite-polarity taps as agreeing');
+
+  // same electrical state, but the two taps have NOT yet reached opposite
+  // polarity (both still read low) -- a real "the slow path hasn't caught
+  // up yet" case, not settled
+  fakeResult.voltages.set('slow', 0);
+  out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 1.0);
+  assert.strictEqual(out.settled, false, 'T-RESOLVED-OUTPUT: matching-polarity taps must read unsettled under settleInverted');
+
+  // Field/Field: both closed -- must be reported as conflict, never
+  // silently coerced into a ternary sign
+  fakeResult.voltages.set('a', 4.95);
+  fakeResult.voltages.set('b', 4.9);
+  out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 2.0);
+  assert.strictEqual(out.conflict, true, 'T-RESOLVED-OUTPUT: Field/Field must be flagged as a real conflict');
+  assert.strictEqual(out.sign, null, 'T-RESOLVED-OUTPUT: a conflict reading must not carry a coerced sign');
+  assert.strictEqual(out.confidence, 0, 'T-RESOLVED-OUTPUT: a conflict reading must report zero confidence, not a guessed value');
+  console.log('Test 44 OK (T-RESOLVED-OUTPUT): +1/void-field resolves cleanly, inversion-aware settling detected correctly, Field/Field reported as real conflict (never coerced)');
+}
+
 console.log('\nAll circuit engine tests passed.');

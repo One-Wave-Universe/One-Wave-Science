@@ -79,6 +79,28 @@
     "in addition to declaring the Diff measurement, and the conflict stages",
     "at the end exist specifically to surface this rather than assume it.",
     "",
+    "Scale-boundary output (experiment.resolvedOutput, simulate.js's",
+    "resolvedOutputFrom): the two-state-machine+M4 unit exposes ONE",
+    "resolved {sign, magnitude, confidence, conflict, settled, timestamp}",
+    "reading per stage, meant to become a single POINT input to the next",
+    "recursion level (Point -> Path -> Field -> next Point) without this",
+    "file assuming what that next level does with it. sign is -1/0/+1 from",
+    "the real SENSEA/SENSEB readback ONLY when exactly one is closed;",
+    "Field/Field sets conflict:true and sign:null instead of forcing a",
+    "value. settled compares FAST_OUT against OVERRIDE_OUT -- but those two",
+    "taps pass through a DIFFERENT number of inverting Schmitt stages (one",
+    "vs two), so at genuine steady state they sit at OPPOSITE logic levels,",
+    "not matching ones; resolvedOutput declares this explicitly via",
+    "settleInverted:true rather than the generic comparison silently",
+    "assuming same-polarity agreement (an earlier draft of this file did",
+    "assume that, and reported 'unsettled' during every real settled hold",
+    "-- caught by actually reading the FAST_OUT/OVERRIDE_OUT values instead",
+    "of trusting the intended design). Verified: settled reads false only",
+    "during the ~20ms write pulses (the 25ms override tap hasn't caught up",
+    "yet) and true through every full hold stage, including the conflict",
+    "hold (a settled reading of 'conflict' is a real, meaningful state, not",
+    "a contradiction).",
+    "",
     "Explicitly NOT implemented in this pass (deferred, not hidden):",
     "  - A true analog differential front end or per-channel oversight/",
     "    override taps for BOTH relays (only SENSEA's chain is built; SENSEB",
@@ -255,6 +277,11 @@
       { "label": "Diff", "measurement": "Diff", "settleBandFrac": 0.05 },
       { "label": "OversightRC", "node": "OVERSIGHT_RC", "settleBandFrac": 0.02 },
       { "label": "OverrideRC", "node": "OVERRIDE_RC", "settleBandFrac": 0.02 }
-    ]
+    ],
+    "resolvedOutput": {
+      "cellA": { "node": "SENSEA" }, "cellB": { "node": "SENSEB" },
+      "settleA": { "node": "FAST_OUT" }, "settleB": { "node": "OVERRIDE_OUT" }, "settleInverted": true,
+      "closedMin": 4.0, "openMax": 1.0, "scale": 5
+    }
   }
 }
