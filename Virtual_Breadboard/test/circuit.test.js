@@ -1558,4 +1558,41 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 46 OK (T-POWER-NETWORK): battery current-limits at', CircuitEngine.BATTERY_MAX_CURRENT, 'A with a real brownout, decoupling cap holds the rail up', (vWithCap - vNoCap).toFixed(3), 'V higher during a fast pulse');
 }
 
+// Test 47 (T-MEASURE-PRIMITIVES): the breadboard qualification spec's
+// measurement primitives (RMS, average, frequency, duty cycle, phase
+// difference, energy integration) verified against known synthetic
+// signals with closed-form answers -- real trapezoidal integration and
+// real interpolated edge-crossing detection, not a shortcut that only
+// works for one waveform shape.
+{
+  const Sim = require('../simulate.js');
+  const N = 5000, fs = 1000, f = 1;
+  const sine = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; sine.push({ t, value: Math.sin(2 * Math.PI * f * t) }); }
+  approx(Sim.rmsValue(sine), 1 / Math.SQRT2, 0.001, 'T-MEASURE-PRIMITIVES: 1V sine RMS must be ~0.7071V');
+  approx(Sim.averageValue(sine), 0, 0.001, 'T-MEASURE-PRIMITIVES: a symmetric sine\'s average must be ~0');
+  approx(Sim.findFrequency(sine), 1.0, 0.001, 'T-MEASURE-PRIMITIVES: a real 1Hz sine must measure ~1.0Hz from its own crossings');
+
+  const sq = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; const phase = (t * 2) % 1; sq.push({ t, value: phase < 0.3 ? 5 : 0 }); }
+  approx(Sim.dutyCycle(sq, 2.5), 0.30, 0.01, 'T-MEASURE-PRIMITIVES: a real 30% duty-cycle square wave must measure ~0.30');
+  approx(Sim.averageValue(sq), 1.5, 0.02, 'T-MEASURE-PRIMITIVES: 0/5V at 30% duty must average ~1.5V');
+  approx(Sim.rmsValue(sq), Math.sqrt(0.3) * 5, 0.02, 'T-MEASURE-PRIMITIVES: 0/5V at 30% duty RMS must be ~sqrt(0.3)*5V');
+
+  const sineB = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; sineB.push({ t, value: Math.sin(2 * Math.PI * f * t - Math.PI / 2) }); }
+  approx(Sim.phaseDifferenceDeg(sine, sineB), 90, 0.5, 'T-MEASURE-PRIMITIVES: a signal lagging by 90deg must measure ~90deg, not 0 or -90');
+
+  const constP = [];
+  for (let i = 0; i <= 300; i++) constP.push({ t: i * 0.01, value: 2 });
+  approx(Sim.integrateEnergy(constP), 6.0, 1e-6, 'T-MEASURE-PRIMITIVES: 2W held for 3s must integrate to exactly 6J');
+
+  const vTrace = [], iTrace = [];
+  for (let i = 0; i <= 200; i++) { vTrace.push({ t: i * 0.01, value: 5 }); iTrace.push({ t: i * 0.01, value: 0.5 }); }
+  approx(Sim.integrateEnergy(Sim.powerFromVI(vTrace, iTrace)), 5.0, 1e-6, 'T-MEASURE-PRIMITIVES: 5V*0.5A for 2s must integrate to exactly 5J');
+  assert.throws(() => Sim.powerFromVI(vTrace, iTrace.slice(1)), /sample counts differ/, 'T-MEASURE-PRIMITIVES: powerFromVI must refuse mismatched V/I sample arrays rather than fabricate a number');
+
+  console.log('Test 47 OK (T-MEASURE-PRIMITIVES): RMS/average/frequency/duty-cycle/phase/energy all verified against known synthetic signals');
+}
+
 console.log('\nAll circuit engine tests passed.');

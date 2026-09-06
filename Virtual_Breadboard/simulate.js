@@ -155,6 +155,7 @@ function resolveTerminals(board, specParts) {
       core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
       gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
       spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
+      initialV: p.type === 'capacitor' ? p.initialV : undefined,
       terminals,
       id,
     };
@@ -291,7 +292,7 @@ function toEngineElements(parts) {
         in: t[0].cellId, out: t[1].cellId, vcc: t[2].cellId, gnd: t[3].cellId,
       });
     } else {
-      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed });
+      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed, initialV: p.type === 'capacitor' ? p.initialV : undefined });
     }
   });
   return { wires, components };
@@ -535,6 +536,171 @@ function traceStatsFromSamples(samples, settleBandFrac) {
     }
   }
   return { min, max, peak: Math.max(Math.abs(min), Math.abs(max)), final, settledAt };
+}
+
+// ---------------------------------------------------------------------
+// Measurement primitives (breadboard qualification spec): real trapezoidal
+// integration and real edge-crossing detection over a trace's own actual
+// samples -- never a closed-form assumption about what the waveform
+// "should" look like. All take the same {t, value} sample arrays every
+// other trace/event mechanism here already produces.
+// ---------------------------------------------------------------------
+
+// average (DC/mean) value over the sampled window, weighted by real
+// elapsed time between samples (trapezoidal), not a plain arithmetic mean
+// of however many samples happened to be taken
+function averageValue(samples) {
+  if (!samples || samples.length < 2) return samples && samples.length ? samples[0].value : null;
+  let acc = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const dt = samples[i].t - samples[i - 1].t;
+    acc += 0.5 * (samples[i].value + samples[i - 1].value) * dt;
+  }
+  return acc / (samples[samples.length - 1].t - samples[0].t);
+}
+
+// RMS over the sampled window, same trapezoidal-integration technique
+// applied to value^2 -- the real definition, not a peak/sqrt(2) shortcut
+// that only holds for an ideal sine
+function rmsValue(samples) {
+  if (!samples || samples.length < 2) return samples && samples.length ? Math.abs(samples[0].value) : null;
+  let acc = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const dt = samples[i].t - samples[i - 1].t;
+    const a = samples[i - 1].value * samples[i - 1].value;
+    const b = samples[i].value * samples[i].value;
+    acc += 0.5 * (a + b) * dt;
+  }
+  const meanSq = acc / (samples[samples.length - 1].t - samples[0].t);
+  return Math.sqrt(Math.max(meanSq, 0));
+}
+
+// real trapezoidal energy integral (Joules) from a power-vs-time trace --
+// P is whatever the caller already computed (V*I); this only integrates
+function integrateEnergy(powerSamples) {
+  if (!powerSamples || powerSamples.length < 2) return 0;
+  let acc = 0;
+  for (let i = 1; i < powerSamples.length; i++) {
+    const dt = powerSamples[i].t - powerSamples[i - 1].t;
+    acc += 0.5 * (powerSamples[i].value + powerSamples[i - 1].value) * dt;
+  }
+  return acc;
+}
+
+// builds a real P(t) = V(t)*I(t) trace from two ALREADY-ALIGNED sample
+// arrays (the normal case: both captured in the same per-step loop, so
+// they share exact timestamps) -- refuses to silently interpolate or
+// truncate a real mismatch rather than fabricate a plausible-looking but
+// wrong energy number
+function powerFromVI(vSamples, iSamples) {
+  if (vSamples.length !== iSamples.length) {
+    throw new Error('powerFromVI: voltage and current sample counts differ (' + vSamples.length + ' vs ' + iSamples.length + ') -- they must come from the same per-step capture, not be reconciled after the fact');
+  }
+  return vSamples.map((s, idx) => {
+    const is_ = iSamples[idx];
+    if (Math.abs(s.t - is_.t) > 1e-9) {
+      throw new Error('powerFromVI: sample ' + idx + ' timestamps do not match (' + s.t + ' vs ' + is_.t + ')');
+    }
+    return { t: s.t, value: s.value * is_.value };
+  });
+}
+
+// real linearly-interpolated threshold crossings over a trace -- the same
+// interpolation technique runExperiment's own event detector uses, factored
+// out so period/frequency/duty-cycle/phase can all share one real
+// crossing-finder instead of each approximating it differently
+function findCrossings(samples, threshold, direction) {
+  const out = [];
+  for (let i = 1; i < samples.length; i++) {
+    const prev = samples[i - 1].value;
+    const val = samples[i].value;
+    if (prev === val) continue;
+    const crossedUp = prev < threshold && val >= threshold;
+    const crossedDown = prev > threshold && val <= threshold;
+    if ((crossedUp && direction !== 'falling') || (crossedDown && direction !== 'rising')) {
+      const frac = (threshold - prev) / (val - prev);
+      const t = samples[i - 1].t + frac * (samples[i].t - samples[i - 1].t);
+      out.push({ t, direction: crossedUp ? 'rising' : 'falling' });
+    }
+  }
+  return out;
+}
+
+// real period from the average spacing between consecutive same-direction
+// crossings -- returns null (never a guessed/default value) if there
+// aren't at least two crossings to measure a real period from. threshold
+// defaults to the trace's own real average (a real AC signal's own DC
+// midpoint), not an arbitrary fixed number.
+function findPeriod(samples, opts) {
+  opts = opts || {};
+  if (!samples || samples.length < 2) return null;
+  const threshold = opts.threshold != null ? opts.threshold : averageValue(samples);
+  const crossings = findCrossings(samples, threshold, 'rising');
+  if (crossings.length < 2) return null;
+  let sum = 0;
+  for (let i = 1; i < crossings.length; i++) sum += crossings[i].t - crossings[i - 1].t;
+  return { period: sum / (crossings.length - 1), threshold, crossingCount: crossings.length };
+}
+
+function findFrequency(samples, opts) {
+  const p = findPeriod(samples, opts);
+  return p && p.period > 0 ? 1 / p.period : null;
+}
+
+// real phase difference (degrees) between two traces, measured from the
+// time offset between their corresponding rising-edge crossings and
+// normalized by signal A's own real measured period -- not assumed from
+// the two circuits' nominal design values
+function phaseDifferenceDeg(samplesA, samplesB, opts) {
+  opts = opts || {};
+  const perA = findPeriod(samplesA, opts.a);
+  if (!perA) return null;
+  const crossA = findCrossings(samplesA, opts.a && opts.a.threshold != null ? opts.a.threshold : averageValue(samplesA), 'rising');
+  const crossB = findCrossings(samplesB, opts.b && opts.b.threshold != null ? opts.b.threshold : averageValue(samplesB), 'rising');
+  if (!crossA.length || !crossB.length) return null;
+  // for each A crossing, the nearest B crossing gives one real delay
+  // sample; averaging several real cycles is more honest than trusting
+  // a single edge, which could be a transient rather than steady state
+  const delays = crossA.map((ca) => {
+    let nearest = crossB[0];
+    let best = Math.abs(crossB[0].t - ca.t);
+    crossB.forEach((cb) => {
+      const d = Math.abs(cb.t - ca.t);
+      if (d < best) { best = d; nearest = cb; }
+    });
+    return nearest.t - ca.t;
+  });
+  const meanDelay = delays.reduce((a, b) => a + b, 0) / delays.length;
+  let deg = (meanDelay / perA.period) * 360;
+  // normalize to (-180, 180]
+  deg = ((deg + 180) % 360 + 360) % 360 - 180;
+  return deg;
+}
+
+// real fraction-of-time (not fraction-of-samples) a trace spends at/above
+// a threshold, using the same interpolated crossings so a coarse sample
+// rate doesn't bias the answer
+function dutyCycle(samples, threshold) {
+  if (!samples || samples.length < 2) return null;
+  const thr = threshold != null ? threshold : averageValue(samples);
+  let highTime = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const t0 = samples[i - 1].t, t1 = samples[i].t;
+    const v0 = samples[i - 1].value, v1 = samples[i].value;
+    const dt = t1 - t0;
+    if (v0 >= thr && v1 >= thr) highTime += dt;
+    else if (v0 >= thr || v1 >= thr) {
+      // one endpoint above, one below -- f0 is the crossing's fractional
+      // position from t0 (the same interpolation findCrossings uses);
+      // falling (v0 high -> v1 low) is above-threshold from t0 TO the
+      // crossing (f0*dt), rising (v0 low -> v1 high) is above-threshold
+      // from the crossing TO t1 ((1-f0)*dt) -- opposite halves, easy to
+      // invert by mistake, so spelled out explicitly rather than reused.
+      const f0 = (thr - v0) / (v1 - v0);
+      highTime += v0 >= thr ? dt * f0 : dt * (1 - f0);
+    }
+  }
+  return highTime / (samples[samples.length - 1].t - samples[0].t);
 }
 
 // Scale-boundary output (item 19 of the hardware-scaling directive): turns
@@ -820,4 +986,5 @@ module.exports = {
   resolveNodeNames, namedVoltagesFrom, measurementsFrom,
   buildSweepValues, applySweepValue, runSweep,
   valueFor, runExperiment, traceStatsFromSamples, resolvedOutputFrom,
+  averageValue, rmsValue, integrateEnergy, powerFromVI, findCrossings, findPeriod, findFrequency, phaseDifferenceDeg, dutyCycle,
 };

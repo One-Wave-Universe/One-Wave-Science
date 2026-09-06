@@ -184,6 +184,15 @@
   // limit on how fast it can actually deliver current, and its leakage
   // is exactly why a "held" sample doesn't stay held forever even with a
   // perfect external circuit.
+  // a real capacitor can arrive on the bench already charged (from a
+  // prior circuit, a manufacturer pre-charge, or simply because a real
+  // test rig starts mid-experiment) -- an optional real initial condition
+  // for the ideal-C portion's own starting voltage, defaulting to 0
+  // (discharged) when not given, exactly like every other real part here
+  // that has a sensible default rather than an invented one.
+  function capInitialV(c) {
+    return c.initialV != null ? c.initialV : 0;
+  }
   function capacitorESR(c) {
     if (c.value >= ELECTROLYTIC_THRESHOLD) {
       // real small-signal electrolytics commonly run from a few ohms at
@@ -933,7 +942,7 @@
             // (see the state-update comment below for why that matters).
             const esr = capacitorESR(c);
             const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
-            const vPrev = this._capState.get(c.id) || 0;
+            const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
             stampG(i, i, gC);
@@ -1794,7 +1803,7 @@
           const esr = capacitorESR(c);
           const gC = 1 / (esr + Math.max(dt, 1e-6) / c.value);
           const gLeak = 1 / capacitorLeakageR(c);
-          const vPrev = this._capState.get(c.id) || 0;
+          const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
           const capBranchI = gC * ((va - vb) - vPrev);
           const leakI = gLeak * (va - vb);
           I = capBranchI + leakI; // total current the part draws, ESR branch + leakage, same convention as every other component's a->b current

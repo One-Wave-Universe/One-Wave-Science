@@ -320,6 +320,9 @@
       p.terminals.forEach((t, j) => checkTerminal(t, i, j, errors));
       if (p.type === 'led' && p.color && !LED_COLORS.has(p.color)) errors.push('part ' + i + ': bad led color "' + p.color + '"');
       if (NUMERIC_TYPES.has(p.type) && !(Number(p.value) > 0)) errors.push('part ' + i + ' (' + p.type + '): needs a positive numeric value');
+      if (p.type === 'capacitor' && p.initialV != null && !Number.isFinite(Number(p.initialV))) {
+        errors.push('part ' + i + ' (capacitor): "initialV" must be a finite number of volts if given');
+      }
       if (p.type === 'diffsource') {
         // unlike a battery, a real differential/lean source's value (deltaV
         // relative to its own reference pin) is explicitly signed and can
