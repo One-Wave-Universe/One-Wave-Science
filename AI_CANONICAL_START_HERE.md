@@ -6,54 +6,67 @@ An AI reading this repository must begin here before summarizing, editing, or ex
 
 ## Current update handoff
 
-1. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
-2. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-3. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-4. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-5. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-6. `VTC_BUILD_ARCHITECTURE.md`
-7. `Nodes/B-206b_Four_Views.md`
-8. `Nodes/B-206c_Four_Actions.md`
-9. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-10. `Nodes/B-223_Three_Moves.md`
-11. `Nodes/B-224_Two_Choices.md`
-12. `Nodes/B-225_Field_Cycle.md`
-13. `Nodes/C-301_Mirror_Gate.md`
-14. `Nodes/G-711_Gate_7.md`
-15. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-16. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-17. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-18. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-19. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-20. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-21. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-22. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `UPDATED_48_HANDOFF_SYNC_G743_G746.md`
+2. `UPDATED_47_DAMPING_MATRIX_DISPERSION.md`
+3. `UPDATED_46_ZONE_EDGE_125GEV_A0_QUARANTINE.md`
+4. `UPDATED_45_PPF_HEX_GRAPH_AND_OCCUPANCY_WRAPPER.md`
+5. `Nodes/G-746_Damping_Matrix_Dispersion.md`
+6. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
+7. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
+8. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
+9. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
+10. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+11. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+12. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+13. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+14. `VTC_BUILD_ARCHITECTURE.md`
+15. `Nodes/B-206b_Four_Views.md`
+16. `Nodes/B-206c_Four_Actions.md`
+17. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+18. `Nodes/B-223_Three_Moves.md`
+19. `Nodes/B-224_Two_Choices.md`
+20. `Nodes/B-225_Field_Cycle.md`
+21. `Nodes/C-301_Mirror_Gate.md`
+22. `Nodes/G-711_Gate_7.md`
+23. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+24. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+25. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+26. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+27. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+28. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+29. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+30. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 ## Current Micro node handoff
 
-1. `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`
-2. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
-3. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
-4. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
-5. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
-6. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
-7. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
-8. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
-9. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
-10. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
-11. `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`
-12. `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`
-13. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
-14. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-15. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
-16. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-17. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-18. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-19. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-20. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-21. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-22. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-23. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+1. `Nodes/G-746_Damping_Matrix_Dispersion.md`
+2. `Nodes/G-728_E1_STAMP.md`
+3. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
+4. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
+5. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
+6. `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`
+7. `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`
+8. `Nodes/G-735_Chapter_Driven_Simulator_Program.md`
+9. `Nodes/G-728_Mathematics_Attack_Laundry_List.md`
+10. `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`
+11. `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`
+12. `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`
+13. `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`
+14. `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`
+15. `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`
+16. `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`
+17. `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`
+18. `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`
+19. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+20. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+21. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+22. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+23. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+24. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+25. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+26. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+27. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+28. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 ## M4 command-runtime handoff
 
@@ -90,6 +103,8 @@ Field/Void ternaries and quadratic routing (G-740)
 ```
 
 Older neutral `-2,-1,0,+1,+2` modulation language is compatibility shorthand only. It must not replace the five commitment/readout states or the five-state self lifecycle. Matching counts are not evidence that two axes are the same.
+
+G-744 occupancy labels (field 2/3/4/5, void pickup of 6) are a domain wrapper. They do not add a seventh route.
 
 ## Updated 34 processing/memory protection
 
@@ -173,6 +188,12 @@ Mass Effect is the response produced when the complete stable recurrence must be
 The cross-couplings among those four interactions are part of the complete response and may not be omitted.
 
 The approximately 125 GeV collider measurement is a separate observable: the Mirror-Gate boundary-response work required to drive the stable architecture to its first mirrored-basin crossing.
+
+G-745 forbids treating 125 GeV as a first-principles lattice constant or as a hidden input to a blind Hoyle test.
+
+## Dispersion split gate (G-746)
+
+E1 scalar dual problem is GREEN only for the assumed linear damped PDE. Matrix Field/Void structure remains YELLOW. E5 remains YELLOW, blocked by multi-branch physics, open-system energy, independent I0, and no-125/no-Hoyle closure.
 
 ## Dimensional integrity before simulation
 
