@@ -1,11 +1,9 @@
-# Triad brain (native)
+# Brain versus nerve
 
-The brain is three loops on CPU: DC polarity, AC ternary, quadratic views/actions.
+Brain = Dream / M4 / Administrator. See G-753.
 
-Jetson files remain as an optional adapter. Do not require GPU detection to cycle the brain.
+Nerve = 3:1 three-winding ternary motor. `nerve_three_winding.py`.
 
-See `Nodes/G-752_Triad_Brain_Three_Loops.md` and `triad_brain.py`.
+G-752 DC/AC/QC names, if used, are nerve timing — not brain lobes.
 
-```bash
-python -m unittest One_Wave_Bench.brain.test_triad_brain
-```
+Jetson remains optional.
