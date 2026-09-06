@@ -88,6 +88,39 @@
   const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
+  // ohms; a purpose-built low-voltage/precision reference source (a DAC
+  // output stage, a precision resistor divider, a low-voltage reference
+  // IC) has real output impedance too, but it is NOT the same real part as
+  // a battery -- typically a couple hundred ohms rather than a battery's
+  // ~1 ohm. Honest order-of-magnitude default; a real design's actual
+  // source impedance is set via the diffsource's own optional sourceR.
+  const DIFFSOURCE_RINT = 200;
+
+  // deterministic PRNG (mulberry32) + Box-Muller Gaussian sampling, used
+  // for real source noise (diffsource's optional noiseRms) -- seeded per
+  // component id so a run is reproducible, not re-randomized every call.
+  function mulberry32(seed) {
+    let s = seed >>> 0;
+    return function () {
+      s = (s + 0x6d2b79f5) | 0;
+      let t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function hashSeed(str) {
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function gaussianSample(rng) {
+    const u1 = Math.max(rng(), 1e-12);
+    const u2 = rng();
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  }
   // farads; at/above this a capacitor is a real polarized electrolytic
   // (matches components.js's drawing threshold -- the same real part,
   // just two different concerns needing the same number)
@@ -302,6 +335,9 @@
       this._compOutLimitDir = new Map(); // "<comparatorId>:<channel>" -> +1/-1, which way it was sourcing/sinking when it hit the limit
       this._vgndLimited = new Map(); // vgnd id -> boolean (output current-limited, can't hold the midpoint under this load)
       this._vgndLimitDir = new Map(); // vgnd id -> +1/-1, which way it was sourcing/sinking when it hit the limit
+      this._diffNoiseRng = new Map(); // diffsource id -> its own seeded PRNG (a real independent noise sequence over time)
+      this._diffNoiseSample = new Map(); // diffsource id -> this frame's sampled noise volts (resampled once per new sim-clock tick, not per fixed-point iteration)
+      this._diffNoiseAtT = new Map(); // diffsource id -> sim-clock time the cached sample was drawn at
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -320,6 +356,28 @@
       const t = this._t;
 
       const batInternal = (c) => '__batint__' + c.id;
+      // diffsource: a real EMF of "value" volts referenced to whatever its
+      // own b-pin is wired to (its real reference input), through its own
+      // real source impedance -- see the `batteries` filter comment below
+      // for why it reuses the battery's exact MNA structure.
+      const sourceRFor = (c) => (c.type === 'diffsource' ? (c.sourceR != null ? c.sourceR : DIFFSOURCE_RINT) : BATTERY_RINT);
+      const diffNoiseSample = (c) => {
+        if (!c.noiseRms) return 0;
+        // resample once per new sim-clock tick, not per fixed-point
+        // iteration -- a real noise source has one value per instant, and
+        // resampling mid-iteration would just be numerical jitter, not
+        // real noise
+        if (this._diffNoiseAtT.get(c.id) !== t) {
+          if (!this._diffNoiseRng.has(c.id)) {
+            this._diffNoiseRng.set(c.id, mulberry32(hashSeed(String(c.noiseSeed != null ? c.noiseSeed : c.id))));
+          }
+          const rng = this._diffNoiseRng.get(c.id);
+          this._diffNoiseSample.set(c.id, gaussianSample(rng) * c.noiseRms);
+          this._diffNoiseAtT.set(c.id, t);
+        }
+        return this._diffNoiseSample.get(c.id) || 0;
+      };
+      const effectiveSourceValue = (c) => (c.type === 'diffsource' ? c.value + diffNoiseSample(c) : c.value);
       const vgndInternal = (c) => '__vgndint__' + c.id;
       const acInternal = (c) => '__acint__' + c.id;
       const mtjSinInternal = (c) => '__mtjsin__' + c.id;
@@ -331,7 +389,7 @@
         uf.find(c.b);
         if (c.type === 'potentiometer') uf.find(c.wiper);
         if ((c.type === 'switch' || c.type === 'pushbutton') && c.closed) uf.union(c.a, c.b);
-        if (c.type === 'battery') uf.find(batInternal(c));
+        if (c.type === 'battery' || c.type === 'diffsource') uf.find(batInternal(c));
         if (c.type === 'vgnd') {
           uf.find(c.out);
           uf.find(vgndInternal(c));
@@ -353,7 +411,16 @@
         }
       });
 
-      const batteries = components.filter((c) => c.type === 'battery');
+      // diffsource shares the exact same ideal-EMF-plus-series-resistance
+      // MNA structure as a battery (extra branch-current unknown via
+      // rowBat) -- it is a real 2-terminal source too, just one whose EMF
+      // is specified as "value volts relative to whatever node b is
+      // wired to" (its real reference pin) instead of an absolute rail,
+      // and with its own real (smaller, precision-source-typical) output
+      // impedance instead of a battery's. Grouping them together reuses
+      // all of the existing extra-unknown row bookkeeping below with no
+      // change to any other row offset.
+      const batteries = components.filter((c) => c.type === 'battery' || c.type === 'diffsource');
       const vgnds = components.filter((c) => c.type === 'vgnd');
       const inductors = components.filter((c) => c.type === 'inductor');
       const acsources = components.filter((c) => c.type === 'acsource');
@@ -391,7 +458,7 @@
         touch(c.a);
         touch(c.b);
         if (c.type === 'potentiometer') touch(c.wiper);
-        if (c.type === 'battery') touch(batInternal(c));
+        if (c.type === 'battery' || c.type === 'diffsource') touch(batInternal(c));
         if (c.type === 'vgnd') {
           touch(c.out);
           touch(vgndInternal(c));
@@ -483,7 +550,13 @@
           const key = cp.id + ':' + ch;
           if (!this._compState.has(key)) this._compState.set(key, false);
           if (!this._compDesired.has(key)) this._compDesired.set(key, false);
-          if (!this._compDesiredSince.has(key)) this._compDesiredSince.set(key, t);
+          // "since t-dt" (the START of this step), not "since t" (its end) --
+          // a desired-state change detected mid-step is conservatively
+          // treated as having held for this whole step's dt already, so a
+          // real propDelay far smaller than dt (the normal case) resolves
+          // within the SAME step instead of always costing one whole extra
+          // step no matter how small propDelay actually is
+          if (!this._compDesiredSince.has(key)) this._compDesiredSince.set(key, t - dt);
           if (!this._compOutLimited.has(key)) this._compOutLimited.set(key, false);
           if (!this._compOutLimitDir.has(key)) this._compOutLimitDir.set(key, 1);
         });
@@ -680,8 +753,8 @@
                 stampG(target, o, -g);
               }
             });
-          } else if (c.type === 'battery') {
-            const g = 1 / BATTERY_RINT;
+          } else if (c.type === 'battery' || c.type === 'diffsource') {
+            const g = 1 / sourceRFor(c);
             const i = gi(uf.find(batInternal(c)));
             const j = gi(uf.find(c.a));
             stampG(i, i, g);
@@ -746,7 +819,7 @@
             A[m][row] -= 1;
             A[row][m] -= 1;
           }
-          b[row] += bat.value;
+          b[row] += effectiveSourceValue(bat);
         });
 
         // rail-splitter constraint: V(internal) = 0.5*(V(a) + V(b)), an
@@ -1015,7 +1088,12 @@
             const key = cp.id + ':' + ch;
             if (shouldBeHigh !== this._compDesired.get(key)) {
               this._compDesired.set(key, shouldBeHigh);
-              this._compDesiredSince.set(key, t);
+              // see the fresh-init comment above: "since t-dt", not "since
+              // t" -- otherwise a change detected mid-step would always
+              // read 0 elapsed time against itself in this same solve()
+              // call and cost a whole extra step no matter how small the
+              // real propDelay is relative to dt
+              this._compDesiredSince.set(key, t - dt);
             }
             // the real output only actually flips propDelay after the
             // real input comparison changed -- at typical frame dt this
@@ -1352,6 +1430,14 @@
       const coreStates = new Map();
       memoryCores.forEach((mc) => coreStates.set(mc.id, this._coreState.get(mc.id)));
 
+      // a real flux probe reads real flux (Weber), not just the normalized
+      // -1..1 remanence figure -- coreStates already IS a direct readout of
+      // the solver's real internal state (never inferred from a terminal
+      // voltage); this just also reports it in the physical unit its own
+      // phiSat is specified in, since B_normalized * phiSat is real flux.
+      const coreFlux = new Map();
+      memoryCores.forEach((mc) => coreFlux.set(mc.id, this._coreState.get(mc.id) * (mc.phiSat || 0)));
+
       // expose each comparator channel's actual HIGH/LOW decision directly
       // -- the real Vin+/Vin-/Vos comparison computed above, never a
       // separately invented state
@@ -1361,7 +1447,7 @@
         out2High: this._compState.get(cp.id + ':2'),
       }));
 
-      return { voltages, currents, warnings, mosfetStates, coreStates, comparatorStates, uf, groundRoot, hasCircuit: true };
+      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
