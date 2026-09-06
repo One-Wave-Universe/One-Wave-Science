@@ -260,8 +260,11 @@ function approx(a, b, eps, msg) {
   const dt = 1 / 2000;
   let res;
   for (let i = 0; i < 2000; i++) res = c.solve(els, dt); // 1 second
-  // steady state: R includes the battery's own internal resistance too
-  const totalR = 100 + CircuitEngine.BATTERY_RINT;
+  // steady state: R includes the battery's own internal resistance AND
+  // the inductor's own real winding resistance (DCR) -- a real 100mH
+  // inductor is never a bare L, so both real series resistances set the
+  // actual L/R time constant, not just the resistor the user placed.
+  const totalR = 100 + CircuitEngine.BATTERY_RINT + CircuitEngine.inductorDCR(0.1);
   const iSteady = 5 / totalR;
   const tau = 0.1 / totalR;
   const iExpected = iSteady * (1 - Math.exp(-1 / tau));
@@ -727,6 +730,16 @@ function windingR(turns, meanTurnLen) {
 // bidirectional switch T-BB-PAIR proves) dumps write current through a
 // memory-core winding while its gates are driven on, then the gates go off
 // -- remanence must survive the gate closing (DC memory, not volatile).
+// Now that the MOSFET model includes real gate input capacitance (Ciss),
+// the pair's shared source node -- otherwise connected to nothing else --
+// would be a genuinely floating node once both channels cut off, exactly
+// like a real back-to-back analog-switch IC's internal node: with no real
+// DC path, real parasitic Cgs charge from the ON phase has nothing to
+// discharge through and the switch can't be relied on to reach a clean
+// off state. Any real bench build of this topology needs a defined bias
+// path on that node for exactly this reason (a standard real design
+// practice for anti-series MOSFET switches) -- sbias is that real, high-
+// value (so it doesn't load real signal current) bias resistor.
 {
   const N = 20;
   const R = windingR(N, 0.03);
@@ -738,6 +751,7 @@ function windingR(turns, meanTurnLen) {
         { id: 'lean', type: 'battery', a: 'D1', b: 'GND', value: leanV },
         { id: 'f1', type: 'nmos', gate: 'GATE', drain: 'D1', source: 'S', value: 1.5 },
         { id: 'f2', type: 'nmos', gate: 'GATE', drain: 'D2', source: 'S', value: 1.5 },
+        { id: 'sbias', type: 'resistor', a: 'S', b: 'GND', value: 1e6 },
         { id: 'mc1', type: 'memorycore', hcAmpTurns: SMALL_CORE.hcAmpTurns, phiSat: SMALL_CORE.phiSat, switchTau: SMALL_CORE.switchTau, windings: [{ a: 'D2', b: 'GND', N, R }] },
       ],
     };
@@ -1095,7 +1109,227 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 36 OK (T-CAP-POLARITY): reverse-biased electrolytic warns, reverse-biased ceramic does not');
 }
 
-// Test 37 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 37 (T-MONTE-CARLO): simulate.js's tolerance/Monte-Carlo mode must
+// actually perturb real component values within their real, honest
+// manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE) -- not just
+// report the one perfect nominal case -- and the resulting spread on a
+// plain resistor divider must land inside what real +/-5% resistors and a
+// real +/-2% supply can actually produce, checked against the analytic
+// worst-case bound, not just "some nonzero spread happened".
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+
+  // same seed twice must reproduce identically -- a real tolerance run has
+  // to be reproducible for a design review, not a new answer every time
+  const spec = [
+    { type: 'battery', value: 9, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+    { type: 'resistor', value: 1000, terminals: [{ row: 'c', col: 5 }, { row: 'c', col: 10 }] },
+    { type: 'resistor', value: 1000, terminals: [{ row: 'd', col: 10 }, { row: 'h', col: 10 }] },
+    { type: 'wire', terminals: [{ row: 'i', col: 5 }, { row: 'i', col: 10 }] },
+  ];
+  const { parts } = Sim.resolveTerminals(board, spec);
+  const sim = { seconds: 0.02, dt: 0.001 };
+
+  const reportA = Sim.runMonteCarlo(parts, sim, { trials: 300, seed: 42, watch: [{ label: 'mid', path: 'voltages.b0:T10' }] });
+  const reportB = Sim.runMonteCarlo(parts, sim, { trials: 300, seed: 42, watch: [{ label: 'mid', path: 'voltages.b0:T10' }] });
+  assert.deepStrictEqual(reportA.summary.mid, reportB.summary.mid, 'T-MONTE-CARLO: the same seed must reproduce the exact same trial statistics');
+
+  // an even 1k/1k divider off a 9V supply sits at 4.5V nominal; two
+  // independent +/-5% resistors plus a +/-2% supply can worst-case push
+  // the midpoint roughly +/-(5%+2.5%+2%) ~= +/-9.5% of 4.5V -- real
+  // sampled trials must fall well inside that bound and must NOT all be
+  // exactly 4.5V (that would mean tolerance isn't actually being applied)
+  const { min, max, stdev } = reportA.summary.mid;
+  const nominal = 4.5;
+  assert.ok(stdev > 0.01, 'T-MONTE-CARLO: trials must show real spread from part tolerance, not all land on the exact nominal value');
+  assert.ok(min > nominal * 0.85 && max < nominal * 1.15, 'T-MONTE-CARLO: spread must stay within the real worst-case bound for +/-5% resistors and a +/-2% supply, got min=' + min + ' max=' + max);
+  assert.strictEqual(reportA.trials, 300, 'T-MONTE-CARLO: must run exactly the requested trial count');
+
+  console.log('Test 37 OK (T-MONTE-CARLO): 300 seeded trials reproduce identically, midpoint spread', min.toFixed(3), '-', max.toFixed(3), 'V (nominal', nominal, 'V) from real part tolerance');
+}
+
+// Test 38 (T-DIFFSOURCE): a real mV differential source (V = V0 + deltaV,
+// real source impedance) must hold its commanded deltaV across whatever
+// its reference pin is wired to, under a light real load -- exactly the
+// same ideal-EMF-plus-series-resistance structure as a battery, just
+// referenced to a real node instead of an absolute rail. Its optional
+// noise must be real (non-zero spread) and reproducible from the same
+// seed, not fresh randomness every run.
+{
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+      { id: 'src1', type: 'diffsource', a: 'LEAN', b: 'V0', value: 0.02, sourceR: 300 },
+      { id: 'rload', type: 'resistor', a: 'LEAN', b: 'V0', value: 1e6 },
+    ],
+  };
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 10; i++) res = c.solve(els, 1 / 2000);
+  const vLean = res.voltages.get(res.uf.find('LEAN'));
+  const vV0 = res.voltages.get(res.uf.find('V0'));
+  approx(vLean - vV0, 0.02, 1e-4, 'T-DIFFSOURCE: LEAN must sit deltaV above V0 under a light real load');
+
+  // same seed twice must reproduce the exact same noise sequence
+  const elsNoisy = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+      { id: 'src1', type: 'diffsource', a: 'LEAN', b: 'V0', value: 0.02, sourceR: 300, noiseRms: 0.005, noiseSeed: 7 },
+      { id: 'rload', type: 'resistor', a: 'LEAN', b: 'V0', value: 1e6 },
+    ],
+  };
+  function runNoisy() {
+    const cc = new Circuit();
+    const decisions = [];
+    for (let i = 0; i < 20; i++) {
+      const r = cc.solve(elsNoisy, 1 / 2000);
+      decisions.push(r.voltages.get(r.uf.find('LEAN')) - r.voltages.get(r.uf.find('V0')));
+    }
+    return decisions;
+  }
+  const runA = runNoisy();
+  const runB = runNoisy();
+  assert.deepStrictEqual(runA, runB, 'T-DIFFSOURCE: the same noiseSeed must reproduce the exact same noise sequence');
+  const meanA = runA.reduce((a, b) => a + b, 0) / runA.length;
+  const varA = runA.reduce((a, b) => a + (b - meanA) ** 2, 0) / runA.length;
+  approx(meanA, 0.02, 0.01, 'T-DIFFSOURCE: noisy samples must still average near the commanded deltaV');
+  assert.ok(Math.sqrt(varA) > 0.001, 'T-DIFFSOURCE: noiseRms must actually produce real sample-to-sample spread, not a constant value');
+
+  console.log('Test 38 OK (T-DIFFSOURCE): LEAN = V0 + 20mV under load, noise reproducible from its seed with real spread (stdev', Math.sqrt(varA).toFixed(4), 'V)');
+}
+
+// Test 39 (T-NAMED-NODES): simulate.js's nodeNames must resolve a real
+// declared name to the exact same electrical node as any part wired to
+// that hole's bus (a pure label, no new topology), and named measurements
+// must report the real solved difference between two such names.
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const AI = require('../js/ai.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+
+  const spec = {
+    layout: '1large',
+    nodeNames: { V0: { row: 'e', col: 20 }, LEAN: { row: 'c', col: 25 } },
+    parts: [
+      { id: 'bat1', type: 'battery', value: 9, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+      { id: 'vg1', type: 'vgnd', terminals: [{ row: 'd', col: 5 }, { row: 'g', col: 5 }, { row: 'e', col: 20 }] },
+      { id: 'lean1', type: 'diffsource', value: 0.02, sourceR: 300, terminals: [{ row: 'c', col: 25 }, { row: 'a', col: 20 }] },
+    ],
+    measurements: [{ label: 'Decision', a: 'LEAN', b: 'V0' }],
+  };
+  const { parts } = Sim.resolveTerminals(board, AI.validateSpec(spec).parts);
+  const { names, errors: nameErrors } = Sim.resolveNodeNames(board, spec.nodeNames);
+  assert.strictEqual(nameErrors.length, 0, 'T-NAMED-NODES: real hole references must resolve cleanly');
+
+  const elements = Sim.toEngineElements(parts);
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 30; i++) res = c.solve(elements, 1 / 2000);
+  const snap = Sim.snapshot(res, { nodeNameCellIds: names, measurements: spec.measurements });
+  approx(snap.namedVoltages.V0, 4.5, 0.01, 'T-NAMED-NODES: named V0 must read the real solved vgnd midpoint');
+  approx(snap.measurements.Decision, 0.02, 0.001, 'T-NAMED-NODES: named measurement Decision must read the real LEAN-V0 difference');
+
+  // an explicit part "id" must be used as-is (not renumbered), so a
+  // component-keyed result (currents here) is addressable by that name
+  assert.ok('lean1' in snap.currents, 'T-NAMED-NODES: an explicit part id must be preserved as the real component id');
+
+  console.log('Test 39 OK (T-NAMED-NODES): named V0 =', snap.namedVoltages.V0.toFixed(3), 'V, Decision =', (snap.measurements.Decision * 1000).toFixed(2), 'mV');
+}
+
+// Test 40 (T-SWEEP): simulate.js's parameter sweep must actually vary the
+// declared part field across the declared range and re-solve at each
+// point -- checked against the real linear divider response, not just
+// "some numbers came back".
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const AI = require('../js/ai.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+  const spec = {
+    layout: '1large',
+    nodeNames: { V0: { row: 'e', col: 20 }, LEAN: { row: 'c', col: 25 } },
+    parts: [
+      { id: 'bat1', type: 'battery', value: 9, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+      { id: 'vg1', type: 'vgnd', terminals: [{ row: 'd', col: 5 }, { row: 'g', col: 5 }, { row: 'e', col: 20 }] },
+      { id: 'lean1', type: 'diffsource', value: 0, sourceR: 300, terminals: [{ row: 'c', col: 25 }, { row: 'a', col: 20 }] },
+    ],
+    measurements: [{ label: 'Decision', a: 'LEAN', b: 'V0' }],
+  };
+  const { parts } = Sim.resolveTerminals(board, AI.validateSpec(spec).parts);
+  const { names } = Sim.resolveNodeNames(board, spec.nodeNames);
+  const snapOpts = { nodeNameCellIds: names, measurements: spec.measurements };
+  const report = Sim.runSweep(parts, { seconds: 0.02, dt: 0.001 }, { partId: 'lean1', field: 'value', from: -0.1, to: 0.1, steps: 5 }, snapOpts);
+  assert.strictEqual(report.points.length, 5, 'T-SWEEP: must produce exactly the requested number of points');
+  const expected = [-0.1, -0.05, 0, 0.05, 0.1];
+  report.points.forEach((p, i) => {
+    approx(p.value, expected[i], 1e-9, 'T-SWEEP: sweep point ' + i + ' must land on the declared linear value');
+    approx(p.measurements.Decision, expected[i], 0.002, 'T-SWEEP: Decision must track the swept deltaV at point ' + i);
+  });
+  console.log('Test 40 OK (T-SWEEP): 5-point sweep from -100mV to +100mV tracks Decision at every point');
+}
+
+// Test 41 (T-EXPERIMENT): simulate.js's staged experiment runner must (a)
+// detect a real threshold-crossing event with an interpolated time between
+// the two straddling solves, and (b) correctly measure persistence -- a
+// real memory-core write followed by a real release, checked with the
+// SAME real remanence physics T-CORE-LOCK/T-GATE-MEM already prove, not a
+// separate scripted result.
+{
+  const Sim = require('../simulate.js');
+  const Board = require('../js/board.js');
+  const AI = require('../js/ai.js');
+  const board = Board.build(Sim.LAYOUT_PRESETS['1large']);
+  board.layoutKey = '1large';
+  const spec = {
+    layout: '1large',
+    nodeNames: { V0: { row: 'e', col: 20 }, WRITE: { row: 'c', col: 25 } },
+    parts: [
+      { id: 'bat1', type: 'battery', value: 9, terminals: [{ row: 'e', col: 5 }, { row: 'f', col: 5 }] },
+      { id: 'vg1', type: 'vgnd', terminals: [{ row: 'd', col: 5 }, { row: 'g', col: 5 }, { row: 'e', col: 20 }] },
+      { id: 'drv1', type: 'diffsource', value: 0, sourceR: 1, terminals: [{ row: 'c', col: 25 }, { row: 'a', col: 20 }] },
+      { id: 'mc1', type: 'memorycore', turns: [20], core: 'small', terminals: [{ row: 'd', col: 25 }, { row: 'b', col: 20 }] },
+    ],
+  };
+  const { parts } = Sim.resolveTerminals(board, AI.validateSpec(spec).parts);
+  const { names } = Sim.resolveNodeNames(board, spec.nodeNames);
+  const snapOpts = { nodeNameCellIds: names, measurements: [] };
+  const experiment = {
+    stages: [
+      { name: 'settle', seconds: 0.01, dt: 0.0005 },
+      { name: 'write', seconds: 0.02, dt: 0.0005, set: [{ partId: 'drv1', field: 'value', value: 0.5 }] },
+      { name: 'release', seconds: 0.05, dt: 0.0005, set: [{ partId: 'drv1', field: 'value', value: 0 }] },
+    ],
+    events: [{ label: 'core_lock', core: 'mc1', threshold: 0.9, direction: 'rising' }],
+    persistence: { label: 'CoreHold', core: 'mc1', baselineStage: 'write', holdStage: 'release', minDelta: 0.5 },
+  };
+  const result = Sim.runExperiment(parts, experiment, snapOpts);
+  assert.strictEqual(result.errors.length, 0, 'T-EXPERIMENT: a well-formed staged experiment must run without errors');
+  approx(result.stages[1].snapshot.coreStates.mc1, 1, 0.001, 'T-EXPERIMENT: the write stage must actually saturate the core (real ampere-turns past Hc)');
+
+  assert.strictEqual(result.events.length, 1, 'T-EXPERIMENT: the core-lock threshold crossing must be detected exactly once');
+  const ev = result.events[0];
+  assert.strictEqual(ev.stage, 'write', 'T-EXPERIMENT: the crossing must be attributed to the write stage');
+  assert.ok(ev.t > 0.01 && ev.t < 0.03, 'T-EXPERIMENT: the interpolated crossing time must fall within the write stage window, got ' + ev.t);
+  assert.ok(ev.valueBefore < 0.9 && ev.valueAfter >= 0.9, 'T-EXPERIMENT: the recorded before/after values must straddle the declared threshold');
+
+  assert.strictEqual(result.persistence.baseline, 0, 'T-EXPERIMENT: persistence baseline must be the real pre-write state (demagnetized)');
+  assert.ok(result.persistence.distinguishable, 'T-EXPERIMENT: remanence must stay distinguishable from the pre-write baseline throughout release, got minObservedDelta=' + result.persistence.minObservedDelta);
+  approx(result.persistence.minObservedDelta, 1, 0.001, 'T-EXPERIMENT: remanence must not meaningfully decay during release (real DC memory, not volatile)');
+
+  console.log('Test 41 OK (T-EXPERIMENT): core-lock event at t=', ev.t.toFixed(6), 's, persistence minObservedDelta=', result.persistence.minObservedDelta.toFixed(4));
+}
+
+// Test 42 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
@@ -1107,7 +1341,7 @@ function windingR(turns, meanTurnLen) {
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 37 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 42 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');

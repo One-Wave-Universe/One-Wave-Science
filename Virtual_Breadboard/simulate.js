@@ -27,6 +27,22 @@
  *   }
  * Output shape (failure -- bad spec or unresolvable terminal), exit code 1:
  *   { "ok": false, "errors": [ "..." ] }
+ *
+ * Monte Carlo tolerance mode: add a "monteCarlo" key to the input --
+ *   "monteCarlo": {
+ *     "trials": 200,               // how many randomized runs, default 100
+ *     "seed": 12345,                // optional, for a reproducible sequence
+ *     "watch": [                    // optional, values to collect stats on
+ *       { "label": "MEM", "path": "voltages.<cellId>" },
+ *       { "label": "core", "path": "coreStates.mc1" }
+ *     ]
+ *   }
+ * Each trial re-samples every resistor/capacitor/battery/inductor value
+ * within its real manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE
+ * -- honest datasheet-typical bands, not tuned per-circuit) and re-runs the
+ * full sim, so a design has to hold up across real part variation instead
+ * of one perfect nominal case. Output is a { warningRate, summary } report,
+ * not a per-trial dump -- see runMonteCarlo below.
  */
 const fs = require('fs');
 
@@ -103,6 +119,7 @@ function deriveTlv3202Holes(board, anchor) {
 // back to board 0.
 function resolveTerminals(board, specParts) {
   const errors = [];
+  const seenIds = new Map(); // explicit id -> part index that claimed it first
   const parts = specParts.map((p, i) => {
     const terminals = p.type === 'potentiometer'
       ? derivePotentiometerHoles(board, H(board, p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
@@ -113,6 +130,15 @@ function resolveTerminals(board, specParts) {
       errors.push('part ' + i + ' (' + p.type + '): a terminal does not resolve to a real hole on layout "' + (board.layoutKey || '') + '"');
       return null;
     }
+    // an explicit "id" is a real, honest convenience -- it's still the
+    // same electrical component with the same physical terminals, just a
+    // name a receipt/experiment can read instead of guessing "which m2 was
+    // that again". No name is special to the solver; it's just a label.
+    const id = p.id != null ? String(p.id) : p.type[0] + (i + 1);
+    if (seenIds.has(id)) {
+      errors.push('part ' + i + ' (' + p.type + '): id "' + id + '" is already used by part ' + seenIds.get(id) + ' -- part ids must be unique');
+    }
+    seenIds.set(id, i);
     return {
       type: p.type,
       value: p.value,
@@ -121,13 +147,16 @@ function resolveTerminals(board, specParts) {
       pos: p.type === 'potentiometer' ? 0.5 : undefined,
       freq: p.freq,
       phase: p.phase,
+      sourceR: p.type === 'diffsource' ? p.sourceR : undefined,
+      noiseRms: p.type === 'diffsource' ? p.noiseRms : undefined,
+      noiseSeed: p.type === 'diffsource' ? (p.noiseSeed != null ? p.noiseSeed : id) : undefined,
       turnsPerSection: p.type === 'toroid' ? p.turns : undefined,
       turnsPerWinding: p.type === 'memorycore' ? p.turns : undefined,
       core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
       gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
       spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
       terminals,
-      id: p.type[0] + (i + 1),
+      id,
     };
   });
   const resolved = parts.filter(Boolean);
@@ -199,6 +228,11 @@ function toEngineElements(parts) {
       components.push({ id: p.id, type: 'vgnd', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, out: p.terminals[2].cellId });
     } else if (p.type === 'nmos' || p.type === 'pmos') {
       components.push({ id: p.id, type: p.type, label: p.id, gate: p.terminals[0].cellId, drain: p.terminals[1].cellId, source: p.terminals[2].cellId, value: p.value });
+    } else if (p.type === 'diffsource') {
+      components.push({
+        id: p.id, type: 'diffsource', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value,
+        sourceR: p.sourceR, noiseRms: p.noiseRms, noiseSeed: p.noiseSeed,
+      });
     } else if (p.type === 'acsource') {
       components.push({ id: p.id, type: 'acsource', label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, freq: p.freq || 1, phase: p.phase || 0 });
     } else if (p.type === 'mtjsensor') {
@@ -230,7 +264,55 @@ function toEngineElements(parts) {
   return { wires, components };
 }
 
-function snapshot(result) {
+// Named nodes: a name is a real label for an EXISTING physical hole (given
+// by row/col/board, exactly like a part terminal), not a new electrical
+// node -- resolving it just looks up that hole's real cellId, the same
+// cellId any part wired to that same bus already uses. No topology
+// changes; it's purely a label for readable specs/receipts (e.g. "V0",
+// "LEAN", "CORE_SENSE" instead of "b0:T14").
+function resolveNodeNames(board, nodeNamesSpec) {
+  const errors = [];
+  const names = {};
+  Object.keys(nodeNamesSpec || {}).forEach((name) => {
+    const ref = nodeNamesSpec[name];
+    const hole = ref && H(board, ref.row, ref.col, ref.board);
+    if (!hole) {
+      errors.push('nodeNames.' + name + ': does not resolve to a real hole on layout "' + (board.layoutKey || '') + '"');
+      return;
+    }
+    names[name] = hole.cellId;
+  });
+  return { names, errors };
+}
+
+// look up each declared name's real solved voltage -- voltages are keyed
+// by union-find root, not raw cellId, so this resolves through result.uf
+// exactly like every other lookup in this file does
+function namedVoltagesFrom(result, nodeNameCellIds) {
+  const out = {};
+  Object.keys(nodeNameCellIds || {}).forEach((name) => {
+    const root = result.uf.find(nodeNameCellIds[name]);
+    const v = result.voltages.get(root);
+    if (typeof v === 'number') out[name] = v;
+  });
+  return out;
+}
+
+// named measurement groups (e.g. Decision = V(LEAN) - V(V0)) -- only the
+// difference form the milestone actually needs; a richer expression
+// language is not built here
+function measurementsFrom(namedVoltages, measurementsSpec) {
+  const out = {};
+  (measurementsSpec || []).forEach((m) => {
+    const va = namedVoltages[m.a];
+    const vb = namedVoltages[m.b];
+    if (typeof va === 'number' && typeof vb === 'number') out[m.label] = va - vb;
+  });
+  return out;
+}
+
+function snapshot(result, opts) {
+  opts = opts || {};
   const out = {
     voltages: Object.fromEntries((result && result.voltages) || []),
     currents: Object.fromEntries((result && result.currents) || []),
@@ -242,10 +324,281 @@ function snapshot(result) {
   if (result && result.coreStates && result.coreStates.size) {
     out.coreStates = Object.fromEntries(result.coreStates);
   }
+  if (result && result.coreFlux && result.coreFlux.size) {
+    out.coreFlux = Object.fromEntries(result.coreFlux);
+  }
   if (result && result.comparatorStates && result.comparatorStates.size) {
     out.comparatorStates = Object.fromEntries(result.comparatorStates);
   }
+  if (opts.nodeNameCellIds && Object.keys(opts.nodeNameCellIds).length) {
+    out.namedVoltages = namedVoltagesFrom(result, opts.nodeNameCellIds);
+    if (opts.measurements && opts.measurements.length) {
+      out.measurements = measurementsFrom(out.namedVoltages, opts.measurements);
+    }
+  }
   return out;
+}
+
+// deterministic PRNG (mulberry32) so a seeded Monte Carlo run is
+// reproducible run-to-run -- real randomness isn't the point here, real
+// part-to-part variation is
+function mulberry32(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// real per-type manufacturing tolerance (CircuitEngine.COMPONENT_TOLERANCE)
+// -- only part types with a modeled real value spread are perturbed; a
+// type with no entry here (MOSFETs' discrete part-class selection,
+// comparator, memorycore/toroid core material, etc.) is left at its
+// nominal value rather than inventing an untethered tolerance for it.
+function toleranceFor(part) {
+  if (part.type === 'resistor') return CircuitEngine.COMPONENT_TOLERANCE.resistor;
+  if (part.type === 'capacitor') return CircuitEngine.capacitorToleranceFor(part);
+  if (part.type === 'battery') return CircuitEngine.COMPONENT_TOLERANCE.battery;
+  if (part.type === 'inductor') return CircuitEngine.COMPONENT_TOLERANCE.inductor;
+  return null;
+}
+
+// a diffsource's deltaV is a controlled experimental input, not a part
+// with its own manufacturing spread -- perturbParts leaves it alone
+// (toleranceFor returns null for it) so a sweep/Monte-Carlo run varies
+// resistors/caps/batteries around it without also smearing the very
+// quantity the experiment is deliberately sweeping
+
+function perturbParts(parts, rng) {
+  return parts.map((p) => {
+    const tol = toleranceFor(p);
+    if (tol == null || typeof p.value !== 'number') return p;
+    const frac = 1 + (rng() * 2 - 1) * tol; // uniform in [1-tol, 1+tol]
+    return Object.assign({}, p, { value: p.value * frac });
+  });
+}
+
+function getPath(snap, path) {
+  let v = snap;
+  for (const key of path.split('.')) {
+    if (v == null) return undefined;
+    v = v[key];
+  }
+  return v;
+}
+
+function runOneTrial(parts, sim) {
+  const elements = toEngineElements(parts);
+  const circuit = new CircuitEngine.Circuit();
+  const seconds = sim.seconds != null ? sim.seconds : 1;
+  const dt = sim.dt != null ? sim.dt : 0.001;
+  const steps = Math.max(1, Math.round(seconds / dt));
+  let lastResult = null;
+  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt);
+  return lastResult;
+}
+
+// parameter sweep: vary ONE declared part field across a real range of
+// values and re-run the full sim at each point -- either an explicit
+// value list, or a linear from/to/steps range. One dimension only in this
+// pass; a real multi-dimensional sweep is a straightforward extension of
+// the same mechanism if/when it's needed.
+function buildSweepValues(sweep) {
+  if (Array.isArray(sweep.values)) return sweep.values.slice();
+  const from = sweep.from;
+  const to = sweep.to;
+  const steps = sweep.steps || 2;
+  if (steps <= 1) return [from];
+  const out = [];
+  for (let i = 0; i < steps; i++) out.push(from + ((to - from) * i) / (steps - 1));
+  return out;
+}
+
+function applySweepValue(parts, partId, field, value) {
+  let found = false;
+  const out = parts.map((p) => {
+    if (p.id !== partId) return p;
+    found = true;
+    return Object.assign({}, p, { [field]: value });
+  });
+  return { parts: out, found };
+}
+
+function runSweep(resolvedParts, sim, sweep, snapOpts) {
+  const values = buildSweepValues(sweep);
+  const points = values.map((value) => {
+    const { parts, found } = applySweepValue(resolvedParts, sweep.partId, sweep.field, value);
+    if (!found) return { [sweep.field]: value, error: 'no part with id "' + sweep.partId + '" found' };
+    const snap = snapshot(runOneTrial(parts, sim), snapOpts);
+    return Object.assign({ [sweep.field]: value }, snap);
+  });
+  return { partId: sweep.partId, field: sweep.field, points };
+}
+
+// look up a real declared measurement point for event/persistence checks --
+// "node" is a named voltage (see resolveNodeNames), "measurement" is one
+// of the declared named differences (see measurementsFrom), "core" is a
+// memorycore's real remanent-flux state (direct readout, not inferred
+// from a terminal voltage). Exactly one of these should be set.
+function valueFor(lastResult, nodeNameCellIds, measurementsSpec, ref) {
+  if (ref.coreFlux) {
+    return lastResult.coreFlux ? lastResult.coreFlux.get(ref.coreFlux) : undefined;
+  }
+  if (ref.core) {
+    return lastResult.coreStates ? lastResult.coreStates.get(ref.core) : undefined;
+  }
+  const nv = namedVoltagesFrom(lastResult, nodeNameCellIds);
+  if (ref.measurement) {
+    const m = (measurementsSpec || []).find((mm) => mm.label === ref.measurement);
+    if (!m) return undefined;
+    const va = nv[m.a];
+    const vb = nv[m.b];
+    return typeof va === 'number' && typeof vb === 'number' ? va - vb : undefined;
+  }
+  if (ref.node) return nv[ref.node];
+  return undefined;
+}
+
+// A staged experiment: one persistent Circuit instance runs through a
+// declared sequence of stages (each its own real duration/dt, optionally
+// changing a real part's field before it starts -- "apply the lean",
+// "release the drive"), while:
+//   - real threshold-crossing events are detected at full solver
+//     resolution (every internal step, not just sampled ones) and their
+//     exact crossing time is linearly interpolated between the two
+//     straddling samples, not just snapped to the nearest step;
+//   - an optional persistence check records a real baseline value at the
+//     START of one named stage (i.e. the true pre-transition reference --
+//     the state right before that stage's own dynamics/drive begin) and
+//     then tracks the SMALLEST |value-baseline| seen throughout another
+//     named stage's entire duration, so "did it stay distinguishable from
+//     where it started the whole time" is a real minimum-over-time
+//     measurement, not a single end-of-run sample.
+// Because it's the same Circuit instance for every stage, real component
+// state (memory-core remanence, capacitor charge, comparator latch, etc.)
+// genuinely carries across stages -- releasing a drive and continuing
+// the solve is not a reset.
+function runExperiment(resolvedParts, experimentSpec, snapOpts) {
+  const stages = experimentSpec.stages || [];
+  const eventsSpec = experimentSpec.events || [];
+  const persistenceSpec = experimentSpec.persistence || null;
+  const nodeNameCellIds = snapOpts.nodeNameCellIds;
+  const measurementsSpec = snapOpts.measurements;
+  const errors = [];
+
+  const circuit = new CircuitEngine.Circuit();
+  let parts = resolvedParts;
+  let t = 0;
+  let lastResult = null;
+
+  const eventPrev = new Map();
+  const detectedEvents = [];
+  const stageLog = [];
+  const persistenceState = persistenceSpec ? { baseline: null, minAbsDelta: Infinity, samples: 0 } : null;
+
+  stages.forEach((stage) => {
+    (stage.set || []).forEach((s) => {
+      const { parts: nextParts, found } = applySweepValue(parts, s.partId, s.field, s.value);
+      if (!found) errors.push('stage "' + stage.name + '": no part with id "' + s.partId + '" found to set');
+      parts = nextParts;
+    });
+
+    if (persistenceSpec && persistenceSpec.baselineStage === stage.name && lastResult) {
+      persistenceState.baseline = valueFor(lastResult, nodeNameCellIds, measurementsSpec, persistenceSpec);
+    }
+
+    const elements = toEngineElements(parts);
+    const dt = stage.dt != null ? stage.dt : 0.001;
+    const seconds = stage.seconds != null ? stage.seconds : 0.01;
+    const steps = Math.max(1, Math.round(seconds / dt));
+    const stageStartT = t;
+
+    for (let i = 0; i < steps; i++) {
+      t += dt;
+      lastResult = circuit.solve(elements, dt);
+
+      eventsSpec.forEach((ev) => {
+        const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, ev);
+        if (val == null) return;
+        const prev = eventPrev.get(ev.label);
+        if (prev != null && prev !== val) {
+          const crossedUp = prev < ev.threshold && val >= ev.threshold;
+          const crossedDown = prev > ev.threshold && val <= ev.threshold;
+          const dir = ev.direction || 'either';
+          if ((crossedUp && dir !== 'falling') || (crossedDown && dir !== 'rising')) {
+            const frac = (ev.threshold - prev) / (val - prev);
+            const crossT = t - dt + frac * dt;
+            detectedEvents.push({ label: ev.label, t: Number(crossT.toFixed(9)), stage: stage.name, direction: crossedUp ? 'rising' : 'falling', valueBefore: prev, valueAfter: val });
+          }
+        }
+        eventPrev.set(ev.label, val);
+      });
+
+      if (persistenceSpec && persistenceSpec.holdStage === stage.name && persistenceState.baseline != null) {
+        const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, persistenceSpec);
+        if (val != null) {
+          persistenceState.minAbsDelta = Math.min(persistenceState.minAbsDelta, Math.abs(val - persistenceState.baseline));
+          persistenceState.samples++;
+        }
+      }
+    }
+
+    stageLog.push({
+      name: stage.name,
+      startT: Number(stageStartT.toFixed(9)),
+      endT: Number(t.toFixed(9)),
+      snapshot: snapshot(lastResult, snapOpts),
+    });
+  });
+
+  const out = { errors, stages: stageLog, events: detectedEvents, final: snapshot(lastResult, snapOpts) };
+  if (persistenceSpec) {
+    const observed = persistenceState.minAbsDelta === Infinity ? null : persistenceState.minAbsDelta;
+    out.persistence = {
+      label: persistenceSpec.label,
+      baseline: persistenceState.baseline,
+      minDelta: persistenceSpec.minDelta,
+      minObservedDelta: observed,
+      samples: persistenceState.samples,
+      distinguishable: observed != null && persistenceState.baseline != null && observed >= persistenceSpec.minDelta,
+    };
+  }
+  return out;
+}
+
+function runMonteCarlo(resolvedParts, sim, mc, snapOpts) {
+  const trials = mc.trials || 100;
+  const rng = mulberry32(mc.seed != null ? mc.seed : 12345);
+  const watch = mc.watch || [];
+  const watchStats = watch.map((w) => ({ label: w.label || w.path, path: w.path, values: [] }));
+  let warningTrials = 0;
+  const warningsSample = [];
+  for (let i = 0; i < trials; i++) {
+    const parts = perturbParts(resolvedParts, rng);
+    const snap = snapshot(runOneTrial(parts, sim), snapOpts);
+    if (snap.warnings.length) {
+      warningTrials++;
+      if (warningsSample.length < 5 && !warningsSample.includes(snap.warnings[0])) warningsSample.push(snap.warnings[0]);
+    }
+    watchStats.forEach((ws) => {
+      const v = getPath(snap, ws.path);
+      if (typeof v === 'number') ws.values.push(v);
+    });
+  }
+  const summary = {};
+  watchStats.forEach((ws) => {
+    if (!ws.values.length) {
+      summary[ws.label] = { note: 'no numeric value found at "' + ws.path + '" in any trial -- check the path' };
+      return;
+    }
+    const n = ws.values.length;
+    const mean = ws.values.reduce((a, b) => a + b, 0) / n;
+    const variance = ws.values.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+    summary[ws.label] = { min: Math.min(...ws.values), max: Math.max(...ws.values), mean, stdev: Math.sqrt(variance), n };
+  });
+  return { trials, warningTrials, warningRate: warningTrials / trials, warningsSample, summary };
 }
 
 function main() {
@@ -269,10 +622,33 @@ function main() {
   const { parts, errors: holeErrors } = resolveTerminals(board, validatedParts);
   if (holeErrors.length) return fail(holeErrors);
 
-  const elements = toEngineElements(parts);
-  const circuit = new CircuitEngine.Circuit();
+  const { names: nodeNameCellIds, errors: nodeNameErrors } = resolveNodeNames(board, input.nodeNames);
+  if (nodeNameErrors.length) return fail(nodeNameErrors);
+  const measurements = input.measurements || [];
+  const snapOpts = { nodeNameCellIds, measurements };
 
   const sim = input.sim || {};
+
+  if (input.monteCarlo) {
+    const mcReport = runMonteCarlo(parts, sim, input.monteCarlo, snapOpts);
+    console.log(JSON.stringify({ ok: true, errors: [], monteCarlo: mcReport }, null, 2));
+    return;
+  }
+
+  if (input.sweep) {
+    const sweepReport = runSweep(parts, sim, input.sweep, snapOpts);
+    console.log(JSON.stringify({ ok: true, errors: [], sweep: sweepReport }, null, 2));
+    return;
+  }
+
+  if (input.experiment) {
+    const expReport = runExperiment(parts, input.experiment, snapOpts);
+    console.log(JSON.stringify({ ok: true, errors: expReport.errors, experiment: expReport }, null, 2));
+    return;
+  }
+
+  const elements = toEngineElements(parts);
+  const circuit = new CircuitEngine.Circuit();
   const seconds = sim.seconds != null ? sim.seconds : 1;
   const dt = sim.dt != null ? sim.dt : 0.001;
   const sampleEvery = sim.sampleEvery || null;
@@ -286,12 +662,12 @@ function main() {
     t += dt;
     lastResult = circuit.solve(elements, dt);
     if (t >= nextSampleAt) {
-      samples.push(Object.assign({ t: Number(t.toFixed(6)) }, snapshot(lastResult)));
+      samples.push(Object.assign({ t: Number(t.toFixed(6)) }, snapshot(lastResult, snapOpts)));
       nextSampleAt += sampleEvery;
     }
   }
 
-  const out = { ok: true, errors: [], final: snapshot(lastResult) };
+  const out = { ok: true, errors: [], final: snapshot(lastResult, snapOpts) };
   if (sampleEvery) out.samples = samples;
   console.log(JSON.stringify(out, null, 2));
 }
@@ -304,4 +680,8 @@ if (require.main === module) main();
 module.exports = {
   LAYOUT_PRESETS, H, derivePotentiometerHoles, deriveTlv3202Holes,
   resolveTerminals, memoryCoreWindings, toEngineElements, snapshot, main,
+  mulberry32, toleranceFor, perturbParts, getPath, runOneTrial, runMonteCarlo,
+  resolveNodeNames, namedVoltagesFrom, measurementsFrom,
+  buildSweepValues, applySweepValue, runSweep,
+  valueFor, runExperiment,
 };
