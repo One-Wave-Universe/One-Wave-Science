@@ -1,10 +1,11 @@
-"""3:1 three-winding ternary nerve. Not the brain."""
+"""3:1 three-winding nerve. Ternary = virtual ground + choice."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 WINDINGS = ("U", "V", "W")
+# (0) = HOLD = virtual ground. That is the whole ternary.
 MOVES = ("DOWN", "HOLD", "UP")
 
 
@@ -27,14 +28,18 @@ def rest() -> NerveCommand:
 
 
 def from_admin(move: str) -> NerveCommand:
+    if move not in MOVES:
+        raise ValueError("move is DOWN HOLD or UP around virtual ground")
     if move == "HOLD":
         return rest()
     if move == "UP":
         return NerveCommand("UP", "HOLD", "DOWN", "HOLD", "ADMIN")
-    if move == "DOWN":
-        return NerveCommand("DOWN", "HOLD", "UP", "HOLD", "ADMIN")
-    raise ValueError("admin move must be DOWN HOLD or UP")
+    return NerveCommand("DOWN", "HOLD", "UP", "HOLD", "ADMIN")
 
 
 def m4_may_drive() -> bool:
     return False
+
+
+def ternary_is() -> str:
+    return "virtual_ground_plus_choice"
