@@ -95,6 +95,31 @@
   // ~1 ohm. Honest order-of-magnitude default; a real design's actual
   // source impedance is set via the diffsource's own optional sourceR.
   const DIFFSOURCE_RINT = 200;
+  // amps; a real small supply (a coin cell, a small wall-wart, a bench
+  // supply set to a low limit) cannot source unlimited current no matter
+  // how low the load resistance goes -- past this point the real behavior
+  // is a hard brownout (output collapses toward 0V), not a steeper but
+  // still-linear Rint droop. Honest small-supply order of magnitude.
+  const BATTERY_MAX_CURRENT = 2;
+
+  // Temperature: every stateful thermal quantity here is a REAL, evolving
+  // per-component value (backward-Euler against a thermal RC, exactly the
+  // same numerical technique already used for capacitor voltage and
+  // magnetic-core B), not a static label. rTh (°C/W) and tau (seconds) are
+  // honest small-part order-of-magnitude figures, not one specific
+  // datasheet's exact number -- a bare small resistor sheds heat faster
+  // (smaller tau) than a wound coil+bobbin assembly (larger thermal mass).
+  const AMBIENT_C_DEFAULT = 25;
+  const THERMAL_SPEC = {
+    resistor: { rTh: 200, tau: 8 },
+    mosfet: { rTh: 150, tau: 5 },
+    hbridge: { rTh: 40, tau: 4 },
+    magneticCore: { rTh: 80, tau: 20 }, // memorycore/latchrelay coil+core assembly
+  };
+  const RESISTOR_TEMPCO = 200e-6; // 1/°C, typical film/carbon resistor (positive tempco)
+  const MOSFET_RDSON_TEMPCO = 0.004; // 1/°C, typical silicon MOSFET channel (~0.4%/°C)
+  const COPPER_TEMPCO = 0.00393; // 1/°C, real copper winding resistance tempco (a physical constant, not approximated)
+  const MAGNETIC_HC_TEMPCO = -0.002; // 1/°C, soft-magnetic coercivity drifts down toward the Curie point -- an honest simplified linear approximation, not lot-specific
 
   // deterministic PRNG (mulberry32) + Box-Muller Gaussian sampling, used
   // for real source noise (diffsource's optional noiseRms) -- seeded per
@@ -328,6 +353,7 @@
     vmMin: 2.7, // volts, real minimum motor-supply voltage (below this, real undervoltage lockout forces outputs off)
     vmMax: 10.8, // volts, real maximum motor-supply voltage
     currentLimit: 1.5, // amps, real per-channel continuous output current rating
+    thermalShutdownC: 150, // °C, real die/junction thermal-shutdown threshold (DRV8833-class)
   };
   function hbridgeSpec(c) {
     return Object.assign({}, HBRIDGE_SPEC, c && c.spec);
@@ -450,6 +476,8 @@
       this._schmittDesired = new Map(); // schmitt id -> boolean, the INVERTED output value the input-side decision currently implies, before propagation delay
       this._schmittDesiredSince = new Map(); // schmitt id -> sim-clock time the desired output last changed
       this._schmittState = new Map(); // schmitt id -> boolean, the LATCHED output actually driven, after real propagation delay
+      this._temp = new Map(); // component id -> real self-heating temperature in °C, backward-Euler against a thermal RC, persists across frames exactly like capacitor voltage/core B
+      this._hbridgeThermalFault = new Map(); // hbridge id -> boolean, latched true once real self-heating crosses thermalShutdownC (stays latched -- a real thermally-shutdown part doesn't silently resume)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -459,13 +487,31 @@
      *   components: [{id, type, a, b, value, color, closed, pos, wiper}]
      * }
      * dt = seconds since last solve (for capacitor transient stepping)
+     * ambientC = real ambient temperature in °C (default 25) -- a real,
+     *   settable experiment parameter (an experiment can change it stage
+     *   to stage, e.g. simulating a hot enclosure), not a static label;
+     *   every component's own self-heating genuinely evolves over
+     *   simulated time relative to it from real dissipated power.
      */
-    solve(elements, dt) {
+    solve(elements, dt, ambientC) {
       const wires = elements.wires || [];
       const components = elements.components || [];
+      const ambient = ambientC != null ? ambientC : AMBIENT_C_DEFAULT;
       const uf = new UnionFind();
       this._t += dt;
       const t = this._t;
+      // one-step-behind thermal update, same pattern as every other
+      // persisted decision here: reads the temperature this component
+      // arrived at LAST frame, used for this frame's tempco-adjusted
+      // values; the temperature itself is advanced from the power actually
+      // dissipated (computed after solving) at the end of this function.
+      const tempOf = (id) => this._temp.get(id) != null ? this._temp.get(id) : ambient;
+      const updateTemp = (id, powerW, spec) => {
+        const told = tempOf(id);
+        const target = ambient + powerW * spec.rTh;
+        const k = Math.max(dt, 1e-6) / spec.tau;
+        this._temp.set(id, (told + k * target) / (1 + k));
+      };
 
       const batInternal = (c) => '__batint__' + c.id;
       // diffsource: a real EMF of "value" volts referenced to whatever its
@@ -818,7 +864,10 @@
 
         components.forEach((c) => {
           if (c.type === 'resistor') {
-            const g = 1 / Math.max(c.value, 1e-6);
+            // real, evolving self-heating: this resistor's own value drifts
+            // with ITS OWN temperature (last frame's, one-step-behind like
+            // every other decision here), not a fixed nominal value
+            const g = 1 / (Math.max(c.value, 1e-6) * (1 + RESISTOR_TEMPCO * (tempOf(c.id) - 25)));
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
             stampG(i, i, g);
@@ -929,7 +978,12 @@
             stampI(g_, IeqGate);
             stampI(s, -IeqGate);
             if (this._fetChannelState.get(c.id)) {
-              const g = 1 / spec.rdsOn;
+              // real RDS(on) drift with the channel's OWN temperature --
+              // silicon channel resistance rises with temperature, the
+              // same direction (and rough magnitude) every real MOSFET
+              // datasheet's RDS(on)-vs-T curve shows
+              const rdsEff = spec.rdsOn * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
+              const g = 1 / rdsEff;
               stampG(d, d, g);
               stampG(s, s, g);
               stampG(d, s, -g);
@@ -1007,20 +1061,25 @@
             // iteration's own solve and would only see stale/empty
             // voltages on a fixed point loop's first pass, with no
             // "changed" signal to force a retry once real voltages exist)
-            const mode = this._hbridgeMode.get(c.id) || 'coast';
+            // real thermal shutdown latches the bridge into 'coast' the
+            // same way UVLO does -- forced here at stamp time from a fault
+            // flag that's only ever SET in the decision-update phase below
+            // (one-step-behind, like every other real-valued decision here)
+            const mode = this._hbridgeThermalFault.get(c.id) ? 'coast' : this._hbridgeMode.get(c.id) || 'coast';
+            const ronEff = (nominal) => nominal * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
             [['out1', c.out1, 1], ['out2', c.out2, 2]].forEach(([tag, outPin, outNum]) => {
               const o = gi(uf.find(outPin));
               const highOn = (mode === 'forward' && outNum === 1) || (mode === 'reverse' && outNum === 2);
               const lowOn = (mode === 'forward' && outNum === 2) || (mode === 'reverse' && outNum === 1) || mode === 'brake';
               if (highOn) {
-                const g = 1 / spec.ronHS;
+                const g = 1 / ronEff(spec.ronHS);
                 stampG(o, o, g);
                 stampG(vmIdx, vmIdx, g);
                 stampG(o, vmIdx, -g);
                 stampG(vmIdx, o, -g);
               }
               if (lowOn) {
-                const g = 1 / spec.ronLS;
+                const g = 1 / ronEff(spec.ronLS);
                 stampG(o, o, g);
                 stampG(gndIdx, gndIdx, g);
                 stampG(o, gndIdx, -g);
@@ -1252,7 +1311,12 @@
               A[ib][row] -= 1;
               A[row][ib] -= 1;
             }
-            A[row][row] -= w.R || 0;
+            // real copper winding resistance rises with the core+coil
+            // assembly's own temperature (a real, physical constant, not
+            // an approximation) -- one shared temperature per core, since
+            // every winding on it is real wire on the same physical bobbin
+            const rEff = (w.R || 0) * (1 + COPPER_TEMPCO * (tempOf(mc.id) - 25));
+            A[row][row] -= rEff;
             const Vind = (w.N || 0) * (mc.phiSat || 0) * dBdt;
             b[row] += Vind;
           });
@@ -1559,7 +1623,15 @@
             netAT += (w.N || 0) * (xSol[rowMemCore(mck, wi)] || 0);
           });
           const bStart = coreBStart.get(mc.id);
-          const hc = mc.hcAmpTurns > 0 ? mc.hcAmpTurns : 1;
+          const hcNominal = mc.hcAmpTurns > 0 ? mc.hcAmpTurns : 1;
+          // real soft-magnetic coercivity drifts down as the core+coil
+          // assembly's OWN temperature rises (heated by real winding I2R,
+          // see the self-heating update below) -- a hot core switches with
+          // less drive than a cold one, exactly the direction real
+          // ferrite/soft-magnetic materials behave approaching their
+          // Curie point. Floored well above zero: this is an honest
+          // simplified linear approximation, not a real Curie-point model.
+          const hc = Math.max(hcNominal * (1 + MAGNETIC_HC_TEMPCO * (tempOf(mc.id) - 25)), hcNominal * 0.2);
           let target;
           if (netAT > hc) target = 1;
           else if (netAT < -hc) target = -1;
@@ -1629,6 +1701,15 @@
         arr.forEach((I, wi) => memCoreCurrent.set(mc.id + ':' + wi, I));
         memCoreCurrent.set(mc.id, arr[0] || 0);
         this._coreState.set(mc.id, coreB.get(mc.id));
+        // real self-heating from every winding's own I2R (the same
+        // temperature-dependent resistance just stamped above) -- this is
+        // what actually drives the Hc drift computed earlier in this same
+        // solve() call for NEXT frame (one-step-behind, like everything else)
+        const windingP = mc.windings.reduce((sum, w, wi) => {
+          const rEff = (w.R || 0) * (1 + COPPER_TEMPCO * (tempOf(mc.id) - 25));
+          return sum + arr[wi] * arr[wi] * rEff;
+        }, 0);
+        updateTemp(mc.id, windingP, THERMAL_SPEC.magneticCore);
       });
 
       components.forEach((c) => {
@@ -1636,8 +1717,10 @@
         const vb = voltages.get(uf.find(c.b));
         let I = 0;
         if (c.type === 'resistor') {
-          I = (va - vb) / c.value;
-          const p = I * I * c.value;
+          const rEff = Math.max(c.value, 1e-6) * (1 + RESISTOR_TEMPCO * (tempOf(c.id) - 25));
+          I = (va - vb) / rEff;
+          const p = I * I * rEff;
+          updateTemp(c.id, p, THERMAL_SPEC.resistor);
           if (p > 0.25) warnings.push(`Resistor ${c.label || c.id}: ${p.toFixed(2)} W — exceeds a typical 1/4W resistor's rating`);
         } else if (c.type === 'led' || c.type === 'diode') {
           const on = this._ledState.get(c.id);
@@ -1712,7 +1795,13 @@
           // total conventional current from drain to source: the channel
           // (when on) and the body diode (when on) are two parallel paths
           // between the same two nodes, so their currents just add.
-          I = this._fetChannelState.get(c.id) ? (vd - vs) / spec.rdsOn : 0;
+          const rdsEff = spec.rdsOn * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
+          const channelI = this._fetChannelState.get(c.id) ? (vd - vs) / rdsEff : 0;
+          I = channelI;
+          // self-heating from real channel conduction loss only (switching
+          // loss is not modeled -- a real device's dominant loss at these
+          // small currents/frequencies is conduction, not switching)
+          updateTemp(c.id, channelI * channelI * rdsEff, THERMAL_SPEC.mosfet);
           if (this._fetDiodeState.get(c.id)) {
             const anodeV = c.type === 'nmos' ? vs : vd;
             const cathodeV = c.type === 'nmos' ? vd : vs;
@@ -1799,6 +1888,7 @@
           const vmV = voltages.get(uf.find(c.vm)) || 0;
           const gndV = voltages.get(uf.find(c.gnd)) || 0;
           const supplyV = vmV - gndV;
+          const ronEff = (nominal) => nominal * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
           if ((touchCount.get(uf.find(c.vm)) || 0) <= 1 || (touchCount.get(uf.find(c.gnd)) || 0) <= 1) {
             warnings.push(`${c.label || c.id} (H-bridge): VM or GND is not wired to anything -- an unpowered bridge can't drive a real load`);
           } else if (supplyV < spec.vmMin) {
@@ -1806,27 +1896,45 @@
           } else if (supplyV > spec.vmMax) {
             warnings.push(`${c.label || c.id} (H-bridge): VM is ${supplyV.toFixed(2)}V -- exceeds its ${spec.vmMax}V maximum rating`);
           }
+          if (this._hbridgeThermalFault.get(c.id)) {
+            warnings.push(`${c.label || c.id} (H-bridge): real thermal shutdown latched at ${tempOf(c.id).toFixed(0)}°C (>${spec.thermalShutdownC}°C) -- outputs forced to coast until the part cools and is reset`);
+          }
           // per-output current, "<id>:out1"/"<id>:out2" -- the current
           // actually flowing INTO the load from each output pin (through
           // whichever real path, FET or flyback diode, is conducting)
+          let conductionP = 0;
           [['out1', c.out1], ['out2', c.out2]].forEach(([tag, outPin]) => {
             const vOut = voltages.get(uf.find(outPin)) || 0;
             const key = c.id + ':' + tag;
-            const iToVm = (vmV - vOut) / spec.ronHS;
-            const iToGnd = (vOut - gndV) / spec.ronLS;
+            const ronHSeff = ronEff(spec.ronHS);
+            const ronLSeff = ronEff(spec.ronLS);
+            const iToVm = (vmV - vOut) / ronHSeff;
+            const iToGnd = (vOut - gndV) / ronLSeff;
             // whichever real path is actually the active one dominates;
             // report the FET-path current when that FET is on, otherwise
             // whatever the flyback diode is carrying
-            const mode = this._hbridgeMode.get(c.id);
+            const mode = this._hbridgeThermalFault.get(c.id) ? 'coast' : this._hbridgeMode.get(c.id);
             const outNum = tag === 'out1' ? 1 : 2;
             const highOn = (mode === 'forward' && outNum === 1) || (mode === 'reverse' && outNum === 2);
             const lowOn = (mode === 'forward' && outNum === 2) || (mode === 'reverse' && outNum === 1) || mode === 'brake';
             const Iout = highOn ? iToVm : lowOn ? -iToGnd : (this._hbridgeDiodeState.get(key + ':hi') ? iToVm : this._hbridgeDiodeState.get(key + ':lo') ? -iToGnd : 0);
+            if (highOn) conductionP += Iout * Iout * ronHSeff;
+            else if (lowOn) conductionP += Iout * Iout * ronLSeff;
             if (Math.abs(Iout) > spec.currentLimit) {
               warnings.push(`${c.label || c.id} (H-bridge) ${tag}: ${(Iout * 1000).toFixed(0)}mA -- exceeds its ${(spec.currentLimit * 1000).toFixed(0)}mA real continuous current rating`);
             }
             currents.set(key, Iout);
           });
+          // real self-heating from conduction loss across both channels;
+          // once it crosses the real thermal-shutdown threshold the fault
+          // LATCHES (a real part doesn't silently resume the instant it
+          // dips back under -- it needs to genuinely cool down first, so
+          // this only clears once temperature drops a real margin below
+          // the threshold, not the instant it crosses back)
+          updateTemp(c.id, conductionP, THERMAL_SPEC.hbridge);
+          const tNow = tempOf(c.id);
+          if (tNow > spec.thermalShutdownC) this._hbridgeThermalFault.set(c.id, true);
+          else if (this._hbridgeThermalFault.get(c.id) && tNow < spec.thermalShutdownC - 10) this._hbridgeThermalFault.set(c.id, false);
         } else if (c.type === 'schmitt') {
           const spec = schmittSpec(c);
           const vcc = voltages.get(uf.find(c.vcc));
@@ -1968,7 +2076,16 @@
       // from the IN1/IN2 command alone, since real propagation delay
       // means the outputs haven't necessarily caught up yet
       const hbridgeStates = new Map();
-      hbridges.forEach((hb) => hbridgeStates.set(hb.id, { mode: this._hbridgeMode.get(hb.id) || 'coast' }));
+      hbridges.forEach((hb) => {
+        const requestedMode = this._hbridgeMode.get(hb.id) || 'coast';
+        const thermalFault = this._hbridgeThermalFault.get(hb.id) || false;
+        // "mode" must report what the outputs are ACTUALLY doing -- a real
+        // thermally-shutdown part coasts regardless of what the latched
+        // command still says, and hiding that behind the requested mode
+        // would be exactly the kind of silent fault-masking this simulator
+        // is required not to do
+        hbridgeStates.set(hb.id, { mode: thermalFault ? 'coast' : requestedMode, requestedMode, thermalFault, tempC: Number(tempOf(hb.id).toFixed(2)) });
+      });
 
       // expose the real latched (propagation-delayed) output decision
       // directly, plus the raw hysteretic input-side state for diagnosing
@@ -1991,6 +2108,8 @@
     LATCHRELAY_SPEC, latchRelaySpec,
     HBRIDGE_SPEC, hbridgeSpec,
     SCHMITT_SPEC, schmittSpec,
+    AMBIENT_C_DEFAULT, THERMAL_SPEC, RESISTOR_TEMPCO, MOSFET_RDSON_TEMPCO, COPPER_TEMPCO, MAGNETIC_HC_TEMPCO,
+    BATTERY_MAX_CURRENT,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;

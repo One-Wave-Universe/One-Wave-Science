@@ -429,7 +429,7 @@ function runOneTrial(parts, sim) {
   const dt = sim.dt != null ? sim.dt : 0.001;
   const steps = Math.max(1, Math.round(seconds / dt));
   let lastResult = null;
-  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt);
+  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt, sim.ambientC);
   return lastResult;
 }
 
@@ -606,6 +606,12 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   let parts = resolvedParts;
   let t = 0;
   let lastResult = null;
+  // real, settable ambient temperature -- an experiment can change it
+  // stage to stage (e.g. simulating a hot enclosure at a later stage); it
+  // does not auto-rise on its own without a real heat source modeled, but
+  // every component's own self-heating genuinely evolves from real
+  // dissipated power against it (see circuit.js's updateTemp).
+  let ambientC = experimentSpec.ambientC != null ? experimentSpec.ambientC : undefined;
 
   const eventPrev = new Map();
   const detectedEvents = [];
@@ -613,6 +619,7 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   const persistenceState = persistenceSpec ? { baseline: null, minAbsDelta: Infinity, samples: 0 } : null;
 
   stages.forEach((stage) => {
+    if (stage.ambientC != null) ambientC = stage.ambientC;
     (stage.set || []).forEach((s) => {
       const { parts: nextParts, found } = applySweepValue(parts, s.partId, s.field, s.value);
       if (!found) errors.push('stage "' + stage.name + '": no part with id "' + s.partId + '" found to set');
@@ -632,7 +639,7 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
 
     for (let i = 0; i < steps; i++) {
       t += dt;
-      lastResult = circuit.solve(elements, dt);
+      lastResult = circuit.solve(elements, dt, ambientC);
 
       tracesSpec.forEach((tr) => {
         const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, tr);
@@ -789,7 +796,7 @@ function main() {
   let nextSampleAt = sampleEvery || Infinity;
   for (let i = 0; i < steps; i++) {
     t += dt;
-    lastResult = circuit.solve(elements, dt);
+    lastResult = circuit.solve(elements, dt, sim.ambientC);
     if (t >= nextSampleAt) {
       samples.push(Object.assign({ t: Number(t.toFixed(6)) }, snapshot(lastResult, snapOpts)));
       nextSampleAt += sampleEvery;

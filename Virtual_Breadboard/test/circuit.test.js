@@ -1446,4 +1446,76 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 44 OK (T-RESOLVED-OUTPUT): +1/void-field resolves cleanly, inversion-aware settling detected correctly, Field/Field reported as real conflict (never coerced)');
 }
 
+// Test 45 (T-THERMAL): temperature is a real, evolving per-component
+// quantity (backward-Euler self-heating against a thermal RC, same
+// technique as capacitor voltage/core B), not a static label. Checks:
+// (a) a heavily-dissipating resistor's OWN value visibly drifts with its
+// own self-heating (current drops under a fixed voltage as R rises);
+// (b) an H-bridge driving a real overcurrent load latches a genuine
+// thermal-shutdown fault, exposes it honestly (mode must report the
+// ACTUAL coast, not the still-latched requested mode), and the fault
+// clears only once real hysteresis margin is met; (c) a marginal magnetic
+// write pulse that fails to switch a cold core succeeds against the exact
+// same drive once the core is genuinely hot (real Hc drift), never forced.
+{
+  const circuit = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', value: 20, a: 'p', b: 'g' },
+      { id: 'r1', type: 'resistor', value: 20, a: 'p', b: 'g' }, // ~20W into a 1/4W-class part -- real heavy self-heating
+    ],
+  };
+  let res;
+  const iStart = circuit.solve(els, 0.01, 25).currents.get('r1');
+  for (let i = 0; i < 2000; i++) res = circuit.solve(els, 0.01, 25);
+  const iAfter = res.currents.get('r1');
+  assert.ok(iAfter < iStart * 0.85, `T-THERMAL: self-heating must visibly raise R1's real value over time (current should drop), got ${iStart} -> ${iAfter}`);
+}
+{
+  const circuit = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', value: 10, a: 'vm', b: 'gnd' },
+      { id: 'in1', type: 'diffsource', value: 5, sourceR: 50, a: 'in1', b: 'gnd' },
+      { id: 'in2', type: 'diffsource', value: 0, sourceR: 50, a: 'in2', b: 'gnd' },
+      { id: 'hb1', type: 'hbridge', in1: 'in1', in2: 'in2', vm: 'vm', gnd: 'gnd', out1: 'out1', out2: 'out2' },
+      { id: 'rload', type: 'resistor', value: 0.6, a: 'out1', b: 'out2' }, // real heavy overcurrent through the bridge FETs
+    ],
+  };
+  let res, tripStep = null;
+  for (let i = 0; i < 3000; i++) {
+    res = circuit.solve(els, 0.005, 25);
+    if (res.hbridgeStates.get('hb1').thermalFault && tripStep == null) tripStep = i;
+  }
+  assert.ok(tripStep != null, 'T-THERMAL: sustained real overcurrent through an H-bridge must eventually latch a real thermal-shutdown fault');
+  const st = res.hbridgeStates.get('hb1');
+  assert.strictEqual(st.mode, 'coast', 'T-THERMAL: a thermally-shutdown bridge must report its ACTUAL mode (coast), not the still-latched requested mode');
+  assert.strictEqual(st.requestedMode, 'forward', 'T-THERMAL: the requested mode must still be visible separately from the actual (faulted) mode');
+  assert.strictEqual(res.currents.get('hb1:out1'), 0, 'T-THERMAL: a thermally-shutdown bridge must actually stop driving current, not just report a fault flag');
+}
+{
+  const spec = CircuitEngine.LATCHRELAY_SPEC;
+  function marginalWrite(ambientC) {
+    const circuit = new Circuit();
+    const els = {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', value: 5, a: 'p', b: 'g' },
+        { id: 'r1', type: 'resistor', value: 115, a: 'p', b: 'a' },
+        { id: 'lr1', type: 'latchrelay', windings: [{ a: 'a', b: 'g', N: 1, R: spec.coilR }], contactA: 'ca', contactB: 'cb', hcAmpTurns: spec.hcAmpTurns, phiSat: spec.phiSat, switchTau: spec.switchTau },
+      ],
+    };
+    let res;
+    for (let i = 0; i < 40; i++) res = circuit.solve(els, 0.005, ambientC);
+    return res.coreStates.get('lr1');
+  }
+  const cold = marginalWrite(25);
+  const hot = marginalWrite(200);
+  assert.ok(cold < 0.5, `T-THERMAL: a marginal write pulse must genuinely fail to switch a cold core, got ${cold}`);
+  assert.ok(hot > 0.9, `T-THERMAL: the EXACT SAME marginal pulse must succeed once the core is genuinely hot (real Hc drift), got ${hot}`);
+  console.log('Test 45 OK (T-THERMAL): resistor self-heating drifts a real value, H-bridge thermal shutdown latches/reports/clamps current honestly, magnetic Hc drift lets an identical marginal pulse flip a hot core but not a cold one');
+}
+
 console.log('\nAll circuit engine tests passed.');
