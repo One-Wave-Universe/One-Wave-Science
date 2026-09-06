@@ -323,6 +323,9 @@
       if (p.type === 'capacitor' && p.initialV != null && !Number.isFinite(Number(p.initialV))) {
         errors.push('part ' + i + ' (capacitor): "initialV" must be a finite number of volts if given');
       }
+      if (p.type === 'battery' && p.capacityAh != null && !(Number(p.capacityAh) > 0)) {
+        errors.push('part ' + i + ' (battery): "capacityAh" must be a positive number of amp-hours if given');
+      }
       if (p.type === 'diffsource') {
         // unlike a battery, a real differential/lean source's value (deltaV
         // relative to its own reference pin) is explicitly signed and can

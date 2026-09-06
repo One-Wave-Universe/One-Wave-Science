@@ -1595,4 +1595,50 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 47 OK (T-MEASURE-PRIMITIVES): RMS/average/frequency/duty-cycle/phase/energy all verified against known synthetic signals');
 }
 
+// Test 48 (T-BATTERY-CAPACITY): a battery given a real capacityAh must
+// genuinely run down under real load -- real Coulomb counting against
+// the ACTUAL delivered current (not an assumed nominal current), a real
+// discharge curve (flat near nominal voltage until a real low-charge
+// knee, then a genuine collapse -- not a straight linear droop to zero,
+// which is not how a real primary cell behaves), and real energy
+// tracking that's internally consistent with the same integrated current.
+{
+  const circuit = new Circuit();
+  const els = { wires: [], components: [
+    { id: 'bat1', type: 'battery', value: 5, a: 'p', b: 'gnd', capacityAh: 0.0001 }, // 0.36 real Coulombs
+    { id: 'r1', type: 'resistor', value: 1, a: 'p', b: 'gnd' },
+  ] };
+  const dt = 0.001;
+  let res;
+  let integratedC = 0; // independently integrated charge, cross-checked against the engine's own Coulomb count
+  let flatVoltages = [];
+  for (let i = 0; i < 120; i++) { // 120ms, well within the flat region for this capacity/load
+    res = circuit.solve(els, dt);
+    integratedC += Math.abs(res.currents.get('bat1')) * dt;
+    flatVoltages.push(res.voltages.get('p'));
+  }
+  const bsFlat = res.batteryStates.get('bat1');
+  assert.ok(bsFlat, 'T-BATTERY-CAPACITY: a capacityAh battery must expose batteryStates');
+  const capC = 0.0001 * 3600;
+  approx(bsFlat.chargeRemainingAh * 3600, capC - integratedC, capC * 0.02, 'T-BATTERY-CAPACITY: remaining charge must match real Coulomb counting against the actual delivered current');
+  const flatSpread = Math.max(...flatVoltages) - Math.min(...flatVoltages);
+  assert.ok(flatSpread < 0.05, `T-BATTERY-CAPACITY: terminal voltage must stay real flat well above the knee, spread was ${flatSpread}V`);
+  assert.ok(bsFlat.socFraction > 0.2, 'T-BATTERY-CAPACITY: 150ms of this load must not yet reach the real low-charge knee');
+
+  // continue past the knee -- voltage must genuinely collapse, not
+  // linearly fade, and energyConsumedJ must be a real, growing number
+  // consistent with V*I actually delivered
+  let collapsed = false;
+  for (let i = 0; i < 300; i++) {
+    res = circuit.solve(els, dt);
+    if (res.voltages.get('p') < 1.0) { collapsed = true; break; }
+  }
+  assert.ok(collapsed, 'T-BATTERY-CAPACITY: continued discharge past the real knee must genuinely collapse the terminal voltage');
+  const bsCollapsed = res.batteryStates.get('bat1');
+  assert.ok(bsCollapsed.socFraction < 0.2, 'T-BATTERY-CAPACITY: a collapsed terminal voltage must correspond to a real low state of charge, not an unrelated cause');
+  assert.ok(bsCollapsed.energyConsumedJ > 0.3, `T-BATTERY-CAPACITY: real cumulative energy delivered must be substantial by the time it collapses, got ${bsCollapsed.energyConsumedJ}J`);
+
+  console.log('Test 48 OK (T-BATTERY-CAPACITY): real Coulomb-counted runtime, flat-then-knee discharge curve, and consistent energy tracking all verified');
+}
+
 console.log('\nAll circuit engine tests passed.');

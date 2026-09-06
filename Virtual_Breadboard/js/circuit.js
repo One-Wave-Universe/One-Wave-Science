@@ -110,6 +110,22 @@
   // rating here would silently break every existing circuit built on
   // that general role. A disclosed simplification, not an oversight.
 
+  // Battery capacity/runtime: OPT-IN via a real capacityAh field (a
+  // battery with no capacity given stays the existing ideal
+  // always-available EMF -- no behavior change for anything already
+  // built). Real Coulomb counting (charge -= |I|*dt, the same honest
+  // integration technique as everything else here) against a real,
+  // simplified discharge curve: a primary cell's terminal voltage stays
+  // close to nominal for most of its life, then genuinely collapses near
+  // the end -- not a straight linear droop to zero, which is not how a
+  // real alkaline/primary cell actually behaves.
+  const BATTERY_KNEE_SOC = 0.2; // state-of-charge fraction where the real voltage knee begins
+  function batteryEmfScale(soc) {
+    if (soc <= 0) return 0;
+    if (soc >= BATTERY_KNEE_SOC) return 1;
+    return soc / BATTERY_KNEE_SOC;
+  }
+
   // Temperature: every stateful thermal quantity here is a REAL, evolving
   // per-component value (backward-Euler against a thermal RC, exactly the
   // same numerical technique already used for capacitor voltage and
@@ -496,6 +512,8 @@
       this._temp = new Map(); // component id -> real self-heating temperature in °C, backward-Euler against a thermal RC, persists across frames exactly like capacitor voltage/core B
       this._batLimited = new Map(); // battery/diffsource id -> boolean, real output current-limited (a real supply can't source unlimited current no matter how low the load resistance)
       this._batLimitDir = new Map(); // battery/diffsource id -> +1/-1, which way it was sourcing/sinking when it hit the limit
+      this._batteryChargeC = new Map(); // battery id -> real remaining charge in Coulombs, only tracked for batteries with a real capacityAh given
+      this._batteryEnergyJ = new Map(); // battery id -> real cumulative energy delivered in Joules, same opt-in batteries
       this._hbridgeThermalFault = new Map(); // hbridge id -> boolean, latched true once real self-heating crosses thermalShutdownC (stays latched -- a real thermally-shutdown part doesn't silently resume)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
@@ -557,7 +575,19 @@
         }
         return this._diffNoiseSample.get(c.id) || 0;
       };
-      const effectiveSourceValue = (c) => (c.type === 'diffsource' ? c.value + diffNoiseSample(c) : c.value);
+      const effectiveSourceValue = (c) => {
+        if (c.type === 'diffsource') return c.value + diffNoiseSample(c);
+        // real discharge-curve EMF scaling, one-step-behind like every
+        // other persisted decision here (uses LAST frame's committed
+        // charge -- this frame's own Coulomb-count update happens after
+        // solving, in the post-solve current-computation block)
+        if (c.type === 'battery' && c.capacityAh > 0) {
+          const capC = c.capacityAh * 3600;
+          const chargeC = this._batteryChargeC.has(c.id) ? this._batteryChargeC.get(c.id) : capC;
+          return c.value * batteryEmfScale(chargeC / capC);
+        }
+        return c.value;
+      };
 
       // real relay contact resistance: nominal closed/open value, except
       // for a real, bounded window right after the armature actually moved
@@ -2059,6 +2089,23 @@
         } else if (Math.abs(Isrc) > 1.0) {
           warnings.push(`Short circuit at ${bat.label || bat.id}: ${Isrc.toFixed(2)} A — check your wiring`);
         }
+        // real capacity/runtime: opt-in via capacityAh, real Coulomb
+        // counting against actual delivered current (never the nominal
+        // load current a design assumed) -- see batteryEmfScale for how
+        // this commits back into next frame's terminal voltage
+        if (bat.type === 'battery' && bat.capacityAh > 0) {
+          const capC = bat.capacityAh * 3600;
+          const prevC = this._batteryChargeC.has(bat.id) ? this._batteryChargeC.get(bat.id) : capC;
+          const nextC = Math.max(0, prevC - Math.abs(Isrc) * dt);
+          this._batteryChargeC.set(bat.id, nextC);
+          const va = voltages.get(uf.find(bat.a)) || 0;
+          const vb = voltages.get(uf.find(bat.b)) || 0;
+          const prevE = this._batteryEnergyJ.get(bat.id) || 0;
+          this._batteryEnergyJ.set(bat.id, prevE + Math.abs(Isrc) * Math.abs(va - vb) * dt);
+          if (prevC > 0 && nextC <= 0) {
+            warnings.push(`${bat.label || bat.id}: capacity exhausted -- real runtime ended, terminal voltage has collapsed`);
+          }
+        }
       });
 
       // Two ideal-ish voltage sources wired directly across the same node
@@ -2178,7 +2225,23 @@
         inputHigh: this._schmittInputHigh.get(sg.id),
       }));
 
-      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, uf, groundRoot, hasCircuit: true };
+      // real remaining-capacity/runtime readout -- only populated for
+      // batteries that were actually given a real capacityAh (see
+      // effectiveSourceValue/the post-solve Coulomb-counting block above)
+      const batteryStates = new Map();
+      batteries.forEach((bat) => {
+        if (bat.type !== 'battery' || !(bat.capacityAh > 0)) return;
+        const capC = bat.capacityAh * 3600;
+        const chargeC = this._batteryChargeC.has(bat.id) ? this._batteryChargeC.get(bat.id) : capC;
+        batteryStates.set(bat.id, {
+          socFraction: chargeC / capC,
+          chargeRemainingAh: chargeC / 3600,
+          energyConsumedJ: this._batteryEnergyJ.get(bat.id) || 0,
+          dead: chargeC <= 0,
+        });
+      });
+
+      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };
     }
   }
 

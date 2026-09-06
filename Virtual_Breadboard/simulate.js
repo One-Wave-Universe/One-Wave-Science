@@ -156,6 +156,7 @@ function resolveTerminals(board, specParts) {
       gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
       spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
       initialV: p.type === 'capacitor' ? p.initialV : undefined,
+      capacityAh: p.type === 'battery' ? p.capacityAh : undefined,
       terminals,
       id,
     };
@@ -292,7 +293,7 @@ function toEngineElements(parts) {
         in: t[0].cellId, out: t[1].cellId, vcc: t[2].cellId, gnd: t[3].cellId,
       });
     } else {
-      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed, initialV: p.type === 'capacitor' ? p.initialV : undefined });
+      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed, initialV: p.type === 'capacitor' ? p.initialV : undefined, capacityAh: p.type === 'battery' ? p.capacityAh : undefined });
     }
   });
   return { wires, components };
@@ -363,6 +364,9 @@ function snapshot(result, opts) {
   }
   if (result && result.comparatorStates && result.comparatorStates.size) {
     out.comparatorStates = Object.fromEntries(result.comparatorStates);
+  }
+  if (result && result.batteryStates && result.batteryStates.size) {
+    out.batteryStates = Object.fromEntries(result.batteryStates);
   }
   if (opts.nodeNameCellIds && Object.keys(opts.nodeNameCellIds).length) {
     out.namedVoltages = namedVoltagesFrom(result, opts.nodeNameCellIds);
