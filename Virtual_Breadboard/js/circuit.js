@@ -101,6 +101,14 @@
   // is a hard brownout (output collapses toward 0V), not a steeper but
   // still-linear Rint droop. Honest small-supply order of magnitude.
   const BATTERY_MAX_CURRENT = 2;
+  // diffsource deliberately has NO current limit here: unlike a battery
+  // (a real power-network supply, the actual subject of this limit),
+  // diffsource is used throughout this codebase as a general-purpose
+  // controllable low-impedance source standing in for whatever real drive
+  // an experiment needs (its own sourceR is already the real, settable
+  // knob for that) -- adding one real part class's specific current
+  // rating here would silently break every existing circuit built on
+  // that general role. A disclosed simplification, not an oversight.
 
   // Temperature: every stateful thermal quantity here is a REAL, evolving
   // per-component value (backward-Euler against a thermal RC, exactly the
@@ -477,6 +485,8 @@
       this._schmittDesiredSince = new Map(); // schmitt id -> sim-clock time the desired output last changed
       this._schmittState = new Map(); // schmitt id -> boolean, the LATCHED output actually driven, after real propagation delay
       this._temp = new Map(); // component id -> real self-heating temperature in °C, backward-Euler against a thermal RC, persists across frames exactly like capacitor voltage/core B
+      this._batLimited = new Map(); // battery/diffsource id -> boolean, real output current-limited (a real supply can't source unlimited current no matter how low the load resistance)
+      this._batLimitDir = new Map(); // battery/diffsource id -> +1/-1, which way it was sourcing/sinking when it hit the limit
       this._hbridgeThermalFault = new Map(); // hbridge id -> boolean, latched true once real self-heating crosses thermalShutdownC (stays latched -- a real thermally-shutdown part doesn't silently resume)
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
@@ -519,6 +529,9 @@
       // real source impedance -- see the `batteries` filter comment below
       // for why it reuses the battery's exact MNA structure.
       const sourceRFor = (c) => (c.type === 'diffsource' ? (c.sourceR != null ? c.sourceR : DIFFSOURCE_RINT) : BATTERY_RINT);
+      // real current limit applies only to 'battery' (the actual power-
+      // network supply); diffsource is left unlimited by design (see the
+      // constants section above)
       const diffNoiseSample = (c) => {
         if (!c.noiseRms) return 0;
         // resample once per new sim-clock tick, not per fixed-point
@@ -773,6 +786,11 @@
         // a fresh rail splitter starts un-limited -- no load history yet
         if (!this._vgndLimited.has(v.id)) this._vgndLimited.set(v.id, false);
         if (!this._vgndLimitDir.has(v.id)) this._vgndLimitDir.set(v.id, 1);
+      });
+      batteries.forEach((bat) => {
+        // a fresh supply starts un-limited -- no load history yet
+        if (!this._batLimited.has(bat.id)) this._batLimited.set(bat.id, false);
+        if (!this._batLimitDir.has(bat.id)) this._batLimitDir.set(bat.id, 1);
       });
       hbridges.forEach((hb) => {
         // a fresh bridge starts coasting -- same "don't presume a decision"
@@ -1107,13 +1125,26 @@
             stampClampDiode(o, vccIdx, this._railClampState.get(c.id + ':hi') || false, spec.clampVf, RAIL_CLAMP_RON);
             stampClampDiode(gndIdx, o, this._railClampState.get(c.id + ':lo') || false, spec.clampVf, RAIL_CLAMP_RON);
           } else if (c.type === 'battery' || c.type === 'diffsource') {
-            const g = 1 / sourceRFor(c);
-            const i = gi(uf.find(batInternal(c)));
-            const j = gi(uf.find(c.a));
-            stampG(i, i, g);
-            stampG(j, j, g);
-            stampG(i, j, -g);
-            stampG(j, i, -g);
+            // real load regulation up to a real output current limit,
+            // exactly the same "stiff below the limit, a fixed current
+            // source at/beyond it" regime switch as the vgnd rail
+            // splitter below -- no real small supply can source
+            // unlimited current no matter how low the load resistance is.
+            if (this._batLimited.get(c.id)) {
+              const dir = this._batLimitDir.get(c.id) || 1;
+              const a = gi(uf.find(c.a));
+              const b_ = gi(uf.find(c.b));
+              stampI(a, dir * BATTERY_MAX_CURRENT);
+              stampI(b_, -dir * BATTERY_MAX_CURRENT);
+            } else {
+              const g = 1 / sourceRFor(c);
+              const i = gi(uf.find(batInternal(c)));
+              const j = gi(uf.find(c.a));
+              stampG(i, i, g);
+              stampG(j, j, g);
+              stampG(i, j, -g);
+              stampG(j, i, -g);
+            }
           } else if (c.type === 'vgnd') {
             // real load regulation up to a real output current limit: below
             // the limit this is a stiff low-impedance buffer (VGND_RINT);
@@ -1181,6 +1212,13 @@
         });
 
         batteries.forEach((bat, k) => {
+          // unconditional, exactly like vgnd's own internal reference node:
+          // batInternal always holds the real, undamped ideal source
+          // voltage regardless of current-limit state, so the decision
+          // block below can always ask "what would the resistor path draw
+          // right now" even while a current source is stamped instead (see
+          // the per-component stamp branch) -- if this row were skipped
+          // while limited, that check would read a meaningless voltage.
           const row = nNodes + k;
           const p = gi(uf.find(batInternal(bat)));
           const m = gi(uf.find(bat.b));
@@ -1611,6 +1649,28 @@
           updateClampDiode(v.id + ':lo', vB, vOut, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
         });
 
+        batteries.filter((bat) => bat.type === 'battery').forEach((bat) => {
+          // same on/off-style fixed-point decision as vgnd's own current
+          // limit: batInternal always holds the real ideal-source voltage
+          // (see the unconditional extra-row stamp above), so this can
+          // always ask "what would the plain resistor path draw right now"
+          // even while a current source is the one actually stamped.
+          // (diffsource is deliberately excluded -- see BATTERY_MAX_CURRENT's comment)
+          const vInt = voltages.get(uf.find(batInternal(bat)));
+          const vA = voltages.get(uf.find(bat.a));
+          const iIfNormal = ((vInt || 0) - (vA || 0)) / sourceRFor(bat);
+          const maxI = BATTERY_MAX_CURRENT;
+          const limited = this._batLimited.get(bat.id);
+          if (!limited && Math.abs(iIfNormal) > maxI) {
+            this._batLimited.set(bat.id, true);
+            this._batLimitDir.set(bat.id, iIfNormal >= 0 ? 1 : -1);
+            changed = true;
+          } else if (limited && Math.abs(iIfNormal) <= maxI) {
+            this._batLimited.set(bat.id, false);
+            changed = true;
+          }
+        });
+
         memoryCores.forEach((mc, mck) => {
           // net ampere-turns driving this core: every winding contributes
           // turns*current, exactly like a real multi-winding core (this is
@@ -1968,13 +2028,26 @@
       });
 
       batteries.forEach((bat, k) => {
-        // MNA's branch-current unknown is defined flowing p->m through the
-        // source; negate so a positive value reads as "current the battery
-        // is discharging into the external circuit", matching the a->b
-        // convention used for every other component's current.
-        const Isrc = -(xSol[nNodes + k] || 0);
+        // real current-limited mode stamps a direct current source across
+        // a/b instead (see the per-component stamp branch) -- the extra
+        // unknown row's own branch current is disconnected from that real
+        // external path in this mode (nothing else touches batInternal),
+        // so report the real fixed maxCurrent instead of that phantom
+        // near-zero value.
+        let Isrc;
+        if (this._batLimited.get(bat.id)) {
+          Isrc = (this._batLimitDir.get(bat.id) || 1) * BATTERY_MAX_CURRENT;
+        } else {
+          // MNA's branch-current unknown is defined flowing p->m through
+          // the source; negate so a positive value reads as "current the
+          // battery is discharging into the external circuit", matching
+          // the a->b convention used for every other component's current.
+          Isrc = -(xSol[nNodes + k] || 0);
+        }
         currents.set(bat.id, Isrc);
-        if (Math.abs(Isrc) > 1.0) {
+        if (this._batLimited.get(bat.id)) {
+          warnings.push(`${bat.label || bat.id}: current-limited at ${(BATTERY_MAX_CURRENT * 1000).toFixed(0)}mA -- a real supply can't hold its voltage under this load, a real brownout`);
+        } else if (Math.abs(Isrc) > 1.0) {
           warnings.push(`Short circuit at ${bat.label || bat.id}: ${Isrc.toFixed(2)} A — check your wiring`);
         }
       });

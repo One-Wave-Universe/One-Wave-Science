@@ -63,17 +63,20 @@ function approx(a, b, eps, msg) {
   console.log('Test 3 OK: reversed LED current =', res.currents.get('led1'));
 }
 
-// Test 4: direct short circuit across battery terminals -> warning + high current
+// Test 4: direct short circuit across battery terminals -> a real supply
+// current-limits rather than delivering an idealized unlimited current
+// (BATTERY_MAX_CURRENT, item 11's real power-network limit)
 {
   const c = new Circuit();
   const els = {
     wires: [{ a: 'P', b: 'M' }],
     components: [{ id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 }],
   };
-  const res = c.solve(els, 1 / 60);
-  approx(res.currents.get('bat1'), 5, 1e-3, 'short circuit current (5V/1ohm internal)');
-  assert.ok(res.warnings.some((w) => w.includes('Short circuit')), 'should warn about short circuit');
-  console.log('Test 4 OK: short-circuit current =', res.currents.get('bat1').toFixed(2), 'A, warned:', res.warnings[0]);
+  let res;
+  for (let i = 0; i < 3; i++) res = c.solve(els, 1 / 60);
+  approx(res.currents.get('bat1'), CircuitEngine.BATTERY_MAX_CURRENT, 1e-3, 'a real short circuit current-limits at the supply\'s real max rating, not an idealized 5V/1ohm');
+  assert.ok(res.warnings.some((w) => w.includes('current-limited')), 'should warn about the real current limit (brownout), not an idealized unlimited short: ' + res.warnings.join(';'));
+  console.log('Test 4 OK: short-circuit current current-limits at', res.currents.get('bat1').toFixed(2), 'A (real supply limit), warned:', res.warnings[0]);
 }
 
 // Test 5: too-small resistor with LED -> current-limiting warning
@@ -1516,6 +1519,40 @@ function windingR(turns, meanTurnLen) {
   assert.ok(cold < 0.5, `T-THERMAL: a marginal write pulse must genuinely fail to switch a cold core, got ${cold}`);
   assert.ok(hot > 0.9, `T-THERMAL: the EXACT SAME marginal pulse must succeed once the core is genuinely hot (real Hc drift), got ${hot}`);
   console.log('Test 45 OK (T-THERMAL): resistor self-heating drifts a real value, H-bridge thermal shutdown latches/reports/clamps current honestly, magnetic Hc drift lets an identical marginal pulse flip a hot core but not a cold one');
+}
+
+// Test 46 (T-POWER-NETWORK): a real battery cannot source unlimited
+// current no matter how low the load resistance is (item 11) -- below the
+// real limit it's a stiff, honestly-drooping source (Rint already did
+// this); at/beyond it, a real brownout: current pins at the real max
+// rating and the rail voltage collapses well below what an idealized
+// unlimited source would give. Also checks that a real decoupling
+// capacitor visibly holds the rail up during a fast heavy transient
+// pulse, using nothing but ordinary, already-existing capacitor physics.
+{
+  const circuit = new Circuit();
+  const els = { wires: [], components: [
+    { id: 'bat1', type: 'battery', value: 5, a: 'vcc', b: 'gnd' },
+    { id: 'rload', type: 'resistor', value: 0.5, a: 'vcc', b: 'gnd' }, // ideal 5V/0.5ohm would be 10A, well past the real limit
+  ] };
+  let res;
+  for (let i = 0; i < 3; i++) res = circuit.solve(els, 0.001);
+  approx(res.currents.get('bat1'), CircuitEngine.BATTERY_MAX_CURRENT, 1e-6, 'T-POWER-NETWORK: current must pin at the real max rating, not the idealized 10A Ohm\'s-law answer');
+  assert.ok(res.voltages.get('vcc') < 1.5, `T-POWER-NETWORK: the rail must genuinely brown out under a real overload, got ${res.voltages.get('vcc')}V`);
+  assert.ok(res.warnings.some((w) => w.includes('current-limited')), 'T-POWER-NETWORK: a real brownout must be reported, not silently absorbed');
+}
+{
+  const withoutCap = new Circuit();
+  const withCap = new Circuit();
+  const base = [{ id: 'bat1', type: 'battery', value: 5, a: 'vcc', b: 'gnd' }];
+  const capBase = base.concat([{ id: 'cd', type: 'capacitor', value: 2.2e-4, a: 'vcc', b: 'gnd' }]);
+  for (let i = 0; i < 5; i++) { withoutCap.solve({ wires: [], components: base }, 0.0002); withCap.solve({ wires: [], components: capBase }, 0.0002); }
+  const pulseNoCap = { wires: [], components: base.concat([{ id: 'rpulse', type: 'resistor', value: 3, a: 'vcc', b: 'gnd' }]) };
+  const pulseWithCap = { wires: [], components: capBase.concat([{ id: 'rpulse', type: 'resistor', value: 3, a: 'vcc', b: 'gnd' }]) };
+  const vNoCap = withoutCap.solve(pulseNoCap, 0.0002).voltages.get('vcc');
+  const vWithCap = withCap.solve(pulseWithCap, 0.0002).voltages.get('vcc');
+  assert.ok(vWithCap > vNoCap + 0.2, `T-POWER-NETWORK: a real decoupling capacitor must visibly hold the rail up during a fast transient pulse (no new physics beyond the existing capacitor model), got ${vNoCap}V vs ${vWithCap}V`);
+  console.log('Test 46 OK (T-POWER-NETWORK): battery current-limits at', CircuitEngine.BATTERY_MAX_CURRENT, 'A with a real brownout, decoupling cap holds the rail up', (vWithCap - vNoCap).toFixed(3), 'V higher during a fast pulse');
 }
 
 console.log('\nAll circuit engine tests passed.');
