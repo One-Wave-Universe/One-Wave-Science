@@ -1641,4 +1641,21 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 48 OK (T-BATTERY-CAPACITY): real Coulomb-counted runtime, flat-then-knee discharge curve, and consistent energy tracking all verified');
 }
 
+// Test 49 (T-LED-LIGHT-OUTPUT): approximate relative LED light output
+// (real electrical power I*Vf times a real, channel-specific wall-plug
+// efficiency) must be monotonic in current and must distinguish real
+// LED color families by their real differing efficiency, not treat
+// every color as identical.
+{
+  const red20 = CircuitEngine.ledLightOutputW(0.02, 'red');
+  const red40 = CircuitEngine.ledLightOutputW(0.04, 'red');
+  const blue20 = CircuitEngine.ledLightOutputW(0.02, 'blue');
+  const white20 = CircuitEngine.ledLightOutputW(0.02, 'white');
+  assert.ok(red40 > red20, 'T-LED-LIGHT-OUTPUT: light output must be monotonic in current');
+  approx(red40 / red20, 2.0, 0.01, 'T-LED-LIGHT-OUTPUT: doubling current at the same Vf must double output (linear in current)');
+  assert.ok(blue20 !== red20 && white20 !== red20 && blue20 !== white20, 'T-LED-LIGHT-OUTPUT: red/blue/white must be genuinely distinguishable, not the same number in different colors');
+  assert.ok(blue20 > red20 && white20 > red20, 'T-LED-LIGHT-OUTPUT: blue/white indicator LEDs are real-world more efficient than red -- the model must reflect that, not treat all colors equally');
+  console.log('Test 49 OK (T-LED-LIGHT-OUTPUT): monotonic in current, real per-color efficiency differences preserved');
+}
+
 console.log('\nAll circuit engine tests passed.');

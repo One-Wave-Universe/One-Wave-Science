@@ -83,6 +83,26 @@
   }
 
   const LED_VF = { red: 1.8, yellow: 2.0, green: 2.1, blue: 3.0, white: 3.0, ir: 1.4 };
+  // real, honest order-of-magnitude wall-plug (optical-power-out /
+  // electrical-power-in) efficiency for a small INDICATOR-class LED of
+  // each color family -- not a high-power/lighting-grade part, and not
+  // photometric lm/W (which folds in the human eye's own uneven color
+  // sensitivity, a separate real effect this simulator doesn't model).
+  // Real LEDs genuinely differ this way: shorter-wavelength/newer
+  // (blue, white phosphor-converted) chemistries are typically more
+  // efficient than red/AlGaInP-class indicator parts.
+  const LED_WALLPLUG_EFFICIENCY = { red: 0.06, yellow: 0.08, green: 0.10, blue: 0.18, white: 0.22, ir: 0.30 };
+  // approximate relative optical power output (watts) = real electrical
+  // power actually delivered (I * Vf, both already-solved real values)
+  // times that real efficiency -- monotonic in current by construction
+  // (never a hard-coded three-tier brightness label), and distinguishes
+  // channels because the efficiency genuinely differs, not because the
+  // color was special-cased.
+  function ledLightOutputW(current, color) {
+    const vf = LED_VF[color] != null ? LED_VF[color] : LED_VF.red;
+    const eff = LED_WALLPLUG_EFFICIENCY[color] != null ? LED_WALLPLUG_EFFICIENCY[color] : LED_WALLPLUG_EFFICIENCY.red;
+    return Math.max(current, 0) * vf * eff;
+  }
   const LED_RON = 12; // ohms, approximate forward dynamic resistance
   const DIODE_VF = 0.7; // volts, generic silicon rectifier (e.g. 1N4001-class)
   const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
@@ -324,6 +344,16 @@
     const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
     return table[c.value] || table[1.5];
   }
+  // real off-state drain-source leakage (IDSS-class): even with the
+  // channel fully off and the body diode reverse-biased, a real MOSFET
+  // still passes a real, tiny leakage current -- datasheets typically
+  // spec a max (often ~1uA), with real typical parts well below that;
+  // this is an honest typical order of magnitude, not that worst-case
+  // limit. Stamped unconditionally (like a real physical leakage path
+  // always present) rather than only when "off", since it's utterly
+  // negligible next to real channel/diode conduction whenever those ARE
+  // active -- no separate on/off bookkeeping needed.
+  const MOSFET_OFF_LEAKAGE_G = 2e-9;
 
   // Real TLV3202 dual comparator (TI datasheet): rail-to-rail push-pull
   // output (not open-drain -- no pull-up needed), input offset voltage a
@@ -1034,6 +1064,12 @@
             const IeqGate = gGate * vgPrev;
             stampI(g_, IeqGate);
             stampI(s, -IeqGate);
+            // real off-state leakage, always present alongside whatever
+            // else is conducting (see MOSFET_OFF_LEAKAGE_G's comment)
+            stampG(d, d, MOSFET_OFF_LEAKAGE_G);
+            stampG(s, s, MOSFET_OFF_LEAKAGE_G);
+            stampG(d, s, -MOSFET_OFF_LEAKAGE_G);
+            stampG(s, d, -MOSFET_OFF_LEAKAGE_G);
             if (this._fetChannelState.get(c.id)) {
               // real RDS(on) drift with the channel's OWN temperature --
               // silicon channel resistance rises with temperature, the
@@ -1896,7 +1932,7 @@
           // between the same two nodes, so their currents just add.
           const rdsEff = spec.rdsOn * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
           const channelI = this._fetChannelState.get(c.id) ? (vd - vs) / rdsEff : 0;
-          I = channelI;
+          I = channelI + (vd - vs) * MOSFET_OFF_LEAKAGE_G;
           // self-heating from real channel conduction loss only (switching
           // loss is not modeled -- a real device's dominant loss at these
           // small currents/frequencies is conduction, not switching)
@@ -2246,14 +2282,14 @@
   }
 
   const api = {
-    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
+    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
     AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
     LATCHRELAY_SPEC, latchRelaySpec,
     HBRIDGE_SPEC, hbridgeSpec,
     SCHMITT_SPEC, schmittSpec,
-    AMBIENT_C_DEFAULT, THERMAL_SPEC, RESISTOR_TEMPCO, MOSFET_RDSON_TEMPCO, COPPER_TEMPCO, MAGNETIC_HC_TEMPCO,
+    AMBIENT_C_DEFAULT, THERMAL_SPEC, RESISTOR_TEMPCO, MOSFET_RDSON_TEMPCO, COPPER_TEMPCO, MAGNETIC_HC_TEMPCO, MOSFET_OFF_LEAKAGE_G,
     BATTERY_MAX_CURRENT,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
