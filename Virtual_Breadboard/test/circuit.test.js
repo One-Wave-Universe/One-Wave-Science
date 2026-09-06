@@ -1329,7 +1329,68 @@ function windingR(turns, meanTurnLen) {
   console.log('Test 41 OK (T-EXPERIMENT): core-lock event at t=', ev.t.toFixed(6), 's, persistence minObservedDelta=', result.persistence.minObservedDelta.toFixed(4));
 }
 
-// Test 42 (T-NO-MACRO): the new calibration example presets in js/app.js
+// Test 42 (T-RAIL-CLAMP): a current-limited vgnd/comparator output stage
+// physically cannot swing past its own supply rails by more than a real
+// clamp-diode drop -- previously it could, because the limited-regime
+// stamp was a pure ideal current source with no conductance back to any
+// rail; on the real window-comparator + sample-and-hold circuit below, at
+// a small-but-reasonable dt (a real capacitor's first-step inrush current
+// demands more than the vgnd's rated 20mA), V0 diverged to hundreds of
+// volts instead of sagging realistically. This must now land bounded near
+// the rails, with the real current-limit/common-mode warnings that
+// honestly describe the problem, not silent numerical garbage.
+{
+  // sanity first: the SAME clamp mechanism must NOT engage or perturb V0
+  // even slightly under completely normal, legitimate load -- a rail
+  // splitter's output sits BETWEEN its two rails by design, so a clamp
+  // that (incorrectly) treated "below the high rail" or "above the low
+  // rail" as a fault would misfire on every normal midpoint reading.
+  {
+    const els = {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+        { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+        { id: 'rload', type: 'resistor', a: 'V0', b: 'M', value: 10000 },
+      ],
+    };
+    const c = new Circuit();
+    let res;
+    for (let i = 0; i < 5; i++) res = c.solve(els, 1 / 60);
+    approx(res.voltages.get(res.uf.find('V0')), 2.5, 0.01, 'T-RAIL-CLAMP: a legitimate midpoint reading under normal load must not be perturbed by the rail clamp');
+  }
+
+  // the real failure case: a window comparator (the same divider/decision
+  // topology T-WINDOW-3STATE proves) driving a PMOS/NMOS sample-and-hold,
+  // solved at a small dt where the hold cap's real first-step inrush
+  // current exceeds the vgnd's rated 20mA.
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 },
+      { id: 'vg1', type: 'vgnd', a: 'P', b: 'M', out: 'V0' },
+      { id: 'r1', type: 'resistor', a: 'P', b: 'X', value: 124000 },
+      { id: 'r2', type: 'resistor', a: 'X', b: 'V0', value: 1000 },
+      { id: 'r3', type: 'resistor', a: 'V0', b: 'Y', value: 1000 },
+      { id: 'r4', type: 'resistor', a: 'Y', b: 'M', value: 124000 },
+      { id: 'cmp', type: 'comparator', in1p: 'X', in1m: 'V0', gnd: 'M', in2p: 'V0', in2m: 'Y', out1: 'OUT1', out2: 'OUT2', vcc: 'P' },
+      { id: 'q1', type: 'pmos', gate: 'OUT1', drain: 'MEM', source: 'P', value: 1.5 },
+      { id: 'q2', type: 'nmos', gate: 'OUT2', drain: 'MEM', source: 'M', value: 1.5 },
+      { id: 'r5', type: 'resistor', a: 'MEM', b: 'V0', value: 100000 },
+      { id: 'cap2', type: 'capacitor', a: 'MEM', b: 'V0', value: 10e-6 },
+    ],
+  };
+  const c = new Circuit();
+  let res;
+  for (let i = 0; i < 100; i++) res = c.solve(els, 0.0005);
+  const v0 = res.voltages.get(res.uf.find('V0'));
+  assert.ok(v0 > -1 && v0 < 6, 'T-RAIL-CLAMP: V0 must stay physically bounded near the 0-5V supply rails even when current-limited by a real inrush transient, got ' + v0 + 'V');
+  assert.ok(res.warnings.some((w) => /current-limited/.test(w)), 'T-RAIL-CLAMP: the real current-limit condition must still be honestly reported');
+
+  console.log('Test 42 OK (T-RAIL-CLAMP): normal midpoint reading unperturbed; a real inrush-driven current-limit transient stays bounded at V0=', v0.toFixed(3), 'V instead of diverging');
+}
+
+// Test 43 (T-NO-MACRO): the new calibration example presets in js/app.js
 // must be built from real discrete parts (nmos/pmos), not the legacy
 // ternarycell macro -- a static source check since app.js itself needs a
 // DOM and can't be required directly from this Node test.
@@ -1341,7 +1402,7 @@ function windingR(turns, meanTurnLen) {
     assert.ok(m, 'T-NO-MACRO: could not find ' + name + ' in js/app.js to check');
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
-  console.log('Test 42 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+  console.log('Test 43 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
 }
 
 console.log('\nAll circuit engine tests passed.');
