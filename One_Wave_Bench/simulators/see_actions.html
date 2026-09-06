@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>One-Wave — In Out Across Over</title>
+<style>
+html,body{margin:0;height:100%;background:#100c08;color:#e8c99a;font:15px/1.45 ui-sans-serif,system-ui}
+#c{display:block;width:100%;height:70vh;background:#0b0907}
+.bar{padding:12px 16px}
+button{margin:4px 6px 4px 0;padding:8px 12px;background:#2a2118;color:#f0d5a8;border:1px solid #6a4e2a;cursor:pointer}
+button:active{background:#4a3518}
+#read{opacity:.9}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="bar">
+  <button data-a="in">Inward</button>
+  <button data-a="out">Outward</button>
+  <button data-a="across">Across</button>
+  <button data-a="over">Over</button>
+  <button data-a="rest">Hold</button>
+  <div id="read"></div>
+  <div>Energy is the numbers on this hex. There is no other box. W (kg) is not in this file.</div>
+</div>
+<script>
+const cv=document.getElementById('c'),x=cv.getContext('2d');
+function sz(){cv.width=innerWidth;cv.height=cv.parentElement?innerHeight*0.7:innerHeight*0.7;} sz(); addEventListener('resize',sz);
+let ac=1, ar=Array(6).fill(1), action=null, tAcross=0;
+function dipole(){
+  let C=0,S=0;
+  ar.forEach((a,k)=>{const th=k*Math.PI/3;C+=a*Math.cos(th);S+=a*Math.sin(th);});
+  return {C,S,th:Math.atan2(S,C)};
+}
+function E(){
+  const d=dipole();
+  const R=(ar.reduce((s,v)=>s+v,0)/6)/ (ac+1e-9);
+  let eK=0.4*ar.reduce((s,a,i)=>s+(a-ar[(i+1)%6])**2,0);
+  let eE=(R-1)**2+0.5*(ac-1)**2;
+  let eM=0.35*Math.sin(d.th)**2;
+  let eT=0.8*(R-1)**2+0.2*ar.reduce((s,a)=>s+(a-ac)**2,0);
+  return {tot:eK+eE+eM+eT,R,th:d.th,eK,eE,eM,eT};
+}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>action=b.dataset.a);
+function tick(){
+  if(action==='in'){ac=Math.min(1.4,ac+0.01); ar=ar.map(a=>Math.max(0.6,a-0.008));}
+  if(action==='out'){ac=Math.max(0.7,ac-0.01); ar=ar.map(a=>Math.min(1.4,a+0.008));}
+  if(action==='across'){tAcross+=0.04; ar=ar.map((a,i)=>1+0.08*Math.sin(tAcross+i*Math.PI));}
+  if(action==='over'){
+    const d=dipole();
+    const tgt=Math.abs(d.th)<Math.PI/2?Math.PI:0;
+    ar=ar.map((a,i)=>a+0.02*Math.cos(i*Math.PI/3+tgt)-0.01*(a-1));
+  }
+  if(action==='rest'){ac+=(1-ac)*0.08; ar=ar.map(a=>a+(1-a)*0.08);}
+  const e=E(), w=cv.width,h=cv.height,cx=w/2,cy=h*0.5,rad=Math.min(w,h)*0.28;
+  x.fillStyle='#0b0907'; x.fillRect(0,0,w,h);
+  const pts=ar.map((_,i)=>[cx+rad*Math.cos(-Math.PI/2+i*Math.PI/3), cy+rad*Math.sin(-Math.PI/2+i*Math.PI/3)]);
+  x.strokeStyle='#5a3f22'; x.beginPath();
+  pts.forEach((p,i)=>{i?x.lineTo(...p):x.moveTo(...p);}); x.closePath(); x.stroke();
+  pts.forEach((p,i)=>{
+    x.beginPath(); x.moveTo(cx,cy); x.lineTo(...p); x.strokeStyle='#2a1e12'; x.stroke();
+    x.beginPath(); x.arc(p[0],p[1],6+10*(ar[i]-0.6),0,6.3);
+    x.fillStyle=ar[i]>1.05?'#f0c36a':'#7a5a30'; x.fill();
+  });
+  x.beginPath(); x.arc(cx,cy,8+18*(ac-0.7),0,6.3); x.fillStyle='#edd5a8'; x.fill();
+  document.getElementById('read').textContent =
+    `E=${e.tot.toFixed(3)}  R=${e.R.toFixed(3)}  theta=${e.th.toFixed(2)}  K=${e.eK.toFixed(3)} shell=${e.eE.toFixed(3)} M=${e.eM.toFixed(3)} weave=${e.eT.toFixed(3)}`;
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
