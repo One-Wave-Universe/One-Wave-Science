@@ -65,6 +65,19 @@ This lab cross-checks local differential measurements against global integrals:
 
 The purpose is to catch fields that look plausible locally but fail their global conservation/topology identity.
 
+## Maxwell Control Lab
+
+Runnable at `maxwell-controls/index.html`.
+
+1. Gauss electric flux control.
+2. Gauss magnetic / divergence-free circulating-field control.
+3. Faraday induction control.
+4. Ampère circulation control.
+5. Plane electromagnetic wave orthogonality control.
+6. Poynting energy-flow control.
+
+These are normalized standard electromagnetic identities. They are controls for later comparisons, not a claim that a One-Wave model has reproduced electromagnetism.
+
 ## Scientific separation
 
 - `control` means a declared standard equation or numerical-control problem.
@@ -92,6 +105,6 @@ The next quantitative layer should connect these controls rather than inventing 
 - quaternion orientation + rotating vector fields;
 - rigid-body response + external torque fields;
 - vector-field divergence/curl + flux/circulation integral checks;
-- three-phase field rotation + spatial orientation;
+- Maxwell controls + three-phase spatial rotation;
 - three-body ensembles + candidate finite-reach residual sweeps;
-- real versioned datasets for galaxy curves, redshift, lensing, and stellar spectra.
+- real versioned datasets for galaxy curves, redshift, lensing, stellar spectra, and electromagnetic benchmarks.
