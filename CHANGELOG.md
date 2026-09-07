@@ -1,4 +1,14 @@
 
+## Section 8 Attempted — Static-Space Time-Dilation No-Go Theorem (September 7, 2026)
+
+- Added E-534, a direct attempt at E-533 Section 8's bar: find a mechanism, using One-Wave's own primitives, that reproduces universal (1+z) time dilation of distant transients without the spatial background becoming time-dependent (i.e. without literal expansion).
+- Result: derived, not asserted. For the most general homogeneous static-space metric with a time-varying global lapse, `ds^2 = -alpha(t)^2 dt^2 + dx^2`, the apparent dilation in light's coordinate transit time is exactly cancelled by the observer's own clock (which runs at the same alpha(t) at the moment of reception) — a coordinate artifact, not physics, because this metric is related to flat Minkowski spacetime by a time reparametrization. Real time dilation requires the *spatial* metric coefficient to depend on time, which is the FRW scale factor under another name.
+- The one loophole that survives the math (decoupling light's local speed from the constant that sets clock rates) is closed by data: it requires order-unity variation in the fine-structure constant across z~0.1-0.8, and quasar-absorption/Oklo-reactor bounds constrain that to roughly 1e-5-1e-6 over comparable redshifts — many orders of magnitude too tight.
+- A second loophole (breaking homogeneity/isotropy) is named but not developed: nothing motivates it beyond wanting to avoid the theorem, and it would need to explain why it doesn't show up in CMB/large-scale-structure isotropy tests.
+- Verdict: the sub-claim "a homogeneous, isotropic, locally-Lorentz-invariant static-space mechanism can reproduce real universal (1+z) time dilation" is RED per I-02 — now a structural result, not only an empirical exclusion.
+- What survives: A-115 Sections 1-4 and the White Energy/quasar identification are untouched. The theorem points at one remaining research direction: deriving expansion-like spatial time-dependence *from* the compression field's own dynamics (A-115 Section 1's field equation plus White Energy circulation) rather than importing a(t) as an external postulate — i.e. explaining why space behaves as though it expands, instead of denying that it does. Not attempted here.
+- Updated E-533 Section 8 and `ONE_WAVE_SCIENCE_ATTACK_MAP.md` Section L with pointers to E-534.
+
 ## Cosmology Attack Executed — Redshift Law Versus Expansion (September 7, 2026)
 
 - Added E-533, executing the `ONE_WAVE_SCIENCE_ATTACK_MAP.md` Section L attack in full: took E-528's explicit redshift law as written and compared it against outside supernova time-dilation, Tolman surface-brightness, CMB blackbody/T(z), and BAO measurements.
