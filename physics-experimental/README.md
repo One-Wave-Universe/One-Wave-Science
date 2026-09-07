@@ -49,6 +49,22 @@ Runnable at `vector-field-topology/index.html`.
 
 This lab measures finite-difference divergence and scalar curl over the rendered analytic field, exposing topology numerically instead of relying on arrows alone.
 
+## Integral Field Theorem Lab
+
+Runnable at `integral-field-theorems/index.html`.
+
+1. Linear expansion field.
+2. Solid rotation field.
+3. Saddle field.
+4. Mixed linear field with simultaneous nonzero divergence and curl.
+
+This lab cross-checks local differential measurements against global integrals:
+
+- boundary flux versus area integral of divergence;
+- boundary circulation versus area integral of curl.
+
+The purpose is to catch fields that look plausible locally but fail their global conservation/topology identity.
+
 ## Scientific separation
 
 - `control` means a declared standard equation or numerical-control problem.
@@ -78,4 +94,4 @@ The next quantitative layer should connect these controls rather than inventing 
 - vector-field divergence/curl + flux/circulation integral checks;
 - three-phase field rotation + spatial orientation;
 - three-body ensembles + candidate finite-reach residual sweeps;
-- real versioned datasets for galaxy curves, redshift, stellar spectra, and lensing.
+- real versioned datasets for galaxy curves, redshift, lensing, and stellar spectra.
