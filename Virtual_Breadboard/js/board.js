@@ -62,6 +62,27 @@
     return b + 'B' + col;
   }
 
+  // The real, physical (component-free) netlist: every hole on a built
+  // board, grouped by the cellId cellIdFor() already assigns it -- i.e.
+  // by what a bare physical board itself ties together, before any part
+  // or jumper touches it. This is the ground truth for "do 5 holes on one
+  // strip really become one node", "does the center trench connect top
+  // and bottom", and "do split rails stay split" -- it needs nothing
+  // beyond the board's own geometry, no circuit or solve involved.
+  function netlist(board) {
+    const byCellId = new Map();
+    board.holes.forEach((h) => {
+      if (!byCellId.has(h.cellId)) byCellId.set(h.cellId, []);
+      byCellId.get(h.cellId).push({ row: h.row, col: h.col, boardIdx: h.boardIdx, kind: h.kind });
+    });
+    const nets = [];
+    for (const [cellId, holes] of byCellId) {
+      nets.push({ cellId, kind: holes[0].kind, boardIdx: holes[0].boardIdx, holes });
+    }
+    nets.sort((a, b) => (a.cellId < b.cellId ? -1 : a.cellId > b.cellId ? 1 : 0));
+    return nets;
+  }
+
   // build one board's holes/rows at a local origin (0,0); the caller shifts
   // them into place once the overall grid layout is known
   function buildOne(boardIdx, cols) {
@@ -269,7 +290,7 @@
     ctx.restore();
   }
 
-  const api = { BOARD_SIZES, HOLE, MARGIN, build, hitTest, holeAt, cellIdFor, draw };
+  const api = { BOARD_SIZES, HOLE, MARGIN, build, hitTest, holeAt, cellIdFor, netlist, draw };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.Board = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

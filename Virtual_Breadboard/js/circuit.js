@@ -82,6 +82,270 @@
     }
   }
 
+  // Every internal (non-user-facing) node a component needs -- pure
+  // functions of the component's own id, so they can be shared between
+  // solve()'s real numeric stamping and netlist()'s topology-only report
+  // below without either one needing to know about the other.
+  const batInternal = (c) => '__batint__' + c.id;
+  const vgndInternal = (c) => '__vgndint__' + c.id;
+  const acInternal = (c) => '__acint__' + c.id;
+  const mtjSinInternal = (c) => '__mtjsin__' + c.id;
+  const mtjCosInternal = (c) => '__mtjcos__' + c.id;
+
+  // The real electrical topology: which node NAMES are actually the same
+  // electrical node, before any numeric solve happens. Wires and closed
+  // switches are the only things that ever make two different names the
+  // same node -- every other component type here just REGISTERS its own
+  // pins (so they show up in a netlist even if nothing else ties them to
+  // anything) without merging them, exactly like a real resistor's two
+  // legs are two different nodes, never one. Shared by solve() (which
+  // needs the union-find to assemble its matrix) and netlist() (which
+  // needs nothing else).
+  function buildTopologyUnionFind(components, wires) {
+    const uf = new UnionFind();
+    wires.forEach((w) => uf.union(w.a, w.b));
+    components.forEach((c) => {
+      uf.find(c.a);
+      uf.find(c.b);
+      if (c.type === 'potentiometer') uf.find(c.wiper);
+      if ((c.type === 'switch' || c.type === 'pushbutton') && c.closed) uf.union(c.a, c.b);
+      if (c.type === 'battery' || c.type === 'diffsource') uf.find(batInternal(c));
+      if (c.type === 'vgnd') {
+        uf.find(c.out);
+        uf.find(vgndInternal(c));
+      }
+      if (c.type === 'acsource') uf.find(acInternal(c));
+      if (c.type === 'mtjsensor') {
+        uf.find(c.sin);
+        uf.find(c.cos);
+        uf.find(mtjSinInternal(c));
+        uf.find(mtjCosInternal(c));
+      }
+      if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
+      if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
+      if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
+      if (c.type === 'latchrelay') { uf.find(c.contactA); uf.find(c.contactB); }
+      if (c.type === 'comparator') {
+        uf.find(c.in1p); uf.find(c.in1m); uf.find(c.out1);
+        uf.find(c.in2p); uf.find(c.in2m); uf.find(c.out2);
+        uf.find(c.vcc); uf.find(c.gnd);
+      }
+      if (c.type === 'hbridge') {
+        uf.find(c.in1); uf.find(c.in2); uf.find(c.vm); uf.find(c.gnd);
+        uf.find(c.out1); uf.find(c.out2);
+      }
+      if (c.type === 'schmitt') {
+        uf.find(c.in); uf.find(c.out); uf.find(c.vcc); uf.find(c.gnd);
+      }
+    });
+    return uf;
+  }
+
+  // The actual netlist: every node NAME grouped by the real electrical
+  // node (union-find root) it belongs to, plus which raw names are
+  // internal bookkeeping (a component's own hidden reference node, never
+  // a real user-facing hole/terminal) versus real, placeable node names.
+  // This is read-only reporting -- it never affects solve()'s own answer,
+  // and calling it twice on the same elements always returns the same
+  // grouping (a fresh UnionFind every call, same as solve() itself gets).
+  function netlist(elements) {
+    const wires = elements.wires || [];
+    const components = elements.components || [];
+    const uf = buildTopologyUnionFind(components, wires);
+    const groups = new Map(); // root -> Set(names)
+    for (const name of uf.parent.keys()) {
+      // components without an a/b pin pair (comparator, hbridge, schmitt,
+      // ...) harmlessly register `undefined` via uf.find(c.a)/uf.find(c.b)
+      // -- never a real node name, skip it here same as solve() itself
+      // implicitly does by never giving it a matrix row.
+      if (name === undefined) continue;
+      const root = uf.find(name);
+      if (!groups.has(root)) groups.set(root, new Set());
+      groups.get(root).add(name);
+    }
+    const isInternal = (name) => /^__\w+__/.test(name);
+    const nets = [];
+    for (const [root, names] of groups) {
+      const sorted = Array.from(names).sort();
+      nets.push({
+        root,
+        nodes: sorted.filter((n) => !isInternal(n)),
+        internalNodes: sorted.filter((n) => isInternal(n)),
+      });
+    }
+    nets.sort((a, b) => (a.root < b.root ? -1 : a.root > b.root ? 1 : 0));
+    return nets;
+  }
+
+  // Real DC-conductance edges between a component's OWN pins, for the
+  // reachability check diagnose() uses to find FLOATING nodes. This is
+  // deliberately NOT the same as buildTopologyUnionFind's registration --
+  // a resistor's two legs are two different nodes (no union), but there
+  // IS a real conductive path between them, which is exactly what
+  // "floating" needs to check for. High-impedance IC inputs (a
+  // comparator's or Schmitt's input pin, a MOSFET's gate) get no edge at
+  // all here, on purpose: a real op-amp/logic input is NOT a DC path to
+  // anything else in the package, so a genuinely dangling input pin
+  // SHOULD show up as floating -- that is a real bench fact, not a false
+  // positive.
+  function realDcEdges(components) {
+    const edges = [];
+    const add = (a, b) => { if (a != null && b != null) edges.push([a, b]); };
+    components.forEach((c) => {
+      switch (c.type) {
+        case 'resistor': case 'capacitor': case 'inductor':
+        case 'led': case 'diode': case 'acsource':
+          add(c.a, c.b);
+          break;
+        case 'battery': case 'diffsource':
+          add(c.a, c.b);
+          break;
+        case 'switch': case 'pushbutton':
+          if (c.closed) add(c.a, c.b);
+          break;
+        case 'potentiometer':
+          add(c.a, c.wiper);
+          add(c.wiper, c.b);
+          break;
+        case 'vgnd':
+          add(c.a, c.b);
+          add(c.out, c.a);
+          add(c.out, c.b);
+          break;
+        case 'nmos': case 'pmos':
+          // real body diode is unconditional -- drain and source always
+          // have SOME real path between them regardless of gate state.
+          // The gate itself gets no edge: a real MOSFET gate is
+          // genuinely DC-isolated from drain/source.
+          add(c.drain, c.source);
+          break;
+        case 'toroid': case 'memorycore':
+          (c.windings || []).forEach((w) => add(w.a, w.b));
+          break;
+        case 'latchrelay':
+          (c.windings || []).forEach((w) => add(w.a, w.b));
+          add(c.contactA, c.contactB); // real mechanical contact, closed or open, still a physical part with SOME (possibly very high) real resistance
+          break;
+        case 'comparator':
+          add(c.vcc, c.gnd);
+          add(c.out1, c.vcc); add(c.out1, c.gnd);
+          add(c.out2, c.vcc); add(c.out2, c.gnd);
+          break;
+        case 'hbridge':
+          add(c.vm, c.gnd);
+          add(c.out1, c.vm); add(c.out1, c.gnd);
+          add(c.out2, c.vm); add(c.out2, c.gnd);
+          break;
+        case 'schmitt':
+          add(c.vcc, c.gnd);
+          add(c.out, c.vcc); add(c.out, c.gnd);
+          break;
+        default:
+          break;
+      }
+    });
+    return edges;
+  }
+
+  // Named fault states, derived read-only from an already-solved result --
+  // never changes a single solved value. "The simulator must never
+  // replace an impossible circuit with a nice-looking waveform": this is
+  // the layer that names what solve() already computed honestly, instead
+  // of leaving a real fault looking like just another number.
+  function diagnose(elements, result) {
+    const components = elements.components || [];
+    const warnings = result.warnings || [];
+
+    // NO REFERENCE: nothing in this circuit deliberately anchors a 0V
+    // node -- solve()'s own groundRoot selection falls back to an
+    // arbitrary wire/component pin (see js/circuit.js's solve(), and
+    // Virtual_Breadboard/00_RULES/measurement_rules.md's floating-
+    // reference note) whenever no battery/diffsource is present.
+    const hasRealSource = components.some((c) => c.type === 'battery' || c.type === 'diffsource');
+    const noReference = !hasRealSource;
+
+    // SOLVER FAILED: the linear solve itself produced garbage. GMIN
+    // (stamped at every real node) makes an outright singular matrix rare,
+    // but a NaN/Infinity anywhere in the solved state is never a real
+    // physical answer -- report it as a named failure, not a number.
+    let solverFailed = false;
+    for (const v of result.voltages.values()) if (!Number.isFinite(v)) solverFailed = true;
+    for (const v of result.currents.values()) if (!Number.isFinite(v)) solverFailed = true;
+
+    // FLOATING: any real, placeable node with no real DC-conductance path
+    // (see realDcEdges above) back to whichever node solve() used as its
+    // reference -- found by a plain reachability search, not by
+    // eyeballing a suspicious-looking voltage.
+    const uf = result.uf;
+    const edges = realDcEdges(components);
+    const adjacency = new Map();
+    const linkRoot = (r) => { if (!adjacency.has(r)) adjacency.set(r, new Set()); return adjacency.get(r); };
+    edges.forEach(([a, b]) => {
+      const ra = uf.find(a), rb = uf.find(b);
+      if (ra === rb) return;
+      linkRoot(ra).add(rb);
+      linkRoot(rb).add(ra);
+    });
+    const allRoots = new Set();
+    for (const name of uf.parent.keys()) {
+      if (name === undefined) continue; // see netlist()'s identical guard
+      allRoots.add(uf.find(name));
+    }
+    const reachable = new Set();
+    if (result.groundRoot != null) {
+      const queue = [result.groundRoot];
+      reachable.add(result.groundRoot);
+      while (queue.length) {
+        const cur = queue.pop();
+        for (const nbr of (adjacency.get(cur) || [])) {
+          if (!reachable.has(nbr)) { reachable.add(nbr); queue.push(nbr); }
+        }
+      }
+    }
+    const isInternal = (name) => /^__\w+__/.test(name);
+    const floatingNodes = Array.from(allRoots)
+      .filter((r) => !reachable.has(r) && !isInternal(r))
+      .sort();
+
+    // SHORT / OVER-CURRENT / component-level FLOATING: classified
+    // straight from the real warnings solve() already generated (every
+    // phrase below is copied verbatim from where it's pushed in this
+    // same file) -- this never invents a new detection, only names an
+    // existing one.
+    const shorts = [];
+    const overCurrent = [];
+    const floatingComponents = [];
+    const other = [];
+    warnings.forEach((w) => {
+      if (/^Short circuit at/.test(w) || /^Overload at/.test(w) || /a real brownout/.test(w)) {
+        shorts.push(w);
+      } else if (/not wired to anything|floating gate/.test(w)) {
+        floatingComponents.push(w);
+      } else if (/exceeds|current-limited|W in its|add a current-limiting resistor/.test(w)) {
+        overCurrent.push(w);
+      } else {
+        other.push(w);
+      }
+    });
+
+    // OPEN: components with a real open/closed state that are currently
+    // open -- read directly from the same state solve() already tracked
+    // (c.closed for switches, mosfetStates.channelOn for MOSFETs), not a
+    // new computation.
+    const openComponents = [];
+    components.forEach((c) => {
+      if ((c.type === 'switch' || c.type === 'pushbutton') && !c.closed) {
+        openComponents.push({ id: c.id, type: c.type, reason: 'commanded open' });
+      }
+      if ((c.type === 'nmos' || c.type === 'pmos') && result.mosfetStates && result.mosfetStates.has(c.id)) {
+        const st = result.mosfetStates.get(c.id);
+        if (!st.channelOn) openComponents.push({ id: c.id, type: c.type, reason: 'channel off' });
+      }
+    });
+
+    return { noReference, solverFailed, floatingNodes, floatingComponents, shorts, overCurrent, openComponents, otherWarnings: other };
+  }
+
   const LED_VF = { red: 1.8, yellow: 2.0, green: 2.1, blue: 3.0, white: 3.0, ir: 1.4 };
   // real, honest order-of-magnitude wall-plug (optical-power-out /
   // electrical-power-in) efficiency for a small INDICATOR-class LED of
@@ -564,7 +828,7 @@
       const wires = elements.wires || [];
       const components = elements.components || [];
       const ambient = ambientC != null ? ambientC : AMBIENT_C_DEFAULT;
-      const uf = new UnionFind();
+      const uf = buildTopologyUnionFind(components, wires);
       this._t += dt;
       const t = this._t;
       // one-step-behind thermal update, same pattern as every other
@@ -580,7 +844,6 @@
         this._temp.set(id, (told + k * target) / (1 + k));
       };
 
-      const batInternal = (c) => '__batint__' + c.id;
       // diffsource: a real EMF of "value" volts referenced to whatever its
       // own b-pin is wired to (its real reference input), through its own
       // real source impedance -- see the `batteries` filter comment below
@@ -644,47 +907,6 @@
         }
         return base * (this._latchBounceSample.get(lr.id) || 1);
       };
-      const vgndInternal = (c) => '__vgndint__' + c.id;
-      const acInternal = (c) => '__acint__' + c.id;
-      const mtjSinInternal = (c) => '__mtjsin__' + c.id;
-      const mtjCosInternal = (c) => '__mtjcos__' + c.id;
-
-      wires.forEach((w) => uf.union(w.a, w.b));
-      components.forEach((c) => {
-        uf.find(c.a);
-        uf.find(c.b);
-        if (c.type === 'potentiometer') uf.find(c.wiper);
-        if ((c.type === 'switch' || c.type === 'pushbutton') && c.closed) uf.union(c.a, c.b);
-        if (c.type === 'battery' || c.type === 'diffsource') uf.find(batInternal(c));
-        if (c.type === 'vgnd') {
-          uf.find(c.out);
-          uf.find(vgndInternal(c));
-        }
-        if (c.type === 'acsource') uf.find(acInternal(c));
-        if (c.type === 'mtjsensor') {
-          uf.find(c.sin);
-          uf.find(c.cos);
-          uf.find(mtjSinInternal(c));
-          uf.find(mtjCosInternal(c));
-        }
-        if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
-        if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
-        if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
-        if (c.type === 'latchrelay') { uf.find(c.contactA); uf.find(c.contactB); }
-        if (c.type === 'comparator') {
-          uf.find(c.in1p); uf.find(c.in1m); uf.find(c.out1);
-          uf.find(c.in2p); uf.find(c.in2m); uf.find(c.out2);
-          uf.find(c.vcc); uf.find(c.gnd);
-        }
-        if (c.type === 'hbridge') {
-          uf.find(c.in1); uf.find(c.in2); uf.find(c.vm); uf.find(c.gnd);
-          uf.find(c.out1); uf.find(c.out2);
-        }
-        if (c.type === 'schmitt') {
-          uf.find(c.in); uf.find(c.out); uf.find(c.vcc); uf.find(c.gnd);
-        }
-      });
-
       // diffsource shares the exact same ideal-EMF-plus-series-resistance
       // MNA structure as a battery (extra branch-current unknown via
       // rowBat) -- it is a real 2-terminal source too, just one whose EMF
@@ -2291,6 +2513,7 @@
     SCHMITT_SPEC, schmittSpec,
     AMBIENT_C_DEFAULT, THERMAL_SPEC, RESISTOR_TEMPCO, MOSFET_RDSON_TEMPCO, COPPER_TEMPCO, MAGNETIC_HC_TEMPCO, MOSFET_OFF_LEAKAGE_G,
     BATTERY_MAX_CURRENT,
+    netlist, buildTopologyUnionFind, diagnose, realDcEdges,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') window.CircuitEngine = api;

@@ -17,6 +17,7 @@ tolerances. No Field/Void/flashlight/nerve/motor logic belongs here.
 | GMIN (numerical stability floor) | `circuit.js:109`, stamped at `circuit.js:949` | PASSING | implicit in every floating-node test |
 | Power calculation | derived per-part from solved V/I at readback time (e.g. resistor power-rating warning at `circuit.js:1854+`) | PASSING | `qualification.test.js` #2 (resistor-power-warning) |
 | Numerical tolerance / pivot floor | `solveLinear()`'s `maxAbs < 1e-15` skip, `circuit.js:477` | PASSING | — |
+| **SOLVER FAILED — explicitly named** | `diagnose()`'s NaN/Infinity check over `result.voltages`/`result.currents` (`circuit.js:262`) | PASSING | `test/fault-states.test.js` |
 
 ## A real bug found and fixed here this session (receipt-worthy)
 
