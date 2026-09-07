@@ -32,6 +32,12 @@
 | Green/Stokes circulation | solid rotation field | boundary circulation - area integral of curl | rotational integral mismatch |
 | Zero-integral saddle | centered saddle field | total flux + circulation residuals | false global source/rotation |
 | Mixed integral field | simultaneous div/curl linear field | both theorem residuals | one identity passing while the other fails |
+| Gauss electric | normalized point-charge field | spherical flux constancy | incorrect inverse-square/area relation |
+| Gauss magnetic | divergence-free circulating field | sampled divergence | spurious magnetic monopole term |
+| Faraday induction | time-varying uniform B through loop | EMF vs `-A dB/dt` | incorrect sign or time derivative |
+| Ampère circulation | normalized straight-current field | loop circulation vs current | radius-dependent circulation error |
+| Plane EM wave | orthogonal E/B plane wave | `E dot B` + phase relation | non-orthogonal or phase-broken fields |
+| Poynting flow | `S = E × B` | energy-flow direction and magnitude | incorrect cross-product direction |
 
 ## Quaternion control check
 
@@ -44,5 +50,6 @@ Replace synthetic comparisons with versioned datasets and machine-readable param
 - quaternion orientation plus applied torque-field response;
 - timestep sweeps for rigid-body and three-body controls;
 - finite-reach candidates tested against the same three-body initial conditions as the control solver;
-- real galaxy rotation, redshift, lensing, and stellar-spectrum datasets;
+- Maxwell controls compared against a full finite-difference time-domain reference implementation;
+- real galaxy rotation, redshift, lensing, stellar-spectrum, and electromagnetic datasets;
 - 3D divergence/curl and surface-volume integral checks after the 2D controls are stable.
