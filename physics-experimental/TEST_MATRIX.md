@@ -14,5 +14,31 @@
 | Redshift | SR + exterior gravity formulas | z against normalized driver | misuse outside formula scope |
 | Wake families | 1/r² reference | family departure | arbitrary cutoff behavior |
 | Residual bench | synthetic 1/r² control data | relative RMSE | candidate rejection |
+| Quaternion axis-angle | unit quaternion rotation | quaternion norm + rotated-vector norm | non-unit orientation state |
+| Quaternion composition | SO(3) composition | angle between `qx*qy` and `qy*qx` results | false commutativity assumption |
+| SLERP | quaternion great-circle interpolation | unit norm + interpolation fraction | linear interpolation distortion |
+| Euler gimbal lock | ZYX Euler representation | `abs(cos(pitch))` | coordinate singularity near ±90° |
+| Quaternion rate integration | `q_dot = 0.5 q omega` | normalized vs raw quaternion norm | integration drift without renormalization |
+| Torque-free rigid body | Euler rigid-body equations | rotational-energy and angular-momentum drift | unstable or incorrect body dynamics |
+| Frame composition | parent × child quaternion | unit norm + transformed axes | local/world frame ordering mistakes |
+| Three-phase 3D rotor | classical 120° phase vectors | resultant magnitude + frame norm | incorrect phase/frame composition |
+| Uniform vector field | constant analytic field | mean divergence + curl | numerical derivative bias |
+| Radial source | analytic softened source | divergence map | missing source topology |
+| Vortex | analytic softened vortex | curl map | missing rotational topology |
+| Saddle field | `F=(x,-y)` | near-zero divergence + curl | confusing deformation with source/rotation |
+| Dipole pair | source + sink superposition | signed topology / derivative map | incorrect superposition |
+| Source + vortex | linear field superposition | simultaneous divergence + curl | losing one component under composition |
 
-The next upgrade should replace synthetic comparisons with versioned datasets and machine-readable parameter sweeps.
+## Quaternion control check
+
+The torque-free rigid-body module has a documented offline 100-time-unit RK4 check at `dt = 0.0025` with approximately `7.98e-13` relative rotational-energy drift and `3.77e-13` relative angular-momentum-magnitude drift. See `orientation-quaternion/VALIDATION.md`.
+
+## Next validation upgrade
+
+Replace synthetic comparisons with versioned datasets and machine-readable parameter sweeps, and add integral cross-checks:
+
+- divergence theorem: volume/area divergence versus boundary flux;
+- Stokes/Green circulation: surface curl versus line integral;
+- quaternion orientation plus applied torque-field response;
+- timestep sweeps for rigid-body and three-body controls;
+- real galaxy rotation, redshift, lensing, and stellar-spectrum datasets.
