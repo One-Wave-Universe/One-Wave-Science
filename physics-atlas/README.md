@@ -7,15 +7,16 @@ Open `index.html` directly in a modern browser. No build step is required.
 ## Current scenes
 
 1. Wave Packet — damped 2D scalar-wave toy.
-2. Coupled Oscillators — classical coupled oscillator control.
-3. Rotating Field — three phase-shifted vectors and rotating resultant.
-4. Spherical Flux — inverse-square geometry control.
-5. Bound Orbit — Newtonian two-body Verlet control.
-6. Three-Body Figure Eight — Newtonian three-body stress test.
-7. Star / Corona — reduced stellar transport/corona scaffold.
-8. Galaxy Rotation — Kepler-like versus flat-curve comparison scaffold.
-9. Redshift Ladder — normalized wavelength-shift comparison scaffold.
-10. Accretion / Quasar — central-potential disk with clearly artistic macro overlays.
+2. Double-Slit Interference — two coherent sources on a damped lattice (illustrative), checked against an exact closed-form two-source path-length calculation compared to the textbook paraxial formula Δy = λL/d.
+3. Coupled Oscillators — classical coupled oscillator control.
+4. Rotating Field — three phase-shifted vectors and rotating resultant.
+5. Spherical Flux — inverse-square geometry control.
+6. Bound Orbit — Newtonian two-body Verlet control, with live Kepler elements (semi-major axis, eccentricity, period) derived from the vis-viva/angular-momentum relations.
+7. Three-Body Figure Eight — Newtonian three-body stress test.
+8. Star / Corona — reduced stellar transport/corona scaffold.
+9. Galaxy Rotation — Kepler-like versus flat-curve comparison scaffold.
+10. Redshift Ladder — normalized wavelength-shift comparison scaffold.
+11. Accretion / Quasar — central-potential disk with clearly artistic macro overlays.
 
 ## Scientific separation
 

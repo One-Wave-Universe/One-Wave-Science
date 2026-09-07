@@ -5,10 +5,11 @@ The atlas is organized by scale, not by claim priority.
 | Scale | Scene | Current role | Next quantitative upgrade |
 |---|---|---|---|
 | micro | Wave Packet | scalar-field toy | boundary sweeps, dispersion residuals, wave-packet benchmarks |
+| micro | Double-Slit Interference | wave-optics control (exact path-length vs. paraxial Δy = λL/d) | ingest a finite-aperture (N-slit/grating) model and compare visibility falloff |
 | micro | Coupled Oscillators | classical control | normal-mode spectrum, damping/drive sweeps |
 | micro/control | Rotating Field | vector geometry control | RL/RLC winding model, phase error, torque proxy |
 | bridge | Spherical Flux | analytic control | shell-flux residual plot and alternate dimensions |
-| orbital | Bound Orbit | Newtonian control | Kepler elements, timestep convergence, perturbation sweeps |
+| orbital | Bound Orbit | Newtonian control + live Kepler elements (a, e, T) | timestep convergence, perturbation sweeps |
 | orbital | Three-Body Figure Eight | Newtonian stress test | finite-reach candidate family beside control, never inside it |
 | stellar | Star / Corona | reduced scaffold | hydrostatic structure, energy transport, MHD/corona model |
 | galactic | Galaxy Rotation | comparison scaffold | ingest observed rotation curves and fit competing laws |
