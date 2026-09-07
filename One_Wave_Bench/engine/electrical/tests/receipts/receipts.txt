@@ -1,0 +1,195 @@
+TEST: dc-source-holds-value
+EXPECTED: 9.0
+ACTUAL: 9.0
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: an ideal DC source under negligible load must read its own nominal voltage
+
+TEST: ohms-law-current
+EXPECTED: 0.005
+ACTUAL: 0.005
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: I = V/R through a single real resistor
+
+TEST: series-resistors-match-equivalent
+EXPECTED: 0.0025
+ACTUAL: 0.0025
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: two 1k resistors in series must draw the same current as one real 2k resistor
+
+TEST: series-resistors-same-current-both-legs
+EXPECTED: 0.0025
+ACTUAL: 0.0025
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: a series loop must carry the same current through every element
+
+TEST: parallel-resistors-match-equivalent
+EXPECTED: 0.01
+ACTUAL: 0.01
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: two 1k resistors in parallel must together draw the same total current as one real 500ohm resistor
+
+TEST: unloaded-divider-vtop
+EXPECTED: 9.0
+ACTUAL: 9.0
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: Vtop must hold the real source voltage
+
+TEST: unloaded-divider-vcenter
+EXPECTED: 4.5
+ACTUAL: 4.5
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: equal-value divider legs must produce a real half-rail midpoint
+
+TEST: unloaded-divider-vbottom
+EXPECTED: 0.0
+ACTUAL: 0.0
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: the explicit Ground node must read exactly 0V
+
+TEST: unloaded-divider-current
+EXPECTED: 0.00045
+ACTUAL: 0.00045
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: the loop current must match I = V / (R1+R2) exactly, computed from the real network, not assumed
+
+TEST: loaded-divider-center-matches-real-thevenin
+EXPECTED: 3.0
+ACTUAL: 3.0
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: loading CENTER with a real 10k resistor to the bottom rail must produce the real Thevenin-divided voltage
+
+TEST: loaded-divider-center-must-move
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: CENTER must genuinely move under load (unloaded=4.5000V, loaded=3.0000V) -- a simulator that silently restores CENTER to 4.5V here is FAILING this test by construction, not passing it by coincidence
+
+TEST: loaded-divider-branch-current-r1-real
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: I(r1) must be a real, nonzero, independently measured branch current
+
+TEST: loaded-divider-branch-current-r2-real
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: I(r2) must be a real, nonzero, independently measured branch current
+
+TEST: loaded-divider-branch-current-load-real
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: I(load) must be a real, nonzero, independently measured branch current
+
+TEST: differential-plus-relative-center
+EXPECTED: 4.5
+ACTUAL: 4.5
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: V(+ rail) relative to CENTER
+
+TEST: differential-minus-relative-center
+EXPECTED: -4.5
+ACTUAL: -4.5
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: V(- rail) relative to CENTER
+
+TEST: differential-plus-to-minus
+EXPECTED: 9.0
+ACTUAL: 9.0
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: V(+ to - rail) differential must equal the full rail voltage
+
+TEST: branch-current-r1-real
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: I(R1) = 0.000600A, must be real and flowing from + toward CENTER
+
+TEST: source-current-equals-r1-current
+EXPECTED: 0.0006
+ACTUAL: 0.0006000000000000001
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: in this single-loop-into-CENTER topology, the source current must equal I(R1) exactly (KCL at the top node)
+
+TEST: kcl-at-center-node
+EXPECTED: 0.0
+ACTUAL: 0.0
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: current arriving at CENTER (I(R1)) must equal current leaving it (I(R2)+I(load)) -- real Kirchhoff's current law, not assumed
+
+TEST: resistor-power-real-positive
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: P(R1)=0.003600W, P(R2)=0.000900W, P(load)=0.000900W -- every real resistor must show real positive dissipation
+
+TEST: source-power-matches-total-dissipation
+EXPECTED: 0.005399999999999999
+ACTUAL: 0.0054
+TOLERANCE: 1e-09
+PASS/FAIL: PASS
+NOTES: source power must equal total dissipated resistor power within numerical tolerance -- no unexplained gain or loss
+
+TEST: energy-supplied-real-positive
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: supplied energy over 60.0s = 0.324000J
+
+TEST: energy-balance-closes
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: supplied 0.324000J vs dissipated 0.324000J -- must close within numerical tolerance, no unexplained energy gain or loss
+
+TEST: mismatch-1pct-matches-real-formula
+EXPECTED: 4.522388059701493
+ACTUAL: 4.522388059701492
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: R2=10.1k must move CENTER to exactly the real formula's value, not a hard-coded number
+
+TEST: mismatch-1pct-shows-real-shift
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: a real 1% mismatch must produce a real, measurable shift from 4.5V (got 4.522388V), not stay pinned at 4.5V
+
+TEST: mismatch-5pct-matches-real-formula
+EXPECTED: 4.609756097560975
+ACTUAL: 4.609756097560976
+TOLERANCE: 1e-06
+PASS/FAIL: PASS
+NOTES: R2=10.5k must move CENTER to exactly the real formula's value, not a hard-coded number
+
+TEST: mismatch-5pct-shift-larger-than-1pct
+EXPECTED: True
+ACTUAL: True
+TOLERANCE: n/a (boolean check)
+PASS/FAIL: PASS
+NOTES: a bigger real mismatch must produce a bigger real shift (1%=0.022388V, 5%=0.109756V) -- proportional, not an arbitrary fixed nudge
