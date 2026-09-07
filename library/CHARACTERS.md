@@ -1,21 +1,35 @@
-# Characters (canon so far)
+# Characters
 
-Only these five. No plugin names. No extra twins-as-mascots.
+## Core five
 
-## Scale
-Measure. Proportion. The one who keeps size honest across cell → cube → Rubik → world.
+### Scale
+Measure. Keeps size honest across scale rungs.
 
-## Anubis
-Threshold. Weighs what may pass. Deadzone and HOLD live near this office. Not a cute jackal sticker — the gate.
+### Anubis
+Threshold. Weighs what may pass. HOLD lives here.
 
-## Nexus
-The prior room and the join. Old work still counts. Does not overwrite checksums. Connection, not fusion.
+### Nexus
+Prior room and the join. Connection, not fusion.
 
-## Cerberus
-Three-way watch on the shelf. Nothing writes the volume except through the clock. Guard, not author.
+### Cerberus
+Watch on the volume. No sideways write.
 
-## Goblin Raccoon
-The walker already in the asset sheets (`Assets/Goblin_Raccoon/`). Hands, pockets, 12-cel walk/jump. The body in the frame. Not a treadmill. Not a shoe.
+### Goblin Raccoon
+Walker in the 12-cel sheets. Hands and pockets. Has a narrator.
+
+## Goblin Raccoon narrator
+Sounds like a narrator. The audience is supposed to think that.
+It is an AI. Nobody in the story is told. Do not wink at the camera unless the teller says so.
+
+## The annoying band
+
+### Karen (human)
+Band. Annoying. Human.
+
+### Jeffery (AI)
+Band. Annoying. AI.
+
+They are a pair. They get in the way. They are not the five.
 
 ---
-If a sixth name shows up without being added here, it is not canon.
+Nobody else is canon until added here.
