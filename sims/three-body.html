@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three-Body Problem Solver</title>
+<style>
+:root{
+  --bg:#03050a; --panel:#0a0f16e8; --line:#243240; --ink:#eef7fb; --muted:#93a6b3;
+  --cyan:#7ce6f2; --amber:#f2bf67; --green:#7de0a7; --red:#ef7a75; --purple:#c695ff;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#020408;color:var(--ink);overflow:hidden}
+#space{position:fixed;inset:0;width:100%;height:100%;display:block;
+  background:radial-gradient(circle at 50% 42%,#0c1a22 0,#020408 55%,#000 100%)}
+.ui{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr auto;pointer-events:none}
+header{pointer-events:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;background:linear-gradient(180deg,#05080ddd,#05080d88,transparent);backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.sigil{flex:none;width:36px;height:36px;border:1px solid #5bd7e4;border-radius:50%;position:relative;box-shadow:0 0 26px #5bd7e44a}
+.sigil:before,.sigil:after{content:"";position:absolute;inset:7px;border:1px solid #5bd7e4;border-radius:50%}
+.sigil:after{inset:15px;background:#5bd7e4;box-shadow:0 0 14px #5bd7e4}
+h1{font-size:13px;letter-spacing:.13em;text-transform:uppercase;margin:0}
+.subtitle{font-size:10.5px;color:var(--muted);margin-top:3px}
+.back{font-size:10px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 10px;flex:none}
+.back:hover{border-color:var(--cyan);color:var(--ink)}
+.middle{display:grid;grid-template-columns:280px 1fr 300px;min-height:0;gap:12px;padding:0 12px 12px}
+.panel{pointer-events:auto;background:linear-gradient(180deg,#0a0f15e8,#080c11d9);border:1px solid var(--line);
+  border-radius:16px;backdrop-filter:blur(16px);overflow:auto;padding:13px}
+.center{pointer-events:none;position:relative}
+.centerTop{pointer-events:auto;position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;gap:8px;
+  background:#05090dbd;border:1px solid var(--line);border-radius:999px;padding:6px;flex-wrap:wrap;justify-content:center;max-width:92%}
+.btn{border:1px solid #31404b;background:#101820;color:var(--ink);border-radius:999px;padding:8px 12px;font-size:11px;cursor:pointer}
+.btn:hover{border-color:var(--cyan)}
+.btn.primary{border-color:#397c85;background:#10262c}
+.btn.active{border-color:var(--cyan);box-shadow:0 0 18px #67d8e52b}
+.eyebrow{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);margin:2px 0 9px}
+.case{display:grid;grid-template-columns:26px 1fr;gap:9px;padding:10px;border:1px solid #1d2831;border-radius:11px;
+  margin:7px 0;background:#070b0fbd;cursor:pointer}
+.case:hover{border-color:#40505b}
+.case.active{border-color:#3b838c;background:#0d2025}
+.case .n{width:24px;height:24px;border-radius:50%;border:1px solid #33424e;display:grid;place-items:center;font-size:9px;color:var(--muted)}
+.case.active .n{color:var(--cyan);border-color:var(--cyan)}
+.case strong{display:block;font-size:11px}
+.case small{display:block;font-size:9.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.status{font-size:9px;border:1px solid #46525b;border-radius:999px;padding:3px 6px;display:inline-block;margin-top:6px}
+.status.periodic{color:var(--green);border-color:#315f45}
+.status.chaotic{color:var(--red);border-color:#663333}
+.card{border-top:1px solid #1d2831;padding:12px 0}
+.card:first-of-type{border-top:0;padding-top:0}
+.card h2{font-size:12px;margin:0 0 7px}
+.copy{font-size:10.5px;color:#b0bec8;line-height:1.55}
+.copy b{color:var(--ink)}
+.readout{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-bottom:1px solid #171f26;font-size:10px}
+.readout span{color:var(--muted)}
+.readout b{font-variant-numeric:tabular-nums}
+.good{color:var(--green)}
+.yellow{color:var(--amber)}
+.bad{color:var(--red)}
+.control{margin:10px 0}
+.control label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}
+.control input[type=range]{width:100%;accent-color:#76dce8}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:10px}
+.toggle input{accent-color:#76dce8}
+#sceneTitle{position:absolute;left:22px;bottom:20px;text-shadow:0 2px 20px #000;
+  font-size:clamp(20px,3.4vw,44px);letter-spacing:-.03em;font-weight:650;max-width:70%}
+#sceneTitle small{display:block;font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:#b5c6d1;margin-bottom:5px}
+.legend{position:absolute;right:22px;bottom:22px;font-size:9px;color:#8ea1ae;text-align:right;max-width:280px;line-height:1.5}
+@media(max-width:1050px){.middle{grid-template-columns:230px 1fr}.right{display:none}}
+@media(max-width:720px){
+  body{overflow:auto} .ui{position:relative;min-height:100vh}
+  .middle{grid-template-columns:1fr;padding:0 8px 8px} .left{order:2}
+  .right{display:block;order:3} .center{order:1;min-height:58vh}
+  .subtitle{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="space"></canvas>
+<div class="ui">
+  <header>
+    <div class="brand">
+      <div class="sigil"></div>
+      <div>
+        <h1>Three-Body Problem Solver</h1>
+        <div class="subtitle">Newtonian gravity · velocity-Verlet integrator · conservation-checked</div>
+      </div>
+    </div>
+    <a class="back" href="index.html">← Simulation Lab</a>
+  </header>
+
+  <div class="middle">
+    <aside class="panel left">
+      <div class="eyebrow">Initial-condition cases</div>
+      <div id="caseList"></div>
+    </aside>
+
+    <main class="center">
+      <div class="centerTop">
+        <button class="btn primary" id="play">Pause</button>
+        <button class="btn" id="reset">Reset</button>
+        <button class="btn" id="pulse">Perturb</button>
+        <button class="btn" id="twin">Chaos Twin</button>
+      </div>
+      <div id="sceneTitle"><small id="sceneKicker"></small><span id="sceneName"></span></div>
+      <div class="legend" id="legend"></div>
+    </main>
+
+    <aside class="panel right">
+      <div class="card">
+        <h2 id="statusTitle">What this solves</h2>
+        <div class="copy" id="statusCopy"></div>
+      </div>
+      <div class="card">
+        <h2>Live diagnostics</h2>
+        <div id="readouts"></div>
+      </div>
+      <div class="card">
+        <h2>Controls</h2>
+        <div class="control"><label><span>Time scale</span><b id="speedOut">1.00×</b></label>
+          <input id="speed" type="range" min="0.05" max="3" value="1" step="0.05"></div>
+        <div class="control"><label><span>Trail persistence</span><b id="trailOut">0.94</b></label>
+          <input id="trail" type="range" min="0.75" max="0.995" value="0.94" step="0.005"></div>
+        <div class="toggle"><span>Relational edge overlay</span><input id="edges" type="checkbox" checked></div>
+        <button class="btn" id="exportBtn">Export diagnostics CSV</button>
+      </div>
+      <div class="card">
+        <h2>Why a general solver, not a formula</h2>
+        <div class="copy">Poincaré (1889) proved the three-body problem has no general closed-form solution in
+          elementary functions — motion for generic starting conditions is chaotic. This page numerically
+          integrates Newton's equations of motion directly (the way the problem is actually "solved" in
+          practice) and verifies correctness live via energy / momentum / angular-momentum conservation.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+const c = document.getElementById('space'), x = c.getContext('2d', { alpha:false });
+let W, H, D = 1, last = performance.now(), run = true, t = 0, frame = 0, ci = 0, cs, rows = [];
+const $ = id => document.getElementById(id);
+const u = {
+  list:$('caseList'), play:$('play'), reset:$('reset'), pulse:$('pulse'), twin:$('twin'),
+  name:$('sceneName'), kicker:$('sceneKicker'), legend:$('legend'),
+  statusTitle:$('statusTitle'), statusCopy:$('statusCopy'), readouts:$('readouts'),
+  speed:$('speed'), speedOut:$('speedOut'), trail:$('trail'), trailOut:$('trailOut'),
+  edges:$('edges'), exportBtn:$('exportBtn'),
+};
+
+function resize(){
+  D = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  c.width = W * D; c.height = H * D;
+  c.style.width = W + 'px'; c.style.height = H + 'px';
+  x.setTransform(D, 0, 0, D, 0, 0);
+}
+addEventListener('resize', resize);
+resize();
+
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = (v, d = 4) => !Number.isFinite(v) ? '—' :
+  (Math.abs(v) > 0 && Math.abs(v) < 1e-4 ? v.toExponential(2) : v.toFixed(d));
+
+// ---- Gravitational N-body core (Newtonian, G = 1, velocity-Verlet symplectic integrator) ----
+const G = 1;
+const Body = (m, X, Y, vx, vy, r) => ({ m, x:X, y:Y, vx, vy, ax:0, ay:0, r, tr:[] });
+
+function accel(bodies, soft){
+  bodies.forEach(o => { o.ax = 0; o.ay = 0; });
+  for (let i = 0; i < bodies.length; i++){
+    for (let j = i + 1; j < bodies.length; j++){
+      const a = bodies[i], b2 = bodies[j];
+      const dx = b2.x - a.x, dy = b2.y - a.y;
+      const r2 = dx*dx + dy*dy + soft*soft, r = Math.sqrt(r2), k = G / (r2 * r);
+      a.ax += b2.m * dx * k; a.ay += b2.m * dy * k;
+      b2.ax -= a.m * dx * k; b2.ay -= a.m * dy * k;
+    }
+  }
+}
+function verletStep(bodies, dt, soft){
+  accel(bodies, soft);
+  bodies.forEach(o => { o.vx += .5*o.ax*dt; o.vy += .5*o.ay*dt; o.x += o.vx*dt; o.y += o.vy*dt; });
+  accel(bodies, soft);
+  bodies.forEach(o => { o.vx += .5*o.ax*dt; o.vy += .5*o.ay*dt; });
+}
+function invariants(bodies, soft){
+  let K=0, U=0, L=0, px=0, py=0;
+  bodies.forEach(o => { K += .5*o.m*(o.vx*o.vx+o.vy*o.vy); L += o.m*(o.x*o.vy - o.y*o.vx); px += o.m*o.vx; py += o.m*o.vy; });
+  for (let i=0;i<bodies.length;i++) for (let j=i+1;j<bodies.length;j++){
+    const dx=bodies[j].x-bodies[i].x, dy=bodies[j].y-bodies[i].y;
+    U -= G*bodies[i].m*bodies[j].m/Math.sqrt(dx*dx+dy*dy+soft*soft);
+  }
+  return { E: K+U, L, P: Math.hypot(px, py) };
+}
+function minSep(bodies){
+  let m = Infinity;
+  for (let i=0;i<bodies.length;i++) for (let j=i+1;j<bodies.length;j++){
+    const dx=bodies[j].x-bodies[i].x, dy=bodies[j].y-bodies[i].y;
+    m = Math.min(m, Math.hypot(dx,dy));
+  }
+  return m;
+}
+// adaptive substep: shrink the inner step during close encounters so chaotic
+// configurations (e.g. the Pythagorean problem) don't blow up numerically.
+function advance(bodies, dt, soft, baseH){
+  const sep = minSep(bodies);
+  const h = baseH * clamp(sep / (soft*40 || 0.3), 0.08, 1);
+  const steps = Math.max(1, Math.ceil(dt / h));
+  const hs = dt / steps;
+  for (let i = 0; i < steps; i++) verletStep(bodies, hs, soft);
+  bodies.forEach(o => { o.tr.push([o.x, o.y]); if (o.tr.length > 900) o.tr.shift(); });
+}
+
+// ---- Named special-case + chaotic initial conditions ----
+const CASES = [
+  {
+    id:'eight', name:'Figure-Eight Choreography', kicker:'Periodic · Chenciner–Montgomery (1993)',
+    st:'periodic', soft:.006, baseH:.006, speedMul:.5, zoom:.27,
+    txt:'Three equal masses chase each other around a single figure-eight curve. Discovered numerically by Moore (1993) and proven to exist by Chenciner & Montgomery (2000) — a rare exact periodic solution, not a general-case formula.',
+    leg:'Equal masses · closed periodic orbit',
+    init(){
+      const X=.97000436, Y=-.24308753, vx=.466203685, vy=.43236573;
+      return [ Body(1,-X,-Y, vx, vy, 6.5), Body(1, X, Y, vx, vy, 6.5), Body(1, 0, 0, -2*vx, -2*vy, 6.5) ];
+    }
+  },
+  {
+    id:'lagrange', name:'Lagrange Equilateral Triangle', kicker:'Periodic · rigid rotation',
+    st:'periodic', soft:.01, baseH:.008, speedMul:.6, zoom:.3,
+    txt:'Three equal masses at the vertices of an equilateral triangle, each moving perpendicular to its radius at the exact speed that keeps the triangle rigid. Lagrange showed in 1772 this works for any mass ratio, not just equal masses.',
+    leg:'Equal masses · rigid rotating triangle',
+    init(){
+      const m=1, r=.85;
+      const w = Math.sqrt(G*m/(Math.sqrt(3)*r*r*r));
+      const b = [];
+      for (let i=0;i<3;i++){
+        const a = i*2*Math.PI/3;
+        const px = r*Math.cos(a), py = r*Math.sin(a);
+        b.push(Body(m, px, py, -w*py, w*px, 6.5));
+      }
+      return b;
+    }
+  },
+  {
+    id:'euler', name:'Euler Collinear Line', kicker:'Periodic · equal-mass syzygy',
+    st:'periodic', soft:.01, baseH:.007, speedMul:.6, zoom:.24,
+    txt:'Three equal masses stay perfectly collinear forever: the outer two orbit while the middle mass sits exactly at the common centre of mass, where the pull from both sides cancels. Euler found this family of collinear solutions in 1767.',
+    leg:'Equal masses · rotating collinear line',
+    init(){
+      const m=1, d=.9;
+      const w = Math.sqrt(5*G*m/(4*d*d*d));
+      return [[-d,0],[0,0],[d,0]].map(([px,py]) => Body(m, px, py, -w*py, w*px, 6.5));
+    }
+  },
+  {
+    id:'pyth', name:'Pythagorean Problem', kicker:'Chaotic · Burrau (1913), masses 3:4:5',
+    st:'chaotic', soft:.02, baseH:.003, speedMul:.35, zoom:.11,
+    txt:'The classic chaos benchmark: masses 3, 4 and 5 placed at rest on a 3-4-5 right triangle. There is no periodicity here — close encounters eject the lightest body after wild swings. This is what "unsolvable in closed form" looks like.',
+    leg:'Masses 3:4:5 · started at rest · highly sensitive to initial conditions',
+    init(){
+      return [
+        Body(3, 1, 3, 0, 0, 8),
+        Body(4, -2, -1, 0, 0, 9),
+        Body(5, 1, -1, 0, 0, 10),
+      ];
+    }
+  },
+];
+
+let bodies = [], twinBodies = null, E0 = 0, L0 = 0, twinOn = false;
+
+function listCases(){
+  u.list.innerHTML = CASES.map((q,i) => `
+    <div class="case ${i===ci?'active':''}" data-i="${i}">
+      <div class="n">${String(i+1).padStart(2,'0')}</div>
+      <div>
+        <strong>${q.name}</strong>
+        <small>${q.kicker}</small>
+        <span class="status ${q.st}">${q.st==='periodic'?'PERIODIC':'CHAOTIC'}</span>
+      </div>
+    </div>`).join('');
+  u.list.querySelectorAll('.case').forEach(e => e.onclick = () => set(+e.dataset.i));
+}
+
+function set(i){
+  ci = clamp(i, 0, CASES.length - 1);
+  cs = CASES[ci];
+  listCases();
+  u.name.textContent = cs.name;
+  u.kicker.textContent = cs.kicker;
+  u.legend.textContent = cs.leg;
+  u.statusTitle.textContent = cs.st === 'periodic' ? 'Exact periodic solution' : 'Generic chaotic case';
+  u.statusCopy.textContent = cs.txt;
+  t = 0; rows = [];
+  bodies = cs.init();
+  const inv = invariants(bodies, cs.soft);
+  E0 = inv.E; L0 = inv.L;
+  twinBodies = null;
+  u.twin.classList.toggle('active', false);
+  twinOn = false;
+  read();
+}
+
+function makeTwin(){
+  twinBodies = bodies.map(o => ({ ...o, tr: [] }));
+  twinBodies[0].x += 1e-6; // microscopic perturbation to demonstrate sensitivity to initial conditions
+}
+
+function draw(){
+  x.globalAlpha = 1 - +u.trail.value;
+  x.fillStyle = '#020408';
+  x.fillRect(0, 0, W, H);
+  x.globalAlpha = 1;
+
+  const cx = W*.52, cy = H*.5, k = Math.min(W,H) * cs.zoom;
+  const cols = ['#7ce6f2', '#f2bf67', '#c695ff'];
+
+  if (u.edges.checked){
+    for (let i=0;i<bodies.length;i++) for (let j=i+1;j<bodies.length;j++){
+      x.strokeStyle = 'rgba(130,170,255,.18)';
+      x.beginPath();
+      x.moveTo(cx+bodies[i].x*k, cy+bodies[i].y*k);
+      x.lineTo(cx+bodies[j].x*k, cy+bodies[j].y*k);
+      x.stroke();
+    }
+  }
+
+  if (twinBodies){
+    twinBodies.forEach((o,i) => {
+      x.strokeStyle = cols[i] + '33';
+      x.beginPath();
+      o.tr.forEach((q,j) => j ? x.lineTo(cx+q[0]*k, cy+q[1]*k) : x.moveTo(cx+q[0]*k, cy+q[1]*k));
+      x.stroke();
+      x.fillStyle = cols[i] + '99';
+      x.beginPath();
+      x.arc(cx+o.x*k, cy+o.y*k, o.r*.6, 0, 7);
+      x.fill();
+    });
+  }
+
+  bodies.forEach((o,i) => {
+    x.strokeStyle = cols[i] + '66';
+    x.beginPath();
+    o.tr.forEach((q,j) => j ? x.lineTo(cx+q[0]*k, cy+q[1]*k) : x.moveTo(cx+q[0]*k, cy+q[1]*k));
+    x.stroke();
+    x.fillStyle = cols[i];
+    x.shadowColor = cols[i];
+    x.shadowBlur = 22;
+    x.beginPath();
+    x.arc(cx+o.x*k, cy+o.y*k, o.r, 0, 7);
+    x.fill();
+    x.shadowBlur = 0;
+  });
+}
+
+function step(dt){
+  dt *= +u.speed.value * cs.speedMul;
+  t += dt;
+  advance(bodies, dt, cs.soft, cs.baseH);
+  if (twinBodies) advance(twinBodies, dt, cs.soft, cs.baseH);
+  if (frame % 15 === 0) rec();
+}
+
+function diag(){
+  const inv = invariants(bodies, cs.soft);
+  const ed = (inv.E - E0) / Math.abs(E0);
+  const ld = (inv.L - L0) / (Math.abs(L0) || 1);
+  const rowsOut = [
+    ['Bodies', bodies.length],
+    ['Time', fmt(t, 3)],
+    ['Energy', fmt(inv.E, 6)],
+    ['Energy drift', fmt(ed*100, 4) + '%', Math.abs(ed) < 1e-2 ? 'good' : (Math.abs(ed) < .05 ? 'yellow' : 'bad')],
+    ['Angular L', fmt(inv.L, 6)],
+    ['L drift', fmt(ld*100, 4) + '%', Math.abs(ld) < 1e-2 ? 'good' : (Math.abs(ld) < .05 ? 'yellow' : 'bad')],
+    ['Momentum |P|', fmt(inv.P, 6)],
+    ['Min separation', fmt(minSep(bodies), 4)],
+  ];
+  if (twinBodies){
+    let sep2 = 0;
+    for (let i=0;i<bodies.length;i++) sep2 += (bodies[i].x-twinBodies[i].x)**2 + (bodies[i].y-twinBodies[i].y)**2;
+    const sep = Math.sqrt(sep2);
+    rowsOut.push(['Twin separation (from 1e-6 kick)', fmt(sep, 8), sep > .05 ? 'bad' : 'good']);
+  }
+  return rowsOut;
+}
+
+function read(){
+  u.readouts.innerHTML = diag().map(q =>
+    `<div class="readout"><span>${q[0]}</span><b class="${q[2]||''}">${q[1]}</b></div>`).join('');
+}
+function rec(){
+  const row = { case: cs.id, time: t.toFixed(6) };
+  diag().forEach(a => row[a[0].toLowerCase().replace(/[^a-z0-9]+/g,'_')] = a[1]);
+  rows.push(row);
+  if (rows.length > 6000) rows.shift();
+  read();
+}
+function exp(){
+  if (!rows.length) rec();
+  const ks = [...new Set(rows.flatMap(r => Object.keys(r)))];
+  const esc = v => '"' + String(v ?? '').replaceAll('"','""') + '"';
+  const csv = [ks.join(','), ...rows.map(r => ks.map(k => esc(r[k])).join(','))].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type:'text/csv' }));
+  a.download = 'three_body_' + cs.id + '_diagnostics.csv';
+  a.click();
+}
+function perturb(){
+  const o = bodies[Math.floor(Math.random() * bodies.length)];
+  o.vx += (Math.random()-.5) * .04;
+  o.vy += (Math.random()-.5) * .04;
+}
+
+u.play.onclick = () => { run = !run; u.play.textContent = run ? 'Pause' : 'Play'; };
+u.reset.onclick = () => set(ci);
+u.pulse.onclick = perturb;
+u.twin.onclick = () => {
+  twinOn = !twinOn;
+  u.twin.classList.toggle('active', twinOn);
+  if (twinOn) makeTwin(); else twinBodies = null;
+};
+u.speed.oninput = () => u.speedOut.textContent = (+u.speed.value).toFixed(2) + '×';
+u.trail.oninput = () => u.trailOut.textContent = (+u.trail.value).toFixed(3);
+u.exportBtn.onclick = exp;
+
+function loop(now){
+  const dt = Math.min(.035, (now - last) / 1000 || .016);
+  last = now;
+  if (run) step(dt);
+  draw();
+  frame++;
+  requestAnimationFrame(loop);
+}
+set(0);
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
