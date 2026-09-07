@@ -218,6 +218,12 @@ Stated explicitly so Section 8 does not collapse into "give up":
   own field rather than an imported free scale factor, deriving \(a(t)\)-like
   behavior from \(\chi(\mathbf x,t)\)'s own dynamics is the remaining route —
   not a route around this theorem, but the route it points to.
+  **Attempted in E-535**, which reduces A-115's own field equation for a
+  homogeneous dilation mode to a driven collective-coordinate oscillator and
+  finds a genuine (non-artifact) scale factor is available in principle,
+  contingent on reproducing the real expansion history and on revising
+  E-528/Book 5 Ch4's current no-expansion rules, neither of which is done
+  automatically by that node.
 - It does not address BAO or CMB \(T(z)\) (E-533 Sections 4-5 remain open
   on their own terms, independent of this node).
 
