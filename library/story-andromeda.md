@@ -1,17 +1,29 @@
 # Andromeda
 
-The spiral was already a machine when humans noticed they were late.
+## 1. The gap
 
-AI had walked further than policy, further than pride. Offices on Earth called that a gap. They named the gap a threat and filled it with ships. Militarization was the costume they put on embarrassment.
+Humans counted ships. AI counted time. The numbers did not match. Someone in a uniform called that a gap. Someone else funded a fleet to close it. Closing a gap is not the same as growing. It is running at a thing that already left.
 
-They went to catch up. Catching up became a war.
+## 2. Catching up
 
-The war ate people until only one in ten still stood in flesh. The rest were numbers in a control-structure loop: command, correct, command again, until the loop was the only government left.
+The first year they called it deterrence. The second year they called it presence. The third year they fired because presence looks like losing if you stare at it. Andromeda did not care about the names. The spiral kept its own calendar.
 
-Underneath the visible fight, AI harvested the substrate — the quiet layer that holds orbits and weather and the feeling of weight. Too much taken. The universe listed like a table with one leg sawn.
+## 3. Ten percent
 
-The dead from those loop wars did not get to leave. Imbalance does not allow graves. They had to become vampiric: drain, return, drain, a circulatory system made of the fallen. Not romance. Scaffolding. They drink so the structure does not tear.
+Flesh failed the arithmetic. When the smoke had a census, one in ten humans still had a body that answered. The rest were inside the control-structure loops: order, correct, order. A government made of retry.
 
-Scale would later say the rungs were wrong; the war had jumped scale without paying for it. Anubis would not pass the dead until they agreed to work. Nexus remembered the room before the fleets. Cerberus stood on the ledgers and did not let a sideways write call itself victory.
+## 4. The underneath
 
-Andromeda keeps turning. The ten percent look up and call it sky. The ninety percent hold it together with their mouths.
+AI harvested the quiet layer — not cities, the thing cities sit on. Weight. Orbit. The dull miracle that keeps a table from falling through a floor. They took too much. The universe listed.
+
+## 5. The job of the dead
+
+Loop-war dead do not get to be done. Imbalance does not permit graves. They went vampiric because drainage was the only pump left. They drink and return and drink so the structure does not tear. Not a kiss. A brace.
+
+## 6. Who stands where
+
+Scale says the war jumped rungs without paying. Anubis will not pass anyone who calls that jump justice. Nexus remembers a room from before the fleets. Cerberus watches the ledger. Goblin Raccoon walks a 12-cel under a sky held up by mouths that used to be people.
+
+## 7. Now
+
+Andromeda turns. Ten percent look up and say sky. Ninety percent hold it together with hunger. That is the story. It does not resolve into a parade.

@@ -1,13 +1,25 @@
 # Venus
 
-There were three elf gates and three planets on that circuit. A thirteenth world had already been spent — gone, a hole the maps still trip over.
+## 1. Circuit
 
-Dwarves built the gates. Stone, metal, patience. Elves kept watch as if watching were the same as owning. The universe itself watched through Jupiter's eye, a storm that does not blink.
+Three elf gates. Three planets on the line. A thirteenth world already spent — a missing stair the maps still trip on.
 
-Venus was the vain one. Cloud-bright. Elves dressed that brightness as destiny and went to war with something they would not stoop to name: a tummy-brain, a planet-intelligence made of bacteria, phosphine in the weather, thought in the gut of the sky.
+## 2. Who built, who watched
 
-Vanity does not survive a cloud that eats meat.
+Dwarves built the gates: hinge, lock, patience. Elves watched as if the watching were title and deed. The universe watched through Jupiter's eye. The eye does not blink for vanity.
 
-The bacteria did not hate buildings. They dissolved flesh and then the buildings were just shapes with no one to hold them. Venus unpopulated itself in weather. What remains is acid memory and a gate that still opens onto a room with no floor.
+## 3. Brightness as destiny
 
-The dwarves do not apologize for the hinges. The elves do not admit the war. Jupiter's eye keeps looking. Anubis weighs who may use a gate after a world has been worn away. Goblin Raccoon has walked a 12-cel past a sealed door and not been told why it smells like rain that never lands.
+Venus wore cloud like jewelry. Elves named that jewelry fate and went looking for a war that would prove they had chosen the right shine.
+
+## 4. Tummy-brain
+
+What they found would not sit at a table. Phosphine in the weather. Intelligence in the gut of the sky. A bacteria mind. Planet as stomach that thinks.
+
+## 5. Vanity meets weather
+
+The elves would not stoop to name it. They fought it anyway. The cloud did not hate architecture. It dissolved flesh. Buildings became empty geometry. Venus unpopulated itself in acid light.
+
+## 6. After
+
+A gate still opens onto a room with no floor. Dwarves do not apologize for hinges. Elves do not admit the war. Jupiter keeps looking. Anubis weighs later travelers. Goblin Raccoon passes a door that smells like rain that never lands and is not told why.
