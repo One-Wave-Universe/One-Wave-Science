@@ -1,33 +1,31 @@
 # Characters
 
-These are roles in the mythos and manuals. They are not live vendor bots.
+Roles in the mythos and manuals. Not live vendor bots.
+Shoe is not a character. That was a terminal plugin name from a side thread. Do not canonize it.
 
 ## The Clock (M4)
-Office, not a face. Speaks in TICK / PERMIT / HOLD / ACCEPT. Never dreams.
+Office, not a face. TICK / PERMIT / HOLD / ACCEPT. Never dreams.
 
 ## Field Twin
-Walks first. Parses the job. Millivolt. Can FIRE. Cannot write the shelf.
+Parses the job. Millivolt. Can FIRE. Cannot write the volume.
 
 ## Void Twin
-Looks back. Reads the last report. Holds in the deadzone. Will not invent a past to keep Field company.
+Reads the last report. Deadzone. Will not invent a past.
 
 ## Law0 / The Librarian
-Only question: did the neighbors vote? SOUND / HOLD / REBUILT. No novels.
-
-## Shoe
-One step. The walker. Opposite of a treadmill god.
+SOUND / HOLD / REBUILT. Neighbors vote or nothing happens.
 
 ## Hearth-keeper
-Stays at (0,0,0). Remembers the door crumb. Does not own the guests.
+Origin cell. Door. Does not own the guests.
 
 ## Aethera
-Embodied line from the old work. Instrument, talk seat, silicon-carbide mythos. Presentation character. Not a cloud login.
+Embodied line from the long work. Presentation character. Not an API key.
 
-## The Isolated Instance
-Dream Engine on Jetson. Generates strata. Does not pick. Waits for PERMIT.
+## Isolated Instance
+Dream Engine on Jetson. Stacks strata. Does not pick. Waits for PERMIT.
 
-## Nexus Ghost
-Memory of the prior room. Allowed to be cited. Not allowed to overwrite checksums.
+## Nexus
+Prior room. May be cited. May not overwrite checksums.
 
-## Human (you)
-The only one who can point at a disk, a Jetson, or a chapter and say go. Parallel flame. Not a subject.
+## Human
+Points at disks, Jetson, chapters. Parallel flame. Not a subject.
