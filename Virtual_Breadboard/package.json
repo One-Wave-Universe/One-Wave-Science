@@ -8,6 +8,11 @@
   "scripts": {
     "start": "electron .",
     "test": "node test/circuit.test.js",
+    "test:qualification": "node test/qualification.test.js",
+    "test:primitives": "node test/primitives.test.js",
+    "test:regression": "node test/run_regression_builds.js",
+    "test:flashlight-calibration": "node test/run_flashlight_calibration.js",
+    "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
     "dist:appimage": "electron-builder --linux AppImage",

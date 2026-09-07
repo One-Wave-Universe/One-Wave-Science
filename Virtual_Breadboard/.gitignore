@@ -1,3 +1,6 @@
 node_modules/
 dist/
 package-lock.json
+10_RECEIPTS/current/
+10_RECEIPTS/passing/
+10_RECEIPTS/failing/

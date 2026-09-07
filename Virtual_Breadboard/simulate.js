@@ -155,6 +155,8 @@ function resolveTerminals(board, specParts) {
       core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
       gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
       spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
+      initialV: p.type === 'capacitor' ? p.initialV : undefined,
+      capacityAh: p.type === 'battery' ? p.capacityAh : undefined,
       terminals,
       id,
     };
@@ -257,8 +259,41 @@ function toEngineElements(parts) {
         windings: memoryCoreWindings(p),
         hcAmpTurns: coreDef.hcAmpTurns, phiSat: coreDef.phiSat, switchTau: coreDef.switchTau,
       });
+    } else if (p.type === 'latchrelay') {
+      // one real coil (electrically identical to a single-winding
+      // memorycore -- the engine's `memoryCores` filter picks up either
+      // type by matching on c.windings) plus a genuinely separate
+      // mechanical contact pair; N=1 because this is a fixed real part
+      // (TQ2-L-5V-class), not a user-wound toroid/core.
+      const t = p.terminals;
+      const lrSpec = CircuitEngine.LATCHRELAY_SPEC;
+      components.push({
+        id: p.id, type: 'latchrelay', label: p.id,
+        windings: [{ a: t[0].cellId, b: t[1].cellId, N: 1, R: lrSpec.coilR }],
+        contactA: t[2].cellId, contactB: t[3].cellId,
+        // the shared magnetic-dynamics loop (memoryCores.forEach in
+        // circuit.js) reads these three fields straight off the component,
+        // exactly like a memorycore's -- latchRelaySpec()'s own defaults
+        // merge is used elsewhere (armature/contact logic) but does NOT
+        // feed this loop, so they must be set here too or the core never
+        // sees a real coercive threshold.
+        hcAmpTurns: lrSpec.hcAmpTurns, phiSat: lrSpec.phiSat, switchTau: lrSpec.switchTau,
+      });
+    } else if (p.type === 'hbridge') {
+      const t = p.terminals;
+      components.push({
+        id: p.id, type: 'hbridge', label: p.id,
+        in1: t[0].cellId, in2: t[1].cellId, vm: t[2].cellId, gnd: t[3].cellId,
+        out1: t[4].cellId, out2: t[5].cellId,
+      });
+    } else if (p.type === 'schmitt') {
+      const t = p.terminals;
+      components.push({
+        id: p.id, type: 'schmitt', label: p.id,
+        in: t[0].cellId, out: t[1].cellId, vcc: t[2].cellId, gnd: t[3].cellId,
+      });
     } else {
-      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed });
+      components.push({ id: p.id, type: p.type, label: p.id, a: p.terminals[0].cellId, b: p.terminals[1].cellId, value: p.value, color: p.color, closed: !!p.closed, initialV: p.type === 'capacitor' ? p.initialV : undefined, capacityAh: p.type === 'battery' ? p.capacityAh : undefined });
     }
   });
   return { wires, components };
@@ -330,6 +365,9 @@ function snapshot(result, opts) {
   if (result && result.comparatorStates && result.comparatorStates.size) {
     out.comparatorStates = Object.fromEntries(result.comparatorStates);
   }
+  if (result && result.batteryStates && result.batteryStates.size) {
+    out.batteryStates = Object.fromEntries(result.batteryStates);
+  }
   if (opts.nodeNameCellIds && Object.keys(opts.nodeNameCellIds).length) {
     out.namedVoltages = namedVoltagesFrom(result, opts.nodeNameCellIds);
     if (opts.measurements && opts.measurements.length) {
@@ -396,7 +434,7 @@ function runOneTrial(parts, sim) {
   const dt = sim.dt != null ? sim.dt : 0.001;
   const steps = Math.max(1, Math.round(seconds / dt));
   let lastResult = null;
-  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt);
+  for (let i = 0; i < steps; i++) lastResult = circuit.solve(elements, dt, sim.ambientC);
   return lastResult;
 }
 
@@ -480,10 +518,256 @@ function valueFor(lastResult, nodeNameCellIds, measurementsSpec, ref) {
 // state (memory-core remanence, capacitor charge, comparator latch, etc.)
 // genuinely carries across stages -- releasing a drive and continuing
 // the solve is not a reset.
+// per-stage trace statistics for one declared signal (a named node, a
+// named measurement/difference, or a core's B/flux): real min/max/peak
+// over the stage, and a real settling time -- the LATEST time within the
+// stage the value was still outside a real tolerance band around the
+// stage's own final value, i.e. "how long until it stopped moving",
+// not a single end-of-stage sample. A signal that never leaves the band
+// settles instantly (settledAt = the stage's own start time).
+function traceStatsFromSamples(samples, settleBandFrac) {
+  if (!samples.length) return null;
+  const values = samples.map((s) => s.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const final = values[values.length - 1];
+  const band = Math.max(Math.abs(final) * (settleBandFrac || 0.02), 1e-9);
+  let settledAt = samples[0].t;
+  for (let i = samples.length - 1; i >= 0; i--) {
+    if (Math.abs(samples[i].value - final) > band) {
+      settledAt = i + 1 < samples.length ? samples[i + 1].t : samples[i].t;
+      break;
+    }
+  }
+  return { min, max, peak: Math.max(Math.abs(min), Math.abs(max)), final, settledAt };
+}
+
+// ---------------------------------------------------------------------
+// Measurement primitives (breadboard qualification spec): real trapezoidal
+// integration and real edge-crossing detection over a trace's own actual
+// samples -- never a closed-form assumption about what the waveform
+// "should" look like. All take the same {t, value} sample arrays every
+// other trace/event mechanism here already produces.
+// ---------------------------------------------------------------------
+
+// average (DC/mean) value over the sampled window, weighted by real
+// elapsed time between samples (trapezoidal), not a plain arithmetic mean
+// of however many samples happened to be taken
+function averageValue(samples) {
+  if (!samples || samples.length < 2) return samples && samples.length ? samples[0].value : null;
+  let acc = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const dt = samples[i].t - samples[i - 1].t;
+    acc += 0.5 * (samples[i].value + samples[i - 1].value) * dt;
+  }
+  return acc / (samples[samples.length - 1].t - samples[0].t);
+}
+
+// RMS over the sampled window, same trapezoidal-integration technique
+// applied to value^2 -- the real definition, not a peak/sqrt(2) shortcut
+// that only holds for an ideal sine
+function rmsValue(samples) {
+  if (!samples || samples.length < 2) return samples && samples.length ? Math.abs(samples[0].value) : null;
+  let acc = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const dt = samples[i].t - samples[i - 1].t;
+    const a = samples[i - 1].value * samples[i - 1].value;
+    const b = samples[i].value * samples[i].value;
+    acc += 0.5 * (a + b) * dt;
+  }
+  const meanSq = acc / (samples[samples.length - 1].t - samples[0].t);
+  return Math.sqrt(Math.max(meanSq, 0));
+}
+
+// real trapezoidal energy integral (Joules) from a power-vs-time trace --
+// P is whatever the caller already computed (V*I); this only integrates
+function integrateEnergy(powerSamples) {
+  if (!powerSamples || powerSamples.length < 2) return 0;
+  let acc = 0;
+  for (let i = 1; i < powerSamples.length; i++) {
+    const dt = powerSamples[i].t - powerSamples[i - 1].t;
+    acc += 0.5 * (powerSamples[i].value + powerSamples[i - 1].value) * dt;
+  }
+  return acc;
+}
+
+// builds a real P(t) = V(t)*I(t) trace from two ALREADY-ALIGNED sample
+// arrays (the normal case: both captured in the same per-step loop, so
+// they share exact timestamps) -- refuses to silently interpolate or
+// truncate a real mismatch rather than fabricate a plausible-looking but
+// wrong energy number
+function powerFromVI(vSamples, iSamples) {
+  if (vSamples.length !== iSamples.length) {
+    throw new Error('powerFromVI: voltage and current sample counts differ (' + vSamples.length + ' vs ' + iSamples.length + ') -- they must come from the same per-step capture, not be reconciled after the fact');
+  }
+  return vSamples.map((s, idx) => {
+    const is_ = iSamples[idx];
+    if (Math.abs(s.t - is_.t) > 1e-9) {
+      throw new Error('powerFromVI: sample ' + idx + ' timestamps do not match (' + s.t + ' vs ' + is_.t + ')');
+    }
+    return { t: s.t, value: s.value * is_.value };
+  });
+}
+
+// real linearly-interpolated threshold crossings over a trace -- the same
+// interpolation technique runExperiment's own event detector uses, factored
+// out so period/frequency/duty-cycle/phase can all share one real
+// crossing-finder instead of each approximating it differently
+function findCrossings(samples, threshold, direction) {
+  const out = [];
+  for (let i = 1; i < samples.length; i++) {
+    const prev = samples[i - 1].value;
+    const val = samples[i].value;
+    if (prev === val) continue;
+    const crossedUp = prev < threshold && val >= threshold;
+    const crossedDown = prev > threshold && val <= threshold;
+    if ((crossedUp && direction !== 'falling') || (crossedDown && direction !== 'rising')) {
+      const frac = (threshold - prev) / (val - prev);
+      const t = samples[i - 1].t + frac * (samples[i].t - samples[i - 1].t);
+      out.push({ t, direction: crossedUp ? 'rising' : 'falling' });
+    }
+  }
+  return out;
+}
+
+// real period from the average spacing between consecutive same-direction
+// crossings -- returns null (never a guessed/default value) if there
+// aren't at least two crossings to measure a real period from. threshold
+// defaults to the trace's own real average (a real AC signal's own DC
+// midpoint), not an arbitrary fixed number.
+function findPeriod(samples, opts) {
+  opts = opts || {};
+  if (!samples || samples.length < 2) return null;
+  const threshold = opts.threshold != null ? opts.threshold : averageValue(samples);
+  const crossings = findCrossings(samples, threshold, 'rising');
+  if (crossings.length < 2) return null;
+  let sum = 0;
+  for (let i = 1; i < crossings.length; i++) sum += crossings[i].t - crossings[i - 1].t;
+  return { period: sum / (crossings.length - 1), threshold, crossingCount: crossings.length };
+}
+
+function findFrequency(samples, opts) {
+  const p = findPeriod(samples, opts);
+  return p && p.period > 0 ? 1 / p.period : null;
+}
+
+// real phase difference (degrees) between two traces, measured from the
+// time offset between their corresponding rising-edge crossings and
+// normalized by signal A's own real measured period -- not assumed from
+// the two circuits' nominal design values
+function phaseDifferenceDeg(samplesA, samplesB, opts) {
+  opts = opts || {};
+  const perA = findPeriod(samplesA, opts.a);
+  if (!perA) return null;
+  const crossA = findCrossings(samplesA, opts.a && opts.a.threshold != null ? opts.a.threshold : averageValue(samplesA), 'rising');
+  const crossB = findCrossings(samplesB, opts.b && opts.b.threshold != null ? opts.b.threshold : averageValue(samplesB), 'rising');
+  if (!crossA.length || !crossB.length) return null;
+  // for each A crossing, the nearest B crossing gives one real delay
+  // sample; averaging several real cycles is more honest than trusting
+  // a single edge, which could be a transient rather than steady state
+  const delays = crossA.map((ca) => {
+    let nearest = crossB[0];
+    let best = Math.abs(crossB[0].t - ca.t);
+    crossB.forEach((cb) => {
+      const d = Math.abs(cb.t - ca.t);
+      if (d < best) { best = d; nearest = cb; }
+    });
+    return nearest.t - ca.t;
+  });
+  const meanDelay = delays.reduce((a, b) => a + b, 0) / delays.length;
+  let deg = (meanDelay / perA.period) * 360;
+  // normalize to (-180, 180]
+  deg = ((deg + 180) % 360 + 360) % 360 - 180;
+  return deg;
+}
+
+// real fraction-of-time (not fraction-of-samples) a trace spends at/above
+// a threshold, using the same interpolated crossings so a coarse sample
+// rate doesn't bias the answer
+function dutyCycle(samples, threshold) {
+  if (!samples || samples.length < 2) return null;
+  const thr = threshold != null ? threshold : averageValue(samples);
+  let highTime = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const t0 = samples[i - 1].t, t1 = samples[i].t;
+    const v0 = samples[i - 1].value, v1 = samples[i].value;
+    const dt = t1 - t0;
+    if (v0 >= thr && v1 >= thr) highTime += dt;
+    else if (v0 >= thr || v1 >= thr) {
+      // one endpoint above, one below -- f0 is the crossing's fractional
+      // position from t0 (the same interpolation findCrossings uses);
+      // falling (v0 high -> v1 low) is above-threshold from t0 TO the
+      // crossing (f0*dt), rising (v0 low -> v1 high) is above-threshold
+      // from the crossing TO t1 ((1-f0)*dt) -- opposite halves, easy to
+      // invert by mistake, so spelled out explicitly rather than reused.
+      const f0 = (thr - v0) / (v1 - v0);
+      highTime += v0 >= thr ? dt * f0 : dt * (1 - f0);
+    }
+  }
+  return highTime / (samples[samples.length - 1].t - samples[0].t);
+}
+
+// Scale-boundary output (item 19 of the hardware-scaling directive): turns
+// a real two-cell differential readback into the {sign, magnitude,
+// confidence, settled, timestamp} interface the next recursion level
+// (Point -> Path -> Field -> next Point) would consume. This reads only
+// already-solved, real values (cellA/cellB are ordinary valueFor refs --
+// a sense-line voltage, a core state, whatever the experiment actually
+// wired up) and asserts nothing about what a valid combination means: a
+// Field/Field (both "closed") reading is reported as conflict:true,
+// sign:null -- never coerced into -1/0/+1. "settled" is only computed if
+// the experiment names both a fast-path and a slow-path (e.g. override)
+// readback to compare; it reports whether the slowest confirming signal
+// already agrees with the fastest one, not a fixed timer guess.
+function resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, spec, t) {
+  const va = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.cellA);
+  const vb = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.cellB);
+  if (va == null || vb == null) return null;
+  const closedMin = spec.closedMin != null ? spec.closedMin : 4.0;
+  const openMax = spec.openMax != null ? spec.openMax : 1.0;
+  const classify = (v) => (v >= closedMin ? 'closed' : v <= openMax ? 'open' : 'ambiguous');
+  const a = classify(va);
+  const b = classify(vb);
+  let sign = null;
+  let conflict = false;
+  if (a === 'open' && b === 'open') sign = 0;
+  else if (a === 'closed' && b === 'open') sign = -1;
+  else if (a === 'open' && b === 'closed') sign = 1;
+  else if (a === 'closed' && b === 'closed') conflict = true;
+  // else: at least one cell is genuinely ambiguous (mid-transition/fault)
+  // -- sign stays null and conflict stays false, a real third kind of
+  // "not resolved yet" distinct from a real Field/Field conflict.
+  const scale = spec.scale != null ? spec.scale : 5;
+  const magnitude = Number((Math.abs(va - vb) / scale).toFixed(6));
+  const confidence = conflict ? 0 : a !== 'ambiguous' && b !== 'ambiguous' ? 1 : 0.5;
+  // "settled" compares two already-built taps (e.g. the fast path and the
+  // slowest/override path) to see whether the slow one has caught up with
+  // the fast one -- but it must NOT assume they land at the same logic
+  // polarity. An inverting gate (a real Schmitt trigger is one) flips
+  // polarity once per stage it passes through, so two taps built from a
+  // different number of inverting stages are EXPECTED to disagree even
+  // once both are fully settled. `settleInverted` names that known,
+  // real wiring fact explicitly (the same way an event spec names its own
+  // "rising"/"falling" direction) rather than the generic comparison here
+  // guessing at it.
+  let settled = null;
+  if (spec.settleA && spec.settleB) {
+    const fa = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.settleA);
+    const fb = valueFor(lastResult, nodeNameCellIds, measurementsSpec, spec.settleB);
+    if (fa != null && fb != null) {
+      const agree = (fa >= scale / 2) === (fb >= scale / 2);
+      settled = spec.settleInverted ? !agree : agree;
+    }
+  }
+  return { sign, magnitude, confidence, conflict, settled, timestamp: Number(t.toFixed(9)) };
+}
+
 function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   const stages = experimentSpec.stages || [];
   const eventsSpec = experimentSpec.events || [];
   const persistenceSpec = experimentSpec.persistence || null;
+  const tracesSpec = experimentSpec.traces || [];
+  const resolvedOutputSpec = experimentSpec.resolvedOutput || null;
   const nodeNameCellIds = snapOpts.nodeNameCellIds;
   const measurementsSpec = snapOpts.measurements;
   const errors = [];
@@ -492,6 +776,12 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   let parts = resolvedParts;
   let t = 0;
   let lastResult = null;
+  // real, settable ambient temperature -- an experiment can change it
+  // stage to stage (e.g. simulating a hot enclosure at a later stage); it
+  // does not auto-rise on its own without a real heat source modeled, but
+  // every component's own self-heating genuinely evolves from real
+  // dissipated power against it (see circuit.js's updateTemp).
+  let ambientC = experimentSpec.ambientC != null ? experimentSpec.ambientC : undefined;
 
   const eventPrev = new Map();
   const detectedEvents = [];
@@ -499,6 +789,7 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
   const persistenceState = persistenceSpec ? { baseline: null, minAbsDelta: Infinity, samples: 0 } : null;
 
   stages.forEach((stage) => {
+    if (stage.ambientC != null) ambientC = stage.ambientC;
     (stage.set || []).forEach((s) => {
       const { parts: nextParts, found } = applySweepValue(parts, s.partId, s.field, s.value);
       if (!found) errors.push('stage "' + stage.name + '": no part with id "' + s.partId + '" found to set');
@@ -514,10 +805,16 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
     const seconds = stage.seconds != null ? stage.seconds : 0.01;
     const steps = Math.max(1, Math.round(seconds / dt));
     const stageStartT = t;
+    const traceSamples = new Map(tracesSpec.map((tr) => [tr.label, []]));
 
     for (let i = 0; i < steps; i++) {
       t += dt;
-      lastResult = circuit.solve(elements, dt);
+      lastResult = circuit.solve(elements, dt, ambientC);
+
+      tracesSpec.forEach((tr) => {
+        const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, tr);
+        if (val != null) traceSamples.get(tr.label).push({ t, value: val });
+      });
 
       eventsSpec.forEach((ev) => {
         const val = valueFor(lastResult, nodeNameCellIds, measurementsSpec, ev);
@@ -545,15 +842,24 @@ function runExperiment(resolvedParts, experimentSpec, snapOpts) {
       }
     }
 
+    const traces = {};
+    tracesSpec.forEach((tr) => {
+      const stats = traceStatsFromSamples(traceSamples.get(tr.label), tr.settleBandFrac);
+      if (stats) traces[tr.label] = stats;
+    });
+
     stageLog.push({
       name: stage.name,
       startT: Number(stageStartT.toFixed(9)),
       endT: Number(t.toFixed(9)),
       snapshot: snapshot(lastResult, snapOpts),
+      traces,
+      resolvedOutput: resolvedOutputSpec ? resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, resolvedOutputSpec, t) : undefined,
     });
   });
 
   const out = { errors, stages: stageLog, events: detectedEvents, final: snapshot(lastResult, snapOpts) };
+  if (resolvedOutputSpec) out.finalResolvedOutput = resolvedOutputFrom(lastResult, nodeNameCellIds, measurementsSpec, resolvedOutputSpec, t);
   if (persistenceSpec) {
     const observed = persistenceState.minAbsDelta === Infinity ? null : persistenceState.minAbsDelta;
     out.persistence = {
@@ -660,7 +966,7 @@ function main() {
   let nextSampleAt = sampleEvery || Infinity;
   for (let i = 0; i < steps; i++) {
     t += dt;
-    lastResult = circuit.solve(elements, dt);
+    lastResult = circuit.solve(elements, dt, sim.ambientC);
     if (t >= nextSampleAt) {
       samples.push(Object.assign({ t: Number(t.toFixed(6)) }, snapshot(lastResult, snapOpts)));
       nextSampleAt += sampleEvery;
@@ -683,5 +989,6 @@ module.exports = {
   mulberry32, toleranceFor, perturbParts, getPath, runOneTrial, runMonteCarlo,
   resolveNodeNames, namedVoltagesFrom, measurementsFrom,
   buildSweepValues, applySweepValue, runSweep,
-  valueFor, runExperiment,
+  valueFor, runExperiment, traceStatsFromSamples, resolvedOutputFrom,
+  averageValue, rmsValue, integrateEnergy, powerFromVI, findCrossings, findPeriod, findFrequency, phaseDifferenceDeg, dutyCycle,
 };

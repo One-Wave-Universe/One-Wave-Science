@@ -1,0 +1,233 @@
+{
+  "receipt_id": "RCP-ELEC-DC-001",
+  "engine": "electrical-dc",
+  "code_version": "electrical-dc-0.1",
+  "generated_utc": "2026-09-07T03:06:07.351751+00:00",
+  "checks": [
+    {
+      "test": "dc-source-holds-value",
+      "expected": 9.0,
+      "actual": 9.0,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "an ideal DC source under negligible load must read its own nominal voltage"
+    },
+    {
+      "test": "ohms-law-current",
+      "expected": 0.005,
+      "actual": 0.005,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "I = V/R through a single real resistor"
+    },
+    {
+      "test": "series-resistors-match-equivalent",
+      "expected": 0.0025,
+      "actual": 0.0025,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "two 1k resistors in series must draw the same current as one real 2k resistor"
+    },
+    {
+      "test": "series-resistors-same-current-both-legs",
+      "expected": 0.0025,
+      "actual": 0.0025,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "a series loop must carry the same current through every element"
+    },
+    {
+      "test": "parallel-resistors-match-equivalent",
+      "expected": 0.01,
+      "actual": 0.01,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "two 1k resistors in parallel must together draw the same total current as one real 500ohm resistor"
+    },
+    {
+      "test": "unloaded-divider-vtop",
+      "expected": 9.0,
+      "actual": 9.0,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "Vtop must hold the real source voltage"
+    },
+    {
+      "test": "unloaded-divider-vcenter",
+      "expected": 4.5,
+      "actual": 4.5,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "equal-value divider legs must produce a real half-rail midpoint"
+    },
+    {
+      "test": "unloaded-divider-vbottom",
+      "expected": 0.0,
+      "actual": 0.0,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "the explicit Ground node must read exactly 0V"
+    },
+    {
+      "test": "unloaded-divider-current",
+      "expected": 0.00045,
+      "actual": 0.00045,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "the loop current must match I = V / (R1+R2) exactly, computed from the real network, not assumed"
+    },
+    {
+      "test": "loaded-divider-center-matches-real-thevenin",
+      "expected": 3.0,
+      "actual": 3.0,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "loading CENTER with a real 10k resistor to the bottom rail must produce the real Thevenin-divided voltage"
+    },
+    {
+      "test": "loaded-divider-center-must-move",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "CENTER must genuinely move under load (unloaded=4.5000V, loaded=3.0000V) -- a simulator that silently restores CENTER to 4.5V here is FAILING this test by construction, not passing it by coincidence"
+    },
+    {
+      "test": "loaded-divider-branch-current-r1-real",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "I(r1) must be a real, nonzero, independently measured branch current"
+    },
+    {
+      "test": "loaded-divider-branch-current-r2-real",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "I(r2) must be a real, nonzero, independently measured branch current"
+    },
+    {
+      "test": "loaded-divider-branch-current-load-real",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "I(load) must be a real, nonzero, independently measured branch current"
+    },
+    {
+      "test": "differential-plus-relative-center",
+      "expected": 4.5,
+      "actual": 4.5,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "V(+ rail) relative to CENTER"
+    },
+    {
+      "test": "differential-minus-relative-center",
+      "expected": -4.5,
+      "actual": -4.5,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "V(- rail) relative to CENTER"
+    },
+    {
+      "test": "differential-plus-to-minus",
+      "expected": 9.0,
+      "actual": 9.0,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "V(+ to - rail) differential must equal the full rail voltage"
+    },
+    {
+      "test": "branch-current-r1-real",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "I(R1) = 0.000600A, must be real and flowing from + toward CENTER"
+    },
+    {
+      "test": "source-current-equals-r1-current",
+      "expected": 0.0006,
+      "actual": 0.0006000000000000001,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "in this single-loop-into-CENTER topology, the source current must equal I(R1) exactly (KCL at the top node)"
+    },
+    {
+      "test": "kcl-at-center-node",
+      "expected": 0.0,
+      "actual": 0.0,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "current arriving at CENTER (I(R1)) must equal current leaving it (I(R2)+I(load)) -- real Kirchhoff's current law, not assumed"
+    },
+    {
+      "test": "resistor-power-real-positive",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "P(R1)=0.003600W, P(R2)=0.000900W, P(load)=0.000900W -- every real resistor must show real positive dissipation"
+    },
+    {
+      "test": "source-power-matches-total-dissipation",
+      "expected": 0.005399999999999999,
+      "actual": 0.0054,
+      "tolerance": 1e-09,
+      "pass": true,
+      "notes": "source power must equal total dissipated resistor power within numerical tolerance -- no unexplained gain or loss"
+    },
+    {
+      "test": "energy-supplied-real-positive",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "supplied energy over 60.0s = 0.324000J"
+    },
+    {
+      "test": "energy-balance-closes",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "supplied 0.324000J vs dissipated 0.324000J -- must close within numerical tolerance, no unexplained energy gain or loss"
+    },
+    {
+      "test": "mismatch-1pct-matches-real-formula",
+      "expected": 4.522388059701493,
+      "actual": 4.522388059701492,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "R2=10.1k must move CENTER to exactly the real formula's value, not a hard-coded number"
+    },
+    {
+      "test": "mismatch-1pct-shows-real-shift",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "a real 1% mismatch must produce a real, measurable shift from 4.5V (got 4.522388V), not stay pinned at 4.5V"
+    },
+    {
+      "test": "mismatch-5pct-matches-real-formula",
+      "expected": 4.609756097560975,
+      "actual": 4.609756097560976,
+      "tolerance": 1e-06,
+      "pass": true,
+      "notes": "R2=10.5k must move CENTER to exactly the real formula's value, not a hard-coded number"
+    },
+    {
+      "test": "mismatch-5pct-shift-larger-than-1pct",
+      "expected": true,
+      "actual": true,
+      "tolerance": null,
+      "pass": true,
+      "notes": "a bigger real mismatch must produce a bigger real shift (1%=0.022388V, 5%=0.109756V) -- proportional, not an arbitrary fixed nudge"
+    }
+  ],
+  "all_checks_pass": true
+}

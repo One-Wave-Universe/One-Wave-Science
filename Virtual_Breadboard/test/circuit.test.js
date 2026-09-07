@@ -63,17 +63,20 @@ function approx(a, b, eps, msg) {
   console.log('Test 3 OK: reversed LED current =', res.currents.get('led1'));
 }
 
-// Test 4: direct short circuit across battery terminals -> warning + high current
+// Test 4: direct short circuit across battery terminals -> a real supply
+// current-limits rather than delivering an idealized unlimited current
+// (BATTERY_MAX_CURRENT, item 11's real power-network limit)
 {
   const c = new Circuit();
   const els = {
     wires: [{ a: 'P', b: 'M' }],
     components: [{ id: 'bat1', type: 'battery', a: 'P', b: 'M', value: 5 }],
   };
-  const res = c.solve(els, 1 / 60);
-  approx(res.currents.get('bat1'), 5, 1e-3, 'short circuit current (5V/1ohm internal)');
-  assert.ok(res.warnings.some((w) => w.includes('Short circuit')), 'should warn about short circuit');
-  console.log('Test 4 OK: short-circuit current =', res.currents.get('bat1').toFixed(2), 'A, warned:', res.warnings[0]);
+  let res;
+  for (let i = 0; i < 3; i++) res = c.solve(els, 1 / 60);
+  approx(res.currents.get('bat1'), CircuitEngine.BATTERY_MAX_CURRENT, 1e-3, 'a real short circuit current-limits at the supply\'s real max rating, not an idealized 5V/1ohm');
+  assert.ok(res.warnings.some((w) => w.includes('current-limited')), 'should warn about the real current limit (brownout), not an idealized unlimited short: ' + res.warnings.join(';'));
+  console.log('Test 4 OK: short-circuit current current-limits at', res.currents.get('bat1').toFixed(2), 'A (real supply limit), warned:', res.warnings[0]);
 }
 
 // Test 5: too-small resistor with LED -> current-limiting warning
@@ -960,9 +963,12 @@ function windingR(turns, meanTurnLen) {
 // read really do differ by the expected real voltage.
 {
   const appSrc = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf8');
-  assert.ok(/p\.type !== 'scope' && p\.type !== 'diffscope'/.test(appSrc), 'T-DIFFSCOPE: sampleScopeProbes must handle diffscope probes');
-  const diffSampleMatch = appSrc.match(/if \(p\.type === 'diffscope'\) \{([\s\S]*?)\}/);
-  assert.ok(diffSampleMatch, 'T-DIFFSCOPE: could not find the diffscope sampling branch in sampleScopeProbes');
+  assert.ok(/p\.type === 'scope' \|\| p\.type === 'diffscope'/.test(appSrc), 'T-DIFFSCOPE: the scope-probe sampling path must handle diffscope probes');
+  // the diffscope va-vb computation lives in rawScopeValue (a shared
+  // helper the trigger detector and the coupling/bandwidth pipeline both
+  // read from, rather than duplicated inline in sampleScopeProbes itself)
+  const diffSampleMatch = appSrc.match(/if \(p\.type === 'diffscope'\) \{([\s\S]*?)\n    \}/);
+  assert.ok(diffSampleMatch, 'T-DIFFSCOPE: could not find the diffscope sampling branch');
   assert.ok(/va - vb/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must compute va - vb (terminal 0 minus terminal 1), not something else');
   assert.ok(/terminals\[0\]\.cellId/.test(diffSampleMatch[1]) && /terminals\[1\]\.cellId/.test(diffSampleMatch[1]), 'T-DIFFSCOPE: diffscope must read its own two terminals, not e.g. terminal 0 twice');
 
@@ -1403,6 +1409,253 @@ function windingR(turns, meanTurnLen) {
     assert.ok(!m[1].includes('ternarycell'), 'T-NO-MACRO: ' + name + ' must not reference the legacy ternarycell macro');
   });
   console.log('Test 43 OK (T-NO-MACRO): all', calPresetNames.length, 'calibration presets are built from real discrete parts, no ternarycell macro');
+}
+
+// Test 44 (T-RESOLVED-OUTPUT): simulate.js's resolvedOutputFrom -- the
+// scale-boundary {sign,magnitude,confidence,conflict,settled,timestamp}
+// interface -- must read a real two-cell differential without coercing an
+// invalid (both-closed) reading into a valid ternary sign, and its
+// "settled" comparison must respect an explicitly-declared inversion
+// parity between the two taps being compared rather than assuming they
+// agree at steady state.
+{
+  const Sim = require('../simulate.js');
+  const fakeResult = { voltages: new Map(), currents: new Map(), warnings: [], uf: { find: (x) => x } };
+  const names = { A: 'a', B: 'b', FAST: 'fast', SLOW: 'slow' };
+  const spec = { cellA: { node: 'A' }, cellB: { node: 'B' }, settleA: { node: 'FAST' }, settleB: { node: 'SLOW' }, settleInverted: true, closedMin: 4, openMax: 1, scale: 5 };
+
+  // Void/Field: B closed, A open -- a real, valid +1 reading
+  fakeResult.voltages.set('a', 0.2);
+  fakeResult.voltages.set('b', 4.9);
+  fakeResult.voltages.set('fast', 0); // fast tap already low
+  fakeResult.voltages.set('slow', 5); // slow tap (inverted-parity) already high -- agrees once inversion is accounted for
+  let out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 1.0);
+  assert.strictEqual(out.sign, 1, 'T-RESOLVED-OUTPUT: Void/Field must resolve to sign +1');
+  assert.strictEqual(out.conflict, false, 'T-RESOLVED-OUTPUT: a valid single-cell-closed reading must not be flagged as conflict');
+  assert.strictEqual(out.settled, true, 'T-RESOLVED-OUTPUT: settleInverted must treat opposite-polarity taps as agreeing');
+
+  // same electrical state, but the two taps have NOT yet reached opposite
+  // polarity (both still read low) -- a real "the slow path hasn't caught
+  // up yet" case, not settled
+  fakeResult.voltages.set('slow', 0);
+  out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 1.0);
+  assert.strictEqual(out.settled, false, 'T-RESOLVED-OUTPUT: matching-polarity taps must read unsettled under settleInverted');
+
+  // Field/Field: both closed -- must be reported as conflict, never
+  // silently coerced into a ternary sign
+  fakeResult.voltages.set('a', 4.95);
+  fakeResult.voltages.set('b', 4.9);
+  out = Sim.resolvedOutputFrom(fakeResult, names, [], spec, 2.0);
+  assert.strictEqual(out.conflict, true, 'T-RESOLVED-OUTPUT: Field/Field must be flagged as a real conflict');
+  assert.strictEqual(out.sign, null, 'T-RESOLVED-OUTPUT: a conflict reading must not carry a coerced sign');
+  assert.strictEqual(out.confidence, 0, 'T-RESOLVED-OUTPUT: a conflict reading must report zero confidence, not a guessed value');
+  console.log('Test 44 OK (T-RESOLVED-OUTPUT): +1/void-field resolves cleanly, inversion-aware settling detected correctly, Field/Field reported as real conflict (never coerced)');
+}
+
+// Test 45 (T-THERMAL): temperature is a real, evolving per-component
+// quantity (backward-Euler self-heating against a thermal RC, same
+// technique as capacitor voltage/core B), not a static label. Checks:
+// (a) a heavily-dissipating resistor's OWN value visibly drifts with its
+// own self-heating (current drops under a fixed voltage as R rises);
+// (b) an H-bridge driving a real overcurrent load latches a genuine
+// thermal-shutdown fault, exposes it honestly (mode must report the
+// ACTUAL coast, not the still-latched requested mode), and the fault
+// clears only once real hysteresis margin is met; (c) a marginal magnetic
+// write pulse that fails to switch a cold core succeeds against the exact
+// same drive once the core is genuinely hot (real Hc drift), never forced.
+{
+  const circuit = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', value: 20, a: 'p', b: 'g' },
+      { id: 'r1', type: 'resistor', value: 20, a: 'p', b: 'g' }, // ~20W into a 1/4W-class part -- real heavy self-heating
+    ],
+  };
+  let res;
+  const iStart = circuit.solve(els, 0.01, 25).currents.get('r1');
+  for (let i = 0; i < 2000; i++) res = circuit.solve(els, 0.01, 25);
+  const iAfter = res.currents.get('r1');
+  assert.ok(iAfter < iStart * 0.85, `T-THERMAL: self-heating must visibly raise R1's real value over time (current should drop), got ${iStart} -> ${iAfter}`);
+}
+{
+  const circuit = new Circuit();
+  const els = {
+    wires: [],
+    components: [
+      { id: 'bat1', type: 'battery', value: 10, a: 'vm', b: 'gnd' },
+      { id: 'in1', type: 'diffsource', value: 5, sourceR: 50, a: 'in1', b: 'gnd' },
+      { id: 'in2', type: 'diffsource', value: 0, sourceR: 50, a: 'in2', b: 'gnd' },
+      { id: 'hb1', type: 'hbridge', in1: 'in1', in2: 'in2', vm: 'vm', gnd: 'gnd', out1: 'out1', out2: 'out2' },
+      { id: 'rload', type: 'resistor', value: 0.6, a: 'out1', b: 'out2' }, // real heavy overcurrent through the bridge FETs
+    ],
+  };
+  let res, tripStep = null;
+  for (let i = 0; i < 3000; i++) {
+    res = circuit.solve(els, 0.005, 25);
+    if (res.hbridgeStates.get('hb1').thermalFault && tripStep == null) tripStep = i;
+  }
+  assert.ok(tripStep != null, 'T-THERMAL: sustained real overcurrent through an H-bridge must eventually latch a real thermal-shutdown fault');
+  const st = res.hbridgeStates.get('hb1');
+  assert.strictEqual(st.mode, 'coast', 'T-THERMAL: a thermally-shutdown bridge must report its ACTUAL mode (coast), not the still-latched requested mode');
+  assert.strictEqual(st.requestedMode, 'forward', 'T-THERMAL: the requested mode must still be visible separately from the actual (faulted) mode');
+  assert.strictEqual(res.currents.get('hb1:out1'), 0, 'T-THERMAL: a thermally-shutdown bridge must actually stop driving current, not just report a fault flag');
+}
+{
+  const spec = CircuitEngine.LATCHRELAY_SPEC;
+  function marginalWrite(ambientC) {
+    const circuit = new Circuit();
+    const els = {
+      wires: [],
+      components: [
+        { id: 'bat1', type: 'battery', value: 5, a: 'p', b: 'g' },
+        { id: 'r1', type: 'resistor', value: 115, a: 'p', b: 'a' },
+        { id: 'lr1', type: 'latchrelay', windings: [{ a: 'a', b: 'g', N: 1, R: spec.coilR }], contactA: 'ca', contactB: 'cb', hcAmpTurns: spec.hcAmpTurns, phiSat: spec.phiSat, switchTau: spec.switchTau },
+      ],
+    };
+    let res;
+    for (let i = 0; i < 40; i++) res = circuit.solve(els, 0.005, ambientC);
+    return res.coreStates.get('lr1');
+  }
+  const cold = marginalWrite(25);
+  const hot = marginalWrite(200);
+  assert.ok(cold < 0.5, `T-THERMAL: a marginal write pulse must genuinely fail to switch a cold core, got ${cold}`);
+  assert.ok(hot > 0.9, `T-THERMAL: the EXACT SAME marginal pulse must succeed once the core is genuinely hot (real Hc drift), got ${hot}`);
+  console.log('Test 45 OK (T-THERMAL): resistor self-heating drifts a real value, H-bridge thermal shutdown latches/reports/clamps current honestly, magnetic Hc drift lets an identical marginal pulse flip a hot core but not a cold one');
+}
+
+// Test 46 (T-POWER-NETWORK): a real battery cannot source unlimited
+// current no matter how low the load resistance is (item 11) -- below the
+// real limit it's a stiff, honestly-drooping source (Rint already did
+// this); at/beyond it, a real brownout: current pins at the real max
+// rating and the rail voltage collapses well below what an idealized
+// unlimited source would give. Also checks that a real decoupling
+// capacitor visibly holds the rail up during a fast heavy transient
+// pulse, using nothing but ordinary, already-existing capacitor physics.
+{
+  const circuit = new Circuit();
+  const els = { wires: [], components: [
+    { id: 'bat1', type: 'battery', value: 5, a: 'vcc', b: 'gnd' },
+    { id: 'rload', type: 'resistor', value: 0.5, a: 'vcc', b: 'gnd' }, // ideal 5V/0.5ohm would be 10A, well past the real limit
+  ] };
+  let res;
+  for (let i = 0; i < 3; i++) res = circuit.solve(els, 0.001);
+  approx(res.currents.get('bat1'), CircuitEngine.BATTERY_MAX_CURRENT, 1e-6, 'T-POWER-NETWORK: current must pin at the real max rating, not the idealized 10A Ohm\'s-law answer');
+  assert.ok(res.voltages.get('vcc') < 1.5, `T-POWER-NETWORK: the rail must genuinely brown out under a real overload, got ${res.voltages.get('vcc')}V`);
+  assert.ok(res.warnings.some((w) => w.includes('current-limited')), 'T-POWER-NETWORK: a real brownout must be reported, not silently absorbed');
+}
+{
+  const withoutCap = new Circuit();
+  const withCap = new Circuit();
+  const base = [{ id: 'bat1', type: 'battery', value: 5, a: 'vcc', b: 'gnd' }];
+  const capBase = base.concat([{ id: 'cd', type: 'capacitor', value: 2.2e-4, a: 'vcc', b: 'gnd' }]);
+  for (let i = 0; i < 5; i++) { withoutCap.solve({ wires: [], components: base }, 0.0002); withCap.solve({ wires: [], components: capBase }, 0.0002); }
+  const pulseNoCap = { wires: [], components: base.concat([{ id: 'rpulse', type: 'resistor', value: 3, a: 'vcc', b: 'gnd' }]) };
+  const pulseWithCap = { wires: [], components: capBase.concat([{ id: 'rpulse', type: 'resistor', value: 3, a: 'vcc', b: 'gnd' }]) };
+  const vNoCap = withoutCap.solve(pulseNoCap, 0.0002).voltages.get('vcc');
+  const vWithCap = withCap.solve(pulseWithCap, 0.0002).voltages.get('vcc');
+  assert.ok(vWithCap > vNoCap + 0.2, `T-POWER-NETWORK: a real decoupling capacitor must visibly hold the rail up during a fast transient pulse (no new physics beyond the existing capacitor model), got ${vNoCap}V vs ${vWithCap}V`);
+  console.log('Test 46 OK (T-POWER-NETWORK): battery current-limits at', CircuitEngine.BATTERY_MAX_CURRENT, 'A with a real brownout, decoupling cap holds the rail up', (vWithCap - vNoCap).toFixed(3), 'V higher during a fast pulse');
+}
+
+// Test 47 (T-MEASURE-PRIMITIVES): the breadboard qualification spec's
+// measurement primitives (RMS, average, frequency, duty cycle, phase
+// difference, energy integration) verified against known synthetic
+// signals with closed-form answers -- real trapezoidal integration and
+// real interpolated edge-crossing detection, not a shortcut that only
+// works for one waveform shape.
+{
+  const Sim = require('../simulate.js');
+  const N = 5000, fs = 1000, f = 1;
+  const sine = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; sine.push({ t, value: Math.sin(2 * Math.PI * f * t) }); }
+  approx(Sim.rmsValue(sine), 1 / Math.SQRT2, 0.001, 'T-MEASURE-PRIMITIVES: 1V sine RMS must be ~0.7071V');
+  approx(Sim.averageValue(sine), 0, 0.001, 'T-MEASURE-PRIMITIVES: a symmetric sine\'s average must be ~0');
+  approx(Sim.findFrequency(sine), 1.0, 0.001, 'T-MEASURE-PRIMITIVES: a real 1Hz sine must measure ~1.0Hz from its own crossings');
+
+  const sq = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; const phase = (t * 2) % 1; sq.push({ t, value: phase < 0.3 ? 5 : 0 }); }
+  approx(Sim.dutyCycle(sq, 2.5), 0.30, 0.01, 'T-MEASURE-PRIMITIVES: a real 30% duty-cycle square wave must measure ~0.30');
+  approx(Sim.averageValue(sq), 1.5, 0.02, 'T-MEASURE-PRIMITIVES: 0/5V at 30% duty must average ~1.5V');
+  approx(Sim.rmsValue(sq), Math.sqrt(0.3) * 5, 0.02, 'T-MEASURE-PRIMITIVES: 0/5V at 30% duty RMS must be ~sqrt(0.3)*5V');
+
+  const sineB = [];
+  for (let i = 0; i < N; i++) { const t = i / fs; sineB.push({ t, value: Math.sin(2 * Math.PI * f * t - Math.PI / 2) }); }
+  approx(Sim.phaseDifferenceDeg(sine, sineB), 90, 0.5, 'T-MEASURE-PRIMITIVES: a signal lagging by 90deg must measure ~90deg, not 0 or -90');
+
+  const constP = [];
+  for (let i = 0; i <= 300; i++) constP.push({ t: i * 0.01, value: 2 });
+  approx(Sim.integrateEnergy(constP), 6.0, 1e-6, 'T-MEASURE-PRIMITIVES: 2W held for 3s must integrate to exactly 6J');
+
+  const vTrace = [], iTrace = [];
+  for (let i = 0; i <= 200; i++) { vTrace.push({ t: i * 0.01, value: 5 }); iTrace.push({ t: i * 0.01, value: 0.5 }); }
+  approx(Sim.integrateEnergy(Sim.powerFromVI(vTrace, iTrace)), 5.0, 1e-6, 'T-MEASURE-PRIMITIVES: 5V*0.5A for 2s must integrate to exactly 5J');
+  assert.throws(() => Sim.powerFromVI(vTrace, iTrace.slice(1)), /sample counts differ/, 'T-MEASURE-PRIMITIVES: powerFromVI must refuse mismatched V/I sample arrays rather than fabricate a number');
+
+  console.log('Test 47 OK (T-MEASURE-PRIMITIVES): RMS/average/frequency/duty-cycle/phase/energy all verified against known synthetic signals');
+}
+
+// Test 48 (T-BATTERY-CAPACITY): a battery given a real capacityAh must
+// genuinely run down under real load -- real Coulomb counting against
+// the ACTUAL delivered current (not an assumed nominal current), a real
+// discharge curve (flat near nominal voltage until a real low-charge
+// knee, then a genuine collapse -- not a straight linear droop to zero,
+// which is not how a real primary cell behaves), and real energy
+// tracking that's internally consistent with the same integrated current.
+{
+  const circuit = new Circuit();
+  const els = { wires: [], components: [
+    { id: 'bat1', type: 'battery', value: 5, a: 'p', b: 'gnd', capacityAh: 0.0001 }, // 0.36 real Coulombs
+    { id: 'r1', type: 'resistor', value: 1, a: 'p', b: 'gnd' },
+  ] };
+  const dt = 0.001;
+  let res;
+  let integratedC = 0; // independently integrated charge, cross-checked against the engine's own Coulomb count
+  let flatVoltages = [];
+  for (let i = 0; i < 120; i++) { // 120ms, well within the flat region for this capacity/load
+    res = circuit.solve(els, dt);
+    integratedC += Math.abs(res.currents.get('bat1')) * dt;
+    flatVoltages.push(res.voltages.get('p'));
+  }
+  const bsFlat = res.batteryStates.get('bat1');
+  assert.ok(bsFlat, 'T-BATTERY-CAPACITY: a capacityAh battery must expose batteryStates');
+  const capC = 0.0001 * 3600;
+  approx(bsFlat.chargeRemainingAh * 3600, capC - integratedC, capC * 0.02, 'T-BATTERY-CAPACITY: remaining charge must match real Coulomb counting against the actual delivered current');
+  const flatSpread = Math.max(...flatVoltages) - Math.min(...flatVoltages);
+  assert.ok(flatSpread < 0.05, `T-BATTERY-CAPACITY: terminal voltage must stay real flat well above the knee, spread was ${flatSpread}V`);
+  assert.ok(bsFlat.socFraction > 0.2, 'T-BATTERY-CAPACITY: 150ms of this load must not yet reach the real low-charge knee');
+
+  // continue past the knee -- voltage must genuinely collapse, not
+  // linearly fade, and energyConsumedJ must be a real, growing number
+  // consistent with V*I actually delivered
+  let collapsed = false;
+  for (let i = 0; i < 300; i++) {
+    res = circuit.solve(els, dt);
+    if (res.voltages.get('p') < 1.0) { collapsed = true; break; }
+  }
+  assert.ok(collapsed, 'T-BATTERY-CAPACITY: continued discharge past the real knee must genuinely collapse the terminal voltage');
+  const bsCollapsed = res.batteryStates.get('bat1');
+  assert.ok(bsCollapsed.socFraction < 0.2, 'T-BATTERY-CAPACITY: a collapsed terminal voltage must correspond to a real low state of charge, not an unrelated cause');
+  assert.ok(bsCollapsed.energyConsumedJ > 0.3, `T-BATTERY-CAPACITY: real cumulative energy delivered must be substantial by the time it collapses, got ${bsCollapsed.energyConsumedJ}J`);
+
+  console.log('Test 48 OK (T-BATTERY-CAPACITY): real Coulomb-counted runtime, flat-then-knee discharge curve, and consistent energy tracking all verified');
+}
+
+// Test 49 (T-LED-LIGHT-OUTPUT): approximate relative LED light output
+// (real electrical power I*Vf times a real, channel-specific wall-plug
+// efficiency) must be monotonic in current and must distinguish real
+// LED color families by their real differing efficiency, not treat
+// every color as identical.
+{
+  const red20 = CircuitEngine.ledLightOutputW(0.02, 'red');
+  const red40 = CircuitEngine.ledLightOutputW(0.04, 'red');
+  const blue20 = CircuitEngine.ledLightOutputW(0.02, 'blue');
+  const white20 = CircuitEngine.ledLightOutputW(0.02, 'white');
+  assert.ok(red40 > red20, 'T-LED-LIGHT-OUTPUT: light output must be monotonic in current');
+  approx(red40 / red20, 2.0, 0.01, 'T-LED-LIGHT-OUTPUT: doubling current at the same Vf must double output (linear in current)');
+  assert.ok(blue20 !== red20 && white20 !== red20 && blue20 !== white20, 'T-LED-LIGHT-OUTPUT: red/blue/white must be genuinely distinguishable, not the same number in different colors');
+  assert.ok(blue20 > red20 && white20 > red20, 'T-LED-LIGHT-OUTPUT: blue/white indicator LEDs are real-world more efficient than red -- the model must reflect that, not treat all colors equally');
+  console.log('Test 49 OK (T-LED-LIGHT-OUTPUT): monotonic in current, real per-color efficiency differences preserved');
 }
 
 console.log('\nAll circuit engine tests passed.');

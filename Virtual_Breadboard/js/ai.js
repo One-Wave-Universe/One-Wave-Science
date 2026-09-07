@@ -248,6 +248,7 @@
     wire: 2, ywire: 4, resistor: 2, led: 2, diode: 2, capacitor: 2, battery: 2, switch: 2, pushbutton: 2,
     potentiometer: 1, vgnd: 3, inductor: 2, acsource: 2, mtjsensor: 3, scope: 1,
     nmos: 3, pmos: 3, comparator: 1, diffscope: 2, diffsource: 2,
+    latchrelay: 4, hbridge: 6, schmitt: 4,
   };
   const VALID_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'railTP', 'railTM', 'railBP', 'railBM']);
   const STRIP_ROWS = new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']);
@@ -319,6 +320,12 @@
       p.terminals.forEach((t, j) => checkTerminal(t, i, j, errors));
       if (p.type === 'led' && p.color && !LED_COLORS.has(p.color)) errors.push('part ' + i + ': bad led color "' + p.color + '"');
       if (NUMERIC_TYPES.has(p.type) && !(Number(p.value) > 0)) errors.push('part ' + i + ' (' + p.type + '): needs a positive numeric value');
+      if (p.type === 'capacitor' && p.initialV != null && !Number.isFinite(Number(p.initialV))) {
+        errors.push('part ' + i + ' (capacitor): "initialV" must be a finite number of volts if given');
+      }
+      if (p.type === 'battery' && p.capacityAh != null && !(Number(p.capacityAh) > 0)) {
+        errors.push('part ' + i + ' (battery): "capacityAh" must be a positive number of amp-hours if given');
+      }
       if (p.type === 'diffsource') {
         // unlike a battery, a real differential/lean source's value (deltaV
         // relative to its own reference pin) is explicitly signed and can
