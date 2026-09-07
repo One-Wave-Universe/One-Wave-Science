@@ -160,14 +160,22 @@ Attack next:
 
 ## L. Cosmology / redshift / large-scale structure
 
-Current repository contains alternative transport/redshift and nonstandard expansion ideas.
+**Attacked: see E-533.** The four bullets below were executed against E-528's
+explicit redshift law. Result: the full-replacement-of-expansion sub-claim is
+excluded by outside data (SNe Ia time dilation, Tolman surface brightness);
+BAO and CMB T(z) remain open requirements rather than independent failures.
+Section 6 of E-533 gives the structural reason no recalibration of E-528's
+coefficient can fix the time-dilation result, and Section 8 gives the
+minimum bar a revised mechanism would need to clear. This does not close the
+section -- it is now a revise-or-drop decision on the specific sub-claim, not
+an unexamined "nonstandard expansion idea."
 
-Attack next:
+Original attack instructions (executed, kept for the record):
 
-- identify a single explicit redshift law;
-- compare against supernova, BAO, CMB, time-dilation, and surface-brightness observations;
-- keep observational fit separate from mechanism preference;
-- reject or revise any version that cannot match the full data set.
+- identify a single explicit redshift law; -- done, Section 1 of E-533.
+- compare against supernova, BAO, CMB, time-dilation, and surface-brightness observations; -- done, Sections 2-5 of E-533.
+- keep observational fit separate from mechanism preference; -- Section 7 of E-533 states the verdict independent of which outcome was preferred.
+- reject or revise any version that cannot match the full data set. -- Section 7 rejects the specific full-replacement sub-claim; Section 8 specifies what a revision would require.
 
 ## M. Scale recursion
 

@@ -5,7 +5,7 @@ namespace: "NODE"
 gate: "GREEN"
 lifecycle: "ACTIVE"
 classification: "Field Propagation / Redshift Replacement"
-claim_gate_detail: "YELLOW (transport equation) / GREEN (tired-light identification)"
+claim_gate_detail: "YELLOW (transport equation) / GREEN (tired-light identification) / RED (full-replacement-of-expansion sub-claim, per E-533 -- SNe Ia light-curve time dilation and Tolman surface brightness data exclude n=0 static-propagation prediction; node-level gate left GREEN pending resolution of whether I-02's Gray-to-Red transform extends to Nodes, an explicitly open question per I-02's own Yellow Audit)"
 metadata_standard: "I-06"
 ---
 
@@ -109,3 +109,17 @@ The model must not merely fit a distance-redshift curve. It must also address:
 - consistency with the same coefficient across different paths.
 
 If the required interaction scatters light enough to destroy observed image sharpness, or if the lost energy has no field destination, this candidate fails.
+
+## Audit Result (E-533)
+
+The "redshift-correlated transient-duration behavior without metric time
+stretching" test above has been executed against outside data: E-533 finds
+this law, taken as full replacement for expansion, predicts zero time
+dilation of source-frame timing (a static background does not touch
+emission-to-emission spacing), while Type Ia supernova light curves show
+\((1+z)\) dilation at high significance (Goldhaber 2001; Blondin 2008), and
+Tolman surface brightness data separately exclude the static
+\((1+z)^{-1}\) law (Lubin & Sandage 2001). See E-533 for the full derivation,
+citations, and what a revised mechanism would need to satisfy. This does not
+retract the propagation law above; it retracts the claim that this law alone,
+unmodified, replaces expansion.
