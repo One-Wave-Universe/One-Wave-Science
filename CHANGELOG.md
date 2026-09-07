@@ -1,4 +1,14 @@
 
+## Derived Expansion Attempted — Compression-Field-Sourced Scale Factor (September 7, 2026)
+
+- Added E-535, taking the one route E-534 left open: derive expansion-like spatial time-dependence from A-115's own field equation instead of importing it externally.
+- Method: restrict A-115's field equation to the homogeneous dilation mode `u(x,t) = x·f(t)` (uniform strain, finite/uniform χ and ∇u; the bare displacement itself is origin-dependent, same as in Newtonian treatments of uniform expansion). Reduce to a single collective-coordinate equation for `f(t)` via a Milne-sphere (finite comoving ball, R0→∞) construction rather than naive term-by-term substitution, since the gradient-energy terms (K_χ, S_u) carry finite energy for this mode despite exerting no local bulk force.
+- Result: the K_χ/S_u contribution to f(t)'s effective equation scales as 1/R0² and vanishes in the homogeneous/cosmological limit — confirmed by the correct method, not assumed. What remains is a damped, driven oscillator `ρ_u f̈ + μ_u ḟ (+ mass term) = j(t)`, with `j(t)` hypothesized (new assumption, flagged as unjustified beyond plausibility) to be the coarse-grained population average of E-530's existing local White Energy release events.
+- Consequence: with `a(t) = 1+f(t)`, both the redshift law `1+z = a(t_o)/a(t_e)` and genuine (non-cancelling, per E-534 Section 2) time dilation `dτ_o/dτ_e = 1+z` fall out of the *same* a(t) automatically — resolving E-534's no-go theorem by deriving real expansion rather than denying it. If adopted, E-528's separate propagation-loss redshift law becomes redundant for the cosmological channel.
+- Explicitly flagged: this is `PROPOSED_BUILD`, not adopted. It directly contradicts E-528's Hard Constraint and Book 5 Ch4's "no expansion variable is permitted" rule. Neither was edited by this change — that decision is left to the team. Matching the real expansion history (SNe/BAO/CMB-calibrated H(z)) is not attempted; only the existence and internal consistency of the mechanism is shown.
+- A structural side-finding: Section 3's mass term for `f(t)` requires either abandoning strict translation invariance (motivated here by A-101 Ground/Zero already being a privileged reference, consistent with A-105's existing restoring-toward-Ground primitive) or accepting no mass term at all (pure driven integrator). Flagged for review independent of whether this node's broader proposal is accepted.
+- Updated E-534 Section 6 and `ONE_WAVE_SCIENCE_ATTACK_MAP.md` Section L with pointers to E-535.
+
 ## Section 8 Attempted — Static-Space Time-Dilation No-Go Theorem (September 7, 2026)
 
 - Added E-534, a direct attempt at E-533 Section 8's bar: find a mechanism, using One-Wave's own primitives, that reproduces universal (1+z) time dilation of distant transients without the spatial background becoming time-dependent (i.e. without literal expansion).
