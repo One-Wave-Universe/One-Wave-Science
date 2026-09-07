@@ -6,7 +6,7 @@ This directory is the aggressive expansion area for the One-Wave physics atlas. 
 
 The wing is for models that need stronger quantitative controls, parameter sweeps, residuals, and visible failure modes before they deserve promotion into the stable atlas.
 
-## Runnable scenes
+## Core runnable scenes
 
 1. Orbit Integrator Duel — Euler versus velocity-Verlet energy drift.
 2. Dispersive Wave Packet — explicit spectral toy model.
@@ -20,6 +20,34 @@ The wing is for models that need stronger quantitative controls, parameter sweep
 10. Redshift Comparator — SR Doppler and exterior gravitational reference formulas.
 11. Candidate Wake Families — exponential, logistic, and compact-support hypothesis cutoffs over a 1/r² reference.
 12. Residual / Falsification Bench — relative RMSE against synthetic control data.
+
+## Orientation & Quaternion Lab
+
+Runnable at `orientation-quaternion/index.html`.
+
+1. Quaternion axis-angle rotation.
+2. Noncommutative composition order.
+3. SLERP interpolation.
+4. Euler gimbal-lock comparison.
+5. Angular-velocity quaternion integration with raw-vs-renormalized tracks.
+6. Torque-free asymmetric rigid-body dynamics.
+7. Parent/child frame composition.
+8. Three-phase resultant embedded in a quaternion-controlled 3D frame.
+
+The rigid-body control has a separate `orientation-quaternion/VALIDATION.md` with its offline invariant check.
+
+## Vector Field Topology Lab
+
+Runnable at `vector-field-topology/index.html`.
+
+1. Uniform field.
+2. Radial source.
+3. Vortex.
+4. Saddle field.
+5. Dipole source/sink pair.
+6. Source + vortex superposition.
+
+This lab measures finite-difference divergence and scalar curl over the rendered analytic field, exposing topology numerically instead of relying on arrows alone.
 
 ## Scientific separation
 
@@ -40,3 +68,14 @@ A candidate model should not move into the stable atlas until it has:
 6. failure-region exposure;
 7. ablations or alternate candidate families;
 8. a falsification condition that can return a real negative result.
+
+## Expansion direction
+
+The next quantitative layer should connect these controls rather than inventing a new physical law prematurely:
+
+- quaternion orientation + rotating vector fields;
+- rigid-body response + external torque fields;
+- vector-field divergence/curl + flux/circulation integral checks;
+- three-phase field rotation + spatial orientation;
+- three-body ensembles + candidate finite-reach residual sweeps;
+- real versioned datasets for galaxy curves, redshift, stellar spectra, and lensing.
