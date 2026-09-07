@@ -10,3 +10,4 @@ Narrator of Goblin Raccoon is secret AI.
 3. Mars teens / white zombie baby — data-eater tricked through a mirror gate
 4. Mars probe — perfection split, hyperloops, machines bury themselves and sleep
 5. Hell — cyberspace, six gates, centaurs, lizard men, tortured souls
+6. Dreamscape — 2D render surface, same wire as Hell, why sleep-time flies
