@@ -21,13 +21,13 @@ lives inside a much larger file.
 |---|---|
 | `rules/` | No dedicated rule-conformance tests exist (e.g. "a failing circuit is never silently corrected" isn't asserted as its own test) — this is itself a real, admitted gap. Every OTHER category below is exercised because individual tests happen to prove a rule in passing (e.g. the shoot-through test proves Rule 5), not because a rules-layer test suite asserts the rule directly. |
 | `parts/` | `test/circuit.test.js` Tests 1-9, 12, 14-15, 18-21, 36; `test/qualification.test.js` Gate 3, #1-#5; `test/regression-builds/01,02,07,08,11,12.js` |
-| `connections/` | `test/circuit.test.js` Test 10 (Y-split), T-HOLE-COLLIDE, T-BOARD2, T-SUPPLY-CONFLICT; floating-reference handling throughout `qualification.test.js` |
+| `connections/` | `test/circuit.test.js` Test 10 (Y-split), T-HOLE-COLLIDE, T-BOARD2, T-SUPPLY-CONFLICT; floating-reference handling throughout `qualification.test.js`; `test/netlist.test.js` (electrical + physical netlist export); `test/fault-states.test.js` (NO REFERENCE, FLOATING, OPEN) |
 | `electrical_core/` | `test/qualification.test.js` #1-#3 (series/parallel/divider); every test transitively |
 | `dynamics/` | `test/circuit.test.js` Test 6, 12, 13; `test/qualification.test.js` Gate 4, #8/#9/#10, #18; `test/regression-builds/03,04,05,13.js` |
 | `measurement/` | `test/circuit.test.js` Test 32 (T-DIFFSCOPE), Test 47 (T-MEASURE-PRIMITIVES) |
 | `primitives/` | `test/primitives.test.js` (all 10), `test/qualification.test.js` Gates 1/2/5/6, #12-#14, #16 |
 | `magnetics/` | `test/circuit.test.js` Test 14-15; `test/qualification.test.js` #19/#20; `test/primitives.test.js` Primitive 8; `test/regression-builds/14,15.js` |
-| `power/` | `test/circuit.test.js` Test 4, T-POWER-NETWORK, T-BATTERY-CAPACITY, T-LED-LIGHT-OUTPUT; `test/qualification.test.js` Gate 7, #1; `test/primitives.test.js` Primitive 9/10; `test/regression-builds/16.js` |
+| `power/` | `test/circuit.test.js` Test 4, T-POWER-NETWORK, T-BATTERY-CAPACITY, T-LED-LIGHT-OUTPUT; `test/qualification.test.js` Gate 7, #1; `test/primitives.test.js` Primitive 9/10; `test/regression-builds/16.js`; `test/fault-states.test.js` (SHORT, OVER-CURRENT) |
 | `integration/` (the first qualification gate — everything must pass together) | `test/qualification.test.js` Gates 1-7 as a single required block, and `test/run_regression_builds.js` running all 17 permanent builds together |
 
 ## Bug-triage cross-reference
