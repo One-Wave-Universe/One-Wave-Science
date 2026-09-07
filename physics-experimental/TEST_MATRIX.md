@@ -28,6 +28,10 @@
 | Saddle field | `F=(x,-y)` | near-zero divergence + curl | confusing deformation with source/rotation |
 | Dipole pair | source + sink superposition | signed topology / derivative map | incorrect superposition |
 | Source + vortex | linear field superposition | simultaneous divergence + curl | losing one component under composition |
+| Divergence theorem | linear expansion field | boundary flux - area integral of divergence | local/global inconsistency |
+| Green/Stokes circulation | solid rotation field | boundary circulation - area integral of curl | rotational integral mismatch |
+| Zero-integral saddle | centered saddle field | total flux + circulation residuals | false global source/rotation |
+| Mixed integral field | simultaneous div/curl linear field | both theorem residuals | one identity passing while the other fails |
 
 ## Quaternion control check
 
@@ -35,10 +39,10 @@ The torque-free rigid-body module has a documented offline 100-time-unit RK4 che
 
 ## Next validation upgrade
 
-Replace synthetic comparisons with versioned datasets and machine-readable parameter sweeps, and add integral cross-checks:
+Replace synthetic comparisons with versioned datasets and machine-readable parameter sweeps, and continue the cross-check chain:
 
-- divergence theorem: volume/area divergence versus boundary flux;
-- Stokes/Green circulation: surface curl versus line integral;
 - quaternion orientation plus applied torque-field response;
 - timestep sweeps for rigid-body and three-body controls;
-- real galaxy rotation, redshift, lensing, and stellar-spectrum datasets.
+- finite-reach candidates tested against the same three-body initial conditions as the control solver;
+- real galaxy rotation, redshift, lensing, and stellar-spectrum datasets;
+- 3D divergence/curl and surface-volume integral checks after the 2D controls are stable.
