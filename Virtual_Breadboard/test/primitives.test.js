@@ -19,9 +19,13 @@ const { Circuit } = CircuitEngine;
 const Sim = require('../simulate.js');
 
 let checkCount = 0;
+// Structured records for 10_RECEIPTS/generate_receipts.js -- see the same
+// note in test/qualification.test.js. Additive only, no behavior change.
+const records = [];
 function qual(name, expected, actual, tolerance, note) {
   checkCount++;
   const pass = typeof expected === 'boolean' ? expected === actual : Math.abs(actual - expected) <= tolerance;
+  records.push({ name, expected, actual, tolerance: tolerance != null ? tolerance : null, pass, note: note || '' });
   const line = `${pass ? 'PASS' : 'FAIL'} [${name}] expected=${expected} actual=${actual}${tolerance != null ? ' tolerance=' + tolerance : ''}${note ? ' -- ' + note : ''}`;
   console.log(line);
   if (!pass) throw new Error('PRIMITIVE FAILURE: ' + name);
@@ -429,3 +433,5 @@ console.log('\n=== Primitive 10: LED light output ===');
 }
 
 console.log(`\n=== ALL ${checkCount} REUSABLE-PRIMITIVE CHECKS PASSED ===`);
+
+module.exports = { checkCount, records };

@@ -30,9 +30,15 @@ const { Circuit } = CircuitEngine;
 const Sim = require('../simulate.js');
 
 let checkCount = 0;
+// Every check's structured record, for 10_RECEIPTS/generate_receipts.js to
+// consume when this file is require()'d instead of run standalone --
+// collected in addition to (never instead of) the existing PASS/FAIL console
+// output and throw-on-first-failure behavior, which are unchanged below.
+const records = [];
 function qual(name, expected, actual, tolerance, note) {
   checkCount++;
   const pass = typeof expected === 'boolean' ? expected === actual : Math.abs(actual - expected) <= tolerance;
+  records.push({ name, expected, actual, tolerance: tolerance != null ? tolerance : null, pass, note: note || '' });
   const line = `${pass ? 'PASS' : 'FAIL'} [${name}] expected=${expected} actual=${actual}${tolerance != null ? ' tolerance=' + tolerance : ''}${note ? ' -- ' + note : ''}`;
   console.log(line);
   if (!pass) throw new Error('QUALIFICATION GATE FAILURE: ' + name);
@@ -885,3 +891,5 @@ console.log('\n=== #20 Three coupled windings ===');
 }
 
 console.log(`\n=== ALL ${checkCount} QUALIFICATION CHECKS PASSED (GATE + REMAINING FUNDAMENTAL TESTS) ===`);
+
+module.exports = { checkCount, records };
