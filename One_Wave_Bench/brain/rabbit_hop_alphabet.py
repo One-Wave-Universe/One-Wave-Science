@@ -1,14 +1,20 @@
-"""Locked rabbit-hopping addressing and system-communication translator.
+"""Locked Rabbit-Hopping address and system-communication translator.
 
-There are exactly three currently declared routes: one original route and two
-ascending K routes.  Every route produces a top address and every complete
-packet ends with either the top-minus-one or top-plus-one wrapper.
+Rabbit Hopping keeps route identity separate from numerical destination.
+The canonical arithmetic has three route receipts:
 
-The same fully attributed address receipt can cross a system boundary without
-losing its source, top, wrapper, route family, K, polarity, or direction.
+* ORIGINAL: ``N * 2`` with ``K=0``;
+* DOUBLE_THEN_SHIFT: ``N * 2 + K`` for any integer ``K``;
+* SHIFT_THEN_DOUBLE: ``(N + K) * 2`` for any integer ``K``.
 
-Division here only verifies that a fully attributed receipt can mechanically
-recover its source rank.  The broader meaning/job of division remains open.
+``K`` is a signed top-offset/route step.  It is *not* the final connector.
+Every selected top independently receives one of the two mandatory wrappers
+``TOP-1`` or ``TOP+1``.  A complete receipt therefore preserves operation
+order even when two routes land on the same number.
+
+The legacy names ``ASCENDING_AFTER`` and ``ASCENDING_BEFORE`` remain Enum
+aliases so existing callers continue to work; they no longer imply that K
+must be positive.
 """
 
 from __future__ import annotations
@@ -28,7 +34,7 @@ class AlphabetOrientation(str, Enum):
 
     @property
     def vertical_sign(self) -> int:
-        """Side-to-side inversion also inverts logical up/down."""
+        """Side-to-side alphabet inversion also inverts logical up/down."""
 
         return 1 if self is self.NORMAL else -1
 
@@ -52,6 +58,10 @@ class MirrorPolarity(IntEnum):
 
 class RouteFamily(str, Enum):
     ORIGINAL = "N*2"
+    DOUBLE_THEN_SHIFT = "N*2+K"
+    SHIFT_THEN_DOUBLE = "(N+K)*2"
+
+    # Backward-compatible aliases.  These names predate signed K support.
     ASCENDING_AFTER = "N*2+K"
     ASCENDING_BEFORE = "(N+K)*2"
 
@@ -68,7 +78,7 @@ class TraversalDirection(str, Enum):
 
 @dataclass(frozen=True, slots=True)
 class RabbitHopCoordinate:
-    """One complete ``source | top | wrapper`` address receipt."""
+    """One complete ``source | top | wrapper`` route receipt."""
 
     letter: str
     alphabet_orientation: AlphabetOrientation
@@ -94,6 +104,8 @@ class RabbitHopCoordinate:
         return abs(self.wrapper_address) % 2
 
     def opposed(self) -> "RabbitHopCoordinate":
+        """Reverse traversal without silently changing any other receipt field."""
+
         direction = (
             TraversalDirection.REVERSE
             if self.traversal is TraversalDirection.FORWARD
@@ -133,17 +145,14 @@ def mirrored_alphabet_runs(layout: AlphabetMirrorLayout) -> tuple[str, int, str]
 def _validate_route_k(route_family: RouteFamily, k: int) -> None:
     if not isinstance(k, int):
         raise TypeError("K must be an integer")
-    if route_family is RouteFamily.ORIGINAL:
-        if k != 0:
-            raise ValueError("the original N*2 route has no K; use K=0")
-    elif k < 1:
-        raise ValueError("ascending routes require K >= 1")
+    if route_family is RouteFamily.ORIGINAL and k != 0:
+        raise ValueError("the original N*2 route has no offset; use K=0")
 
 
 def _unsigned_top(source_rank: int, route_family: RouteFamily, k: int) -> int:
     if route_family is RouteFamily.ORIGINAL:
         return source_rank * 2
-    if route_family is RouteFamily.ASCENDING_AFTER:
+    if route_family is RouteFamily.DOUBLE_THEN_SHIFT:
         return source_rank * 2 + k
     return (source_rank + k) * 2
 
@@ -158,7 +167,12 @@ def coordinate(
     wrapper: WrapperSide = WrapperSide.UPPER,
     traversal: TraversalDirection = TraversalDirection.FORWARD,
 ) -> RabbitHopCoordinate:
-    """Produce one complete address packet while preserving its route."""
+    """Produce one complete address packet while preserving its route.
+
+    The top is computed first from the route and signed integer K.  The wrapper
+    is then applied as a separate +/-1 operation.  This distinction is part of
+    the receipt and must not be collapsed.
+    """
 
     _validate_route_k(route_family, k)
     rank = alphabet_rank(letter, alphabet_orientation)
@@ -189,7 +203,7 @@ def wrapper_pair(
     k: int = 0,
     traversal: TraversalDirection = TraversalDirection.FORWARD,
 ) -> tuple[RabbitHopCoordinate, RabbitHopCoordinate]:
-    """Produce the mandatory lower and upper wrappers for one top."""
+    """Produce the mandatory TOP-1 and TOP+1 packets for one top."""
 
     return tuple(
         coordinate(
@@ -205,21 +219,28 @@ def wrapper_pair(
     )
 
 
-def ascending_ladder(
+def offset_ladder(
     letter: str,
     *,
     route_family: RouteFamily,
+    min_k: int,
     max_k: int,
     alphabet_orientation: AlphabetOrientation = AlphabetOrientation.NORMAL,
     polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
     traversal: TraversalDirection = TraversalDirection.FORWARD,
 ) -> tuple[tuple[RabbitHopCoordinate, RabbitHopCoordinate], ...]:
-    """Materialize K=1..max_k for one of the two ascending routes."""
+    """Materialize an inclusive signed-K ladder for either offset route.
+
+    Example ``min_k=-3, max_k=3`` produces all seven tops around the reference:
+    ``...-3, -2, -1, 0, +1, +2, +3``.  Each top still has both wrappers.
+    """
 
     if route_family is RouteFamily.ORIGINAL:
-        raise ValueError("the original route is not an ascending K ladder")
-    if not isinstance(max_k, int) or max_k < 1:
-        raise ValueError("max_k must be an integer >= 1")
+        raise ValueError("the original N*2 route has no K ladder")
+    if not isinstance(min_k, int) or not isinstance(max_k, int):
+        raise TypeError("min_k and max_k must be integers")
+    if min_k > max_k:
+        raise ValueError("min_k must be <= max_k")
     return tuple(
         wrapper_pair(
             letter,
@@ -229,7 +250,31 @@ def ascending_ladder(
             k=k,
             traversal=traversal,
         )
-        for k in range(1, max_k + 1)
+        for k in range(min_k, max_k + 1)
+    )
+
+
+def ascending_ladder(
+    letter: str,
+    *,
+    route_family: RouteFamily,
+    max_k: int,
+    alphabet_orientation: AlphabetOrientation = AlphabetOrientation.NORMAL,
+    polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
+    traversal: TraversalDirection = TraversalDirection.FORWARD,
+) -> tuple[tuple[RabbitHopCoordinate, RabbitHopCoordinate], ...]:
+    """Compatibility helper for the historical positive ``K=1..max_k`` run."""
+
+    if not isinstance(max_k, int) or max_k < 1:
+        raise ValueError("max_k must be an integer >= 1")
+    return offset_ladder(
+        letter,
+        route_family=route_family,
+        min_k=1,
+        max_k=max_k,
+        alphabet_orientation=alphabet_orientation,
+        polarity=polarity,
+        traversal=traversal,
     )
 
 
@@ -240,22 +285,26 @@ def all_declared_routes(
     alphabet_orientation: AlphabetOrientation = AlphabetOrientation.NORMAL,
     polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
 ) -> tuple[tuple[RabbitHopCoordinate, RabbitHopCoordinate], ...]:
-    """Return original, after-ascending, and before-ascending packets."""
+    """Return original plus both signed offset families from -max_k..+max_k."""
 
+    if not isinstance(max_k, int) or max_k < 0:
+        raise ValueError("max_k must be an integer >= 0")
     return (
         wrapper_pair(
             letter, alphabet_orientation=alphabet_orientation, polarity=polarity,
         ),
-        *ascending_ladder(
+        *offset_ladder(
             letter,
-            route_family=RouteFamily.ASCENDING_AFTER,
+            route_family=RouteFamily.DOUBLE_THEN_SHIFT,
+            min_k=-max_k,
             max_k=max_k,
             alphabet_orientation=alphabet_orientation,
             polarity=polarity,
         ),
-        *ascending_ladder(
+        *offset_ladder(
             letter,
-            route_family=RouteFamily.ASCENDING_BEFORE,
+            route_family=RouteFamily.SHIFT_THEN_DOUBLE,
+            min_k=-max_k,
             max_k=max_k,
             alphabet_orientation=alphabet_orientation,
             polarity=polarity,
@@ -264,7 +313,7 @@ def all_declared_routes(
 
 
 def recover_source_rank(record: RabbitHopCoordinate) -> int:
-    """Mechanically invert a complete receipt; division's larger role is open."""
+    """Mechanically invert a complete receipt and recover the source rank."""
 
     unsigned_wrapper = int(record.polarity) * record.wrapper_address
     top = (
@@ -273,11 +322,13 @@ def recover_source_rank(record: RabbitHopCoordinate) -> int:
     )
     if record.route_family is RouteFamily.ORIGINAL:
         numerator = top
-    elif record.route_family is RouteFamily.ASCENDING_AFTER:
+    elif record.route_family is RouteFamily.DOUBLE_THEN_SHIFT:
+        # X_top = 2N + K  ->  N = (X_top-K)/2
         numerator = top - record.k
     else:
+        # X_top = 2(N+K)  ->  N = X_top/2-K
         if top % 2:
-            raise ValueError("before-ascending receipt has an invalid odd top")
+            raise ValueError("shift-then-double receipt has an invalid odd top")
         rank = top // 2 - record.k
         if not 1 <= rank <= 26:
             raise ValueError("recovered alphabet rank is outside 1..26")
