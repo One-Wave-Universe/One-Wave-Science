@@ -22,6 +22,12 @@ rabbit_hop_core.py
         |     Circle of Fifths forward / reverse
         |     One-Wave major/minor span convention
         |
+        +-- rabbit_hop_neck.py
+        |     6 standard guitar strings
+        |     12 repeating pitch classes
+        |     open through fret 24
+        |     every position -> full Rabbit-Hop receipt
+        |
         +-- rabbit_hop_scale_rail.py
               bounded 1..12 -> 12..24 outward/inward rail
 ```
@@ -133,6 +139,29 @@ C -> F -> Bb -> Eb -> Ab -> Db -> Gb -> B -> E -> A -> D -> G -> C
 same complete Rabbit-Hop receipt family. It can therefore use `N*2`,
 `N*2+K`, or `(N+K)*2`, including negative and positive K.
 
+## Six strings / 24 frets
+
+`rabbit_hop_neck.py` provides a concrete standard-guitar adapter using normal
+string numbering and tuning:
+
+```text
+6 E
+5 A
+4 D
+3 G
+2 B
+1 E
+```
+
+The default map covers open position through fret 24 inclusive. Fret 12 returns
+the same pitch class one octave up and fret 24 returns it two octaves up. Each
+string/fret position resolves to one of the same 12 pitch classes, then calls
+`music_wrapper_pair()` so all signed-K routes and both wrappers remain
+available.
+
+The neck is a labeling/use adapter. It does not replace the separate locked
+numerical `1..12 -> 12..24` scale rail.
+
 ## One-Wave span convention
 
 These are retained as **project conventions**, not substituted for standard
@@ -176,6 +205,9 @@ One_Wave_Bench/brain/test_rabbit_hop_alphabet.py
 
 One_Wave_Bench/brain/rabbit_hop_music.py
 One_Wave_Bench/brain/test_rabbit_hop_music.py
+
+One_Wave_Bench/brain/rabbit_hop_neck.py
+One_Wave_Bench/brain/test_rabbit_hop_neck.py
 
 One_Wave_Bench/brain/rabbit_hop_scale_rail.py
 One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py
