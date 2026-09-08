@@ -23,47 +23,113 @@ Electrical shorthand:
 
 The center reference remains continuously present. A branch may stop conducting without becoming conceptually disconnected from the reference system.
 
+### Differential is the gate language
+
+Every gate/stage must expose a measurable differential against the same continuously present CENTER reference.
+
+A gate is therefore not a naked binary condition. Its local state is a reference-resolved relation:
+
+```text
+D = V(local+) - V(local-)
+```
+
+with both sides interpreted relative to the same CENTER / virtual ground.
+
+The required progression is three differentials, not three unrelated circuits:
+
+```text
+D1 = BC-DC differential
+D2 = TC-AC differential
+D3 = QC-RC rotation/axis differential
+```
+
+Each new stage adds a relationship while preserving the previous reference. No handoff may invent a new local zero.
+
 ## 2. BC-DC -> TC-AC -> QC-RC
 
 Current build ladder:
 
-### BC-DC
+### BC-DC — Differential 1
 
 Balanced/binary choice represented as a stable DC differential around the center reference.
 
+```text
+(+D1) ---- CENTER ---- (-D1)
+```
+
 Purpose: prove a point/state.
 
-### TC-AC
+The first gate must expose the actual signed displacement from CENTER rather than merely reporting "on/off."
 
-Validated state is handed into an out-and-back oscillating relationship around center.
+### TC-AC — Differential 2
 
-Purpose: prove transition/path and phase.
+Validated DC state is handed into an out-and-back oscillating relationship around the **same** CENTER.
 
-### QC-RC
+The second point/path closes the relationship into an AC loop:
 
-Multiple confirmed phase relationships coordinate into a rotating relationship across axes.
+```text
++D2(t) -> CENTER -> -D2(t) -> CENTER -> +D2(t) ...
+```
+
+Purpose: prove transition/path, reversal, zero crossing, and phase without losing the D1 reference.
+
+The TC-AC gate therefore has its own measurable differential while remaining reference-resolved to the same CENTER as BC-DC.
+
+### QC-RC — Differential 3
+
+A third independently measurable differential coordinates the confirmed phase relationships into rotation / axis behavior.
+
+```text
+D1 = point/state relation
+D2 = opposed oscillation / phase relation
+D3 = axis/rotation relation
+```
 
 `RC` here is the working architecture label for rotating/recursive coordination, not radio frequency.
 
 Purpose: prove controlled rotation / field behavior.
 
-Engineering question: can each handoff preserve reference, timing, and validation without an ambiguous intermediate state?
+For the electrical precursor, the minimum requirement is a center-referenced drive vector with independently measurable axis differentials. Two phase-shifted AC axes can trace a rotating vector in a plane. A third independently driven center-referenced axis can tilt/precess that drive vector through three dimensions.
+
+This remains an **electrical drive-vector result** until magnetic field-vector measurement exists.
+
+Engineering question: can each handoff preserve the same reference, timing, phase, and validation without an ambiguous intermediate state?
+
+### Three differentials / three gate receipts
+
+Every transition should retain at least:
+
+```text
+reference_id = CENTER
+D1 = measured BC-DC differential
+D2 = measured TC-AC differential + phase
+D3 = measured QC-RC axis/rotation differential + phase
+```
+
+If one of those is missing, the next stage does not have enough information to claim a reference-resolved handoff.
 
 ## 3. Three-cell stack experiment
 
 Start with three measurable stages:
 
-1. **Cell 1 — DC differential**: establish the validated point/state.
-2. **Cell 2 — AC handoff**: produce controlled out-center-in behavior and measurable phase.
-3. **Cell 3 — rotation / axis coordination**: drive multiple independent magnetic components and measure the resultant vector.
+1. **Cell 1 — D1 / DC differential**: establish the validated point/state.
+2. **Cell 2 — D2 / AC handoff**: produce controlled out-center-in behavior and measurable phase around the same CENTER.
+3. **Cell 3 — D3 / rotation / axis coordination**: add an independently measurable axis differential and drive multiple magnetic components.
 
-All stages expose test points and share a defined reference strategy. Do not infer a 3D field from a 2D schematic.
+All stages expose test points and share the same defined reference strategy. Do not infer a 3D field from a 2D schematic.
 
-Use a 3-axis Hall measurement where magnetic hardware is introduced:
+When magnetic hardware is introduced, use a 3-axis field measurement:
 
 `B(t) = (Bx(t), By(t), Bz(t))`
 
 The measured vector trajectory, not the drawing, determines whether the result is circular, elliptical, planar, volumetric, stable, or unstable.
+
+The electrical drive differentials and magnetic field components are related measurements, not interchangeable labels. A valid implementation should eventually be able to show both:
+
+```text
+Ddrive(t) = (Dx(t), Dy(t), Dz(t))
+B(t)      = (Bx(t), By(t), Bz(t))
+```
 
 ## 4. Slice -> pyramid -> cube -> field
 
@@ -120,7 +186,9 @@ A state may also be maintained by feedback:
 
 This resembles refresh memory. It does not remove physical losses and must be benchmarked against continuous excitation.
 
-For a future field cell, a candidate test is to define an allowed `Bx/By/Bz` state band and measure whether selective reinjection maintains that band reproducibly and efficiently.
+The reinjection trigger is the **measured differential state**, not elapsed time.
+
+For a future field cell, a candidate test is to define an allowed reference-resolved `Dx/Dy/Dz` drive band and, once field-vector measurement exists, an allowed `Bx/By/Bz` state band. Measure whether selective reinjection maintains those bands reproducibly and efficiently.
 
 ## 7. Nerve layer is not the brain cell
 
@@ -129,6 +197,7 @@ The three-winding ternary control belongs to the fast nerve / local actuation la
 Working separation:
 
 - three-winding ternary nerve: fast local `- / HOLD / +` control
+- bidirectional MOSFET pair: candidate low-loss local nerve gate for bilateral routing
 - sensors: proximity, tilt/angle, current, temperature, pressure, position, vibration, field, etc.
 - vagus-style regulation layer: slower body-state regulation / escalation
 - M4: routes and synchronizes information between lower and higher layers
@@ -214,11 +283,13 @@ Do not claim the full architecture because the pieces individually exist.
 Progress is:
 
 1. build a useful balanced device
-2. measure the primitive
-3. carry only the proven rule upward
-4. test magnetic / multi-axis behavior
-5. test state maintenance and recall
-6. test parser-state reconstruction
-7. only then integrate into the first volumetric cell network
+2. measure D1 / BC-DC against CENTER
+3. measure D2 / TC-AC around the same CENTER
+4. measure D3 / QC-RC electrical axis rotation around the same CENTER
+5. carry only the proven rule upward
+6. add real Bx/By/Bz magnetic-field measurement before claiming 3D field shape
+7. test state maintenance and differential-triggered reinjection
+8. test parser-state reconstruction
+9. only then integrate into the first volumetric cell network
 
 The architecture is explicitly designed so hardware devices, the virtual breadboard, and parser experiments teach the same later cell problem from different directions.
