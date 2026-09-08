@@ -1,26 +1,25 @@
-"""Locked Rabbit-Hopping address and system-communication translator.
+"""Alphabet adapter for the label-independent Rabbit-Hopping route core.
 
-Rabbit Hopping keeps route identity separate from numerical destination.
-The canonical arithmetic has three route receipts:
-
-* ORIGINAL: ``N * 2`` with ``K=0``;
-* DOUBLE_THEN_SHIFT: ``N * 2 + K`` for any integer ``K``;
-* SHIFT_THEN_DOUBLE: ``(N + K) * 2`` for any integer ``K``.
-
-``K`` is a signed top-offset/route step.  It is *not* the final connector.
-Every selected top independently receives one of the two mandatory wrappers
-``TOP-1`` or ``TOP+1``.  A complete receipt therefore preserves operation
-order even when two routes land on the same number.
-
-The legacy names ``ASCENDING_AFTER`` and ``ASCENDING_BEFORE`` remain Enum
-aliases so existing callers continue to work; they no longer imply that K
-must be positive.
+Alphabet-specific responsibilities live here: A-Z / Z-A rank orientation,
+whole-run Mirror Gate layout, and coupled logical up/down inversion. Route
+arithmetic itself comes from ``rabbit_hop_core`` so alphabet, music, and later
+lattice/memory adapters literally use the same implementation.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from enum import Enum, IntEnum
+from enum import Enum
+
+from One_Wave_Bench.brain.rabbit_hop_core import (
+    MirrorPolarity,
+    NumericRouteReceipt,
+    RouteFamily,
+    TraversalDirection,
+    WrapperSide,
+    numeric_coordinate,
+    recover_source_rank as recover_numeric_source_rank,
+)
 
 
 class AlphabetOrientation(str, Enum):
@@ -51,34 +50,9 @@ class AlphabetMirrorLayout(str, Enum):
         return forward[::-1], forward
 
 
-class MirrorPolarity(IntEnum):
-    NEGATIVE = -1
-    POSITIVE = 1
-
-
-class RouteFamily(str, Enum):
-    ORIGINAL = "N*2"
-    DOUBLE_THEN_SHIFT = "N*2+K"
-    SHIFT_THEN_DOUBLE = "(N+K)*2"
-
-    # Backward-compatible aliases.  These names predate signed K support.
-    ASCENDING_AFTER = "N*2+K"
-    ASCENDING_BEFORE = "(N+K)*2"
-
-
-class WrapperSide(IntEnum):
-    LOWER = -1
-    UPPER = 1
-
-
-class TraversalDirection(str, Enum):
-    FORWARD = "forward"
-    REVERSE = "reverse"
-
-
 @dataclass(frozen=True, slots=True)
 class RabbitHopCoordinate:
-    """One complete ``source | top | wrapper`` route receipt."""
+    """One alphabet identity plus a complete numeric route receipt."""
 
     letter: str
     alphabet_orientation: AlphabetOrientation
@@ -142,19 +116,18 @@ def mirrored_alphabet_runs(layout: AlphabetMirrorLayout) -> tuple[str, int, str]
     return left, 0, right
 
 
-def _validate_route_k(route_family: RouteFamily, k: int) -> None:
-    if not isinstance(k, int):
-        raise TypeError("K must be an integer")
-    if route_family is RouteFamily.ORIGINAL and k != 0:
-        raise ValueError("the original N*2 route has no offset; use K=0")
-
-
-def _unsigned_top(source_rank: int, route_family: RouteFamily, k: int) -> int:
-    if route_family is RouteFamily.ORIGINAL:
-        return source_rank * 2
-    if route_family is RouteFamily.DOUBLE_THEN_SHIFT:
-        return source_rank * 2 + k
-    return (source_rank + k) * 2
+def _to_numeric(record: RabbitHopCoordinate) -> NumericRouteReceipt:
+    return NumericRouteReceipt(
+        source_rank=record.source_rank,
+        polarity=record.polarity,
+        route_family=record.route_family,
+        k=record.k,
+        wrapper=record.wrapper,
+        traversal=record.traversal,
+        top_address=record.top_address,
+        wrapper_address=record.wrapper_address,
+        vertical_sign=record.alphabet_orientation.vertical_sign,
+    )
 
 
 def coordinate(
@@ -167,30 +140,29 @@ def coordinate(
     wrapper: WrapperSide = WrapperSide.UPPER,
     traversal: TraversalDirection = TraversalDirection.FORWARD,
 ) -> RabbitHopCoordinate:
-    """Produce one complete address packet while preserving its route.
+    """Translate one alphabet source through a complete Rabbit-Hop route."""
 
-    The top is computed first from the route and signed integer K.  The wrapper
-    is then applied as a separate +/-1 operation.  This distinction is part of
-    the receipt and must not be collapsed.
-    """
-
-    _validate_route_k(route_family, k)
     rank = alphabet_rank(letter, alphabet_orientation)
-    top = _unsigned_top(rank, route_family, k)
-    sign = int(polarity)
-    return RabbitHopCoordinate(
-        letter=letter.upper(),
-        alphabet_orientation=alphabet_orientation,
+    numeric = numeric_coordinate(
+        rank,
         polarity=polarity,
         route_family=route_family,
         k=k,
         wrapper=wrapper,
         traversal=traversal,
-        source_rank=sign * rank,
-        top_address=sign * top,
-        wrapper_address=(
-            sign * (top + alphabet_orientation.vertical_sign * int(wrapper))
-        ),
+        vertical_sign=alphabet_orientation.vertical_sign,
+    )
+    return RabbitHopCoordinate(
+        letter=letter.upper(),
+        alphabet_orientation=alphabet_orientation,
+        polarity=numeric.polarity,
+        route_family=numeric.route_family,
+        k=numeric.k,
+        wrapper=numeric.wrapper,
+        traversal=numeric.traversal,
+        source_rank=numeric.source_rank,
+        top_address=numeric.top_address,
+        wrapper_address=numeric.wrapper_address,
     )
 
 
@@ -229,11 +201,7 @@ def offset_ladder(
     polarity: MirrorPolarity = MirrorPolarity.POSITIVE,
     traversal: TraversalDirection = TraversalDirection.FORWARD,
 ) -> tuple[tuple[RabbitHopCoordinate, RabbitHopCoordinate], ...]:
-    """Materialize an inclusive signed-K ladder for either offset route.
-
-    Example ``min_k=-3, max_k=3`` produces all seven tops around the reference:
-    ``...-3, -2, -1, 0, +1, +2, +3``.  Each top still has both wrappers.
-    """
+    """Materialize an inclusive signed-K ladder for either offset route."""
 
     if route_family is RouteFamily.ORIGINAL:
         raise ValueError("the original N*2 route has no K ladder")
@@ -313,29 +281,9 @@ def all_declared_routes(
 
 
 def recover_source_rank(record: RabbitHopCoordinate) -> int:
-    """Mechanically invert a complete receipt and recover the source rank."""
+    """Use the shared numeric inverse then enforce the alphabet domain 1..26."""
 
-    unsigned_wrapper = int(record.polarity) * record.wrapper_address
-    top = (
-        unsigned_wrapper
-        - record.alphabet_orientation.vertical_sign * int(record.wrapper)
-    )
-    if record.route_family is RouteFamily.ORIGINAL:
-        numerator = top
-    elif record.route_family is RouteFamily.DOUBLE_THEN_SHIFT:
-        # X_top = 2N + K  ->  N = (X_top-K)/2
-        numerator = top - record.k
-    else:
-        # X_top = 2(N+K)  ->  N = X_top/2-K
-        if top % 2:
-            raise ValueError("shift-then-double receipt has an invalid odd top")
-        rank = top // 2 - record.k
-        if not 1 <= rank <= 26:
-            raise ValueError("recovered alphabet rank is outside 1..26")
-        return rank
-    if numerator % 2:
-        raise ValueError("receipt cannot mechanically recover an integer rank")
-    rank = numerator // 2
+    rank = recover_numeric_source_rank(_to_numeric(record))
     if not 1 <= rank <= 26:
         raise ValueError("recovered alphabet rank is outside 1..26")
     return rank
