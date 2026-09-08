@@ -6,6 +6,7 @@ on:
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
+      - 'Virtual_Breadboard/test/flashlight-prototype.test.js'
       - 'Virtual_Breadboard/package.json'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   pull_request:
@@ -13,12 +14,13 @@ on:
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
+      - 'Virtual_Breadboard/test/flashlight-prototype.test.js'
       - 'Virtual_Breadboard/package.json'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   workflow_dispatch:
 
 jobs:
-  flashlight-calibration:
+  flashlight:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -35,3 +37,6 @@ jobs:
 
       - name: Run flashlight calibration pack
         run: node test/run_flashlight_calibration.js
+
+      - name: Run integrated flashlight prototype
+        run: node test/flashlight-prototype.test.js
