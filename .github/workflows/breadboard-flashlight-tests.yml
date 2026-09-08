@@ -1,0 +1,37 @@
+name: Virtual Breadboard - Flashlight Tests
+
+on:
+  push:
+    paths:
+      - 'Virtual_Breadboard/js/**'
+      - 'Virtual_Breadboard/test/flashlight-calibration/**'
+      - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
+      - 'Virtual_Breadboard/package.json'
+      - '.github/workflows/breadboard-flashlight-tests.yml'
+  pull_request:
+    paths:
+      - 'Virtual_Breadboard/js/**'
+      - 'Virtual_Breadboard/test/flashlight-calibration/**'
+      - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
+      - 'Virtual_Breadboard/package.json'
+      - '.github/workflows/breadboard-flashlight-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  flashlight-calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run flashlight calibration pack
+        run: node test/run_flashlight_calibration.js
