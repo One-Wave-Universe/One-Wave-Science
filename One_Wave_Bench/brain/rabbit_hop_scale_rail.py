@@ -1,24 +1,27 @@
 """Bounded 1-12 outward / 12-24 division rail for Rabbit Hopping.
 
-The rail is numerical and label-independent.  A musical-neck or alphabet
-adapter may label its addresses separately without redefining this topology.
+This is the locked scale-boundary adapter. The reusable signed-K arithmetic
+lives in ``rabbit_hop_core``; this file keeps the narrower historical rail:
+source ranks 1..12 project outward through ORIGINAL ``N*2`` and addresses
+12..24 route inward by exact division/shared-wrapper reconstruction.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import Enum, IntEnum
+from enum import Enum
+
+from One_Wave_Bench.brain.rabbit_hop_core import (
+    RouteFamily,
+    WrapperSide,
+    numeric_wrapper_pair,
+)
 
 
 FORWARD_SOURCE_MIN = 1
 FORWARD_SOURCE_MAX = 12
 DIVISION_ADDRESS_MIN = 12
 DIVISION_ADDRESS_MAX = 24
-
-
-class WrapperSide(IntEnum):
-    LOWER = -1
-    UPPER = 1
 
 
 class DivisionRole(str, Enum):
@@ -56,17 +59,22 @@ def forward_pair(source: int) -> tuple[ForwardPacket, ForwardPacket]:
 
     if not isinstance(source, int) or not FORWARD_SOURCE_MIN <= source <= FORWARD_SOURCE_MAX:
         raise ValueError("forward source must be an integer from 1 through 12")
-    top = source * 2
+    pair = numeric_wrapper_pair(source, route_family=RouteFamily.ORIGINAL)
     return tuple(
-        ForwardPacket(source, top, top + int(side), side)
-        for side in WrapperSide
+        ForwardPacket(
+            source=source,
+            top=record.top_address,
+            wrapper=record.wrapper_address,
+            wrapper_side=record.wrapper,
+        )
+        for record in pair
     )
 
 
 def division_candidates(address: int) -> tuple[DivisionCandidate, ...]:
     """Read an address from 12-24 back toward its exact 1-12 source(s).
 
-    Even addresses are doubled tops and divide directly by two.  Odd addresses
+    Even addresses are doubled tops and divide directly by two. Odd addresses
     are shared wrappers: ``address-1`` and ``address+1`` are the neighboring
     even tops, so division returns both connected sources without fractions.
     """
@@ -105,4 +113,3 @@ def division_rail() -> tuple[tuple[int, tuple[int, ...]], ...]:
         (address, tuple(candidate.source for candidate in division_candidates(address)))
         for address in range(DIVISION_ADDRESS_MIN, DIVISION_ADDRESS_MAX + 1)
     )
-
