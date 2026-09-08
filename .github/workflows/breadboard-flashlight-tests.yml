@@ -7,8 +7,11 @@ on:
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
       - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
+      - 'Virtual_Breadboard/test/regression-builds/**'
+      - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
+      - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   pull_request:
     paths:
@@ -16,8 +19,11 @@ on:
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
       - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
+      - 'Virtual_Breadboard/test/regression-builds/**'
+      - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
+      - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   workflow_dispatch:
 
@@ -39,6 +45,9 @@ jobs:
 
       - name: Run flashlight primitive calibration pack
         run: node test/run_flashlight_calibration.js
+
+      - name: Run balanced-cell / nerve / reference regressions
+        run: node test/run_regression_builds.js
 
       - name: Run conventional flashlight reference only
         run: node test/conventional-flashlight-reference.test.js
