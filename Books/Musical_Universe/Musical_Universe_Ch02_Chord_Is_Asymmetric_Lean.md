@@ -22,10 +22,11 @@ E-511 already wrote the Gray procedure, then translated it:
 
 Two checked Gray data points (A as root, values corrected against E-510 — original build had sign and side backwards):
 
-| Gray name | Window `(P_compress, P_expr)` |
+| Gray name | Window jamb |
 |---|---|
-| A major | `(-5, +4)` |
-| A minor | `(-5, +3)` |
+| A major | `-5(0)+4` |
+| A minor | `-5(0)+3` |
+| balanced toy | `-4(0)+4` |
 
 The fifth sits at −5 both times. The third moves: +4 major, +3 minor. One side holds, one side shifts. Two points only. Not a law.
 
@@ -39,12 +40,21 @@ A “chord” in this lane is **more than one address sounding at once**, then r
 
 Re-center is not a new particle. It is E-511: pick a root wall, slide that wall to hold, read everyone else as signed pull.
 
+Write the window in the same grammar as the live choice `-1(0)+1` and the scale jamb `1(0)1`:
+
 ```
-root at (0)
-compress side  <——  (0)  ——>  express side
+P- (0) P+
 ```
 
-If the two sides are equal in magnitude, the set is balanced. That is rare and it is a result, not a virtue.
+Balanced example the user named:
+
+```
+-4 (0) +4
+```
+
+Compress arm left. Hold in the middle. Express arm right. The `+` lives on the express arm so the sign cannot hide inside the digit.
+
+If `|P-| = |P+|`, the set is balanced (`L = 0`). That is a result, not a virtue.
 
 If they are not equal, the set **leans**. That lean *is* the chord.
 
@@ -60,10 +70,26 @@ Power set (root + one side only) has **no opposite pull to sum against**. E-513 
 
 ## Mathematics
 
-Window, from E-512, after E-511 re-center:
+Window, from E-512, after E-511 re-center. Pair form and jamb form are the same object:
 
 $$
-W = (P_{-},\, P_{+})
+W = (P_{-},\, P_{+}) = P_{-}\,(0)\,P_{+}
+$$
+
+Balanced example:
+
+$$
+-4\,(0)\,+4
+$$
+
+Checked receipts in jamb form:
+
+$$
+\text{A major} = -5\,(0)\,+4
+$$
+
+$$
+\text{A minor} = -5\,(0)\,+3
 $$
 
 Lean, from E-513, generalized past a single pair:
@@ -144,11 +170,11 @@ A chord is not a stack. It is a hold with uneven arms. One side pulls harder. Th
 
 Operator chain:
 
-`E-510 clock → E-511 re-center to (0) → E-512 window (P−, P+) → E-513 L`
+`E-510 clock → E-511 re-center to (0) → E-512 window P-(0)P+ → E-513 L`
 
-Worked (Gray stickers, two points only):
+Worked:
 
-- A major → \(W=(-5,+4)\) → \(L=1\) backward  
-- A minor → \(W=(-5,+3)\) → \(L=2\) backward  
-
-Address reminder from Ch1: E# / C# are polarity on one pyramid. After re-center they become signed positions around hold. Still one wave. Still no devil interval running the show.
+- A major → `-5(0)+4` → \(L=1\) backward  
+- A minor → `-5(0)+3` → \(L=2\) backward  
+- balanced → `-4(0)+4` → \(L=0\)  
+- one-arm → `-5(0)` → UNDEFINED

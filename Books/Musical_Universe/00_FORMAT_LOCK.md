@@ -20,7 +20,8 @@ One-Wave pair law:
 - Flip = Compression (B-204)  
 - Face ↔ Flip = Mirror (B-205) through the plane  
 - Opposite pyramids = midline / axis pair (the 3)  
-- Rest / hold = `1(0)1`
+- Rest / hold = `1(0)1`  
+- Chord window = `P-(0)P+`. Balanced lean example: `-4(0)+4`. Uneven arms *are* the chord.
 
 That is one wave. Two views of one wall. Not two enemy notes.
 
@@ -42,7 +43,7 @@ Optional ninth block, after Closing, labeled **Score Stave** — pyramid + polar
 ## Domain tags (copy onto every page that uses a number)
 
 | glyph | geometry | clock | gate / brain | pack |
-|---|---|---|---|---|
+|---|---|---|---|
 | 3 | axis pairs in the hex plane | midlines (opposite pyramids) | trit `{+1,0,-1}` | — |
 | 6 | D-408 directed neighbors / pyramids | six faces (Expression sheet) | 7-cluster ring | in-plane NN |
 | 12 | face×flip; D-409 12-NN (do not smash with clock) | E-510 slots / M4 tick | two-Rubik flattened story | fcc-12 |
