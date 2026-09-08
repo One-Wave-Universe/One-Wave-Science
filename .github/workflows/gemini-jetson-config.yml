@@ -1,0 +1,76 @@
+name: Gemini Jetson Config
+
+on:
+  push:
+    paths:
+      - 'GEMINI.md'
+      - 'GEMINI_TASK_TEMPLATE.md'
+      - 'JETSON_GEMINI_MINIMAL.md'
+      - '.gemini/settings.json'
+      - '.geminiignore'
+      - 'scripts/install_gemini_jetson.sh'
+      - 'scripts/gemini_min.sh'
+      - '.github/workflows/gemini-jetson-config.yml'
+  pull_request:
+    paths:
+      - 'GEMINI.md'
+      - 'GEMINI_TASK_TEMPLATE.md'
+      - 'JETSON_GEMINI_MINIMAL.md'
+      - '.gemini/settings.json'
+      - '.geminiignore'
+      - 'scripts/install_gemini_jetson.sh'
+      - 'scripts/gemini_min.sh'
+      - '.github/workflows/gemini-jetson-config.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate shell syntax
+        run: |
+          bash -n scripts/install_gemini_jetson.sh
+          bash -n scripts/gemini_min.sh
+
+      - name: Validate low-token settings
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('.gemini/settings.json').read_text())
+          assert data['model']['name'] == 'flash-lite'
+          assert data['model']['maxSessionTurns'] <= 6
+          assert data['model']['compressionThreshold'] <= 0.25
+          assert data['context']['fileFiltering']['enableRecursiveFileSearch'] is False
+          assert data['experimental']['autoMemory'] is False
+          assert data['privacy']['usageStatisticsEnabled'] is False
+          assert data['security']['disableYoloMode'] is True
+          assert data['contextManagement']['historyWindow']['maxTokens'] <= 12000
+          assert data['contextManagement']['messageLimits']['normalMaxTokens'] <= 1200
+          print('settings: PASS')
+          PY
+
+      - name: Smoke test wrapper without cloud call
+        run: |
+          mkdir -p .ci-bin
+          cat > .ci-bin/gemini <<'SH'
+          #!/usr/bin/env bash
+          printf '%s\n' "$@"
+          SH
+          chmod +x .ci-bin/gemini
+          PATH="$PWD/.ci-bin:$PATH" bash scripts/gemini_min.sh ask "CI bounded smoke" > /tmp/gemini-args.txt
+          grep -Fx -- '--extensions' /tmp/gemini-args.txt
+          grep -Fx -- 'none' /tmp/gemini-args.txt
+          grep -Fx -- '--model' /tmp/gemini-args.txt
+          grep -Fx -- 'flash-lite' /tmp/gemini-args.txt
+          grep -Fx -- '--output-format' /tmp/gemini-args.txt
+          grep -Fx -- 'json' /tmp/gemini-args.txt
+
+      - name: Confirm secret patterns are ignored
+        run: |
+          grep -Fx '.gemini/.env' .geminiignore
+          grep -Fx '.env' .geminiignore
