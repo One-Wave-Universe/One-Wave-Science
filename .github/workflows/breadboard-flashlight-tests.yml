@@ -6,16 +6,18 @@ on:
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
-      - 'Virtual_Breadboard/test/flashlight-prototype.test.js'
+      - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
       - 'Virtual_Breadboard/package.json'
+      - 'One_Wave_Bench/flashlight/**'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   pull_request:
     paths:
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
-      - 'Virtual_Breadboard/test/flashlight-prototype.test.js'
+      - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
       - 'Virtual_Breadboard/package.json'
+      - 'One_Wave_Bench/flashlight/**'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   workflow_dispatch:
 
@@ -35,8 +37,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Run flashlight calibration pack
+      - name: Run flashlight primitive calibration pack
         run: node test/run_flashlight_calibration.js
 
-      - name: Run integrated flashlight prototype
-        run: node test/flashlight-prototype.test.js
+      - name: Run conventional flashlight reference only
+        run: node test/conventional-flashlight-reference.test.js
