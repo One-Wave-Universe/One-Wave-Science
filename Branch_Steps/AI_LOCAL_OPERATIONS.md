@@ -1,0 +1,21 @@
+# AI local operator guide branch-step
+
+- MAIN GOAL: reliable Field/Void coding engine for real software and the internal world.
+- WHY: workers need executable local instructions and shared canon rather than guessed setup.
+- CURRENT STEP: add an operator guide; no runtime or physics changes.
+- HARD START: clean canonical main verified at ea4e9ff2c36cad64b1461eacde53eb863fc80a54; installed CLI and authoring docs inspected.
+- ROOT: /home/Scales/One-Wave-Science.
+- BRANCH: codex/ai-local-operations.
+- REFERENCES: AGENTS.md, JETSON_OPENCLAW_RUNTIME.md, BRANCH_STEP_PROJECT_TEMPLATE.md, AI_CANONICAL_START_HERE.md, architecture roadmap, UPDATED_44 and installed OpenClaw/plugin-creator documentation.
+- ALLOWED FILES: AI_LOCAL_OPERATIONS.md, Branch_Steps/AI_LOCAL_OPERATIONS.md.
+- PROTECTED: all source, existing branch steps, simulations, Terminal Bridge, media and runtime configuration.
+- EXACT ACTION: add instructions for startup, reference access, bounded work, plugins, process comparison and Physics District evidence.
+- SUCCESS: documented commands match installed tools, no claims of unverified runtime completion, independent review permits documentation.
+- TESTS: inspected actual CLI help, Makefile, plugin docs; git diff --check and allowed-file status check after copy.
+- FIELD NOTES: distinguish installed components from proposed world behavior; correct older agent exec example in this guide only.
+- VOID PRE-OVERSIGHT: independent review_guide agent returned ALLOW after reading proposed document; recommended recording canon commit, now included.
+- PROGRESS: documentation prepared and reviewed; installation and final whitespace/scope check follow.
+- ATTEMPT: approach A, 1/3; no failed approaches.
+- REFLECTION: verified installed commands matter; arithmetic fixtures and storage tests do not establish physical theory. No protected executable behavior changes.
+- HARD STOP: documentation present and scope/whitespace verified. No runtime implementation, plugin installation or disk action in this step.
+- HANDOFF: independently review future candidate code and test evidence under its own branch-step. This documentation does not prove a coding worker completed an assignment.
