@@ -15,6 +15,7 @@ from One_Wave_Bench.brain.rabbit_hop_alphabet import (
     connection_addresses,
     coordinate,
     mirrored_alphabet_runs,
+    offset_ladder,
     recover_source_rank,
     shared_original_bridge,
     validate_coordinate,
@@ -24,15 +25,19 @@ from One_Wave_Bench.brain.rabbit_hop_alphabet import (
 
 
 class RabbitHopAlphabetTests(unittest.TestCase):
-    def test_exactly_three_current_route_families_are_declared(self):
+    def test_three_canonical_route_families_are_declared(self):
         self.assertEqual(
             set(RouteFamily),
             {
                 RouteFamily.ORIGINAL,
-                RouteFamily.ASCENDING_AFTER,
-                RouteFamily.ASCENDING_BEFORE,
+                RouteFamily.DOUBLE_THEN_SHIFT,
+                RouteFamily.SHIFT_THEN_DOUBLE,
             },
         )
+
+    def test_legacy_route_names_are_compatible_aliases(self):
+        self.assertIs(RouteFamily.ASCENDING_AFTER, RouteFamily.DOUBLE_THEN_SHIFT)
+        self.assertIs(RouteFamily.ASCENDING_BEFORE, RouteFamily.SHIFT_THEN_DOUBLE)
 
     def test_original_route_is_separate_and_has_both_wrappers(self):
         pair = wrapper_pair("A")
@@ -40,7 +45,63 @@ class RabbitHopAlphabetTests(unittest.TestCase):
         self.assertTrue(all(packet.route_family is RouteFamily.ORIGINAL for packet in pair))
         self.assertTrue(all(packet.k == 0 for packet in pair))
 
-    def test_after_double_ladder_ascends_k_from_one(self):
+    def test_double_then_shift_has_complete_negative_zero_positive_ladder(self):
+        ladder = offset_ladder(
+            "A", route_family=RouteFamily.DOUBLE_THEN_SHIFT, min_k=-3, max_k=3
+        )
+        self.assertEqual(
+            [[packet.tuple for packet in pair] for pair in ladder],
+            [
+                [(1, -1, -2), (1, -1, 0)],
+                [(1, 0, -1), (1, 0, 1)],
+                [(1, 1, 0), (1, 1, 2)],
+                [(1, 2, 1), (1, 2, 3)],
+                [(1, 3, 2), (1, 3, 4)],
+                [(1, 4, 3), (1, 4, 5)],
+                [(1, 5, 4), (1, 5, 6)],
+            ],
+        )
+
+    def test_shift_then_double_has_complete_negative_zero_positive_ladder(self):
+        ladder = offset_ladder(
+            "A", route_family=RouteFamily.SHIFT_THEN_DOUBLE, min_k=-3, max_k=3
+        )
+        self.assertEqual(
+            [[packet.tuple for packet in pair] for pair in ladder],
+            [
+                [(1, -4, -5), (1, -4, -3)],
+                [(1, -2, -3), (1, -2, -1)],
+                [(1, 0, -1), (1, 0, 1)],
+                [(1, 2, 1), (1, 2, 3)],
+                [(1, 4, 3), (1, 4, 5)],
+                [(1, 6, 5), (1, 6, 7)],
+                [(1, 8, 7), (1, 8, 9)],
+            ],
+        )
+
+    def test_top_offset_and_wrapper_are_separate_operations(self):
+        pair = wrapper_pair(
+            "A", route_family=RouteFamily.DOUBLE_THEN_SHIFT, k=3
+        )
+        self.assertEqual(pair[0].top_address, 5)
+        self.assertEqual([packet.wrapper_address for packet in pair], [4, 6])
+        self.assertEqual(pair[0].k, 3)
+        self.assertIs(pair[0].wrapper, WrapperSide.LOWER)
+        self.assertIs(pair[1].wrapper, WrapperSide.UPPER)
+
+    def test_signed_k_is_allowed_on_both_offset_routes_but_not_original(self):
+        with self.assertRaises(ValueError):
+            wrapper_pair("A", route_family=RouteFamily.ORIGINAL, k=1)
+        with self.assertRaises(ValueError):
+            wrapper_pair("A", route_family=RouteFamily.ORIGINAL, k=-1)
+        for family in (
+            RouteFamily.DOUBLE_THEN_SHIFT,
+            RouteFamily.SHIFT_THEN_DOUBLE,
+        ):
+            for k in (-20, -3, -2, -1, 0, 1, 2, 3, 20):
+                validate_wrapper_pair(wrapper_pair("K", route_family=family, k=k))
+
+    def test_historical_positive_ladder_helper_still_works(self):
         ladder = ascending_ladder(
             "A", route_family=RouteFamily.ASCENDING_AFTER, max_k=3
         )
@@ -53,29 +114,10 @@ class RabbitHopAlphabetTests(unittest.TestCase):
             ],
         )
 
-    def test_before_double_ladder_ascends_k_from_one(self):
-        ladder = ascending_ladder(
-            "A", route_family=RouteFamily.ASCENDING_BEFORE, max_k=3
-        )
-        self.assertEqual(
-            [[packet.tuple for packet in pair] for pair in ladder],
-            [
-                [(1, 4, 3), (1, 4, 5)],
-                [(1, 6, 5), (1, 6, 7)],
-                [(1, 8, 7), (1, 8, 9)],
-            ],
-        )
-
-    def test_k_rules_keep_original_and_both_ascending_routes_distinct(self):
-        with self.assertRaises(ValueError):
-            wrapper_pair("A", route_family=RouteFamily.ORIGINAL, k=1)
-        for family in (RouteFamily.ASCENDING_AFTER, RouteFamily.ASCENDING_BEFORE):
-            with self.assertRaises(ValueError):
-                wrapper_pair("A", route_family=family, k=0)
-
-    def test_same_top_retains_two_distinct_route_receipts(self):
-        after = wrapper_pair("A", route_family=RouteFamily.ASCENDING_AFTER, k=2)
-        before = wrapper_pair("A", route_family=RouteFamily.ASCENDING_BEFORE, k=1)
+    def test_equal_destination_keeps_operation_order_receipt(self):
+        # 2N+2 == 2(N+1) for N=1, but the route that got there is not erased.
+        after = wrapper_pair("A", route_family=RouteFamily.DOUBLE_THEN_SHIFT, k=2)
+        before = wrapper_pair("A", route_family=RouteFamily.SHIFT_THEN_DOUBLE, k=1)
         self.assertEqual([p.tuple for p in after], [p.tuple for p in before])
         self.assertNotEqual(after[0].route_family, before[0].route_family)
         self.assertNotEqual(after[0].k, before[0].k)
@@ -89,10 +131,10 @@ class RabbitHopAlphabetTests(unittest.TestCase):
                 self.assertNotEqual(packet.top_parity, packet.wrapper_parity)
 
     def test_wrappers_connect_tops_across_routes_and_directions(self):
-        top_four = wrapper_pair("A", route_family=RouteFamily.ASCENDING_BEFORE, k=1)
+        top_four = wrapper_pair("A", route_family=RouteFamily.SHIFT_THEN_DOUBLE, k=1)
         top_five = wrapper_pair(
             "A",
-            route_family=RouteFamily.ASCENDING_AFTER,
+            route_family=RouteFamily.DOUBLE_THEN_SHIFT,
             k=3,
             traversal=TraversalDirection.REVERSE,
         )
@@ -128,11 +170,11 @@ class RabbitHopAlphabetTests(unittest.TestCase):
         )
 
     def test_polarity_mirrors_every_numeric_field(self):
-        positive = wrapper_pair("B", route_family=RouteFamily.ASCENDING_AFTER, k=3)
+        positive = wrapper_pair("B", route_family=RouteFamily.DOUBLE_THEN_SHIFT, k=-3)
         negative = wrapper_pair(
             "B",
-            route_family=RouteFamily.ASCENDING_AFTER,
-            k=3,
+            route_family=RouteFamily.DOUBLE_THEN_SHIFT,
+            k=-3,
             polarity=MirrorPolarity.NEGATIVE,
         )
         self.assertEqual(
@@ -143,8 +185,8 @@ class RabbitHopAlphabetTests(unittest.TestCase):
     def test_route_reversal_does_not_erase_other_receipt_fields(self):
         packet = coordinate(
             "K",
-            route_family=RouteFamily.ASCENDING_AFTER,
-            k=4,
+            route_family=RouteFamily.DOUBLE_THEN_SHIFT,
+            k=-4,
             wrapper=WrapperSide.LOWER,
         )
         opposed = packet.opposed()
@@ -153,13 +195,13 @@ class RabbitHopAlphabetTests(unittest.TestCase):
         self.assertEqual(opposed.k, packet.k)
         self.assertNotEqual(opposed.traversal, packet.traversal)
 
-    def test_mechanical_receipt_recovery_only_division_role_stays_open(self):
+    def test_mechanical_receipt_recovery_handles_signed_offsets(self):
         for orientation in AlphabetOrientation:
             for polarity in MirrorPolarity:
                 for family, values in (
                     (RouteFamily.ORIGINAL, (0,)),
-                    (RouteFamily.ASCENDING_AFTER, (1, 4, 20)),
-                    (RouteFamily.ASCENDING_BEFORE, (1, 4, 20)),
+                    (RouteFamily.DOUBLE_THEN_SHIFT, (-20, -3, -1, 0, 1, 4, 20)),
+                    (RouteFamily.SHIFT_THEN_DOUBLE, (-20, -3, -1, 0, 1, 4, 20)),
                 ):
                     for k in values:
                         for packet in wrapper_pair(
