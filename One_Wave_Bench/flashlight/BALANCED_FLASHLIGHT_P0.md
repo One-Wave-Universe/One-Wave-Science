@@ -140,6 +140,64 @@ Prefer reusable assortment inventory over one-off purchases where sensible:
 
 Cheap legacy MOSFET assortments may contain parts that do not fully enhance at 3.3/5 V gate drive. Verify gate-drive requirements before treating a part as a low-voltage switch.
 
+## Virtual Breadboard status — 2026-09-08
+
+**SIMULATION RESULT — not a physical bench result.**
+
+The Virtual Breadboard now has two flashlight test levels on `main`:
+
+```text
+Virtual_Breadboard/test/flashlight-calibration/
+Virtual_Breadboard/test/run_flashlight_calibration.js
+Virtual_Breadboard/test/flashlight-prototype.test.js
+```
+
+The calibration pack independently checks:
+
+1. white LED + real current limiter;
+2. MOSFET-switched LED;
+3. real L/R coil step response;
+4. flyback-clamped coil;
+5. reversible H-bridge inductive load.
+
+The integrated prototype then joins these already-qualified circuit primitives into one live simulation containing:
+
+```text
+5 V source
+  -> buffered CENTER reference
+  -> storage capacitor
+  -> Schmitt hysteresis
+  -> PMOS reinjection gate
+  -> current-limited white LED load
+```
+
+The integrated simulation must prove all of the following before CI passes:
+
+- storage does not collapse below 3.2 V;
+- storage remains bounded below 4.6 V rather than rail-locking;
+- hysteretic reinjection repeatedly cycles across the storage band;
+- the PMOS has both conducting and disconnected/coast intervals;
+- the white LED remains on through the coast interval;
+- average LED current remains nontrivial for the modeled indicator-class LED;
+- buffered CENTER remains a real midpoint under the integrated load;
+- the solver reports no numerical failure.
+
+The dedicated GitHub Actions workflow is:
+
+```text
+.github/workflows/breadboard-flashlight-tests.yml
+```
+
+It runs both the five-circuit calibration pack and the integrated prototype on every relevant change.
+
+### Why the integrated simulator starts at 5 V
+
+The Virtual Breadboard currently models an SN74HC14-class Schmitt trigger whose declared operating supply is 2–6 V. Driving that model directly from the P0 9 V battery would be an invalid circuit and must not be hidden by the simulator.
+
+Therefore the current successful integrated run proves the **reinjection/light/control topology at a valid 5 V control rail**. It does **not** yet prove the complete 9 V P0 source architecture.
+
+The next 9 V simulation step is to add a physically valid 9 V -> logic-rail supply/regulator path (or select a hysteretic controller genuinely rated for the 9 V rail), then repeat the exact same checks and add the matched-brightness continuous-drive energy comparison.
+
 ## Done for P0
 
 The flashlight makes useful light, remains electrically stable around its center reference, performs measurable threshold-controlled reinjection, projects a momentary battery bar display, and produces a complete runtime/energy comparison against the conventional reference.
