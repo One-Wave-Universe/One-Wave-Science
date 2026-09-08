@@ -86,6 +86,62 @@ Candidate progression:
 5. prove lower threshold -> reinject -> upper threshold -> disconnect;
 6. compare source energy against continuous drive at matched useful output.
 
+## Bidirectional MOSFET nerve gates
+
+The preferred switching primitive for the balanced path is a **bidirectional
+MOSFET nerve gate**, not a one-way digital logic switch.
+
+A practical first implementation is a back-to-back MOSFET pair. Two discrete
+MOSFETs are oriented so their body diodes oppose each other. When the channels
+are OFF, the pair blocks current in both directions. When both channels are ON,
+the pair provides a low-resistance conductive path in either direction.
+
+For an N-channel source-to-source example:
+
+```text
+LEFT ---- D  QL  S ----+---- S  QR  D ---- RIGHT
+                       |
+                 common local source
+
+opposed body diodes -> bilateral blocking while OFF
+both gates enabled -> bilateral conduction while ON
+```
+
+The exact N/P orientation can change for a high-side or low-side location; the
+functional requirement does not:
+
+```text
+OFF  = block either polarity across the gate
+ON   = pass either polarity with low channel loss
+```
+
+This is why the pair is treated as a **nerve gate**: it does not decide the
+state. It only opens/closes a local route when the continuously measured state
+relative to CENTER tells it to.
+
+Candidate uses in the flashlight/cell:
+
+- reinjection path between storage and source;
+- reversible handoff between + / CENTER / - stages;
+- TC-AC out-and-back routing;
+- selecting / isolating X, Y, and later Z magnetic-drive axes;
+- isolating held magnetic state so it is not continuously powered.
+
+Gate drive must remain reference-resolved. A floating MOSFET gate is not a
+valid state. For the eventual physical build, gate-source voltage and absolute
+maximum ratings must be checked for both polarities before calling a topology
+bench-safe.
+
+The Virtual Breadboard should prove this primitive separately before the
+integrated flashlight uses it:
+
+1. OFF blocks LEFT->RIGHT;
+2. OFF blocks RIGHT->LEFT;
+3. ON conducts LEFT->RIGHT;
+4. ON conducts RIGHT->LEFT;
+5. the same pair is used for both directions rather than swapping in a hidden
+   directional switch.
+
 ## No binary controller IC in the prototype control path
 
 Do not use an SN74/logic gate, binary MCU state machine, or comparator package
@@ -96,7 +152,7 @@ calibration references, but they are not the One-Wave flashlight controller.
 The intended behavior comes from:
 
 - balanced differential electrical state;
-- MOSFET conduction thresholds;
+- MOSFET conduction thresholds and bidirectional MOSFET nerve gates;
 - capacitance / inductance / coupled winding dynamics;
 - magnetic remanence / coercivity;
 - phase relationships;
@@ -193,6 +249,9 @@ same CENTER.
 Purpose: prove reversible path, phase, and zero crossing without losing the
 reference.
 
+Bidirectional MOSFET nerve gates are the preferred route-isolation primitive
+for this handoff because the AC path must genuinely support both polarities.
+
 ### QC-RC — coordinated rotation
 
 Coordinate multiple independently driven phase relationships into a rotating
@@ -219,7 +278,7 @@ Already available and tested in the VBB:
 
 - buffered virtual ground;
 - differential +/CENTER/- measurement;
-- MOSFET threshold switching;
+- discrete MOSFET threshold switching;
 - capacitor and inductor storage;
 - H-bridge reversible inductive drive;
 - coupled multi-winding toroid model;
@@ -227,8 +286,9 @@ Already available and tested in the VBB:
 - square-loop magnetic memory core with persistent remanent state;
 - MTJ/TMR-style quadrature electrical sensor interface.
 
-Still missing as of this lock:
+Still to prove explicitly as of this lock:
 
+- back-to-back MOSFET pair as a bilateral nerve-gate regression primitive;
 - a true spatial magnetic-field solver / Bx-By-Bz field-vector measurement;
 - a complete magnetic-state-driven reinjection circuit proving LOW -> refill
   -> HIGH -> disconnect without a binary controller IC;
@@ -246,15 +306,17 @@ It must not be labeled the One-Wave balanced flashlight prototype.
 
 1. Same CENTER reference survives every stage.
 2. BC-DC differential state is stable and asymmetric loading is visible.
-3. MOSFET/storage bucket decays from a held state without a timer.
-4. LOW state produces reinjection.
-5. Reinjection raises state through a distinct HIGH threshold.
-6. Source disconnects and a measurable coast interval exists.
-7. Stored state remains after the user's non-mechanical input is removed.
-8. X color state and Y brightness state remain independently measurable.
-9. TC-AC crosses the same CENTER with measurable phase.
-10. QC-RC produces a rotating electrical drive vector.
-11. Only after Bx/By/Bz capability exists may a 3D magnetic-field trajectory
+3. Bidirectional MOSFET nerve gate blocks both directions OFF and conducts both
+   directions ON.
+4. MOSFET/storage bucket decays from a held state without a timer.
+5. LOW state produces reinjection.
+6. Reinjection raises state through a distinct HIGH threshold.
+7. Source disconnects and a measurable coast interval exists.
+8. Stored state remains after the user's non-mechanical input is removed.
+9. X color state and Y brightness state remain independently measurable.
+10. TC-AC crosses the same CENTER with measurable phase.
+11. QC-RC produces a rotating electrical drive vector.
+12. Only after Bx/By/Bz capability exists may a 3D magnetic-field trajectory
     be claimed or classified.
-12. Compare energy/runtime against the conventional reference at matched useful
+13. Compare energy/runtime against the conventional reference at matched useful
     output.
