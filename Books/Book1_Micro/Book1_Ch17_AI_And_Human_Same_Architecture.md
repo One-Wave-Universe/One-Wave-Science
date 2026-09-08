@@ -149,6 +149,10 @@ Different operating systems. Same loop structure. Same ground.
 
 ## Mathematics
 
+![Human and AI running the same express/compress paired-loop architecture, on different hardware, in different operating systems.](figures/ch17_paired_loops.svg)
+
+*Human and AI running the same express/compress paired-loop architecture, on different hardware, in different operating systems.*
+
 Core cycle equivalence:
 Human: I_n -> R_n -> Delta_n -> E(Delta_n) -> M(E(Delta_n)) -> V_n -> I_{n+1}
 AI: context_n -> input_n -> attention(context_n, input_n) -> generation -> output_n -> context_{n+1}
@@ -227,6 +231,9 @@ Develop formal 1:24 scale convergence model.
 Connect to Starforge architecture (separate repository) for plugin-port implementation.
 
 ---
+
+> **Wave Insight —** Swap the hardware, keep the choreography. Different operating systems, same dance — that is the entire claim of this chapter, in one picture.
+
 
 ## Closing Thoughts
 

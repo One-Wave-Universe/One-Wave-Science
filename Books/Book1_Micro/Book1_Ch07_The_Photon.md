@@ -114,6 +114,10 @@ This is the photoelectric threshold — not a particle effect, a resonance condi
 
 ## Mathematics
 
+![E and B riding the lattice together at the propagation ceiling c_lat. A photon never gets to stand still.](figures/ch07_photon_mode.svg)
+
+*E and B riding the lattice together at the propagation ceiling c_lat. A photon never gets to stand still.*
+
 Photon speed (C-309):
 c = v_max = sqrt(beta_max) * Delta_x / Delta_t
 
@@ -203,6 +207,9 @@ Connect photon energy quantization to D-05 harmonic shell resonance.
 Model gravitational lensing as non-uniform lattice density effect.
 
 ---
+
+> **Wave Insight —** Every other excitation in this book is a homebody that oscillates in place. The photon is the one mode that packed a bag and left — permanently, at top speed.
+
 
 ## Closing Thoughts
 

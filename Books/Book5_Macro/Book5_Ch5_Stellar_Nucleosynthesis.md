@@ -92,6 +92,10 @@ supernova environment specifically, not stellar cores generally).
 
 ## Mathematics
 
+![Core compression climbing through each fusion threshold in turn — H to He to C to O to Si to Fe — one stage unlocking the next.](figures/ch5_nucleosynthesis_staircase.svg)
+
+*Core compression climbing through each fusion threshold in turn — H to He to C to O to Si to Fe — one stage unlocking the next.*
+
 Inherited directly from Ch7 (real, unmodified):
 Nuclear binding energy = total surface energy reduction from
 interlocking braids.
@@ -165,6 +169,9 @@ Connect stage-transition compression thresholds to real fusion
 temperature/pressure data as a quantitative check.
 
 ---
+
+> **Wave Insight —** A star is basically running a video game where you cannot skip levels. Burn through hydrogen, hit the next threshold, unlock helium; the boss fight at iron is the one you cannot win, and that is the supernova waiting next door.
+
 
 ## Closing Thoughts
 

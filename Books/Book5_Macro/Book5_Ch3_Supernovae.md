@@ -99,6 +99,10 @@ question this chapter does not attempt to replace.
 
 ## Mathematics
 
+![The carried mismatch |M_i| rising as the restoring capacity R_i falls through stellar decline — the crossing point is the Break Condition, not a mysterious detonation.](figures/ch3_break_condition.svg)
+
+*The carried mismatch |M_i| rising as the restoring capacity R_i falls through stellar decline — the crossing point is the Break Condition, not a mysterious detonation.*
+
 Break Condition, inherited directly (B-209, real, not modified here):
 Crossing condition: |M_i| > R_i
 
@@ -164,6 +168,9 @@ If a One-Wave nucleosynthesis account is ever attempted, it belongs in
 its own chapter — do not fold it into this one after the fact.
 
 ---
+
+> **Wave Insight —** A supernova is not the star losing a fight against nothing. It is the exact, calculable moment the restoring response finally runs out of capacity to carry what the star is asking it to carry.
+
 
 ## Closing Thoughts
 

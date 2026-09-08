@@ -126,6 +126,10 @@ Memory is not fixed storage. Memory is a living recursive mode.
 
 ## Mathematics
 
+![A routine — the full unrolled trajectory — compressed down to a single stored handle, ready to unpack on recall.](figures/ch16_handle_and_routine.svg)
+
+*A routine — the full unrolled trajectory — compressed down to a single stored handle, ready to unpack on recall.*
+
 Inertial memory (A-07):
 Delta_psi_n = psi_n - psi_{n-1}
 Two-step memory: the field remembers the last two states.
@@ -225,6 +229,9 @@ Develop compression ratio metric for Persistent Mode memory.
 Connect to AI memory architecture (Starforge, Chapter 17).
 
 ---
+
+> **Wave Insight —** Memory is not a filing cabinet. It is a whole song compressed down to its first three notes, fully ready to unfold the moment something hums them back.
+
 
 ## Closing Thoughts
 

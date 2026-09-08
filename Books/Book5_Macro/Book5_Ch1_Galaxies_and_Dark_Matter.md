@@ -92,6 +92,10 @@ extension, not yet attempted.
 
 ## Mathematics
 
+![The observed flat rotation curve against the Keplerian falloff expected from visible mass alone; the gap is attributed to the compression ring, not to unseen matter.](figures/ch1_rotation_curve.svg)
+
+*The observed flat rotation curve against the Keplerian falloff expected from visible mass alone; the gap is attributed to the compression ring, not to unseen matter.*
+
 Compression ring contribution (from Book 1 Ch12, A-115, applied at galactic scale):
 
 R_total = R_gravity + R_ring
@@ -194,6 +198,9 @@ Attempt a derivation of spiral arm structure from the rotating compression
 ring.
 
 ---
+
+> **Wave Insight —** Every galaxy you have ever seen a picture of is spinning faster at the edges than plain gravity says it should. One-Wave's bet: that extra push is not an invisible halo of exotic particles, it is the compression ring the visible mass was leaning on all along.
+
 
 ## Closing Thoughts
 

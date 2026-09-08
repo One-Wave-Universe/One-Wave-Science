@@ -101,6 +101,10 @@ not an independent postulate.
 
 ## Mathematics
 
+![The boundary pressure cushion P_c(r), peaked at the shell radius. Charge is the height and shape of that peak, not a label stapled to a point.](figures/ch04_charge_shell.svg)
+
+*The boundary pressure cushion P_c(r), peaked at the shell radius. Charge is the height and shape of that peak, not a label stapled to a point.*
+
 Harmonic shell condition (D-05):
 2*pi*R_n = n*lambda
 R_n = n*lambda / (2*pi)
@@ -183,6 +187,9 @@ Model anomalous magnetic moment from lattice coupling correction.
 Compare predicted electron radius to experimental upper bounds.
 
 ---
+
+> **Wave Insight —** Charge is not a sticker glued onto the electron. It is where the wave leans on itself the hardest at its own edge.
+
 
 ## Closing Thoughts
 

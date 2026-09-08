@@ -99,6 +99,10 @@ Charge is not assigned. It is the pressure geometry of the boundary.
 
 ## Mathematics
 
+![A Persistent Mode: recursive update settles into a stable pattern](figures/ch01_persistent_mode.svg)
+
+*The update rule below drives a toy mode for 120 steps. After the field finds its footing (shaded band), it keeps returning to the same bounded oscillation forever — that recurring return is the whole definition of a Persistent Mode.*
+
 Persistent Mode stability criterion (A-10):
 ||psi_{n+k} - psi_n|| < epsilon
 
@@ -190,6 +194,8 @@ Derivation: complete charge emergence from B-06b pressure cushion.
 Derivation: complete the C-318 four-interaction carried-pattern response and absolute-energy calibration program.
 
 ---
+
+> **Wave Insight —** Next time someone asks "what are you made of," the honest One-Wave answer is: *a really good habit.* An electron isn't a tiny billiard ball, it's the lattice doing the same stable move over and over, forever, without missing a beat. You are not made of stuff. You are made of a rhythm that refuses to stop.
 
 ## Closing Thoughts
 

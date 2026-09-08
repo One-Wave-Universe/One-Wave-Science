@@ -114,6 +114,10 @@ All proton wiki simulations must satisfy D-412. D-413 provides the lower Ground 
 
 ## Mathematics
 
+![Three circulating vortex loops, pressure-coupled at 120 degrees, braided into one bound structure — that braid is the proton.](figures/ch02_three_vortex_knot.svg)
+
+*Three circulating vortex loops, pressure-coupled at 120 degrees, braided into one bound structure — that braid is the proton.*
+
 Three-vortex braid: YELLOW (derivation incomplete)
 
 S3 fiber from braiding: cross-reference C-01, C-08
@@ -186,6 +190,9 @@ Derive positron release condition from B-06b roll-off at proton boundary.
 Write three-body extension of E-04 Coupling.
 
 ---
+
+> **Wave Insight —** Three dancers who can never stop spinning, holding each other up by leaning in at exactly the right angle: that is not a metaphor for a proton, it *is* the proton.
+
 
 ## Closing Thoughts
 

@@ -187,6 +187,10 @@ Mass is not a substance inside the mode. It is the response of the whole bounded
 
 ## Direct Lattice Form
 
+![Mass Effect: resistance to relocating the carried pattern, curvature at v=0 sets the effective mass](figures/ch14_mass_effect_curve.svg)
+
+*The energy cost of moving the carried pattern grows quadratically with velocity; the curvature of that curve at rest, not a bolted-on constant, is the effective mass \(m_{\rm eff}\).*
+
 For one update step, a center shift \(\delta\mathbf X=\mathbf v\Delta t\) changes the complete profile by
 
 \[
@@ -372,6 +376,8 @@ Open:
 - separate damping tensor and C-313 frame consistency.
 
 ---
+
+> **Wave Insight —** Mass is not a price tag stapled onto a particle at checkout. It is the size of the tantrum the whole carried pattern throws every time you try to move it somewhere else, all at once, without warning.
 
 ## Closing
 

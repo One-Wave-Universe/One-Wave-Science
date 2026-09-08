@@ -139,6 +139,10 @@ requires formal analysis. Deferred.
 
 ## Mathematics
 
+![The interference pattern I(x) survives a focal-point reading — measurement couples to the pattern, it does not shatter it.](figures/ch09_focal_point_coupling.svg)
+
+*The interference pattern I(x) survives a focal-point reading — measurement couples to the pattern, it does not shatter it.*
+
 Focal Point Coupling condition:
 FPC(x_F, t_F) = wave hit + boundary response + phase sample
 
@@ -243,6 +247,9 @@ Demonstrate that entanglement correlations from birth-phase reproduce EPR predic
 Systematic comparison of One-Wave measurement model to quantum measurement postulates.
 
 ---
+
+> **Wave Insight —** Looking at the wave does not scare it into behaving. It just means you finally showed up to a party the wave was already throwing.
+
 
 ## Closing Thoughts
 

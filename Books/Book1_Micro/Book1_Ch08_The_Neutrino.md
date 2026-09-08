@@ -108,6 +108,10 @@ The oscillation is a wave interference effect (F-05), not a particle identity ch
 
 ## Mathematics
 
+![Attenuation over counted updates: a high-coupling mode (gold) dies out fast, a low-coupling mode (cyan) barely notices the lattice is there.](figures/ch08_low_coupling_return.svg)
+
+*Attenuation over counted updates: a high-coupling mode (gold) dies out fast, a low-coupling mode (cyan) barely notices the lattice is there.*
+
 Neutrino coupling (sketch — Yellow):
 beta_neutrino << beta_matter
 
@@ -205,6 +209,9 @@ Connect three-flavor structure to three boundary collapse event types.
 Test whether the neutrino Mass-Effect ordering follows from the three stable four-interaction profiles without per-flavor fitting.
 
 ---
+
+> **Wave Insight —** The neutrino is the introvert of the lattice — coupling so weakly to everything around it that entire planets are basically see-through to it.
+
 
 ## Closing Thoughts
 

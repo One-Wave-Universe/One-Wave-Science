@@ -96,6 +96,10 @@ This is blocked pending the proton boundary derivation in Chapter 2 / Book 2.
 
 ## Mathematics
 
+![Two nested pressure shells with opposite sign, summing to a net pressure of zero — a neutron caught mid-handshake.](figures/ch05_two_shell_balance.svg)
+
+*Two nested pressure shells with opposite sign, summing to a net pressure of zero — a neutron caught mid-handshake.*
+
 Two-shell model (parked pending CCD-02):
 Inner shell:  R+ = 0.7331 fm
 Outer shell:  R- = 0.8409 fm
@@ -198,6 +202,9 @@ Compare predicted beta decay energy distribution to experimental data.
 Derive the neutron-proton Mass-Effect difference from the two stable four-interaction profiles without per-object refitting.
 
 ---
+
+> **Wave Insight —** A neutron is not chargeless because nothing is happening inside it. It is chargeless because two things are happening at once, and they cancel perfectly.
+
 
 ## Closing Thoughts
 

@@ -87,6 +87,10 @@ generally — a star is simply a massive, sustained source of them.
 
 ## Mathematics
 
+![Interior compression pressure falling outward, restoring response rising outward — they cross at the star's stable working radius.](figures/ch2_stellar_balance.svg)
+
+*Interior compression pressure falling outward, restoring response rising outward — they cross at the star's stable working radius.*
+
 Persistent Mode stability (inherited from A-112):
 ||psi_{n+k} - psi_n|| < epsilon
 
@@ -150,6 +154,9 @@ does a more massive star require a larger epsilon, or a different
 gamma(s)/beta(s) regime (same open problem as B-220/E-507)?
 
 ---
+
+> **Wave Insight —** A star is not fighting gravity and winning. It is gravity and the restoring response arm-wrestling to an exact draw, for billions of years, without either side letting go.
+
 
 ## Closing Thoughts
 

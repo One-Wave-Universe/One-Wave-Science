@@ -112,6 +112,10 @@ being divided into two complementary boundary modes by the nuclear field.
 
 ## Mathematics
 
+![Expressive and compressive pressure branches, both strictly positive-energy — there is no negative-energy mirror twin hiding underneath.](figures/ch11_no_mirror_branch.svg)
+
+*Expressive and compressive pressure branches, both strictly positive-energy — there is no negative-energy mirror twin hiding underneath.*
+
 Positron as released internal pressure (B-06b):
 DeltaE = E_mode - E_s
 DeltaE > 0 at boundary break => internal expression pressure released
@@ -209,6 +213,9 @@ Derive antihydrogen spectral equivalence from harmonic shell condition.
 Connect antimatter asymmetry resolution to Snap and Fill cosmological model (Book 5).
 
 ---
+
+> **Wave Insight —** There is no evil-twin universe hiding behind the mirror. There is just one wave, breathing in and breathing out, and both directions cost positive energy.
+
 
 ## Closing Thoughts
 

@@ -283,6 +283,10 @@ They only appear to be competing forces because the Standard Model treats them a
 
 ## Mathematics
 
+![The restoring gradient field around a persistent mode — rebuilt fresh on every update, not a static bowl carved once.](figures/ch12_gravity_gradient.svg)
+
+*The restoring gradient field around a persistent mode — rebuilt fresh on every update, not a static bowl carved once.*
+
 Gradient field from Persistent Mode (A-04, A-10):
 
 Phi_M(r) ~ A_M / r        (sketch — inverse distance, derivation deferred)
@@ -514,6 +518,9 @@ Show equivalence principle is exact in One-Wave.
 Derive the mapping from C-318 localized rest energy to A-115 gravity-source amplitude using one coefficient structure.
 
 ---
+
+> **Wave Insight —** Gravity is not a hole something fell into a long time ago. The lattice re-digs that hole from scratch on every single tick, forever.
+
 
 ## Closing Thoughts
 

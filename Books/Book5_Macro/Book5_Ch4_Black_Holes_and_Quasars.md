@@ -121,6 +121,12 @@ different from a Persistent Mode with extremely high compression
 between "very strong compression" and "structural failure" has not
 been made mathematically precise here.
 
+![Black Holes: where the lattice-step Delta x stops being defined, so v_max stops being defined too](figures/ch4_black_hole_boundary.svg)
+
+*An ordinary compressed mode keeps a small but well-defined propagation ceiling v_max as Delta_x shrinks; the candidate black-hole boundary is the point where Delta_x itself stops being a meaningful lattice-step, not just a very small one.*
+
+> **Wave Insight —** A black hole is not "gravity turned up to eleven." Turning gravity up to eleven still leaves you a number. A black hole is the one place the lattice's own ruler breaks, and there is no number left to turn up.
+
 Candidate quasar condition (new, NOT derived):
 Jet luminosity/velocity as a function of the M^4=I closure completing
 — no functional form proposed, only the qualitative claim that the

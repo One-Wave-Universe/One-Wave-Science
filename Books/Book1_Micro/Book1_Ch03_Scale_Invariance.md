@@ -109,6 +109,10 @@ Express up. Compress back. Return. Then the next scale takes over.
 
 ## Mathematics
 
+![The same normalized waveform, at three wildly different physical scales. Zoom in, zoom out — the riff never changes.](figures/ch03_scale_invariance.svg)
+
+*The same normalized waveform, at three wildly different physical scales. Zoom in, zoom out — the riff never changes.*
+
 Scale-invariant loop (E-06):
 At every scale s:
 Express(s) -> Compress(s) -> Threshold(s) -> Return or Break(s)
@@ -196,6 +200,9 @@ Map Saturn hexagon to E-03 surface tension minimum.
 Develop 1:24 space node — what happens when recursive depth exceeds single-participant navigation.
 
 ---
+
+> **Wave Insight —** Whatever tune the lattice is playing at the scale of a cell, it is still playing at the scale of a body. Reality did not write a new song for each size of stage.
+
 
 ## Closing Thoughts
 

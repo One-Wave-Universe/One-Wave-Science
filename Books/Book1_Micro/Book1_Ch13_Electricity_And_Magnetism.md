@@ -143,6 +143,10 @@ Full 1:6 compressed-space architecture is deferred.
 
 ## Mathematics
 
+![Radial gradient (electric, cyan) and rotational curl (magnetic, gold) of the same boundary pressure field.](figures/ch13_e_and_b.svg)
+
+*Radial gradient (electric, cyan) and rotational curl (magnetic, gold) of the same boundary pressure field.*
+
 Electric field from pressure cushion (C-311, B-06b):
 E_vec ~ nabla P_c = nabla(beta * DeltaE / V_c)
 E_vec points radially outward for positive charge (outward pressure cushion)
@@ -266,6 +270,9 @@ Formalize stress-space transfer as DeltaS_in -> DeltaS_out through coupled paths
 Separate conductor stress-transfer from field/radio stress-transfer.
 
 ---
+
+> **Wave Insight —** Electricity and magnetism are not two forces that happen to get along. They are the same handshake, photographed from two different angles.
+
 
 ## Closing Thoughts
 

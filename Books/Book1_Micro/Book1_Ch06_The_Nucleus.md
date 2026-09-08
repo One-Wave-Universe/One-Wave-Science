@@ -97,6 +97,10 @@ The range (~1 fm) is set by the lattice coupling length.
 
 ## Mathematics
 
+![Nucleon modes braided by shared coupling links — every node holds the next one in place.](figures/ch06_braided_cluster.svg)
+
+*Nucleon modes braided by shared coupling links — every node holds the next one in place.*
+
 Nuclear binding energy from surface reduction (E-03):
 B_nuclear = E_surface(separated) - E_surface(bound)
 B_nuclear = sum_i(sigma * 4*pi*R_i^2) - sigma * 4*pi*R_nucleus^2
@@ -169,6 +173,9 @@ Compare predicted binding curve to experimental data.
 Formalize pion replacement by direct lattice coupling.
 
 ---
+
+> **Wave Insight —** Picture a nucleus as a group chat where nobody is allowed to leave: every message (coupling link) keeps someone else from drifting off.
+
 
 ## Closing Thoughts
 

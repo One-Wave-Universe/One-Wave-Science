@@ -112,6 +112,10 @@ Identifying this with Planck time requires an independently derived `Delta x`; i
 
 ## Mathematics
 
+![Physical time as a damped stem plot of counted updates — each tick is a real recursive step, decaying inside its own envelope.](figures/ch10_counted_updates.svg)
+
+*Physical time as a damped stem plot of counted updates — each tick is a real recursive step, decaying inside its own envelope.*
+
 ### Elapsed time
 
 \[
@@ -187,6 +191,9 @@ Still open:
 - experimental test of a preferred lattice frame.
 
 ---
+
+> **Wave Insight —** Forget the river metaphor. Time, at micro scale, is a drum machine: one recursive tick at a time, no tick skipped, no tick free.
+
 
 ## Closing Thoughts
 

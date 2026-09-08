@@ -106,6 +106,10 @@ How much coupled pressure-work is required to force the stable four-interaction 
 
 ## Mirror-Gate Work
 
+![125 GeV Mirror-Gate: pressure-work integral across the boundary path Gamma, peaking at the measured anchor](figures/ch15_mirror_gate_threshold.svg)
+
+*The pressure-work integral climbs from the stable hold state \(\mathbf q_0\) to the first Mirror-flip state \(\mathbf q_G\); its peak is the measured ~125 GeV anchor, not a free parameter chosen to match it.*
+
 Let \(\mathbf q_0\) be the stable hold state and \(\mathbf q_G\) the first allowed state where the current orientation branch loses hold.
 
 The gate energy is
@@ -353,6 +357,8 @@ Open:
 - stored-versus-dissipated energy split and complete collider release pattern.
 
 ---
+
+> **Wave Insight —** Nobody found a new brick in the wall at 125 GeV. They found out how hard you have to push the wall before it admits it was made of pressure the whole time.
 
 ## Closing
 
