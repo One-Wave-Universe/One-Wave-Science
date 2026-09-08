@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
+  "general": {
+    "defaultApprovalMode": "default",
+    "enableAutoUpdate": true,
+    "enableAutoUpdateNotification": true
+  },
+  "model": {
+    "name": "flash-lite",
+    "maxSessionTurns": 6,
+    "compressionThreshold": 0.25,
+    "summarizeToolOutput": {
+      "run_shell_command": {
+        "tokenBudget": 400
+      }
+    }
+  },
+  "context": {
+    "fileName": "GEMINI.md",
+    "loadFromIncludeDirectories": false,
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "respectGeminiIgnore": true,
+      "enableFileWatcher": false,
+      "enableRecursiveFileSearch": false,
+      "enableFuzzySearch": true
+    }
+  },
+  "experimental": {
+    "autoMemory": false,
+    "contextManagement": true,
+    "powerUserProfile": false
+  },
+  "contextManagement": {
+    "historyWindow": {
+      "maxTokens": 12000,
+      "retainedTokens": 2500
+    },
+    "messageLimits": {
+      "normalMaxTokens": 1200,
+      "retainedMaxTokens": 3500,
+      "normalizationHeadRatio": 0.25
+    },
+    "tools": {
+      "distillation": {
+        "maxOutputTokens": 2000,
+        "summarizationThresholdTokens": 3000
+      },
+      "outputMasking": {
+        "protectionThresholdTokens": 6000,
+        "minPrunableThresholdTokens": 2500,
+        "protectLatestTurn": true
+      }
+    }
+  },
+  "privacy": {
+    "usageStatisticsEnabled": false
+  },
+  "security": {
+    "disableYoloMode": true,
+    "disableAlwaysAllow": true,
+    "enablePermanentToolApproval": false
+  }
+}
