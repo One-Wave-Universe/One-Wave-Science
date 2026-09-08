@@ -2,14 +2,16 @@
 
 ## Status
 
-- **Locked now:** purpose, packet shape, three currently declared routes,
-  mandatory wrappers, route receipts, alphabet inversion, and coupled vertical
-  inversion.
+- **Locked now:** purpose, packet shape, the complete signed-K route grammar,
+  mandatory `TOP-1` / `TOP+1` wrappers, route receipts, alphabet inversion,
+  coupled vertical inversion, polarity, and forward/reverse traversal.
 - **Locked division rail:** sources `1–12` generate outward; addresses `12–24`
   are read inward by division as defined below.
-- **Open:** any broader role of division outside that bounded rail.
-- **Extension rule:** there may be more route families later. None may be
-  invented, merged into these three, or declared without an explicit update.
+- **Open:** any broader role of division outside that bounded rail and any claim
+  that a target domain is physically equivalent to this arithmetic.
+- **Adapter rule:** alphabet, music, neck/fret, memory, movement, and lattice
+  adapters may use this grammar, but they must preserve their own domain
+  identity and must not erase the Rabbit-Hop route receipt.
 
 ## Purpose
 
@@ -19,8 +21,8 @@ Rabbit Hopping is both:
 2. a system-communication translator.
 
 The address packet preserves how an address was produced so it can cross a
-system boundary without losing source identity, route, offset, wrapper,
-orientation, polarity, or traversal direction.
+system boundary without losing source identity, operation order, signed offset,
+wrapper, orientation, polarity, or traversal direction.
 
 ## Complete packet
 
@@ -28,54 +30,133 @@ Every complete packet has exactly this semantic shape:
 
 `source identity | generated top address | wrapper address`
 
-The source identity does not become the generated number. For example, `A`
-carries source rank `1` in the normal run; a packet such as `1 | 4 | 3` means
-that source produced top address `4` with wrapper address `3`.
+The source identity does not become the generated number. For example, normal
+`A` carries source rank `1`; a packet `1 | 5 | 4` means that source produced top
+address `5` and then selected the lower connector `4`.
 
-There is no bare packet and no zero-wrapper option. Every top has both wrapper
-packets:
+### Top offset and wrapper are different operations
 
-- `top - 1`
-- `top + 1`
+This distinction is mandatory.
 
-An odd top therefore has even wrappers. An even top has odd wrappers.
+1. First calculate the **top** using the selected route family and signed `K`.
+2. Then attach one of the two mandatory **wrappers** around that top.
 
-## The three currently declared routes
+Every top has exactly these two complete packets:
 
-Let `N` be the source rank. Let `K` be a positive ascending step only where a
-route declares it.
+- `source | TOP | TOP-1`
+- `source | TOP | TOP+1`
 
-| Route receipt | Top-address rule | Complete packet rules | K domain |
+There is no bare packet and no zero-wrapper option. An odd top has even
+wrappers; an even top has odd wrappers.
+
+A route such as `N×2+1` is therefore **not** the same operation as selecting the
+`+1` wrapper around `N×2`. The first `+1` changes the top; the wrapper is a
+second operation applied after the top exists.
+
+## Complete signed-K route grammar
+
+Let `N` be the source rank, `K` any integer, and `s` the mandatory connector
+side `-1` or `+1`.
+
+| Canonical route receipt | Top-address rule | Complete packet | K domain |
 |---|---|---|---|
-| `ORIGINAL` | `N × 2` | `N | N×2 | (N×2)-1` and `N | N×2 | (N×2)+1` | none; stored as `K=0` |
-| `ASCENDING_AFTER` | `(N × 2) + K` | `N | (N×2)+K | ((N×2)+K)-1` and `...+1` | `1,2,3,...` |
-| `ASCENDING_BEFORE` | `(N + K) × 2` | `N | (N+K)×2 | ((N+K)×2)-1` and `...+1` | `1,2,3,...` |
+| `ORIGINAL` | `2N` | `N | 2N | 2N+s` | exactly `0` |
+| `DOUBLE_THEN_SHIFT` | `2N+K` | `N | 2N+K | 2N+K+s` | all integers |
+| `SHIFT_THEN_DOUBLE` | `2(N+K)` | `N | 2(N+K) | 2(N+K)+s` | all integers |
 
-`ORIGINAL` remains its own route even though substituting `K=0` into either
-ascending expression can produce the same number. The route receipt is part of
-the address.
+Historical names `ASCENDING_AFTER` and `ASCENDING_BEFORE` remain executable
+aliases for compatibility, but `K` is no longer restricted to ascending
+positive values.
 
-For normal `A`, whose source rank is `1`:
+The two generalized families are therefore:
 
-| Route | Step | Two complete packets |
-|---|---:|---|
-| `ORIGINAL` | — | `1 | 2 | 1` and `1 | 2 | 3` |
-| `ASCENDING_AFTER` | `K=1` | `1 | 3 | 2` and `1 | 3 | 4` |
-| `ASCENDING_AFTER` | `K=2` | `1 | 4 | 3` and `1 | 4 | 5` |
-| `ASCENDING_AFTER` | `K=3` | `1 | 5 | 4` and `1 | 5 | 6` |
-| `ASCENDING_BEFORE` | `K=1` | `1 | 4 | 3` and `1 | 4 | 5` |
-| `ASCENDING_BEFORE` | `K=2` | `1 | 6 | 5` and `1 | 6 | 7` |
-| `ASCENDING_BEFORE` | `K=3` | `1 | 8 | 7` and `1 | 8 | 9` |
+`V_K^s(N) = 2N + K + s`
 
-The two ascending routes are unbounded ladders over positive integer `K`.
+`U_K^s(N) = 2(N + K) + s`
+
+where `K ∈ Z` and `s ∈ {-1,+1}`.
+
+### Explicit local run
+
+Around any source `N`, the double-then-shift tops include:
+
+```text
+2N-3
+2N-2
+2N-1
+2N
+2N+1
+2N+2
+2N+3
+```
+
+and continue without an artificial endpoint. Every line above separately gets
+`TOP-1` and `TOP+1` wrappers.
+
+The shift-then-double tops include:
+
+```text
+2(N-3)
+2(N-2)
+2(N-1)
+2N
+2(N+1)
+2(N+2)
+2(N+3)
+```
+
+and likewise continue in both directions, with both wrappers around every top.
+
+### Example for normal A (`N=1`)
+
+Double then shift:
+
+| K | Top | Complete packets |
+|---:|---:|---|
+| -3 | -1 | `1|-1|-2`, `1|-1|0` |
+| -2 | 0 | `1|0|-1`, `1|0|1` |
+| -1 | 1 | `1|1|0`, `1|1|2` |
+| 0 | 2 | `1|2|1`, `1|2|3` |
+| +1 | 3 | `1|3|2`, `1|3|4` |
+| +2 | 4 | `1|4|3`, `1|4|5` |
+| +3 | 5 | `1|5|4`, `1|5|6` |
+
+Shift then double:
+
+| K | Top | Complete packets |
+|---:|---:|---|
+| -3 | -4 | `1|-4|-5`, `1|-4|-3` |
+| -2 | -2 | `1|-2|-3`, `1|-2|-1` |
+| -1 | 0 | `1|0|-1`, `1|0|1` |
+| 0 | 2 | `1|2|1`, `1|2|3` |
+| +1 | 4 | `1|4|3`, `1|4|5` |
+| +2 | 6 | `1|6|5`, `1|6|7` |
+| +3 | 8 | `1|8|7`, `1|8|9` |
+
+## Same number does not mean same route
+
+Operation order is part of identity.
+
+For example:
+
+`2N + 2 = 2(N + 1)`
+
+The numerical destination may be equal, but one receipt says
+`DOUBLE_THEN_SHIFT, K=2` and the other says `SHIFT_THEN_DOUBLE, K=1`.
+They must remain distinguishable.
+
+Likewise, intersections caused by wrappers do not erase route history. Shared
+addresses are connectors, not permission to collapse the generating paths.
 
 ## Wrappers are the connectors
 
 Wrappers connect packets regardless of route family or traversal direction.
 Top `4` carries wrappers `3` and `5`; top `5` carries wrappers `4` and `6`.
-Those packets connect through each other's top/wrapper handoffs. Tops `4` and
-`6` share wrapper `5`. The retained route receipt prevents equal numeric tops
-from erasing how they were reached.
+Those packets can hand off through shared top/wrapper addresses. Tops `4` and
+`6` share wrapper `5`.
+
+The retained route receipt prevents equal numeric addresses from erasing how
+they were reached.
 
 ## Alphabet orientation and coupled inversion
 
@@ -83,27 +164,73 @@ The alphabet can be traversed in either orientation:
 
 | Orientation | Rank run | Original-route endpoints |
 |---|---|---|
-| normal | `A→Z` carries `1→26` | `A` produces top `2`; `Z` produces top `52` |
-| inverted | `Z→A` carries `1→26` | `Z` produces top `2`; `A` produces top `52` |
+| normal | `A→Z` carries `1→26` | `A` top `2`; `Z` top `52` |
+| inverted | `Z→A` carries `1→26` | `Z` top `2`; `A` top `52` |
 
 Whole-run Mirror Gate layouts are `A-Z(0)Z-A` and `Z-A(0)A-Z`. Zero sits
 between whole alphabet runs, not inside a letter packet.
 
 Side-to-side alphabet inversion also inverts logical up/down. On the normal
-axis, a top `2` has logical lower wrapper `1` and upper wrapper `3`. On the
+axis, top `2` has logical lower wrapper `1` and upper wrapper `3`. On the
 inverted axis, top `2` has logical lower wrapper `3` and upper wrapper `1`.
 
 These receipt fields stay distinct:
 
 - alphabet orientation: normal or inverted;
-- vertical wrapper side: logical lower or upper, coupled to orientation;
+- route family;
+- signed integer `K`;
+- wrapper side `s=-1/+1`;
+- vertical logical side, coupled to alphabet orientation;
 - polarity: positive or negative numeric mirror;
-- traversal direction: forward or reverse route order;
-- route family and `K`.
+- traversal direction: forward or reverse route order.
 
-Reversing traversal does not silently change polarity, route family, or `K`.
+Reversing traversal does not silently change polarity, route family, `K`, or
+wrapper side.
 
-## Division boundary
+## Exact inverse / rebuild arithmetic
+
+The full receipt makes both generalized families mechanically reversible.
+Remove the declared wrapper first.
+
+For double then shift:
+
+`X = 2N + K + s`
+
+therefore:
+
+`N = (X - K - s) / 2`
+
+For shift then double:
+
+`X = 2(N + K) + s`
+
+therefore:
+
+`N = (X - s) / 2 - K`
+
+This is the translator's exact reconstruction rule. It does not by itself lock
+a broader physical interpretation of division.
+
+## Multiplication / division direction
+
+Within the declared scale-routing interpretation:
+
+- `×` projects / expands / sends outward;
+- `÷` routes back / locates / rebuilds inward;
+- `+K` shifts one signed direction;
+- `-K` shifts the opposing signed direction;
+- `s=±1` selects the final connector around the chosen top.
+
+A complete example is:
+
+```text
+forward: N -> ×2 -> +3 top shift -> +1 wrapper -> X
+rebuild: X -> -1 wrapper -> -3 top shift -> ÷2 -> N
+```
+
+Changing the order changes the route receipt.
+
+## Locked bounded division rail
 
 The declared bounded rail uses two domains:
 
@@ -113,8 +240,7 @@ The declared bounded rail uses two domains:
 For an even address `X` in `12–24`, `X÷2` identifies its source. For an odd
 address, division uses the wrapper structure rather than creating a fractional
 address: `(X-1)÷2` and `(X+1)÷2` identify the two neighboring connected
-sources. Thus `13` connects back to sources `6` and `7`, while `24` returns to
-source `12`.
+sources.
 
 | Outer address | Inward source address(es) |
 |---:|---:|
@@ -132,27 +258,72 @@ source `12`.
 | 23 | 11, 12 |
 | 24 | 12 |
 
-This rail is numerical and does not require alphabet labels. Six strings,
-twelve note classes, and twenty-four frets are a possible musical-neck adapter,
-but that physical labeling remains separate from the locked numerical rail.
-The larger job of division beyond `12–24` remains unresolved.
+The larger role of division beyond this bounded scale rail remains open unless
+another explicit lock defines it.
+
+## Adapter boundary
+
+The Rabbit-Hop grammar is label-independent. Domain adapters may map labels to
+source identities and route receipts, but must not redefine the arithmetic.
+
+Expected adapters include:
+
+```text
+Rabbit-Hop core
+├── Alphabet
+│   ├── A -> Z
+│   └── Z -> A
+├── Music
+│   ├── 12 pitch classes / chromatic order
+│   ├── Circle of Fifths traversal
+│   ├── major/minor span relationships
+│   └── mirrored/inverted traversal
+├── Neck / scale
+│   ├── 6 strings
+│   ├── 12 note classes
+│   └── 24-fret / 12-24 division rail
+└── Other domains
+    ├── memory / recall routing
+    ├── movement
+    └── lattice addressing
+```
+
+Adapters are translators, not proofs that those domains are physically the
+same system.
 
 ## Executable lock
 
-The reference implementation is
-`One_Wave_Bench/brain/rabbit_hop_alphabet.py`. Regression tests are in
-`One_Wave_Bench/brain/test_rabbit_hop_alphabet.py` and lock:
+Reference implementation:
 
-- all three route families;
-- positive ascending `K` ladders;
-- both mandatory wrappers for every top;
+`One_Wave_Bench/brain/rabbit_hop_alphabet.py`
+
+Regression tests:
+
+`One_Wave_Bench/brain/test_rabbit_hop_alphabet.py`
+
+They lock:
+
+- `ORIGINAL = 2N`;
+- signed `DOUBLE_THEN_SHIFT = 2N+K` for negative, zero, and positive `K`;
+- signed `SHIFT_THEN_DOUBLE = 2(N+K)` for negative, zero, and positive `K`;
+- explicit `K=-3,-2,-1,0,+1,+2,+3` local runs;
+- both mandatory wrappers around every selected top;
+- top-offset and wrapper as separate operations;
+- equal numerical destinations retaining different route receipts;
 - opposite top/wrapper parity;
 - connections within and across route families;
 - normal and inverted alphabet endpoints;
 - coupled side-to-side and up/down inversion;
 - independent polarity and traversal receipts;
-- mechanical receipt recovery without claiming a division theory.
+- exact mechanical source recovery from a complete receipt.
 
-The bounded division rail is implemented in
-`One_Wave_Bench/brain/rabbit_hop_scale_rail.py` and tested in
+The historical positive-only `ascending_ladder()` remains as a compatibility
+helper; `offset_ladder()` is the canonical signed-K helper.
+
+The bounded division rail remains implemented in:
+
+`One_Wave_Bench/brain/rabbit_hop_scale_rail.py`
+
+with tests in:
+
 `One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py`.
