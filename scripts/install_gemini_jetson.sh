@@ -57,8 +57,8 @@ Prefer "Login with Google" for the official CLI if available for your account.
 The no-browser flow prints a URL/code that can be completed from another browser.
 After credentials are cached, use the repo wrapper:
 
-  scripts/gemini_min.sh review TASK.md
-  scripts/gemini_min.sh code TASK.md
+  bash scripts/gemini_min.sh review TASK.md
+  bash scripts/gemini_min.sh code TASK.md
 
 Routine work should stay local with Qwen/OpenClaw. Gemini is the bounded external escalation lane.
 Do not put API keys in this repository.
