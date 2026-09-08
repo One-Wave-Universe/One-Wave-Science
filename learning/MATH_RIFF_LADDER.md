@@ -8,6 +8,22 @@ The goal is not to memorize disconnected rules. The goal is to understand what e
 
 ---
 
+# Problem-reference standard
+
+**Every practice problem in this repo must include a `Uses:` line linking directly to every rule needed to solve it.**
+
+Example:
+
+`2s + 10 = 2t`
+
+**Uses:** [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [9 Equivalent equations](#level-9--equivalent-equations)
+
+For mixed problems, list all important earlier rules too. The learner should never have to guess which rule a problem is testing.
+
+If a new problem needs a rule that is not in this file yet, **add the rule first, then link the problem to it.**
+
+---
+
 ## The learning loop
 
 1. **Understand the idea first.** Know what the symbols and operations are actually doing.
@@ -42,19 +58,15 @@ A number can describe how much of something there is, or where something sits on
 
 Positive and negative values are opposite directions from zero.
 
-Examples:
+Example:
 
-- `+3` is three steps above/right of zero.
-- `-3` is three steps below/left of zero.
-- `3 + (-3) = 0` because the two changes cancel.
+`3 + (-3) = 0`
+
+**Uses:** [0.2 Zero](#02-zero) · [0.3 Positive and negative numbers](#03-positive-and-negative-numbers) · [1.5 Adding opposites cancels](#15-adding-opposites-cancels)
 
 ## 0.4 Equal means same value
 
-`=` does **not** mean “the answer comes next.”
-
-It means:
-
-> the value on the left is the same as the value on the right.
+`=` does **not** mean “the answer comes next.” It means the value on the left is the same as the value on the right.
 
 That idea becomes the foundation of equations and balance problems.
 
@@ -64,25 +76,29 @@ That idea becomes the foundation of equations and balance problems.
 
 ## 1.1 Addition combines change
 
-`3 + 2 = 5`
+Problem:
 
-Start at 3 and move 2 more units in the positive direction.
+`3 + 2 = ?`
+
+**Uses:** [1.1 Addition combines change](#11-addition-combines-change)
+
+Answer: `5`
 
 ## 1.2 Subtraction reverses addition
 
-`5 - 2 = 3`
+Problem:
 
-Subtraction asks what remains after moving backward by 2.
+`5 - 2 = ?`
+
+**Uses:** [1.2 Subtraction reverses addition](#12-subtraction-reverses-addition)
+
+Answer: `3`
 
 ## 1.3 Addition and subtraction are inverse operations
 
 They undo each other.
 
-`3 + 4 = 7`
-
-so
-
-`7 - 4 = 3`
+If `3 + 4 = 7`, then `7 - 4 = 3`.
 
 ## 1.4 Adding zero changes nothing
 
@@ -92,19 +108,19 @@ so
 
 `a + (-a) = 0`
 
-Example:
-
-`5 + (-5) = 0`
-
 ---
 
 # Level 2 — Multiplication and division
 
 ## 2.1 Multiplication is repeated scaling
 
-`3 × 4` means three groups of four, or four groups of three.
+Problem:
 
-`3 × 4 = 12`
+`3 × 4 = ?`
+
+**Uses:** [2.1 Multiplication is repeated scaling](#21-multiplication-is-repeated-scaling)
+
+Answer: `12`
 
 ## 2.2 Multiplication by 1 changes nothing
 
@@ -116,48 +132,32 @@ Example:
 
 ## 2.4 Division undoes multiplication
 
-If
-
-`3 × 4 = 12`
-
-then
-
-`12 ÷ 3 = 4`
-
-and
-
-`12 ÷ 4 = 3`
+If `3 × 4 = 12`, then `12 ÷ 3 = 4` and `12 ÷ 4 = 3`.
 
 ## 2.5 Multiplication and division change scale
 
-Multiplying by 2 doubles a value.
-
-Dividing by 2 cuts the value into two equal parts.
-
-This becomes very important when solving equations.
+Multiplying by 2 doubles a value. Dividing by 2 cuts the value into two equal parts.
 
 ---
 
 # Level 3 — Order of operations
 
-When several operations appear together, use a consistent order so everyone reads the expression the same way.
+Use this order:
 
 1. Parentheses
 2. Exponents
 3. Multiplication and division, left to right
 4. Addition and subtraction, left to right
 
-Example:
+Problem:
 
-`2 + 3 × 4`
+`2 + 3 × 4 = ?`
 
-Multiply first:
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [2.1 Multiplication](#21-multiplication-is-repeated-scaling) · [3 Order of operations](#level-3--order-of-operations)
 
-`2 + 12 = 14`
+Answer: `14`
 
-not `20`.
-
-The point of this rule is not arbitrary obedience. It is a shared notation system that removes ambiguity.
+The point of the rule is a shared notation system that removes ambiguity.
 
 ---
 
@@ -167,9 +167,7 @@ The point of this rule is not arbitrary obedience. It is a shared notation syste
 
 `3/4` means `3 ÷ 4`.
 
-The bottom number tells how many equal parts make the whole.
-
-The top number tells how many of those parts are being counted.
+The bottom number tells how many equal parts make the whole. The top number tells how many of those parts are being counted.
 
 ## 4.2 Equivalent fractions represent the same amount
 
@@ -179,25 +177,25 @@ Multiplying or dividing the top and bottom by the same nonzero number changes th
 
 ## 4.3 Multiplying fractions
 
-Multiply tops together and bottoms together because both quantities are being scaled.
+Problem:
 
-`2/3 × 4/5 = 8/15`
+`2/3 × 4/5 = ?`
+
+**Uses:** [2.1 Multiplication](#21-multiplication-is-repeated-scaling) · [4.1 Fractions are division](#41-a-fraction-is-division) · [4.3 Multiplying fractions](#43-multiplying-fractions)
+
+Answer: `8/15`
 
 ## 4.4 Dividing fractions
 
 Dividing by a fraction asks how many of that fractional size fit into the first quantity.
 
-The standard shortcut is multiply by the reciprocal:
-
 `a/b ÷ c/d = a/b × d/c`
 
-But the meaning should come before the shortcut.
+The meaning should come before the shortcut.
 
 ## 4.5 Adding fractions requires matching-sized pieces
 
-You cannot directly add thirds and fifths because the pieces are different sizes.
-
-First rewrite them using a common denominator.
+You cannot directly add thirds and fifths because the pieces are different sizes. First rewrite them using a common denominator.
 
 ---
 
@@ -209,45 +207,25 @@ First rewrite them using a common denominator.
 
 ## 5.2 A coefficient means multiplication
 
-`2x` means:
-
-`2 × x`
-
-It does **not** mean “2 and x sitting next to each other.”
+`2x` means `2 × x`.
 
 ## 5.3 Like terms have matching variable parts
 
-`2x + 3x = 5x`
+Problem:
 
-because both terms count the same kind of quantity.
+`2x + 3x = ?`
 
-But:
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [5.3 Like terms](#53-like-terms-have-matching-variable-parts)
 
-`2x + 3y`
+Answer: `5x`
 
-cannot normally be combined because `x` and `y` may represent different values.
+`2x + 3y` cannot normally be combined because `x` and `y` may represent different values.
 
 ---
 
 # Level 6 — The balance rule for equations
 
-This is one of the most important early algebra ideas.
-
 If two sides are equal, performing the **same valid operation to both sides** keeps them equal.
-
-Think of the equation as a relationship that must stay intact.
-
-If:
-
-`x + 3 = 8`
-
-subtract 3 from both sides:
-
-`x + 3 - 3 = 8 - 3`
-
-so:
-
-`x = 5`
 
 ## 6.1 Whatever you add to one side, add to the other
 
@@ -259,31 +237,30 @@ so:
 
 Division by zero is never allowed.
 
+Problem:
+
+`x + 3 = 8`
+
+**Uses:** [0.4 Equal means same value](#04-equal-means-same-value) · [1.2 Subtraction](#12-subtraction-reverses-addition) · [1.3 Inverse operations](#13-addition-and-subtraction-are-inverse-operations) · [6.2 Balance by subtraction](#62-whatever-you-subtract-from-one-side-subtract-from-the-other)
+
+Solution: subtract 3 from both sides, giving `x = 5`.
+
 ---
 
 # Level 7 — Undo operations in reverse order
 
 To isolate a variable, reverse the operations that were applied to it.
 
-Example:
+Problem:
 
 `2x + 6 = 14`
 
-The variable was:
+**Uses:** [1.2 Subtraction](#12-subtraction-reverses-addition) · [2.4 Division undoes multiplication](#24-division-undoes-multiplication) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [7 Reverse-order undoing](#level-7--undo-operations-in-reverse-order)
 
-1. multiplied by 2
-2. then increased by 6
+Solution:
 
-Undo in reverse:
-
-1. subtract 6
-2. divide by 2
-
-`2x = 8`
-
-`x = 4`
-
-This is the algebra version of unwinding a sequence.
+1. subtract 6 from both sides → `2x = 8`
+2. divide both sides by 2 → `x = 4`
 
 ---
 
@@ -293,15 +270,15 @@ Multiplication outside parentheses applies to every term inside.
 
 `a(b + c) = ab + ac`
 
-Example:
+Problem:
 
-`2(x + 3) = 2x + 6`
+`2(x + 3) = ?`
 
-Why: two copies of `(x + 3)` contain two copies of `x` and two copies of `3`.
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [2.1 Multiplication](#21-multiplication-is-repeated-scaling) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [8 Distributive property](#level-8--distributive-property)
 
-The reverse direction is factoring:
+Answer: `2x + 6`
 
-`2x + 6 = 2(x + 3)`
+The reverse direction is factoring: `2x + 6 = 2(x + 3)`.
 
 ---
 
@@ -309,25 +286,23 @@ The reverse direction is factoring:
 
 An equation can be rewritten into a different-looking equation that describes the same relationship.
 
-Example:
+Problem:
 
 `2s + 10 = 2t`
+
+**Uses:** [0.4 Equality](#04-equal-means-same-value) · [2.5 Scale](#25-multiplication-and-division-change-scale) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [6.4 Balance by division](#64-whatever-you-divide-one-entire-side-by-divide-the-other-entire-side-by) · [9 Equivalent equations](#level-9--equivalent-equations)
 
 Divide every term by 2:
 
 `s + 5 = t`
 
-These are equivalent.
-
-Another equivalent form is:
+Equivalent limited-tile form:
 
 `s + 6 = t + 1`
 
-because subtracting 1 from both sides gives:
+**Uses:** [1.2 Subtraction](#12-subtraction-reverses-addition) · [6.2 Balance by subtraction](#62-whatever-you-subtract-from-one-side-subtract-from-the-other) · [9 Equivalent equations](#level-9--equivalent-equations)
 
-`s + 5 = t`
-
-This is useful when a problem gives limited pieces or asks for a particular form.
+Subtracting 1 from both sides returns `s + 5 = t`.
 
 ---
 
@@ -345,7 +320,7 @@ This is useful when a problem gives limited pieces or asks for a particular form
 
 `(-a)(-b) = ab`
 
-A useful interpretation is that one negative reverses direction; a second reversal restores the original direction.
+One negative reverses direction; a second reversal restores the original direction.
 
 ---
 
@@ -359,39 +334,30 @@ A useful interpretation is that one negative reverses direction; a second revers
 
 ## 11.2 Square roots undo squaring
 
-If:
+Problem:
 
 `x² = 25`
 
-then values whose square is 25 are:
+**Uses:** [2.1 Multiplication](#21-multiplication-is-repeated-scaling) · [10.3 Negative times negative](#103-negative-times-negative-is-positive) · [11.1 Exponents](#111-exponents-mean-repeated-multiplication) · [11.2 Square roots](#112-square-roots-undo-squaring)
 
-`x = 5` or `x = -5`
-
-because both `5²` and `(-5)²` equal 25.
+Answer: `x = 5` or `x = -5`.
 
 ---
 
 # Level 12 — Coordinates and graphs
 
-A coordinate such as `(x, y)` gives two pieces of positional information.
+A coordinate `(x, y)` gives two pieces of positional information.
 
 - `x` controls horizontal position.
 - `y` controls vertical position.
 
-An equation can describe all coordinate pairs that satisfy a relationship.
+Problem:
 
-Example:
+Find four points satisfying `x + y = 7`.
 
-`x + y = 7`
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [5.1 Variables](#51-a-variable-is-a-number-whose-value-is-not-yet-known-or-is-allowed-to-change) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [12 Coordinates and graphs](#level-12--coordinates-and-graphs)
 
-Possible points include:
-
-- `(0, 7)`
-- `(1, 6)`
-- `(2, 5)`
-- `(3, 4)`
-
-The equation is not just arithmetic; it describes a structure of possible positions.
+Answers include `(0,7)`, `(1,6)`, `(2,5)`, `(3,4)`.
 
 ---
 
@@ -406,8 +372,6 @@ A proportion says two ratios describe the same relationship.
 `2/3 = 4/6`
 
 Rates are ratios involving different units, such as miles per hour or beats per minute.
-
-This becomes important for slopes, frequencies, scaling, music, physics, and programming.
 
 ---
 
@@ -429,17 +393,15 @@ This is the beginning of thinking about motion, trends, waves, rates, and eventu
 
 Two equations can constrain the same variables at once.
 
-Example:
+Problem:
 
 `x + y = 7`
 
 `x - y = 1`
 
-The solution must satisfy **both** equations.
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [1.2 Subtraction](#12-subtraction-reverses-addition) · [5.1 Variables](#51-a-variable-is-a-number-whose-value-is-not-yet-known-or-is-allowed-to-change) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [9 Equivalent equations](#level-9--equivalent-equations) · [15 Systems](#level-15--systems-of-equations)
 
-Methods such as substitution and elimination are different ways of finding the shared solution.
-
-The important idea is intersection: each equation gives a set of possibilities, and the solution is where those possibilities agree.
+The solution must satisfy **both** equations. Methods such as substitution and elimination find the intersection of those constraints.
 
 ---
 
@@ -472,37 +434,55 @@ Do not treat these as a race. Each new topic should reuse earlier rules.
 
 # Spiral practice plan
 
-Every practice block should contain three layers.
+Every practice block contains three layers.
 
 ## A. Warm-up: old riffs
 
 Use 2–4 short problems from earlier material.
 
-Examples:
-
-- signed numbers
-- multiplication/division
-- fractions
-- simple equation balance
-
 ## B. Main riff: current skill
 
 Spend most of the session on the concept currently being learned.
 
-Stay with it until the reasoning makes sense, not merely until the app marks an answer correct.
-
 ## C. Stretch riff: one step harder
 
-Finish with one or two problems that require combining the current rule with an earlier one.
+Finish with one or two problems combining the current rule with earlier ones.
 
-Example progression:
+### Riff 1
 
-1. `x + 3 = 8`
-2. `2x = 10`
-3. `2x + 3 = 13`
-4. `2(x + 3) = 14`
-5. `2(x + 3) - 4 = 14`
-6. solve two equations containing those same operations
+`x + 3 = 8`
+
+**Uses:** [1.2 Subtraction](#12-subtraction-reverses-addition) · [6.2 Balance by subtraction](#62-whatever-you-subtract-from-one-side-subtract-from-the-other)
+
+### Riff 2
+
+`2x = 10`
+
+**Uses:** [2.4 Division](#24-division-undoes-multiplication) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [6.4 Balance by division](#64-whatever-you-divide-one-entire-side-by-divide-the-other-entire-side-by)
+
+### Riff 3
+
+`2x + 3 = 13`
+
+**Uses:** [1.2 Subtraction](#12-subtraction-reverses-addition) · [2.4 Division](#24-division-undoes-multiplication) · [5.2 Coefficients](#52-a-coefficient-means-multiplication) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [7 Reverse-order undoing](#level-7--undo-operations-in-reverse-order)
+
+### Riff 4
+
+`2(x + 3) = 14`
+
+**Uses:** [2.4 Division](#24-division-undoes-multiplication) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [7 Reverse-order undoing](#level-7--undo-operations-in-reverse-order) · [8 Distribution](#level-8--distributive-property)
+
+### Riff 5
+
+`2(x + 3) - 4 = 14`
+
+**Uses:** [1.1 Addition](#11-addition-combines-change) · [1.2 Subtraction](#12-subtraction-reverses-addition) · [2.4 Division](#24-division-undoes-multiplication) · [6 Balance rule](#level-6--the-balance-rule-for-equations) · [7 Reverse-order undoing](#level-7--undo-operations-in-reverse-order) · [8 Distribution](#level-8--distributive-property)
+
+### Riff 6
+
+Solve a two-equation system containing the operations above.
+
+**Uses:** [6 Balance rule](#level-6--the-balance-rule-for-equations) · [7 Reverse-order undoing](#level-7--undo-operations-in-reverse-order) · [8 Distribution](#level-8--distributive-property) · [9 Equivalent equations](#level-9--equivalent-equations) · [15 Systems](#level-15--systems-of-equations)
 
 The difficulty rises, but the old material never disappears.
 
@@ -510,18 +490,12 @@ The difficulty rises, but the old material never disappears.
 
 # Rule for getting stuck
 
-When a problem suddenly feels impossible, do not assume the entire topic is beyond reach.
+When a problem suddenly feels impossible, find the **first step that stopped making sense**. Drop back exactly one layer and rebuild that piece.
 
-Find the **first step that stopped making sense**.
-
-Then drop back exactly one layer and rebuild that piece.
-
-Examples:
-
-- If adding fractions fails, check whether fraction size and common denominators make sense.
-- If solving equations fails, check whether equality and inverse operations make sense.
-- If distribution fails, return to multiplication as repeated groups.
-- If elimination in systems fails, return to the balance rule and equivalent equations.
+- If adding fractions fails, return to [4.1 Fractions](#41-a-fraction-is-division) and [4.5 Common denominators](#45-adding-fractions-requires-matching-sized-pieces).
+- If solving equations fails, return to [0.4 Equality](#04-equal-means-same-value), [1.3 Inverse operations](#13-addition-and-subtraction-are-inverse-operations), and [6 Balance](#level-6--the-balance-rule-for-equations).
+- If distribution fails, return to [2.1 Multiplication](#21-multiplication-is-repeated-scaling) before [8 Distribution](#level-8--distributive-property).
+- If elimination fails, return to [6 Balance](#level-6--the-balance-rule-for-equations), [9 Equivalent equations](#level-9--equivalent-equations), then [15 Systems](#level-15--systems-of-equations).
 
 Do not restart all of mathematics. Repair the missing connection, then return to the riff.
 
