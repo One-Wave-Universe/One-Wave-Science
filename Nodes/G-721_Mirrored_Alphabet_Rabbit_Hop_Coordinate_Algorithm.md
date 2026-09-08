@@ -11,10 +11,11 @@ metadata_standard: "I-06"
 
 # Node G-721: Mirrored Alphabet Rabbit-Hop Coordinate Algorithm
 
-> **Authoritative lock:** `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`. Rabbit
-> Hopping is both an addressing system and a system-communication translator.
-> Its three-route grammar, mandatory wrappers, coupled alphabet/vertical
-> inversion, and open division boundary supersede older shorthand in this node.
+> **Authoritative lock:** `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
+> **Executable arithmetic:** `One_Wave_Bench/brain/rabbit_hop_core.py`.
+>
+> This node describes the alphabet adapter and its interpretation. If shorthand
+> here conflicts with the lock/core, the lock/core wins.
 
 **Dependencies**  
 Upstream: A-101 Ground / Zero, A-103 Differential, A-111 Recursion, B-205 Mirror, B-222 Oscillation Center, B-223 Three Moves, G-716 One-Wave Conversion Grammar  
@@ -23,347 +24,309 @@ Downstream: G-721a Fibonacci reference validation, G-721b Sturmian branch gramma
 
 ## Purpose
 
-The mirrored alphabet algorithm converts letters and words into ordered, reversible coordinate paths. It is an address/translator grammar. It does not claim that different physical or software systems are identical; it gives them a common relational map that can be tested for translation.
+The mirrored alphabet adapter converts letters and words into ordered,
+reversible coordinate paths. Rabbit Hopping supplies identity, nesting, parity,
+route-of-origin, and reversible coordinates. It does not claim that different
+physical or software systems are identical.
 
-The separation remains mandatory:
+Keep these layers separate:
 
-\[
-\boxed{\text{Hopfield/Boltzmann}=\text{memory relationships}}
-\]
+```text
+Hopfield / Boltzmann relationships = memory relationship models
+Rabbit-Hop map                  = reversible address / translator grammar
+wheel system                    = live oscillating movement geometry
+-1(0)+1                         = foundational live choice convention
+```
 
-\[
-\boxed{\text{rabbit-hop map}=\text{identity, nesting, parity, and reversible coordinates}}
-\]
+## Alphabet map
 
-\[
-\boxed{\text{wheel system}=\text{live oscillating movement geometry}}
-\]
+Forward orientation:
 
-\[
-\boxed{-1(0)+1=\text{foundational live choice}}
-\]
+```text
+A=1, B=2, ... Z=26
+```
 
-## Alphabet Map
+Inverted orientation:
 
-For the forward alphabet:
+```text
+Z=1, Y=2, ... A=26
+```
 
-\[
-A=1,\quad B=2,\quad \ldots,\quad Z=26.
-\]
+For a forward rank `N`:
 
-For the inverted alphabet:
+```text
+N_inv = 27 - N
+```
 
-\[
-Z=1,\quad Y=2,\quad \ldots,\quad A=26.
-\]
+A source rank belongs to the letter identity. A generated Rabbit-Hop TOP is an
+address produced by that source; it does not replace the source identity.
 
-For any forward rank \(N\in\{1,\ldots,26\}\), the inverted rank is
+## Canonical route grammar
 
-\[
-\boxed{N_{inv}=27-N}.
-\]
+The shared numerical core has exactly three current route receipts.
 
-Thus A is 1 forward and 26 inverted; Z is 26 forward and 1 inverted.
+### ORIGINAL
 
-These are alphabet ranks used as source addresses. A later generated top
-coordinate belongs to that source address; it does not make the letter equal to
-the top coordinate.
+```text
+TOP = 2N
+K = 0
+```
 
-## N-Only Rabbit-Hop Grammar
+### DOUBLE_THEN_SHIFT
 
-The canonical arithmetic is written only in terms of \(N\) and literal offsets. No auxiliary anchor symbols are required.
+```text
+TOP = 2N + K
+K ∈ integers
+```
 
-### 1. Original route and ascending-after ladder
+The local signed run explicitly includes:
 
-The original `N×2` route stays a separate receipt. The ascending-after route
-uses positive `K=1,2,3,...` after doubling:
+```text
+2N-3, 2N-2, 2N-1, 2N, 2N+1, 2N+2, 2N+3
+```
 
-\[
-\boxed{2N,\;2N+1,\;2N+2,\;2N+3,\;2N+4,\;2N+5,\ldots}
-\]
+and continues in both directions.
 
-In general:
+### SHIFT_THEN_DOUBLE
 
-\[
-\boxed{R_{after}(N,K)=2N+K},\qquad K\in\{1,2,3,\ldots\}.
-\]
+```text
+TOP = 2(N + K)
+K ∈ integers
+```
 
-### 2. Ascending-before ladder
+The local signed run explicitly includes:
 
-Move the input first by positive `K`, then double:
+```text
+2(N-3), 2(N-2), 2(N-1), 2N, 2(N+1), 2(N+2), 2(N+3)
+```
 
-\[
-\boxed{2N,\;2(N+1),\;2(N+2),\;2(N+3),\;2(N+4),\ldots}
-\]
+and continues in both directions.
 
-In general:
+Historical names `ASCENDING_AFTER` and `ASCENDING_BEFORE` are compatibility
+aliases only. They no longer mean positive-only K.
 
-\[
-\boxed{R_{before}(N,K)=2(N+K)},\qquad K\in\{1,2,3,\ldots\}.
-\]
+## Mandatory wrapper / connector
 
-These two ladders can reach the same address by different operation orderings. The exact identity is
+Top selection and wrapper selection are distinct operations.
 
-\[
-\boxed{2N+2m=2(N+m)}.
-\]
+For every selected TOP `X`, both complete packets exist:
 
-This identity is the canonical "two ways to get to the same thing" relation. A receipt must retain which route was used even when the numerical destination is equal.
+```text
+N | X | X-1
+N | X | X+1
+```
 
-### 3. Opposite-parity wrapper
+The final `-1/+1` is the connector around the already-selected TOP. It must not
+be confused with a `K=-1/+1` top shift.
 
-Every selected top address \(X\) is connected to the opposite parity by both
-complete packets:
+Compact generalized forms:
 
-\[
-\boxed{N,\;X,\;X-1}
-\qquad\text{or}\qquad
-\boxed{N,\;X,\;X+1}.
-\]
+```text
+V_K^s(N) = 2N + K + s
+U_K^s(N) = 2(N+K) + s
+```
 
-The final wrapper is mandatory. The bare top address is used to calculate the
-packet but is not a third wrapper choice.
+where:
 
-If \(X\) is even, \(X\pm1\) are odd. If \(X\) is odd, \(X\pm1\) are even.
+```text
+K ∈ integers
+s ∈ {-1,+1}
+```
 
-Applied to the double-first ladder:
+The wrapper has opposite parity from its TOP.
 
-\[
-\boxed{(2N+m)-1,\;2N+m,\;(2N+m)+1}.
-\]
+## Same destination, different route
 
-Applied to the shift-first ladder:
+Two operation orders can land on the same number:
 
-\[
-\boxed{2(N+m)-1,\;2(N+m),\;2(N+m)+1}.
-\]
+```text
+2N + 2m = 2(N + m)
+```
 
-The wrapper is structural: it lets adjacent nested packets share an address and therefore connect in either direction.
+Example:
 
-For example, when \(N=1\):
+```text
+DOUBLE_THEN_SHIFT K=2
+SHIFT_THEN_DOUBLE K=1
+```
 
-\[
-3,4,5
-\]
+can reach the same TOP for the same N. The receipt must retain which route and
+which K produced it.
 
-followed by
+Shared numeric destinations are useful handoffs; they do not erase route
+history.
 
-\[
-5,6,7
-\]
+## Exact reverse / division reconstruction
 
-shares the value 5. Algebraically:
+For a complete double-then-shift packet:
 
-\[
-\boxed{2N+1=2(N+1)-1}.
-\]
+```text
+X = 2N + K + s
+N = (X - K - s) / 2
+```
 
-Likewise an odd center can be wrapped by evens:
+For a complete shift-then-double packet:
 
-\[
-2,3,4
-\]
+```text
+X = 2(N+K) + s
+N = (X - s) / 2 - K
+```
 
-then
+The complete route receipt therefore stores at minimum:
 
-\[
-4,5,6
-\]
+- source / alphabet orientation;
+- route family;
+- signed K;
+- wrapper side s;
+- polarity;
+- traversal direction;
+- resulting TOP and wrapper address.
 
-so the parity of the center may alternate while the neighboring wrapper always uses the opposite parity.
+The bounded `1..12 -> 12..24` scale/division rail is separately locked in
+`rabbit_hop_scale_rail.py`. Broader claims about division remain open unless
+another explicit lock defines them.
 
-## Signed / Mirrored Form
+## Mirrored, inverted, and opposing remain separate
 
-Polarity is independent of alphabet orientation. A complete signed address may be reflected through zero:
+1. **Mirrored** changes numeric polarity: `X -> -X`.
+2. **Inverted** reverses alphabet rank: `N -> 27-N`.
+3. **Opposing** reverses declared traversal order.
 
-\[
-\boxed{X\mapsto -X}.
-\]
+These operations can compose, but none silently substitutes for another.
 
-Therefore each rabbit-hop family has positive and negative forms:
+Alphabet side-to-side inversion also swaps logical lower/upper wrapper
+assignment. Numeric polarity remains independent.
 
-\[
-\boxed{\pm(2N+m)}
-\]
+Whole-run Mirror Gate layouts remain:
 
-and
+```text
+A-Z(0)Z-A
+Z-A(0)A-Z
+```
 
-\[
-\boxed{\pm 2(N+m)}.
-\]
+Zero sits between whole alphabet runs. It is not a route wrapper and is not a
+letter TOP.
 
-The wrapper follows the selected signed center. Sign mirroring changes polarity; it does not by itself invert alphabet rank or reverse traversal order.
+## Point -> Path -> Field interpretation
 
-## Mirrored, Inverted, and Opposing Operations
+The grammar may be used as a nested routing map:
 
-Three operations must remain distinguishable:
+```text
+Point_N -> Path_N -> Field_N -> next nested address
+```
 
-1. **Mirrored** — change sign/polarity: \(X\mapsto-X\).
-2. **Inverted** — reverse alphabet rank: \(N\mapsto27-N\).
-3. **Opposing** — traverse the declared route in the reverse direction while preserving the same address grammar.
+Shared `±1` boundaries can act as handoffs between declared nests. This is a
+translator interpretation. A target domain must be tested separately before
+claiming that this coordinate grammar faithfully represents its behavior.
 
-They may be composed, but none is silently substituted for another.
+## Word-to-path compilation
 
-Inverting the alphabet axis also inverts logical up/down: the numeric
-`-1/+1` sides assigned to logical lower/upper swap together with the alphabet
-orientation.
+For each letter at step `t`, first map the letter to a forward or inverted
+alphabet source rank `N_t`. Then record:
 
-## Mechanical Division Check / Broader Role Open
+```text
+polarity sigma_t ∈ {-1,+1}
+route family
+signed K_t
+wrapper s_t ∈ {-1,+1}
+traversal direction
+```
 
-The identities below mechanically verify a fully attributed receipt. The
-broader role of division is unresolved and must not be described as locked
-Rabbit Hopping theory.
+Double then shift:
 
-For the double-first family
+```text
+X_t = sigma_t * (2N_t + K_t + s_t)
+```
 
-\[
-X=2N+m,
-\]
+Shift then double:
 
-recover \(N\) exactly by
+```text
+X_t = sigma_t * (2(N_t + K_t) + s_t)
+```
 
-\[
-\boxed{N=\frac{X-m}{2}}.
-\]
+The hop between consecutive addresses is:
 
-For the shift-first family
+```text
+Delta X_t = X_(t+1) - X_t
+```
 
-\[
-X=2(N+m),
-\]
+Reversing traversal reverses the route order. It does not silently change
+polarity, alphabet orientation, K, or wrapper side.
 
-recover \(N\) exactly by
+## Relationship to live choice
 
-\[
-\boxed{N=\frac{X}{2}-m}.
-\]
-
-If a wrapper is present, remove the declared wrapper first. For
-
-\[
-X=2(N+m)+s,\qquad s\in\{-1,+1\},
-\]
-
-the inverse is
-
-\[
-\boxed{N=\frac{X-s}{2}-m}.
-\]
-
-For
-
-\[
-X=2N+m+s,
-\]
-
-the inverse is
-
-\[
-\boxed{N=\frac{X-m-s}{2}}.
-\]
-
-A reversible receipt therefore stores at minimum:
-
-- alphabet orientation (forward or inverted);
-- sign/polarity;
-- whether the route was double-first or shift-first;
-- integer offset \(m\);
-- wrapper side \(s\in\{-1,+1\}\), required on every packet;
-- resulting address.
-
-Without those route facts, equal numerical destinations such as \(2N+2m=2(N+m)\) cannot reveal which path produced them.
-
-## Point -> Path -> Field Nesting Interpretation
-
-The arithmetic can be used as a nested routing map:
-
-\[
-\boxed{\text{Point}_N\rightarrow\text{Path}_N\rightarrow\text{Field}_N\rightarrow\text{next nested address}}
-\]
-
-The shared \(\pm1\) boundary is the handoff between neighboring nests. The next layer changes the reference from \(N\) to \(N+1\) while preserving a reversible connection to the preceding layer.
-
-This is a translator interpretation. Whether a particular target domain (software state, memory, music, motion, physics, or another system) is faithfully represented by this grammar must be tested separately in that domain.
-
-## Word-to-Path Compilation
-
-For a word, first map each letter to its declared forward or inverted alphabet rank \(N_t\). For every step choose and record:
-
-- polarity \(\sigma_t\in\{-1,+1\}\);
-- route family: double-first or shift-first;
-- integer offset \(m_t\);
-- wrapper \(s_t\in\{-1,+1\}\).
-
-Double-first:
-
-\[
-\boxed{X_t=\sigma_t(2N_t+m_t+s_t)}.
-\]
-
-Shift-first:
-
-\[
-\boxed{X_t=\sigma_t(2(N_t+m_t)+s_t)}.
-\]
-
-The hop between consecutive addresses is
-
-\[
-\boxed{\Delta X_t=X_{t+1}-X_t}.
-\]
-
-A route may move forward or backward. Reversal reverses the ordered receipt sequence; it does not silently change sign, alphabet inversion, or wrapper side.
-
-## Relationship to Choice
-
-The alphabet/rabbit-hop translator does not make foundational choice. It supplies a coordinate and candidate route.
-
-The operating order remains:
+The alphabet/Rabbit-Hop translator proposes coordinates/routes; it does not make
+foundational live choice.
 
 ```text
 symbolic cue
 -> alphabet coordinate
--> reversible rabbit-hop route
+-> reversible Rabbit-Hop route
 -> live -1(0)+1 choice
 -> top-down validation / permission
 -> committed movement
 ```
 
-A stored sequence may schedule or validate a route. It may not force live movement when the choice or sensory layer selects Hold.
+A stored route may schedule or validate movement. It does not force movement if
+the live-choice/sensory layer selects Hold.
 
-## Validation Requirements
+## Executable adapter
 
-A valid implementation of this generalized grammar must verify:
+```text
+One_Wave_Bench/brain/rabbit_hop_alphabet.py
+One_Wave_Bench/brain/test_rabbit_hop_alphabet.py
+```
 
-1. alphabet rank is in 1..26;
-2. inverted alphabet obeys \(N_{inv}=27-N\);
-3. double-first addresses obey \(X=2N+m\);
-4. shift-first addresses obey \(X=2(N+m)\);
-5. equal-destination cases obey \(2N+2m=2(N+m)\);
-6. every packet ends in exactly a \(-1\) or \(+1\) wrapper around its declared
-   top address;
-7. wrapper parity is opposite the center parity when \(s=\pm1\);
-8. adjacent declared nests preserve their shared boundary when one exists;
-9. positive and negative forms are exact sign mirrors;
-10. mirror, inversion, and opposing traversal remain separately declared;
-11. the declared inverse division reconstructs the original \(N\) exactly;
-12. receipts preserve route family and offset so equal numerical destinations remain distinguishable;
-13. Mirror-Gate zero is never confused with route token zero or a top address;
-14. alphabet, memory, wheel, and live-choice systems remain separate layers.
+The alphabet adapter imports the shared enums and route arithmetic from:
 
-## Failure Conditions
+```text
+One_Wave_Bench/brain/rabbit_hop_core.py
+One_Wave_Bench/brain/test_rabbit_hop_core.py
+```
+
+Music and Circle-of-Fifths use the same core through:
+
+```text
+One_Wave_Bench/brain/rabbit_hop_music.py
+RABBIT_HOPPING_MUSIC_ADAPTER.md
+```
+
+## Validation requirements
+
+A valid implementation must verify:
+
+1. alphabet ranks are in `1..26`;
+2. inverted alphabet obeys `N_inv=27-N`;
+3. `ORIGINAL` obeys `TOP=2N` and `K=0`;
+4. double-then-shift obeys `TOP=2N+K` for signed K;
+5. shift-then-double obeys `TOP=2(N+K)` for signed K;
+6. explicit `K=-3,-2,-1,0,+1,+2,+3` cases work on both generalized routes;
+7. every selected TOP has both `TOP-1` and `TOP+1` complete packets;
+8. top shift and wrapper remain separate receipt fields;
+9. equal numeric destinations keep different route receipts;
+10. positive/negative forms are exact polarity mirrors;
+11. mirror, alphabet inversion, and opposing traversal remain distinct;
+12. exact inverse reconstruction returns the original source rank;
+13. Mirror-Gate zero is not confused with a TOP or wrapper;
+14. alphabet, memory, wheel, music, and live-choice layers remain separate.
+
+## Failure conditions
 
 The grammar fails when:
 
-- parentheses are dropped so operation order changes;
-- two numerically equal destinations are treated as proof that their routes were identical;
-- division is used without first removing the declared offset/wrapper;
-- parity wrapper metadata is discarded;
+- parentheses are dropped and operation order changes;
+- negative K is rejected by a generalized route;
+- K and wrapper ±1 are collapsed into one operation;
+- equal destinations are treated as identical routes;
+- division/rebuild is attempted without route metadata;
+- wrapper parity/side is discarded;
 - mirroring is silently treated as alphabet inversion;
-- reversal silently changes polarity;
-- route arithmetic is presented as already proving a physical mechanism;
-- a later ratio is used to alter an earlier packet after the fact.
+- reversal silently changes polarity or K;
+- route arithmetic is presented as proof of a physical mechanism.
 
 ## Falsifier
 
-This node must be revised if an implementation cannot simultaneously preserve address identity, route-of-origin, sign mirror, alphabet inversion, route reversal, opposite-parity wrapping, and exact division-based reconstruction without ambiguity.
+This node must be revised if the executable implementation cannot
+simultaneously preserve source identity, signed route-of-origin, wrapper side,
+polarity mirror, alphabet inversion, route reversal, and exact inverse
+reconstruction without ambiguity.
