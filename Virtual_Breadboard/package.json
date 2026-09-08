@@ -14,6 +14,7 @@
     "test:flashlight-calibration": "node test/run_flashlight_calibration.js",
     "test:netlist": "node test/netlist.test.js",
     "test:fault-states": "node test/fault-states.test.js",
+    "test:basic-circuits": "node test/basic-circuits.test.js",
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
