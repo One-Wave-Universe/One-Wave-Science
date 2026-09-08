@@ -8,6 +8,35 @@ LED driver, timer loop, or binary-control IC cannot silently replace it again.
 The flashlight is the first useful hardware host for the same balanced cell
 architecture used later by BC-DC -> TC-AC -> QC-RC experiments.
 
+## Scope boundary — do not force a higher state count
+
+The flashlight does **not** have to demonstrate every later One-Wave state
+family.
+
+Its job is to prove the smallest useful physical chain that naturally belongs
+in the device:
+
+```text
+balanced reference
+-> differential state
+-> bidirectional nerve gates
+-> state-triggered reinjection
+-> AC / phase handoff where useful
+-> rotating electrical-drive relationship where useful
+```
+
+If the useful flashlight architecture ends at the nerve-gate / coordinated
+rotation layer, stop there.
+
+Do not force quinary (`-2,-1,0,+1,+2`) into the flashlight merely because a
+five-state grammar exists elsewhere. Quinary remains an optional downstream
+state/magnitude grammar until a measured flashlight function genuinely needs
+two distinct magnitudes on each side of CENTER.
+
+Likewise, do not declare a quaternary/four-state flashlight just because four is
+next in a sequence. The hardware behavior decides the useful state structure;
+the name comes after the measurement.
+
 ## One reference, end to end
 
 There is one continuously present virtual-ground / CENTER reference for the
@@ -315,8 +344,11 @@ It must not be labeled the One-Wave balanced flashlight prototype.
 8. Stored state remains after the user's non-mechanical input is removed.
 9. X color state and Y brightness state remain independently measurable.
 10. TC-AC crosses the same CENTER with measurable phase.
-11. QC-RC produces a rotating electrical drive vector.
-12. Only after Bx/By/Bz capability exists may a 3D magnetic-field trajectory
+11. QC-RC produces a rotating electrical drive vector if the flashlight needs
+    that layer.
+12. Stop at the last useful measured layer; do not add quinary/quaternary state
+    structure merely to continue a numerical sequence.
+13. Only after Bx/By/Bz capability exists may a 3D magnetic-field trajectory
     be claimed or classified.
-13. Compare energy/runtime against the conventional reference at matched useful
+14. Compare energy/runtime against the conventional reference at matched useful
     output.
