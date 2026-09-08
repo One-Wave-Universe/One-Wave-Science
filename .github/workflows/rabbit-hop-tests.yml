@@ -1,0 +1,42 @@
+name: Rabbit-Hop Translator Tests
+
+on:
+  push:
+    paths:
+      - 'One_Wave_Bench/brain/rabbit_hop_*.py'
+      - 'One_Wave_Bench/brain/test_rabbit_hop_*.py'
+      - 'RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
+      - 'RABBIT_HOPPING_MUSIC_ADAPTER.md'
+      - 'CODEX_LATEST_TRANSLATOR_HANDOFF.md'
+      - 'Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
+      - '.github/workflows/rabbit-hop-tests.yml'
+  pull_request:
+    paths:
+      - 'One_Wave_Bench/brain/rabbit_hop_*.py'
+      - 'One_Wave_Bench/brain/test_rabbit_hop_*.py'
+      - 'RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
+      - 'RABBIT_HOPPING_MUSIC_ADAPTER.md'
+      - 'CODEX_LATEST_TRANSLATOR_HANDOFF.md'
+      - 'Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
+      - '.github/workflows/rabbit-hop-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  rabbit-hop-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Rabbit-Hop regression suite
+        run: |
+          python -m unittest discover \
+            -s One_Wave_Bench/brain \
+            -p 'test_rabbit_hop_*.py' \
+            -v
