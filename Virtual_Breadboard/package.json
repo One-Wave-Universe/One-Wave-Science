@@ -1,13 +1,16 @@
 {
   "name": "virtual-breadboard-simulator",
   "version": "1.0.0",
-  "description": "A downloadable virtual breadboard: real parts, jumper wires, click-any-hole placement, and live circuit physics (Ohm's law, LED forward drop, RC transients, short-circuit detection).",
+  "description": "A downloadable virtual breadboard with live circuit physics, Jetson compute offload, and a local reality-audit minder.",
   "main": "main.js",
   "private": true,
   "homepage": "https://github.com/One-Wave-Universe/One-Wave-Science",
   "scripts": {
     "start": "electron .",
+    "worker": "node compute-worker.js",
+    "minder:audit": "node minder.js --audit",
     "test": "node test/circuit.test.js",
+    "test:compute": "node test/compute-worker.test.js",
     "test:qualification": "node test/qualification.test.js",
     "test:primitives": "node test/primitives.test.js",
     "test:regression": "node test/run_regression_builds.js",
@@ -21,6 +24,8 @@
     "dist": "electron-builder",
     "dist:appimage": "electron-builder --linux AppImage",
     "dist:deb": "electron-builder --linux deb",
+    "dist:linux-x64": "electron-builder --linux AppImage deb --x64",
+    "dist:linux-arm64": "electron-builder --linux AppImage deb --arm64",
     "dist:win": "electron-builder --win portable zip",
     "dist:win-installer": "electron-builder --win nsis",
     "dist:mac": "electron-builder --mac zip",
@@ -41,16 +46,19 @@
     "files": [
       "main.js",
       "preload.js",
+      "compute-worker.js",
+      "minder.js",
       "index.html",
       "style.css",
       "js/**/*",
+      "reality/**/*",
       "build/icon.png",
       "!test/**"
     ],
     "linux": {
       "target": [
-        { "target": "AppImage", "arch": ["x64"] },
-        { "target": "deb", "arch": ["x64"] }
+        { "target": "AppImage", "arch": ["x64", "arm64"] },
+        { "target": "deb", "arch": ["x64", "arm64"] }
       ],
       "category": "Education",
       "executableName": "virtual-breadboard-simulator",
