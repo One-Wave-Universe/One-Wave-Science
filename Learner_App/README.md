@@ -151,6 +151,12 @@ by design):
 - any `constraints.number_domain` other than `"integer"` (the default)
 - any character the tokenizer doesn't recognize, even mid-artifact (e.g.
   `"x + 4 @ = 9"` is rejected, not silently read as `"x + 4 = 9"`)
+- a zero divisor (`"x/0 = 5"` is rejected at parse time, an input-boundary
+  check, not just a generator round-trip check)
+- a malformed `coefficient_range`/`constant_range` (wrong shape, non-int,
+  or reversed `lo > hi`) or a non-positive `difficulty` -- these fail
+  cleanly in `validate_packet()` rather than crashing later inside
+  `generate_candidate()`
 
 ### Number domain: solutions stay integers
 

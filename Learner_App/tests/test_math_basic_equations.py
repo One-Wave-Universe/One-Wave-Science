@@ -151,6 +151,22 @@ class TokenizerCoverageTests(unittest.TestCase):
         with self.assertRaises(MathParseError):
             parse_equation_text("x + 4 = 9!")
 
+    def test_junk_before_first_token_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x @ + 4 = 9")
+
+    def test_junk_dollar_sign_before_coefficient_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("7$x = 14")
+
+    def test_repeated_equality_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x = 4 = 9")
+
+    def test_zero_divisor_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x/0 = 5")
+
     def test_valid_text_with_whitespace_gaps_still_parses(self):
         structure = parse_equation_text("x   +   4   =   9")
         self.assertEqual(structure.rhs, 9)
@@ -164,6 +180,60 @@ class TokenizerCoverageTests(unittest.TestCase):
         with self.assertRaises(ProblemVerificationError) as ctx:
             build_problem(packet, adapter=InjectingAdapter())
         self.assertFalse(ctx.exception.verification.well_formed)
+
+    def test_zero_divisor_from_build_problem_is_caught_end_to_end(self):
+        class InjectingAdapter(MathBasicEquationsAdapter):
+            def generate_candidate(self, packet, rng):
+                return "x/0 = 5"
+
+        packet = _packet([EQ_DIV_INVERSE], seed=1)
+        with self.assertRaises(ProblemVerificationError) as ctx:
+            build_problem(packet, adapter=InjectingAdapter())
+        self.assertFalse(ctx.exception.verification.well_formed)
+
+
+class ConstraintValidationTests(unittest.TestCase):
+    """Malformed numeric constraints must fail cleanly in validate_packet(),
+    not later as an unpack/randint crash inside generate_candidate()."""
+
+    def setUp(self):
+        self.adapter = MathBasicEquationsAdapter()
+
+    def test_reversed_coefficient_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"coefficient_range": (9, 2)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_non_tuple_coefficient_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"coefficient_range": 5})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_non_integer_coefficient_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"coefficient_range": (1.5, 9)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_reversed_constant_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"constant_range": (20, 1)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_zero_difficulty_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], difficulty=0)
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_negative_difficulty_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], difficulty=-1)
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_non_integer_difficulty_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], difficulty="high")
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_valid_constraints_accepted(self):
+        packet = _packet(
+            [EQ_ADD_INVERSE, EQ_MUL_INVERSE],
+            constraints={"coefficient_range": (2, 5), "constant_range": (1, 10)},
+            difficulty=2,
+        )
+        self.assertEqual(self.adapter.validate_packet(packet), [])
 
 
 class IntegerSolutionTests(unittest.TestCase):

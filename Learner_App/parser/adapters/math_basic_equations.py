@@ -148,6 +148,12 @@ def _parse_var_term(tokens: list[str], i: int) -> tuple[VarTerm, int]:
         if i >= len(tokens) or not tokens[i].isdigit():
             raise MathParseError("expected an integer divisor after '/'")
         divisor = int(tokens[i])
+        if divisor == 0:
+            # The parser is an input boundary in its own right, not only a
+            # round-trip check on this adapter's own generator -- reject
+            # division by zero here regardless of whether generation could
+            # ever produce it.
+            raise MathParseError("divisor cannot be zero")
         i += 1
 
     return VarTerm(coefficient=coefficient, variable=variable, divisor=divisor), i
@@ -189,6 +195,15 @@ def parse_equation_text(text: str) -> EquationStructure:
         constant_term=constant_term,
         rhs=rhs,
         equality_sides=(lhs_text.strip(), rhs_text.strip()),
+    )
+
+
+def _is_valid_int_range(value: Any) -> bool:
+    return (
+        isinstance(value, (tuple, list))
+        and len(value) == 2
+        and all(isinstance(v, int) and not isinstance(v, bool) for v in value)
+        and value[0] <= value[1]
     )
 
 
@@ -237,6 +252,28 @@ class MathBasicEquationsAdapter:
                 f"unsupported constraints.number_domain for {DOMAIN} v1: {number_domain!r} "
                 f"(only {sorted(SUPPORTED_NUMBER_DOMAINS)} supported)"
             )
+
+        # Validate numeric constraint shapes up front so a malformed packet
+        # fails cleanly here instead of raising an unpack/randint error
+        # later inside generate_candidate().
+        if "coefficient_range" in packet.constraints and not _is_valid_int_range(
+            packet.constraints["coefficient_range"]
+        ):
+            errors.append(
+                "constraints.coefficient_range must be a 2-item (lo, hi) integer range with lo <= hi"
+            )
+        if "constant_range" in packet.constraints and not _is_valid_int_range(
+            packet.constraints["constant_range"]
+        ):
+            errors.append(
+                "constraints.constant_range must be a 2-item (lo, hi) integer range with lo <= hi"
+            )
+        if (
+            not isinstance(packet.difficulty, int)
+            or isinstance(packet.difficulty, bool)
+            or packet.difficulty < 1
+        ):
+            errors.append("difficulty must be a positive integer")
 
         return errors
 
