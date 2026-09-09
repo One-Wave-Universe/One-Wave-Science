@@ -1,12 +1,24 @@
-# One Wave Science — Company Start Here
+# SiC International — Company Start Here
 
 Status: working company foundation for market preparation. The legal entity name is **not yet filed or cleared**.
 
 ## Working company
 
-**Brand:** One Wave Science  
+**Parent company / brand:** SiC International  
+**Primary visual/technical mark:** `SI=C`  
 **Default formation target:** California limited liability company (LLC)  
-**Working legal name:** `One Wave Science LLC` — only if California name availability is confirmed at filing time.
+**Working legal name:** `SiC International LLC` — only if California name availability is confirmed at filing time.
+
+### Meaning of SI=C
+
+`SI=C` deliberately carries two linked meanings:
+
+1. **SiC** — silicon carbide, a real semiconductor/material system relevant to advanced power electronics.
+2. **Si = C** — a company design principle: silicon and carbon are treated as equal partners in the architecture and design language rather than one being assumed to dominate the other.
+
+This is a symbolic engineering identity. It does **not** claim elemental silicon and elemental carbon are chemically identical or physically interchangeable.
+
+**One Wave Science** remains available as an R&D / theory / experimental project identity underneath SiC International rather than serving as the legal parent-company name.
 
 Why start here:
 - simplest practical structure for a founder-led software + electronics-tool company getting products to market;
@@ -64,13 +76,13 @@ Do not assume repository ownership automatically equals company IP ownership. On
 
 ## Immediate sequence
 
-1. Confirm legal entity name availability.
-2. File California LLC Articles of Organization.
-3. File the initial Statement of Information within 90 days.
-4. Obtain a free EIN directly from the IRS.
-5. Open company banking/payment accounts only after entity/EIN are established.
-6. Create written founder IP assignment into the company.
-7. Clear product/company names before spending heavily on branding.
+1. Confirm `SiC International LLC` legal entity name availability.
+2. Search/clear `SI=C`, `SIC INTERNATIONAL`, and close variants for relevant trademark classes before major branding spend.
+3. File California LLC Articles of Organization.
+4. File the initial Statement of Information within 90 days.
+5. Obtain a free EIN directly from the IRS.
+6. Open company banking/payment accounts only after entity/EIN are established.
+7. Create written founder IP assignment into the company.
 8. Lock the Breadboard app release gate.
 9. Build Pedal Lab and Perfboard Amp Lab as separate product modes on the qualified circuit core.
 10. Add terms, privacy disclosure, warranty/disclaimer language and product-liability review before public paid release.
