@@ -135,6 +135,13 @@ def _parse_var_term(tokens: list[str], i: int) -> tuple[VarTerm, int]:
     coefficient = 1
     if tokens[i].isdigit() and i + 1 < len(tokens) and tokens[i + 1].isalpha():
         coefficient = int(tokens[i])
+        if coefficient == 0:
+            # Same input-boundary reasoning as the zero-divisor check below:
+            # a zero coefficient is nonsensical (and would divide by zero
+            # in validate_structure's integer-domain check), so the parser
+            # rejects it outright rather than trusting a generator never to
+            # produce it.
+            raise MathParseError("coefficient cannot be zero")
         i += 1
 
     if i >= len(tokens) or not tokens[i].isalpha():
@@ -207,6 +214,19 @@ def _is_valid_int_range(value: Any) -> bool:
     )
 
 
+def _feasible_coefficient_bounds(coeff_lo: int, coeff_hi: int) -> tuple[int, int] | None:
+    """A coefficient or divisor must be >= 2 to mean anything structurally
+    (1 renders as no coefficient/divisor at all, i.e. no EQ.MUL_INVERSE /
+    EQ.DIV_INVERSE). Returns the router's requested range intersected with
+    that floor, or None if the intersection is empty -- generation must
+    then treat the packet as infeasible rather than silently drawing a
+    coefficient outside the router's requested range."""
+    lo = max(2, coeff_lo)
+    if lo > coeff_hi:
+        return None
+    return lo, coeff_hi
+
+
 def _rules_present(structure: EquationStructure) -> list[str]:
     rules: list[str] = []
     if structure.var_term.coefficient != 1:
@@ -256,11 +276,21 @@ class MathBasicEquationsAdapter:
         # Validate numeric constraint shapes up front so a malformed packet
         # fails cleanly here instead of raising an unpack/randint error
         # later inside generate_candidate().
-        if "coefficient_range" in packet.constraints and not _is_valid_int_range(
-            packet.constraints["coefficient_range"]
-        ):
+        coefficient_range = packet.constraints.get("coefficient_range", DEFAULT_COEFFICIENT_RANGE)
+        if not _is_valid_int_range(coefficient_range):
             errors.append(
                 "constraints.coefficient_range must be a 2-item (lo, hi) integer range with lo <= hi"
+            )
+        elif (
+            EQ_MUL_INVERSE in packet.target_rules or EQ_DIV_INVERSE in packet.target_rules
+        ) and _feasible_coefficient_bounds(*coefficient_range) is None:
+            # The worker must never repair a router constraint by widening
+            # it behind the router's back -- if no coefficient/divisor >= 2
+            # fits inside the router's exact range, the packet is
+            # infeasible, not a license to draw outside that range.
+            errors.append(
+                f"constraints.coefficient_range {tuple(coefficient_range)} cannot produce a "
+                f"coefficient/divisor >= 2, which the requested rule(s) require for {DOMAIN} v1"
             )
         if "constant_range" in packet.constraints and not _is_valid_int_range(
             packet.constraints["constant_range"]
@@ -288,38 +318,45 @@ class MathBasicEquationsAdapter:
         term_lo, term_hi = DEFAULT_TERM_VALUE_RANGE
         term_hi = term_hi * max(1, packet.difficulty)
 
-        coefficient = (
-            rng.randint(max(2, coeff_lo), max(coeff_hi, coeff_lo + 1)) if EQ_MUL_INVERSE in rules else 1
-        )
-        divisor = (
-            rng.randint(max(2, coeff_lo), max(coeff_hi, coeff_lo + 1)) if EQ_DIV_INVERSE in rules else None
-        )
+        # validate_packet() already rejected the packet if no coefficient/
+        # divisor >= 2 fits the router's exact coefficient_range, so this
+        # draws from that exact range rather than widening/clamping it.
+        coeff_bounds = _feasible_coefficient_bounds(coeff_lo, coeff_hi)
+        coefficient = rng.randint(*coeff_bounds) if EQ_MUL_INVERSE in rules else 1
+        divisor = rng.randint(*coeff_bounds) if EQ_DIV_INVERSE in rules else None
+
+        sign = "+" if EQ_ADD_INVERSE in rules else "-" if EQ_SUB_INVERSE in rules else None
+        constant = rng.randint(const_lo, const_hi) if sign else None
 
         # constraints.number_domain defaults to "integer" (v1's only
-        # supported domain, enforced in validate_packet()). When a
-        # coefficient is present, the term's value must land on an exact
-        # multiple of it or the unknown would come out fractional -- so
-        # build the term's value from a hidden integer multiplier rather
-        # than picking it independently. The multiplier itself is never
-        # returned, stored, or logged anywhere public; only its product
-        # (a term value, not the solved unknown) is used.
+        # supported domain, enforced in validate_packet()). Build the
+        # term's value AROUND whatever coefficient/constant were already
+        # drawn -- a multiple of the coefficient when one is present, and
+        # at least the constant when subtracting -- so the result is
+        # guaranteed valid by construction instead of only discovered
+        # invalid afterward by validate_structure(). The hidden multiplier
+        # is never returned, stored, or logged anywhere public; only the
+        # term value it produces (not the solved unknown) is used.
         if coefficient != 1:
-            hidden_multiplier = rng.randint(1, max(1, term_hi // coefficient))
+            min_multiplier = 1
+            if sign == "-":
+                min_multiplier = max(1, -(-constant // coefficient))  # ceil(constant / coefficient)
+            span = max(1, term_hi // coefficient)
+            hidden_multiplier = rng.randint(min_multiplier, min_multiplier + span)
             term_value = coefficient * hidden_multiplier
+        elif sign == "-":
+            term_value = constant + rng.randint(term_lo, term_hi)
         else:
             term_value = rng.randint(term_lo, term_hi)
 
-        sign = "+" if EQ_ADD_INVERSE in rules else "-" if EQ_SUB_INVERSE in rules else None
-        if sign == "-":
-            # rhs = term_value - constant must stay non-negative (v1 has no
-            # negative-number support anywhere in the grammar).
-            constant = rng.randint(const_lo, max(const_lo, min(const_hi, term_value)))
-            rhs = term_value - constant
-        elif sign == "+":
-            constant = rng.randint(const_lo, const_hi)
+        if sign == "+":
             rhs = term_value + constant
+        elif sign == "-":
+            # rhs = term_value - constant is guaranteed non-negative by how
+            # term_value was constructed above (v1 has no negative-number
+            # support anywhere in the grammar).
+            rhs = term_value - constant
         else:
-            constant = None
             rhs = term_value
 
         if divisor is not None:

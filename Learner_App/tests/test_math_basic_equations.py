@@ -191,6 +191,27 @@ class TokenizerCoverageTests(unittest.TestCase):
             build_problem(packet, adapter=InjectingAdapter())
         self.assertFalse(ctx.exception.verification.well_formed)
 
+    def test_zero_coefficient_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("0x = 5")
+
+    def test_zero_coefficient_with_constant_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("0x + 3 = 8")
+
+    def test_zero_coefficient_from_build_problem_is_caught_end_to_end(self):
+        # Before the fix this raised ZeroDivisionError from
+        # validate_structure()'s divisibility check instead of failing
+        # verification cleanly.
+        class InjectingAdapter(MathBasicEquationsAdapter):
+            def generate_candidate(self, packet, rng):
+                return "0x = 5"
+
+        packet = _packet([EQ_ADD_INVERSE], seed=1)
+        with self.assertRaises(ProblemVerificationError) as ctx:
+            build_problem(packet, adapter=InjectingAdapter())
+        self.assertFalse(ctx.exception.verification.well_formed)
+
 
 class ConstraintValidationTests(unittest.TestCase):
     """Malformed numeric constraints must fail cleanly in validate_packet(),
@@ -270,6 +291,74 @@ class IntegerSolutionTests(unittest.TestCase):
                 _packet([EQ_SUB_INVERSE, EQ_MUL_INVERSE], seed=seed), adapter=self.adapter
             )
             self.assertTrue(self._solved_value_is_integer(result.structure))
+
+
+class CoefficientRangeExactnessTests(unittest.TestCase):
+    """Regression tests: the worker must never repair an infeasible
+    coefficient_range by widening it -- it must reject the packet instead
+    of silently drawing a coefficient/divisor outside the router's exact
+    requested range."""
+
+    def setUp(self):
+        self.adapter = MathBasicEquationsAdapter()
+
+    def test_mul_with_range_one_one_is_infeasible(self):
+        packet = _packet([EQ_MUL_INVERSE], constraints={"coefficient_range": (1, 1)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_div_with_range_zero_one_is_infeasible(self):
+        packet = _packet([EQ_DIV_INVERSE], constraints={"coefficient_range": (0, 1)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_mul_with_range_two_two_always_uses_coefficient_two(self):
+        for seed in range(20):
+            packet = _packet(
+                [EQ_MUL_INVERSE], seed=seed, constraints={"coefficient_range": (2, 2)}
+            )
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertEqual(result.structure.var_term.coefficient, 2)
+
+    def test_mul_with_range_four_six_always_stays_within_range(self):
+        for seed in range(30):
+            packet = _packet(
+                [EQ_MUL_INVERSE], seed=seed, constraints={"coefficient_range": (4, 6)}
+            )
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertIn(result.structure.var_term.coefficient, (4, 5, 6))
+
+    def test_div_with_range_four_six_always_stays_within_range(self):
+        for seed in range(30):
+            packet = _packet(
+                [EQ_DIV_INVERSE], seed=seed, constraints={"coefficient_range": (4, 6)}
+            )
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertIn(result.structure.var_term.divisor, (4, 5, 6))
+
+
+class ConstantRangeFeasibilityTests(unittest.TestCase):
+    """Regression tests: a large constant_range for EQ.SUB_INVERSE must
+    either always produce a valid equation, or be rejected up front -- not
+    intermittently raise ProblemVerificationError from a packet that
+    validate_packet() already declared acceptable."""
+
+    def setUp(self):
+        self.adapter = MathBasicEquationsAdapter()
+
+    def test_sub_inverse_with_large_constant_range_always_succeeds(self):
+        packet_kwargs = dict(constraints={"constant_range": (1000, 2000)})
+        for seed in range(30):
+            packet = _packet([EQ_SUB_INVERSE], seed=seed, **packet_kwargs)
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertTrue(result.verification.passed)
+            self.assertGreaterEqual(result.structure.rhs, 0)
+
+    def test_sub_and_mul_inverse_with_large_constant_range_always_succeeds(self):
+        packet_kwargs = dict(constraints={"constant_range": (500, 600)})
+        for seed in range(30):
+            packet = _packet([EQ_SUB_INVERSE, EQ_MUL_INVERSE], seed=seed, **packet_kwargs)
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertTrue(result.verification.passed)
+            self.assertGreaterEqual(result.structure.rhs, 0)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,33 @@
+name: Learner App Tests
+
+on:
+  push:
+    paths:
+      - 'Learner_App/**'
+      - '.github/workflows/learner-app-tests.yml'
+  pull_request:
+    paths:
+      - 'Learner_App/**'
+      - '.github/workflows/learner-app-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  learner-app-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Learner App problem-builder test suite
+        run: |
+          python -m unittest discover \
+            -s Learner_App/tests \
+            -t . \
+            -p 'test_*.py' \
+            -v

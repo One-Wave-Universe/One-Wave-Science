@@ -99,6 +99,25 @@ be used to build a packet under an adapter for the wrong domain —
 `resolved_adapter.domain` is checked against `packet.domain` regardless of
 where the adapter came from, so domain selection stays the router's call.
 
+A `RulePacket` is meant to be a fixed instruction, not something a caller
+can quietly edit after handing it to the worker: `constraints` and
+`metadata` are snapshotted into read-only mappings at construction
+(`models._freeze_mapping()`), so mutating the caller's original dict
+afterward, or assigning into `packet.constraints` directly, cannot change
+what a later `build_problem()` call sees. See `test_models.py`.
+
+The worker never repairs an infeasible router constraint by widening it.
+If `EQ.MUL_INVERSE`/`EQ.DIV_INVERSE` is targeted and no coefficient/divisor
+`>= 2` fits inside the router's exact `coefficient_range`,
+`validate_packet()` rejects the packet outright rather than drawing a
+value outside that range (`CoefficientRangeExactnessTests`). Likewise, for
+`EQ.SUB_INVERSE` the term value is now constructed *around* whatever
+constant was drawn (`term_value = constant + <extra>`) instead of being
+picked independently and then clamped — so a wide `constant_range` always
+produces a valid equation instead of occasionally raising
+`ProblemVerificationError` from a packet `validate_packet()` had already
+accepted (`ConstantRangeFeasibilityTests`).
+
 ## Determinism
 
 `core.build_problem()` seeds a fresh `random.Random(packet.seed)` per call
@@ -151,12 +170,17 @@ by design):
 - any `constraints.number_domain` other than `"integer"` (the default)
 - any character the tokenizer doesn't recognize, even mid-artifact (e.g.
   `"x + 4 @ = 9"` is rejected, not silently read as `"x + 4 = 9"`)
-- a zero divisor (`"x/0 = 5"` is rejected at parse time, an input-boundary
-  check, not just a generator round-trip check)
+- a zero divisor or a zero coefficient (`"x/0 = 5"`, `"0x = 5"` are both
+  rejected at parse time, an input-boundary check, not just a generator
+  round-trip check -- a zero coefficient in particular would otherwise
+  divide by zero inside `validate_structure()`'s integer-domain check)
 - a malformed `coefficient_range`/`constant_range` (wrong shape, non-int,
   or reversed `lo > hi`) or a non-positive `difficulty` -- these fail
   cleanly in `validate_packet()` rather than crashing later inside
   `generate_candidate()`
+- a `coefficient_range` with no value `>= 2` when `EQ.MUL_INVERSE` or
+  `EQ.DIV_INVERSE` is targeted (e.g. `(1, 1)`) -- rejected as infeasible
+  rather than silently drawing a coefficient outside that range
 
 ### Number domain: solutions stay integers
 
@@ -174,10 +198,10 @@ generator's intent. See `IntegerSolutionTests`.
 Example generated artifacts (structural metadata only, no answers):
 
 ```text
-packet target_rules=[EQ.ADD_INVERSE]                 -> "x + 17 = 40"
-packet target_rules=[EQ.MUL_INVERSE]                 -> "7x = 35"
-packet target_rules=[EQ.ADD_INVERSE, EQ.MUL_INVERSE] -> "7x + 1 = 36"
-packet target_rules=[EQ.SUB_INVERSE, EQ.DIV_INVERSE] -> "x/7 - 1 = 33"
+packet target_rules=[EQ.ADD_INVERSE]                 -> "x + 12 = 46"
+packet target_rules=[EQ.MUL_INVERSE]                 -> "7x = 42"
+packet target_rules=[EQ.ADD_INVERSE, EQ.MUL_INVERSE] -> "7x + 17 = 24"
+packet target_rules=[EQ.SUB_INVERSE, EQ.DIV_INVERSE] -> "x/7 - 17 = 2"
 ```
 
 ## Layout
@@ -197,6 +221,7 @@ Learner_App/
   tests/
     test_core.py               # core purity + reusability acceptance tests
     test_verifier.py           # verifier unit tests
+    test_models.py             # RulePacket immutability tests
     test_math_basic_equations.py  # math adapter acceptance tests
     test_adapter_contract.py   # second-adapter proof + protocol compliance
     fixtures/
@@ -211,7 +236,9 @@ From the repository root:
 python3 -m unittest discover -s Learner_App/tests -t . -p "test_*.py" -v
 ```
 
-Python standard library only — no third-party dependencies.
+Python standard library only — no third-party dependencies. CI runs this
+same command on every push/PR touching `Learner_App/**`
+(`.github/workflows/learner-app-tests.yml`).
 
 ## Explicitly out of scope for this PR
 

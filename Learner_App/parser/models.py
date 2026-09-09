@@ -6,12 +6,27 @@ knowledge belongs in adapters (see parser/adapters/).
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from types import MappingProxyType
 from typing import Any
 
 
 def _as_tuple(value: Any) -> tuple[str, ...]:
     return tuple(value) if value else ()
+
+
+def _freeze_mapping(value: Mapping[str, Any] | None) -> MappingProxyType:
+    """Snapshot `value` into a read-only mapping so a RulePacket stays a
+    fixed instruction once built: neither mutating the caller's original
+    dict after construction, nor mutating packet.constraints/metadata
+    directly, can change what a later build_problem() call sees. List
+    values are frozen to tuples one level deep -- the common case (e.g.
+    constraints["variable_names"]) -- without the core needing to know
+    the shape of arbitrary nested domain-specific constraints."""
+    items = dict(value) if value else {}
+    frozen = {k: (tuple(v) if isinstance(v, list) else v) for k, v in items.items()}
+    return MappingProxyType(frozen)
 
 
 @dataclass(frozen=True)
@@ -24,6 +39,12 @@ class RulePacket:
     does not make it. Domain-specific knobs (e.g. a coefficient range for
     math) belong in `constraints`, not as dedicated fields here, so this
     type never has to grow per-domain fields.
+
+    A RulePacket is meant to be a fixed instruction: build_problem() must
+    produce the same result for the same packet and seed every time, so
+    `constraints` and `metadata` are snapshotted into read-only mappings
+    at construction (see _freeze_mapping()) rather than staying plain,
+    mutable dicts a caller could change out from under a stored packet.
     """
 
     packet_id: str
@@ -33,13 +54,15 @@ class RulePacket:
     allowed_support_rules: tuple[str, ...] = ()
     forbidden_rules: tuple[str, ...] = ()
     difficulty: int = 1
-    constraints: dict[str, Any] = field(default_factory=dict)
-    metadata: dict[str, Any] = field(default_factory=dict)
+    constraints: Mapping[str, Any] = field(default_factory=dict)
+    metadata: Mapping[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "target_rules", _as_tuple(self.target_rules))
         object.__setattr__(self, "allowed_support_rules", _as_tuple(self.allowed_support_rules))
         object.__setattr__(self, "forbidden_rules", _as_tuple(self.forbidden_rules))
+        object.__setattr__(self, "constraints", _freeze_mapping(self.constraints))
+        object.__setattr__(self, "metadata", _freeze_mapping(self.metadata))
 
 
 @dataclass(frozen=True)
