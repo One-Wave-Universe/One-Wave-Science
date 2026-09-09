@@ -1,14 +1,16 @@
-# California LLC Formation Checklist — One Wave Science
+# California LLC Formation Checklist — SiC International
 
 Status: preparation checklist only. Filing has not been completed from this repository.
 
 ## 1. Name clearance
 
-Working legal name: `One Wave Science LLC`.
+Working legal name: `SiC International LLC`.
 
-Before filing:
+Primary working mark: `SI=C`.
+
+Before filing/launch:
 - search California bizfile for identical/confusing entity names;
-- search USPTO trademarks for `ONE WAVE SCIENCE` and close variants in relevant software/electronics classes;
+- search USPTO trademarks for `SIC INTERNATIONAL`, `SI=C`, and close variants in relevant software/electronics classes;
 - search web/domain/app-store usage;
 - keep product names provisional until clearance is done.
 
@@ -87,7 +89,7 @@ Keep signed documents private.
 
 Pre-formation software/design work does not magically move into the LLC just because the company is formed.
 
-Execute a written assignment or license that clearly identifies the assets being transferred, including the One-Wave-Science repository and commercial product assets where appropriate.
+Execute a written assignment or license that clearly identifies the assets being transferred, including the One-Wave-Science repository and SiC International commercial product assets where appropriate.
 
 Do not assign third-party code/assets the founder does not own.
 
