@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "policy": {
+    "activationRule": "A part may be treated as reality-bound only when it names a real device or real component class, cites a primary manufacturer/datasheet source when applicable, uses bounded electrical parameters, and has at least one behavior test.",
+    "noSilentPhysics": true,
+    "unverifiedPartsStayCandidate": true
+  },
+  "parts": [
+    {
+      "id": "ao3400a",
+      "manufacturer": "Alpha & Omega Semiconductor",
+      "partNumber": "AO3400A",
+      "kind": "nmos",
+      "modelFamily": "mosfet-switch-with-body-diode",
+      "package": "SOT-23",
+      "sourceUrl": "https://www.aosmd.com/products/mosfets/low-voltage-mosfets-12v-30v/ao3400a",
+      "parameters": {
+        "vdsMaxV": 30,
+        "vgsAbsMaxV": 12,
+        "id25CMaxA": 5.7,
+        "vgsThresholdMinV": 0.65,
+        "vgsThresholdTypV": 1.05,
+        "vgsThresholdMaxV": 1.45,
+        "rdsOnMaxOhmAt4_5V": 0.032,
+        "rdsOnMaxOhmAt2_5V": 0.048
+      },
+      "acceptanceTests": [
+        "channel remains off below threshold range",
+        "channel conducts above a valid gate drive",
+        "body diode remains one-way with gate off",
+        "over-voltage and over-current conditions are surfaced as warnings rather than normalized away"
+      ],
+      "status": "primary-source-seeded"
+    },
+    {
+      "id": "2n7000",
+      "manufacturer": "onsemi",
+      "partNumber": "2N7000",
+      "kind": "nmos",
+      "modelFamily": "mosfet-switch-with-body-diode",
+      "package": "TO-92",
+      "sourceUrl": "https://www.onsemi.com/pdf/datasheet/nds7002a-d.pdf",
+      "parameters": {
+        "vdsMaxV": 60,
+        "vgsAbsMaxV": 20,
+        "idContinuousMaxA": 0.2,
+        "vgsThresholdMinV": 0.8,
+        "vgsThresholdTypV": 2.1,
+        "vgsThresholdMaxV": 3.0
+      },
+      "acceptanceTests": [
+        "gate threshold is treated as a range, not a guaranteed turn-on voltage",
+        "reverse body-diode path is modeled separately from the gated channel",
+        "continuous drain-current limit is not silently exceeded"
+      ],
+      "status": "primary-source-seeded"
+    },
+    {
+      "id": "tlv3202",
+      "manufacturer": "Texas Instruments",
+      "partNumber": "TLV3202",
+      "kind": "comparator",
+      "modelFamily": "dual-push-pull-comparator",
+      "package": "8-pin SOIC/VSSOP family",
+      "sourceUrl": "https://www.ti.com/product/TLV3202",
+      "parameters": {
+        "supplyMinV": 2.7,
+        "supplyMaxV": 5.5,
+        "propagationDelayTypNs": 40,
+        "inputOffsetMaxMv": 5,
+        "commonModeBelowRailV": 0.2,
+        "commonModeAboveRailV": 0.2
+      },
+      "acceptanceTests": [
+        "both channels compare independently",
+        "outputs are push-pull rather than open-collector",
+        "supply and common-mode violations produce warnings",
+        "input offset is represented in the decision model"
+      ],
+      "status": "primary-source-seeded"
+    },
+    {
+      "id": "tle2426",
+      "manufacturer": "Texas Instruments",
+      "partNumber": "TLE2426",
+      "kind": "virtual-ground",
+      "modelFamily": "rail-splitter",
+      "package": "3-terminal TO-92 / 8-pin family",
+      "sourceUrl": "https://www.ti.com/product/TLE2426",
+      "parameters": {
+        "supplyMinV": 4,
+        "supplyMaxV": 40,
+        "outputRatio": 0.5,
+        "sourceCurrentTypA": 0.02,
+        "sinkCurrentTypA": 0.02,
+        "outputImpedanceTypOhm": 0.0075
+      },
+      "acceptanceTests": [
+        "unloaded output stays at one-half of the input span",
+        "loaded output shows finite output impedance instead of an ideal infinite-current midpoint",
+        "source and sink current capability are bounded"
+      ],
+      "status": "primary-source-seeded"
+    }
+  ]
+}
