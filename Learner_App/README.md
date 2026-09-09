@@ -241,9 +241,120 @@ Learner_App/
       trivial_echo_adapter.py  # tiny non-equation adapter, tests-only
 ```
 
+## Phase 2: Router Loop + Two State Machines (issue #42)
+
+Phase 2 proves one complete deterministic learning cycle on top of the
+Phase 1 worker above, without changing it.
+
+```text
+STATE MACHINE A (LearnerTaskState) <-> ROUTER LOOP <-> STATE MACHINE B (EvaluatorState)
+                                            |
+                                    Phase 1 worker (parser.core.build_problem)
+```
+
+**The router loop is the orchestrator, not a third state machine.** There
+are exactly two state machines in this phase:
+
+- **State Machine A** (`router/state_machine_a.py`) — the live
+  learner/task interaction state. Five states, one allowed cycle:
+  `IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING -> IDLE`. Each
+  edge is its own function (`assign_problem`, `present_to_learner`,
+  `receive_attempt`, `apply_route_decision`, `resolve_cycle`); calling one
+  out of order raises `IllegalTaskTransitionError` rather than silently
+  coercing the state.
+- **State Machine B** (`router/state_machine_b.py`) — evaluation of a
+  learner attempt into structured evidence. Three states, one allowed
+  cycle: `IDLE -> EVALUATING -> EMITTED -> IDLE`. Its pure evaluation
+  logic (`evaluate_attempt`) only ever compares rule-ID *strings* — the
+  problem's target rules against the attempt's self-reported
+  `reported_rules_used` — to compute `missing_rules` and `error_kind`
+  (set whenever a target rule is missing, regardless of `outcome`, so a
+  "correct" attempt that skipped a target rule is still visibly
+  incomplete). `outcome` (`"correct" | "incorrect" | "incomplete"`) is
+  supplied by the `LearnerAttempt` itself, from whatever graded it
+  upstream of this phase (a human, a test harness, or — per CLAUDE.md —
+  a later explicitly authorized answer-checking component); State
+  Machine B never re-derives or leaks a solved answer. **B stays at
+  `EMITTED` after `submit_attempt()` returns** — it does not reset to
+  `IDLE` until the router explicitly consumes its evidence in
+  `route_next()`.
+- **Router Loop** (`router/router_loop.py`, class `RouterLoop`) — owns
+  routing/sequencing: it reads the current task state, applies the
+  deterministic policy in `router/policy.py` to build a `RouteDecision`,
+  turns that into a `RulePacket`, calls Phase 1's `build_problem()`
+  through its public contract only, and drives both state machines
+  through one cycle. All of this loop's bookkeeping (curriculum
+  position, current route, repeated-error tracking) is **instance
+  state** on one `RouterLoop` object, never module-level/global state —
+  two independently constructed instances with the same config and seed
+  always produce the same sequence of decisions.
+
+`router/policy.py`'s `decide_next_route()` is a pure function (same
+arguments always produce the same `(RouteDecision, next curriculum
+index)`), driven only by `outcome`, `rules_satisfied` (the router's own
+read of `not evidence.missing_rules`), and the router's own repeated-error
+count. Router authority means the router *decides using* State Machine
+B's evidence, not that it ignores it: a `"correct"` outcome that didn't
+demonstrate every target rule does **not** advance — it routes as
+`REPEAT`/`REDUCE_DIFFICULTY`/`EXPLAIN` with its own distinct reason codes
+(`correct_missing_rules_repeat`, etc.), same as an outright wrong answer.
+`decide_next_route()`'s signature has no `confidence`/`metadata`/`evidence`
+parameter at all, so an evidence object's advisory fields structurally
+cannot influence the decision beyond `outcome` and `rules_satisfied`.
+`DEFAULT_CURRICULUM` is demo *configuration* (a fixed sequence of
+rule-target steps for `math/basic_equations`) kept separate from the
+algorithm, exactly as Phase 1 kept domain constraints out of its core.
+
+### The evidence handshake
+
+`route_next()` takes **no evidence argument** — there is no parameter
+through which a caller could substitute forged or stale evidence for what
+State Machine B actually emitted. It reads
+`self.evaluator_state.last_evidence` directly, requires
+`evaluator_state.lifecycle_state == EMITTED` (raising
+`IllegalEvaluationTransitionError` otherwise), and defensively checks the
+evidence's `problem_id` against the active `task_state.current_problem_id`
+(raising `StaleAttemptError` on mismatch, though this cannot happen via
+the public API since `submit_attempt()` already checked the same match
+before evaluating). Only after computing and applying its decision does
+`route_next()` acknowledge B back to `IDLE` and resolve A back to `IDLE` —
+so both state machines reach their clean boundary state together, and
+only once the router has actually consumed the evidence that put them
+there.
+
+### Failure behavior
+
+- A `RulePacket` Phase 1 rejects (`PacketRejectedError`) or fails to
+  verify (`ProblemVerificationError`) propagates unchanged out of
+  `RouterLoop.generate_problem()`, and `task_state` stays `IDLE` — an
+  unverified problem is never assigned or presented.
+- `submit_attempt()` validates the `LearnerAttempt` (`validate_attempt()`
+  in `state_machine_b.py`) *before* any state mutation: a malformed
+  outcome/`problem_id` raises `MalformedAttemptError`, and a
+  `problem_id` that doesn't match the active cycle raises
+  `StaleAttemptError` — in both cases `task_state`/`evaluator_state` are
+  left exactly as they were, so the rejected attempt cannot mutate the
+  active cycle.
+- Calling a `RouterLoop` method out of turn (e.g. `generate_problem()`
+  twice without completing the cycle) raises `IllegalTaskTransitionError`
+  from State Machine A rather than silently continuing.
+
+### Running the Phase 2 demo
+
+```bash
+python3 -m Learner_App.demo_phase2
+```
+
+Headless, no UI, no LLM/network calls. Drives a `RouterLoop` through a
+correct attempt (`ADVANCE`), an incorrect attempt
+(`REPEAT`/`REDUCE_DIFFICULTY`), and a repeated same-category incorrect
+attempt (`EXPLAIN`) — printing the generated problem, evidence, and next
+`RouteDecision` at each step. Running it twice produces byte-identical
+output (same `base_seed`).
+
 ## Running the tests
 
-From the repository root:
+From the repository root, Phase 1 and Phase 2 tests together:
 
 ```bash
 python3 -m unittest discover -s Learner_App/tests -t . -p "test_*.py" -v
@@ -253,7 +364,14 @@ Python standard library only — no third-party dependencies. CI runs this
 same command on every push/PR touching `Learner_App/**`
 (`.github/workflows/learner-app-tests.yml`).
 
-## Explicitly out of scope for this PR
+## Explicitly out of scope
 
-Per the issue: no router implementation, no learner-state logic, no
-flashcard system, no LLM/network calls anywhere in generation, and no UI.
+Per issue #40 (Phase 1): no router implementation, no learner-state
+logic, no flashcard system, no LLM/network calls anywhere in generation,
+no UI.
+
+Per issue #42 (Phase 2): no six-step flashcard/recursive recall system
+(Phase 3), no UI, no LLM/network calls in the core loop. The router does
+not build a generic workflow framework — `RouterLoop`/`policy.py` are
+concrete and specific to proving this one loop, not a reusable
+state-machine core with its own adapter contract.
