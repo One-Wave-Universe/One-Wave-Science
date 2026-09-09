@@ -49,7 +49,12 @@ function startComputeWorker() {
   if (!shouldRunComputeWorker() || computeWorker) return;
   const port = Number(process.env.VBB_WORKER_PORT || DEFAULT_PORT);
   const bind = process.env.VBB_WORKER_BIND || (isJetsonClassHost() ? '0.0.0.0' : '127.0.0.1');
-  computeWorker = createWorkerServer({ bind, port, privateOnly: true });
+  computeWorker = createWorkerServer({
+    bind,
+    port,
+    privateOnly: true,
+    minderStateDir: path.join(app.getPath('userData'), 'minder'),
+  });
   computeWorker.on('error', (err) => {
     console.error(`[VBB compute] worker failed: ${err.message}`);
     computeWorker = null;
