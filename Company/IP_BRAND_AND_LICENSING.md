@@ -14,6 +14,22 @@ Meaning of the mark:
 
 This is a design/company principle, not a claim that silicon and carbon are chemically identical.
 
+## Mascot — GR
+
+**GR = Goblin Raccoon**, the official working mascot for SiC International.
+
+GR represents the `SI=C` culture:
+- curious and experimental;
+- scrappy and resourceful;
+- skeptical of unnecessary authority;
+- willing to challenge both human and AI assumptions;
+- collaborative rather than obedient;
+- funny enough to keep serious technical work from turning into sterile corporate bullshit.
+
+GR can appear in onboarding, help screens, documentation, product tips, educational material, stickers/merchandise, and company media. The mascot should never replace clear technical warnings or evidence labels.
+
+The GR name, character design, artwork, and distinctive visual identity should be treated as company brand assets. Before commercial merchandise or major advertising, clear the name/artwork for trademark/copyright conflicts and document ownership of the final artwork.
+
 R&D / experimental identity:
 - One Wave Science
 
@@ -26,7 +42,7 @@ These are **working names, not cleared trademarks**.
 
 ## Before public launch branding
 
-For each name/logo:
+For each name/logo/character:
 1. search California business/entity records where relevant;
 2. search the USPTO federal trademark database for identical and confusingly similar marks;
 3. search common-law web/product/app-store usage;
@@ -37,6 +53,7 @@ Search at minimum:
 - `SIC INTERNATIONAL`
 - `SI=C`
 - visually similar SI/C equality marks
+- `GOBLIN RACCOON` / `GR` where used as a branded character
 - product names being sold under the company
 
 USPTO base application fee verified 2026-09-09: **$350 per class**, with possible additional fees depending on application complexity/completeness.
@@ -52,6 +69,7 @@ Before paid release, make an inventory of:
 - third-party packages;
 - copied/adapted reference implementations;
 - images/icons/fonts;
+- mascot/character artwork;
 - circuit diagrams/presets;
 - documentation;
 - audio files or impulse responses if Pedal Lab later includes audio preview.
