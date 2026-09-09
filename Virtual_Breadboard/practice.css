@@ -1,0 +1,84 @@
+.sf-modebar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 18px;
+  border-bottom: 1px solid #232a34;
+  background: #0d1218;
+}
+.sf-mode-buttons { display: flex; gap: 6px; }
+.sf-mode-buttons button {
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid #2c3644;
+  background: #171d27;
+  color: #9aa5b3;
+  cursor: pointer;
+  font-size: 12px;
+}
+.sf-mode-buttons button.active {
+  border-color: #d59a37;
+  color: #fff1cc;
+  background: #382917;
+}
+.sf-mode-description { font-size: 12px; color: #8a94a3; }
+
+.sf-practice-panel {
+  padding: 14px 18px 16px;
+  border-bottom: 1px solid #232a34;
+  background: #121820;
+}
+.sf-practice-panel[hidden] { display: none; }
+.sf-practice-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.sf-practice-head h2 { margin: 0; font-size: 16px; letter-spacing: .03em; }
+.sf-practice-head p { margin: 4px 0 0; color: #8a94a3; font-size: 12px; }
+.sf-practice-score {
+  border: 1px solid #5b4527;
+  border-radius: 999px;
+  padding: 5px 10px;
+  color: #f1c46e;
+  background: #211a12;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.sf-practice-lessons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.sf-lesson {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #2a313c;
+  border-radius: 10px;
+  background: #171d27;
+}
+.sf-lesson h3 { margin: 0 0 7px; font-size: 13px; color: #e8ecf1; }
+.sf-lesson p { margin: 0 0 7px; color: #9aa5b3; font-size: 12px; line-height: 1.45; }
+.sf-lesson-check { color: #c9b181 !important; }
+.sf-lesson-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.sf-lesson-actions button {
+  padding: 6px 9px;
+  border: 1px solid #4c3b24;
+  border-radius: 7px;
+  background: #2b2115;
+  color: #f2cf8a;
+  cursor: pointer;
+  font-size: 11px;
+}
+.sf-lesson-actions button:hover { border-color: #d59a37; color: #fff1cc; }
+.sf-lesson-actions label { color: #9aa5b3; font-size: 11px; }
+
+body[data-star-forge-mode="practice"] .presets h3:nth-of-type(n+2) { opacity: .55; }
+body[data-star-forge-mode="experimental"] .sf-modebar { border-bottom-color: #4c2630; }
+
+@media (max-width: 900px) {
+  .sf-modebar, .sf-practice-head { flex-direction: column; align-items: stretch; }
+  .sf-mode-buttons { flex-wrap: wrap; }
+}
