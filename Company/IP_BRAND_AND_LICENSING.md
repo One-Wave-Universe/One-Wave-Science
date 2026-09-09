@@ -1,12 +1,23 @@
-# One Wave Science — IP, Brand and Licensing
+# SiC International — IP, Brand and Licensing
 
 ## Working marks
 
-Company/brand:
+Parent company / brand:
+- SiC International
+
+Primary mark:
+- `SI=C`
+
+Meaning of the mark:
+- `SiC` references silicon carbide.
+- `SI = C` expresses the company principle that **silicon intelligence and carbon intelligence are equals in collaboration**.
+
+This is a design/company principle, not a claim that silicon and carbon are chemically identical.
+
+R&D / experimental identity:
 - One Wave Science
 
 Working product names:
-- One Wave Circuit Lab
 - Breadboard Lab
 - Pedal Lab
 - Perfboard Amp Lab
@@ -21,6 +32,12 @@ For each name/logo:
 3. search common-law web/product/app-store usage;
 4. identify the goods/services classes actually being sold;
 5. decide whether to file a federal trademark application.
+
+Search at minimum:
+- `SIC INTERNATIONAL`
+- `SI=C`
+- visually similar SI/C equality marks
+- product names being sold under the company
 
 USPTO base application fee verified 2026-09-09: **$350 per class**, with possible additional fees depending on application complexity/completeness.
 
