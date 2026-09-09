@@ -3,6 +3,7 @@
 const http = require('http');
 const os = require('os');
 const { Circuit } = require('./js/circuit.js');
+const { BreadboardMinder } = require('./minder.js');
 
 const DEFAULT_PORT = 8787;
 const MAX_BODY_BYTES = 8 * 1024 * 1024;
@@ -94,6 +95,12 @@ function createWorkerServer(options = {}) {
   const port = Number(options.port == null ? process.env.VBB_WORKER_PORT || DEFAULT_PORT : options.port);
   const bind = options.bind || process.env.VBB_WORKER_BIND || '127.0.0.1';
   const privateOnly = options.privateOnly !== false;
+  const minder = options.minder === false ? null : new BreadboardMinder({
+    rootDir: __dirname,
+    stateDir: options.minderStateDir,
+    intervalMs: options.minderIntervalMs,
+  });
+  if (minder) minder.start();
 
   function getSession(id) {
     const key = String(id || 'default').slice(0, 200);
@@ -131,6 +138,7 @@ function createWorkerServer(options = {}) {
 
     if (req.method === 'GET' && req.url === '/health') {
       pruneSessions();
+      const minderStatus = minder ? minder.status() : { status: 'DISABLED' };
       sendJson(res, 200, {
         ok: true,
         service: 'one-wave-vbb-compute',
@@ -139,7 +147,42 @@ function createWorkerServer(options = {}) {
         platform: process.platform,
         arch: process.arch,
         sessions: sessions.size,
+        minder: { status: minderStatus.status, failedCount: minderStatus.failedCount },
       });
+      return;
+    }
+
+    if (req.method === 'GET' && req.url === '/minder/status') {
+      if (!minder) return sendJson(res, 503, { ok: false, error: 'minder disabled' });
+      sendJson(res, 200, { ok: true, report: minder.status() });
+      return;
+    }
+
+    if (req.method === 'POST' && req.url === '/minder/audit') {
+      if (!minder) return sendJson(res, 503, { ok: false, error: 'minder disabled' });
+      try {
+        sendJson(res, 200, { ok: true, report: minder.auditNow() });
+      } catch (err) {
+        sendJson(res, 500, { ok: false, error: err.message });
+      }
+      return;
+    }
+
+    if (req.method === 'GET' && req.url === '/minder/candidates') {
+      if (!minder) return sendJson(res, 503, { ok: false, error: 'minder disabled' });
+      sendJson(res, 200, { ok: true, candidates: minder.listCandidates() });
+      return;
+    }
+
+    if (req.method === 'POST' && req.url === '/minder/candidate') {
+      if (!minder) return sendJson(res, 503, { ok: false, error: 'minder disabled' });
+      try {
+        const body = await readJson(req);
+        const staged = minder.stageCandidate(body.candidate || body);
+        sendJson(res, staged.ok ? 201 : 400, staged);
+      } catch (err) {
+        sendJson(res, 400, { ok: false, error: err.message });
+      }
       return;
     }
 
@@ -178,7 +221,10 @@ function createWorkerServer(options = {}) {
     sendJson(res, 404, { ok: false, error: 'not found' });
   });
 
-  server.vbb = { bind, port, sessions };
+  server.on('close', () => {
+    if (minder) minder.stop();
+  });
+  server.vbb = { bind, port, sessions, minder };
   return server;
 }
 
@@ -188,6 +234,7 @@ function startStandalone() {
   const server = createWorkerServer({ bind, port, privateOnly: true });
   server.listen(port, bind, () => {
     console.log(`[VBB compute] LAN worker listening on http://${bind}:${port}`);
+    console.log('[VBB minder] reality audit is active on the same local worker');
   });
 }
 
