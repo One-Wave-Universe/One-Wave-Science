@@ -28,6 +28,7 @@ Then launch **One-Wave Animator** from the desktop application menu, or run:
 - timeline scrubbing
 - timed playback at project FPS
 - full-screen playback
+- current playback-frame export to a 1280x720 PNG with the editor grid removed
 - `.animator.json` save and reopen
 - image source path preservation with missing-asset warnings
 
@@ -41,7 +42,7 @@ Animator is judged by the complete loop: **install -> open -> build a scene -> s
 2. Background-derived perspective/grid anchors and explicit drift measurements.
 3. Motion Atlas actions (walk toward/away, look, kick, reach, pick up, sniff).
 4. Asset relinking/packing so projects can move between machines cleanly.
-5. Video/reel export through a local encoder.
+5. Video/reel export through a local encoder (PNG frame export is already available).
 6. AI command panel that calls deterministic editor operations rather than directly mutating scene files.
 7. Packaging as a distributable Ubuntu/Jetson installer rather than a development bootstrap script.
 
