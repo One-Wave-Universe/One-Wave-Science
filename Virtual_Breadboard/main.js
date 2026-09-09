@@ -1,5 +1,8 @@
 const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron');
 const path = require('path');
+const { createWorkerServer, DEFAULT_PORT } = require('./compute-worker');
+
+let computeWorker = null;
 
 // classic (always-visible, space-reserving) scrollbars instead of the
 // GTK-style auto-hiding overlay ones -- the toolbox sidebar's tool options
@@ -32,6 +35,30 @@ ipcMain.handle('ai-fetch', async (event, { url, options }) => {
   return { ok: res.ok, status: res.status, statusText: res.statusText, text };
 });
 
+function isJetsonClassHost() {
+  return process.platform === 'linux' && process.arch === 'arm64';
+}
+
+function shouldRunComputeWorker() {
+  if (process.env.VBB_WORKER === '0') return false;
+  if (process.env.VBB_WORKER === '1') return true;
+  return isJetsonClassHost();
+}
+
+function startComputeWorker() {
+  if (!shouldRunComputeWorker() || computeWorker) return;
+  const port = Number(process.env.VBB_WORKER_PORT || DEFAULT_PORT);
+  const bind = process.env.VBB_WORKER_BIND || (isJetsonClassHost() ? '0.0.0.0' : '127.0.0.1');
+  computeWorker = createWorkerServer({ bind, port, privateOnly: true });
+  computeWorker.on('error', (err) => {
+    console.error(`[VBB compute] worker failed: ${err.message}`);
+    computeWorker = null;
+  });
+  computeWorker.listen(port, bind, () => {
+    console.log(`[VBB compute] worker listening on http://${bind}:${port}`);
+  });
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -54,10 +81,18 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  startComputeWorker();
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+});
+
+app.on('before-quit', () => {
+  if (computeWorker) {
+    computeWorker.close();
+    computeWorker = null;
+  }
 });
 
 app.on('window-all-closed', () => {
