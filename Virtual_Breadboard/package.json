@@ -1,7 +1,7 @@
 {
-  "name": "virtual-breadboard-simulator",
+  "name": "star-forge-digital-bread-board",
   "version": "1.0.0",
-  "description": "A downloadable virtual breadboard with live circuit physics, Jetson compute offload, and a local reality-audit minder.",
+  "description": "Star Forge Digital Bread Board: a local electronics practice and prototype bench with live circuit physics, Jetson compute offload, and a reality-audit minder.",
   "main": "main.js",
   "private": true,
   "homepage": "https://github.com/One-Wave-Universe/One-Wave-Science",
@@ -37,8 +37,8 @@
     "electron-builder": "^25.0.0"
   },
   "build": {
-    "appId": "com.onewavescience.virtualbreadboard",
-    "productName": "Virtual Breadboard Simulator",
+    "appId": "com.onewavescience.starforge",
+    "productName": "Star Forge Digital Bread Board",
     "publish": null,
     "directories": {
       "output": "dist"
@@ -50,6 +50,7 @@
       "minder.js",
       "index.html",
       "style.css",
+      "practice.css",
       "js/**/*",
       "reality/**/*",
       "build/icon.png",
@@ -61,7 +62,7 @@
         { "target": "deb", "arch": ["x64", "arm64"] }
       ],
       "category": "Education",
-      "executableName": "virtual-breadboard-simulator",
+      "executableName": "star-forge-digital-bread-board",
       "icon": "build/icon.png",
       "maintainer": "One Wave Science <opensource@one-wave-universe.example>"
     },
@@ -87,7 +88,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Virtual Breadboard Simulator"
+      "shortcutName": "Star Forge Digital Bread Board"
     }
   }
 }
