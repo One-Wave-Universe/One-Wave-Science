@@ -6,6 +6,7 @@ from Learner_App.parser.models import RulePacket
 from Learner_App.parser.verifier import (
     build_verification,
     check_forbidden_rules_absent,
+    check_no_unapproved_rules,
     check_requested_rules_present,
 )
 
@@ -18,8 +19,45 @@ def _packet(**kwargs) -> RulePacket:
 
 class VerifierTests(unittest.TestCase):
     def test_requested_rules_present_true_when_all_present(self):
+        # check_requested_rules_present() only asks "is every target rule
+        # demonstrated?" -- it does not (and should not) also police
+        # extras; that is check_no_unapproved_rules()'s job, tested below.
+        # An extra rule "C" here therefore does not make this predicate
+        # false, even though build_verification() as a whole would reject
+        # a candidate whose rules_used included it unapproved.
         packet = _packet(target_rules=["A", "B"])
         self.assertTrue(check_requested_rules_present(["A", "B", "C"], packet))
+
+    def test_no_unapproved_rules_true_when_extra_is_allowed_support(self):
+        packet = _packet(target_rules=["A"], allowed_support_rules=["B"])
+        self.assertTrue(check_no_unapproved_rules(["A", "B"], packet))
+
+    def test_no_unapproved_rules_false_when_extra_is_neither_target_nor_allowed(self):
+        packet = _packet(target_rules=["A"], allowed_support_rules=["B"])
+        self.assertFalse(check_no_unapproved_rules(["A", "C"], packet))
+
+    def test_build_verification_passes_with_allowed_support_rule(self):
+        packet = _packet(target_rules=["A"], allowed_support_rules=["B"])
+        result = build_verification(
+            rules_used=["A", "B"],
+            packet=packet,
+            well_formed=True,
+            adapter_valid=True,
+            errors=[],
+        )
+        self.assertTrue(result.passed)
+
+    def test_build_verification_fails_on_unapproved_extra_rule(self):
+        packet = _packet(target_rules=["A"], allowed_support_rules=["B"])
+        result = build_verification(
+            rules_used=["A", "C"],
+            packet=packet,
+            well_formed=True,
+            adapter_valid=True,
+            errors=[],
+        )
+        self.assertFalse(result.passed)
+        self.assertTrue(any("C" in e for e in result.errors))
 
     def test_requested_rules_present_false_when_missing(self):
         packet = _packet(target_rules=["A", "B"])

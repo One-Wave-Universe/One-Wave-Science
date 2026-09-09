@@ -14,7 +14,9 @@ from Learner_App.parser.adapters.math_basic_equations import (
     EQ_MUL_INVERSE,
     EQ_SUB_INVERSE,
     MathBasicEquationsAdapter,
+    MathParseError,
     SUPPORTED_COMBOS,
+    parse_equation_text,
 )
 
 
@@ -126,6 +128,78 @@ class MathAdapterRejectionTests(unittest.TestCase):
         packet = _packet(["EQ.NOT_REAL"])
         errors = self.adapter.validate_packet(packet)
         self.assertTrue(errors)
+
+    def test_unsupported_number_domain_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"number_domain": "rational"})
+        errors = self.adapter.validate_packet(packet)
+        self.assertTrue(errors)
+
+
+class TokenizerCoverageTests(unittest.TestCase):
+    """Regression tests: the reparse must reject any artifact text with
+    characters the grammar doesn't recognize, not silently ignore them."""
+
+    def test_junk_character_between_tokens_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x + 4 @ = 9")
+
+    def test_junk_character_inside_a_number_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x + 4a = 9")
+
+    def test_trailing_junk_character_is_rejected(self):
+        with self.assertRaises(MathParseError):
+            parse_equation_text("x + 4 = 9!")
+
+    def test_valid_text_with_whitespace_gaps_still_parses(self):
+        structure = parse_equation_text("x   +   4   =   9")
+        self.assertEqual(structure.rhs, 9)
+
+    def test_malformed_text_from_build_problem_is_caught_end_to_end(self):
+        class InjectingAdapter(MathBasicEquationsAdapter):
+            def generate_candidate(self, packet, rng):
+                return "x + 4 @ = 9"
+
+        packet = _packet([EQ_ADD_INVERSE], seed=1)
+        with self.assertRaises(ProblemVerificationError) as ctx:
+            build_problem(packet, adapter=InjectingAdapter())
+        self.assertFalse(ctx.exception.verification.well_formed)
+
+
+class IntegerSolutionTests(unittest.TestCase):
+    """Regression tests: EQ.MUL_INVERSE equations must keep the unknown an
+    integer under the v1 default number_domain, not just a random rhs."""
+
+    def setUp(self):
+        self.adapter = MathBasicEquationsAdapter()
+
+    def _solved_value_is_integer(self, structure):
+        term_value = structure.rhs
+        if structure.constant_term is not None:
+            if structure.constant_term.sign == "+":
+                term_value -= structure.constant_term.value
+            else:
+                term_value += structure.constant_term.value
+        return term_value % structure.var_term.coefficient == 0
+
+    def test_mul_inverse_only_always_has_integer_solution(self):
+        for seed in range(50):
+            result = build_problem(_packet([EQ_MUL_INVERSE], seed=seed), adapter=self.adapter)
+            self.assertTrue(self._solved_value_is_integer(result.structure))
+
+    def test_add_and_mul_inverse_always_has_integer_solution(self):
+        for seed in range(50):
+            result = build_problem(
+                _packet([EQ_ADD_INVERSE, EQ_MUL_INVERSE], seed=seed), adapter=self.adapter
+            )
+            self.assertTrue(self._solved_value_is_integer(result.structure))
+
+    def test_sub_and_mul_inverse_always_has_integer_solution(self):
+        for seed in range(50):
+            result = build_problem(
+                _packet([EQ_SUB_INVERSE, EQ_MUL_INVERSE], seed=seed), adapter=self.adapter
+            )
+            self.assertTrue(self._solved_value_is_integer(result.structure))
 
 
 if __name__ == "__main__":

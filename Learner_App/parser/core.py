@@ -72,11 +72,23 @@ def build_problem(packet: RulePacket, *, adapter: ProblemAdapter | None = None) 
 
     `adapter` is normally resolved from the registry via packet.domain;
     it can be passed explicitly (tests use this to exercise a deliberately
-    broken adapter without touching the registry).
+    broken adapter without touching the registry). Either way, the
+    resolved adapter's own `.domain` must match `packet.domain` -- domain
+    selection is the router's call, encoded in the packet, and an explicit
+    override must not be usable to build a packet under an adapter for a
+    different domain.
     """
     _check_generic_contradictions(packet)
 
     resolved_adapter = adapter if adapter is not None else get_adapter(packet.domain)
+
+    if resolved_adapter.domain != packet.domain:
+        raise PacketRejectedError(
+            [
+                f"adapter domain {resolved_adapter.domain!r} does not match "
+                f"packet domain {packet.domain!r}"
+            ]
+        )
 
     adapter_errors = resolved_adapter.validate_packet(packet)
     if adapter_errors:

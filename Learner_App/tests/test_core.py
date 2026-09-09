@@ -33,6 +33,10 @@ from Learner_App.parser.adapters.math_basic_equations import (
     EQ_MUL_INVERSE,
 )
 from Learner_App.parser.models import RulePacket
+from Learner_App.tests.fixtures.trivial_echo_adapter import (
+    DOMAIN as ECHO_DOMAIN,
+    TrivialEchoAdapter,
+)
 
 CORE_SOURCE_FILES = [
     Path(inspect.getfile(core_module)),
@@ -97,6 +101,26 @@ class RegistryTests(unittest.TestCase):
         )
         with self.assertRaises(UnknownAdapterError):
             build_problem(packet)
+
+
+class AdapterDomainMatchTests(unittest.TestCase):
+    """The explicit `adapter=` override must not be usable to build a
+    packet under an adapter for a different domain -- domain selection is
+    the router's call, encoded in packet.domain."""
+
+    def test_mismatched_explicit_adapter_is_rejected(self):
+        packet = RulePacket(
+            packet_id="p6", seed=1, domain=MATH_DOMAIN, target_rules=[EQ_ADD_INVERSE]
+        )
+        with self.assertRaises(PacketRejectedError):
+            build_problem(packet, adapter=TrivialEchoAdapter())
+
+    def test_matching_explicit_adapter_is_accepted(self):
+        packet = RulePacket(
+            packet_id="p7", seed=1, domain=ECHO_DOMAIN, target_rules=["ECHO.PRESENT"]
+        )
+        result = build_problem(packet, adapter=TrivialEchoAdapter())
+        self.assertEqual(result.domain, ECHO_DOMAIN)
 
 
 class DeterminismTests(unittest.TestCase):

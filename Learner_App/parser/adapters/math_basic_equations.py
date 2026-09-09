@@ -14,8 +14,10 @@ are not the learner curriculum -- the router owns that.
 
 v1 explicitly does NOT support: variables on both sides, parentheses,
 exponents, non-integer coefficients, negative numbers anywhere, more than
-one constant term, more than one occurrence of the variable, or a
-coefficient combined with a divisor on the same term.
+one constant term, more than one occurrence of the variable, a coefficient
+combined with a divisor on the same term, or any constraints.number_domain
+other than "integer" (the default -- generation and validation both
+guarantee the unknown solves to an integer under it).
 """
 
 from __future__ import annotations
@@ -64,6 +66,12 @@ DEFAULT_COEFFICIENT_RANGE = (2, 9)
 DEFAULT_CONSTANT_RANGE = (1, 20)
 DEFAULT_TERM_VALUE_RANGE = (1, 40)
 
+# v1 only knows how to guarantee integer solutions. A packet asking for a
+# different number domain is rejected in validate_packet() rather than
+# silently producing fractional/irrational unknowns.
+SUPPORTED_NUMBER_DOMAINS = {"integer"}
+DEFAULT_NUMBER_DOMAIN = "integer"
+
 _TOKEN_RE = re.compile(r"\d+|[a-zA-Z]|[+\-/=]")
 
 
@@ -100,7 +108,24 @@ class MathParseError(ValueError):
 
 
 def _tokenize(text: str) -> list[str]:
-    return _TOKEN_RE.findall(text)
+    """Tokenize `text`, rejecting any character the grammar doesn't
+    recognize. `re.findall` alone would silently drop unmatched characters
+    (e.g. "x + 4 @ = 9" would tokenize identically to "x + 4 = 9"), which
+    would let the reparse accept artifact text it never actually validated.
+    Every gap between matched tokens (and before/after all of them) must be
+    pure whitespace."""
+    tokens: list[str] = []
+    pos = 0
+    for match in _TOKEN_RE.finditer(text):
+        gap = text[pos:match.start()]
+        if gap.strip():
+            raise MathParseError(f"unrecognized character(s) {gap.strip()!r} at position {pos}")
+        tokens.append(match.group())
+        pos = match.end()
+    trailing = text[pos:]
+    if trailing.strip():
+        raise MathParseError(f"unrecognized character(s) {trailing.strip()!r} at position {pos}")
+    return tokens
 
 
 def _parse_var_term(tokens: list[str], i: int) -> tuple[VarTerm, int]:
@@ -206,6 +231,13 @@ class MathBasicEquationsAdapter:
         ):
             errors.append("constraints.variable_names must be a non-empty list of single letters")
 
+        number_domain = packet.constraints.get("number_domain", DEFAULT_NUMBER_DOMAIN)
+        if number_domain not in SUPPORTED_NUMBER_DOMAINS:
+            errors.append(
+                f"unsupported constraints.number_domain for {DOMAIN} v1: {number_domain!r} "
+                f"(only {sorted(SUPPORTED_NUMBER_DOMAINS)} supported)"
+            )
+
         return errors
 
     def generate_candidate(self, packet: RulePacket, rng: random.Random) -> str:
@@ -226,19 +258,31 @@ class MathBasicEquationsAdapter:
             rng.randint(max(2, coeff_lo), max(coeff_hi, coeff_lo + 1)) if EQ_DIV_INVERSE in rules else None
         )
 
-        sign = "+" if EQ_ADD_INVERSE in rules else "-" if EQ_SUB_INVERSE in rules else None
-        constant = rng.randint(const_lo, const_hi) if sign else None
+        # constraints.number_domain defaults to "integer" (v1's only
+        # supported domain, enforced in validate_packet()). When a
+        # coefficient is present, the term's value must land on an exact
+        # multiple of it or the unknown would come out fractional -- so
+        # build the term's value from a hidden integer multiplier rather
+        # than picking it independently. The multiplier itself is never
+        # returned, stored, or logged anywhere public; only its product
+        # (a term value, not the solved unknown) is used.
+        if coefficient != 1:
+            hidden_multiplier = rng.randint(1, max(1, term_hi // coefficient))
+            term_value = coefficient * hidden_multiplier
+        else:
+            term_value = rng.randint(term_lo, term_hi)
 
+        sign = "+" if EQ_ADD_INVERSE in rules else "-" if EQ_SUB_INVERSE in rules else None
         if sign == "-":
             # rhs = term_value - constant must stay non-negative (v1 has no
             # negative-number support anywhere in the grammar).
-            term_value = rng.randint(max(constant, term_lo), max(term_hi, constant + 1))
+            constant = rng.randint(const_lo, max(const_lo, min(const_hi, term_value)))
             rhs = term_value - constant
         elif sign == "+":
-            term_value = rng.randint(term_lo, term_hi)
+            constant = rng.randint(const_lo, const_hi)
             rhs = term_value + constant
         else:
-            term_value = rng.randint(term_lo, term_hi)
+            constant = None
             rhs = term_value
 
         if divisor is not None:
@@ -277,6 +321,28 @@ class MathBasicEquationsAdapter:
         if structure.rhs < 0:
             errors.append("right-hand side is negative; unsupported in v1")
 
+        number_domain = packet.constraints.get("number_domain", DEFAULT_NUMBER_DOMAIN)
+        if (
+            number_domain == "integer"
+            and structure.var_term.coefficient != 1
+            and structure.var_term.divisor is None
+        ):
+            # Re-derive the coefficient*x term's value from the publicly
+            # printed rhs/constant (not from anything the generator kept
+            # around) and independently confirm it is a clean multiple of
+            # the coefficient -- i.e. that x itself would be an integer.
+            # This never computes or exposes x, only checks divisibility.
+            term_value = structure.rhs
+            if structure.constant_term is not None:
+                if structure.constant_term.sign == "+":
+                    term_value -= structure.constant_term.value
+                else:
+                    term_value += structure.constant_term.value
+            if term_value % structure.var_term.coefficient != 0:
+                errors.append(
+                    "equation has no integer solution under the v1 default integer number_domain"
+                )
+
         # single_target_unknown is a math-adapter concept (exactly one
         # unknown symbol, appearing exactly once) -- it stays here, in
         # adapter-facing metadata, rather than becoming a core-level field
@@ -284,6 +350,7 @@ class MathBasicEquationsAdapter:
         metadata = {
             "single_target_unknown": True,
             "variable": structure.var_term.variable,
+            "number_domain": number_domain,
         }
 
         return (not errors, errors, metadata)

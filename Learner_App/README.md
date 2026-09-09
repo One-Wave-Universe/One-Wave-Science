@@ -59,7 +59,8 @@ generator used internally to build the artifact text. The pipeline is:
 ```text
 RulePacket
   -> generic contradiction check (a rule cannot be both target and forbidden)
-  -> resolve adapter from registry (by packet.domain)
+  -> resolve adapter (from the registry by packet.domain, or an explicit
+     override -- either way resolved_adapter.domain must equal packet.domain)
   -> adapter.validate_packet(packet)         # domain-specific rejection
   -> adapter.generate_candidate(packet, rng)  # returns TEXT only
   -> adapter.parse_artifact(artifact_text)    # independent reparse of that text
@@ -72,11 +73,31 @@ RulePacket
 `generate_candidate` and `parse_artifact` are separate code paths with no
 shared internal object — the math adapter's generator builds a string from
 random integers directly; its parser is a from-scratch tokenizer + small
-recursive-descent parser that only ever looks at that string. A
-deliberately broken generator (see
+recursive-descent parser that only ever looks at that string, and rejects
+any character the grammar doesn't recognize instead of silently skipping it
+(`_tokenize()` checks every gap between matched tokens, not just the
+matches themselves — see `TokenizerCoverageTests`). A deliberately broken
+generator (see
 `test_math_basic_equations.py::test_malformed_candidate_fails_reparse_and_verification`)
 demonstrates the reparse step actually catches bad output instead of
 rubber-stamping it.
+
+`verifier.build_verification()` enforces three things generically, none of
+them domain-specific: every target rule is demonstrated
+(`requested_rules_present`), no forbidden rule is demonstrated
+(`forbidden_rules_absent`), and — just as important — nothing else showed
+up either: `rules_used` must be a subset of
+`target_rules | allowed_support_rules`. That last check is what stops the
+worker from silently adding a rule the router never approved; "merely not
+forbidden" is not the same as "permitted," since the router may simply not
+have thought to forbid it. See `test_verifier.py`'s
+`test_build_verification_fails_on_unapproved_extra_rule`.
+
+`build_problem()`'s `adapter=` parameter (mainly used by tests to exercise
+a deliberately broken adapter without touching the registry) still can't
+be used to build a packet under an adapter for the wrong domain —
+`resolved_adapter.domain` is checked against `packet.domain` regardless of
+where the adapter came from, so domain selection stays the router's call.
 
 ## Determinism
 
@@ -127,14 +148,30 @@ by design):
 - more than one constant term
 - more than one occurrence of the variable
 - multi-letter variable names
+- any `constraints.number_domain` other than `"integer"` (the default)
+- any character the tokenizer doesn't recognize, even mid-artifact (e.g.
+  `"x + 4 @ = 9"` is rejected, not silently read as `"x + 4 = 9"`)
+
+### Number domain: solutions stay integers
+
+`constraints.number_domain` defaults to `"integer"`, v1's only supported
+value (`validate_packet()` rejects anything else). When `EQ.MUL_INVERSE` is
+targeted, `generate_candidate()` builds the coefficient's term from a
+hidden integer multiplier (never returned or stored) instead of picking
+the term's value independently, so the unknown always solves to a whole
+number — `7x = 34` (unknown `34/7`) can't be generated.
+`validate_structure()` then independently re-derives the term's value from
+the public `rhs`/constant and checks it's an exact multiple of the
+coefficient, catching any adapter that violated this without trusting the
+generator's intent. See `IntegerSolutionTests`.
 
 Example generated artifacts (structural metadata only, no answers):
 
 ```text
-packet target_rules=[EQ.ADD_INVERSE]                 -> "x + 12 = 46"
-packet target_rules=[EQ.MUL_INVERSE]                 -> "7x = 34"
-packet target_rules=[EQ.ADD_INVERSE, EQ.MUL_INVERSE] -> "7x + 17 = 19"
-packet target_rules=[EQ.SUB_INVERSE, EQ.DIV_INVERSE] -> "x/7 - 17 = 0"
+packet target_rules=[EQ.ADD_INVERSE]                 -> "x + 17 = 40"
+packet target_rules=[EQ.MUL_INVERSE]                 -> "7x = 35"
+packet target_rules=[EQ.ADD_INVERSE, EQ.MUL_INVERSE] -> "7x + 1 = 36"
+packet target_rules=[EQ.SUB_INVERSE, EQ.DIV_INVERSE] -> "x/7 - 1 = 33"
 ```
 
 ## Layout
