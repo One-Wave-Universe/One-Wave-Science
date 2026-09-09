@@ -20,6 +20,7 @@ from . import state_machine_a as sm_a
 from . import state_machine_b as sm_b
 from .models import (
     EvaluationEvidence,
+    EvaluationLifecycle,
     EvaluatorState,
     LearnerAttempt,
     LearnerTaskState,
@@ -82,11 +83,16 @@ class RouterLoop:
         return problem
 
     def submit_attempt(self, attempt: LearnerAttempt) -> EvaluationEvidence:
-        """EXECUTING -> VECTORING, then State Machine B evaluates.
+        """EXECUTING -> VECTORING, then State Machine B evaluates and
+        emits -- but does NOT acknowledge back to IDLE here.
 
         Validation happens before any state mutation: a malformed or
         stale attempt raises before task_state or evaluator_state changes
-        at all, so it cannot mutate the active cycle.
+        at all, so it cannot mutate the active cycle. evaluator_state is
+        left at EMITTED on return; route_next() is what consumes that
+        emission and acknowledges B back to IDLE, so there is a window
+        where B visibly holds evidence the router has not yet acted on,
+        rather than resetting before the router ever reads it.
         """
         sm_b.validate_attempt(attempt, self.task_state)
 
@@ -95,13 +101,33 @@ class RouterLoop:
         self.evaluator_state = sm_b.begin_evaluation(self.evaluator_state)
         evidence = sm_b.evaluate_attempt(attempt, self.task_state)
         self.evaluator_state = sm_b.emit_evidence(self.evaluator_state, evidence)
-        self.evaluator_state = sm_b.acknowledge(self.evaluator_state)
         return evidence
 
-    def route_next(self, evidence: EvaluationEvidence) -> RouteDecision:
-        """VECTORING -> RESOLVING -> IDLE. Applies the deterministic
-        policy in policy.decide_next_route() and returns the RouteDecision
-        that governs the next generate_problem() call."""
+    def route_next(self) -> RouteDecision:
+        """EMITTED -> IDLE for State Machine B, VECTORING -> RESOLVING ->
+        IDLE for State Machine A. Applies the deterministic policy in
+        policy.decide_next_route() and returns the RouteDecision that
+        governs the next generate_problem() call.
+
+        Takes no `evidence` argument: it reads
+        `self.evaluator_state.last_evidence` -- the evidence State
+        Machine B actually emitted -- so there is no parameter through
+        which a caller could substitute forged or stale evidence. The
+        problem_id match against task_state is a defensive check on top
+        of that (it cannot fail via the public API, since submit_attempt()
+        already validated the same match before evaluating).
+        """
+        if self.evaluator_state.lifecycle_state != EvaluationLifecycle.EMITTED:
+            raise sm_b.IllegalEvaluationTransitionError(
+                "route_next", EvaluationLifecycle.EMITTED, self.evaluator_state.lifecycle_state
+            )
+        evidence = self.evaluator_state.last_evidence
+        if evidence.problem_id != self.task_state.current_problem_id:
+            raise sm_b.StaleAttemptError(
+                f"evidence for problem_id {evidence.problem_id!r} does not match the "
+                f"active problem_id {self.task_state.current_problem_id!r}"
+            )
+
         self.task_state = sm_a.apply_route_decision(self.task_state)
 
         if evidence.error_kind is not None and evidence.error_kind == self._last_error_kind:
@@ -116,12 +142,14 @@ class RouterLoop:
             current=self.route,
             curriculum_index=self.curriculum_index,
             outcome=evidence.outcome,
+            rules_satisfied=not evidence.missing_rules,
             consecutive_same_error=self._consecutive_same_error,
             seed=self.base_seed + self.cycle_count,
         )
         self.route = next_route
         self.curriculum_index = next_index
 
+        self.evaluator_state = sm_b.acknowledge(self.evaluator_state)
         self.task_state = sm_a.resolve_cycle(self.task_state)
         return next_route
 
@@ -136,5 +164,5 @@ class RouterLoop:
         problem = self.generate_problem()
         attempt = attempt_factory(problem)
         evidence = self.submit_attempt(attempt)
-        decision = self.route_next(evidence)
+        decision = self.route_next()
         return problem, evidence, decision

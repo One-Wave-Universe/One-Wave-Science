@@ -17,6 +17,7 @@ from Learner_App.router import router_loop as router_loop_module
 from Learner_App.router import state_machine_a as sm_a_module
 from Learner_App.router import state_machine_b as sm_b_module
 from Learner_App.router.models import (
+    EvaluationEvidence,
     EvaluationLifecycle,
     LearnerAttempt,
     RouteAction,
@@ -25,7 +26,11 @@ from Learner_App.router.models import (
 from Learner_App.router.policy import DEFAULT_CURRICULUM, PolicyConfig
 from Learner_App.router.router_loop import RouterLoop
 from Learner_App.router.state_machine_a import IllegalTaskTransitionError
-from Learner_App.router.state_machine_b import MalformedAttemptError, StaleAttemptError
+from Learner_App.router.state_machine_b import (
+    IllegalEvaluationTransitionError,
+    MalformedAttemptError,
+    StaleAttemptError,
+)
 
 ROUTER_SOURCE_FILES = [
     Path(inspect.getfile(router_loop_module)),
@@ -139,18 +144,73 @@ class RouterAuthorityTests(unittest.TestCase):
         self.assertEqual(packet.domain, route.domain)
         self.assertEqual(packet.seed, route.seed)
 
-    def test_evaluator_evidence_confidence_cannot_override_routing_action(self):
+    def test_correct_outcome_with_missing_target_rules_does_not_advance(self):
+        # Router authority means the ROUTER decides using B's evidence, not
+        # that it ignores the evidence: a "correct" outcome that didn't
+        # demonstrate the target rule must not silently advance the
+        # curriculum just because .outcome says "correct".
         loop = RouterLoop(config=PolicyConfig(), base_seed=7)
         problem = loop.generate_problem()
-        # Even a "correct" outcome with zero demonstrated rules (low
-        # confidence) still routes as ADVANCE -- only .outcome drives the
-        # router's decision, never .confidence or .missing_rules.
         evidence = loop.submit_attempt(
             LearnerAttempt(problem_id=problem.problem_id, outcome="correct", reported_rules_used=())
         )
         self.assertEqual(evidence.confidence, "low")
-        decision = loop.route_next(evidence)
+        self.assertTrue(evidence.missing_rules)
+        decision = loop.route_next()
+        self.assertNotEqual(decision.action, RouteAction.ADVANCE)
+        self.assertEqual(decision.target_rules, DEFAULT_CURRICULUM[0][0])
+
+    def test_correct_outcome_with_all_target_rules_demonstrated_advances(self):
+        loop = RouterLoop(config=PolicyConfig(), base_seed=8)
+        problem = loop.generate_problem()
+        evidence = loop.submit_attempt(
+            LearnerAttempt(
+                problem_id=problem.problem_id, outcome="correct", reported_rules_used=problem.rules_used
+            )
+        )
+        self.assertFalse(evidence.missing_rules)
+        decision = loop.route_next()
         self.assertEqual(decision.action, RouteAction.ADVANCE)
+
+    def test_forged_evidence_cannot_be_passed_to_route_next(self):
+        # route_next() takes no evidence argument at all -- there is no
+        # parameter through which a caller could substitute forged
+        # evidence for what State Machine B actually emitted.
+        loop = RouterLoop(config=PolicyConfig(), base_seed=9)
+        problem = loop.generate_problem()
+        loop.submit_attempt(_correct_attempt(problem))
+        forged = EvaluationEvidence(
+            problem_id=problem.problem_id,
+            outcome="correct",
+            error_kind=None,
+            demonstrated_rules=problem.rules_used,
+            missing_rules=(),
+            confidence="high",
+        )
+        with self.assertRaises(TypeError):
+            loop.route_next(forged)  # type: ignore[call-arg]
+
+    def test_route_next_consumes_state_machine_bs_actual_emission(self):
+        loop = RouterLoop(config=PolicyConfig(), base_seed=10)
+        problem = loop.generate_problem()
+        evidence = loop.submit_attempt(_incorrect_attempt(problem))
+        self.assertIs(loop.evaluator_state.last_evidence, evidence)
+        decision = loop.route_next()
+        self.assertIn(decision.action, (RouteAction.REPEAT, RouteAction.REDUCE_DIFFICULTY))
+
+    def test_route_next_rejects_stale_evidence_problem_id(self):
+        # Cannot happen via the public API (submit_attempt() already
+        # checked this match) -- exercised by poking evaluator_state
+        # directly to prove route_next()'s own defensive check fires.
+        import dataclasses
+
+        loop = RouterLoop(config=PolicyConfig(), base_seed=12)
+        problem = loop.generate_problem()
+        evidence = loop.submit_attempt(_correct_attempt(problem))
+        tampered = dataclasses.replace(evidence, problem_id="not-the-active-problem")
+        loop.evaluator_state = dataclasses.replace(loop.evaluator_state, last_evidence=tampered)
+        with self.assertRaises(StaleAttemptError):
+            loop.route_next()
 
 
 class FullCycleTests(unittest.TestCase):
@@ -167,17 +227,21 @@ class FullCycleTests(unittest.TestCase):
 
         evidence = loop.submit_attempt(_correct_attempt(problem))
         self.assertEqual(loop.task_state.lifecycle_state, TaskLifecycle.VECTORING)
-        self.assertEqual(loop.evaluator_state.lifecycle_state, EvaluationLifecycle.IDLE)
+        # B holds its emission until the router explicitly consumes it in
+        # route_next() -- it does not reset to IDLE before that happens.
+        self.assertEqual(loop.evaluator_state.lifecycle_state, EvaluationLifecycle.EMITTED)
+        self.assertIs(loop.evaluator_state.last_evidence, evidence)
 
-        decision = loop.route_next(evidence)
+        decision = loop.route_next()
         self.assertEqual(loop.task_state.lifecycle_state, TaskLifecycle.IDLE)
+        self.assertEqual(loop.evaluator_state.lifecycle_state, EvaluationLifecycle.IDLE)
         self.assertIsNotNone(decision)
 
     def test_correct_attempt_advances(self):
         loop = RouterLoop(config=PolicyConfig(), base_seed=13)
         problem = loop.generate_problem()
         evidence = loop.submit_attempt(_correct_attempt(problem))
-        decision = loop.route_next(evidence)
+        decision = loop.route_next()
         self.assertEqual(decision.action, RouteAction.ADVANCE)
         self.assertEqual(decision.target_rules, DEFAULT_CURRICULUM[1][0])
 
@@ -185,7 +249,7 @@ class FullCycleTests(unittest.TestCase):
         loop = RouterLoop(config=PolicyConfig(), base_seed=17)
         problem = loop.generate_problem()
         evidence = loop.submit_attempt(_incorrect_attempt(problem))
-        decision = loop.route_next(evidence)
+        decision = loop.route_next()
         self.assertIn(decision.action, (RouteAction.REPEAT, RouteAction.REDUCE_DIFFICULTY))
         self.assertEqual(decision.target_rules, DEFAULT_CURRICULUM[0][0])
 
@@ -194,14 +258,14 @@ class FullCycleTests(unittest.TestCase):
         for _ in range(2):
             problem = loop.generate_problem()
             evidence = loop.submit_attempt(_incorrect_attempt(problem))
-            decision = loop.route_next(evidence)
+            decision = loop.route_next()
         self.assertEqual(decision.action, RouteAction.EXPLAIN)
 
     def test_resolve_returns_to_a_clean_boundary_state(self):
         loop = RouterLoop(config=PolicyConfig(), base_seed=23)
         problem = loop.generate_problem()
         evidence = loop.submit_attempt(_correct_attempt(problem))
-        loop.route_next(evidence)
+        loop.route_next()
         self.assertEqual(loop.task_state.lifecycle_state, TaskLifecycle.IDLE)
         self.assertIsNone(loop.task_state.current_problem_id)
         self.assertEqual(loop.task_state.current_rule_targets, ())
@@ -309,6 +373,12 @@ class FailureBehaviorTests(unittest.TestCase):
         loop.generate_problem()  # task_state is now EXECUTING
         with self.assertRaises(IllegalTaskTransitionError):
             loop.generate_problem()  # calling again requires IDLE, not EXECUTING
+
+    def test_route_next_before_submit_attempt_is_rejected(self):
+        loop = RouterLoop(config=PolicyConfig(), base_seed=413)
+        loop.generate_problem()  # evaluator_state is still IDLE, not EMITTED
+        with self.assertRaises(IllegalEvaluationTransitionError):
+            loop.route_next()
 
 
 if __name__ == "__main__":

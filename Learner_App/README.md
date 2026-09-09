@@ -267,12 +267,17 @@ are exactly two state machines in this phase:
   cycle: `IDLE -> EVALUATING -> EMITTED -> IDLE`. Its pure evaluation
   logic (`evaluate_attempt`) only ever compares rule-ID *strings* — the
   problem's target rules against the attempt's self-reported
-  `reported_rules_used` — to compute `missing_rules`. `outcome`
-  (`"correct" | "incorrect" | "incomplete"`) is supplied by the
-  `LearnerAttempt` itself, from whatever graded it upstream of this
-  phase (a human, a test harness, or — per CLAUDE.md — a later
-  explicitly authorized answer-checking component); State Machine B
-  never re-derives or leaks a solved answer.
+  `reported_rules_used` — to compute `missing_rules` and `error_kind`
+  (set whenever a target rule is missing, regardless of `outcome`, so a
+  "correct" attempt that skipped a target rule is still visibly
+  incomplete). `outcome` (`"correct" | "incorrect" | "incomplete"`) is
+  supplied by the `LearnerAttempt` itself, from whatever graded it
+  upstream of this phase (a human, a test harness, or — per CLAUDE.md —
+  a later explicitly authorized answer-checking component); State
+  Machine B never re-derives or leaks a solved answer. **B stays at
+  `EMITTED` after `submit_attempt()` returns** — it does not reset to
+  `IDLE` until the router explicitly consumes its evidence in
+  `route_next()`.
 - **Router Loop** (`router/router_loop.py`, class `RouterLoop`) — owns
   routing/sequencing: it reads the current task state, applies the
   deterministic policy in `router/policy.py` to build a `RouteDecision`,
@@ -286,13 +291,36 @@ are exactly two state machines in this phase:
 
 `router/policy.py`'s `decide_next_route()` is a pure function (same
 arguments always produce the same `(RouteDecision, next curriculum
-index)`), driven only by `outcome` and the router's own repeated-error
-count — an `EvaluationEvidence`'s `confidence`/`missing_rules` are
-evidence for the router to read, never authority the evidence can use to
-override the router's decision. `DEFAULT_CURRICULUM` is demo
-*configuration* (a fixed sequence of rule-target steps for
-`math/basic_equations`) kept separate from the algorithm, exactly as
-Phase 1 kept domain constraints out of its core.
+index)`), driven only by `outcome`, `rules_satisfied` (the router's own
+read of `not evidence.missing_rules`), and the router's own repeated-error
+count. Router authority means the router *decides using* State Machine
+B's evidence, not that it ignores it: a `"correct"` outcome that didn't
+demonstrate every target rule does **not** advance — it routes as
+`REPEAT`/`REDUCE_DIFFICULTY`/`EXPLAIN` with its own distinct reason codes
+(`correct_missing_rules_repeat`, etc.), same as an outright wrong answer.
+`decide_next_route()`'s signature has no `confidence`/`metadata`/`evidence`
+parameter at all, so an evidence object's advisory fields structurally
+cannot influence the decision beyond `outcome` and `rules_satisfied`.
+`DEFAULT_CURRICULUM` is demo *configuration* (a fixed sequence of
+rule-target steps for `math/basic_equations`) kept separate from the
+algorithm, exactly as Phase 1 kept domain constraints out of its core.
+
+### The evidence handshake
+
+`route_next()` takes **no evidence argument** — there is no parameter
+through which a caller could substitute forged or stale evidence for what
+State Machine B actually emitted. It reads
+`self.evaluator_state.last_evidence` directly, requires
+`evaluator_state.lifecycle_state == EMITTED` (raising
+`IllegalEvaluationTransitionError` otherwise), and defensively checks the
+evidence's `problem_id` against the active `task_state.current_problem_id`
+(raising `StaleAttemptError` on mismatch, though this cannot happen via
+the public API since `submit_attempt()` already checked the same match
+before evaluating). Only after computing and applying its decision does
+`route_next()` acknowledge B back to `IDLE` and resolve A back to `IDLE` —
+so both state machines reach their clean boundary state together, and
+only once the router has actually consumed the evidence that put them
+there.
 
 ### Failure behavior
 

@@ -123,6 +123,18 @@ class EvaluateAttemptTests(unittest.TestCase):
         self.assertEqual(evidence.error_kind, "missing_rule:EQ.MUL_INVERSE")
         self.assertEqual(evidence.confidence, "low")
 
+    def test_correct_outcome_with_missing_target_rule_still_reports_error_kind(self):
+        # error_kind reflects missing_rules regardless of outcome -- a
+        # "correct" attempt that didn't demonstrate every target rule is
+        # still an incomplete demonstration the router needs to see.
+        task_state = _executing_task_state(targets=("EQ.ADD_INVERSE", "EQ.MUL_INVERSE"))
+        attempt = LearnerAttempt(
+            problem_id="p1", outcome="correct", reported_rules_used=("EQ.ADD_INVERSE",)
+        )
+        evidence = evaluate_attempt(attempt, task_state)
+        self.assertEqual(evidence.missing_rules, ("EQ.MUL_INVERSE",))
+        self.assertEqual(evidence.error_kind, "missing_rule:EQ.MUL_INVERSE")
+
     def test_incomplete_outcome_is_passed_through(self):
         task_state = _executing_task_state()
         attempt = LearnerAttempt(problem_id="p1", outcome="incomplete")

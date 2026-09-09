@@ -24,6 +24,8 @@ REASON_INITIAL = "initial"
 REASON_CORRECT_ADVANCE = "correct_advance"
 REASON_INCORRECT_REPEAT = "incorrect_repeat"
 REASON_INCORRECT_REDUCE_DIFFICULTY = "incorrect_reduce_difficulty"
+REASON_CORRECT_MISSING_RULES_REPEAT = "correct_missing_rules_repeat"
+REASON_CORRECT_MISSING_RULES_REDUCE_DIFFICULTY = "correct_missing_rules_reduce_difficulty"
 REASON_REPEATED_ERROR_EXPLAIN = "repeated_error_explain"
 
 # A curriculum step is (target_rules, allowed_support_rules). The router's
@@ -70,6 +72,7 @@ def decide_next_route(
     current: RouteDecision,
     curriculum_index: int,
     outcome: str,
+    rules_satisfied: bool,
     consecutive_same_error: int,
     seed: int,
 ) -> tuple[RouteDecision, int]:
@@ -77,13 +80,21 @@ def decide_next_route(
     (RouteDecision, next curriculum_index). No state is read or mutated
     outside these arguments.
 
-    IF correct              -> ADVANCE: next curriculum step, harder.
-    IF incorrect/incomplete:
+    `rules_satisfied` is the router's OWN read of State Machine B's rule
+    evidence (`not evaluation.missing_rules`) -- router authority means
+    the router decides what the evidence means, not that it ignores the
+    evidence. A "correct" outcome that didn't demonstrate every target
+    rule does not advance; it is treated as a repeat/reduce/explain case,
+    same as an outright wrong answer, just with its own reason codes so
+    the two are distinguishable in logs.
+
+    IF correct AND rules_satisfied -> ADVANCE: next curriculum step, harder.
+    ELSE (incorrect/incomplete, OR correct but missing a target rule):
       IF same error repeated >= threshold -> EXPLAIN: hold rules/difficulty.
       ELIF difficulty can drop            -> REDUCE_DIFFICULTY: hold rules.
       ELSE                                -> REPEAT: hold rules/difficulty.
     """
-    if outcome == "correct":
+    if outcome == "correct" and rules_satisfied:
         next_index = min(curriculum_index + 1, len(config.curriculum) - 1)
         target_rules, allowed_support_rules = config.curriculum[next_index]
         decision = RouteDecision(
@@ -99,6 +110,7 @@ def decide_next_route(
         return decision, next_index
 
     target_rules, allowed_support_rules = config.curriculum[curriculum_index]
+    correct_but_incomplete = outcome == "correct" and not rules_satisfied
 
     if consecutive_same_error >= config.repeated_error_threshold:
         decision = RouteDecision(
@@ -120,7 +132,11 @@ def decide_next_route(
             difficulty=max(config.min_difficulty, current.difficulty - 1),
             domain=config.domain,
             seed=seed,
-            reason_code=REASON_INCORRECT_REDUCE_DIFFICULTY,
+            reason_code=(
+                REASON_CORRECT_MISSING_RULES_REDUCE_DIFFICULTY
+                if correct_but_incomplete
+                else REASON_INCORRECT_REDUCE_DIFFICULTY
+            ),
         )
     else:
         decision = RouteDecision(
@@ -131,6 +147,10 @@ def decide_next_route(
             difficulty=current.difficulty,
             domain=config.domain,
             seed=seed,
-            reason_code=REASON_INCORRECT_REPEAT,
+            reason_code=(
+                REASON_CORRECT_MISSING_RULES_REPEAT
+                if correct_but_incomplete
+                else REASON_INCORRECT_REPEAT
+            ),
         )
     return decision, curriculum_index

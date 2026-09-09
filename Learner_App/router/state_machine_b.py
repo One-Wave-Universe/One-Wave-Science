@@ -95,15 +95,19 @@ def validate_attempt(attempt: LearnerAttempt, task_state: LearnerTaskState) -> N
 
 def evaluate_attempt(attempt: LearnerAttempt, task_state: LearnerTaskState) -> EvaluationEvidence:
     """Build EvaluationEvidence from an already-validated attempt. Caller
-    must call validate_attempt() first (the router loop does)."""
+    must call validate_attempt() first (the router loop does).
+
+    `error_kind` reflects a missing target rule regardless of `outcome` --
+    a "correct" attempt that didn't demonstrate every target rule is still
+    an incomplete demonstration the router needs to see, not something
+    this function should silently launder into a clean pass by only
+    checking for missing rules when the outcome was already bad.
+    """
     demonstrated = tuple(sorted(set(attempt.reported_rules_used)))
     target = set(task_state.current_rule_targets)
     missing = tuple(sorted(target - set(demonstrated)))
 
-    error_kind = None
-    if attempt.outcome != "correct" and missing:
-        error_kind = f"missing_rule:{missing[0]}"
-
+    error_kind = f"missing_rule:{missing[0]}" if missing else None
     confidence = "high" if not missing else "low"
 
     return EvaluationEvidence(
