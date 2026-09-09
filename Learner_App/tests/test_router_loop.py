@@ -212,6 +212,18 @@ class RouterAuthorityTests(unittest.TestCase):
         with self.assertRaises(StaleAttemptError):
             loop.route_next()
 
+    def test_replayed_route_next_call_is_rejected(self):
+        # A second route_next() call cannot reuse the evidence a first
+        # call already consumed -- by the time it would run, B is back at
+        # IDLE (only EMITTED is a legal source), so nothing from the prior
+        # cycle can be replayed into a new routing decision.
+        loop = RouterLoop(config=PolicyConfig(), base_seed=14)
+        problem = loop.generate_problem()
+        loop.submit_attempt(_correct_attempt(problem))
+        loop.route_next()
+        with self.assertRaises(IllegalEvaluationTransitionError):
+            loop.route_next()
+
 
 class FullCycleTests(unittest.TestCase):
     def setUp(self):
