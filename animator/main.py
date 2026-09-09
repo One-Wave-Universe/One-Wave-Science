@@ -15,7 +15,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer
-from PySide6.QtGui import QAction, QColor, QPainter, QPen, QPixmap
+from PySide6.QtGui import QAction, QColor, QImage, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import (
     QApplication,
     QFileDialog,
@@ -221,8 +221,10 @@ class AnimatorWindow(QMainWindow):
         )
         fullscreen_action = QAction("Playback Fullscreen", self)
         fullscreen_action.triggered.connect(self.fullscreen_playback)
+        export_action = QAction("Export Frame PNG", self)
+        export_action.triggered.connect(self.export_frame_png)
 
-        for action in (new_action, open_action, save_action, save_as_action, fit_action, fullscreen_action):
+        for action in (new_action, open_action, save_action, save_as_action, fit_action, fullscreen_action, export_action):
             toolbar.addAction(action)
 
         file_menu = self.menuBar().addMenu("File")
@@ -397,6 +399,43 @@ class AnimatorWindow(QMainWindow):
         self.scene.grid_enabled = not self.scene.grid_enabled
         self.grid_button.setText("Grid: On" if self.scene.grid_enabled else "Grid: Off")
         self.scene.update()
+
+    def export_frame_png(self) -> None:
+        """Render the current playback frame without the editor grid."""
+        filename, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export current frame",
+            f"frame-{self.current_frame + 1:04d}.png",
+            "PNG Image (*.png)",
+        )
+        if not filename:
+            return
+        path = Path(filename)
+        if path.suffix.lower() != ".png":
+            path = Path(str(path) + ".png")
+
+        self._sync_item_transforms()
+        old_grid = self.scene.grid_enabled
+        selected = list(self.scene.selectedItems())
+        self.scene.clearSelection()
+        self.scene.grid_enabled = False
+        self.scene.update()
+
+        image = QImage(CANVAS_W, CANVAS_H, QImage.Format.Format_ARGB32)
+        image.fill(QColor(32, 34, 38))
+        painter = QPainter(image)
+        self.scene.render(painter, QRectF(0, 0, CANVAS_W, CANVAS_H), self.scene.sceneRect())
+        painter.end()
+
+        self.scene.grid_enabled = old_grid
+        for item in selected:
+            item.setSelected(True)
+        self.scene.update()
+
+        if not image.save(str(path), "PNG"):
+            QMessageBox.critical(self, APP_NAME, f"Could not export PNG:\n{path}")
+            return
+        self.statusBar().showMessage(f"Exported {path}", 4000)
 
     def fullscreen_playback(self) -> None:
         self.view.setWindowFlag(Qt.WindowType.Window, True)
