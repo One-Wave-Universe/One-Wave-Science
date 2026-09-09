@@ -101,10 +101,17 @@ where the adapter came from, so domain selection stays the router's call.
 
 A `RulePacket` is meant to be a fixed instruction, not something a caller
 can quietly edit after handing it to the worker: `constraints` and
-`metadata` are snapshotted into read-only mappings at construction
-(`models._freeze_mapping()`), so mutating the caller's original dict
-afterward, or assigning into `packet.constraints` directly, cannot change
-what a later `build_problem()` call sees. See `test_models.py`.
+`metadata` are snapshotted at construction (`models._freeze_mapping()`
+/ `_deep_freeze()`) into read-only mappings, recursively -- a mapping
+becomes a `MappingProxyType`, a list/tuple becomes a tuple, and a set
+becomes a `frozenset`, at every nesting depth, not just the top level. So
+mutating the caller's original dict afterward (including a dict or list
+nested *inside* a constraint value), or assigning into `packet.constraints`
+directly, cannot change what a later `build_problem()` call sees. An
+arbitrary custom object nested inside a constraint value is left as-is --
+the core freezes the standard container shapes it can recognize
+generically, not arbitrary domain-specific object graphs. See
+`test_models.py`.
 
 The worker never repairs an infeasible router constraint by widening it.
 If `EQ.MUL_INVERSE`/`EQ.DIV_INVERSE` is targeted and no coefficient/divisor
@@ -116,7 +123,13 @@ constant was drawn (`term_value = constant + <extra>`) instead of being
 picked independently and then clamped — so a wide `constant_range` always
 produces a valid equation instead of occasionally raising
 `ProblemVerificationError` from a packet `validate_packet()` had already
-accepted (`ConstantRangeFeasibilityTests`).
+accepted (`ConstantRangeFeasibilityTests`). A `constant_range` that could
+produce a negative constant (v1's grammar has no unary minus anywhere) is
+rejected the same way, at `validate_packet()` time rather than
+intermittently by seed once generation runs (`ConstantRangeSignTests`) --
+`0` is still an allowed constant, since whether a trivial instance like
+`"x + 0 = 5"` is worth practicing is a router/curriculum call, not
+something this worker should silently veto.
 
 ## Determinism
 

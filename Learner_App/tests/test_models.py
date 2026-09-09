@@ -61,6 +61,59 @@ class RulePacketImmutabilityTests(unittest.TestCase):
         second = build_problem(packet, adapter=adapter)
         self.assertEqual(first.artifact_text, second.artifact_text)
 
+    def test_nested_dict_constraint_value_is_frozen(self):
+        nested = {"mode": "a"}
+        packet = RulePacket(
+            packet_id="p", seed=1, domain=DOMAIN, target_rules=[EQ_ADD_INVERSE],
+            constraints={"domain_options": nested},
+        )
+        self.assertIsInstance(packet.constraints["domain_options"], MappingProxyType)
+        with self.assertRaises(TypeError):
+            packet.constraints["domain_options"]["mode"] = "b"
+
+    def test_mutating_nested_dict_in_original_after_construction_has_no_effect(self):
+        nested = {"mode": "a"}
+        packet = RulePacket(
+            packet_id="p", seed=1, domain=DOMAIN, target_rules=[EQ_ADD_INVERSE],
+            constraints={"domain_options": nested},
+        )
+        nested["mode"] = "CHANGED"
+        self.assertEqual(packet.constraints["domain_options"]["mode"], "a")
+
+    def test_mutating_dict_nested_inside_list_after_construction_has_no_effect(self):
+        item = {"x": 1}
+        original_list = [item]
+        packet = RulePacket(
+            packet_id="p", seed=1, domain=DOMAIN, target_rules=[EQ_ADD_INVERSE],
+            constraints={"items": original_list},
+        )
+        item["x"] = 999
+        original_list.append({"x": 2})
+        self.assertEqual(len(packet.constraints["items"]), 1)
+        self.assertEqual(packet.constraints["items"][0]["x"], 1)
+        with self.assertRaises(TypeError):
+            packet.constraints["items"][0]["x"] = 42
+
+    def test_nested_set_constraint_value_is_frozen(self):
+        packet = RulePacket(
+            packet_id="p", seed=1, domain=DOMAIN, target_rules=[EQ_ADD_INVERSE],
+            constraints={"tags": {"a", "b"}},
+        )
+        self.assertIsInstance(packet.constraints["tags"], frozenset)
+        self.assertEqual(packet.constraints["tags"], frozenset({"a", "b"}))
+
+    def test_repeated_build_stays_deterministic_despite_nested_mutation_attempt(self):
+        nested = {"seed_note": "original"}
+        packet = RulePacket(
+            packet_id="p", seed=7, domain=DOMAIN, target_rules=[EQ_ADD_INVERSE],
+            constraints={"domain_options": nested},
+        )
+        adapter = MathBasicEquationsAdapter()
+        first = build_problem(packet, adapter=adapter)
+        nested["seed_note"] = "tampered"
+        second = build_problem(packet, adapter=adapter)
+        self.assertEqual(first.artifact_text, second.artifact_text)
+
 
 if __name__ == "__main__":
     unittest.main()

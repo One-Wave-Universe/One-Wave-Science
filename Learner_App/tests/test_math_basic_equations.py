@@ -361,5 +361,48 @@ class ConstantRangeFeasibilityTests(unittest.TestCase):
             self.assertGreaterEqual(result.structure.rhs, 0)
 
 
+class ConstantRangeSignTests(unittest.TestCase):
+    """Regression tests: a constant_range that could produce a negative
+    constant must be rejected up front, not accepted and then either fail
+    later in the independent parser or (for a mixed-sign range) only fail
+    intermittently depending on seed."""
+
+    def setUp(self):
+        self.adapter = MathBasicEquationsAdapter()
+
+    def test_negative_only_constant_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"constant_range": (-5, -1)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_mixed_sign_constant_range_rejected(self):
+        packet = _packet([EQ_ADD_INVERSE], constraints={"constant_range": (-2, 5)})
+        self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_mixed_sign_constant_range_rejected_across_seeds(self):
+        # Before the fix, a mixed range like this could pass validation and
+        # then only fail generation/verification for some seeds -- prove
+        # rejection is unconditional, not seed-dependent.
+        for seed in range(10):
+            packet = _packet(
+                [EQ_ADD_INVERSE], seed=seed, constraints={"constant_range": (-2, 5)}
+            )
+            self.assertTrue(self.adapter.validate_packet(packet))
+
+    def test_zero_lower_bound_constant_range_accepted(self):
+        # 0 is a legal (if trivial) constant -- only negative bounds are
+        # rejected, not zero.
+        packet = _packet([EQ_ADD_INVERSE], constraints={"constant_range": (0, 5)})
+        self.assertEqual(self.adapter.validate_packet(packet), [])
+
+    def test_zero_constant_generates_a_valid_problem(self):
+        for seed in range(20):
+            packet = _packet(
+                [EQ_ADD_INVERSE], seed=seed, constraints={"constant_range": (0, 0)}
+            )
+            result = build_problem(packet, adapter=self.adapter)
+            self.assertTrue(result.verification.passed)
+            self.assertEqual(result.structure.constant_term.value, 0)
+
+
 if __name__ == "__main__":
     unittest.main()

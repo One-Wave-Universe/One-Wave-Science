@@ -16,17 +16,29 @@ def _as_tuple(value: Any) -> tuple[str, ...]:
     return tuple(value) if value else ()
 
 
+def _deep_freeze(value: Any) -> Any:
+    """Recursively snapshot standard mutable containers (mapping, list,
+    tuple, set) into read-only/hashable equivalents. An arbitrary custom
+    object nested inside a constraint value is returned as-is -- the core
+    freezes the container shapes it can recognize generically; it cannot
+    know how to snapshot an arbitrary domain-specific object graph."""
+    if isinstance(value, Mapping):
+        return MappingProxyType({k: _deep_freeze(v) for k, v in value.items()})
+    if isinstance(value, (list, tuple)):
+        return tuple(_deep_freeze(v) for v in value)
+    if isinstance(value, (set, frozenset)):
+        return frozenset(_deep_freeze(v) for v in value)
+    return value
+
+
 def _freeze_mapping(value: Mapping[str, Any] | None) -> MappingProxyType:
     """Snapshot `value` into a read-only mapping so a RulePacket stays a
     fixed instruction once built: neither mutating the caller's original
-    dict after construction, nor mutating packet.constraints/metadata
-    directly, can change what a later build_problem() call sees. List
-    values are frozen to tuples one level deep -- the common case (e.g.
-    constraints["variable_names"]) -- without the core needing to know
-    the shape of arbitrary nested domain-specific constraints."""
+    dict (at any nesting depth) after construction, nor mutating
+    packet.constraints/metadata directly, can change what a later
+    build_problem() call sees."""
     items = dict(value) if value else {}
-    frozen = {k: (tuple(v) if isinstance(v, list) else v) for k, v in items.items()}
-    return MappingProxyType(frozen)
+    return MappingProxyType({k: _deep_freeze(v) for k, v in items.items()})
 
 
 @dataclass(frozen=True)

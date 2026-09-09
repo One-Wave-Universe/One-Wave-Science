@@ -292,11 +292,26 @@ class MathBasicEquationsAdapter:
                 f"constraints.coefficient_range {tuple(coefficient_range)} cannot produce a "
                 f"coefficient/divisor >= 2, which the requested rule(s) require for {DOMAIN} v1"
             )
-        if "constant_range" in packet.constraints and not _is_valid_int_range(
-            packet.constraints["constant_range"]
-        ):
+        # 0 is deliberately still allowed as a constant (e.g. "x + 0 = 5"
+        # is a legal, if trivial, EQ.ADD_INVERSE instance): whether that is
+        # worth practicing is a curriculum judgment for the router, not
+        # something this worker should silently veto.
+        constant_range = packet.constraints.get("constant_range", DEFAULT_CONSTANT_RANGE)
+        if not _is_valid_int_range(constant_range):
             errors.append(
                 "constraints.constant_range must be a 2-item (lo, hi) integer range with lo <= hi"
+            )
+        elif constant_range[0] < 0:
+            # v1's grammar has no unary minus anywhere -- a constant_range
+            # that can produce a negative constant would pass validation
+            # here and then be rejected later by the independent parser
+            # (or, for a mixed range like (-2, 5), only intermittently by
+            # seed), which is exactly the "accepted then fails later"
+            # pattern the worker must not allow. Reject up front instead
+            # of silently clamping the router's requested range.
+            errors.append(
+                f"constraints.constant_range {tuple(constant_range)} must not include negative "
+                f"values -- {DOMAIN} v1 has no negative-number support"
             )
         if (
             not isinstance(packet.difficulty, int)
