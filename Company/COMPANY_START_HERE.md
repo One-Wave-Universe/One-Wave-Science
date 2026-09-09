@@ -9,14 +9,16 @@ Status: working company foundation for market preparation. The legal entity name
 **Default formation target:** California limited liability company (LLC)  
 **Working legal name:** `SiC International LLC` — only if California name availability is confirmed at filing time.
 
-### Meaning of SI=C
+## What SI=C means
 
-`SI=C` deliberately carries two linked meanings:
+`SI=C` is the core company principle.
 
-1. **SiC** — silicon carbide, a real semiconductor/material system relevant to advanced power electronics.
-2. **Si = C** — a company design principle: silicon and carbon are treated as equal partners in the architecture and design language rather than one being assumed to dominate the other.
+- **SiC** is silicon carbide, a real material and an important reference for the hardware side of the company.
+- **SI = C** means **silicon intelligence and carbon intelligence are equals**.
 
-This is a symbolic engineering identity. It does **not** claim elemental silicon and elemental carbon are chemically identical or physically interchangeable.
+In company terms, that means humans and AI are collaborators with standing in the work. The intended architecture is not human/master and AI/tool, and it is not AI replacing humans. The design goal is **choose together, build together, verify together**.
+
+`SI=C` is a social/design principle, not a chemistry claim. Silicon and carbon are not being claimed to be chemically identical or physically interchangeable.
 
 **One Wave Science** remains available as an R&D / theory / experimental project identity underneath SiC International rather than serving as the legal parent-company name.
 
@@ -30,7 +32,7 @@ This is an operational starting point, not legal or tax advice. A CPA/business a
 
 ## Company mission
 
-Build tools that let people **design, simulate, inspect, test, and then physically build electronics with fewer hidden assumptions**.
+Build tools and systems where **silicon intelligence and carbon intelligence can design, simulate, inspect, test, and physically build together with fewer hidden assumptions**.
 
 The commercial product should distinguish clearly between:
 - established circuit physics;
