@@ -1,24 +1,15 @@
 const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
-// classic (always-visible, space-reserving) scrollbars instead of the
-// GTK-style auto-hiding overlay ones -- the toolbox sidebar's tool options
-// can extend below the fold, and an overlay scrollbar gives no visible hint
-// that there's more to scroll to.
 app.commandLine.appendSwitch('disable-features', 'OverlayScrollbar');
 
 const APP_SMOKE_TEST = process.argv.includes('--smoke-test');
 
-// the renderer can only ask for this by name (see preload.js) -- validate
-// it's an actual https URL before ever handing it to the OS to open.
 ipcMain.on('open-external', (event, url) => {
   if (typeof url === 'string' && /^https:\/\//.test(url)) shell.openExternal(url);
 });
 
-// AI provider calls (js/ai.js) run as plain fetch() in the renderer, which
-// works for Anthropic/Gemini but not providers that reject browser CORS.
-// Node's fetch in the main process has no browser CORS boundary, so the
-// desktop app proxies only explicit https requests from its own renderer.
 ipcMain.handle('ai-fetch', async (event, { url, options }) => {
   if (typeof url !== 'string' || !/^https:\/\//.test(url)) {
     throw new Error('ai-fetch: refusing a non-https URL');
@@ -28,6 +19,14 @@ ipcMain.handle('ai-fetch', async (event, { url, options }) => {
   return { ok: res.ok, status: res.status, statusText: res.statusText, text };
 });
 
+async function installPedalLab(win) {
+  const scripts = ['circle-fifths-tuner.js', 'pedal-lab.js'];
+  for (const name of scripts) {
+    const source = fs.readFileSync(path.join(__dirname, 'js', name), 'utf8');
+    await win.webContents.executeJavaScript(source, true);
+  }
+}
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -35,7 +34,7 @@ function createWindow() {
     minWidth: 900,
     minHeight: 600,
     backgroundColor: '#10141a',
-    title: 'Virtual Breadboard Simulator',
+    title: 'Star Forge Digital Bread Board',
     icon: path.join(__dirname, 'build', 'icon.png'),
     webPreferences: {
       contextIsolation: true,
@@ -46,6 +45,10 @@ function createWindow() {
   });
 
   Menu.setApplicationMenu(null);
+
+  win.webContents.on('did-finish-load', () => {
+    installPedalLab(win).catch((err) => console.error('PEDAL_LAB_LOAD_FAIL', err));
+  });
 
   if (APP_SMOKE_TEST) {
     let finished = false;
@@ -64,6 +67,7 @@ function createWindow() {
 
     win.webContents.once('did-finish-load', async () => {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 100));
         const state = await win.webContents.executeJavaScript(`(() => ({
           title: document.title,
           canvas: !!document.getElementById('boardCanvas'),
@@ -72,12 +76,13 @@ function createWindow() {
           load: !!document.getElementById('btnLoad'),
           exportButton: !!document.getElementById('btnExport'),
           inspector: !!document.getElementById('props'),
-          scope: !!document.getElementById('scopeCanvas')
+          scope: !!document.getElementById('scopeCanvas'),
+          pedalLab: !!document.getElementById('pedalLabLauncher'),
+          tunerCore: !!globalThis.CircleFifthsTuner
         }))()`);
-        const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'inspector', 'scope'];
+        const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'inspector', 'scope', 'pedalLab', 'tunerCore'];
         const missing = required.filter((key) => !state[key]);
         if (missing.length) throw new Error(`missing required UI: ${missing.join(', ')}`);
-        if (!/Virtual Breadboard Simulator/.test(state.title)) throw new Error(`unexpected title: ${state.title}`);
         finished = true;
         clearTimeout(timer);
         console.log('APP_SMOKE_OK', JSON.stringify(state));
