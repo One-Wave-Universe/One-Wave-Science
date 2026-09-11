@@ -48,6 +48,11 @@ HOLD, defer, or reject it.
 No single sensor is the reference for every scale. The cell must declare what
 it measures, what it cannot observe, and the conditions that make it invalid.
 
+For the rover/drone, gyroscopes supply fast angular-rate Views Up. The gyro does
+not drive a motor by itself; the native controller compares those views with
+the admitted attitude/rate target and continuously corrects the vehicle inside
+the configured safe range.
+
 ## Balanced registration
 
 1. Measure both opposed channels at the same time where practical.
@@ -79,6 +84,9 @@ it measures, what it cannot observe, and the conditions that make it invalid.
 - Establish noise floors and deadbands from data rather than intuition.
 - Build a calibration fixture for physical `x/y/z` registration.
 - Implement sensor disagreement and degraded-quality handling.
+- Define gyro validity, bias, saturation, vibration, and disagreement limits;
+  an invalid gyro view must invoke the native controller's configured recovery
+  behavior rather than a guessed lean.
 - Prove that motor/ESC/coil noise cannot shift `V0` or fabricate direction.
 - Define the turnaround/arbitration rule that prevents an upward view from
   reflecting back as an unauthorized action on the shared gate.

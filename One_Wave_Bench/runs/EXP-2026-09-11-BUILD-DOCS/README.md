@@ -42,6 +42,8 @@ Decision: `ALLOW` with these constraints:
   their authority roles distinct;
 - preserve three complete nerve cycles per one higher-brain function, with
   immediate preemption for fault/override;
+- preserve gyro-fed native balance inside a calibrated safe envelope while
+  higher layers request only bounded target leans;
 - preserve existing flashlight and VBB work without edits.
 
 ## Checks

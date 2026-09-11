@@ -73,6 +73,19 @@ imbalance. They are bounded attitude/vertical setpoint changes. The controller
 uses its measured state to allocate the corrections required to remain stable
 while following the new target.
 
+### Gyro safe envelope
+
+The IMU gyroscopes provide the fast roll, pitch, and yaw-rate views used by the
+native controller to maintain balance. Define safe attitude, angular-rate,
+setpoint-slew, and recovery limits for the chosen airframe in simulation and
+conventional flight testing; do not invent universal degree limits in this
+architecture document.
+
+Every higher-brain lean is clipped or rejected inside that calibrated envelope.
+It cannot suppress gyro stabilization. A stale, saturated, implausible, or
+disagreeing gyro signal invokes the selected native-controller fault/recovery
+path and blocks new external leans.
+
 ## Balanced movement mapping
 
 Each logical axis is expressed around its current admitted target:
@@ -145,6 +158,7 @@ power source or endurance gain.
 ## Mandatory acceptance tests
 
 - Axis polarity and coordinate-frame registration.
+- Gyro bias, vibration, saturation, disagreement, and safe-envelope enforcement.
 - HOLD preserves the selected target and active stabilization.
 - Setpoint magnitude, slew, duration, and mode limits.
 - Stale/repeated/invalid packet rejection.
@@ -168,6 +182,8 @@ power source or endurance gain.
   without delaying native stabilization or override.
 - Demonstrate HOLD, climb/descent, and one directional lean while logging that
   native balance correction remains active throughout each target change.
+- Calibrate the gyro/attitude safe envelope for the selected controller and
+  airframe, then prove out-of-range external leans are clipped or rejected.
 - Define indoor/outdoor position and altitude sensing for the first site.
 - Recruit an experienced autopilot integrator and pilot/test lead.
 - Build the rover wiring diagram and parts list before purchasing duplicates.

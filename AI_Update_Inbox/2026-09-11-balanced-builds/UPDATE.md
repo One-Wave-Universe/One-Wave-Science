@@ -27,6 +27,8 @@ measurement, integration decision, and safety gate visible.
 - Brain, sensor, and three-winding action/nerve cells remain distinct.
 - Native vehicle controllers retain stabilization, mixing, arming, and
   failsafes.
+- Gyro-fed native stabilization remains active inside a calibrated safe
+  envelope; external leans are clipped/rejected and cannot suppress it.
 - Proposed geometry, magnetic switching, and reinjection remain unvalidated
   until measured against controls.
 
