@@ -22,6 +22,8 @@ measurement, integration decision, and safety gate visible.
   bidirectional gate; direction does not create a second gate family.
 - Each last Action Down produces a physical result that returns as the new View
   Up; the return is neither an echo nor an automatic reset.
+- Three complete nerve cycles feed one higher-brain function; safety and native
+  controller override may preempt the group immediately.
 - Brain, sensor, and three-winding action/nerve cells remain distinct.
 - Native vehicle controllers retain stabilization, mixing, arming, and
   failsafes.

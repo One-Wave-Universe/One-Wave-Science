@@ -27,10 +27,13 @@ brain hardware is not required to test the contract.
 | Administrator / Void | Confirm, defer, deny, or override from evidence | Yes |
 | Executor adapter | Translate an admitted action to the target controller | No new choice |
 
-The local nerve loop may operate at the working `3:1` relationship. Higher
-oversight uses the working `6:1` neighborhood/override relationship. These are
-architecture ratios to test, not claims that biological brains literally use
-the proposed hardware.
+The local nerve loop uses the working `3:1` relationship: **three complete
+nerve cycles for one higher-brain function**. Each local cycle contains Action
+Down, physical response, and a new View Up. The higher function compares those
+three returned views and resolves the next larger step. Higher oversight uses
+the working `6:1` neighborhood/override relationship. These are architecture
+ratios to test, not claims that biological brains literally use the proposed
+hardware.
 
 ## One gate, two directions
 
@@ -55,6 +58,15 @@ Rapid direction flipping can make the loop appear simultaneous, but the brain
 contract retains explicit phases and timestamps. Apparent continuity is
 accepted only when measured round-trip latency and jitter stay below the
 declared limit for the controlled process.
+
+The 3:1 scheduler must not turn into blind batching. Every nerve cycle is
+measured and locally bounded. A fault or explicit override may preempt the group
+before cycle three; the receipt must record the incomplete group and reason.
+
+The higher brain changes the **held target**, not the raw actuator balance. Fast
+nerve cycles keep the system balanced around that target while the admitted
+higher function adds lift or a directional lean. HOLD leaves the target in
+place and lets the fast loop continue correcting disturbances.
 
 ## Lifecycle
 
@@ -120,6 +132,8 @@ reversible, and subordinate to hardware limits and explicit human override.
   an earlier zero.
 - Prove `View Up(n+1)` contains the measured result and sequence reference for
   `Action Down(n)` rather than a copy of `View Up(n)`.
+- Prove one higher-brain function consumes three completed nerve-cycle receipts,
+  or an explicitly marked preempted group during override/fault handling.
 - Interrupt the output stream and confirm the target controller's native
   recovery behavior.
 - Preserve a complete decision/response log without hidden state changes.
@@ -133,6 +147,7 @@ reversible, and subordinate to hardware limits and explicit human override.
 - Define shared-gate direction control, turnaround timing, and collision rules.
 - Set per-device minimum cycle rate and maximum latency/jitter from stability
   tests rather than human perception.
+- Implement the 3:1 scheduler, three-receipt comparison, and preemption tests.
 - Implement bounded learning with reversible state snapshots and explicit
   Administrator approval.
 - Add deterministic replay, timeout, duplicate-sequence, and override tests.

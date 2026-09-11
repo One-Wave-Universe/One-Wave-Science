@@ -52,6 +52,27 @@ loop. Log update rate, round-trip latency, and jitter. Any missed deadline,
 stale view, or expired action invokes HOLD or the configured native recovery
 mode rather than extrapolating a new motor command.
 
+The One-Wave companion groups three completed nerve cycles beneath one
+higher-brain function. This 3:1 grouping applies only to the experimental
+setpoint/measurement layer. It does not divide, replace, or slow the native
+flight controller's attitude and rate loops. Native failsafes and pilot
+override may preempt the group at any point.
+
+### Balance while moving
+
+For P0, the native flight controller is the implemented fast nerve layer:
+
+```text
+fast nerve/controller cycles: correct balance around the current target
+higher-brain function:         lean the target for lift or direction
+new fast cycles:               keep balance around the leaned target
+```
+
+Climb is not a raw increase to every motor and direction is not a raw motor
+imbalance. They are bounded attitude/vertical setpoint changes. The controller
+uses its measured state to allocate the corrections required to remain stable
+while following the new target.
+
 ## Balanced movement mapping
 
 Each logical axis is expressed around its current admitted target:
@@ -143,6 +164,10 @@ power source or endurance gain.
   shared bidirectional link.
 - Establish measured update-rate, worst-case latency, and jitter budgets while
   the native controller remains stable under link delay and loss.
+- Prove three experimental nerve-cycle receipts feed one higher-brain function
+  without delaying native stabilization or override.
+- Demonstrate HOLD, climb/descent, and one directional lean while logging that
+  native balance correction remains active throughout each target change.
 - Define indoor/outdoor position and altitude sensing for the first site.
 - Recruit an experienced autopilot integrator and pilot/test lead.
 - Build the rover wiring diagram and parts list before purchasing duplicates.

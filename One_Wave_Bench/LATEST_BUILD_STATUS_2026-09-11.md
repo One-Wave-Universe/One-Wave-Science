@@ -16,6 +16,8 @@ contracts, and physical evidence.
 | Magnetic/non-contact switching | Candidate in flashlight/cell documents | Individual magnetic concepts; no complete qualified switch | Development needed | Leakage, hysteresis, bilateral conduction, heat, and failure-state bench test |
 | Reinjection | Existing flashlight simulation claims and lock document | No physical net-energy advantage | Experimental | Source/storage/load energy accounting against continuous-drive control |
 | Shared up/down gate | Cell and brain contracts | Bilateral-gate concept; no integrated turnaround test | Defined, unvalidated | Rapid Action Down/new View Up alternation with measured cycle rate, latency, jitter, and no role confusion |
+| 3:1 nerve/brain schedule | Cell and brain contracts | Architecture rule; no integrated scheduler result | Defined, unvalidated | Three complete nerve receipts feed one higher-brain function; fault/override preempts safely |
+| Nested balance + movement | Mobility contract | Standard native-controller capability; One-Wave adapter not integrated | Architecture defined | Fast balance loop stays active while higher layer applies bounded lift/direction target lean |
 
 ## Recommended build order
 

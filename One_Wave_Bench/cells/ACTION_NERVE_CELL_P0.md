@@ -58,6 +58,24 @@ the controller must still measure and budget the real turnaround delay. The
 local action rate cannot exceed the rate at which a trustworthy new view and
 higher-level admission can return.
 
+The working schedule groups three complete local cycles beneath one
+higher-brain function:
+
+```text
+nerve 1: Action Down -> response -> new View Up
+nerve 2: Action Down -> response -> new View Up
+nerve 3: Action Down -> response -> new View Up
+higher brain: compare/resolve the three returned views once
+```
+
+Local current/temperature limits and emergency override remain live inside all
+three cycles.
+
+For mobility, the three fast cycles continually reduce balance error around the
+current target. The higher-brain function may then lean that target for lift,
+descent, roll, pitch, or yaw. Stability correction and requested movement are
+therefore nested rather than substituted for one another.
+
 ## P0 hardware blocks
 
 - three characterized windings on a declared geometry/core;
@@ -108,5 +126,7 @@ speed or steering targets.
   bidirectional gate.
 - Measured cycle frequency, worst-case round-trip latency, and jitter limits for
   each target device.
+- A scheduler and receipt proving exactly three completed nerve cycles per one
+  higher-brain function, including preemptive override.
 - Fault injection for stuck phase, open phase, shorted phase, bad sensor, and
   lost higher-level command.

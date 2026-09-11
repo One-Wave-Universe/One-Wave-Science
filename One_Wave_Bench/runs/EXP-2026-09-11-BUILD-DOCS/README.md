@@ -40,6 +40,8 @@ Decision: `ALLOW` with these constraints:
 - preserve HOLD as no new correction, not forced zero output;
 - preserve one bidirectional gate for Views Up and Actions Down while keeping
   their authority roles distinct;
+- preserve three complete nerve cycles per one higher-brain function, with
+  immediate preemption for fault/override;
 - preserve existing flashlight and VBB work without edits.
 
 ## Checks

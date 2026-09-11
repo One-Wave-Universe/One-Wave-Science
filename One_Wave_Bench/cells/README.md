@@ -54,6 +54,19 @@ not proof of zero delay. Record the full cycle rate, turnaround time, worst-case
 latency, and jitter; they must be comfortably inside the controlled device's
 stability budget.
 
+## 3:1 cycle schedule
+
+One complete nerve cycle is:
+
+```text
+Action Down -> physical response -> new View Up
+```
+
+Run **three complete nerve cycles for one higher-brain function**. The higher
+brain function compares the three new returned views, resolves the larger
+relationship, and may admit the next bounded action. This 3:1 schedule is a
+working control contract to test, not permission to delay a safety override.
+
 `HOLD` means **no new differential correction**. It does not mean power off,
 motor zero, light off, or speaker volume zero. The presently admitted operating
 state continues unless a higher safety authority replaces it.
