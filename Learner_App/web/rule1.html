@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learner — Rule 1 Balanced Change</title>
+  <style>
+    :root { font-family: Georgia, "Times New Roman", serif; color: #111; background: #f6f1e8; }
+    body { max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.4rem; }
+    .rule { background: #fff; border: 1px solid #cbb89a; padding: 1rem 1.1rem; }
+    .card { background: #fff; border: 1px solid #cbb89a; padding: 1rem 1.1rem; margin-top: 1rem; }
+    .meta { color: #5c5144; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .eq { font-size: 1.35rem; margin: 0.6rem 0; }
+    textarea { width: 100%; min-height: 4rem; font: inherit; padding: 0.5rem; }
+    button { font: inherit; padding: 0.4rem 0.8rem; margin-right: 0.4rem; cursor: pointer; }
+    .ok { color: #1b5e20; }
+    .bad { color: #8b1e1e; }
+    .hint { color: #5c5144; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Rule 1 — Balanced Change</h1>
+  <div class="rule">
+    If two sides are equal, do the same operation to the <em>whole</em> left
+    and the <em>whole</em> right. They stay equal.
+    <p class="hint">You are preserving the relationship. Do not move a number across and flip its sign yet.</p>
+  </div>
+  <div class="card" id="card"></div>
+  <script>
+    const problems = [
+      {id:"R1-BU-1", stage:"build-up 1/3", start:"3 + 2 = 5", op:"add 4 to both whole sides",
+       prompt:"Write the next line: add 4 to the whole left and the whole right.",
+       accept:["3+2+4=5+4"], teach:"3 + 2 + 4 = 5 + 4  →  9 = 9"},
+      {id:"R1-BU-2", stage:"build-up 2/3", start:"10 = 7 + 3", op:"subtract 2 from both whole sides",
+       prompt:"Write the next line: subtract 2 from each whole side.",
+       accept:["10-2=7+3-2"], teach:"10 - 2 = 7 + 3 - 2  →  8 = 8"},
+      {id:"R1-BU-3", stage:"build-up 3/3", start:"2 + 3 = 6 - 1", op:"add 1 to both whole sides",
+       prompt:"Sides look different. Values match. Add 1 to each whole side.",
+       accept:["2+3+1=6-1+1"], teach:"2 + 3 + 1 = 6 - 1 + 1  →  6 = 6"},
+      {id:"R1-LD-1", stage:"lock-down 1/3", start:"x + 3 = 8", op:"subtract 3 from both whole sides",
+       prompt:"Write the next line only. Do not skip to a shortcut.",
+       accept:["x+3-3=8-3"], teach:null},
+      {id:"R1-LD-2", stage:"lock-down 2/3", start:"x - 4 = 6", op:"add 4 to both whole sides",
+       prompt:"Write the next line only: add 4 to the whole left and the whole right.",
+       accept:["x-4+4=6+4"], teach:null},
+      {id:"R1-LD-3", stage:"lock-down 3/3", start:"5 = 5", op:"someone wrote 5 + 2 = 5",
+       prompt:"Changed only the left side. Does equality still hold? Type yes or no.",
+       accept:["no","n","false","notequal"], teach:null}
+    ];
+    let i = 0;
+    const norm = s => s.toLowerCase().replace(/−/g,"-").replace(/\s+/g,"");
+    function render() {
+      const p = problems[i];
+      document.getElementById("card").innerHTML = `
+        <div class="meta">${p.id} · ${p.stage}</div>
+        <div class="eq">${p.start}</div>
+        <p><strong>Do:</strong> ${p.op}</p>
+        <p>${p.prompt}</p>
+        <textarea id="ans" placeholder="next line"></textarea>
+        <p>
+          <button id="check">Check</button>
+          <button id="next" disabled>Next</button>
+        </p>
+        <p id="fb"></p>
+        ${p.teach ? `<p class="hint">Worked path (build-up only): ${p.teach}</p>` : ""}
+      `;
+      document.getElementById("check").onclick = () => {
+        const raw = document.getElementById("ans").value;
+        const g = norm(raw);
+        const ok = p.accept.some(a => g === a || g.startsWith(a));
+        document.getElementById("fb").className = ok ? "ok" : "bad";
+        document.getElementById("fb").textContent = ok
+          ? "Both-sides change holds."
+          : "Look again: same operation on the whole left and the whole right.";
+        document.getElementById("next").disabled = !ok;
+      };
+      document.getElementById("next").onclick = () => {
+        if (i < problems.length - 1) { i += 1; render(); }
+        else {
+          document.getElementById("card").innerHTML =
+            "<p>Rule 1 locked. Cancellation tricks and coefficients wait until next.</p>";
+        }
+      };
+    }
+    render();
+  </script>
+</body>
+</html>
