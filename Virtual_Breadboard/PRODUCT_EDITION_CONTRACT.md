@@ -1,157 +1,198 @@
-# Breadboard Lab — Free Demo vs Paid Product Contract
+# Breadboard Lab — Classroom Product Contract
 
-Status: product-boundary contract for the human-facing desktop app. One codebase, two entitlements. Do not fork the simulator physics between editions.
+Status: product-boundary contract for the human-facing desktop app. One codebase, Free and Paid classroom editions. **Breadboard Lab is a conventional electronics teaching product. It is not an experimental or One-Wave research workspace.**
+
+## Product identity
+
+Breadboard Lab exists for normal electronics education: students learning what real parts do, teachers demonstrating circuits, and beginners practicing safe low-voltage breadboard work before touching a physical board.
+
+It must teach and simulate established circuit behavior using conventional component models and clearly documented approximations.
+
+Breadboard Lab must not expose or market:
+
+- One-Wave experimental circuits;
+- ternary research cells;
+- magnetic-memory research builds;
+- MTJ / speculative architecture experiments;
+- experimental lattice or AI-hardware concepts;
+- unverified energy, field, gravity, or physics claims;
+- research-only calibration builds as student lessons.
+
+Research work stays in a separate research/testing environment and is never silently mixed into the school product.
 
 ## Core rule
 
-The free demo and paid product must use the **same qualified circuit engine, same component models, same fault logic, and same regression suite**.
+The Free and Paid editions use the **same qualified circuit engine, same conventional component models, same fault logic, and same regression suite**.
 
-Edition gating may control UI access, project limits, instruments, export, advanced parts, or add-on workspaces. It must never make the same circuit produce different physics depending on payment status.
+Edition gating may control classroom features, project limits, instruments, lessons, export, or teacher tools. It must never make the same circuit produce different physics depending on payment status.
+
+## Intended users
+
+- middle-school / high-school electronics classes where appropriate;
+- introductory college electronics;
+- STEM and maker-space classrooms;
+- teachers and tutors;
+- students learning breadboarding at home;
+- beginners who want a safe practice environment before building physically.
 
 ## Free Demo
 
-Purpose: let a human install the app, see that it is real, build something useful, change it, and verify measured behavior without needing GitHub, Node, npm, or a terminal.
+Purpose: let a student or teacher install the app, complete real beginner circuits, change values, and observe conventional electrical behavior without GitHub, Node, npm, or a terminal.
 
 ### Free Demo must include
 
 - one large breadboard workspace;
 - editable blank build mode;
-- ordinary low-voltage parts sufficient for beginner circuits:
+- ordinary low-voltage beginner parts:
   - jumper wire;
   - resistor;
   - LED;
   - ordinary diode;
   - capacitor;
-  - power supply;
+  - DC power supply / battery;
   - switch / pushbutton;
   - potentiometer;
-  - at least one scope probe / voltage readout;
-- live simulation;
+  - scope probe / voltage readout;
+- live conventional simulation;
 - inspector voltage/current readouts;
 - warnings for obvious short/fault conditions;
 - clear/reset;
-- two one-click prebuilt demo builds;
-- all free-demo circuit types backed by the same release regression tests as paid.
+- two one-click teaching demos;
+- all free-demo circuit types backed by the same release regression tests as Paid.
 
-### Free Demo prebuilt builds
+### Free teaching demos
 
-1. **LED Lamp**
+1. **LED Lamp — current limiting**
    - 5 V supply;
    - current-limiting resistor;
    - LED;
    - ordinary wiring;
-   - user can change resistor value and see current/brightness-related electrical behavior change.
+   - learner changes resistor value and observes current change;
+   - lesson target: voltage, resistance, current, polarity, and why the resistor protects the LED.
 
-2. **RC Charge / Delay**
+2. **RC Charge / Delay — time constant**
    - supply;
    - switch;
    - resistor;
    - capacitor;
    - scope probe;
-   - user can toggle the switch and watch the real RC transient;
-   - user can change R or C and see the time constant change.
+   - learner toggles the switch and watches the RC transient;
+   - learner changes R or C and observes the time constant change;
+   - lesson target: stored charge and the relationship tau = R*C.
 
-The existing short-circuit preset may remain as a safety/fault demonstration, but it is not one of the two primary showcase demos.
+A short-circuit example may remain as an explicitly labeled **safety lesson**, not a showcase experiment.
 
 ### Free Demo limits
 
-Initial release limits should be obvious and non-destructive:
+Initial limits should be obvious and non-destructive:
 
 - one board at a time;
-- basic component subset only;
+- beginner component subset;
 - limited scope channels/features;
-- no advanced calibration/experimental components;
-- no Pedal Lab workspace;
-- no Perfboard Amp Lab workspace;
-- no batch/export automation;
-- local temporary/autosave may be allowed so a crash does not punish the user, but unrestricted project library/export belongs to paid.
+- small built-in lesson/demo library;
+- limited project persistence;
+- no advanced classroom library;
+- no teacher assignment/class management tools;
+- no Pedal Lab;
+- no Perfboard Amp Lab;
+- no research/experimental components or presets.
 
-Do **not** use artificial solver inaccuracies, fake delays, hidden watermarks over the circuit, or deliberately broken parts as a paywall.
+Do **not** use artificial solver inaccuracies, fake delays, or deliberately broken parts as a paywall.
 
-## Paid — Breadboard Lab
+## Paid — Breadboard Lab Classroom
 
-Purpose: full human builder product.
+Purpose: the complete conventional electronics learning and teaching product.
 
-Paid unlocks:
+Paid expands the classroom, not the experimental scope.
 
-- full validated component library;
-- all supported board layouts / multi-board workspaces;
-- unrestricted project save/reopen;
+Paid may unlock:
+
+- larger conventional component library;
+- multiple breadboards / larger classroom projects;
+- unrestricted save/reopen;
 - project library;
-- self-contained circuit export/share;
+- export/share for homework and teacher review;
 - full oscilloscope controls and multiple probes;
 - differential measurements;
-- calibration/reference builds;
-- advanced MOSFET, virtual-ground, comparator, inductive/toroid and other qualified components;
-- complete fault/diagnostic views;
-- BOM/project reporting when implemented;
-- AI-assisted build workflow where available, with deterministic validation of resulting circuits;
-- future Pedal Lab and Perfboard Amp Lab modules according to license/add-on policy.
+- AC source and conventional frequency-response lessons;
+- conventional RC/RL/filter lessons;
+- conventional transistor/MOSFET lessons where the model is qualified;
+- conventional comparator/op-amp lessons only after those models are qualified;
+- continuity, fault, power, and diagnostic views;
+- BOM / worksheet / report output;
+- guided lessons and challenge circuits;
+- teacher answer/reference builds kept separate from student-facing tasks;
+- classroom/maker-space licensing and teacher features when implemented.
 
-## Paid add-ons / editions
+### Explicit Paid exclusion
 
-The first product family should stay modular:
+Paying does **not** unlock experimental One-Wave research inside Breadboard Lab. Those builds belong elsewhere.
+
+## Separate products
+
+SiC International may sell other electronics products, but they remain separate products/workspaces:
 
 ```text
 SiC International
       |
-      +-- Breadboard Lab Free Demo
-      +-- Breadboard Lab Paid
-      +-- Pedal Lab
-      +-- Perfboard Amp Lab
+      +-- Breadboard Lab Free — classroom electronics
+      +-- Breadboard Lab Paid — classroom electronics
+      +-- Pedal Lab — guitar-pedal design/testing
+      +-- Perfboard Amp Lab — low-voltage amp/perfboard design/testing
+      +-- Research tools — separate from classroom releases
 ```
 
-Pedal Lab and Perfboard Amp Lab reuse the same qualified core. They do not get private alternative physics engines.
+Pedal Lab and Perfboard Amp Lab may reuse the same qualified conventional circuit core, but their specialist features do not turn Breadboard Lab into a research sandbox.
 
 ## Entitlement implementation
 
-Use one application binary/codebase where practical.
+Use one Breadboard Lab codebase where practical.
 
-Recommended internal capability model:
+Recommended capability model:
 
 ```text
 edition = free | paid
 capabilities = {
   board_count,
-  allowed_component_types,
+  allowed_conventional_component_types,
   scope_channels,
   advanced_scope,
   save_projects,
   export_projects,
-  calibration_library,
-  ai_builder,
-  pedal_workspace,
-  perfboard_workspace
+  lesson_library,
+  teacher_tools
 }
 ```
 
-UI asks the capability layer whether a feature is available. Circuit-engine code must not read `edition` and must not branch its physics based on entitlement.
+The UI asks the capability layer whether a classroom feature is available. Circuit-engine code must not read `edition` and must not branch its physics based on entitlement.
 
-## Human acceptance paths
+A separate build/profile should define research-only parts and presets. They are not merely hidden paid features.
 
-### Free acceptance
+## Human acceptance — Free
 
 ```text
 install
 -> open
--> load LED Lamp demo
+-> load LED Lamp lesson
 -> inspect voltage/current
 -> change resistor
--> see result change
--> load RC demo
+-> see expected conventional result change
+-> load RC lesson
 -> toggle switch
 -> observe charge curve
--> make a small blank-board circuit
--> close/reopen app without corruption
+-> change R or C
+-> observe tau change
+-> make a small blank-board student circuit
+-> close/reopen without corruption
 ```
 
-### Paid acceptance
+## Human acceptance — Paid
 
 ```text
 install
--> activate paid entitlement
+-> activate paid classroom entitlement
 -> open blank board
--> build supported ordinary circuit
+-> build supported conventional circuit
 -> simulate
 -> inspect/scope
 -> diagnose/adjust
@@ -159,23 +200,24 @@ install
 -> close
 -> reopen
 -> reload project exactly
--> export/share
--> reopen exported/shared artifact where supported
+-> export/share for teacher or student review
 ```
 
 ## Release gate
 
 Neither edition ships until:
 
-1. the full supported basic-circuit suite is green;
+1. the full supported **conventional basic-circuit** suite is green;
 2. the Electron launch smoke test is green;
-3. both demo builds are present in the installed UI and usable without a terminal;
-4. the free/paid capability tests prove gating does not change solver output;
-5. Linux x64 and Jetson/ARM64 package paths are verified for the intended launch platforms;
-6. paid save/reopen/export is exercised end-to-end by a human.
+3. both teaching demos are present in the installed UI and usable without a terminal;
+4. Free/Paid capability tests prove gating does not change solver output;
+5. all student-visible parts are conventional and have an explicit qualification status;
+6. no research/experimental presets or terminology appear in the classroom build;
+7. Linux x64 and Jetson/ARM64 package paths are verified for intended launch platforms;
+8. Paid save/reopen/export is exercised end-to-end by a human.
 
 ## Pricing
 
 Do not hard-code a price into the simulator source.
 
-Pricing belongs in company/configuration/release metadata so it can change without touching circuit physics. Initial beta pricing should be decided after the installable app survives hands-on human testing and we know which paid features actually carry value.
+Pricing belongs in company/configuration/release metadata so it can change without touching circuit physics. Initial pricing should be decided after teachers/students have exercised the installable classroom build and we know which paid teaching features carry real value.
