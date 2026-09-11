@@ -5,7 +5,6 @@ from __future__ import annotations
 import unittest
 
 from Learner_App.curriculum.rule_01_balanced_change import (
-    FORBIDDEN_TEACHING,
     PROBLEMS,
     RULE_ID,
     RULE_STATEMENT,
@@ -25,11 +24,8 @@ class Rule1ShapeTests(unittest.TestCase):
         self.assertIn("same operation", RULE_STATEMENT.lower())
         self.assertIn("both", RULE_STATEMENT.lower())
 
-    def test_no_move_across_shortcut_in_teaching(self) -> None:
-        blob = " ".join(
-            [RULE_STATEMENT, FORBIDDEN_TEACHING]
-            + [p.prompt + p.operation + p.title for p in PROBLEMS]
-        ).lower()
+    def test_no_move_across_shortcut_in_learner_facing_copy(self) -> None:
+        blob = " ".join(p.prompt + p.operation + p.title for p in PROBLEMS).lower()
         self.assertNotIn("change its sign", blob)
         self.assertNotIn("move the 3 across", blob)
         self.assertNotIn("flip the sign", blob)

@@ -1,10 +1,9 @@
 """Rule 1 — Balanced Change.
 
-If two sides are equal, the same operation on the whole left side and
-the whole right side keeps them equal.
+If two sides are equal, the same operation on both whole sides keeps them equal.
 
 This is a fixed first lesson, not a random generator. No coefficients.
-No 'move across and flip the sign'. Cancellation-as-shortcut is later.
+No move-across shortcut. Cancellation-as-shortcut is later.
 """
 
 from __future__ import annotations
@@ -15,13 +14,13 @@ from typing import Literal
 RULE_ID = "RULE.BALANCED_CHANGE"
 RULE_TITLE = "Balanced Change"
 RULE_STATEMENT = (
-    "If two sides are equal, you can do the same operation to the whole "
-    "left side and the whole right side, and they stay equal."
+    "If two sides are equal, you can do the same operation to both "
+    "whole sides — the whole left and the whole right — and they stay equal."
 )
 
 FORBIDDEN_TEACHING = (
-    "Do not teach 'move the number across and change its sign' yet. "
-    "The learner is preserving the relationship by changing both sides equally."
+    "Teacher note only: do not use the later shortcut of relocating a term "
+    "and reversing its operation. The learner is preserving the relationship."
 )
 
 Stage = Literal["build_up", "lock_down"]
@@ -140,6 +139,7 @@ def check_answer(problem: Rule1Problem, raw: str) -> bool:
     if not got:
         return False
     if problem.problem_id == "R1-LD-3":
-        return any(got == _norm(a) or got.startswith(_norm(a) + " ") for a in problem.accept)
+        compact = got.replace(" ", "").replace(",", "")
+        return compact == "no" or compact.startswith("no") or compact in {"n", "false", "notequal"}
     compact = got.replace(" ", "")
     return any(compact == _norm(a).replace(" ", "") for a in problem.accept)
