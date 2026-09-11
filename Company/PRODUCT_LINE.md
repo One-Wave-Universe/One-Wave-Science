@@ -1,64 +1,122 @@
-# One Wave Science — Initial Product Line
+# SiC International — Initial Product Line
 
 Working names only. Brand/trademark clearance is required before final launch naming.
 
-## Platform: One Wave Circuit Lab
+## Shared platform principle
 
-Shared qualified circuit-simulation core plus product-specific workspaces.
+Products may reuse one qualified conventional circuit-simulation core where that is technically appropriate.
 
-The platform should share:
+Shared infrastructure may include:
 - circuit solver;
-- component model registry;
+- conventional component-model registry;
 - measurement engine;
 - fault reporting;
-- save/load project format;
+- project format;
 - test/receipt framework;
 - installer/update framework.
 
-Do not fork the physics engine independently for each product.
+Do not fork the same conventional component into contradictory physics across products.
+
+Research-only models and experimental hypotheses must not be silently exposed inside classroom products.
 
 ---
 
 ## Product 1 — Breadboard Lab
 
-### User
-Hobbyist, student, repairer, inventor or bench builder who wants to try a circuit before wiring the physical board.
+### Product role
 
-### Core workflow
+**Breadboard Lab is a normal electronics education product.**
+
+It is for students, teachers, introductory electronics classes, STEM programs, maker-space education, and beginners learning how conventional breadboard circuits work.
+
+It is **not** the One-Wave research sandbox and is not marketed as an experimental electronics platform.
+
+### What belongs in Breadboard Lab
+
+- Ohm's law;
+- series and parallel circuits;
+- voltage/current/resistance;
+- LEDs and current limiting;
+- ordinary diodes;
+- switches and pushbuttons;
+- potentiometers/dividers;
+- capacitors and RC timing;
+- inductors and RL behavior where qualified;
+- conventional AC lessons;
+- conventional transistor/MOSFET lessons where qualified;
+- conventional comparator/op-amp lessons only after those models are qualified;
+- scope/measurement practice;
+- shorts, open circuits, polarity mistakes and other normal fault lessons;
+- safe low-voltage breadboard practice before a physical build.
+
+### What does not belong in Breadboard Lab
+
+- One-Wave theory experiments;
+- ternary research cells;
+- magnetic-memory architecture experiments;
+- MTJ research demonstrations;
+- lattice/AI-hardware experiments;
+- unverified energy or field claims;
+- speculative physics;
+- internal qualification/calibration fixtures presented as student lessons.
+
+Those remain in separate research/development tooling.
+
+### Core student workflow
 
 ```text
-NEW BUILD
-  -> place parts
+OPEN LESSON OR NEW BOARD
+  -> place normal parts
   -> wire
-  -> power/simulate
+  -> simulate
   -> inspect
   -> scope/measure
-  -> diagnose faults
+  -> identify mistake or expected behavior
   -> adjust
-  -> save
-  -> reopen
-  -> export/share
-  -> physical bench build
+  -> save/share when edition permits
+  -> reproduce on a physical low-voltage breadboard
 ```
+
+### Free edition
+
+A useful classroom demo, not crippleware:
+- one editable board;
+- beginner conventional parts;
+- live voltage/current inspection;
+- basic scope;
+- fault warnings;
+- LED current-limiting lesson;
+- RC charge/time-constant lesson.
+
+### Paid classroom edition
+
+Expands educational capability:
+- larger conventional component/lesson library;
+- multi-board classroom projects;
+- save/reopen/project library;
+- export/share for homework or teacher review;
+- advanced scope/measurement tools;
+- guided lessons/challenges;
+- reporting/BOM/worksheet support;
+- teacher/classroom features when implemented.
+
+Paid Breadboard Lab still does **not** unlock experimental One-Wave research content.
 
 ### Release-one promise
 
-A human can install the desktop app and build/test ordinary low-voltage breadboard circuits without using GitHub, Node, npm or a terminal.
-
-### Evidence already available
-
-The repository contains conventional control/regression suites for resistor networks, RC/RL behavior, diodes/LEDs, MOSFETs, netlists, fault states and additional primitives. These validate the simulator controls; they do not make every possible circuit/model accurate automatically.
+A student or teacher can install the desktop app and build/test supported ordinary low-voltage educational circuits without GitHub, Node, npm, or a terminal.
 
 ---
 
 ## Product 2 — Pedal Lab
 
-### User
-Guitarist/pedal builder who wants to design, compare and troubleshoot low-voltage effects circuits before soldering.
+### Product role
+
+A separate specialist product for guitarists and pedal builders who want to design, compare and troubleshoot conventional low-voltage effects circuits before soldering.
 
 ### Product-specific workspace
 
-Use the same circuit core but provide a pedal-oriented bench:
+Use the qualified conventional circuit core where possible, with:
 - guitar/input signal generator;
 - input/output jack representation;
 - 9V/18V pedal supply presets;
@@ -69,43 +127,31 @@ Use the same circuit core but provide a pedal-oriented bench:
 - gain meter;
 - clipping view;
 - current draw;
-- optional audio preview only after the electrical transfer path is correctly modeled.
+- optional audio preview after the electrical path is correctly modeled.
 
-### Required component-model expansion
+### Required model expansion
 
-Likely required for useful real pedal coverage:
+For useful real pedal coverage:
 - BJT NPN/PNP models;
 - JFET models;
 - common audio op-amp models;
-- additional diode families including clipping diodes/LEDs;
+- additional diode families;
 - coupling capacitor behavior;
 - potentiometer tapers;
 - transistor/op-amp bias and supply limits.
 
-A fixed-resistance or ideal-switch approximation must be labeled when used.
-
-### First pedal controls
-
-Use established circuits whose expected behavior is well documented as simulator qualification fixtures, for example:
-- passive volume/tone network;
-- simple diode clipper;
-- transistor boost;
-- op-amp gain stage after op-amp support exists;
-- tone-control network;
-- true-bypass switching.
-
-Do not ship named commercial pedal clones without checking trademark/copyright/layout issues. Generic circuit classes are safer reference fixtures.
+Approximations must be labeled.
 
 ---
 
 ## Product 3 — Perfboard Amp Lab
 
-### User
-DIY amplifier builder who wants to convert a validated schematic into a physical perfboard layout and catch wiring, bias, loading and thermal mistakes before soldering.
+### Product role
+
+A separate specialist tool for DIY amplifier builders converting validated low-voltage schematics into physical perfboard layouts.
 
 ### Product-specific workspace
 
-Add a real perfboard topology layer:
 - holes/pads;
 - copper strips where applicable;
 - cuts;
@@ -114,14 +160,13 @@ Add a real perfboard topology layer:
 - underside/topside views;
 - continuity/net highlighting;
 - collision/lead-reach checks;
-- project BOM;
+- BOM;
 - test points.
 
-The physical layout compiles into the same electrical netlist consumed by the qualified solver.
+The physical layout compiles into the same qualified conventional electrical netlist where possible.
 
-### Amplifier tests
+### Amplifier checks
 
-For supported low-voltage amplifiers:
 - DC bias / quiescent current;
 - input impedance;
 - output impedance where modeled;
@@ -138,36 +183,30 @@ For supported low-voltage amplifiers:
 
 Initial Perfboard Amp Lab is **low-voltage only**.
 
-Tube amps, mains wiring and other hazardous-voltage designs remain out of scope until a separately designed high-voltage safety model, isolation rules and expert review exist.
+Tube amps, mains wiring and other hazardous-voltage designs remain out of scope until separately designed and reviewed high-voltage safety handling exists.
 
 ---
 
-## Product architecture rule
+## Research/development tools
+
+Experimental One-Wave, ternary, magnetic-memory, lattice, AI-hardware, and other exploratory work stays in research/development tooling.
+
+It may reuse internal engineering code where appropriate, but it is **not a Breadboard Lab edition or paid classroom unlock**.
+
+This separation protects students and teachers from confusing established electronics with exploratory claims.
+
+## Product architecture
 
 ```text
-QUALIFIED CIRCUIT CORE
+SiC International
        |
-       +-- Breadboard workspace
-       +-- Pedal workspace
-       +-- Perfboard/Amp workspace
-       |
-       +-- shared measurements
-       +-- shared fault system
-       +-- shared project format
-       +-- shared regression infrastructure
+       +-- Breadboard Lab Free        (classroom)
+       +-- Breadboard Lab Paid        (classroom)
+       +-- Pedal Lab                  (specialist conventional electronics)
+       +-- Perfboard Amp Lab          (specialist conventional electronics)
+       +-- Research / Experimental    (separate, clearly labeled)
 ```
 
-A product-specific UI may add a thin adapter. It must not silently create different physics for the same component.
+## Pricing
 
-## Possible commercial tiers — not yet priced
-
-Keep pricing separate from code until the installable product is proven.
-
-Potential structure:
-- free/read-only or basic educational tier;
-- paid builder tier with save/export/advanced instruments;
-- Pedal Lab add-on;
-- Perfboard Amp Lab add-on;
-- later classroom/maker-space licensing.
-
-No price is approved by this document.
+Pricing stays outside circuit-engine source. No price is approved by this document.
