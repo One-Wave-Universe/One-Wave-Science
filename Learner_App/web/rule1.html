@@ -7,7 +7,13 @@
   <style>
     :root { font-family: Georgia, "Times New Roman", serif; color: #e8e4d8; background: #000; }
     html, body { background: #000; }
-    body { max-width: 40rem; margin: 2rem auto; padding: 0 1rem; min-height: 100vh; }
+    body {
+      width: min(40rem, 100%);
+      margin: 2rem 1.25rem 2rem auto;
+      padding: 0 1rem;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
     h1 { font-size: 1.4rem; color: #f2efe4; }
     .rule { background: #161616; border: 1px solid #3a3a3a; padding: 1rem 1.1rem; }
     .card { background: #1a1a1a; border: 1px solid #3a3a3a; padding: 1rem 1.1rem; margin-top: 1rem; }
