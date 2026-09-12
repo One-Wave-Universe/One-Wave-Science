@@ -1,0 +1,23 @@
+name: tmp-vbb-bjt-ac-fix
+on:
+  push:
+    branches: [virtual-breadboard-bjt-support]
+    paths:
+      - '.github/workflows/tmp-vbb-bjt-ac-fix.yml'
+      - '.github/scripts/fix_vbb_bjt_ac_splice.py'
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-bjt-support
+      - run: python .github/scripts/fix_vbb_bjt_ac_splice.py
+      - run: |
+          git config user.name "Mark Wright"
+          git config user.email "markluvsoliviaduh@gmail.com"
+          git add Virtual_Breadboard/js/ac-analysis.js
+          git commit -m "Fix BJT AC analysis splice"
+          git push origin HEAD:virtual-breadboard-bjt-support
