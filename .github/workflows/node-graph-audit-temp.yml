@@ -1,0 +1,20 @@
+name: TEMP Node Graph Audit
+
+on:
+  push:
+    branches:
+      - canon/complete-node-graph-2026-09-12
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check synchronized discovery surfaces
+        run: python3 scripts/sync_node_graph_indexes.py --check
+      - name: Audit canonical node graph
+        run: python3 scripts/node_graph_integrity.py
