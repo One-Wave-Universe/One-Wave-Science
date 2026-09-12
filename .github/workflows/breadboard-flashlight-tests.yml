@@ -15,6 +15,7 @@ on:
       - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
       - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
+      - 'Virtual_Breadboard/test/mosfet-model-cards.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -39,6 +40,7 @@ on:
       - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
       - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
+      - 'Virtual_Breadboard/test/mosfet-model-cards.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -93,6 +95,9 @@ jobs:
 
       - name: Run continuous MOSFET qualification
         run: npm run test:mosfet-continuous
+
+      - name: Run MOSFET model-card qualification
+        run: npm run test:mosfet-model-cards
 
       - name: Run SPICE convergence tolerance qualification
         run: npm run test:spice-tolerances
