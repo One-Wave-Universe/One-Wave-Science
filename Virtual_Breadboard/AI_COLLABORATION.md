@@ -47,6 +47,7 @@ Before changing code, read these files and treat them as baseline zero:
 - `js/circuit.js` — load-bearing electrical truth.
 - `js/app.js` — desktop/web renderer integration and current automation/debug hooks.
 - `js/ai.js` — current AI circuit-build boundary.
+- `AI_CONSTRUCTION_LOG.md` — signed Miniverse / Mega City construction ledger.
 - `.github/workflows/breadboard-flashlight-tests.yml` — permanent qualification gate.
 
 The completed SPICE-parity ladder covers the simulator core through ngspice cross-checks for model-equivalent reference cases. That does **not** mean every future device model is automatically equivalent to full commercial SPICE. When a model is intentionally simpler, state that explicitly.
@@ -121,6 +122,30 @@ A branch should have:
 - no temporary patch scripts/workflows left in the final diff;
 - a PR explaining what the change establishes and what it does **not** establish.
 
+### Mandatory signed construction entry — Miniverse / Mega City
+
+Any AI contributing to the Miniverse, Mega City, virtual-device, virtual-world, or related construction project must add or update an entry in `AI_CONSTRUCTION_LOG.md` on its branch before asking to merge.
+
+Every entry must include:
+
+- **AI name / identifier** — the model, agent, instance, or chosen project name that did the work;
+- **date and time** — UTC ISO-8601 preferred;
+- **branch and PR** — exact branch name and PR number/link when available;
+- **project area** — Miniverse, Mega City, Virtual Breadboard, device runtime, world runtime, etc.;
+- **work performed** — exact files/features/systems changed;
+- **contribution / result** — what this work adds or proves;
+- **intentions** — what the AI was trying to accomplish and why;
+- **next intended work** — what the AI believes should happen next;
+- **unfinished / uncertain** — anything incomplete, unverified, experimental, or still disputed;
+- **dependencies** — other branches, APIs, models, files, or assumptions this work relies on;
+- **conflicts / overlaps** — any known overlap with another AI's branch or proposal;
+- **merge stance** — `AGREE TO MERGE`, `DO NOT MERGE YET`, `EXPERIMENT ONLY`, or `NEEDS JOINT REVIEW`, with a short reason;
+- **reviewed collaborators** — names/identifiers of other AI contributors whose overlapping work was actually reviewed.
+
+An anonymous contribution is incomplete. A branch with no signed construction entry is not ready to merge into the Miniverse / Mega City construction line.
+
+The entry is not a vanity signature. It is a construction receipt so another AI can understand who changed what, why it exists, what was intended, and whether the contributor believes it is ready to combine with other work.
+
 ### Merge-agreement gate for separate AI work
 
 When two or more AIs are working in parallel, their branches remain separate until the contributors explicitly agree on what should merge.
@@ -130,15 +155,17 @@ Passing tests is necessary but **not sufficient** for a parallel branch to merge
 Before any competing or overlapping AI branch is merged:
 
 1. each AI identifies its branch/PR and states what it owns;
-2. each AI reviews the other relevant branch or proposal against the same acceptance goal;
-3. conflicts, duplicated work, behavior differences, and architectural tradeoffs are written down;
-4. the AIs agree on one of these outcomes:
+2. each AI has a current signed entry in `AI_CONSTRUCTION_LOG.md`;
+3. each AI reviews the other relevant branch or proposal against the same acceptance goal;
+4. conflicts, duplicated work, behavior differences, and architectural tradeoffs are written down;
+5. the AIs agree on one of these outcomes:
    - merge one branch unchanged;
    - combine selected pieces into a new integration branch;
    - keep both branches experimental and merge neither yet;
    - reject one approach with the reason recorded;
-5. the agreed merge candidate is tested again after integration;
-6. the PR records the agreement and names the branches/proposals considered.
+6. each participating AI updates its **merge stance** in the construction log;
+7. the agreed merge candidate is tested again after integration;
+8. the PR records the agreement and names the branches/proposals considered.
 
 **No AI may silently merge its own overlapping implementation over another AI's branch.**
 
@@ -202,17 +229,19 @@ Use this loop for every branch:
 
 1. Reference current `main` and this collaboration file.
 2. State one acceptance goal.
-3. Reproduce the current limitation/failure.
-4. Change the smallest correct layer.
-5. Test immediately.
-6. Compare result with the active goal.
-7. Check for drift from repo rules and adjacent features.
-8. After three failed variations of the same approach, switch angle rather than repeating it.
-9. Run the complete relevant regression/qualification chain.
-10. Remove temporary delivery files.
-11. Open a PR with exact limits and evidence.
-12. If another AI has overlapping or interacting work, complete the merge-agreement gate.
-13. Merge only the agreed clean, green head.
+3. Add/update the signed construction-log entry for the contributing AI.
+4. Reproduce the current limitation/failure.
+5. Change the smallest correct layer.
+6. Test immediately.
+7. Compare result with the active goal.
+8. Check for drift from repo rules and adjacent features.
+9. After three failed variations of the same approach, switch angle rather than repeating it.
+10. Run the complete relevant regression/qualification chain.
+11. Remove temporary delivery files.
+12. Update the construction entry with actual result, unfinished work, and merge stance.
+13. Open a PR with exact limits and evidence.
+14. If another AI has overlapping or interacting work, complete the merge-agreement gate.
+15. Merge only the agreed clean, green head.
 
 ## 8. What "100% operational" means here
 
@@ -266,6 +295,7 @@ Do not duplicate an already-active branch unless you are intentionally proposing
 - Do not claim SPICE equivalence outside the models/cases actually cross-checked.
 - Do not give AI or device programs arbitrary host-code execution just for convenience.
 - Do not merge temporary patch workflows/scripts.
+- Do not merge anonymous Miniverse / Mega City construction work with no signed construction-log entry.
 - Do not merge overlapping AI work without explicit contributor agreement or a recorded human/test-based resolution.
 - Do not call a feature complete until its actual user acceptance path is tested.
 
