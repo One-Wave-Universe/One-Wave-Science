@@ -20,7 +20,6 @@ WARNINGS
 - master index does not list G-744 (Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md)
 
 ERRORS
-- duplicate node_id D-415: Nodes/D-415_Hexagonal_Lattice_Force_Dynamics.md and Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench.md
 - Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md: missing YAML front matter
 - Nodes/G-728_E1_STAMP.md: missing metadata key node_id
 - Nodes/G-728_E1_STAMP.md: missing metadata key canonical_name
@@ -258,5 +257,5 @@ ERRORS
 - Nodes/G-763_Scalar_to_Harmonic.md: missing metadata key claim_gate_detail
 - Nodes/G-763_Scalar_to_Harmonic.md: missing metadata key metadata_standard
 
-FAIL: 237 error(s), 13 warning(s)
+FAIL: 236 error(s), 13 warning(s)
 audit_exit=1
