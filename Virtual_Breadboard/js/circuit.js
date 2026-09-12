@@ -123,6 +123,7 @@
       }
       if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
+      if (c.type === 'npn' || c.type === 'pnp') { uf.find(c.base); uf.find(c.collector); uf.find(c.emitter); }
       if (c.type === 'vccs' || c.type === 'vcvs') { uf.find(c.controlP); uf.find(c.controlN); }
       if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       if (c.type === 'latchrelay') { uf.find(c.contactA); uf.find(c.contactB); }
@@ -222,6 +223,10 @@
           // The gate itself gets no edge: a real MOSFET gate is
           // genuinely DC-isolated from drain/source.
           add(c.drain, c.source);
+          break;
+        case 'npn': case 'pnp':
+          add(c.base, c.emitter);
+          add(c.base, c.collector);
           break;
         case 'toroid': case 'memorycore':
           (c.windings || []).forEach((w) => add(w.a, w.b));
@@ -377,6 +382,11 @@
   const DIODE_IS = 1e-12; // A, generic silicon saturation current for precision/Newton mode
   const DIODE_N = 1.8; // emission coefficient for a generic small silicon rectifier
   const THERMAL_VOLTAGE_25C = 0.025852; // V = kT/q at 25 C
+  const BJT_IS = 1e-15; // A, generic small-signal silicon transistor transport saturation current
+  const BJT_BETA_F = 100; // forward common-emitter current gain
+  const BJT_BETA_R = 1; // reverse gain is intentionally much smaller than forward gain
+  const BJT_NF = 1.0; // forward junction emission coefficient
+  const BJT_NR = 1.0; // reverse junction emission coefficient
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
   // ohms; a purpose-built low-voltage/precision reference source (a DAC
@@ -684,6 +694,58 @@
     return { id, gm, gdd, gss, ieq: id - gm * vg - gdd * vd - gss * vs };
   }
 
+  function bjtSpec(c) {
+    const betaF = Math.max(1e-6, Number(c.betaF != null ? c.betaF : c.bf != null ? c.bf : BJT_BETA_F));
+    const betaR = Math.max(1e-6, Number(c.betaR != null ? c.betaR : c.br != null ? c.br : BJT_BETA_R));
+    return {
+      is: Math.max(1e-30, Number(c.is != null ? c.is : BJT_IS)),
+      betaF,
+      betaR,
+      alphaF: betaF / (betaF + 1),
+      alphaR: betaR / (betaR + 1),
+      nf: Math.max(0.1, Number(c.nf != null ? c.nf : BJT_NF)),
+      nr: Math.max(0.1, Number(c.nr != null ? c.nr : BJT_NR)),
+    };
+  }
+
+  function bjtCurrents(c, vb, vc, ve, tempC) {
+    const spec = bjtSpec(c);
+    const p = c.type === 'pnp' ? -1 : 1;
+    const vt = THERMAL_VOLTAGE_25C * (((Number.isFinite(tempC) ? tempC : 25) + 273.15) / 298.15);
+    const vbe = p * (vb - ve);
+    const vbc = p * (vb - vc);
+    const ebe = Math.exp(Math.max(-80, Math.min(40, vbe / (spec.nf * vt))));
+    const ebc = Math.exp(Math.max(-80, Math.min(40, vbc / (spec.nr * vt))));
+    const iF = spec.is * (ebe - 1);
+    const iR = spec.is * (ebc - 1);
+    const icN = spec.alphaF * iF - iR;
+    const ieN = -iF + spec.alphaR * iR;
+    const ibN = -(icN + ieN);
+    return { collector: p * icN, base: p * ibN, emitter: p * ieN };
+  }
+
+  function bjtLinearization(c, vb, vc, ve, tempC) {
+    const h = 1e-5;
+    const base = bjtCurrents(c, vb, vc, ve, tempC);
+    const vars = [vb, vc, ve];
+    const names = ['base', 'collector', 'emitter'];
+    const jacobian = {};
+    const ieq = {};
+    names.forEach((terminal) => { jacobian[terminal] = [0, 0, 0]; });
+    for (let k = 0; k < 3; k++) {
+      const plus = vars.slice(); plus[k] += h;
+      const minus = vars.slice(); minus[k] -= h;
+      const ip = bjtCurrents(c, plus[0], plus[1], plus[2], tempC);
+      const im = bjtCurrents(c, minus[0], minus[1], minus[2], tempC);
+      names.forEach((terminal) => { jacobian[terminal][k] = (ip[terminal] - im[terminal]) / (2 * h); });
+    }
+    names.forEach((terminal) => {
+      const g = jacobian[terminal];
+      ieq[terminal] = base[terminal] - g[0] * vb - g[1] * vc - g[2] * ve;
+    });
+    return { currents: base, jacobian, ieq };
+  }
+
   // Real TLV3202 dual comparator (TI datasheet): rail-to-rail push-pull
   // output (not open-drain -- no pull-up needed), input offset voltage a
   // few mV, and a real minimum operating supply voltage. `outputRon` is a
@@ -988,6 +1050,7 @@
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
+      const bjts = components.filter((c) => c.type === 'npn' || c.type === 'pnp');
       // a latchrelay's coil is, electrically, exactly a one-winding
       // memorycore (real winding resistance + the same square-loop
       // magnetic dynamics) -- folding it into the same array reuses all
@@ -1042,6 +1105,8 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
+
+        if (c.type === 'npn' || c.type === 'pnp') { touch(c.base); touch(c.collector); touch(c.emitter); }
         if (c.type === 'vccs' || c.type === 'vcvs') { touch(c.controlP); touch(c.controlN); }
         if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'latchrelay') { touch(c.contactA); touch(c.contactB); }
@@ -1214,10 +1279,18 @@
       let previousVoltages = new Map();
       let previousSolution = null;
       let previousPrecisionCurrents = new Map();
+      // Per-solve PN-junction limiting for BJT Newton continuation. A hard-driven
+      // saturated transistor can otherwise jump from an off-state linearization
+      // straight into decades of exponential junction current. Limiting only the
+      // linearization point (not the final device equation) walks Vbe/Vbc toward
+      // the solved node voltages in bounded increments, the same numerical idea
+      // used by classic SPICE pnjlim-style junction limiting.
+      const bjtLimitedJunctions = new Map();
+      bjts.forEach((q) => bjtLimitedJunctions.set(q.id, { vbe: 0, vbc: 0 }));
       const reltol = solverOptions && Number.isFinite(solverOptions.reltol) ? Math.max(0, solverOptions.reltol) : 1e-3;
       const vntol = solverOptions && Number.isFinite(solverOptions.vntol) ? Math.max(0, solverOptions.vntol) : 1e-6;
       const abstol = solverOptions && Number.isFinite(solverOptions.abstol) ? Math.max(0, solverOptions.abstol) : 1e-12;
-      const precisionConvergenceActive = !!(solverOptions && (solverOptions.diodeModel === 'newton' || solverOptions.mosfetModel === 'continuous'));
+      const precisionConvergenceActive = bjts.length > 0 || !!(solverOptions && (solverOptions.diodeModel === 'newton' || solverOptions.mosfetModel === 'continuous'));
       let voltageDeltaConverged = !precisionConvergenceActive;
       let currentDeltaConverged = !precisionConvergenceActive;
       let maxVoltageDelta = 0;
@@ -1246,6 +1319,10 @@
         const stampI = (i, val) => {
           if (i >= 0) b[i] += val;
         };
+        // A limited BJT junction is deliberately NOT yet at the true Newton
+        // expansion point. Do not let stable node voltages alone masquerade
+        // as convergence while the limiter is still walking toward Vbe/Vbc.
+        let bjtJunctionLimitsSettled = true;
         // real output/protection clamp diode: same on/off ideal-diode
         // stamp as the LED/rectifier and MOSFET body-diode models above,
         // just reused here for "this pin cannot swing past its own supply
@@ -1369,6 +1446,45 @@
               stampI(i, Ieq);
               stampI(j, -Ieq);
             }
+          } else if (c.type === 'npn' || c.type === 'pnp') {
+            const b_ = gi(uf.find(c.base));
+            const c_ = gi(uf.find(c.collector));
+            const e_ = gi(uf.find(c.emitter));
+            const vb0 = previousVoltages.get(uf.find(c.base)) || 0;
+            const vc0 = previousVoltages.get(uf.find(c.collector)) || 0;
+            const ve0 = previousVoltages.get(uf.find(c.emitter)) || 0;
+            const polarity = c.type === 'pnp' ? -1 : 1;
+            const targetVbe = polarity * (vb0 - ve0);
+            const targetVbc = polarity * (vb0 - vc0);
+            const limited = bjtLimitedJunctions.get(c.id) || { vbe: 0, vbc: 0 };
+            const maxJunctionStep = 0.05; // V per nonlinear iteration
+            // Only a jump deeper into forward bias needs exponential limiting.
+            // Reverse-bias moves are safe to take directly; forcing a -5 V
+            // reverse-biased collector junction to crawl in 50 mV steps would
+            // waste ~100 iterations without improving numerical safety.
+            const approach = (target, last) => target > last + maxJunctionStep ? last + maxJunctionStep : target;
+            const vbeLin = approach(targetVbe, limited.vbe);
+            const vbcLin = approach(targetVbc, limited.vbc);
+            bjtLimitedJunctions.set(c.id, { vbe: vbeLin, vbc: vbcLin });
+            const vbeLimitTol = vntol + reltol * Math.max(Math.abs(targetVbe), Math.abs(vbeLin));
+            const vbcLimitTol = vntol + reltol * Math.max(Math.abs(targetVbc), Math.abs(vbcLin));
+            if (Math.abs(targetVbe - vbeLin) > vbeLimitTol || Math.abs(targetVbc - vbcLin) > vbcLimitTol) {
+              bjtJunctionLimitsSettled = false;
+            }
+            // Reconstruct an equivalent terminal point carrying the limited
+            // junction voltages; the stamped tangent is still a full 3-terminal
+            // Ebers-Moll Jacobian and converges to the actual node voltages once
+            // the limiter catches up.
+            const veLin = ve0;
+            const vbLin = veLin + polarity * vbeLin;
+            const vcLin = vbLin - polarity * vbcLin;
+            const lin = bjtLinearization(c, vbLin, vcLin, veLin, tempOf(c.id));
+            const cols = [b_, c_, e_];
+            [['base', b_], ['collector', c_], ['emitter', e_]].forEach(([terminal, row]) => {
+              const g = lin.jacobian[terminal];
+              cols.forEach((col, k) => { if (row >= 0 && col >= 0) stampG(row, col, g[k]); });
+              if (row >= 0) stampI(row, -lin.ieq[terminal]);
+            });
           } else if (c.type === 'nmos' || c.type === 'pmos') {
             // a real discrete MOSFET: a channel (RDS(on) resistor between
             // drain and source, only while gate-source crosses the real
@@ -1873,7 +1989,7 @@
         voltages = new Map();
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
-        let changed = false;
+        let changed = !bjtJunctionLimitsSettled;
         // same on/off ideal-diode fixed-point decision as the LED/diode
         // and MOSFET body-diode blocks below, reused for the vgnd/
         // comparator rail-clamp paths: turn on once the real forward
@@ -2230,6 +2346,15 @@
                 precisionCurrents.set('mosfet:' + f.id, ich + (vd - vs) * MOSFET_OFF_LEAKAGE_G);
               });
             }
+            bjts.forEach((q) => {
+              const vb = voltages.get(uf.find(q.base)) || 0;
+              const vc = voltages.get(uf.find(q.collector)) || 0;
+              const ve = voltages.get(uf.find(q.emitter)) || 0;
+              const iq = bjtCurrents(q, vb, vc, ve, tempOf(q.id));
+              precisionCurrents.set('bjt:' + q.id + ':collector', iq.collector);
+              precisionCurrents.set('bjt:' + q.id + ':base', iq.base);
+              precisionCurrents.set('bjt:' + q.id + ':emitter', iq.emitter);
+            });
             precisionCurrents.forEach((now, key) => {
               if (!previousPrecisionCurrents.has(key)) {
                 currentDeltaConverged = false;
@@ -2264,6 +2389,15 @@
                 seedCurrents.set('mosfet:' + f.id, mosfetChannelCurrent(f, vg, vd, vs, tempOf(f.id)) + (vd - vs) * MOSFET_OFF_LEAKAGE_G);
               });
             }
+            bjts.forEach((q) => {
+              const vb = voltages.get(uf.find(q.base)) || 0;
+              const vc = voltages.get(uf.find(q.collector)) || 0;
+              const ve = voltages.get(uf.find(q.emitter)) || 0;
+              const iq = bjtCurrents(q, vb, vc, ve, tempOf(q.id));
+              seedCurrents.set('bjt:' + q.id + ':collector', iq.collector);
+              seedCurrents.set('bjt:' + q.id + ':base', iq.base);
+              seedCurrents.set('bjt:' + q.id + ':emitter', iq.emitter);
+            });
             previousPrecisionCurrents = seedCurrents;
           }
           previousSolution = xSol.slice();
@@ -2460,6 +2594,15 @@
           I = 0;
         } else if (c.type === 'toroid') {
           I = toroidCurrent.get(c.id) || 0;
+        } else if (c.type === 'npn' || c.type === 'pnp') {
+          const vb = voltages.get(uf.find(c.base)) || 0;
+          const vc = voltages.get(uf.find(c.collector)) || 0;
+          const ve = voltages.get(uf.find(c.emitter)) || 0;
+          const iq = bjtCurrents(c, vb, vc, ve, tempOf(c.id));
+          I = iq.collector;
+          currents.set(c.id + ':collector', iq.collector);
+          currents.set(c.id + ':base', iq.base);
+          currents.set(c.id + ':emitter', iq.emitter);
         } else if (c.type === 'nmos' || c.type === 'pmos') {
           const spec = mosfetSpec(c);
           const vg = voltages.get(uf.find(c.gate));
@@ -2836,7 +2979,7 @@
   }
 
   const api = {
-    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BATTERY_RINT, VGND_RINT,
+    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BJT_IS, BJT_BETA_F, BJT_BETA_R, BJT_NF, BJT_NR, bjtSpec, bjtCurrents, bjtLinearization, BATTERY_RINT, VGND_RINT,
     AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
