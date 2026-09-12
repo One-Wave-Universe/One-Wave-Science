@@ -19,6 +19,7 @@ on:
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
       - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
+      - 'Virtual_Breadboard/test/controlled-sources.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -41,33 +42,15 @@ on:
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
       - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
+      - 'Virtual_Breadboard/test/controlled-sources.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  patch-controlled-sources:
-    if: github.ref == 'refs/heads/virtual-breadboard-controlled-sources'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: virtual-breadboard-controlled-sources
-      - run: python .github/scripts/patch_vbb_controlled_sources.py
-      - run: |
-          git config user.name "Mark Wright"
-          git config user.email "markluvsoliviaduh@gmail.com"
-          git add Virtual_Breadboard/js/circuit.js Virtual_Breadboard/js/ac-analysis.js
-          git commit -m "Virtual Breadboard: add current and controlled sources"
-          git push origin HEAD:virtual-breadboard-controlled-sources
-
   flashlight:
-    if: github.ref != 'refs/heads/virtual-breadboard-controlled-sources' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     defaults:
@@ -120,3 +103,6 @@ jobs:
 
       - name: Run pole-zero sanity qualification
         run: npm run test:pole-zero
+
+      - name: Run current and controlled-source qualification
+        run: npm run test:controlled-sources
