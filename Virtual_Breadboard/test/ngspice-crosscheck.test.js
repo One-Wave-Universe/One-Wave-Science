@@ -36,7 +36,9 @@ function runNgspice(body) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vbb-ngspice-'));
   const net = path.join(dir, 'case.cir');
   const log = path.join(dir, 'case.log');
-  fs.writeFileSync(net, body);
+  // SPICE reserves the first physical line as a title. Always provide one
+  // so the first actual component is not silently discarded by ngspice.
+  fs.writeFileSync(net, `Virtual Breadboard ngspice cross-check\n${body}`);
   const p = spawnSync('ngspice', ['-b', '-o', log, net], { encoding: 'utf8' });
   const text = fs.existsSync(log) ? fs.readFileSync(log, 'utf8') : `${p.stdout || ''}\n${p.stderr || ''}`;
   fs.rmSync(dir, { recursive: true, force: true });
