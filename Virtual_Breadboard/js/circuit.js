@@ -1448,7 +1448,7 @@
               cols.forEach((col, k) => { if (row >= 0 && col >= 0) stampG(row, col, g[k]); });
               if (row >= 0) stampI(row, -lin.ieq[terminal]);
             });
-           else if (c.type === 'nmos' || c.type === 'pmos') {
+          } else if (c.type === 'nmos' || c.type === 'pmos') {
             // a real discrete MOSFET: a channel (RDS(on) resistor between
             // drain and source, only while gate-source crosses the real
             // threshold) IN PARALLEL WITH a real body diode (silicon-
