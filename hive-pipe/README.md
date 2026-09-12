@@ -105,3 +105,15 @@ individually.
 
 The gateway still does not accept raw command strings. Broader terminal actions
 must be added as named actions with their own validation and tests.
+
+## MCP adapter
+
+The same gateway provides a sessionless Streamable HTTP MCP endpoint at `/mcp`.
+It supports `initialize`, `ping`, `tools/list`, and `tools/call`. Every MCP tool
+maps one-to-one to the existing `mudl.ACTIONS` allowlist, takes no arguments, and
+waits for the queue worker's result. Raw shell text and arbitrary paths remain
+invalid, so the adapter cannot write to `Virtual_Breadboard/` or to a disk.
+
+Use the public HTTPS tunnel URL plus `/mcp` when adding the connector. Supply the
+Codex bearer token through the connector's secret/authentication UI; never put
+the token in a chat message, URL, repository file, or Cloudflare command line.

@@ -69,6 +69,52 @@ class GatewayTests(unittest.TestCase):
             self.request("/v1/jobs", method="POST", body={"action": "health", "command": "id"})
         self.assertEqual(caught.exception.code, 400)
 
+    def test_mcp_initialize_and_tools_list(self):
+        status, initialized = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}
+        })
+        self.assertEqual(status, 200)
+        self.assertEqual(initialized["result"]["serverInfo"]["name"], "one-wave-hive-pipe")
+        status, listed = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}
+        })
+        self.assertEqual(status, 200)
+        names = {tool["name"] for tool in listed["result"]["tools"]}
+        self.assertEqual(names, set(mudl.ACTIONS))
+        self.assertTrue(all(tool["annotations"]["readOnlyHint"] for tool in listed["result"]["tools"]))
+
+    def test_mcp_tool_call_runs_only_named_action(self):
+        def worker():
+            deadline = __import__("time").monotonic() + 2
+            while __import__("time").monotonic() < deadline:
+                pending = list(mudl.PENDING.glob("*.json"))
+                if pending:
+                    claimed = mudl.PROCESSING / pending[0].name
+                    pending[0].replace(claimed)
+                    mudl.execute(claimed)
+                    return
+                __import__("time").sleep(0.01)
+
+        thread = threading.Thread(target=worker)
+        thread.start()
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 3, "method": "tools/call",
+            "params": {"name": "health", "arguments": {}},
+        })
+        thread.join()
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        self.assertEqual(called["result"]["structuredContent"]["action"], "health")
+
+    def test_mcp_rejects_arguments_and_unknown_tools(self):
+        for name, arguments in (("health", {"command": "id"}), ("shell", {})):
+            status, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 4, "method": "tools/call",
+                "params": {"name": name, "arguments": arguments},
+            })
+            self.assertEqual(status, 200)
+            self.assertEqual(response["error"]["code"], -32602)
+
 
 if __name__ == "__main__":
     unittest.main()
