@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import json
-import os
 from pathlib import Path
 import tempfile
 import threading
@@ -52,6 +51,14 @@ class GatewayTests(unittest.TestCase):
             self.request("/v1/health", token="wrong")
         self.assertEqual(caught.exception.code, 401)
 
+    def test_health_reports_terminal_tools(self):
+        status, health = self.request("/v1/health")
+        self.assertEqual(status, 200)
+        self.assertEqual(
+            set(health["terminal_tools"]),
+            {"terminal_pwd", "terminal_which", "terminal_run"},
+        )
+
     def test_enqueues_and_returns_named_action(self):
         status, queued = self.request("/v1/jobs", method="POST", body={"action": "health"})
         self.assertEqual(status, 202)
@@ -75,13 +82,40 @@ class GatewayTests(unittest.TestCase):
         })
         self.assertEqual(status, 200)
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "one-wave-hive-pipe")
+        self.assertEqual(initialized["result"]["serverInfo"]["version"], "3.0")
         status, listed = self.request("/mcp", method="POST", body={
             "jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}
         })
         self.assertEqual(status, 200)
-        names = {tool["name"] for tool in listed["result"]["tools"]}
-        self.assertEqual(names, set(mudl.ACTIONS))
-        self.assertTrue(all(tool["annotations"]["readOnlyHint"] for tool in listed["result"]["tools"]))
+        tools = {tool["name"]: tool for tool in listed["result"]["tools"]}
+        self.assertTrue(set(mudl.ACTIONS).issubset(tools))
+        self.assertTrue({"terminal_pwd", "terminal_which", "terminal_run"}.issubset(tools))
+        self.assertTrue(tools["terminal_pwd"]["annotations"]["readOnlyHint"])
+        self.assertFalse(tools["terminal_run"]["annotations"]["readOnlyHint"])
+
+    def test_mcp_terminal_run_returns_real_output(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 20, "method": "tools/call",
+            "params": {
+                "name": "terminal_run",
+                "arguments": {"argv": ["printf", "AI_TERMINAL_OK"]},
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["stdout"], "AI_TERMINAL_OK")
+        self.assertEqual(result["exit_code"], 0)
+        self.assertIn("cwd", result)
+
+    def test_mcp_terminal_which(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 21, "method": "tools/call",
+            "params": {"name": "terminal_which", "arguments": {"name": "python3"}},
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        self.assertTrue(called["result"]["structuredContent"]["path"])
 
     def test_mcp_tool_call_runs_only_named_action(self):
         def worker():
@@ -118,4 +152,3 @@ class GatewayTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

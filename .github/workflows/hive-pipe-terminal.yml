@@ -1,0 +1,34 @@
+name: Hive Pipe Terminal
+
+on:
+  push:
+    paths:
+      - 'hive-pipe/**'
+      - '.github/workflows/hive-pipe-terminal.yml'
+  pull_request:
+    paths:
+      - 'hive-pipe/**'
+      - '.github/workflows/hive-pipe-terminal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax
+        run: |
+          bash -n hive-pipe/agent.sh
+          bash -n hive-pipe/install_gateway.sh
+      - name: Python syntax
+        run: |
+          python3 -m py_compile \
+            hive-pipe/gateway.py \
+            hive-pipe/mudl.py \
+            hive-pipe/terminal_parser.py
+      - name: Hive Pipe tests
+        run: python3 -m unittest discover -s hive-pipe -p 'test_*.py' -v

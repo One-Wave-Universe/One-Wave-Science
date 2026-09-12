@@ -2,6 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+REPO_ROOT="$(dirname -- "$SCRIPT_DIR")"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
 TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
@@ -21,6 +22,7 @@ for agent in codex claude gemini; do
 done
 
 escaped_root="$(printf '%s' "$SCRIPT_DIR" | sed 's/ /\\x20/g')"
+escaped_repo="$(printf '%s' "$REPO_ROOT" | sed 's/ /\\x20/g')"
 {
   echo '[Unit]'
   echo 'Description=One-Wave Hive Pipe Agent Gateway'
@@ -36,7 +38,9 @@ escaped_root="$(printf '%s' "$SCRIPT_DIR" | sed 's/ /\\x20/g')"
   echo 'NoNewPrivileges=true'
   echo 'PrivateTmp=true'
   echo 'ProtectSystem=strict'
-  echo "ReadWritePaths=$escaped_root/queue"
+  # The terminal parser may build/edit the checked-out project, but system paths
+  # remain read-only and privilege escalation is still blocked.
+  echo "ReadWritePaths=$escaped_repo"
   echo
   echo '[Install]'
   echo 'WantedBy=default.target'
@@ -65,6 +69,9 @@ escaped_root="$(printf '%s' "$SCRIPT_DIR" | sed 's/ /\\x20/g')"
 systemctl --user daemon-reload
 systemctl --user disable --now hive-pipe.service 2>/dev/null || true
 systemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service
+systemctl --user restart hive-pipe-agent.service hive-pipe-gateway.service
 echo "HIVE_PIPE_GATEWAY_INSTALLED"
 echo "Local endpoint: http://127.0.0.1:8765"
+echo "AI terminal: terminal_pwd / terminal_which / terminal_run via MCP"
+echo "Writable scope: $REPO_ROOT"
 echo "Tokens: $TOKEN_DIR (0600; never commit or paste them into the public repository)"

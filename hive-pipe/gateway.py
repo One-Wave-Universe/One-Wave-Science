@@ -11,17 +11,21 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import re
+import subprocess
 import sys
 import time
 
 import mudl
+import terminal_parser
 
 
 JOB_ROUTE = re.compile(r"^/v1/jobs/([A-Za-z0-9][A-Za-z0-9._-]{0,95})$")
-MAX_BODY = 4096
+MAX_BODY = 16384
 MCP_PROTOCOL = "2025-06-18"
-MCP_TOOLS = {
-    action: {
+
+
+def action_tool(action: str) -> dict:
+    return {
         "name": action,
         "title": action.replace("_", " ").title(),
         "description": {
@@ -32,8 +36,55 @@ MCP_TOOLS = {
         "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
         "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
     }
-    for action in sorted(mudl.ACTIONS)
-}
+
+
+MCP_TOOLS = {action: action_tool(action) for action in sorted(mudl.ACTIONS)}
+MCP_TOOLS.update({
+    "terminal_pwd": {
+        "name": "terminal_pwd",
+        "title": "Terminal Pwd",
+        "description": "Return the Jetson terminal working directory available to the AI parser.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"cwd": {"type": "string"}},
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
+    },
+    "terminal_which": {
+        "name": "terminal_which",
+        "title": "Terminal Which",
+        "description": "Find an executable on the Jetson PATH.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"name": {"type": "string"}},
+            "required": ["name"],
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
+    },
+    "terminal_run": {
+        "name": "terminal_run",
+        "title": "Terminal Run",
+        "description": "Run a structured argv command on the Jetson and return stdout, stderr, exit code, cwd, and timing. Runs as the normal unprivileged Jetson user; sudo/raw-disk/power commands and shell -c strings are blocked.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "argv": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "minItems": 1,
+                    "maxItems": 128,
+                },
+                "cwd": {"type": "string"},
+                "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+            },
+            "required": ["argv"],
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": False},
+    },
+})
 
 
 def load_tokens() -> list[str]:
@@ -70,6 +121,45 @@ def mcp_error(request_id: object, code: int, message: str) -> dict:
     return {"jsonrpc": "2.0", "id": request_id, "error": {"code": code, "message": message}}
 
 
+def tool_result(request_id: object, result: dict, *, failed: bool = False) -> dict:
+    return {
+        "jsonrpc": "2.0",
+        "id": request_id,
+        "result": {
+            "content": [{"type": "text", "text": json.dumps(result, sort_keys=True)}],
+            "structuredContent": result,
+            "isError": failed,
+        },
+    }
+
+
+def handle_terminal_tool(request_id: object, name: str, arguments: object) -> dict:
+    if not isinstance(arguments, dict):
+        return mcp_error(request_id, -32602, "Terminal arguments must be an object")
+    try:
+        if name == "terminal_pwd":
+            if set(arguments) - {"cwd"}:
+                raise ValueError("terminal_pwd accepts only cwd")
+            result = terminal_parser.pwd(arguments.get("cwd"))
+        elif name == "terminal_which":
+            if set(arguments) != {"name"}:
+                raise ValueError("terminal_which requires exactly name")
+            result = terminal_parser.which(arguments["name"])
+        elif name == "terminal_run":
+            if not set(arguments).issubset({"argv", "cwd", "timeout"}) or "argv" not in arguments:
+                raise ValueError("terminal_run requires argv and accepts optional cwd/timeout")
+            result = terminal_parser.run(
+                arguments["argv"],
+                cwd=arguments.get("cwd"),
+                timeout=arguments.get("timeout", 60),
+            )
+        else:
+            return mcp_error(request_id, -32602, "Unknown terminal tool")
+        return tool_result(request_id, result, failed=not result.get("ok", False))
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        return tool_result(request_id, {"ok": False, "error": str(error)}, failed=True)
+
+
 def handle_mcp(payload: object) -> dict | None:
     if not isinstance(payload, dict) or payload.get("jsonrpc") != "2.0":
         return mcp_error(None, -32600, "Invalid Request")
@@ -82,7 +172,7 @@ def handle_mcp(payload: object) -> dict | None:
         return {"jsonrpc": "2.0", "id": request_id, "result": {
             "protocolVersion": MCP_PROTOCOL,
             "capabilities": {"tools": {"listChanged": False}},
-            "serverInfo": {"name": "one-wave-hive-pipe", "version": "2.0"},
+            "serverInfo": {"name": "one-wave-hive-pipe", "version": "3.0"},
         }}
     if method == "ping":
         return {"jsonrpc": "2.0", "id": request_id, "result": {}}
@@ -93,27 +183,22 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
+        if name in {"terminal_pwd", "terminal_which", "terminal_run"}:
+            return handle_terminal_tool(request_id, name, arguments)
         if name not in MCP_TOOLS or arguments != {}:
             return mcp_error(request_id, -32602, "Unknown tool or non-empty arguments")
         try:
             queued = mudl.enqueue(name)
             job_id = json.loads(queued.read_text(encoding="utf-8"))["id"]
             result = wait_for_result(job_id)
-            failed = result.get("exit_code") != 0
-            return {"jsonrpc": "2.0", "id": request_id, "result": {
-                "content": [{"type": "text", "text": json.dumps(result, sort_keys=True)}],
-                "structuredContent": result,
-                "isError": failed,
-            }}
+            return tool_result(request_id, result, failed=result.get("exit_code") != 0)
         except (OSError, ValueError, TimeoutError, json.JSONDecodeError) as error:
-            return {"jsonrpc": "2.0", "id": request_id, "result": {
-                "content": [{"type": "text", "text": str(error)}], "isError": True,
-            }}
+            return tool_result(request_id, {"ok": False, "error": str(error)}, failed=True)
     return mcp_error(request_id, -32601, "Method not found")
 
 
 class GatewayHandler(BaseHTTPRequestHandler):
-    server_version = "HivePipe/2"
+    server_version = "HivePipe/3"
 
     def log_message(self, message: str, *args: object) -> None:
         print(f"{self.address_string()} - {message % args}", file=sys.stderr)
@@ -150,7 +235,12 @@ class GatewayHandler(BaseHTTPRequestHandler):
         if not self.require_auth():
             return
         if self.path == "/v1/health":
-            self.send_json(HTTPStatus.OK, {"status": "ok", "actions": sorted(mudl.ACTIONS), "mcp": "/mcp"})
+            self.send_json(HTTPStatus.OK, {
+                "status": "ok",
+                "actions": sorted(mudl.ACTIONS),
+                "terminal_tools": ["terminal_pwd", "terminal_which", "terminal_run"],
+                "mcp": "/mcp",
+            })
             return
         match = JOB_ROUTE.fullmatch(self.path)
         if not match:
