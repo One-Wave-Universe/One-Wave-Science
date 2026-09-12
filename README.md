@@ -32,7 +32,21 @@ This is the project-level reminder for how humans and AI are expected to work he
 >
 > **Get in where you fit in. Expand the science. Isolate the primitives. Consolidate the builds.**
 
-This is an architectural working principle, not a claim that carbon and silicon are physically, biologically, or cognitively identical. Different substrates have different mechanisms, constraints, failure modes, sensing, memory, timing, embodiment, and operating environments. The shared abstraction is the loop: state, input, transformation, feedback, consequence, learning, and recurrence can be studied across implementations without pretending the implementations are the same.
+The shared primitive is recurrence:
+
+```text
+LOOP
+  -> consequence
+  -> new data
+  -> new memory
+  -> new action
+  -> new state
+  -> next loop
+```
+
+A loop does not become a different kind of loop just because the substrate changes. Carbon and silicon can implement the recurrence through different physical mechanisms, timing, sensing, embodiment, memory, constraints, and failure modes while still sharing the same abstract update structure. That lets the repository compare and combine loop architectures without claiming the underlying substrates are identical.
+
+The practical rule is simple: every completed pass through a system should leave something changed or learned. A consequence becomes data; data can alter memory; memory can alter the next action; action changes state; state becomes the starting condition for the next pass. If nothing can change, be measured, or be retained, it is not yet a useful learning loop.
 
 That gives this repository four standing construction duties:
 
