@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One-Wave Orientation & Quaternion Lab</title>
+<style>
+:root{--bg:#020409;--p:#09111aee;--l:#263844;--i:#effaff;--m:#91a8b8;--c:#78e7f2;--a:#f2bd63;--g:#7de0a7;--r:#f07872;--v:#c799ff;font-family:Inter,system-ui,sans-serif}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;background:var(--bg);color:var(--i);overflow:hidden}
+canvas{position:fixed;inset:0;width:100%;height:100%;background:radial-gradient(circle at 52% 40%,#10242e,#020409 58%,#000)}
+.ui{position:fixed;inset:0;display:grid;grid-template-columns:280px 1fr 300px;gap:10px;padding:10px;pointer-events:none}
+.panel{pointer-events:auto;background:var(--p);border:1px solid var(--l);border-radius:16px;backdrop-filter:blur(14px);overflow:auto;padding:14px}
+.stage{position:relative}.brand{font-size:14px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.sub,.copy{font-size:10px;line-height:1.5;color:var(--m)}
+.scene{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:9px;border:1px solid #1d2a34;border-radius:10px;margin:6px 0;background:#070c12bd;cursor:pointer}
+.scene:hover,.scene.on{border-color:var(--c)}.n{width:26px;height:26px;border:1px solid #3b4c58;border-radius:50%;display:grid;place-items:center;font-size:9px;color:var(--m)}
+.scene strong{display:block;font-size:10.5px}.scene small{display:block;font-size:9px;color:var(--m)}.tag{display:inline-block;margin-top:4px;padding:2px 6px;border:1px solid #315d45;border-radius:999px;font-size:8px;color:var(--g)}
+.tools{pointer-events:auto;position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:#071018d6;border:1px solid var(--l);padding:6px;border-radius:999px}
+.btn{border:1px solid #354652;background:#101a22;color:var(--i);padding:8px 11px;border-radius:999px;font-size:11px;cursor:pointer}.btn:hover,.btn.on{border-color:var(--c)}
+.title{position:absolute;left:24px;bottom:28px;font-size:clamp(30px,4.8vw,64px);font-weight:760;letter-spacing:-.05em;text-shadow:0 3px 28px #000}.title small{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#bdced8;margin-bottom:6px}
+.card{border-top:1px solid #1d2b34;padding:12px 0}.card:first-child{border-top:0;padding-top:0}.card h2{font-size:12px;margin:0 0 7px}
+.row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-bottom:1px solid #16232b;font-size:10px}.row span{color:var(--m)}.row b{font-variant-numeric:tabular-nums}
+.good{color:var(--g)}.warn{color:var(--a)}.bad{color:var(--r)}.slider{margin:10px 0}.slider label{display:flex;justify-content:space-between;font-size:10px;color:var(--m);margin-bottom:4px}.slider input{width:100%;accent-color:var(--c)}
+@media(max-width:1050px){.ui{grid-template-columns:235px 1fr}.right{display:none}}@media(max-width:720px){body{overflow:auto}.ui{position:relative;display:block}.panel{margin-bottom:8px}.stage{min-height:65vh}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="ui">
+<aside class="panel"><div class="brand">Orientation & Quaternion Lab</div><div class="sub">3D rotation controls · composition · interpolation · rigid-body dynamics.</div><div id="list"></div></aside>
+<main class="stage"><div class="tools"><button class="btn" id="play">Pause</button><button class="btn" id="reset">Reset</button><button class="btn" id="kick">Perturb</button></div><div class="title"><small id="kicker"></small><span id="name"></span></div></main>
+<aside class="panel right">
+<div class="card"><h2 id="status"></h2><div class="copy" id="copy"></div></div>
+<div class="card"><h2>Live diagnostics</h2><div id="diag"></div></div>
+<div class="card"><h2>Parameters</h2><div class="slider"><label><span>Parameter A</span><b id="ao">1.00</b></label><input id="a" type="range" min="0" max="1" value=".5" step=".005"></div><div class="slider"><label><span>Parameter B</span><b id="bo">1.00</b></label><input id="b" type="range" min="0" max="1" value=".5" step=".005"></div><button class="btn" id="export">Export CSV</button></div>
+<div class="card"><h2>Control rule</h2><div class="copy">Quaternion scenes enforce unit-norm rotation controls. No One-Wave hypothesis term enters the equations. Exports record <code>solver_affects_hypothesis=false</code>.</div></div>
+</aside>
+</div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),c=$('cv'),g=c.getContext('2d',{alpha:false});
+let W,H,D=1,last=performance.now(),run=true,t=0,si=0,s,rows=[],rb;
+const U={list:$('list'),play:$('play'),reset:$('reset'),kick:$('kick'),name:$('name'),kicker:$('kicker'),status:$('status'),copy:$('copy'),diag:$('diag'),a:$('a'),b:$('b'),ao:$('ao'),bo:$('bo'),export:$('export')};
+const S=[
+['axis','Quaternion Axis-Angle','Control · unit quaternion','Quaternion rotation control','Axis-angle → normalized quaternion → vector rotation.'],
+['compose','Composition Order','Control · noncommutativity','Quaternion composition control','Compare qx·qy with qy·qx. 3D rotations generally do not commute.'],
+['slerp','SLERP','Control · interpolation','Spherical interpolation control','Interpolate on the unit 4D quaternion sphere at constant angular rate.'],
+['gimbal','Euler Gimbal Lock','Control · representation failure','Euler-angle comparison','Expose the ZYX Euler singularity as pitch approaches ±90°.'],
+['integrate','Angular-Velocity Integration','Control · q̇ = ½qω','Quaternion integration control','Integrate a body-rate vector into orientation while measuring unit-norm drift.'],
+['rigid','Torque-Free Rigid Body','Control · Euler equations','Rigid-body dynamics control','Integrate asymmetric-body angular velocity plus orientation; track rotational invariants.'],
+['frame','Frame Composition','Control · local/world transforms','Reference-frame control','Compose parent and child orientations and compare world-frame axes.'],
+['phase3d','Three-Phase 3D Rotor','Bridge · rotating vector','Vector rotation bridge','Embed the classical 120° three-phase resultant in a quaternion-controlled 3D frame.']
+];
+const qmul=(a,b)=>[
+a[0]*b[0]-a[1]*b[1]-a[2]*b[2]-a[3]*b[3],
+a[0]*b[1]+a[1]*b[0]+a[2]*b[3]-a[3]*b[2],
+a[0]*b[2]-a[1]*b[3]+a[2]*b[0]+a[3]*b[1],
+a[0]*b[3]+a[1]*b[2]-a[2]*b[1]+a[3]*b[0]];
+const qnorm=q=>Math.hypot(...q),qnormalize=q=>{let n=qnorm(q)||1;return q.map(v=>v/n)},qconj=q=>[q[0],-q[1],-q[2],-q[3]];
+function qaxis(axis,ang){let n=Math.hypot(...axis)||1,h=ang/2,s=Math.sin(h)/n;return qnormalize([Math.cos(h),axis[0]*s,axis[1]*s,axis[2]*s])}
+function qrot(q,v){let r=qmul(qmul(q,[0,...v]),qconj(q));return[r[1],r[2],r[3]]}
+function qdot(a,b){return a.reduce((s,v,i)=>s+v*b[i],0)}
+function qslerp(a,b,u){let d=qdot(a,b);if(d<0){b=b.map(v=>-v);d=-d}if(d>.9995)return qnormalize(a.map((v,i)=>v+u*(b[i]-v)));let th=Math.acos(Math.max(-1,Math.min(1,d))),sn=Math.sin(th);return a.map((v,i)=>(Math.sin((1-u)*th)*v+Math.sin(u*th)*b[i])/sn)}
+function qeuler(yaw,pitch,roll){return qmul(qmul(qaxis([0,0,1],yaw),qaxis([0,1,0],pitch)),qaxis([1,0,0],roll))}
+function resize(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;c.style.width=W+'px';c.style.height=H+'px';g.setTransform(D,0,0,D,0,0)}addEventListener('resize',resize);resize();
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),fmt=(x,n=5)=>Number.isFinite(x)?(Math.abs(x)&&Math.abs(x)<1e-4?x.toExponential(2):x.toFixed(n)):'—';
+function fade(a=.28){g.fillStyle=`rgba(2,4,9,${a})`;g.fillRect(0,0,W,H)}
+function proj(v){let z=4+v[2],k=Math.min(W,H)*.22/z;return[W*.52+v[0]*k*4,H*.47-v[1]*k*4]}
+function line3(a,b,col,w=2){let A=proj(a),B=proj(b);g.strokeStyle=col;g.lineWidth=w;g.beginPath();g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);g.stroke()}
+function axes(q=[1,0,0,0],scale=1){let O=[0,0,0],X=qrot(q,[scale,0,0]),Y=qrot(q,[0,scale,0]),Z=qrot(q,[0,0,scale]);line3(O,X,'#f07872',3);line3(O,Y,'#7de0a7',3);line3(O,Z,'#78e7f2',3)}
+function menu(){U.list.innerHTML=S.map((q,i)=>`<div class="scene ${i===si?'on':''}" data-i="${i}"><div class="n">${String(i+1).padStart(2,'0')}</div><div><strong>${q[1]}</strong><small>${q[2]}</small><span class="tag">CONTROL</span></div></div>`).join('');U.list.querySelectorAll('.scene').forEach(e=>e.onclick=()=>set(+e.dataset.i))}
+function set(i){si=i;s=S[i];menu();U.name.textContent=s[1];U.kicker.textContent=s[2];U.status.textContent=s[3];U.copy.textContent=s[4];t=0;rows=[];init();read()}
+function init(){fade(1);if(s&&s[0]==='rigid')initRigid()}
+function drawAxis(){fade();let ang=(.1+.9*+U.a.value)*Math.PI*2,axis=[.2+.8*+U.b.value,1,.35],q=qaxis(axis,ang);axes(q,1.2);let v=qrot(q,[1.2,0,0]);line3([0,0,0],v,'#fff',5)}
+function drawCompose(){fade();let a=(.1+.9*+U.a.value)*Math.PI/2,b=(.1+.9*+U.b.value)*Math.PI/2,qx=qaxis([1,0,0],a),qy=qaxis([0,1,0],b),qxy=qmul(qx,qy),qyx=qmul(qy,qx);axes(qxy,1);let off=[2.2,0,0],basis=[[1,0,0],[0,1,0],[0,0,1]],cols=['#f07872','#7de0a7','#78e7f2'];basis.forEach((v,i)=>line3(off,off.map((x,j)=>x+qrot(qyx,v)[j]),cols[i],3))}
+function drawSlerp(){fade();let q0=[1,0,0,0],q1=qaxis([1,1,.2],Math.PI*1.35),u=(Math.sin(t*.7)+1)/2,q=qslerp(q0,q1,u);axes(q,1.25);for(let i=0;i<=12;i++){let qi0=qslerp(q0,q1,i/12),p=qrot(qi0,[1.5,0,0]),P=proj(p);g.fillStyle='rgba(199,153,255,.55)';g.beginPath();g.arc(P[0],P[1],2,0,7);g.fill()}}
+function drawGimbal(){fade();let pitch=(+U.a.value-.5)*Math.PI*1.05,yaw=(+U.b.value-.5)*Math.PI*2,roll=.7,q=qeuler(yaw,pitch,roll);axes(q,1.2);g.fillStyle='#f2bd63';g.font='700 28px system-ui';g.fillText(`pitch ${(pitch*180/Math.PI).toFixed(1)}°`,W*.16,H*.28)}
+function integrateQ(q,w,h,renorm=true){let dq=qmul(q,[0,...w]).map(v=>.5*v*h),nq=q.map((v,i)=>v+dq[i]);return renorm?qnormalize(nq):nq}
+let qi=[1,0,0,0],qraw=[1,0,0,0];
+function drawIntegrate(){fade(.18);axes(qi,1.2);let p=qrot(qraw,[1.2,0,0]);line3([0,0,0],p,'#f2bd63',4)}
+function stepIntegrate(dt){let w=[.5+1.5*+U.a.value,.25+1.2*+U.b.value,.85],n=Math.max(1,Math.ceil(dt/.003)),h=dt/n;for(let i=0;i<n;i++){qi=integrateQ(qi,w,h,true);qraw=integrateQ(qraw,w,h,false)}}
+function initRigid(){rb={q:[1,0,0,0],w:[1.15,.7,1.45],I:[1,2,3]};rb.E0=rigidE(rb.w);rb.L0=rigidL(rb)}
+function rigidE(w){return .5*(rb.I[0]*w[0]*w[0]+rb.I[1]*w[1]*w[1]+rb.I[2]*w[2]*w[2])}
+function rigidL(o){let lb=o.w.map((v,i)=>o.I[i]*v);return qrot(o.q,lb)}
+function wdot(w){let [I1,I2,I3]=rb.I,[x,y,z]=w;return[((I2-I3)/I1)*y*z,((I3-I1)/I2)*z*x,((I1-I2)/I3)*x*y]}
+function rk4w(w,h){let add=(a,b,k)=>a.map((v,i)=>v+b[i]*k),k1=wdot(w),k2=wdot(add(w,k1,h/2)),k3=wdot(add(w,k2,h/2)),k4=wdot(add(w,k3,h));return w.map((v,i)=>v+h*(k1[i]+2*k2[i]+2*k3[i]+k4[i])/6)}
+function stepRigid(dt){let n=Math.max(1,Math.ceil(dt/.0025)),h=dt/n;for(let i=0;i<n;i++){rb.w=rk4w(rb.w,h);rb.q=integrateQ(rb.q,rb.w,h,true)}}
+function drawRigid(){fade(.18);axes(rb.q,1.25);let L=rigidL(rb),n=Math.hypot(...L)||1;line3([0,0,0],L.map(v=>1.45*v/n),'#fff',5)}
+function drawFrame(){fade();let qp=qaxis([0,0,1],(+U.a.value-.5)*Math.PI*2),qc=qaxis([0,1,0],(+U.b.value-.5)*Math.PI*2),qw=qmul(qp,qc);axes(qp,1.05);let off=[2.2,0,0],cols=['#f07872','#7de0a7','#78e7f2'];[[1,0,0],[0,1,0],[0,0,1]].forEach((v,i)=>{let r=qrot(qw,v);line3(off,off.map((x,j)=>x+r[j]),cols[i],3)})}
+function drawPhase3d(){fade(.2);let ang=t*(.8+1.6*+U.a.value),tilt=qaxis([1,0,0],(+U.b.value-.5)*Math.PI),ph=[0,2*Math.PI/3,4*Math.PI/3],sum=[0,0,0];ph.forEach((p,i)=>{let amp=Math.cos(ang+p),v=qrot(tilt,[Math.cos(p)*amp,Math.sin(p)*amp,0]);sum=sum.map((x,j)=>x+v[j]);line3([0,0,0],v,['#f07872','#7de0a7','#78e7f2'][i],2)});line3([0,0,0],sum,'#fff',5)}
+function diagnostics(){let id=s[0],A=+U.a.value,B=+U.b.value;if(id==='axis'){let q=qaxis([.2+.8*B,1,.35],(.1+.9*A)*Math.PI*2);return[['|q|',fmt(qnorm(q),7),'good'],['angle °',fmt((.1+.9*A)*360,2)],['axis x',fmt(.2+.8*B,3)]]}
+if(id==='compose'){let qx=qaxis([1,0,0],(.1+.9*A)*Math.PI/2),qy=qaxis([0,1,0],(.1+.9*B)*Math.PI/2),a=qrot(qmul(qx,qy),[0,0,1]),b=qrot(qmul(qy,qx),[0,0,1]),d=Math.acos(clamp(a.reduce((s0,v,i)=>s0+v*b[i],0)/(Math.hypot(...a)*Math.hypot(...b)),-1,1));return[['order gap °',fmt(d*180/Math.PI,3),d>.01?'warn':'good'],['commutes','generally no']]}
+if(id==='slerp'){let q0=[1,0,0,0],q1=qaxis([1,1,.2],Math.PI*1.35),u=(Math.sin(t*.7)+1)/2,q=qslerp(q0,q1,u);return[['u',fmt(u,4)],['|q|',fmt(qnorm(q),7),'good'],['path','great-circle']]}
+if(id==='gimbal'){let p=(A-.5)*Math.PI*1.05,c0=Math.abs(Math.cos(p));return[['pitch °',fmt(p*180/Math.PI,2)],['|cos pitch|',fmt(c0,5),c0<.05?'bad':c0<.2?'warn':'good'],['Euler singularity',c0<.05?'near':'clear',c0<.05?'bad':'good']]}
+if(id==='integrate')return[['renorm |q|',fmt(qnorm(qi),7),'good'],['raw |q|',fmt(qnorm(qraw),7),Math.abs(qnorm(qraw)-1)>.01?'bad':'warn'],['body rate',fmt(Math.hypot(.5+1.5*A,.25+1.2*B,.85),3)]];
+if(id==='rigid'){let E=rigidE(rb.w),L=rigidL(rb),L0=rb.L0,dL=Math.hypot(L[0]-L0[0],L[1]-L0[1],L[2]-L0[2]);return[['ΔE/E',fmt((E-rb.E0)/rb.E0,7),Math.abs((E-rb.E0)/rb.E0)<1e-4?'good':'warn'],['|ΔL world|',fmt(dL,7),dL<1e-3?'good':'warn'],['|q|',fmt(qnorm(rb.q),7),'good']]}
+if(id==='frame'){let qp=qaxis([0,0,1],(A-.5)*Math.PI*2),qc=qaxis([0,1,0],(B-.5)*Math.PI*2),qw=qmul(qp,qc);return[['|parent|',fmt(qnorm(qp),7),'good'],['|world child|',fmt(qnorm(qw),7),'good'],['composition','parent × child']]}
+let ph=[0,2*Math.PI/3,4*Math.PI/3],ang=t*(.8+1.6*A),sum=[0,0,0],tilt=qaxis([1,0,0],(B-.5)*Math.PI);ph.forEach(p=>{let amp=Math.cos(ang+p),v=qrot(tilt,[Math.cos(p)*amp,Math.sin(p)*amp,0]);sum=sum.map((x,j)=>x+v[j])});return[['resultant |R|',fmt(Math.hypot(...sum),5)],['phase separation','120°'],['frame |q|',fmt(qnorm(tilt),7),'good']]}
+function read(){U.diag.innerHTML=diagnostics().map(q=>`<div class="row"><span>${q[0]}</span><b class="${q[2]||''}">${q[1]}</b></div>`).join('')}
+function record(){let o={scene:s[0],time:t.toFixed(5),parameter_a:+U.a.value,parameter_b:+U.b.value,solver_affects_hypothesis:false};diagnostics().forEach(q=>o[q[0].toLowerCase().replace(/[^a-z0-9]+/g,'_')]=q[1]);rows.push(o);if(rows.length>4000)rows.shift()}
+function step(dt){t+=dt;if(s[0]==='integrate')stepIntegrate(dt);if(s[0]==='rigid')stepRigid(dt);if(Math.floor(t*12)%4===0){record();read()}}
+function draw(){let id=s[0];if(id==='axis')drawAxis();else if(id==='compose')drawCompose();else if(id==='slerp')drawSlerp();else if(id==='gimbal')drawGimbal();else if(id==='integrate')drawIntegrate();else if(id==='rigid')drawRigid();else if(id==='frame')drawFrame();else drawPhase3d()}
+function resetDynamic(){qi=[1,0,0,0];qraw=[1,0,0,0]}
+function perturb(){if(s[0]==='rigid'){rb.w[0]*=1.03;rb.w[1]*=.98}else if(s[0]==='integrate'){qi=qmul(qaxis([0,1,0],.08),qi);qraw=qmul(qaxis([0,1,0],.08),qraw)}else U.a.value=clamp(+U.a.value+(Math.random()-.5)*.2,0,1);out()}
+function out(){U.ao.textContent=(+U.a.value).toFixed(3);U.bo.textContent=(+U.b.value).toFixed(3);read()}
+U.play.onclick=()=>{run=!run;U.play.textContent=run?'Pause':'Play'};U.reset.onclick=()=>{resetDynamic();set(si)};U.kick.onclick=perturb;U.a.oninput=out;U.b.oninput=out;
+U.export.onclick=()=>{if(!rows.length)record();let ks=[...new Set(rows.flatMap(r=>Object.keys(r)))],Q=v=>'"'+String(v??'').replaceAll('"','""')+'"',csv=[ks.join(','),...rows.map(r=>ks.map(k=>Q(r[k])).join(','))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`quaternion_${s[0]}.csv`;a.click()};
+function loop(now){let dt=Math.min(.03,(now-last)/1000||.016);last=now;if(run)step(dt);draw();requestAnimationFrame(loop)}
+resetDynamic();set(0);requestAnimationFrame(loop);
+})();
+</script></body></html>
