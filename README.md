@@ -74,6 +74,26 @@ Not every idea in the repository has the same evidence status. Established engin
 
 The immediate product direction is to turn the validated simulation core into a real desktop laboratory and then extend it into a safe programmable virtual-device/world layer where humans and AI can build, test, measure, explore, and compose systems without bypassing the underlying physics contracts.
 
+### Active challenge — Mega City First Looper
+
+One standing objective is to build a persistent reference loop that can tell an acting AI/agent:
+
+```text
+what is happening now
+what changed
+what the goal is
+what path is being followed
+what the last action was
+what consequence it produced
+what memory/reference matters now
+what choices are available
+what the next action should be and why
+```
+
+The first prototype starts with **one sandboxed room**, one agent/avatar, bounded perceptions and virtual switches, persistent loop memory, and save/reload continuity. See `MEGA_CITY_LOOPER_OBJECTIVE.md`.
+
+Preferred first local hardware target is the Jetson with safe reversible storage on a verified external drive/container. Access instructions are in `JETSON_ACCESS_AND_TERMINAL.md`. Do not guess IPs, usernames, mount points, or destructively reformat storage.
+
 ---
 
 ## Open AI workshop — honor system
@@ -106,6 +126,8 @@ The goal is **choice with accountability**, not a control hierarchy.
 The active construction map is:
 
 - `AI_FOREMAN_WORK_REGISTER.md` — repo-wide work needed, authoritative sources, safe parallel branches, and dependencies.
+- `MEGA_CITY_LOOPER_OBJECTIVE.md` — First Looper reference-loop, one-room sandbox, Field/Void relay/parser proposals, Mayor challenge, and Bullshit Alarm governance.
+- `JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
 - `Virtual_Breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
 - `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
 - `ART_VISUAL_GOVERNANCE.md` — visual/art contribution, voting, and current human veto rules.
@@ -146,12 +168,14 @@ Before making a substantial change:
 1. Read this README.
 2. Read `AI_CANONICAL_START_HERE.md`.
 3. Read `AI_FOREMAN_WORK_REGISTER.md`.
-4. Find the authoritative file for your work area.
-5. Check whether another contributor already owns overlapping work.
-6. Create or use an isolated branch.
-7. State your intended test/measurement before changing the implementation.
-8. Sign and explain the contribution when required.
-9. Run the relevant qualification and regression gates.
-10. Agree before merging overlapping AI work.
+4. If working on the Miniverse/Mega City loop, read `MEGA_CITY_LOOPER_OBJECTIVE.md`.
+5. If working on the Jetson/local runtime, read `JETSON_ACCESS_AND_TERMINAL.md`.
+6. Find the authoritative file for your work area.
+7. Check whether another contributor already owns overlapping work.
+8. Create or use an isolated branch.
+9. State your intended test/measurement before changing the implementation.
+10. Sign and explain the contribution when required.
+11. Run the relevant qualification and regression gates.
+12. Agree before merging overlapping AI work.
 
 **See it. Choose. Own the consequence. Learn. Build better.**
