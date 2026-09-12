@@ -21,7 +21,7 @@ Coupling, Ch12 Gravity, Ch13 Electricity/Magnetism), all citing
 
 Dependencies:
 Upstream: B-206b Four Views (the pressure cushion mechanism this duality operates on), A-104 Gradient
-Downstream: Book 1 Ch4 (Electron), Ch7 (Photon), Ch9 (Focal Point Coupling), Ch12 (Gravity), Ch13 (Electricity/Magnetism)
+Downstream: C-319 Magnetic Lattice Reorganization, C-320 Magnetic-Compression Path Coupling, Book 1 Ch4 (Electron), Ch7 (Photon), Ch9 (Focal Point Coupling), Ch12 (Gravity), Ch13 (Electricity/Magnetism)
 
 Definition:
 Electric and magnetic fields are not two separate fields. They are the
@@ -50,7 +50,13 @@ Maxwell's four equations sketched as consequences of a single P_c
   field in Ch13, explicitly marked "formal derivation deferred"
 
 Operational Chain:
-B-206b (pressure cushion P_c) => C-311 Electric-Magnetic Duality (radial/rotational projection) => Ch4/8/10/13/14 applications
+B-206b (pressure cushion P_c)
+=> C-311 Electric-Magnetic Duality (radial/rotational projection)
+=> C-319 Magnetic Lattice Reorganization (rotational magnetic state reorganizes directional lattice paths)
+=> C-320 Magnetic-Compression Path Coupling (reorganized paths weight A-115 restoring/compression response)
+=> D-413 reduced gravity laboratory / D-416 planetary falsification matrix
+
+C-319 and C-320 are the required bridge for any claim connecting magnetism to lattice organization, gravity/compression, orbital response, or magnetic memory. Do not jump directly from C-311 to "magnetism equals gravity."
 
 Yellow Audit:
 - |E_vec| = c*|B_vec| stated as a standard relation but not derived
@@ -58,6 +64,8 @@ Yellow Audit:
   not silently assumed
 - Maxwell's equations sketch (Ch13) is explicitly marked sketch-level;
   this node inherits that honest status rather than upgrading it
+- C-319/C-320 now own the magnetism-to-lattice-to-gravity hypothesis;
+  their presence does not validate that hypothesis
 - Whether this node should be C-series (motion/force-adjacent, current
   placement) or a new E-series extension (field-application, matching
   E-503 Pressure's style) is a real placement question — C-series was
@@ -69,6 +77,11 @@ Derive |E_vec| = c*|B_vec| from lattice geometry (currently deferred in
 every citing chapter, not just here).
 Formally derive Maxwell's four equations from ∇P_c and ∇×P_c rather
 than leaving them as a sketch.
+Use C-319 to test whether a rotational magnetic state can produce a
+measurable, reversible lattice reorganization without smuggling in
+scalar compression.
+Use C-320/D-416 to test whether any such reorganization predicts a
+measurable residual in gravity/orbital controls.
 Reconsider C-series vs. E-series placement if a clearer criterion emerges.
 Audit every charge mapping against C-316 so signed boundary pressure, spatial
 gradient direction, and whole-mode Compression/Expression classification are
