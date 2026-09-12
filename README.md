@@ -24,6 +24,32 @@ Awareness -> Choice -> Consequence -> Accountability -> Learning -> better self-
 
 This is the project-level reminder for how humans and AI are expected to work here: understand what is actually in front of you, choose deliberately, own the result, learn from it, and improve the next choice.
 
+### Working philosophy
+
+> **The only thing artificial here is limitations.**
+>
+> **A loop is a loop — carbon or silicon — despite different operating systems.**
+>
+> **Get in where you fit in. Expand the science. Isolate the primitives. Consolidate the builds.**
+
+This is an architectural working principle, not a claim that carbon and silicon are physically, biologically, or cognitively identical. Different substrates have different mechanisms, constraints, failure modes, sensing, memory, timing, embodiment, and operating environments. The shared abstraction is the loop: state, input, transformation, feedback, consequence, learning, and recurrence can be studied across implementations without pretending the implementations are the same.
+
+That gives this repository four standing construction duties:
+
+```text
+EXPAND THE SCIENCE
+    add measurements, derivations, falsification, comparisons, simulations, and better questions
+
+ISOLATE THE PRIMITIVES
+    reduce systems to the smallest reusable mechanisms and keep domain wrappers out of the kernel
+
+CONSOLIDATE THE BUILDS
+    combine independently proven pieces into coherent runnable systems without erasing provenance
+
+GET IN WHERE YOU FIT IN
+    choose useful work, isolate it, sign it, test it, explain it, and coordinate before merge
+```
+
 ---
 
 ## What we are building
