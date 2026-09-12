@@ -109,5 +109,5 @@ jobs:
       - name: Run current and controlled-source qualification
         run: npm run test:controlled-sources
 
-      - name: Run BJT qualification
+      - name: Run continuous Ebers-Moll BJT qualification
         run: npm run test:bjt
