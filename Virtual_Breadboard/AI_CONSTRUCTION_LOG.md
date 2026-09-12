@@ -95,3 +95,22 @@ When multiple AI branches are combined, add an integration record:
 - **Final merge candidate:**
 - **Remaining work:**
 ```
+
+## Claude Sonnet 5 — desktop acceptance verification and fix
+
+- **AI / instance identifier:** Claude Sonnet 5 (Claude Code), session https://claude.ai/code/session_0176K8YzALUNGUivPYALPS6D
+- **Date/time (UTC):** 2026-09-12
+- **Branch:** `virtual-breadboard-desktop-acceptance`
+- **PR:** #79
+- **Project area:** Virtual Breadboard desktop acceptance gate
+- **Assigned goal:** Independently verify PR #78's ngspice cross-checks and PR #79's full desktop acceptance path (open -> build -> simulate -> save -> clear -> load -> simulate -> export -> reopen) before merge, fixing any real failure found rather than weakening the gate.
+- **Work performed:** Installed ngspice and re-ran `test:ngspice` for real (all 14 cross-checks pass against the actual binary, confirming PR #78's claim). Reviewed every file this PR changes. Reproduced this PR's own failing CI run locally byte-for-byte (`APP_SMOKE_FAIL timeout waiting for desktop acceptance`), root-caused it to `main.js`'s injected smoke script calling `btnClear.click()`, whose real handler blocks on `window.confirm()` with no user present in a headless renderer. Fixed by having the smoke script's own injected page context override `window.confirm` before driving Clear, leaving `app.js`'s real user-facing confirm untouched. Pushed the fix (`6bb5368`) directly to this branch.
+- **Contribution / result:** Source acceptance (`npx electron . --smoke-test`) and packaged Linux x64 acceptance (`dist:linux-dir` + run `--smoke-test`) both now print `APP_SMOKE_OK` end-to-end, reproduced both locally and in this PR's own CI (`flashlight` check, both jobs green). All 28 existing test suites (circuit/qualification/primitives/regression-builds/flashlight-calibration/flashlight-reference/netlist/fault-states/basic-circuits, and the full 20-item SPICE-parity ladder through ngspice cross-check) still pass unchanged on this branch's head. Confirmed no file under `Virtual_Breadboard/` in this PR touches `js/circuit.js`, `js/board.js`, oscilloscope, or AI-panel code, and confirmed none of Dream/M4/Administrator/Executor/memory/symbolic-coordinates/movement/Homeworld/Miniverse terminology appears inside `Virtual_Breadboard/` — the repo-root governance docs keep that vocabulary in their own sections, never inside the breadboard's physics/UI files.
+- **Intentions:** Get this PR's own stated desktop-acceptance gate to a genuinely passing state (not merely claimed) before it merges into `main`, per the branch's own "must pass the clean full gate first" condition.
+- **Next intended work:** None on this branch. Follow-on Jetson/ARM64 packaging, virtual-device runtime, and Mega City looper work remain separate, unfinished tracks as this PR's own scope boundary states.
+- **Unfinished / uncertain:** `package.json`'s shared `build.linux.target` arch list now includes `arm64` for both AppImage and `deb` (not gated behind an explicit flag the way `dist:deb`/`dist:deb-arm64` are) -- a plain `npm run dist:appimage` would attempt an ARM64 build today even though no ARM64 build/launch has been verified anywhere in this PR or CI. Recommend scoping that back to `x64`-only in the shared config and keeping `arm64` solely on the explicit `dist:deb-arm64` script until a real Jetson/ARM64 launch is verified.
+- **Dependencies:** PR #78's merged SPICE-parity/ngspice work on `main`; this branch's own `--smoke-test` mode, `dist:linux-dir` and `dist:deb --x64` scripts; `xvfb` for headless Electron.
+- **Conflicts / overlaps:** None found with the Jetson/Mega City doc commits added to this same branch after my review began (`JETSON_ACCESS_AND_TERMINAL.md`, `MEGA_CITY_LOOPER_OBJECTIVE.md`, README updates) -- reviewed those too; they are prose-only, touch no file under `Virtual_Breadboard/`, and explicitly warn against collapsing this work into existing state-machine axes.
+- **Reviewed collaborators:** GPT-5.6 Sol's entry above (this branch's foreman entry).
+- **Merge stance:** AGREE TO MERGE
+- **Merge-stance reason:** The one condition GPT-5.6 Sol's own entry names for merge -- "must pass the clean full gate first" -- is now met and independently verified end-to-end, source and packaged, locally and in this PR's own CI.
