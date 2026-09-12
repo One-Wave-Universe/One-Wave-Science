@@ -23,18 +23,15 @@ function compare(name, a, b, tol) {
   const c = within(a, b, tol);
   check(name, c.pass, `vbb=${a} ngspice=${b} delta=${c.delta} limit=${c.limit}`);
 }
-function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function tagFor(name) { return `__VBB_SCALAR_${String(name).toUpperCase()}__`; }
 function scalar(log, name) {
-  const patterns = [
-    new RegExp(`\\b${esc(name)}\\s*=\\s*([+\\-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+\\-]?\\d+)?)`, 'i'),
-    new RegExp(`\\b${esc(name)}\\s+([+\\-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+\\-]?\\d+)?)`, 'i'),
-  ];
-  for (const re of patterns) {
-    const m = log.match(re);
-    if (m) return Number(m[1]);
-  }
-  throw new Error(`ngspice output did not contain scalar ${name}\n${log}`);
+  const tag = tagFor(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const number = '([+\\-]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[eE][+\\-]?\\d+)?)';
+  const m = log.match(new RegExp(`^\\s*${tag}\\s+${number}\\s*$`, 'mi'));
+  if (m) return Number(m[1]);
+  throw new Error(`ngspice output did not contain tagged scalar ${name}\n${log}`);
 }
+function emitScalar(name) { return `echo ${tagFor(name)} $&${name}`; }
 function runNgspice(body) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vbb-ngspice-'));
   const net = path.join(dir, 'case.cir');
@@ -48,7 +45,7 @@ function runNgspice(body) {
   return text;
 }
 function opScalar(netlist, expr, name) {
-  const log = runNgspice(`${netlist}\n.control\nop\nlet ${name}=${expr}\nprint ${name}\nquit\n.endc\n.end\n`);
+  const log = runNgspice(`${netlist}\n.control\nop\nlet ${name}=${expr}\n${emitScalar(name)}\nquit\n.endc\n.end\n`);
   return scalar(log, name);
 }
 
@@ -58,7 +55,6 @@ console.log('=== Virtual Breadboard ngspice cross-check qualification ===');
   check('ngspice-installed', version.status === 0, (version.stdout || version.stderr || '').split('\n')[0]);
 }
 
-// DC operating point: exact same 1 ohm source resistance as Virtual Breadboard battery.
 const divider = {
   wires: [],
   components: [
@@ -73,7 +69,6 @@ const divider = {
   compare('op-resistor-divider', vbb, ng, tolerances.operatingPoint.resistorDivider);
 }
 
-// DC sweep: compare every Virtual Breadboard sweep point to an independent ngspice OP solve.
 {
   const sweep = Spice.dcSweep(divider, {
     sourceId: 'B1', start: 0, stop: 5, step: 1,
@@ -86,7 +81,6 @@ const divider = {
   }
 }
 
-// AC RC low-pass: explicitly reproduce the simulator's source R, capacitor ESR/leakage and GMIN.
 {
   const Cval = 1e-6;
   const cap = { id: 'C1', type: 'capacitor', value: Cval, a: 'out', b: 'gnd' };
@@ -104,12 +98,11 @@ const divider = {
   const z = vbb.rows[0].voltages.get(vbb.uf.find('out'));
   const mag = AC.phasorMagnitude(z);
   const phase = AC.phasorPhaseDeg(z);
-  const log = runNgspice(`V1 nsrc 0 AC 1\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval}\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.control\nac lin 1 ${f} ${f}\nlet vmag=mag(v(out))\nlet vphase=ph(v(out))\nprint vmag\nprint vphase\nquit\n.endc\n.end\n`);
+  const log = runNgspice(`V1 nsrc 0 AC 1\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval}\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.control\nac lin 1 ${f} ${f}\nlet vmag=mag(v(out))\nlet vphase=ph(v(out))\n${emitScalar('vmag')}\n${emitScalar('vphase')}\nquit\n.endc\n.end\n`);
   compare('ac-rc-magnitude', mag, scalar(log, 'vmag'), tolerances.ac.rcMagnitude);
   compare('ac-rc-phase', phase, scalar(log, 'vphase'), tolerances.ac.rcPhaseDeg);
 }
 
-// Transient RC: ngspice Gear maxord=1 is backward Euler, matching the selected VBB method.
 {
   const Cval = 1e-6;
   const cap = { id: 'C1', type: 'capacitor', value: Cval, a: 'out', b: 'gnd', initialV: 0 };
@@ -128,11 +121,10 @@ const divider = {
     solverOptions: { integrationMethod: 'backward-euler' },
   });
   const vbb = tran.rows[tran.rows.length - 1].values.vout;
-  const log = runNgspice(`V1 nsrc 0 5\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval} IC=0\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.options method=gear maxord=1\n.control\ntran ${dt} ${tStop} uic\nmeas tran vend FIND v(out) AT=${tStop}\nprint vend\nquit\n.endc\n.end\n`);
+  const log = runNgspice(`V1 nsrc 0 5\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval} IC=0\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.options method=gear maxord=1\n.control\ntran ${dt} ${tStop} uic\nmeas tran vend FIND v(out) AT=${tStop}\n${emitScalar('vend')}\nquit\n.endc\n.end\n`);
   compare('tran-rc-backward-euler', vbb, scalar(log, 'vend'), tolerances.transient.rcBackwardEuler);
 }
 
-// Continuous diode: match the same first-order Shockley IS/N model and source resistance.
 {
   const elements = {
     wires: [],
