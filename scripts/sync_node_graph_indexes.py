@@ -1,26 +1,35 @@
 #!/usr/bin/env python3
-"""Synchronize the canonical discovery surfaces for locked node-graph additions.
+"""Synchronize canonical node discovery surfaces.
 
-This script is deliberately narrow and idempotent.  It does not regenerate the
-whole master index or rewrite prose.  It owns only the exact rows/section needed
-for the C-319/C-320/D-416 bridge.
+The curated master tables stay hand-authored. This tool owns:
+- the C-319/C-320/D-416 bridge rows and AI ingestion path;
+- an auto-generated supplement listing every canonical I-06 NODE that is not
+  already represented in the curated master tables.
+
+NODE_ARTIFACT documents are intentionally excluded from the master node list.
 """
 
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "00_MASTER_INDEX.md"
 AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
+NODE_DIRS = (ROOT / "Nodes", ROOT / "Root_Axioms")
 
 C319_ROW = "| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |"
 C320_ROW = "| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |"
 D416_ROW = "| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | GREEN |"
 
-AI_BRIDGE = """## Magnetism / Gravity canonical bridge\n\nBefore any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:\n\n1. `Nodes/C-311_Electric_Magnetic_Duality.md` — magnetic field is the rotational field view used by the framework.\n2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md` — planar control geometry only.\n3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — required native 3D geometry before planetary interpretation.\n4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.\n5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.\n6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.\n7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.\n8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.\n\nLocked interpretation:\n\n```text\nmagnetic rotational state\n-> reorganizes lattice pathways\n-> changes directional accessibility of an existing compression/restoring field\n-> can alter distributed restoring response and torque if the coupling survives tests\n```\n\nDo **not** collapse this to `magnetism = gravity`.  Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field.  Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance.  Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.\n\n"""
+SUPPLEMENT_START = "<!-- AUTO-NODE-REGISTRY:START -->"
+SUPPLEMENT_END = "<!-- AUTO-NODE-REGISTRY:END -->"
+ROW_ID_RE = re.compile(r"^\|\s*([A-G]-\d{3}[a-z]?)\s*\|", re.MULTILINE)
+
+AI_BRIDGE = """## Magnetism / Gravity canonical bridge\n\nBefore any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:\n\n1. `Nodes/C-311_Electric_Magnetic_Duality.md` — magnetic field is the rotational field view used by the framework.\n2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md` — planar control geometry only.\n3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — required native 3D geometry before planetary interpretation.\n4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.\n5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.\n6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.\n7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.\n8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.\n\nLocked interpretation:\n\n```text\nmagnetic rotational state\n-> reorganizes lattice pathways\n-> changes directional accessibility of an existing compression/restoring field\n-> can alter distributed restoring response and torque if the coupling survives tests\n```\n\nDo **not** collapse this to `magnetism = gravity`. Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field. Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance. Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.\n\n"""
 
 
 def require_once(text: str, needle: str, label: str) -> None:
@@ -29,7 +38,93 @@ def require_once(text: str, needle: str, label: str) -> None:
         raise RuntimeError(f"expected exactly one {label}; found {count}")
 
 
+def parse_scalar(raw: str) -> str:
+    raw = raw.strip()
+    if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in {'"', "'"}:
+        return raw[1:-1]
+    return raw
+
+
+def frontmatter(path: Path) -> dict[str, str]:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---\n"):
+        return {}
+    end = text.find("\n---\n", 4)
+    if end < 0:
+        return {}
+    meta: dict[str, str] = {}
+    for line in text[4:end].splitlines():
+        if ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        meta[key.strip()] = parse_scalar(value)
+    return meta
+
+
+def canonical_nodes() -> dict[str, tuple[str, str, str, str]]:
+    """Return node_id -> (name, gate, classification, source path)."""
+    nodes: dict[str, tuple[str, str, str, str]] = {}
+    for directory in NODE_DIRS:
+        for path in sorted(directory.glob("*.md")):
+            meta = frontmatter(path)
+            if meta.get("namespace") != "NODE" or not meta.get("node_id"):
+                continue
+            node_id = meta["node_id"]
+            nodes[node_id] = (
+                meta.get("canonical_name", path.stem),
+                meta.get("gate", "BROWN"),
+                meta.get("classification", "Canonical node"),
+                str(path.relative_to(ROOT)),
+            )
+    return nodes
+
+
+def strip_supplement(text: str) -> str:
+    if SUPPLEMENT_START not in text and SUPPLEMENT_END not in text:
+        return text.rstrip() + "\n"
+    if text.count(SUPPLEMENT_START) != 1 or text.count(SUPPLEMENT_END) != 1:
+        raise RuntimeError("master index has malformed auto-node registry markers")
+    before, rest = text.split(SUPPLEMENT_START, 1)
+    _, after = rest.split(SUPPLEMENT_END, 1)
+    return (before.rstrip() + "\n" + after.lstrip()).rstrip() + "\n"
+
+
+def clean_cell(value: str) -> str:
+    return value.replace("|", "/").replace("\n", " ").strip()
+
+
+def build_supplement(base_text: str) -> str:
+    represented = set(ROW_ID_RE.findall(base_text))
+    missing = []
+    for node_id, (name, gate, classification, source) in sorted(canonical_nodes().items()):
+        if not re.fullmatch(r"[A-G]-\d{3}[a-z]?", node_id):
+            continue
+        if node_id in represented:
+            continue
+        missing.append((node_id, name, gate, classification, source))
+
+    lines = [
+        SUPPLEMENT_START,
+        "## Auto-synchronized canonical node registry supplement",
+        "",
+        "These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.",
+        "",
+        "| Node | Name | Definition / source | Gate |",
+        "|---|---|---|---|",
+    ]
+    if missing:
+        for node_id, name, gate, classification, source in missing:
+            definition = f"{clean_cell(classification)}. Source: `{source}`."
+            lines.append(f"| {node_id} | {clean_cell(name)} | {definition} | {clean_cell(gate)} |")
+    else:
+        lines.append("| — | No unplaced canonical nodes | Every canonical node is represented in the curated tables above. | — |")
+    lines.extend([SUPPLEMENT_END, ""])
+    return "\n".join(lines)
+
+
 def sync_master(text: str) -> str:
+    # First keep the load-bearing bridge in its semantic tables.
+    text = strip_supplement(text)
     if "| C-319 |" not in text:
         anchor = "| C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |"
         require_once(text, anchor, "C-318 master-index row")
@@ -47,7 +142,9 @@ def sync_master(text: str) -> str:
         "### Appendix D — Resonance, Modal & Dimensional Structure (15 nodes)",
         "### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)",
     )
-    return text
+
+    base = text.rstrip() + "\n\n"
+    return base + build_supplement(base)
 
 
 def sync_ai_start(text: str) -> str:
