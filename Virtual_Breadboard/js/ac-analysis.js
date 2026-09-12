@@ -118,11 +118,11 @@ function smallSignalAc(elements, options) {
   const wires = base.wires || [];
   const source = components.find((c) => c.id === sourceId);
   if (!source) throw new Error(`AC source '${sourceId}' was not found`);
-  if (!['battery', 'diffsource', 'acsource'].includes(source.type)) {
-    throw new Error(`AC source '${sourceId}' must be battery, diffsource, or acsource`);
+  if (!['battery', 'diffsource', 'acsource', 'isource'].includes(source.type)) {
+    throw new Error(`AC source '${sourceId}' must be battery, diffsource, acsource, or isource`);
   }
 
-  const supported = new Set(['resistor', 'capacitor', 'inductor', 'battery', 'diffsource', 'acsource', 'diode', 'led', 'nmos', 'pmos', 'switch', 'pushbutton']);
+  const supported = new Set(['resistor', 'capacitor', 'inductor', 'battery', 'diffsource', 'acsource', 'isource', 'vccs', 'vcvs', 'cccs', 'ccvs', 'diode', 'led', 'nmos', 'pmos', 'switch', 'pushbutton']);
   const unsupported = components.filter((c) => !supported.has(c.type));
   if (unsupported.length) throw new Error(`AC analysis does not yet support: ${unsupported.map((c) => `${c.id}:${c.type}`).join(', ')}`);
 
@@ -130,9 +130,10 @@ function smallSignalAc(elements, options) {
   if (!op.solver || !op.solver.converged) throw new Error('DC operating point did not converge; AC linearization is invalid');
 
   const uf = buildTopologyUnionFind(components, wires);
-  const voltageSources = components.filter((c) => ['battery', 'diffsource', 'acsource'].includes(c.type));
+  const voltageSources = components.filter((c) => ['battery', 'diffsource', 'acsource', 'vcvs', 'ccvs'].includes(c.type));
   const sourceInternal = new Map();
   voltageSources.forEach((c) => {
+    if (c.type === 'vcvs' || c.type === 'ccvs') return;
     const name = `__acsmall__${c.id}`;
     uf.find(name);
     sourceInternal.set(c.id, name);
@@ -153,6 +154,7 @@ function smallSignalAc(elements, options) {
     if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
   });
   sourceInternal.forEach((n) => touch(n));
+  components.forEach((c) => { if (c.type === 'vccs' || c.type === 'vcvs') { touch(c.controlP); touch(c.controlN); } });
   roots.add(groundRoot);
   const nodeRoots = Array.from(roots).filter((r) => r !== groundRoot);
   const nodeIndex = new Map(nodeRoots.map((r, i) => [r, i]));
@@ -192,10 +194,28 @@ function smallSignalAc(elements, options) {
 
     for (let i = 0; i < nNodes; i++) A[i][i] = add(A[i][i], C(gmin, 0));
 
+    const sourceRowById = new Map(voltageSources.map((s,k)=>[s.id,rowSource(k)]));
     components.forEach((c) => {
       const a = idx(c.a);
       const bb = idx(c.b);
-      if (c.type === 'resistor') {
+      if (c.type === 'isource') {
+        if (c.id === sourceId) {
+          const iz = polar(magnitude, phaseDeg);
+          if (a >= 0) b[a] = sub(b[a], iz);
+          if (bb >= 0) b[bb] = add(b[bb], iz);
+        }
+      } else if (c.type === 'vccs') {
+        const cp=idx(c.controlP), cn=idx(c.controlN), g=Number(c.gain != null ? c.gain : c.value)||0;
+        if (a>=0&&cp>=0) A[a][cp]=add(A[a][cp],C(g,0));
+        if (a>=0&&cn>=0) A[a][cn]=sub(A[a][cn],C(g,0));
+        if (bb>=0&&cp>=0) A[bb][cp]=sub(A[bb][cp],C(g,0));
+        if (bb>=0&&cn>=0) A[bb][cn]=add(A[bb][cn],C(g,0));
+      } else if (c.type === 'cccs') {
+        const cr=sourceRowById.get(c.controlSourceId), gain=Number(c.gain != null ? c.gain : c.value)||0;
+        if (cr == null) throw new Error(`CCCS ${c.id} controlSourceId '${c.controlSourceId}' is not a voltage-source branch`);
+        if (a>=0) A[a][cr]=add(A[a][cr],C(gain,0));
+        if (bb>=0) A[bb][cr]=sub(A[bb][cr],C(gain,0));
+      } else if (c.type === 'resistor') {
         stampY(A, a, bb, C(1 / Math.max(c.value, 1e-12), 0));
       } else if (c.type === 'capacitor') {
         const esr = capacitorESR(c);
@@ -234,14 +254,28 @@ function smallSignalAc(elements, options) {
     });
 
     voltageSources.forEach((s, k) => {
-      const internal = idx(sourceInternal.get(s.id));
-      const a = idx(s.a);
-      const ref = idx(s.b);
-      stampY(A, internal, a, C(1 / Math.max(sourceResistance(s), 1e-12), 0));
       const row = rowSource(k);
-      if (internal >= 0) { A[internal][row] = add(A[internal][row], C(1, 0)); A[row][internal] = add(A[row][internal], C(1, 0)); }
-      if (ref >= 0) { A[ref][row] = sub(A[ref][row], C(1, 0)); A[row][ref] = sub(A[row][ref], C(1, 0)); }
-      if (s.id === sourceId) b[row] = add(b[row], polar(magnitude, phaseDeg));
+      const a = idx(s.a), ref = idx(s.b);
+      if (s.type === 'vcvs' || s.type === 'ccvs') {
+        if (a >= 0) { A[a][row]=add(A[a][row],C(1,0)); A[row][a]=add(A[row][a],C(1,0)); }
+        if (ref >= 0) { A[ref][row]=sub(A[ref][row],C(1,0)); A[row][ref]=sub(A[row][ref],C(1,0)); }
+        const gain=Number(s.gain != null ? s.gain : s.value)||0;
+        if (s.type === 'vcvs') {
+          const cp=idx(s.controlP), cn=idx(s.controlN);
+          if (cp>=0) A[row][cp]=sub(A[row][cp],C(gain,0));
+          if (cn>=0) A[row][cn]=add(A[row][cn],C(gain,0));
+        } else {
+          const cr=sourceRowById.get(s.controlSourceId);
+          if (cr == null || cr === row) throw new Error(`CCVS ${s.id} controlSourceId '${s.controlSourceId}' is not a distinct voltage-source branch`);
+          A[row][cr]=sub(A[row][cr],C(gain,0));
+        }
+      } else {
+        const internal = idx(sourceInternal.get(s.id));
+        stampY(A, internal, a, C(1 / Math.max(sourceResistance(s), 1e-12), 0));
+        if (internal >= 0) { A[internal][row] = add(A[internal][row], C(1, 0)); A[row][internal] = add(A[row][internal], C(1, 0)); }
+        if (ref >= 0) { A[ref][row] = sub(A[ref][row], C(1, 0)); A[row][ref] = sub(A[row][ref], C(1, 0)); }
+        if (s.id === sourceId) b[row] = add(b[row], polar(magnitude, phaseDeg));
+      }
     });
 
     const x = size ? solveComplex(A, b) : [];

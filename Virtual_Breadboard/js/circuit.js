@@ -123,6 +123,7 @@
       }
       if (c.type === 'toroid') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       if (c.type === 'nmos' || c.type === 'pmos') { uf.find(c.gate); uf.find(c.drain); uf.find(c.source); }
+      if (c.type === 'vccs' || c.type === 'vcvs') { uf.find(c.controlP); uf.find(c.controlN); }
       if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { uf.find(w.a); uf.find(w.b); });
       if (c.type === 'latchrelay') { uf.find(c.contactA); uf.find(c.contactB); }
       if (c.type === 'comparator') {
@@ -197,8 +198,11 @@
         case 'led': case 'diode': case 'acsource':
           add(c.a, c.b);
           break;
-        case 'battery': case 'diffsource':
+        case 'battery': case 'diffsource': case 'vcvs': case 'ccvs':
           add(c.a, c.b);
+          break;
+        case 'isource': case 'vccs': case 'cccs':
+          // ideal current sources do not create a passive DC-conductive path
           break;
         case 'switch': case 'pushbutton':
           if (c.closed) add(c.a, c.b);
@@ -994,6 +998,7 @@
       const comparators = components.filter((c) => c.type === 'comparator');
       const hbridges = components.filter((c) => c.type === 'hbridge');
       const schmitts = components.filter((c) => c.type === 'schmitt');
+      const controlledVoltageSources = components.filter((c) => c.type === 'vcvs' || c.type === 'ccvs');
 
       let groundRoot = null;
       if (batteries.length) groundRoot = uf.find(batteries[0].b);
@@ -1037,6 +1042,7 @@
         }
         if (c.type === 'toroid') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
+        if (c.type === 'vccs' || c.type === 'vcvs') { touch(c.controlP); touch(c.controlN); }
         if (c.type === 'memorycore' || c.type === 'latchrelay') c.windings.forEach((w) => { touch(w.a); touch(w.b); });
         if (c.type === 'latchrelay') { touch(c.contactA); touch(c.contactB); }
         if (c.type === 'comparator') {
@@ -1094,9 +1100,15 @@
         });
       }
       const rowMemCore = (mcK, windingIdx) => memCoreRowOffsets[mcK] + windingIdx;
-      const size = memCoreRowBase + nMemCoreRows;
+      const ctrlVRowBase = memCoreRowBase + nMemCoreRows;
+      const rowCtrlV = (k) => ctrlVRowBase + k;
+      const size = ctrlVRowBase + controlledVoltageSources.length;
 
       const gi = (rt) => (rt === groundRoot ? -1 : nodeIndex.get(rt));
+      const branchRowBySourceId = new Map();
+      batteries.forEach((c,k)=>branchRowBySourceId.set(c.id,rowBat(k)));
+      acsources.forEach((c,k)=>branchRowBySourceId.set(c.id,rowAc(k)));
+      controlledVoltageSources.forEach((c,k)=>branchRowBySourceId.set(c.id,rowCtrlV(k)));
 
       const diodes = components.filter((c) => c.type === 'led' || c.type === 'diode');
       diodes.forEach((d) => {
@@ -1533,6 +1545,27 @@
             stampG(target, o, -g);
             stampClampDiode(o, vccIdx, this._railClampState.get(c.id + ':hi') || false, spec.clampVf, RAIL_CLAMP_RON);
             stampClampDiode(gndIdx, o, this._railClampState.get(c.id + ':lo') || false, spec.clampVf, RAIL_CLAMP_RON);
+          } else if (c.type === 'isource') {
+            const ia = gi(uf.find(c.a));
+            const ib = gi(uf.find(c.b));
+            const I = Number(c.value) || 0;
+            stampI(ia, -I);
+            stampI(ib, I);
+          } else if (c.type === 'vccs') {
+            const ia = gi(uf.find(c.a)), ib = gi(uf.find(c.b));
+            const cp = gi(uf.find(c.controlP)), cn = gi(uf.find(c.controlN));
+            const g = Number(c.gain != null ? c.gain : c.value) || 0;
+            if (ia >= 0 && cp >= 0) A[ia][cp] += g;
+            if (ia >= 0 && cn >= 0) A[ia][cn] -= g;
+            if (ib >= 0 && cp >= 0) A[ib][cp] -= g;
+            if (ib >= 0 && cn >= 0) A[ib][cn] += g;
+          } else if (c.type === 'cccs') {
+            const ctrlRow = branchRowBySourceId.get(c.controlSourceId);
+            if (ctrlRow == null) throw new Error(`CCCS ${c.id} controlSourceId '${c.controlSourceId}' is not a voltage-source branch`);
+            const ia = gi(uf.find(c.a)), ib = gi(uf.find(c.b));
+            const gain = Number(c.gain != null ? c.gain : c.value) || 0;
+            if (ia >= 0) A[ia][ctrlRow] += gain;
+            if (ib >= 0) A[ib][ctrlRow] -= gain;
           } else if (c.type === 'battery' || c.type === 'diffsource') {
             // real load regulation up to a real output current limit,
             // exactly the same "stiff below the limit, a fixed current
@@ -1640,6 +1673,23 @@
             A[row][m] -= 1;
           }
           b[row] += effectiveSourceValue(bat);
+        });
+
+        controlledVoltageSources.forEach((src, k) => {
+          const row = rowCtrlV(k);
+          const ia = gi(uf.find(src.a)), ib = gi(uf.find(src.b));
+          if (ia >= 0) { A[ia][row] += 1; A[row][ia] += 1; }
+          if (ib >= 0) { A[ib][row] -= 1; A[row][ib] -= 1; }
+          const gain = Number(src.gain != null ? src.gain : src.value) || 0;
+          if (src.type === 'vcvs') {
+            const cp = gi(uf.find(src.controlP)), cn = gi(uf.find(src.controlN));
+            if (cp >= 0) A[row][cp] -= gain;
+            if (cn >= 0) A[row][cn] += gain;
+          } else {
+            const ctrlRow = branchRowBySourceId.get(src.controlSourceId);
+            if (ctrlRow == null || ctrlRow === row) throw new Error(`CCVS ${src.id} controlSourceId '${src.controlSourceId}' is not a distinct voltage-source branch`);
+            A[row][ctrlRow] -= gain;
+          }
         });
 
         // rail-splitter constraint: V(internal) = 0.5*(V(a) + V(b)), an
@@ -2320,7 +2370,19 @@
         const va = voltages.get(uf.find(c.a));
         const vb = voltages.get(uf.find(c.b));
         let I = 0;
-        if (c.type === 'resistor') {
+        if (c.type === 'isource') {
+          I = Number(c.value) || 0;
+        } else if (c.type === 'vccs') {
+          const vp = voltages.get(uf.find(c.controlP)) || 0;
+          const vn = voltages.get(uf.find(c.controlN)) || 0;
+          I = (Number(c.gain != null ? c.gain : c.value) || 0) * (vp - vn);
+        } else if (c.type === 'cccs') {
+          const rr = branchRowBySourceId.get(c.controlSourceId);
+          I = (Number(c.gain != null ? c.gain : c.value) || 0) * (rr == null ? 0 : (xSol[rr] || 0));
+        } else if (c.type === 'vcvs' || c.type === 'ccvs') {
+          const rr = branchRowBySourceId.get(c.id);
+          I = rr == null ? 0 : (xSol[rr] || 0);
+        } else if (c.type === 'resistor') {
           const rEff = Math.max(c.value, 1e-6) * (1 + RESISTOR_TEMPCO * (tempOf(c.id) - 25));
           I = (va - vb) / rEff;
           const p = I * I * rEff;
