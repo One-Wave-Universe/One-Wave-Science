@@ -1,0 +1,112 @@
+name: Jetson Command Lane
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Shell command to run on the Jetson as its normal unprivileged user"
+        required: true
+        type: string
+      cwd:
+        description: "Optional Jetson working directory"
+        required: false
+        default: ""
+        type: string
+      timeout:
+        description: "Timeout in seconds (gateway caps this)"
+        required: false
+        default: "120"
+        type: string
+      gateway_url:
+        description: "Optional current quick-tunnel URL; blank uses JETSON_GATEWAY_URL secret"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jetson-command-lane
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    # Deliberately GitHub-hosted. Do not change this to self-hosted while the
+    # repository is public.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      REQUESTED_URL: ${{ inputs.gateway_url }}
+      DEFAULT_URL: ${{ secrets.JETSON_GATEWAY_URL }}
+      GATEWAY_TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+      COMMAND: ${{ inputs.command }}
+      COMMAND_CWD: ${{ inputs.cwd }}
+      COMMAND_TIMEOUT: ${{ inputs.timeout }}
+
+    steps:
+      - name: Validate dispatch configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${REQUESTED_URL}" && -z "${DEFAULT_URL}" ]]; then
+            echo "::error::Provide gateway_url or configure JETSON_GATEWAY_URL."
+            exit 1
+          fi
+          if [[ -z "${GATEWAY_TOKEN}" ]]; then
+            echo "::error::Configure JETSON_GATEWAY_TOKEN."
+            exit 1
+          fi
+          case "${COMMAND_TIMEOUT}" in
+            ''|*[!0-9]*) echo "::error::timeout must be an integer"; exit 1 ;;
+          esac
+
+      - name: Send command to Jetson
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="${REQUESTED_URL:-$DEFAULT_URL}"
+          export URL
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+
+          payload = {
+              "command": os.environ["COMMAND"],
+              "timeout": int(os.environ["COMMAND_TIMEOUT"]),
+          }
+          if os.environ.get("COMMAND_CWD"):
+              payload["cwd"] = os.environ["COMMAND_CWD"]
+
+          req = urllib.request.Request(
+              os.environ["URL"].rstrip("/") + "/v1/exec",
+              data=json.dumps(payload).encode(),
+              headers={
+                  "Authorization": "Bearer " + os.environ["GATEWAY_TOKEN"],
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(
+                  req,
+                  timeout=int(os.environ["COMMAND_TIMEOUT"]) + 15,
+              ) as response:
+                  result = json.load(response)
+          except urllib.error.HTTPError as exc:
+              sys.stderr.write(exc.read().decode("utf-8", errors="replace"))
+              raise SystemExit(1)
+
+          sys.stdout.write(result.get("stdout", ""))
+          sys.stderr.write(result.get("stderr", ""))
+          print(
+              f"\n[jetson exit={result.get('exit_code')} "
+              f"duration_ms={result.get('duration_ms')}]"
+          )
+          raise SystemExit(
+              int(result.get("exit_code", 0 if result.get("ok") else 1))
+          )
+          PY
