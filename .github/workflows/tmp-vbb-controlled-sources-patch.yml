@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/tmp-vbb-controlled-sources-patch.yml'
       - '.github/scripts/patch_vbb_controlled_sources.py'
+      - '.github/scripts/fix_vbb_controlled_patch.py'
   workflow_dispatch:
 permissions:
   contents: write
@@ -15,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: virtual-breadboard-controlled-sources
+      - run: python .github/scripts/fix_vbb_controlled_patch.py
       - run: python .github/scripts/patch_vbb_controlled_sources.py
       - run: |
           git config user.name "Mark Wright"
