@@ -1,4 +1,25 @@
 
+## Six-Route Commitment Map Derived and Numerically Validated — G-764/G-765 (September 12, 2026)
+
+- Added G-764: closed-form solution of UPDATED_43's explicitly open `K`-map
+  problem using the exact biased double-well test bench UPDATED_43 Section 4
+  proposed — saddle instability of Ground, the exact bias-independent
+  inflection threshold `x*=x_pm/sqrt(3)`, the exact hysteresis field
+  `h_c=sqrt(4b^3/27a)`, the resulting five-state map, a capture/return
+  energy criterion, and a ringdown frequency.
+- Added G-765: ran G-739's real six-gate extractor against a numerically
+  integrated trajectory of G-764's exact equation. Found and fixed a real
+  calibration bug (the extractor's structural `boundary` parameter is not
+  the same thing as G-764's commitment threshold `x_pm` once bias shifts a
+  well's rest point). Confirmed the Loop-crossing time exactly and derived
+  a bias-dependent generalization of G-764's ringdown formula, matching a
+  direct numerical measurement to four significant figures.
+- Updated G-764 Sections 7 and 8 with the two corrections G-765 found:
+  the capture criterion needs re-evaluation whenever the bias itself
+  changes, and the ringdown frequency formula generalizes to
+  `sqrt(V''(x_well(h)) - (zeta*omega0)^2)`.
+- Annotated ONE_WAVE_SCIENCE_ATTACK_MAP.md Sections C and D as attacked.
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.
