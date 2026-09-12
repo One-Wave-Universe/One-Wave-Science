@@ -39,7 +39,9 @@ console.log('=== Virtual Breadboard current + controlled-source qualification ==
   check('vccs-current-reported',close(r.currents.get('G1'),0.001,2e-6),`I=${r.currents.get('G1')}`);
 }
 
-// VCVS: output is exactly gain * differential control voltage (subject only to GMIN/load solve).
+// VCVS: output is exactly gain * differential control voltage. The control
+// input is ideal/high-impedance, so the 1-ohm battery source resistance has
+// no control-side drop here: 1.5 V * 2 = 3.0 V.
 {
   const elements={wires:[],components:[
     {id:'VCTRL',type:'battery',a:'ctrl',b:'gnd',value:1.5},
@@ -47,7 +49,7 @@ console.log('=== Virtual Breadboard current + controlled-source qualification ==
     {id:'R1',type:'resistor',a:'out',b:'gnd',value:1000},
   ]};
   const r=new Circuit().solve(elements,1e-3,25,{});
-  check('vcvs-gain',close(v(r,'out'),2.997003,5e-4),`Vout=${v(r,'out')}`);
+  check('vcvs-gain',close(v(r,'out'),3.0,5e-6),`Vout=${v(r,'out')}`);
 }
 
 // Current-controlled sources use the named voltage-source MNA branch current.
