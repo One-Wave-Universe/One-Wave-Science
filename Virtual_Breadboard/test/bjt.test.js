@@ -18,6 +18,7 @@ console.log('=== Virtual Breadboard BJT qualification ===');
 
 check('bjt-helper-exported', typeof bjtCurrents === 'function');
 check('bjt-default-beta', bjtSpec({type:'npn'}).betaF === BJT_BETA_F, JSON.stringify(bjtSpec({type:'npn'})));
+check('bjt-custom-beta-parameter', bjtSpec({type:'npn',betaF:150}).betaF === 150, JSON.stringify(bjtSpec({type:'npn',betaF:150})));
 
 // Independent Ebers-Moll forward-active reference: Vbe forward, Vbc strongly reverse.
 {
