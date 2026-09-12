@@ -257,7 +257,7 @@ function smallSignalAc(elements, options) {
           if (row < 0) return;
           lin.jacobian[terminal].forEach((g, k) => { if (cols[k] >= 0) A[row][cols[k]] = add(A[row][cols[k]], C(g, 0)); });
         });
-       else if (c.type === 'nmos' || c.type === 'pmos') {
+      } else if (c.type === 'nmos' || c.type === 'pmos') {
         const gate = idx(c.gate);
         const drain = idx(c.drain);
         const sourceNode = idx(c.source);
