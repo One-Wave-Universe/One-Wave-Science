@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+<title id="title">Surface-to-volume ratio versus radius</title>
+<desc id="desc">Graph of A over V equals three over radius for an ideal sphere, showing the ratio falling as radius increases.</desc>
+<rect width="960" height="640" fill="white"/>
+<g stroke="#20242a" stroke-width="3" fill="none">
+  <line x1="120" y1="520" x2="860" y2="520"/><line x1="120" y1="520" x2="120" y2="80"/>
+</g>
+<g font-family="Arial, sans-serif" fill="#111">
+  <text x="480" y="50" text-anchor="middle" font-size="28" font-weight="bold">Sphere: surface-to-volume ratio A/V = 3/r</text>
+  <text x="490" y="600" text-anchor="middle" font-size="22">radius r</text>
+  <text x="35" y="310" text-anchor="middle" font-size="22" transform="rotate(-90 35 310)">A / V</text>
+</g>
+<polyline points="160,120 200,240 260,340 340,410 460,460 620,490 820,505" fill="none" stroke="#20242a" stroke-width="6"/>
+<g fill="#20242a">
+  <circle cx="160" cy="120" r="7"/><circle cx="200" cy="240" r="7"/><circle cx="260" cy="340" r="7"/><circle cx="340" cy="410" r="7"/><circle cx="460" cy="460" r="7"/><circle cx="620" cy="490" r="7"/><circle cx="820" cy="505" r="7"/>
+</g>
+<text x="650" y="430" font-family="Arial, sans-serif" font-size="20" fill="#111">larger radius → less membrane area per unit volume</text>
+</svg>
