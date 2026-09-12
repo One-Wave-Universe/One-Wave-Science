@@ -1,6 +1,6 @@
 # AI Jetson Tool Guide
 
-This is the shortest correct guide for a fresh AI/Claude/Codex/Gemini instance.
+This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or other authorized AI instance.
 
 ## Start here
 
@@ -26,6 +26,72 @@ terminal_run
 
 Do not assume the old `/v1/exec` gateway is active. Do not start
 `scripts/jetson_gateway.py` beside Hive Pipe; it uses the same port 8765.
+
+## Client credentials
+
+The installer creates separate tokens for:
+
+```text
+codex
+claude
+gemini
+perplexity
+```
+
+They live only on the Jetson under:
+
+```text
+~/.config/hive-pipe/tokens/<client>.token
+```
+
+To add any other client:
+
+```bash
+bash hive-pipe/create_client_token.sh CLIENT_NAME
+```
+
+The gateway accepts the same client token through any of these common forms:
+
+```text
+Authorization: Bearer <token>
+Authorization: ApiKey <token>
+X-API-Key: <token>
+Api-Key: <token>
+```
+
+Never commit or paste tokens into the public repository.
+
+## Perplexity remote MCP
+
+Perplexity remote custom connectors support API-key authentication. Configure:
+
+```text
+MCP URL: https://YOUR-TUNNEL/mcp
+Transport: Streamable HTTP
+Authentication: API Key
+API key: contents of ~/.config/hive-pipe/tokens/perplexity.token
+```
+
+Perplexity commonly uses normal shell wrappers such as `bash -lc` for terminal
+work. Hive Pipe permits those wrappers now. If Perplexity can list tools but
+terminal calls fail, first test `terminal_pwd`, then run:
+
+```json
+{
+  "name": "terminal_run",
+  "arguments": {
+    "argv": ["bash", "-lc", "printf PERPLEXITY_TERMINAL_OK"],
+    "cwd": "/home/Scales/One-Wave-Science",
+    "timeout": 30
+  }
+}
+```
+
+Expected stdout:
+
+```text
+PERPLEXITY_TERMINAL_OK
+```
 
 ## First terminal call
 
@@ -157,21 +223,31 @@ Review and publish through a task branch/PR.
 
 ## Safety boundary
 
-Normal AI terminal access blocks:
+Normal authenticated AI terminal access runs as the Jetson's ordinary user and
+supports normal shell wrappers, including `bash -lc`.
+
+Direct invocation of a small set of high-risk system programs remains blocked,
+including privilege escalation, raw disk formatting/partitioning, mounting, and
+power-control commands. Credential/private-key paths are also rejected by the
+parser. These command checks are secondary guardrails, not the primary security
+boundary.
+
+The primary boundaries are:
 
 ```text
-sudo / su / doas / pkexec
-raw disk formatting/partition tools
-mount/unmount
-shutdown/reboot/poweroff
-shell -c / -lc strings
-credential/private-key paths
+per-client authentication token
+normal non-root user
+systemd NoNewPrivileges
+ProtectSystem=strict
+explicit writable repo/workspace paths
+independent SSH recovery
 ```
 
-The service sandbox permits writes to the One-Wave checkout and the explicit
+The service sandbox permits writes to the live Hive Pipe checkout, the canonical
+`~/One-Wave-Science` checkout when present, and the explicit
 `~/One-Wave-External-Work` workspace. System paths remain read-only.
 
 ## Full reference
 
 Read `JETSON_AI_ACCESS.md` for setup, tokens, tunnel configuration, all paths,
-and the ten-step acceptance test.
+and the acceptance tests.
