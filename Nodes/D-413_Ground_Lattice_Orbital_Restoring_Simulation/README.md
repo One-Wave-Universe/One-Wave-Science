@@ -1,5 +1,13 @@
 # D-413 Ground Lattice Orbital-Restoring Simulation
 
+## Canonical node links
+
+- Theory home: [`A-115 Unified Compression Field`](../A-115_Unified_Compression_Field.md)
+- Node specification: [`D-413 Ground Lattice Orbital-Restoring Simulation`](../D-413_Ground_Lattice_Orbital_Restoring_Simulation.md)
+- Repository graph: [`00_MASTER_INDEX.md`](../../00_MASTER_INDEX.md)
+
+This directory is the runnable laboratory attached to the canonical A-115 -> D-413 gravity/compression path. Results produced here are evidence about the reduced D-413 model; they do not bypass the node graph or promote the imposed curvature well into a derived gravity law.
+
 Open `index.html` in a modern browser for the canonical D-413 simulation.
 
 Open `ai_human_workstation.html` inside the Codex visualization surface for the
@@ -17,4 +25,4 @@ thresholds, hysteretic gates, resistance, surface tension, internal
 pressure/voltage, experiment presets, CSV receipts, wiki requests, and
 Codex-hosted experiment dialogue.
 
-The curvature well is imposed and the bounded shell is a Yellow reduced coordinate. This does not derive gravity, quarks, protons, charge, Mirror Gate, or Mass Effect.
+The curvature well is imposed and the bounded shell is a Yellow reduced coordinate. This does not derive gravity, quarks, protons, charge, Mirror Gate, or Mass Effect. The next direct gravity integration is to drive the lab from A-115's source-derived compression field `chi` and test the resulting `g_OW = -alpha_g * grad(chi)` against the existing imposed-well controls.
