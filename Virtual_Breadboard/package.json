@@ -19,6 +19,7 @@
     "test:spice-analysis": "node test/spice-analysis.test.js",
     "test:solver-convergence": "node test/solver-convergence.test.js",
     "test:dc-op": "node test/dc-operating-point.test.js",
+    "test:stepping": "node test/source-gmin-stepping.test.js",
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
