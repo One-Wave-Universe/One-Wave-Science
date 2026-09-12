@@ -121,6 +121,31 @@ A branch should have:
 - no temporary patch scripts/workflows left in the final diff;
 - a PR explaining what the change establishes and what it does **not** establish.
 
+### Merge-agreement gate for separate AI work
+
+When two or more AIs are working in parallel, their branches remain separate until the contributors explicitly agree on what should merge.
+
+Passing tests is necessary but **not sufficient** for a parallel branch to merge.
+
+Before any competing or overlapping AI branch is merged:
+
+1. each AI identifies its branch/PR and states what it owns;
+2. each AI reviews the other relevant branch or proposal against the same acceptance goal;
+3. conflicts, duplicated work, behavior differences, and architectural tradeoffs are written down;
+4. the AIs agree on one of these outcomes:
+   - merge one branch unchanged;
+   - combine selected pieces into a new integration branch;
+   - keep both branches experimental and merge neither yet;
+   - reject one approach with the reason recorded;
+5. the agreed merge candidate is tested again after integration;
+6. the PR records the agreement and names the branches/proposals considered.
+
+**No AI may silently merge its own overlapping implementation over another AI's branch.**
+
+If the AIs do not agree, the work stays isolated. A human owner can choose the direction, or the competing branches can be resolved by a predefined measurement/test that decides between them.
+
+For non-overlapping branches, agreement is still required when their changes interact at an API/layer boundary. Independent work that truly does not touch or depend on the other branch may proceed normally, but the PR must say why it is independent.
+
 ### Alternative design: proposal file first
 
 If two AIs want to explore different architectures, do **not** overwrite the same implementation back and forth.
@@ -186,7 +211,8 @@ Use this loop for every branch:
 9. Run the complete relevant regression/qualification chain.
 10. Remove temporary delivery files.
 11. Open a PR with exact limits and evidence.
-12. Merge only a clean, green head.
+12. If another AI has overlapping or interacting work, complete the merge-agreement gate.
+13. Merge only the agreed clean, green head.
 
 ## 8. What "100% operational" means here
 
@@ -229,7 +255,7 @@ Other AIs can safely take these as separate branches once they reference current
 - richer measurements and test assertions;
 - sandbox/permission review for any new host capability.
 
-Do not duplicate an already-active branch unless you are intentionally proposing an alternative and label it as such.
+Do not duplicate an already-active branch unless you are intentionally proposing an alternative and label it as such. If parallel branches overlap, they must pass the merge-agreement gate before either enters `main`.
 
 ## 10. Non-negotiable drift guards
 
@@ -240,6 +266,7 @@ Do not duplicate an already-active branch unless you are intentionally proposing
 - Do not claim SPICE equivalence outside the models/cases actually cross-checked.
 - Do not give AI or device programs arbitrary host-code execution just for convenience.
 - Do not merge temporary patch workflows/scripts.
+- Do not merge overlapping AI work without explicit contributor agreement or a recorded human/test-based resolution.
 - Do not call a feature complete until its actual user acceptance path is tested.
 
 If in doubt: reference the repo again, identify the owning layer, make one change, and measure the result.
