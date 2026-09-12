@@ -185,15 +185,20 @@ convergence between this framework and observation.
 - The product-stability half of the old "availability condition" (is a
   new stable harmonic-shell configuration accessible for the product)
   is still asserted, not derived at the level this chapter needs.
-  D-405 now has two candidate energy ladders (constant-spacing via
-  Model 2 + A-114's dispersion relation, and growing-spacing via Ch6
-  surface energy + Model 1), but neither is calibrated, neither is
-  mapped from shell index n to actual nucleon count (Z, A), and the two
-  candidates make different, unreconciled predictions about the ladder
-  shape. This chapter still cannot compute "is the next configuration
-  accessible" from either one yet -- the blocker moved from "no energy
-  model at all" to "two uncalibrated, unmapped candidates," which is
-  real progress but not a closed gap.
+  D-405 now identifies Model 2 (fixed nuclear radius, internal mode
+  index n) as the operative geometry for the nuclear/magic-number case
+  this chapter actually needs (Model 1's growing-radius picture turned
+  out to fit D-405's separate atomic-shell use, not this one), and has
+  two independent derivations (Model 2 + A-114's dispersion relation,
+  and A-106's breathing-mode oscillator) agreeing on a constant-spacing
+  energy ladder E_n = epsilon*n. That is real narrowing, not a full
+  answer: calibrating epsilon is blocked on C-318's own still-open
+  (YELLOW) Mass-Effect numbers -- and explicitly may NOT be shortcut
+  through the propagation-ceiling/speed route, per C-318's own
+  permanent prohibition -- and no mapping from shell index n to actual
+  nucleon count (Z, A) exists yet. This chapter still cannot compute
+  "is the next configuration accessible" numerically, but the remaining
+  blockers are now named precisely rather than left as one vague gap.
 - Stage-specific thresholds T_n are not derived from B-208's real
   bands, only proposed as applying "per-stage" without specifying how
   the universal 100-0 band structure maps onto multiple sequential
@@ -215,10 +220,11 @@ convergence between this framework and observation.
 
 ## Future Work
 
-D-405 now has two candidate energy ladders (see its own Future Work);
-pick or derive a criterion for which applies, then calibrate it and map
-shell index n to actual nucleon count (Z, A), so the product-stability
-half of the availability condition can actually be computed.
+D-405 now points to Model 2 + constant spacing for this nuclear case
+specifically (see its own Future Work); calibrate epsilon once C-318's
+Mass-Effect numbers exist, and map shell index n to actual nucleon
+count (Z, A), so the product-stability half of the availability
+condition can actually be computed.
 Cross-check the Gamow-peak table above against published reaction-rate
 data rather than leaving it as a self-computed illustration.
 Map B-208's real band structure onto the actual sequence of stellar

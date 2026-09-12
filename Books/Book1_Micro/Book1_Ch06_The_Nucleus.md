@@ -80,6 +80,17 @@ but governed by the same 2*pi*R = n*lambda condition at nuclear scale.
 Closed shells at magic numbers have zero net coupling overhang —
 all modes are fully coupled, no dangling ends.
 
+Correction (D-405): "not the same as atomic shells" is right, but D-405
+had been applying its variable-radius Model 1 (each shell its own
+growing R_n) to this nuclear case anyway, which is the atomic-shell
+picture, not this one. Nuclear shells share one fixed confining volume
+(this chapter's own R_nucleus ~ R_0*A^(1/3), independent of which shell
+a nucleon occupies) — D-405's fixed-R Model 2 (k_n = n/R) is the
+geometry that actually matches "no dangling ends" as a statement about
+which internal modes of one fixed nucleus are filled, not about a
+container that grows with each shell. See D-405's "Reconciling Model 2
+with Ch6's magic-number picture" section.
+
 Fission and fusion:
 Fission: a heavy nucleus (above iron) splits to reduce surface energy.
 The split reduces total surface-to-volume ratio.

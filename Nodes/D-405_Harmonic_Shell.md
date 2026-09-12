@@ -5,7 +5,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Geometry, Resonance, and Simulation"
-claim_gate_detail: "YELLOW — GEOMETRY FORMALIZED; THREE CANDIDATE ENERGY LADDERS DERIVED (TWO INDEPENDENT ROUTES AGREE ON CONSTANT SPACING, ONE PREDICTS GROWING SPACING; ALL FUNCTIONAL-FORM ONLY, UNCALIBRATED)"
+claim_gate_detail: "YELLOW — GEOMETRY FORMALIZED; MODEL 2 IDENTIFIED AS THE OPERATIVE NUCLEAR GEOMETRY (MODEL 1 RETAINED FOR ATOMIC SHELLS); CONSTANT-SPACING ENERGY LADDER SUPPORTED BY TWO INDEPENDENT DERIVATIONS, STILL UNCALIBRATED; CALIBRATION BLOCKED ON C-318'S OWN OPEN MASS-EFFECT NUMBERS, NOT A ROUTABLE GAP"
 metadata_standard: "I-06"
 ---
 
@@ -132,6 +132,75 @@ spacing, though neither is calibrated and A-106's breathing-mode n is not
 established to be the same quantum number as this node's winding number n
 (see A-106 12a's explicit caveat on that point).
 
+**Attempting to compute omega_breathe hits a hard, permanent wall, not a
+temporary gap.** The missing effective mass would have to come from
+Mass Effect (C-318), and C-318 explicitly and permanently forbids
+deriving mass from a propagation-ceiling/speed shortcut ("a previous
+draft incorrectly treated propagation status as a source of inertia...
+it is false, permanently erased, and prohibited from re-entry under
+alternate wording") -- which is exactly the kind of shortcut a fixed-R
+confinement problem invites (mass from a confinement-scale/c_L
+combination). C-318 itself is GREEN only on mechanism identity; its
+actual coefficients and numerical spectrum are YELLOW. So this
+candidate's normalization is not blocked on "nobody has done the
+algebra yet" -- it is blocked on the repository's own central,
+still-open Mass-Effect derivation, and must wait on that rather than
+route around it.
+
+### Reconciling Model 2 with Ch6's magic-number picture (resolved)
+
+D-405's own Downstream line already names two different application
+domains: atomic shells/electron orbitals, and nuclear magic numbers.
+These are not the same physical situation, and on inspection they
+actually want D-405's two different models separately, rather than
+needing to be forced into one:
+
+- **Atomic electron shells genuinely sit at different average radii**
+  around one nucleus (principal quantum number n, Bohr-radius-like
+  scaling with n). A picture where shell radius grows with n --
+  **Model 1** -- is the physically appropriate one here.
+- **Nuclear shells do not work this way.** Nucleons in different
+  shells (1s, 1p, 1d2s, ...) all sit within the SAME confining nuclear
+  volume (empirically, nuclear radius scales with mass number A, not
+  with which shell a given nucleon occupies -- Ch6's own `R_nucleus ~
+  R_0 * A^(1/3)`). Ch6's own magic-number language -- "all modes are
+  fully coupled, no dangling ends," a count of how many internal
+  coupling slots are filled -- describes occupancy of internal modes
+  within one fixed container, not a container that grows with each
+  new shell. That is **Model 2**'s picture (fixed R, internal mode
+  index n), not Model 1's.
+
+So D-405 applying Model 1's geometry to the *nuclear* magic-number
+story was a category mismatch: it borrowed the right formula (shell
+condition) for the wrong domain (Model 1 fits atomic shells, not
+nuclear ones). This does not mean Model 1 is wrong everywhere -- it is
+likely still right for D-405's atomic-shell downstream use -- it means
+the *nuclear*/carbon-nucleosynthesis question this node keeps getting
+asked to answer (Book5_Ch5, D-406) should have been reaching for Model
+2 all along, not Model 1 + Ch6 surface energy.
+
+This also answers the "is breathing-mode n the same as winding number
+n" question, at least for the nuclear case specifically: once Model 2
+is recognized as the right nuclear picture, its n (internal excitation
+index of one fixed-size confined system) and A-106's breathing-mode n
+(radial excitation index of one localized solution) are playing the
+same role -- counting internal excitation quanta of one fixed object --
+even though neither is proven numerically identical to the other yet.
+For the atomic-shell case, where Model 1 is likely correct instead,
+this correspondence is not expected to hold, and is not claimed to.
+
+**Net effect on the three candidates:** this is an argument, not a
+disproof -- it does not mathematically forbid a real growing-spacing
+mechanism from existing by some other route. But it removes the
+surface-energy candidate's own geometric justification for the
+specific nuclear/carbon question this repository actually needs D-405
+for, while the two constant-spacing candidates (Model 2 + A-114, and
+A-106's breathing mode) turn out to describe the same kind of picture
+for the right reason, not by coincidence. Constant spacing is now the
+better-supported candidate for the nuclear case on three independent
+grounds (two derivations plus this domain-matching argument); it is
+still not calibrated, and is still not proof.
+
 ### Honest limits of the Model-2/A-114 ladder specifically
 
 - A-114's `omega(k)` formula is a **small-k, small-gamma leading-order**
@@ -191,35 +260,42 @@ Yellow Audit:
   independent second candidate via Ch6's surface energy + Model 1's R_n
   (E_n proportional to n^2, growing spacing), plus a THIRD independent
   route via A-106's own Derrick-theorem stability analysis treated as a
-  breathing-mode oscillator (also constant spacing, pending an
-  unsupplied effective-mass term -- see A-106 section 12a). Two of three
+  breathing-mode oscillator (also constant spacing). Two of three
   independent routes now agree on constant spacing, which is real
-  supporting evidence, not proof; none is calibrated, and the surface-
-  energy candidate's growing-spacing prediction has not been ruled out;
+  supporting evidence, not proof; the surface-energy candidate's
+  growing-spacing prediction has not been mathematically ruled out, though
+  see the domain-matching argument below, which weakens its own geometric
+  justification for the nuclear case specifically;
+- CLOSED (permanent wall, not a gap): the breathing-mode candidate's
+  effective mass cannot be supplied from a propagation-ceiling/speed
+  shortcut -- C-318 explicitly and permanently forbids exactly that
+  derivation. It must wait on C-318's own still-open (YELLOW) numerical
+  Mass-Effect derivation rather than route around it;
 - lambda is not independently measured;
 - D-407's 0.6594 fm candidate is conditional on an unproved 7/8 adjacency;
 - beta and c_L (the inputs the new linear ladder's slope depends on) are
   not measured at nuclear scale (A-114's own Yellow Audit);
-- the Model-2 fixed-R excitation-mode picture is not yet reconciled with
-  Ch6's variable-radius nested-shell picture used for magic-number closure;
+- RESOLVED: the Model-2 fixed-R excitation-mode picture and Ch6's
+  variable-radius nested-shell picture were never actually competitors --
+  Model 1 fits D-405's atomic-shell downstream use (electron shells do
+  sit at growing radii), Model 2 fits the nuclear/magic-number use (all
+  nucleon shells share one fixed nuclear volume). D-405 had been applying
+  Model 1's geometry to the nuclear case, which was the mismatch. See the
+  new "Reconciling Model 2 with Ch6's magic-number picture" section;
 - radial stability hierarchy is not established;
 - relationship to the neutron two-profile model remains conditional.
 
 Future Work:
-Supply the effective-mass/kinetic term A-106's breathing-mode candidate
-needs (from A-109 or C-303) to actually compute omega_breathe, rather
-than leaving it as a functional form.
-Decide (or derive a criterion for) which candidate ladder -- constant
-spacing (Model 2 + A-114, and independently A-106's breathing mode) or
-growing spacing (Model 1 + Ch6 surface energy) -- actually applies,
-rather than carrying both indefinitely.
-Determine whether A-106's breathing-mode n and this node's winding
-number n are the same quantum number or genuinely separate axes, per
-A-106 12a's explicit caveat -- do not assume either answer.
-Reconcile Model 2's fixed-R excitation-mode picture with Ch6's
-variable-radius nested-shell picture of magic-number closure, or show they
-answer genuinely different questions (which configurations exist vs. how
-much energy separates them) that do not need to be merged into one R.
+Do not attempt to supply the breathing-mode candidate's effective mass
+from a propagation-ceiling/speed shortcut -- C-318 permanently forbids
+it. Wait on C-318's own Mass-Effect numerical derivation instead.
+For the nuclear/carbon question specifically, treat Model 2 (fixed-R,
+k_n=n/R) as the operative geometry rather than Model 1 -- Model 1 remains
+the right picture for D-405's separate atomic-shell downstream use.
+Now that constant spacing has two independent derivations plus the
+domain-matching argument above, actively look for a reason the
+surface-energy (growing-spacing) candidate could still be right for some
+other regime, rather than treating it as ruled out by weight of numbers.
 Derive the physical boundary-value problem that decides between fixed-R
 wavenumber quantization, variable-R winding shells, or radial eigenmodes,
 now that both extremes have an explicit candidate ladder to compare against.
