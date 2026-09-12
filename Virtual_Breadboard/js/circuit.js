@@ -623,10 +623,10 @@
   const MOSFET_BETA_CAL_VOV = 2.5;
   const MOSFET_CHANNEL_LAMBDA = 0.02;
   const MOSFET_MODEL_CARDS = Object.freeze({
-    AO3400A: Object.freeze({ type: 'nmos', name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30, ciss: 300e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
-    '2N7000': Object.freeze({ type: 'nmos', name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 24e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
-    AO3401A: Object.freeze({ type: 'pmos', name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30, ciss: 470e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
-    BS250: Object.freeze({ type: 'pmos', name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 40e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
+    AO3400A: Object.freeze({ type: 'nmos', name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30, ciss: 300e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 5 }),
+    '2N7000': Object.freeze({ type: 'nmos', name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 24e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 5 }),
+    AO3401A: Object.freeze({ type: 'pmos', name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30, ciss: 470e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 5 }),
+    BS250: Object.freeze({ type: 'pmos', name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 40e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 5 }),
   });
   const NMOS_PARTS = { 1.5: MOSFET_MODEL_CARDS.AO3400A, 2.1: MOSFET_MODEL_CARDS['2N7000'] };
   const PMOS_PARTS = { 1.5: MOSFET_MODEL_CARDS.AO3401A, 2.1: MOSFET_MODEL_CARDS.BS250 };
