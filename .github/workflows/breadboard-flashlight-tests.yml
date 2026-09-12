@@ -18,6 +18,7 @@ on:
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
+      - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -39,6 +40,7 @@ on:
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
+      - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -96,3 +98,6 @@ jobs:
 
       - name: Run Bode transfer qualification
         run: npm run test:bode
+
+      - name: Run pole-zero sanity qualification
+        run: npm run test:pole-zero
