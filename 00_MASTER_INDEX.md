@@ -78,7 +78,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-205 | Mirror | The flip operation between Expression and Compression states. | GREEN |
 | B-206 | Paired Loop | Reciprocal exchange between two systems alternating Expression/Compression while sharing state. | GREEN |
 | B-206a | Shared Boundary | The common reference interface between paired regions. | YELLOW |
-| B-206b | Four Views | The four directional relationships (Inward/Outward/Across/Over) of a field mode at its boundary — perspectives, not separate forces. | YELLOW |
+| B-206b | Four Views — Direction, Phase, Strength, Reference | Four descriptive readout modes available to Mirror-gate evaluation; they are not four Mirror gates and do not change the six-gate count. | YELLOW |
 | B-207 | Threshold State | Three-variable state `(q,a,p)` separating integrity, activation, and compressive/expressive polarity. | YELLOW |
 | B-208 | Threshold Windows | Separate provisional windows for activation, polarity, and integrity; low energy is not automatically break. | YELLOW |
 | B-209 | Break Condition | Integrity `q` falls below a break boundary; activation alone cannot define break. | YELLOW |
@@ -199,7 +199,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-708 | Persistence B | Interpretation that convergence (G-707) indicates successful balance. | YELLOW |
 | G-709 | Regulated-Response Balance | Regulated response under feedback — scaled, not absent or excessive. | GREEN |
 | G-710 | "Grow The Fuck Up" Gate | The transition from unregulated reaction to regulated response. | GREEN |
-| G-711 | Gate 7 | The review gate — Gates 1–6 build state, Gate 7 reviews it. | GREEN |
+| G-711 | Namika — Inter-System Relation (No Internal Gate 7) | A complete system has six internal gates; Namika names a higher-order relation between complete six-gate systems and is not an internal seventh gate. | YELLOW |
 | G-712 | Evaluation Mathematics | Formal mechanism for how E(Δₙ) produces a quantified signal (not yet derived). | YELLOW |
 | G-713 | Modulation Mathematics | Bounded cost-minimizing selection among Hold/Increase/Decrease/Redirect/Stabilize/Reject/Admit. | YELLOW |
 | G-714 | Decision Mathematics | Formal selection mechanism for Return vs. Break in the Threshold system. | YELLOW |
@@ -405,8 +405,8 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 
 | Node | Name | Definition / source | Gate |
 |---|---|---|---|
-| B-206c | Four Actions — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
-| B-221a | Six-Step Oscillator Program — Begin Build Hold Build Break Loop | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | YELLOW |
+| B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
+| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
 | B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
 | B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
 | C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
@@ -418,7 +418,7 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
 | G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`. | YELLOW |
 | G-728 | Mathematics Attack Laundry List | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-728_Mathematics_Attack_Laundry_List.md`. | BROWN |
-| G-729 | Mirror as Continuous Phase with Six-Route Projection | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
+| G-729 | Mirror Operator for the Three Mirror Gates | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
 | G-730 | History, Phase, and Hysteresis Commitment Map | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`. | YELLOW |
 | G-731 | Ground, Center, and Coherent Hold Separation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`. | YELLOW |
 | G-732 | Vortex Trial-Profile Diagnostic Repair | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`. | YELLOW |
@@ -428,7 +428,7 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-736 | Standard Model Interpretation Overlay for Micro Simulators | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`. | YELLOW |
 | G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | GREEN |
 | G-738 | Center Geometry Classification and Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`. | YELLOW |
-| G-739 | Six-Gate Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
+| G-739 | Six-Gate Mirror-Action Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
 | G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | GREEN |
 | G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`. | YELLOW |
 | G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`. | YELLOW |
