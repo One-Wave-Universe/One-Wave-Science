@@ -7,6 +7,7 @@
   "homepage": "https://github.com/One-Wave-Universe/One-Wave-Science",
   "scripts": {
     "start": "electron .",
+    "test:desktop-smoke": "electron . --smoke-test",
     "test": "node test/circuit.test.js",
     "test:qualification": "node test/qualification.test.js",
     "test:primitives": "node test/primitives.test.js",
@@ -39,8 +40,10 @@
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
+    "dist:linux-dir": "electron-builder --linux dir --x64",
     "dist:appimage": "electron-builder --linux AppImage",
-    "dist:deb": "electron-builder --linux deb",
+    "dist:deb": "electron-builder --linux deb --x64",
+    "dist:deb-arm64": "electron-builder --linux deb --arm64",
     "dist:win": "electron-builder --win portable zip",
     "dist:win-installer": "electron-builder --win nsis",
     "dist:mac": "electron-builder --mac zip",
@@ -58,7 +61,7 @@
     "directories": { "output": "dist" },
     "files": ["main.js","preload.js","index.html","style.css","js/**/*","build/icon.png","!test/**"],
     "linux": {
-      "target": [{ "target": "AppImage", "arch": ["x64"] }, { "target": "deb", "arch": ["x64"] }],
+      "target": [{ "target": "AppImage", "arch": ["x64", "arm64"] }, { "target": "deb", "arch": ["x64", "arm64"] }],
       "category": "Education",
       "executableName": "virtual-breadboard-simulator",
       "icon": "build/icon.png",
