@@ -4,15 +4,13 @@
  * SPICE-style analysis helpers for the Virtual Breadboard solver.
  *
  * This deliberately sits beside Circuit.solve() instead of refactoring the
- * load-bearing MNA core.  The first analysis implemented here is a DC source
- * sweep: vary one independent source, solve each operating point, and record
- * requested node voltages/component currents.  That is the same experiment
- * shape as SPICE .dc and gives the breadboard a repeatable transfer-curve
- * tool without changing the editor or component models.
+ * load-bearing MNA core.  Analysis modes transform only what SPICE itself
+ * treats differently from transient simulation, then hand the resulting
+ * circuit to the same generic electrical solver.
  */
 
 const CircuitEngine = require('./circuit.js');
-const { Circuit } = CircuitEngine;
+const { Circuit, inductorDCR } = CircuitEngine;
 
 function cloneElements(elements) {
   return JSON.parse(JSON.stringify(elements || { wires: [], components: [] }));
@@ -34,9 +32,6 @@ function sweepValues(start, stop, step) {
   }
 
   const out = [];
-  // Floating-point sweeps must not miss the requested stop because 0.1 is
-  // not exactly representable.  Compute by integer index and admit a tiny
-  // endpoint epsilon rather than repeatedly adding step to the prior value.
   const span = Math.abs(stop - start);
   const eps = Math.max(1, Math.abs(start), Math.abs(stop)) * 1e-12;
   const maxPoints = 100000;
@@ -77,18 +72,74 @@ function sampleProbes(result, probes) {
 }
 
 /**
+ * Build and solve a true DC operating point (.op-class).
+ *
+ * DC rules are explicit and history-free:
+ *   - capacitors are open circuits and therefore carry 0 A DC current;
+ *   - inductors lose only their reactive L/dt term and retain the same real
+ *     winding DCR already used by the transient solver;
+ *   - a fresh Circuit instance is always used, so capacitor voltage,
+ *     inductor current, battery/runtime state, and magnetic transient history
+ *     from any earlier simulation cannot leak into this answer.
+ *
+ * Everything else is still solved by Circuit.solve(), including the same MNA,
+ * nonlinear device iteration, GMIN, convergence report, and fault warnings.
+ */
+function operatingPoint(elements, options) {
+  options = options || {};
+  const ambientC = options.ambientC;
+  if (ambientC != null) finiteNumber('ambientC', ambientC);
+
+  const original = cloneElements(elements);
+  const dcElements = cloneElements(elements);
+  const capacitorIds = [];
+
+  dcElements.components = (dcElements.components || []).flatMap((component) => {
+    if (component.type === 'capacitor') {
+      capacitorIds.push(component.id);
+      return [];
+    }
+    if (component.type === 'inductor') {
+      return [{
+        id: component.id,
+        label: component.label,
+        type: 'resistor',
+        a: component.a,
+        b: component.b,
+        value: inductorDCR(component.value),
+      }];
+    }
+    return [component];
+  });
+
+  const circuit = new Circuit();
+  // dt is irrelevant to the transformed C/L network, but the generic solver
+  // still accepts one because other transient-capable component models share
+  // the same entry point. A fixed positive value keeps that API well-defined.
+  const result = circuit.solve(dcElements, 1, ambientC, options.solverOptions);
+
+  // Preserve original component IDs as measurable DC quantities. Removed
+  // capacitors are true open circuits, so their DC current is exactly zero.
+  for (const id of capacitorIds) result.currents.set(id, 0);
+
+  result.analysis = {
+    type: 'op',
+    historyIndependent: true,
+    capacitorRule: 'open-circuit',
+    inductorRule: 'winding-dcr',
+  };
+  result.originalElements = original;
+  result.dcElements = dcElements;
+  return result;
+}
+
+/**
  * Sweep one independent source through a numeric range.
  *
- * Supported swept sources for the first implementation: battery and
- * diffsource.  Those are the Virtual Breadboard's real DC independent
- * voltage-source types.  AC sources are intentionally excluded because a
- * transient sinusoid's instantaneous value is not a DC operating parameter.
- *
- * By default every point gets a fresh Circuit instance.  That prevents a
- * capacitor/core/battery history from one point contaminating the next point.
- * Set continuation=true when deliberately testing hysteresis/history; then the
- * same Circuit state is carried point-to-point, similar to continuation in a
- * nonlinear sweep.
+ * Supported swept sources: battery and diffsource. Each point uses a fresh
+ * Circuit by default so history does not silently contaminate the transfer
+ * curve. continuation=true retains the older deliberate history/hysteresis
+ * experiment mode.
  */
 function dcSweep(elements, options) {
   options = options || {};
@@ -146,4 +197,4 @@ function dcSweep(elements, options) {
   };
 }
 
-module.exports = { dcSweep, sweepValues };
+module.exports = { operatingPoint, dcSweep, sweepValues };

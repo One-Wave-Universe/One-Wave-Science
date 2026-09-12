@@ -20,9 +20,9 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 
 ### P1 — analysis modes and numerical truth
 
-1. **DC source sweep (`.dc`-class)** — IMPLEMENTED on this branch in `js/spice-analysis.js`.
-2. **Convergence report** — every solve must report iteration count, converged/not-converged, and a numerical residual/tolerance result. Hitting the iteration ceiling must be a named solver failure, never a silent answer.
-3. **True DC operating point (`.op`-class)** — capacitors open at DC, inductors use their DC path, independent transient history must not be required to obtain the operating point.
+1. **DC source sweep (`.dc`-class)** — IMPLEMENTED in `js/spice-analysis.js`.
+2. **Convergence report** — IMPLEMENTED. Every nonlinear solve reports iteration count, state stability, numerical residual/tolerance, and converged/not-converged; iteration-ceiling failure is named `SOLVER FAILED`.
+3. **True DC operating point (`.op`-class)** — IMPLEMENTED in `js/spice-analysis.js`. Capacitors are open at DC, inductors retain their declared winding DCR with no reactive term, and every `.op` solve uses fresh solver state so transient history is not required.
 4. **Source stepping / GMIN stepping** — hard nonlinear circuits should be approached gradually instead of only retrying the same fixed point.
 
 ### P2 — nonlinear device quality
