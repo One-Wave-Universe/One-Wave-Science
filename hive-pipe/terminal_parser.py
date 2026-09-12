@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Structured terminal parser/executor for the Jetson Hive Pipe gateway.
 
-The parser accepts argv arrays instead of free-form shell strings, validates a
-small set of hard stops, runs as the current unprivileged Jetson user, and
-returns structured stdout/stderr/exit status for the calling AI.
+The parser accepts argv arrays, runs as the current unprivileged Jetson user,
+and returns structured stdout/stderr/exit status for the calling AI. Normal
+shell wrappers such as ``bash -lc`` are supported because several AI clients use
+them for routine terminal work.
 """
 
 from __future__ import annotations
@@ -22,7 +23,10 @@ MAX_ARG_LEN = 4096
 MAX_TIMEOUT = 300
 MAX_OUTPUT = 512 * 1024
 
-# These are intentionally unavailable through normal AI terminal access.
+# Direct high-risk system programs remain unavailable through normal AI terminal
+# access. The primary boundaries are still non-root execution, systemd
+# NoNewPrivileges/ProtectSystem, authenticated client tokens, and bounded writable
+# directories; this list is not treated as the main security boundary.
 BLOCKED_PROGRAMS = {
     "sudo", "su", "doas", "pkexec",
     "mount", "umount", "fdisk", "cfdisk", "sfdisk", "parted", "gdisk",
@@ -30,9 +34,6 @@ BLOCKED_PROGRAMS = {
     "wipefs", "cryptsetup", "losetup", "blockdev", "hdparm",
     "shutdown", "reboot", "poweroff", "halt",
 }
-
-# Shells are permitted only for executing a script file, never -c/-lc strings.
-SHELLS = {"bash", "sh", "dash", "zsh"}
 
 SENSITIVE_PARTS = (
     "/.ssh/",
@@ -81,13 +82,6 @@ def _validate_argv(argv: Any) -> list[str]:
     if program in BLOCKED_PROGRAMS or program.startswith("mkfs."):
         raise ValueError(f"program is disabled through AI terminal access: {program}")
 
-    if program in SHELLS:
-        forbidden = {"-c", "-lc", "-cl", "--command"}
-        if any(arg in forbidden for arg in argv[1:]):
-            raise ValueError("shell command strings are disabled; pass argv directly")
-        if len(argv) < 2:
-            raise ValueError("shells may only execute an explicit script file")
-
     joined = "\n".join(argv)
     for marker in SENSITIVE_PARTS:
         if marker in joined:
@@ -119,7 +113,6 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
 
     started = time.monotonic()
     env = os.environ.copy()
-    # Keep normal PATH/tooling, but never manufacture or print secrets here.
     env.setdefault("LANG", "C.UTF-8")
 
     try:

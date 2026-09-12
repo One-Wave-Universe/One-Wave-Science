@@ -3,7 +3,7 @@
 Hive Pipe is the authenticated Jetson-side tool gateway used by AI clients,
 GitHub Actions, and direct remote clients.
 
-It has two layers:
+It exposes:
 
 ```text
 MCP / authenticated HTTP
@@ -29,9 +29,8 @@ hive-pipe/install_gateway.sh
 ```
 
 The gateway binds to `127.0.0.1:8765` and exposes MCP at `/mcp`.
-
 Do not run the legacy `scripts/jetson_gateway.py` beside Hive Pipe; it uses the
-same port. `scripts/install_jetson_gateway.sh` now delegates to this installer.
+same port. `scripts/install_jetson_gateway.sh` delegates to this installer.
 
 ## Install on the Jetson
 
@@ -40,47 +39,50 @@ cd "$HOME/One-Wave-Science"
 bash hive-pipe/install_gateway.sh
 ```
 
-This installs and restarts:
+This installs/restarts `hive-pipe-agent.service` and
+`hive-pipe-gateway.service`, creates the external-work workspace, and creates
+separate client tokens for:
 
 ```text
-hive-pipe-agent.service
-hive-pipe-gateway.service
+codex
+claude
+gemini
+perplexity
 ```
 
-It creates separate client tokens under:
+Tokens live under `~/.config/hive-pipe/tokens/` and remain outside git.
+Add another client with:
+
+```bash
+bash hive-pipe/create_client_token.sh CLIENT_NAME
+```
+
+## Authentication
+
+The gateway accepts any configured client token through common MCP/API-key
+forms:
 
 ```text
-~/.config/hive-pipe/tokens/
+Authorization: Bearer <token>
+Authorization: ApiKey <token>
+X-API-Key: <token>
+Api-Key: <token>
 ```
 
-and an explicit external-work area at:
-
-```text
-~/One-Wave-External-Work/
-```
-
-The systemd sandbox keeps system paths read-only while allowing writes to the
-One-Wave checkout and that explicit external-work directory.
+This makes clients such as Perplexity remote custom MCP connectors usable
+without forcing one provider-specific header format.
 
 ## Terminal parser
 
-`terminal_run` accepts a structured argv array. Example MCP call:
+`terminal_run` accepts a structured argv array. It also permits normal shell
+wrappers such as:
 
 ```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/call",
-  "params": {
-    "name": "terminal_run",
-    "arguments": {
-      "argv": ["git", "status", "--short", "--branch"],
-      "cwd": "/home/Scales/One-Wave-Science",
-      "timeout": 60
-    }
-  }
-}
+["bash", "-lc", "git status --short --branch"]
 ```
+
+That compatibility matters for AI clients that routinely wrap terminal work in
+`bash -lc`.
 
 The result contains:
 
@@ -94,69 +96,47 @@ output_clipped
 timed_out (when applicable)
 ```
 
-The parser runs with `shell=False`. It blocks normal AI access to privilege
-escalation, raw-device/formatting tools, power commands, credential/private-key
-paths, and shell `-c/-lc` command strings.
+Direct invocation of a small set of high-risk system programs remains blocked,
+including privilege escalation, raw-device/formatting tools, mounting, and
+power-control commands. Credential/private-key paths are also rejected. These
+checks are secondary guardrails; the primary boundaries are authenticated
+per-client tokens, normal non-root execution, `NoNewPrivileges`,
+`ProtectSystem=strict`, and explicit writable directories.
 
-It is intentionally usable for normal development commands such as `git`,
-`python3`, test runners, compilers, and project scripts.
+Normal development commands, shell pipelines/wrappers, `git`, `python3`, test
+runners, compilers, and project scripts are supported.
 
-## Named queue actions
+## Perplexity test
 
-The older bounded queue remains for simple named actions:
-
-```text
-queue/pending/<job-id>.json
-        -> agent.sh
-        -> mudl.py run
-        -> queue/results/<job-id>.json
-        -> queue/done/<job-id>.json
-```
-
-List enabled actions with:
+After installing the current gateway:
 
 ```bash
-python3 hive-pipe/mudl.py actions
-```
-
-## Local test
-
-```bash
-TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/codex.token")"
+TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/perplexity.token")"
 
 curl -sS \
-  -H "Authorization: Bearer $TOKEN" \
+  -H "X-API-Key: $TOKEN" \
   -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["printf","AI_TERMINAL_OK"]}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["bash","-lc","printf PERPLEXITY_TERMINAL_OK"]}}}' \
   http://127.0.0.1:8765/mcp
 ```
 
-Expected structured output contains `AI_TERMINAL_OK` and exit code `0`.
+Expected output contains `PERPLEXITY_TERMINAL_OK` and exit code `0`.
+
+For a Perplexity remote custom connector use:
+
+```text
+URL: https://YOUR-TUNNEL/mcp
+Transport: Streamable HTTP
+Authentication: API Key
+Key: contents of ~/.config/hive-pipe/tokens/perplexity.token
+```
 
 ## Remote paths
 
-Hive Pipe can be reached through an authenticated reverse tunnel. Keep the
-server bound to loopback and point Cloudflare/another trusted tunnel at:
-
-```text
-http://127.0.0.1:8765
-```
-
-Remote MCP URL:
-
-```text
-https://YOUR-TUNNEL/mcp
-```
-
-Every request still requires a Hive Pipe bearer token.
-
-The same MCP terminal parser is used by:
-
-- `.github/workflows/jetson-command.yml` for GitHub -> Jetson;
-- `scripts/jetson_remote.sh` for direct HTTPS client -> Jetson;
-- connected MCP-capable AI clients.
-
-SSH remains a separate recovery path and does not depend on Hive Pipe.
+Keep Hive Pipe bound to loopback and expose it only through the authenticated
+reverse tunnel. The same parser is used by GitHub -> Jetson, direct HTTPS
+clients, and connected MCP-capable AI clients. SSH remains the independent
+recovery path.
 
 ## External work
 

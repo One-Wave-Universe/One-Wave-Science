@@ -39,10 +39,12 @@ class GatewayTests(unittest.TestCase):
         self.paths.stop()
         self.temp.cleanup()
 
-    def request(self, path, *, method="GET", body=None, token="test-token"):
+    def request(self, path, *, method="GET", body=None, token="test-token", headers=None):
         data = json.dumps(body).encode() if body is not None else None
-        headers = {"Authorization": f"Bearer {token}"}
-        request = Request(self.base + path, data=data, headers=headers, method=method)
+        request_headers = dict(headers or {})
+        if token is not None and not request_headers:
+            request_headers["Authorization"] = f"Bearer {token}"
+        request = Request(self.base + path, data=data, headers=request_headers, method=method)
         with urlopen(request) as response:
             return response.status, json.loads(response.read())
 
@@ -50,6 +52,24 @@ class GatewayTests(unittest.TestCase):
         with self.assertRaises(HTTPError) as caught:
             self.request("/v1/health", token="wrong")
         self.assertEqual(caught.exception.code, 401)
+
+    def test_accepts_api_key_header_for_remote_mcp_clients(self):
+        status, health = self.request(
+            "/v1/health",
+            token=None,
+            headers={"X-API-Key": "test-token"},
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(health["status"], "ok")
+
+    def test_accepts_api_key_authorization_scheme(self):
+        status, health = self.request(
+            "/v1/health",
+            token=None,
+            headers={"Authorization": "ApiKey test-token"},
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(health["status"], "ok")
 
     def test_health_reports_terminal_tools(self):
         status, health = self.request("/v1/health")
@@ -82,7 +102,7 @@ class GatewayTests(unittest.TestCase):
         })
         self.assertEqual(status, 200)
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "one-wave-hive-pipe")
-        self.assertEqual(initialized["result"]["serverInfo"]["version"], "3.0")
+        self.assertEqual(initialized["result"]["serverInfo"]["version"], "3.1")
         status, listed = self.request("/mcp", method="POST", body={
             "jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}
         })
@@ -107,6 +127,20 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(result["stdout"], "AI_TERMINAL_OK")
         self.assertEqual(result["exit_code"], 0)
         self.assertIn("cwd", result)
+
+    def test_mcp_terminal_run_accepts_perplexity_style_bash_lc(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 22, "method": "tools/call",
+            "params": {
+                "name": "terminal_run",
+                "arguments": {"argv": ["bash", "-lc", "printf PERPLEXITY_MCP_OK"]},
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["stdout"], "PERPLEXITY_MCP_OK")
+        self.assertEqual(result["exit_code"], 0)
 
     def test_mcp_terminal_which(self):
         status, called = self.request("/mcp", method="POST", body={

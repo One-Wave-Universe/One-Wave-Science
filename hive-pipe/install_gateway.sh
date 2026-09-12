@@ -15,7 +15,8 @@ mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
 mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
 chmod 700 "$CONFIG_DIR" "$TOKEN_DIR"
 
-for agent in codex claude gemini; do
+# First-class AI clients. Additional clients can be added with create_client_token.sh.
+for agent in codex claude gemini perplexity; do
   token_file="$TOKEN_DIR/$agent.token"
   if [[ ! -e "$token_file" ]]; then
     umask 077
@@ -98,3 +99,4 @@ if [[ -n "$escaped_project" ]]; then
 fi
 echo "Writable external work: $EXTERNAL_WORK_ROOT"
 echo "Tokens: $TOKEN_DIR (0600; never commit or paste them into the public repository)"
+echo "Default clients: codex, claude, gemini, perplexity"
