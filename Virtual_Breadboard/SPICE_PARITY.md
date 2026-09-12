@@ -28,7 +28,7 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 ### P2 — nonlinear device quality
 
 5. **Continuous diode equation + Newton linearization** — IMPLEMENTED as opt-in `solverOptions.diodeModel = 'newton'`. Plain diodes use a temperature-scaled Shockley I-V law, each nonlinear iteration stamps the local tangent conductance/current-source companion, voltage limiting prevents exponential overflow, and convergence requires the diode terminal voltage to settle. The original constant-drop threshold model remains the default fast/simple mode so existing breadboard builds keep their prior behavior.
-6. **Continuous MOSFET I-V model** — cutoff / triode / saturation rather than threshold + fixed RDS(on) only; preserve explicit body diode and parasitics.
+6. **Continuous MOSFET I-V model** — IMPLEMENTED as opt-in `solverOptions.mosfetModel = 'continuous'`. The channel uses a square-law large-signal model with cutoff, triode, and saturation regions plus modest channel-length modulation; each nonlinear iteration stamps a Newton Jacobian around the previous terminal voltages. The channel is bidirectional when enhanced, temperature dependence remains tied to the existing RDS(on) behavior, and the explicit body diode, gate capacitance, leakage, ratings, and thermal accounting remain separate. The original threshold + fixed-RDS(on) model remains the default fast/simple mode.
 7. **Convergence tolerances** — RELTOL / VNTOL / ABSTOL-style voltage-current criteria rather than state flips alone.
 
 ### P3 — frequency-domain analysis
