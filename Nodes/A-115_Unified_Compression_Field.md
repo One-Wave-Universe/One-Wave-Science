@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**
 Upstream: A-101 Ground / Zero, A-102 Displacement, A-104 Gradient, A-105 Restoring Response, A-106 Pressure Response, A-109 Inertial Memory, A-112 Persistent Mode, A-116 Three-Dimensional Spherical Default, C-309 Friction Limit
-Downstream: Book 1 Ch12 Gravity, Book 1 Ch14 Mass Effect, Book 1 Ch15 Higgs, Book 5 Ch1 Galaxies and Dark Matter, C-301 Mirror Gate, C-322 Mirror-Gate 125 GeV Boundary Response, E-528 Static Redshift Transport, E-529 Low-Coupling Return Mode, E-530 White Energy Recirculation, Book 5 Ch4 Black Holes and Quasars
+Downstream: Book 1 Ch12 Gravity, D-413 Ground Lattice Orbital-Restoring Simulation, Book 1 Ch14 Mass Effect, Book 1 Ch15 Higgs, Book 5 Ch1 Galaxies and Dark Matter, C-301 Mirror Gate, C-322 Mirror-Gate 125 GeV Boundary Response, E-528 Static Redshift Transport, E-529 Low-Coupling Return Mode, E-530 White Energy Recirculation, Book 5 Ch4 Black Holes and Quasars
 
 ## Purpose
 
@@ -22,6 +22,18 @@ This node gives one load-bearing home to a central One-Wave claim:
 > Gravity, dark-matter behavior, local Mass Effect, and the Mirror-Gate boundary response are measurement views of one displaced, compressed, restoring field.
 
 The same field has an outward return channel called **White Energy**. White Energy means quasar/white-hole-scale ejection and reinjection. It does not mean expansion of space.
+
+## Runnable Gravity Laboratory
+
+[D-413 Ground Lattice Orbital-Restoring Simulation](D-413_Ground_Lattice_Orbital_Restoring_Simulation.md) is the canonical runnable reduced laboratory attached to this node.
+
+```text
+A-115 Unified Compression Field
+-> D-413 Ground Lattice Orbital-Restoring Simulation
+-> numerical orbit / restoring-gradient / shell-torque controls and ablations
+```
+
+D-413 currently imposes its curvature depression. It tests the consequences of a declared gravity-like restoring geometry and the lattice response around it; it does **not** yet derive the A-115 gravity law. Promotion requires replacing that imposed well with a source-derived A-115 compression field and testing whether the same fixed law reproduces the required limits.
 
 ## 1. Field Variables
 
