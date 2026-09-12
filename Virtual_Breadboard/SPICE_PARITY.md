@@ -39,7 +39,7 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 
 ### P4 — sources, controlled elements, and model coverage
 
-11. Current sources and controlled sources (VCCS/VCVS/CCCS/CCVS).
+11. **Current sources and controlled sources (VCCS/VCVS/CCCS/CCVS)** — IMPLEMENTED in the generic MNA core and small-signal AC analyzer. `isource` is an ideal independent current source with positive current defined from `a` to `b`; VCCS/VCVS use differential `controlP`/`controlN` voltage; CCCS/CCVS use classic SPICE-style `controlSourceId` to reference the MNA branch current of a named voltage-source element. VCVS/CCVS get their own MNA branch-current unknowns, invalid current-control references fail loudly, and the same definitions work through transient/DC solves and `.op`. AC analysis supports all five source families, including an independent current source as the selected phasor excitation, and explicitly prefers a named `gnd`/`ground`/`0` node for the AC reference. Permanent qualification checks independent-current Ohm's law, VCCS/VCVS gain, CCCS/CCVS sign and gain, AC excitation/gain, and invalid-reference rejection.
 12. BJT support.
 13. Better MOSFET parameter sets / model cards.
 14. Piecewise-linear and pulse sources for repeatable transient tests.
