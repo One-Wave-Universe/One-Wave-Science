@@ -1,6 +1,7 @@
 === sync check ===
-node graph discovery surfaces already synchronized
-sync_exit=0
+node graph discovery surfaces are stale:
+- 00_MASTER_INDEX.md
+sync_exit=1
 === graph audit ===
 canonical nodes parsed: 199
 node artifacts parsed: 5
