@@ -2,17 +2,19 @@ const { Circuit, check } = require('./_lib');
 
 // Physical-shape qualification for CELL_V1.
 //
-// IMPORTANT COUNT BOUNDARY:
+// COUNT BOUNDARY:
 //   3 logical Mirror gates: G+, G0, G-
 //   each logical station has an upper bilateral leg and a lower bilateral leg
 //   each bilateral leg uses 2 source-to-source NMOS devices
 //   => 12 MOSFET devices in this explicit bench model, but still only 3
-//      logical Mirror gates. Hardware device count must not redefine gate count.
+//      logical Mirror gates. Hardware device count does not redefine gate count.
 //
-// The two legs are mirrored around CENTER. In balance, current delivered from
-// PLUS into CENTER through the upper leg is matched by current leaving CENTER
-// toward MINUS through the lower leg. Imbalance is the observable; CENTER must
-// remain a reference rather than becoming the load return that wanders.
+// Each station has ONE local midpoint. The upper bilateral leg arrives from
+// PLUS, the lower bilateral leg leaves toward MINUS, and the local midpoint
+// is tied to the CENTER spine through a small sense resistor. In a symmetric
+// hold most current passes PLUS -> station -> MINUS and almost no imbalance
+// current enters CENTER. A deliberate arm mismatch creates a measurable center
+// receipt while the buffered reference itself must stay stiff.
 
 function addBilateralPair(components, id, left, right, enabled) {
   const source = `${id}_source`;
@@ -33,21 +35,22 @@ function solveCell({ enabled = true, leanStation = null } = {}) {
 
   for (const station of ['gp', 'g0', 'gm']) {
     const upperR = station === leanStation ? 680 : 1000;
-    const lowerR = 1000;
     const upperIn = `${station}_upper_in`;
     const lowerOut = `${station}_lower_out`;
+    const tap = `${station}_tap`;
 
     components.push(
       { id: `${station}_ru`, type: 'resistor', value: upperR, a: 'plus', b: upperIn },
-      { id: `${station}_rl`, type: 'resistor', value: lowerR, a: lowerOut, b: 'minus' },
+      { id: `${station}_rl`, type: 'resistor', value: 1000, a: lowerOut, b: 'minus' },
+      { id: `${station}_rg`, type: 'resistor', value: 10, a: tap, b: 'center' },
     );
-    addBilateralPair(components, `${station}_upper`, upperIn, 'center', enabled);
-    addBilateralPair(components, `${station}_lower`, 'center', lowerOut, enabled);
+    addBilateralPair(components, `${station}_upper`, upperIn, tap, enabled);
+    addBilateralPair(components, `${station}_lower`, tap, lowerOut, enabled);
   }
 
   const els = { wires: [], components };
   let res;
-  for (let i = 0; i < 40; i++) res = c.solve(els, 0.0001);
+  for (let i = 0; i < 50; i++) res = c.solve(els, 0.0001);
 
   const vp = res.voltages.get('plus');
   const vg = res.voltages.get('center');
@@ -55,12 +58,17 @@ function solveCell({ enabled = true, leanStation = null } = {}) {
   const stationCurrents = {};
   let upperTotal = 0;
   let lowerTotal = 0;
+  let centerReceiptTotal = 0;
+
   for (const station of ['gp', 'g0', 'gm']) {
     const upper = Math.abs(res.currents.get(`${station}_ru`) || 0);
     const lower = Math.abs(res.currents.get(`${station}_rl`) || 0);
-    stationCurrents[station] = { upper, lower, delta: upper - lower };
+    const centerReceipt = res.currents.get(`${station}_rg`) || 0;
+    const tapV = res.voltages.get(`${station}_tap`);
+    stationCurrents[station] = { upper, lower, centerReceipt, tapV };
     upperTotal += upper;
     lowerTotal += lower;
+    centerReceiptTotal += centerReceipt;
   }
 
   return {
@@ -69,7 +77,7 @@ function solveCell({ enabled = true, leanStation = null } = {}) {
     stationCurrents,
     upperTotal,
     lowerTotal,
-    imbalance: upperTotal - lowerTotal,
+    centerReceiptTotal,
     warnings: res.warnings || [],
   };
 }
@@ -87,20 +95,25 @@ function run() {
       `lower total OFF=${(off.lowerTotal * 1e6).toFixed(3)}uA`),
     check('full-cell-balanced-center-stays-midpoint', true, Math.abs(balanced.vg - balanced.ideal) < 0.002, null,
       `CENTER=${balanced.vg.toFixed(5)}V midpoint=${balanced.ideal.toFixed(5)}V`),
-    check('full-cell-balanced-net-center-current-cancels', true, Math.abs(balanced.imbalance) < 5e-5, null,
-      `upper=${(balanced.upperTotal * 1000).toFixed(3)}mA lower=${(balanced.lowerTotal * 1000).toFixed(3)}mA delta=${(balanced.imbalance * 1e6).toFixed(2)}uA`),
+    check('full-cell-balanced-center-receipt-near-zero', true, Math.abs(balanced.centerReceiptTotal) < 5e-5, null,
+      `net I_G receipt=${(balanced.centerReceiptTotal * 1e6).toFixed(2)}uA`),
   );
 
-  for (const [station, currents] of Object.entries(balanced.stationCurrents)) {
+  for (const [station, s] of Object.entries(balanced.stationCurrents)) {
     checks.push(
-      check(`${station}-mirrored-upper-lower-current-match`, true, Math.abs(currents.delta) < 5e-5, null,
-        `upper=${(currents.upper * 1000).toFixed(3)}mA lower=${(currents.lower * 1000).toFixed(3)}mA`),
+      check(`${station}-mirrored-upper-lower-current-match`, true, Math.abs(s.upper - s.lower) < 5e-5, null,
+        `upper=${(s.upper * 1000).toFixed(3)}mA lower=${(s.lower * 1000).toFixed(3)}mA`),
+      check(`${station}-tap-sits-near-center-in-hold`, true, Math.abs(s.tapV - balanced.vg) < 0.002, null,
+        `tap-center=${((s.tapV - balanced.vg) * 1000).toFixed(3)}mV`),
     );
   }
 
+  const leanG0 = lean.stationCurrents.g0;
   checks.push(
-    check('full-cell-g0-resistor-lean-creates-measurable-differential', true, Math.abs(lean.imbalance) > 5e-4, null,
-      `lean imbalance=${(lean.imbalance * 1000).toFixed(3)}mA`),
+    check('full-cell-g0-resistor-lean-creates-center-receipt', true, Math.abs(leanG0.centerReceipt) > 5e-4, null,
+      `G0 I_G receipt=${(leanG0.centerReceipt * 1000).toFixed(3)}mA`),
+    check('full-cell-g0-lean-moves-local-tap-from-center', true, Math.abs(leanG0.tapV - lean.vg) > 0.005, null,
+      `G0 tap-center=${((leanG0.tapV - lean.vg) * 1000).toFixed(3)}mV`),
     check('full-cell-center-remains-reference-during-lean', true, Math.abs(lean.vg - lean.ideal) < 0.005, null,
       `lean CENTER error=${(Math.abs(lean.vg - lean.ideal) * 1000).toFixed(3)}mV`),
     check('full-cell-no-solver-warning-balanced', true, balanced.warnings.length === 0, null,
