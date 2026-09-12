@@ -26,6 +26,7 @@
     "test:ac-analysis": "node test/ac-analysis.test.js",
     "test:bode": "node test/bode-analysis.test.js",
     "test:pole-zero": "node test/pole-zero-sanity.test.js",
+    "test:controlled-sources": "node test/controlled-sources.test.js",
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
