@@ -14,7 +14,7 @@ metadata_standard: "I-06"
 **Dependencies**  
 Upstream: A-101 Ground / Zero, A-102 Displacement, A-104 Gradient, A-117 Dimensional Integrity, B-206 Paired Loop  
 Lateral: D-411 Mirrored Axis Pairs, D-412 Lattice Simulation Standard, E-520 Recursive Self-Modeling Levels, E-524 Kuramoto Lattice Synchronization  
-Downstream: D-413 Ground-lattice orbital-restoring simulation, circulation-emergence simulation, quark-phase simulation, Wave Computer cell simulations
+Downstream: C-319 Magnetic Lattice Reorganization, D-413 Ground-lattice orbital-restoring simulation, circulation-emergence simulation, quark-phase simulation, Wave Computer cell simulations
 
 ## Definition
 
@@ -114,6 +114,12 @@ For the six-edge ring, a discrete circulation measure is
 
 A nonzero \(\Gamma_6\) is circulation evidence. It is not by itself a quark or stable Vortex Phase.
 
+## Magnetic-Reorganization Handoff
+
+C-319 may use this six-neighbor lattice as the first planar control for directional path reorganization. In that use, magnetic reorganization changes measured edge/path weights or accessibility variables; it does not authorize a renderer-only distortion or a new hidden connection graph.
+
+Any result remains a 2D precursor until the same rule is translated to D-409's native 3D coordination.
+
 ## Seed of Life and Flower of Life View
 
 Place equal-radius influence circles on the triangular-lattice centers. One center plus its six surrounding centers produces the seven-circle Seed-of-Life arrangement. Repetition produces the Flower-of-Life overlap pattern.
@@ -154,7 +160,8 @@ for all sites, with zero net update. Stationary means zero net motion, not a fro
 4. shear input;
 5. ring-circulation input;
 6. resistance sweep;
-7. overlap-field visualization generated from the same state arrays.
+7. overlap-field visualization generated from the same state arrays;
+8. C-319 magnetic-reorganization ON/OFF control with identical initial lattice state.
 
 D-413 now supplies the first runnable reduced implementation of this geometry, including Ground-fixed and displacement-fixed views, a curvature-well candidate, lattice bunching, and torque ablations.
 
@@ -170,7 +177,7 @@ Every run must satisfy D-412 and record:
 
 ## Dimensional Boundary
 
-This node is natively 2D. It can test planar transfer and circulation emergence. It cannot establish a complete 3D Vortex Phase, Three-Vortex Knot, volumetric shell, or Mass Effect tensor.
+This node is natively 2D. It can test planar transfer and circulation emergence. It cannot establish a complete 3D Vortex Phase, Three-Vortex Knot, volumetric shell, Mass Effect tensor, or planetary magnetic-gravity coupling.
 
 Those require D-409 and the relevant physical nodes.
 
