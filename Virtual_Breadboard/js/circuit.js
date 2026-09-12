@@ -1471,6 +1471,15 @@
       // used by classic SPICE pnjlim-style junction limiting.
       const bjtLimitedJunctions = new Map();
       bjts.forEach((q) => bjtLimitedJunctions.set(q.id, { vbe: 0, vbc: 0 }));
+      // Plain-diode Newton limiting follows the same SPICE-style principle as
+      // the BJT junction limiter above: limit only the expansion point, never
+      // the final diode equation. This replaces the old permanent 0.8 V
+      // exponential clamp, which incorrectly turned the high-forward-bias
+      // Shockley curve into a tangent-line extrapolation.
+      const diodeLimitedJunctions = new Map();
+      diodes.forEach((d) => {
+        if (d.type === 'diode' && solverOptions && solverOptions.diodeModel === 'newton') diodeLimitedJunctions.set(d.id, 0);
+      });
       const reltol = solverOptions && Number.isFinite(solverOptions.reltol) ? Math.max(0, solverOptions.reltol) : 1e-3;
       const vntol = solverOptions && Number.isFinite(solverOptions.vntol) ? Math.max(0, solverOptions.vntol) : 1e-6;
       const abstol = solverOptions && Number.isFinite(solverOptions.abstol) ? Math.max(0, solverOptions.abstol) : 1e-12;
@@ -1509,6 +1518,7 @@
         // expansion point. Do not let stable node voltages alone masquerade
         // as convergence while the limiter is still walking toward Vbe/Vbc.
         let bjtJunctionLimitsSettled = true;
+        let diodeJunctionLimitsSettled = true;
         // real output/protection clamp diode: same on/off ideal-diode
         // stamp as the LED/rectifier and MOSFET body-diode models above,
         // just reused here for "this pin cannot swing past its own supply
@@ -1628,11 +1638,17 @@
               const j = gi(uf.find(c.b));
               const va0 = previousVoltages.get(uf.find(c.a)) || 0;
               const vb0 = previousVoltages.get(uf.find(c.b)) || 0;
-              const vdRaw = va0 - vb0;
+              const targetVd = va0 - vb0;
+              const lastVd = diodeLimitedJunctions.get(c.id) || 0;
+              const maxJunctionStep = 0.05;
+              const vd = targetVd > lastVd + maxJunctionStep ? lastVd + maxJunctionStep : targetVd;
+              diodeLimitedJunctions.set(c.id, vd);
+              const limitTol = vntol + reltol * Math.max(Math.abs(targetVd), Math.abs(vd));
+              if (Math.abs(targetVd - vd) > limitTol) diodeJunctionLimitsSettled = false;
               const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);
               const nvt = DIODE_N * vt;
-              const vd = Math.max(-5, Math.min(0.8, vdRaw));
-              const ev = Math.exp(vd / nvt);
+              const exponent = Math.max(-100, Math.min(40, vd / nvt));
+              const ev = Math.exp(exponent);
               const id0 = DIODE_IS * (ev - 1);
               const gd = Math.max(DIODE_IS / nvt, DIODE_IS * ev / nvt);
               const ieq = id0 - gd * vd;
@@ -2226,7 +2242,7 @@
         voltages = new Map();
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
-        let changed = !bjtJunctionLimitsSettled;
+        let changed = !bjtJunctionLimitsSettled || !diodeJunctionLimitsSettled;
         // same on/off ideal-diode fixed-point decision as the LED/diode
         // and MOSFET body-diode blocks below, reused for the vgnd/
         // comparator rail-clamp paths: turn on once the real forward
@@ -2570,8 +2586,9 @@
                 const vb = voltages.get(uf.find(d.b)) || 0;
                 const vt = THERMAL_VOLTAGE_25C * ((tempOf(d.id) + 273.15) / 298.15);
                 const nvt = DIODE_N * vt;
-                const vj = Math.max(-5, Math.min(0.8, va - vb));
-                precisionCurrents.set('diode:' + d.id, DIODE_IS * (Math.exp(vj / nvt) - 1));
+                const vj = va - vb;
+                const exponent = Math.max(-100, Math.min(40, vj / nvt));
+                precisionCurrents.set('diode:' + d.id, DIODE_IS * (Math.exp(exponent) - 1));
               });
             }
             if (solverOptions && solverOptions.mosfetModel === 'continuous') {
@@ -2797,8 +2814,9 @@
           if (c.type === 'diode' && solverOptions && solverOptions.diodeModel === 'newton') {
             const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);
             const nvt = DIODE_N * vt;
-            const vd = Math.max(-5, Math.min(0.8, va - vb));
-            I = DIODE_IS * (Math.exp(vd / nvt) - 1);
+            const vd = va - vb;
+            const exponent = Math.max(-100, Math.min(40, vd / nvt));
+            I = DIODE_IS * (Math.exp(exponent) - 1);
           } else {
             const on = this._ledState.get(c.id);
             I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;
