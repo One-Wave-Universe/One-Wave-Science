@@ -33,7 +33,7 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 
 ### P3 — frequency-domain analysis
 
-8. **Small-signal AC analysis (`.ac`-class)** — linearize around the DC operating point and solve complex admittance versus frequency.
+8. **Small-signal AC analysis (`.ac`-class)** — IMPLEMENTED in `js/ac-analysis.js`. The analyzer first solves a precision DC operating point, zeros independent AC excitation for that bias solve, then builds a complex MNA system at each requested frequency. Resistors, capacitor ESR/leakage, inductor DCR, source impedance, GMIN, diode local conductance, and continuous-MOSFET small-signal derivatives are stamped from the same physical models used elsewhere. Analytic RC, RL, and series-RLC phasors plus a nonlinear diode-bias slope are permanent CI references. Unsupported component classes are rejected explicitly rather than silently ignored.
 9. **Bode output** — magnitude/phase probes and transfer-function plotting.
 10. **Pole/zero sanity checks** for simple RC/RL/RLC networks against analytic answers.
 
