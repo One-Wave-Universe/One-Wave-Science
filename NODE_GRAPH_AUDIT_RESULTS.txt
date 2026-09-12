@@ -1,7 +1,9 @@
+=== metadata check ===
+legacy node metadata already normalized
+metadata_exit=0
 === sync check ===
-node graph discovery surfaces are stale:
-- 00_MASTER_INDEX.md
-sync_exit=1
+node graph discovery surfaces already synchronized
+sync_exit=0
 === graph audit ===
 canonical nodes parsed: 199
 node artifacts parsed: 5
@@ -10,54 +12,6 @@ ERRORS
 - Root_Axioms/A+101_One_Field_Ground.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
 - Root_Axioms/A+102_Positive_Displacement_Expression.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
 - Root_Axioms/A+103_Differential_Expression.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
-- master index does not list B-206c (Nodes/B-206c_Four_Actions.md)
-- master index does not list B-221a (Nodes/B-221a_Six_Step_Oscillator_Program.md)
-- master index does not list B-226 (Nodes/B-226_Research_Discovery_Invention_Loop.md)
-- master index does not list B-227 (Nodes/B-227_Time_Scale_Bottleneck_Loop.md)
-- master index does not list C-323 (Nodes/C-323_Four_Forces_as_Displacement_Regimes.md)
-- master index does not list D-417 (Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md)
-- master index does not list E-531 (Nodes/E-531_Dual_Harmonic_Propagation_Operator.md)
-- master index does not list E-532 (Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md)
-- master index does not list G-724 (Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md)
-- master index does not list G-725 (Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md)
-- master index does not list G-726 (Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md)
-- master index does not list G-727 (Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md)
-- master index does not list G-728 (Nodes/G-728_Mathematics_Attack_Laundry_List.md)
-- master index does not list G-729 (Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md)
-- master index does not list G-730 (Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md)
-- master index does not list G-731 (Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md)
-- master index does not list G-732 (Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md)
-- master index does not list G-733 (Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md)
-- master index does not list G-734 (Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md)
-- master index does not list G-735 (Nodes/G-735_Chapter_Driven_Simulator_Program.md)
-- master index does not list G-736 (Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md)
-- master index does not list G-737 (Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md)
-- master index does not list G-738 (Nodes/G-738_Center_Geometry_Classification_and_Receipt.md)
-- master index does not list G-739 (Nodes/G-739_Six_Gate_Trajectory_Extraction.md)
-- master index does not list G-740 (Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md)
-- master index does not list G-741 (Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md)
-- master index does not list G-742 (Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md)
-- master index does not list G-743 (Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md)
-- master index does not list G-744 (Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md)
-- master index does not list G-745 (Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md)
-- master index does not list G-746 (Nodes/G-746_Damping_Matrix_Dispersion.md)
-- master index does not list G-747 (Nodes/G-747_Two_Group_Velocity_Zeros.md)
-- master index does not list G-748 (Nodes/G-748_Nested_Hex_Pyramid_Triangle_Cube.md)
-- master index does not list G-749 (Nodes/G-749_Point_Rotation_and_Angular_Momentum_Receipt.md)
-- master index does not list G-750 (Nodes/G-750_Body_Rate_Transport.md)
-- master index does not list G-751 (Nodes/G-751_Cell_Brain_Biology_RobotDog_Comparison.md)
-- master index does not list G-752 (Nodes/G-752_Triad_Brain_Three_Loops.md)
-- master index does not list G-753 (Nodes/G-753_Brain_Versus_Three_Winding_Nerve.md)
-- master index does not list G-754 (Nodes/G-754_Cell_Chip_Cube_Rubik_Two_State_Machines.md)
-- master index does not list G-755 (Nodes/G-755_Ternary_Is_Virtual_Ground_And_Choice.md)
-- master index does not list G-756 (Nodes/G-756_Build_Contract_Square_Away.md)
-- master index does not list G-757 (Nodes/G-757_Discrete_E4_Seven_Cell.md)
-- master index does not list G-758 (Nodes/G-758_Nudged_Elastic_Band.md)
-- master index does not list G-759 (Nodes/G-759_Mass_Effect_Four_Actions.md)
-- master index does not list G-760 (Nodes/G-760_Micro_First_Attack_Mirror_Term.md)
-- master index does not list G-761 (Nodes/G-761_SM_Assumption_Smash.md)
-- master index does not list G-762 (Nodes/G-762_Four_Balanced_Interactions.md)
-- master index does not list G-763 (Nodes/G-763_Scalar_to_Harmonic.md)
 
-FAIL: 51 error(s)
+FAIL: 3 error(s)
 audit_exit=1
