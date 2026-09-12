@@ -1,0 +1,47 @@
+name: Patch VBB GMIN Option
+
+on:
+  push:
+    branches: [virtual-breadboard-source-gmin-stepping]
+    paths:
+      - '.github/workflows/patch-vbb-gmin-option.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-source-gmin-stepping
+      - name: Patch configurable GMIN into solver
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('Virtual_Breadboard/js/circuit.js')
+          s = p.read_text()
+          old = """      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)\n        ? Math.max(1, Math.floor(solverOptions.maxIterations))\n        : 30;"""
+          new = """      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)\n        ? Math.max(1, Math.floor(solverOptions.maxIterations))\n        : 30;\n      const solveGmin = solverOptions && Number.isFinite(solverOptions.gmin)\n        ? Math.max(0, solverOptions.gmin)\n        : GMIN;"""
+          if old not in s:
+              raise SystemExit('solver-options anchor not found')
+          s = s.replace(old, new, 1)
+          old = """          stampG(i, i, GMIN);"""
+          new = """          stampG(i, i, solveGmin);"""
+          if old not in s:
+              raise SystemExit('GMIN stamp anchor not found')
+          s = s.replace(old, new, 1)
+          old = """        relTolerance,\n      };"""
+          new = """        relTolerance,\n        gmin: solveGmin,\n      };"""
+          if old not in s:
+              raise SystemExit('solver metadata anchor not found')
+          s = s.replace(old, new, 1)
+          p.write_text(s)
+      - name: Commit solver patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Virtual_Breadboard/js/circuit.js
+          git commit -m "Virtual Breadboard: make GMIN solver-configurable"
+          git push
