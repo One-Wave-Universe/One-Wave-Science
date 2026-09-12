@@ -271,7 +271,7 @@ function smallSignalAc(elements, options) {
         // Ciss is the same lumped gate-source capacitance used by transient
         // switching. Keeping it here makes the named model card affect AC
         // input loading too instead of silently disappearing in frequency domain.
-        stampY(A, gate, sourceNode, C(0, omega * spec.ciss));
+        stampY(A, gate, sourceNode, C(0, w * spec.ciss));
         const bodyOn = op.mosfetStates && op.mosfetStates.get(c.id) && op.mosfetStates.get(c.id).bodyDiodeOn;
         if (bodyOn) stampY(A, drain, sourceNode, C(1 / spec.bodyDiodeRon, 0));
       }
