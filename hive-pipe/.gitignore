@@ -1,0 +1,6 @@
+queue/pending/*.json
+queue/processing/*.json
+queue/results/*.json
+queue/done/*.json
+__pycache__/
+
