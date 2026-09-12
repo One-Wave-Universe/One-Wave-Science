@@ -5,7 +5,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Geometry, Resonance, and Simulation"
-claim_gate_detail: "YELLOW — GEOMETRY FORMALIZED; TWO CANDIDATE ENERGY LADDERS DERIVED (FUNCTIONAL FORM ONLY, UNCALIBRATED, MUTUALLY UNRECONCILED)"
+claim_gate_detail: "YELLOW — GEOMETRY FORMALIZED; THREE CANDIDATE ENERGY LADDERS DERIVED (TWO INDEPENDENT ROUTES AGREE ON CONSTANT SPACING, ONE PREDICTS GROWING SPACING; ALL FUNCTIONAL-FORM ONLY, UNCALIBRATED)"
 metadata_standard: "I-06"
 ---
 
@@ -114,6 +114,24 @@ about the shape of the shell-energy ladder (flat vs. widening gaps) --
 that difference is itself a future test target, not something to force
 into agreement now.
 
+### Third route: breathing-mode oscillation (A-106)
+
+A-106's own Derrick-theorem rescaling analysis already proves a localized
+solution sits in a genuine potential well as a function of its size
+(`d^2E/dlambda^2 > 0` at the stable point) -- a real, already-derived
+"oscillates around a center" structure, not asserted from the oscillation
+language used elsewhere in the repo. See A-106 section 12a for the full
+derivation. If quantized (pending one still-missing ingredient: an
+effective mass/kinetic term for the size coordinate, from A-109 or C-303,
+not yet supplied), it gives `E_n = hbar*omega_breathe*(n+1/2)` --
+**equally spaced**, the same qualitative shape as the Model-2/A-114
+candidate above, reached by a completely independent route. Two
+independent derivations landing on the same shape is real supporting
+evidence for constant spacing over the surface-energy candidate's growing
+spacing, though neither is calibrated and A-106's breathing-mode n is not
+established to be the same quantum number as this node's winding number n
+(see A-106 12a's explicit caveat on that point).
+
 ### Honest limits of the Model-2/A-114 ladder specifically
 
 - A-114's `omega(k)` formula is a **small-k, small-gamma leading-order**
@@ -171,9 +189,13 @@ Yellow Audit:
 - RESOLVED IN PART: a candidate energy ladder now exists via Model 2 +
   A-114's dispersion relation (E_n = epsilon*n, constant spacing), plus an
   independent second candidate via Ch6's surface energy + Model 1's R_n
-  (E_n proportional to n^2, growing spacing). Neither is calibrated, and
-  the two make different, not-yet-reconciled predictions about the shape
-  of the ladder;
+  (E_n proportional to n^2, growing spacing), plus a THIRD independent
+  route via A-106's own Derrick-theorem stability analysis treated as a
+  breathing-mode oscillator (also constant spacing, pending an
+  unsupplied effective-mass term -- see A-106 section 12a). Two of three
+  independent routes now agree on constant spacing, which is real
+  supporting evidence, not proof; none is calibrated, and the surface-
+  energy candidate's growing-spacing prediction has not been ruled out;
 - lambda is not independently measured;
 - D-407's 0.6594 fm candidate is conditional on an unproved 7/8 adjacency;
 - beta and c_L (the inputs the new linear ladder's slope depends on) are
@@ -184,9 +206,16 @@ Yellow Audit:
 - relationship to the neutron two-profile model remains conditional.
 
 Future Work:
+Supply the effective-mass/kinetic term A-106's breathing-mode candidate
+needs (from A-109 or C-303) to actually compute omega_breathe, rather
+than leaving it as a functional form.
 Decide (or derive a criterion for) which candidate ladder -- constant
-spacing (Model 2 + A-114) or growing spacing (Model 1 + Ch6 surface
-energy) -- actually applies, rather than carrying both indefinitely.
+spacing (Model 2 + A-114, and independently A-106's breathing mode) or
+growing spacing (Model 1 + Ch6 surface energy) -- actually applies,
+rather than carrying both indefinitely.
+Determine whether A-106's breathing-mode n and this node's winding
+number n are the same quantum number or genuinely separate axes, per
+A-106 12a's explicit caveat -- do not assume either answer.
 Reconcile Model 2's fixed-R excitation-mode picture with Ch6's
 variable-radius nested-shell picture of magic-number closure, or show they
 answer genuinely different questions (which configurations exist vs. how

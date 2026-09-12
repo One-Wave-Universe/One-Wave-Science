@@ -5,7 +5,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Field Response Organization Primitive"
-claim_gate_detail: "YELLOW (curvature relationship now derived — was previously the open gap)"
+claim_gate_detail: "YELLOW (curvature relationship derived; stability well now shown to be a breathing-mode oscillator, quantization pending an unsupplied effective-mass term — see section 12a)"
 metadata_standard: "I-06"
 ---
 
@@ -194,6 +194,62 @@ DEPENDENCIES:
 		BRONZE = Validated.
 		SILVER = Integrated.
 		GOLD = Confirmed.
+
+12a. BREATHING-MODE OSCILLATION AROUND THE STABLE SIZE (new)
+
+	The rescaling analysis above already proves more than a single stable
+	size -- it proves a genuine POTENTIAL WELL in the size coordinate
+	lambda, since d^2E/dlambda^2 > 0 at the minimum. That is an oscillator,
+	not just a resting point: a localized solution nudged slightly off its
+	equilibrium size does not just sit there, it has a restoring "force" in
+	lambda pulling it back, the same structure as any other harmonic well.
+	This is the rigorous version of "oscillating around a center, back and
+	forth" -- derived from the stability analysis already on record, not
+	asserted from the oscillation language elsewhere in the repo.
+
+	EFFECTIVE POTENTIAL (from E(lambda) = I1/lambda + I2/lambda^3 + I3*lambda,
+	stationary at lambda=1 with I3 = I1 + 3*I2, verified symbolically):
+
+		E(lambda) ~= E(1) + (I1 + 6*I2)*(lambda - 1)^2   for lambda near 1
+
+	i.e. a harmonic well in lambda with effective spring constant
+	k_eff = 2*(I1 + 6*I2) -- the same combination A-107's stability
+	condition already requires to be positive, now doing double duty as
+	the well's actual curvature.
+
+	WHAT WOULD QUANTIZE IT (the one missing ingredient, not fabricated
+	here): a harmonic well needs a conjugate KINETIC/inertia term for
+	lambda to have quantized levels. E[psi] as written is a pure static
+	energy functional -- it has no (d(lambda)/dt)^2 term or effective mass
+	M_eff for the breathing coordinate. That inertia would have to come
+	from A-109 Inertial Memory or C-303 Kinetic Energy, applied to the
+	collective coordinate lambda specifically; neither has been done. This
+	is exactly the same kind of honest gap as D-405's beta/c_L/R -- the
+	functional form is now derivable, the number is not.
+
+	IF that M_eff is supplied, the standard 1D-harmonic-oscillator result
+	is immediate and requires no new physics beyond it:
+
+		omega_breathe = sqrt(2*(I1 + 6*I2) / M_eff)
+		E_n = hbar * omega_breathe * (n + 1/2)      -- EQUALLY SPACED
+
+	This is a THIRD, independently-motivated candidate for D-405's missing
+	energy ladder -- reached by an entirely different route (radial
+	breathing-mode quantization of this node's own already-proven stable
+	solution) than either of D-405's two candidates. It lands on the SAME
+	qualitative shape as D-405's Model-2/A-114 candidate (constant
+	spacing), not the Ch6-surface-energy candidate (growing spacing) --
+	two independent derivations agreeing is real, if still incomplete,
+	evidence, not proof.
+
+	HONEST DISTINCTION, not to be quietly erased: this breathing-mode "n"
+	(radial size-oscillation quantum number of ONE localized solution) is
+	not obviously the same "n" as D-405's winding number (how many
+	wavelengths fit around one closed path). They could turn out to be the
+	same principal quantum number in a fuller theory, or could be
+	genuinely separate axes (compare: in a real atom, radial and angular
+	quantum numbers are different things that both affect energy). Treat
+	them as distinct until a specific argument connects them.
 
 13. FINAL DEFINITION / CLOSURE
 	NODE:
