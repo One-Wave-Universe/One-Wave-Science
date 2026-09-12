@@ -370,6 +370,9 @@
   const LED_RON = 12; // ohms, approximate forward dynamic resistance
   const DIODE_VF = 0.7; // volts, generic silicon rectifier (e.g. 1N4001-class)
   const DIODE_RON = 5; // ohms, approximate forward dynamic resistance
+  const DIODE_IS = 1e-12; // A, generic silicon saturation current for precision/Newton mode
+  const DIODE_N = 1.8; // emission coefficient for a generic small silicon rectifier
+  const THERMAL_VOLTAGE_25C = 0.025852; // V = kT/q at 25 C
   const GMIN = 1e-9;
   const BATTERY_RINT = 1; // ohms, internal resistance of a small supply/battery
   // ohms; a purpose-built low-voltage/precision reference source (a DAC
@@ -1138,6 +1141,7 @@
 
       let voltages = new Map();
       let xSol = new Array(size).fill(0);
+      let previousVoltages = new Map();
 
       const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)
         ? Math.max(1, Math.floor(solverOptions.maxIterations))
@@ -1254,7 +1258,23 @@
             stampG(i, j, -gLeak);
             stampG(j, i, -gLeak);
           } else if (c.type === 'led' || c.type === 'diode') {
-            if (this._ledState.get(c.id)) {
+            const diodeModel = solverOptions && solverOptions.diodeModel === 'newton' && c.type === 'diode' ? 'newton' : 'simple';
+            if (diodeModel === 'newton') {
+              const i = gi(uf.find(c.a));
+              const j = gi(uf.find(c.b));
+              const va0 = previousVoltages.get(uf.find(c.a)) || 0;
+              const vb0 = previousVoltages.get(uf.find(c.b)) || 0;
+              const vdRaw = va0 - vb0;
+              const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);
+              const nvt = DIODE_N * vt;
+              const vd = Math.max(-5, Math.min(0.8, vdRaw));
+              const ev = Math.exp(vd / nvt);
+              const id0 = DIODE_IS * (ev - 1);
+              const gd = Math.max(DIODE_IS / nvt, DIODE_IS * ev / nvt);
+              const ieq = id0 - gd * vd;
+              stampG(i, i, gd); stampG(j, j, gd); stampG(i, j, -gd); stampG(j, i, -gd);
+              stampI(i, -ieq); stampI(j, ieq);
+            } else if (this._ledState.get(c.id)) {
               const vf = forwardVoltage(c);
               const g = 1 / forwardRon(c);
               const i = gi(uf.find(c.a));
@@ -1743,6 +1763,7 @@
           }
         };
         diodes.forEach((d) => {
+          if (solverOptions && solverOptions.diodeModel === 'newton' && d.type === 'diode') return;
           const va = voltages.get(uf.find(d.a));
           const vb = voltages.get(uf.find(d.b));
           const vd = va - vb;
@@ -1759,6 +1780,19 @@
             }
           }
         });
+        if (solverOptions && solverOptions.diodeModel === 'newton') {
+          let diodeDelta = 0;
+          diodes.forEach((d) => {
+            if (d.type !== 'diode') return;
+            const va = voltages.get(uf.find(d.a)) || 0;
+            const vb = voltages.get(uf.find(d.b)) || 0;
+            const pva = previousVoltages.get(uf.find(d.a)) || 0;
+            const pvb = previousVoltages.get(uf.find(d.b)) || 0;
+            diodeDelta = Math.max(diodeDelta, Math.abs((va - vb) - (pva - pvb)));
+          });
+          if (diodeDelta > 1e-9) changed = true;
+        }
+        previousVoltages = new Map(voltages);
 
         mosfets.forEach((f) => {
           const spec = mosfetSpec(f);
@@ -2071,6 +2105,7 @@
         absTolerance,
         relTolerance,
         gmin: solveGmin,
+        diodeModel: solverOptions && solverOptions.diodeModel === 'newton' ? 'newton' : 'simple',
       };
 
       const currents = new Map();
@@ -2130,8 +2165,15 @@
           updateTemp(c.id, p, THERMAL_SPEC.resistor);
           if (p > 0.25) warnings.push(`Resistor ${c.label || c.id}: ${p.toFixed(2)} W — exceeds a typical 1/4W resistor's rating`);
         } else if (c.type === 'led' || c.type === 'diode') {
-          const on = this._ledState.get(c.id);
-          I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;
+          if (c.type === 'diode' && solverOptions && solverOptions.diodeModel === 'newton') {
+            const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);
+            const nvt = DIODE_N * vt;
+            const vd = Math.max(-5, Math.min(0.8, va - vb));
+            I = DIODE_IS * (Math.exp(vd / nvt) - 1);
+          } else {
+            const on = this._ledState.get(c.id);
+            I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;
+          }
           if (c.type === 'led' && I > 0.03) warnings.push(`LED ${c.label || c.id}: ${(I * 1000).toFixed(0)} mA — add a current-limiting resistor`);
           if (c.type === 'diode' && I > 1.0) warnings.push(`Diode ${c.label || c.id}: ${I.toFixed(2)} A — exceeds a typical small rectifier's rating`);
         } else if (c.type === 'capacitor') {
@@ -2557,7 +2599,7 @@
   }
 
   const api = {
-    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,
+    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BATTERY_RINT, VGND_RINT,
     AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
