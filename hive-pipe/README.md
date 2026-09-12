@@ -77,11 +77,17 @@ not a claim of remote terminal access.
 `gateway.py` exposes the same named-action queue over authenticated HTTP. It
 binds only to `127.0.0.1:8765`; never bind it directly to a public interface.
 
-Install the per-user service and create separate local tokens for Codex,
-Claude, and Gemini:
+Install both per-user services (queue worker plus gateway) and create separate
+local tokens for Codex, Claude, and Gemini:
 
 ```bash
 bash hive-pipe/install_gateway.sh
+```
+
+Verify that both halves are running:
+
+```bash
+systemctl --user status hive-pipe-agent.service hive-pipe-gateway.service
 ```
 
 Check the localhost endpoint with one token:
