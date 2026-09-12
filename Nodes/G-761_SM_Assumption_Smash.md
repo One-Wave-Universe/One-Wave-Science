@@ -1,8 +1,12 @@
 ---
-id: G-761
-title: Standard Model assumptions versus One-Wave node equations
-status: yellow-confrontation
-claim_boundary: measurements kept; particle/Higgs/four-force ontology challenged; no claim that OW has replaced SM numerics
+node_id: "G-761"
+canonical_name: "Standard Model assumptions versus One-Wave node equations"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "measurements kept; particle/Higgs/four-force ontology challenged; no claim that OW has replaced SM numerics"
+metadata_standard: "I-06"
 ---
 
 # G-761 — Smash the assumptions, keep the data

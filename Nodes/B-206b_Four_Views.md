@@ -5,31 +5,32 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "Implementation-canonical; physical instantiations remain scale-specific"
+claim_gate_detail: "Descriptive four-view readout vocabulary; does not alter the three-Mirror/three-Action primitive gate cycle"
 metadata_standard: "I-06"
 ---
 
 # Node B-206b: Four Views — Direction, Phase, Strength, Reference
 
-## Correction
+## Canonical boundary
 
-Earlier repository text incorrectly called **Inward, Outward, Across, Over** the Four Views. Those are Actions, not Views. The canonical separation is now:
+The primitive gate cycle is fixed elsewhere as:
 
-- **Views = what the system reads about a state.**
-- **Actions = what the system does with a state.**
+```text
+M1 -> A1 -> M2 -> A2 -> M3 -> A3 -> M1 ...
+```
 
-See `B-206c_Four_Actions.md`.
+with exactly three Mirror gates and three Action gates.
+
+The four Views below are **readout dimensions/modes** available to a Mirror-gate evaluation. They are not four Mirror gates and do not change the six-gate count.
 
 ## The Four Views
 
-1. **Direction** — Which way is the resolved relation leaning or moving relative to the active reference. At the ternary routing layer this can be represented as `-1 / 0 / +1` = left / stay / right.
-2. **Phase** — Where the oscillatory relation is in its cycle, including handedness/crossover orientation where the implementation tracks it.
-3. **Strength** — How large or intense the relation is relative to its active reference. Five-state or finer threshold bands may be used as representations of this quantity, but they are not part of the invariant kernel.
-4. **Reference** — The local baseline `(0)` against which Direction, Phase, and Strength are interpreted. Reference is carried at every recursive level; no state is interpreted as an absolute value without an active reference.
+1. **Direction** — which way the resolved relation leans or moves relative to the active reference. At a ternary routing layer this may be represented as `-1 / 0 / +1`.
+2. **Phase** — where the oscillatory relation is in its cycle, including handedness/orientation when the implementation tracks it.
+3. **Strength** — how large or intense the relation is relative to its active reference. Threshold bands may represent this quantity without becoming gate states.
+4. **Reference** — the local baseline `(0)` against which Direction, Phase, and Strength are interpreted.
 
-## Measurement Packet
-
-A minimal view packet can be written as:
+A minimal descriptive packet is:
 
 ```text
 ViewState {
@@ -40,44 +41,58 @@ ViewState {
 }
 ```
 
-This packet is descriptive. It does not itself command a transformation.
+This packet describes state. It does not command an action and does not add gate positions.
 
-## Domain Independence
+## Relationship to Action gates and Action modes
 
-The same Four Views can describe a circuit, a wave packet, a cell, a lattice relation, a cognitive state, or another scale-specific system. Domain labels are wrappers above the invariant engine.
+The primitive architecture has three Action gates: `A1`, `A2`, and `A3`.
 
-The kernel must not encode domain-specific meanings such as temperature, matter phase, planets, musical intervals, or biological labels into these four slots.
-
-## Relationship to the Actions
+B-206c provides an optional four-mode vocabulary for describing what an Action gate may do:
 
 ```text
-VIEW                         ACTION
-what is read                 what is done
-
-Direction                    Inward
-Phase                        Outward
-Strength                     Across
-Reference                    Over
+Inward / Outward / Across / Over
 ```
 
-The columns are parallel four-part layers, not one-to-one semantic aliases. An Action may operate on all four Views simultaneously.
+Keep the counts separate:
 
-## Anti-Drift Rule
+```text
+4 Views = readout vocabulary
+4 Action modes = transformation vocabulary
+3 Mirror gates = primitive read/compare positions
+3 Action gates = primitive change/carry positions
+6 total primitive gates = 6 process steps
+```
 
-If replacing or deleting a domain representation changes the definitions of Direction, Phase, Strength, or Reference, that representation has leaked into the core architecture.
+There is no required one-to-one mapping between a View and an Action mode.
 
-## Operational Chain
+## Operational chain
 
 ```text
 state
- -> read Direction / Phase / Strength / Reference
- -> choose or resolve an Action
- -> produce consequence
- -> consequence becomes input/reference for the next relation
+ -> Mirror gate reads Direction / Phase / Strength / Reference
+ -> Mirror resolution
+ -> paired Action gate A1/A2/A3
+ -> optional action-mode description
+ -> consequence/new state
+ -> next Mirror gate
 ```
 
-## Yellow Audit
+## Domain independence
 
-- The four-slot measurement architecture is canonical for implementation.
-- Exact physical sensors and mathematical coordinates remain implementation-specific.
-- The relationship between these Views and any dimensional 1D/2D/3D/4D representation must be derived separately; it is not assumed here.
+The same View vocabulary can describe circuits, wave packets, cells, lattice relations, cognitive states, or other scale-specific systems. Domain labels are wrappers above the invariant engine.
+
+## Anti-drift rule
+
+If a representation turns Direction/Phase/Strength/Reference into four primitive Mirror gates, or turns Inward/Outward/Across/Over into four primitive Action gates, it has changed the architecture and must be rejected.
+
+Canonical primitive remains:
+
+```text
+3 Mirror + 3 Action = 6 gates = 6 steps
+```
+
+## Yellow audit
+
+- Four-view measurement vocabulary is canonical as a descriptor layer.
+- Exact sensors and mathematical coordinates remain implementation-specific.
+- Its relationship to dimensional 1D/2D/3D/4D representations must be derived separately.

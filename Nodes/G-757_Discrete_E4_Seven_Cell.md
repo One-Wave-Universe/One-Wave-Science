@@ -1,8 +1,12 @@
 ---
-id: G-757
-title: Discrete four-interaction energy on the seven-cell
-status: yellow
-claim_boundary: dimensionless discrete energy and critical-point tests only; not C-322 numerical close; not a0; not proton observables
+node_id: "G-757"
+canonical_name: "Discrete four-interaction energy on the seven-cell"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "dimensionless discrete energy and critical-point tests only; not C-322 numerical close; not a0; not proton observables"
+metadata_standard: "I-06"
 ---
 
 # G-757 — Discrete \(\overline E_4\) on the seven-cell

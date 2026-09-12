@@ -1,8 +1,12 @@
 ---
-id: G-756
-title: Build contract square-away
-status: yellow-architecture
-claim_boundary: dictionary and stacking order; does not add kernel axes; millivolt and SiC remain unmeasured
+node_id: "G-756"
+canonical_name: "Build contract square-away"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "dictionary and stacking order; does not add kernel axes; millivolt and SiC remain unmeasured"
+metadata_standard: "I-06"
 ---
 
 # G-756 — Square-away

@@ -1,8 +1,12 @@
 ---
-id: G-752
-title: Triad Brain from Three Loops
-status: yellow-architecture
-claim_boundary: CPU-native brain definition; Jetson is optional skin; kernel six-route count unchanged
+node_id: "G-752"
+canonical_name: "Triad Brain from Three Loops"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "CPU-native brain definition; Jetson is optional skin; kernel six-route count unchanged"
+metadata_standard: "I-06"
 ---
 
 # G-752 — Build the brain from the 3-loop triad

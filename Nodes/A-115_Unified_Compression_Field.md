@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**
 Upstream: A-101 Ground / Zero, A-102 Displacement, A-104 Gradient, A-105 Restoring Response, A-106 Pressure Response, A-109 Inertial Memory, A-112 Persistent Mode, A-116 Three-Dimensional Spherical Default, C-309 Friction Limit
-Downstream: Book 1 Ch12 Gravity, D-413 Ground Lattice Orbital-Restoring Simulation, Book 1 Ch14 Mass Effect, Book 1 Ch15 Higgs, Book 5 Ch1 Galaxies and Dark Matter, C-301 Mirror Gate, C-322 Mirror-Gate 125 GeV Boundary Response, E-528 Static Redshift Transport, E-529 Low-Coupling Return Mode, E-530 White Energy Recirculation, Book 5 Ch4 Black Holes and Quasars
+Downstream: Book 1 Ch12 Gravity, C-320 Magnetic-Compression Path Coupling, D-413 Ground Lattice Orbital-Restoring Simulation, D-416 Planetary Rotation-Magnetic Coupling Test Matrix, Book 1 Ch14 Mass Effect, Book 1 Ch15 Higgs, Book 5 Ch1 Galaxies and Dark Matter, C-301 Mirror Gate, C-322 Mirror-Gate 125 GeV Boundary Response, E-528 Static Redshift Transport, E-529 Low-Coupling Return Mode, E-530 White Energy Recirculation, Book 5 Ch4 Black Holes and Quasars
 
 ## Purpose
 
@@ -27,10 +27,15 @@ The same field has an outward return channel called **White Energy**. White Ener
 
 [D-413 Ground Lattice Orbital-Restoring Simulation](D-413_Ground_Lattice_Orbital_Restoring_Simulation.md) is the canonical runnable reduced laboratory attached to this node.
 
+The magnetism/gravity extension is not allowed to bypass A-115. Its canonical route is:
+
 ```text
-A-115 Unified Compression Field
--> D-413 Ground Lattice Orbital-Restoring Simulation
--> numerical orbit / restoring-gradient / shell-torque controls and ablations
+A-115 source/compression field
+-> C-311 magnetic rotational view
+-> C-319 magnetic lattice reorganization
+-> C-320 path-weighted compression/restoring response
+-> D-413 reduced laboratory
+-> D-416 planetary falsification matrix
 ```
 
 D-413 currently imposes its curvature depression. It tests the consequences of a declared gravity-like restoring geometry and the lattice response around it; it does **not** yet derive the A-115 gravity law. Promotion requires replacing that imposed well with a source-derived A-115 compression field and testing whether the same fixed law reproduces the required limits.
@@ -92,15 +97,31 @@ Define
 \[
 \Phi_{\rm OW}=\alpha_g\chi,
 \qquad
-\mathbf g_{\rm OW}=-\nabla\Phi_{\rm OW}=-\alpha_g\nabla\chi.
+\mathbf g_{0}=-\nabla\Phi_{\rm OW}=-\alpha_g\nabla\chi.
 \]
+
+The subscript `0` marks the baseline isotropic A-115 gravity view. C-320 is the only canonical node currently allowed to propose the magnetic/lattice path-weighting extension. It uses C-319's accessibility tensor `K_L`:
+
+\[
+\mathbf g_{\rm OW}=-\alpha_g\mathbf K_L\nabla\chi.
+\]
+
+Its mandatory recovery limit is
+
+\[
+\mathbf K_L\to\mathbf I
+\Rightarrow
+\mathbf g_{\rm OW}\to\mathbf g_0.
+\]
+
+This keeps the concepts separate: `chi` is compression, `grad(chi)` is the baseline restoring bias, C-319 supplies magnetic lattice reorganization, and C-320 tests whether that reorganization changes how the existing bias is expressed. A nonzero magnetic field is not allowed to create A-115 gravity by itself when `grad(chi)=0`.
 
 The Newtonian exterior limit is recovered only if the derived source solution gives
 
 \[
 \Phi_{\rm OW}(r)\rightarrow-\frac{G M_{\rm eff}}{r},
 \qquad
-|\mathbf g_{\rm OW}(r)|\rightarrow\frac{G M_{\rm eff}}{r^2}.
+|\mathbf g_{0}(r)|\rightarrow\frac{G M_{\rm eff}}{r^2}.
 \]
 
 Here \(M_{\rm eff}\) is the measured **Mass Effect** assigned to the bounded source, not an independently defined substance.
@@ -110,12 +131,12 @@ Here \(M_{\rm eff}\) is the measured **Mass Effect** assigned to the bounded sou
 For bookkeeping,
 
 \[
-\mathbf g_{\rm OW}=\mathbf g_{\rm local}+\mathbf g_{\rm wake}.
+\mathbf g_{0}=\mathbf g_{\rm local}+\mathbf g_{\rm wake}.
 \]
 
 This does not introduce a second substance. It separates near-source response from retained or wake-like compression.
 
-For circular motion,
+For circular motion in the isotropic baseline,
 
 \[
 \frac{v_c^2(r)}{r}=|\mathbf g_{\rm local}(r)+\mathbf g_{\rm wake}(r)|.
@@ -129,6 +150,8 @@ A conventional analysis would infer
 \]
 
 In One-Wave this is the **Extended Compression Effect**, not unseen particulate matter.
+
+C-320 may later test a path-weighted version of the restoring response, but it may not use magnetic reorganization to hide a failed source solution or replace the requirement to derive the wake profile.
 
 ## 4. Local Mass Effect and Mirror-Gate Boundary View
 
@@ -286,6 +309,8 @@ Mass Effect / displacement
 -> new Mass Effect / structure
 ```
 
+The C-319/C-320 magnetic path-accessibility hypothesis is a local extension of the restoring-response leg. It is not permission to rewrite the cosmic accounting loop without separate derivation.
+
 ## 7. Promotion Requirements
 
 ### Yellow completion
@@ -296,19 +321,23 @@ Mass Effect / displacement
 - derive the four-interaction work metric, the actual gate-crossing path, the scale-free gate-to-mass ratio, and one explicit energy calibration route,
 - derive the E-528 propagation coefficient from field variables,
 - derive the E-529 neutrino-transfer coefficients,
-- close the E-530 static energy budget.
+- close the E-530 static energy budget,
+- for the magnetic extension, derive or calibrate C-319/C-320 without breaking the `K_L -> I` baseline limit.
 
 ### Bronze
 
 - one fixed field law reproduces chosen gravity/rotation/lensing datasets,
 - one four-interaction boundary model produces a pressure-work threshold near 125 GeV,
 - a static transport simulation conserves total energy through photon loss, neutrino return, capture, and White Energy ejection,
+- any claimed planetary magnetic coupling survives the D-416 multi-body controls and ablations,
 - code, parameters, raw outputs, and failed regimes are published.
 
 ## Direct Failure Conditions
 
 This version fails if one coefficient set cannot connect the claimed views, if redshift requires hidden expansion terms, if the energy lost by light cannot be accounted for, if the neutrino return channel has no derivable coupling, or if White Energy ejection creates energy rather than returning stored compression.
 
+The magnetic extension specifically fails if a nonzero magnetic state can create A-115 gravity with `grad(chi)=0`, if its zero-reorganization limit does not return the A-115 baseline, or if it survives only by body-specific arbitrary tuning forbidden by D-416.
+
 ## Status Statement
 
-A-115 is load-bearing because it states the identity and accounting rules being tested. It does not claim established experimental proof.
+A-115 is load-bearing because it states the identity and accounting rules being tested. It does not claim established experimental proof. C-319/C-320 are now the sole canonical magnetism-to-lattice-to-gravity extension path and must remain separately falsifiable.

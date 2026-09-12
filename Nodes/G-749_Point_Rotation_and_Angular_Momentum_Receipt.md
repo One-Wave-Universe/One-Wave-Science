@@ -1,7 +1,12 @@
 ---
-id: G-749
-title: C2 Point Rotation and Angular-Momentum Receipt
-status: split-gate
+node_id: "G-749"
+canonical_name: "C2 Point Rotation and Angular-Momentum Receipt"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "split-gate"
+metadata_standard: "I-06"
 ---
 
 # G-749 — C2 Point rotation

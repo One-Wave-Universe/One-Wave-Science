@@ -1,71 +1,94 @@
 ---
-id: G-739
-title: Six-Gate Trajectory Extraction
-status: yellow
-tier: executable-math
-claim_boundary: measured gate labels for declared trajectories; not a universal physical derivation
+node_id: "G-739"
+canonical_name: "Six-Gate Mirror-Action Trajectory Extraction"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Measures behavior at the canonical six gate positions; it does not define a second six-gate system"
+metadata_standard: "I-06"
 ---
 
-# Node G-739: Six-Gate Trajectory Extraction
+# Node G-739: Six-Gate Mirror-Action Trajectory Extraction
+
+## Canonical structure
+
+This node does **not** create six measured oscillator gates beside the six-step program. The six process steps are the six gates:
+
+```text
+Gate 1  BEGIN = Mirror 1
+Gate 2  BUILD = Action 1
+Gate 3  HOLD  = Mirror 2
+Gate 4  BUILD = Action 2
+Gate 5  BREAK = Mirror 3
+Gate 6  LOOP  = Action 3
+```
+
+or, by role:
+
+```text
+M1 -> A1 -> M2 -> A2 -> M3 -> A3 -> M1 ...
+```
+
+Exactly three positions are Mirror gates and exactly three are Action gates.
 
 ## Purpose
 
-The six recursive gates must be measured from motion rather than painted onto
-an animation or imposed as a one-way script. This node defines a conservative
-extractor for:
+Trajectory extraction measures whether the physical/computational state at each canonical gate position actually behaves like its declared step. It must not paint a desired six-step sequence onto an animation, fabricate missing evidence, or invent a second set of gates.
 
-[
-	ext{Begin}ightarrow	ext{Build}_{coherent}ightarrow	ext{Hold}
-ightarrow	ext{Build}_{unstable}ightarrow	ext{Break}ightarrow	ext{Loop}.
-]
+The behavior labels remain:
 
-The labels describe stability regions around a bidirectional oscillator. They
-do not replace Field/Void identity, the two choices, the three moves, the five
-commitment states, or the continuous Mirror phase.
+```text
+BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP
+```
+
+but they are measurements of the same six Mirror/Action gate positions defined by B-221a and C-301.
 
 ## Per-sample receipt
 
-For sample (i), the extractor receives:
+For sample `i`, the extractor may receive:
 
-- (x_i): displacement from the declared center;
-- (v_i): velocity;
-- (E_i): stored-state or energy ledger;
-- (c_iin[0,1]): coherence;
-- (h_ige0): instability/heat receipt.
+- `x_i`: displacement from the declared center/reference;
+- `v_i`: velocity or state-change rate;
+- `E_i`: stored-state or energy ledger;
+- `c_i in [0,1]`: coherence;
+- `h_i >= 0`: instability/heat receipt;
+- `gate_i`: which of the six canonical gate positions is active;
+- `role_i`: Mirror or Action.
 
 The finite difference
 
-[
-dot E_i=(E_i-E_{i-1})/(t_i-t_{i-1})
-]
+```text
+dot(E)_i = (E_i - E_(i-1)) / (t_i - t_(i-1))
+```
 
-separates building, holding, and release. Every tolerance is declared by the
-caller and retains the units of its variable.
+can separate building, holding, and release behavior. Every tolerance is declared by the caller and retains the units of its variable.
 
-## Evidence rules
+## Evidence rules by canonical position
 
-- **Begin:** inside the center band, low speed, low stored state.
-- **Coherent Build:** positive energy rate with coherence above threshold and
-  heat below threshold.
-- **Hold:** energy rate and speed both within their tolerances while stored
-  state remains above the Begin floor.
-- **Unstable Build:** positive energy rate accompanied by low coherence or high
-  heat.
-- **Break:** negative energy rate beyond the release threshold, or a declared
-  boundary excursion accompanied by outward motion.
-- **Loop:** a center crossing after an observed Break. Direction and crossing
-  speed are retained so Loop is not confused with exact reset.
-- **Unclassified:** evidence insufficient or contradictory.
+- **Gate 1 / BEGIN / Mirror 1:** shared-reference entry or beginning relation is read and established.
+- **Gate 2 / BUILD / Action 1:** state is actively built/carried away from the first mirror resolution.
+- **Gate 3 / HOLD / Mirror 2:** the built relation is read against reference and must demonstrate coherent retention rather than merely zero speed.
+- **Gate 4 / BUILD / Action 2:** a second active build/carry operation follows the Hold mirror result.
+- **Gate 5 / BREAK / Mirror 3:** the third mirror read detects/releases the condition that ends the built relation; a Break must be evidenced, not assumed.
+- **Gate 6 / LOOP / Action 3:** the return/loop action carries the consequence into the next Gate 1 / BEGIN relation.
 
-The extractor never fabricates a missing gate to make a complete sequence.
+`Unclassified` remains valid when evidence is insufficient or contradictory. Unclassified is an audit result, not a seventh gate.
+
+## Mirror/action discipline
+
+A Mirror gate is a read/compare/reflect/reference role. An Action gate changes or carries the relation forward. A trajectory implementation fails if it sends a primitive action into a Mirror position or treats an Action position as another independent Mirror crossover without an explicit derived mechanism.
+
+Higher-order view/action vocabularies may annotate the receipt, but they cannot change the primitive count:
+
+```text
+3 Mirror gates + 3 Action gates = 6 gates = 6 steps
+```
 
 ## Validation boundary
 
-Deterministic tests cover each gate, ambiguous evidence, and the crucial rule
-that Loop requires prior Break. The output includes raw energy-rate receipts and
-sample indices so classification can be replayed.
+Deterministic tests should cover all six canonical positions, ambiguous evidence, role alternation, and the requirement that Gate 6 feeds the next Gate 1 rather than creating Gate 7.
 
-This closes B3 as executable gate extraction. B4 remains responsible for the
-minimum stored-state, threshold, and phase conditions that make a Break valid.
+This node is an extractor/auditor. It does not prove a universal physical mechanism.
 
 **Brick recommendation:** Yellow.

@@ -12,23 +12,37 @@ metadata_standard: "I-06"
 # Node D-413: Ground Lattice Orbital-Restoring Simulation
 
 **Dependencies**  
-Upstream: A-101 Ground Zero, A-102 Displacement, A-103 Differential, A-105 Restoring Response, A-109 Inertial Memory, A-115 Unified Compression Field, A-117 Dimensional Integrity, C-317 Boundary-Tension Weave, D-408, D-411, D-412  
-Lateral: B-202 Pressure, E-502 Flowback, E-503 Pressure, E-506 Stability  
-Downstream: bounded excitation, circulation emergence, Vortex Phase, quark, proton knot, electrical shell, Mirror Gate, and Mass Effect simulations
+Upstream: A-101 Ground Zero, A-102 Displacement, A-103 Differential, A-105 Restoring Response, A-109 Inertial Memory, A-115 Unified Compression Field, A-117 Dimensional Integrity, C-319 Magnetic Lattice Reorganization, C-320 Magnetic-Compression Path Coupling, C-317 Boundary-Tension Weave, D-408, D-411, D-412  
+Lateral: B-202 Pressure, C-306 Torque, C-307 Angular Momentum, D-409 Twelvefold 3D Close-Packed Coordination, E-502 Flowback, E-503 Pressure, E-506 Stability  
+Downstream: D-416 Planetary Rotation-Magnetic Coupling Test Matrix, bounded excitation, circulation emergence, Vortex Phase, quark, proton knot, electrical shell, Mirror Gate, and Mass Effect simulations
 
 ## Canonical Node Graph Linkage
 
 D-413 is the runnable gravity/compression laboratory attached to [A-115 Unified Compression Field](A-115_Unified_Compression_Field.md). It is also listed in the repository-level [`00_MASTER_INDEX.md`](../00_MASTER_INDEX.md), so the lab is part of the canonical node graph rather than a standalone demo.
 
+The gravity-only baseline path is:
+
 ```text
 A-101 Ground / Zero
 -> A-102 Displacement
 -> A-104 Gradient / A-105 Restoring Response
--> A-115 Unified Compression Field (gravity/compression theory home)
--> D-413 Ground Lattice Orbital-Restoring Simulation (runnable reduced lab)
+-> A-115 Unified Compression Field
+-> D-413 Ground Lattice Orbital-Restoring Simulation
+```
+
+The canonical magnetic extension is:
+
+```text
+C-311 Electric-Magnetic Duality
+-> C-319 Magnetic Lattice Reorganization
+-> C-320 Magnetic-Compression Path Coupling
+-> D-413 ON/OFF laboratory controls
+-> D-416 planetary falsification matrix
 ```
 
 The runnable files live in [`D-413_Ground_Lattice_Orbital_Restoring_Simulation/`](D-413_Ground_Lattice_Orbital_Restoring_Simulation/). Results from the lab must be interpreted through this node and A-115; they must not silently promote the imposed curvature well into a derived gravity law.
+
+**Current implementation boundary:** the existing D-413 runnable lab does not yet implement C-319/C-320. Those nodes are upstream requirements for the next magnetic/gravity experiment, not a claim that the current code already tests magnetic coupling.
 
 ## Purpose
 
@@ -64,6 +78,8 @@ omitted: full 3D twelve-neighbor coordination and 4D recurrence shell
 ```
 
 The lattice is not square and does not use four-neighbor Cartesian propagation.
+
+D-408 owns this planar geometry. D-409 remains mandatory before a planetary physical claim, including any D-416 result.
 
 ## Ground State
 
@@ -121,7 +137,38 @@ The bounded displacement centroid and its shell samples use the same surface int
 
 If the visible depression and the sampled restoring surface disagree, the renderer fails.
 
-The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity. The direct A-115 integration target is to replace this imposed Gaussian with a source-derived compression field \(\chi(\mathbf x,t)\) and its gravity view \(\mathbf g_{\rm OW}=-\alpha_g\nabla\chi\).
+The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity. The direct A-115 integration target is to replace this imposed Gaussian with a source-derived compression field \(\chi(\mathbf x,t)\) and its baseline gravity view \(\mathbf g_0=-\alpha_g\nabla\chi\).
+
+## Magnetic-Lattice Coupling Target
+
+After the A-115 baseline is source-derived and reproduces the gravity-only controls, D-413 must add C-319/C-320 as a separately switchable experiment.
+
+C-319 supplies
+
+\[
+\mathbf K_L=\mathbf I+\kappa_R\mathbf R,
+\]
+
+and C-320 proposes
+
+\[
+\mathbf g_{\rm OW}=-\alpha_g\mathbf K_L\nabla\chi.
+\]
+
+The required order is:
+
+```text
+SOURCE-DERIVED BASELINE:
+chi -> grad(chi) -> g0 -> trajectory/torque
+
+MAGNETIC EXTENSION:
+B/rotation -> R -> K_L
+                  +
+               grad(chi)
+                  -> g_OW -> trajectory/torque
+```
+
+The magnetic channel must have an explicit OFF state with `R=0`, `K_L=I`, and exact recovery of the baseline within numerical tolerance. It may not be used to repair a baseline gravity run that already fails its own controls.
 
 ## Bounded Displacement Region
 
@@ -176,6 +223,8 @@ displacement falls across the depression
 ```
 
 Spin is not inserted as an animation command.
+
+C-306 and C-307 remain the authority for torque/angular accounting whether the restoring field comes from the baseline or the later C-320 extension.
 
 ## Lattice Coupling
 
@@ -233,21 +282,26 @@ The reference run reports:
 - nonzero axial spin for the asymmetric shell;
 - approximately zero axial spin for the symmetric-shell ablation.
 
-These results validate the declared reduced code path only. They do not validate One-Wave gravity, quark identity, proton structure, electrical-shell emergence, or Mass Effect.
+These results validate the declared reduced code path only. They do not validate One-Wave gravity, C-319 magnetic reorganization, C-320 magnetic/gravity coupling, planetary locking, quark identity, proton structure, electrical-shell emergence, or Mass Effect.
 
 ## Required Next Tests
 
-Before promotion, D-413 must add:
+Before promotion, D-413 must add in this order:
 
-- replace the imposed Gaussian well with an A-115 source-derived \(\chi\) field and test \(\mathbf g_{\rm OW}=-\alpha_g\nabla\chi\);
-- time-step refinement;
-- lattice-radius refinement;
-- boundary-reflection and periodic-boundary comparisons;
-- full work accounting for imposed well, damping, and lattice reaction;
-- a field-only displacement with no collective shell coordinate;
-- derived circulation and vorticity from the lattice state;
-- stable-orbit windows versus capture, escape, and collapse;
-- 3D D-409 translation after the 2D mechanism is understood.
+1. replace the imposed Gaussian well with an A-115 source-derived \(\chi\) field and test \(\mathbf g_0=-\alpha_g\nabla\chi\);
+2. prove the source-derived baseline reproduces or explains the existing gravity-only controls before adding magnetism;
+3. implement C-319 `R` and `K_L` with ON/OFF/reversal/rotation controls;
+4. implement C-320 `g_OW=-alpha_g K_L grad(chi)` and verify `K_L=I` reproduces the baseline;
+5. record trajectory, torque, capture, orbit, work, and drift differences with C-319/C-320 ON versus OFF;
+6. time-step refinement;
+7. lattice-radius refinement;
+8. boundary-reflection and periodic-boundary comparisons;
+9. full work accounting for imposed/source field, damping, lattice reaction, and magnetic reorganization;
+10. a field-only displacement with no collective shell coordinate;
+11. derived circulation and vorticity from the lattice state;
+12. stable-orbit windows versus capture, escape, and collapse;
+13. 3D D-409 translation;
+14. only after 3D translation, hand results to D-416 for planetary tests.
 
 ## Failure / Revision Conditions
 
@@ -256,8 +310,10 @@ D-413 fails if:
 1. camera mode changes the physical trajectory or measurements;
 2. spin remains when the shell is symmetric and all torque sources are removed;
 3. the zero-input lattice drifts or injects energy;
-4. the renderer displays compression, curvature, orbit, or spin not calculated from state;
+4. the renderer displays compression, curvature, orbit, spin, or magnetic reorganization not calculated from state;
 5. the visible well surface, contour geometry, displacement height, and restoring gradient do not come from the same lattice state;
 6. the curvature well is described as derived gravity;
 7. the bounded shell is mislabeled as a quark or particle;
-8. a visually attractive orbit is promoted without convergence, ablation, and work-ledger tests.
+8. a visually attractive orbit is promoted without convergence, ablation, and work-ledger tests;
+9. C-319/C-320 are claimed as tested before their state variables exist in the runnable code;
+10. enabling the magnetic extension changes the supposedly identical baseline even when `R=0` and `K_L=I`.

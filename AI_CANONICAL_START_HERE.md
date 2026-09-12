@@ -23,6 +23,30 @@ Exact memory may not be overwritten by generative recall
 D-413 well is imposed; V_eff is the conservative skeleton only
 ```
 
+## Magnetism / Gravity canonical bridge
+
+Before any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:
+
+1. `Nodes/C-311_Electric_Magnetic_Duality.md` — magnetic field is the rotational field view used by the framework.
+2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md` — planar control geometry only.
+3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — required native 3D geometry before planetary interpretation.
+4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.
+5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.
+6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.
+7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.
+8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.
+
+Locked interpretation:
+
+```text
+magnetic rotational state
+-> reorganizes lattice pathways
+-> changes directional accessibility of an existing compression/restoring field
+-> can alter distributed restoring response and torque if the coupling survives tests
+```
+
+Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field.  Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance.  Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.
+
 ## Current update handoff
 
 0. `UPDATED_49_MINIVERSE_DREAMWORLD_AI_GUIDE.md`
@@ -117,7 +141,7 @@ The current structures are separate:
 2 binary choices
 3 ternary moves
 6 route addresses = 2 x 3
-6 measured oscillator gates
+6 process steps = 6 gates = 3 Mirror gates + 3 Action gates
 5 downstream commitment/readout states (Updated 43)
 5-state self lifecycle: Idle -> Primed -> Executing -> Vectoring -> Resolving (G-742)
 Field/Void ternaries and quadratic routing (G-740)
@@ -161,20 +185,20 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 ```
 
 - `/` is one simultaneous mirrored pair.
-- `-` is the Mirror Gate return/crossover through the shared `(0)` reference.
+- `-` is the handoff from one canonical gate position to the next; Mirror behavior occurs only at M1, M2, and M3.
 - There are six coupled logical operations / twelve pair-side positions, not twelve serial instructions.
-- The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.
+- The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.
 - Four Views are **Direction, Phase, Strength, Reference**.
-- Four Actions are **Inward, Outward, Across, Over**.
+- Four Action **modes** are **Inward, Outward, Across, Over**; they describe what an Action gate may do and are not four primitive Action gates.
 - Two engagement choices are **Everything / Nothing** in this older vocabulary; Updated 43 owns the current executable YES/NO binary choice contract.
 - Three differential moves are **Left / Stay / Right = -1 / 0 / +1** in this older vocabulary; Updated 43 owns the current executable DOWN/HOLD/UP ternary move contract.
 - Older five-level `-2,-1,0,+1,+2` modulation is compatibility shorthand, not the canonical five-state structure. See Updated 44.
-- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**; G-739 constrains them as measured stability regions around a bidirectional oscillator.
+- The six process steps are the six gates: **BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3**; G-739 measures behavior at those same positions rather than defining another gate set.
 - There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in this architecture.
 
 ### Anti-drift rule
 
-If removing a domain vocabulary changes the six-pair oscillator, that domain representation has leaked into the kernel.
+If removing a domain vocabulary changes the six-step/six-gate Mirror-Action oscillator, that domain representation has leaked into the kernel.
 
 Point/Path/Field, Carrier/Breathing/Phase, dimensions, thermal labels, matter labels, musical mappings, cognition, planetary models, EM validation, and hardware materials are wrappers/instantiations above the invariant engine unless a separate node explicitly derives otherwise.
 
@@ -195,7 +219,7 @@ Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory,
 5. `Nodes/B-222_Oscillation_Center.md`
 6. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
 
-BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
+BEGIN/M1 is the first Mirror-gate relation at the active shared center/reference region. The six recursive labels are the same six gate positions: three Mirror gates alternating with three Action gates, not a separate measured-gate layer or a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
 
 ## Current Mass-Effect architecture
 

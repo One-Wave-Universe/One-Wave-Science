@@ -1,7 +1,12 @@
 ---
-id: G-753
-title: Brain versus 3:1 three-winding nerve
-status: yellow-architecture
+node_id: "G-753"
+canonical_name: "Brain versus 3:1 three-winding nerve"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-architecture"
+metadata_standard: "I-06"
 ---
 
 # G-753 — Just the brain. Nerves are 3:1 windings.

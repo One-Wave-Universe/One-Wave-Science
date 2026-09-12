@@ -1,3 +1,12 @@
+---
+artifact_id: "G-757_HESSIAN_RECEIPT"
+parent_node_id: "G-757"
+title: "G-757 Hessian receipt (2026-09-06)"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE"
+metadata_standard: "I-06"
+---
+
 # G-757 Hessian receipt (2026-09-06)
 
 14 coordinates: amplitudes `a_0..a_6` then phases `phi_0..phi_6`.

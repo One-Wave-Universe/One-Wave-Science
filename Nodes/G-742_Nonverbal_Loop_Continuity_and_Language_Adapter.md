@@ -1,9 +1,12 @@
 ---
-id: G-742
-title: Nonverbal Loop Continuity and Reconstructable Language Adapter
-status: proposed-build
-tier: yellow-computational-hypothesis
-claim_boundary: testimonial-inspired engineering requirements; not evidence for an afterlife or substrate-independent cognition
+node_id: "G-742"
+canonical_name: "Nonverbal Loop Continuity and Reconstructable Language Adapter"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "testimonial-inspired engineering requirements; not evidence for an afterlife or substrate-independent cognition"
+metadata_standard: "I-06"
 ---
 
 # Node G-742: Nonverbal Loop Continuity and Language Adapter

@@ -1,7 +1,12 @@
 ---
-id: G-762
-title: Four balanced interactions
-status: yellow-architecture
+node_id: "G-762"
+canonical_name: "Four balanced interactions"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-architecture"
+metadata_standard: "I-06"
 ---
 
 # G-762 — Four balanced interactions
