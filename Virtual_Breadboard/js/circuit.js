@@ -114,7 +114,7 @@
         uf.find(c.out);
         uf.find(vgndInternal(c));
       }
-      if (c.type === 'acsource') uf.find(acInternal(c));
+      if (c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse') uf.find(acInternal(c));
       if (c.type === 'mtjsensor') {
         uf.find(c.sin);
         uf.find(c.cos);
@@ -196,7 +196,7 @@
     components.forEach((c) => {
       switch (c.type) {
         case 'resistor': case 'capacitor': case 'inductor':
-        case 'led': case 'diode': case 'acsource':
+        case 'led': case 'diode': case 'acsource': case 'pwl': case 'pulse':
           add(c.a, c.b);
           break;
         case 'battery': case 'diffsource': case 'vcvs': case 'ccvs':
@@ -866,6 +866,53 @@
     return amplitude * Math.sin(2 * Math.PI * freqHz * t + (phaseDeg * Math.PI) / 180);
   }
 
+  // SPICE-style repeatable transient source waveforms. PWL points are
+  // [timeSeconds, volts] pairs, linearly interpolated between breakpoints
+  // and held at the endpoint values outside the declared time range.
+  function pwlValue(points, t) {
+    const pts = (points || []).map((p) => [Number(p[0]), Number(p[1])])
+      .filter((p) => Number.isFinite(p[0]) && Number.isFinite(p[1]))
+      .sort((a,b) => a[0]-b[0]);
+    if (!pts.length) return 0;
+    if (t <= pts[0][0]) return pts[0][1];
+    for (let i=1;i<pts.length;i++) {
+      if (t <= pts[i][0]) {
+        const [t0,v0]=pts[i-1], [t1,v1]=pts[i];
+        if (t1 === t0) return v1;
+        const f=(t-t0)/(t1-t0);
+        return v0 + f*(v1-v0);
+      }
+    }
+    return pts[pts.length-1][1];
+  }
+
+  // PULSE(V1 V2 TD TR TF PW PER)-class waveform. Zero rise/fall values are
+  // treated as ideal edges. If period is omitted/non-positive, one pulse is
+  // emitted and the source returns to V1 permanently.
+  function pulseValue(c, t) {
+    const v1=Number(c.v1 != null ? c.v1 : c.low != null ? c.low : 0) || 0;
+    const v2=Number(c.v2 != null ? c.v2 : c.high != null ? c.high : c.value != null ? c.value : 1) || 0;
+    const td=Math.max(0, Number(c.delay != null ? c.delay : c.td) || 0);
+    const tr=Math.max(0, Number(c.rise != null ? c.rise : c.tr) || 0);
+    const tf=Math.max(0, Number(c.fall != null ? c.fall : c.tf) || 0);
+    const pw=Math.max(0, Number(c.width != null ? c.width : c.pw) || 0);
+    const per=Number(c.period != null ? c.period : c.per) || 0;
+    if (t < td) return v1;
+    let x=t-td;
+    if (per > 0) x = x % per;
+    else if (x > tr + pw + tf) return v1;
+    if (tr > 0 && x < tr) return v1 + (v2-v1)*(x/tr);
+    if (x < tr + pw) return v2;
+    if (tf > 0 && x < tr + pw + tf) return v2 + (v1-v2)*((x-tr-pw)/tf);
+    return v1;
+  }
+
+  function transientSourceValue(c, t) {
+    if (c.type === 'pwl') return pwlValue(c.points || c.pwl, t);
+    if (c.type === 'pulse') return pulseValue(c, t);
+    return wave(c.value, c.freq || 1, c.phase || 0, t);
+  }
+
   // LEDs and plain diodes are the same device electrically (one-way
   // conduction past a threshold) — only the threshold/dynamic-resistance and
   // whether it glows differ.
@@ -1069,7 +1116,7 @@
       const batteries = components.filter((c) => c.type === 'battery' || c.type === 'diffsource');
       const vgnds = components.filter((c) => c.type === 'vgnd');
       const inductors = components.filter((c) => c.type === 'inductor');
-      const acsources = components.filter((c) => c.type === 'acsource');
+      const acsources = components.filter((c) => c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse');
       const mtjsensors = components.filter((c) => c.type === 'mtjsensor');
       const toroids = components.filter((c) => c.type === 'toroid');
       const mosfets = components.filter((c) => c.type === 'nmos' || c.type === 'pmos');
@@ -1119,7 +1166,7 @@
           touch(c.out);
           touch(vgndInternal(c));
         }
-        if (c.type === 'acsource') touch(acInternal(c));
+        if (c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse') touch(acInternal(c));
         if (c.type === 'mtjsensor') {
           touch(c.sin);
           touch(c.cos);
@@ -1767,7 +1814,7 @@
               stampClampDiode(j, ia, this._railClampState.get(key + ':hi') || false, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
               stampClampDiode(ib, j, this._railClampState.get(key + ':lo') || false, RAIL_CLAMP_VF, RAIL_CLAMP_RON);
             }
-          } else if (c.type === 'acsource') {
+          } else if (c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse') {
             const g = 1 / AC_RINT;
             const i = gi(uf.find(acInternal(c)));
             const j = gi(uf.find(c.a));
@@ -1958,8 +2005,8 @@
           });
         });
 
-        // AC source: an ideal source like a battery, but its target value is
-        // the shared sim clock's sinusoid instead of a constant.
+        // Time-domain source: shared MNA/source-impedance primitive for sine,
+        // PWL, and PULSE waveforms; only the commanded voltage differs.
         acsources.forEach((ac, k) => {
           const row = rowAc(k);
           const p = gi(uf.find(acInternal(ac)));
@@ -1972,7 +2019,7 @@
             A[m][row] -= 1;
             A[row][m] -= 1;
           }
-          b[row] += wave(ac.value, ac.freq || 1, ac.phase || 0, t);
+          b[row] += transientSourceValue(ac, t);
         });
 
         // MTJ angle sensor: two ideal sources sharing one rotating clock,
@@ -2611,7 +2658,7 @@
           I = indCurrent.get(c.id) || 0;
           const dcrP = I * I * inductorDCR(c.value);
           if (dcrP > 0.25) warnings.push(`Inductor ${c.label || c.id}: ${dcrP.toFixed(2)} W in its real winding resistance -- exceeds a typical small inductor's rating`);
-        } else if (c.type === 'acsource') {
+        } else if (c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse') {
           I = acCurrent.get(c.id) || 0;
         } else if (c.type === 'mtjsensor') {
           I = 0;
@@ -3003,7 +3050,7 @@
 
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BJT_IS, BJT_BETA_F, BJT_BETA_R, BJT_NF, BJT_NR, bjtSpec, bjtCurrents, bjtLinearization, BATTERY_RINT, VGND_RINT,
-    AC_RINT, MTJ_RINT, MOSFET_MODEL_CARDS, NMOS_PARTS, PMOS_PARTS, findMosfetModelCard, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
+    AC_RINT, MTJ_RINT, wave, pwlValue, pulseValue, transientSourceValue, MOSFET_MODEL_CARDS, NMOS_PARTS, PMOS_PARTS, findMosfetModelCard, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
     LATCHRELAY_SPEC, latchRelaySpec,

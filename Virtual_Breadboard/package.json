@@ -23,6 +23,7 @@
     "test:diode-newton": "node test/diode-newton.test.js",
     "test:mosfet-continuous": "node test/mosfet-continuous.test.js",
     "test:mosfet-model-cards": "node test/mosfet-model-cards.test.js",
+    "test:pwl-pulse": "node test/pwl-pulse-sources.test.js",
     "test:spice-tolerances": "node test/spice-tolerances.test.js",
     "test:ac-analysis": "node test/ac-analysis.test.js",
     "test:bode": "node test/bode-analysis.test.js",
