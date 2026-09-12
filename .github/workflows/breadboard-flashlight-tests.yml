@@ -21,6 +21,7 @@ on:
       - 'Virtual_Breadboard/test/sparse-mna.test.js'
       - 'Virtual_Breadboard/test/adaptive-transient.test.js'
       - 'Virtual_Breadboard/test/integration-methods.test.js'
+      - 'Virtual_Breadboard/test/convergence-diagnostics.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -51,6 +52,7 @@ on:
       - 'Virtual_Breadboard/test/sparse-mna.test.js'
       - 'Virtual_Breadboard/test/adaptive-transient.test.js'
       - 'Virtual_Breadboard/test/integration-methods.test.js'
+      - 'Virtual_Breadboard/test/convergence-diagnostics.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -123,6 +125,9 @@ jobs:
 
       - name: Run trapezoidal and Gear2 integration qualification
         run: npm run test:integration-methods
+
+      - name: Run deterministic convergence diagnostics qualification
+        run: npm run test:convergence-diagnostics
 
       - name: Run SPICE convergence tolerance qualification
         run: npm run test:spice-tolerances
