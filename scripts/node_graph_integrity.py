@@ -38,6 +38,7 @@ ARTIFACT_REQUIRED = (
     "lifecycle",
     "metadata_standard",
 )
+ALLOWED_CANONICAL_NAMESPACES = {"NODE", "ROOT_AXIOM"}
 ALLOWED_GATES = {"BROWN", "GRAY", "GREEN", "YELLOW", "BRONZE", "SILVER", "GOLD", "RED"}
 ALLOWED_LIFECYCLES = {
     "ACTIVE",
@@ -158,9 +159,9 @@ def main() -> int:
                     artifacts.append((path, parent))
                 continue
 
-            if namespace != "NODE":
+            if namespace not in ALLOWED_CANONICAL_NAMESPACES:
                 errors.append(
-                    f"{path.relative_to(ROOT)}: namespace must be NODE or NODE_ARTIFACT, got {namespace!r}"
+                    f"{path.relative_to(ROOT)}: namespace must be NODE, ROOT_AXIOM, or NODE_ARTIFACT, got {namespace!r}"
                 )
                 continue
 
@@ -241,7 +242,7 @@ def main() -> int:
     else:
         errors.append("AI_CANONICAL_START_HERE.md missing")
 
-    print(f"canonical nodes parsed: {len(nodes)}")
+    print(f"canonical nodes/root axioms parsed: {len(nodes)}")
     print(f"node artifacts parsed: {len(artifacts)}")
     if errors:
         print("\nERRORS")
@@ -250,7 +251,7 @@ def main() -> int:
         print(f"\nFAIL: {len(errors)} error(s)")
         return 1
 
-    print("PASS: canonical node metadata, index coverage, dependencies, artifacts, and locked graph edges all hold")
+    print("PASS: canonical node metadata, root axioms, index coverage, dependencies, artifacts, and locked graph edges all hold")
     return 0
 
 
