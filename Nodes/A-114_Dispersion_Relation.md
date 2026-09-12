@@ -94,6 +94,15 @@ Yellow Audit:
   is constant; a separate shell-energy model is the critical next connection
 - General (non-small) gamma case not solved
 
+Update: D-405 has since adopted the fixed-R, variable-k Model 2 suggested
+above and combined it with this node's small-k omega(k) to get a candidate
+linear ladder E_n = epsilon*n (constant spacing), alongside an independent
+second candidate (Ch6 surface energy + Model 1's R_n) giving E_n
+proportional to n^2 (growing spacing). See D-405's "Candidate energy
+ladder" section. Both remain uncalibrated (beta, c_L still unmeasured here)
+and unreconciled with each other; this node's small-k regime caveat below
+applies directly to the first candidate.
+
 Future Work:
 Solve the exact quadratic for general gamma (not just small-gamma limit)
 to get the full damped dispersion relation — needed before this applies to

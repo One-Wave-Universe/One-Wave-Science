@@ -184,8 +184,16 @@ convergence between this framework and observation.
 
 - The product-stability half of the old "availability condition" (is a
   new stable harmonic-shell configuration accessible for the product)
-  is still asserted, not derived — it is blocked on D-405's own
-  admitted gap, not something this chapter can close on its own
+  is still asserted, not derived at the level this chapter needs.
+  D-405 now has two candidate energy ladders (constant-spacing via
+  Model 2 + A-114's dispersion relation, and growing-spacing via Ch6
+  surface energy + Model 1), but neither is calibrated, neither is
+  mapped from shell index n to actual nucleon count (Z, A), and the two
+  candidates make different, unreconciled predictions about the ladder
+  shape. This chapter still cannot compute "is the next configuration
+  accessible" from either one yet -- the blocker moved from "no energy
+  model at all" to "two uncalibrated, unmapped candidates," which is
+  real progress but not a closed gap.
 - Stage-specific thresholds T_n are not derived from B-208's real
   bands, only proposed as applying "per-stage" without specifying how
   the universal 100-0 band structure maps onto multiple sequential
@@ -207,9 +215,10 @@ convergence between this framework and observation.
 
 ## Future Work
 
-Derive D-405's missing energy ladder (E_n as a function of shell
-configuration, not just geometry) so the product-stability half of the
-availability condition can actually be computed rather than asserted.
+D-405 now has two candidate energy ladders (see its own Future Work);
+pick or derive a criterion for which applies, then calibrate it and map
+shell index n to actual nucleon count (Z, A), so the product-stability
+half of the availability condition can actually be computed.
 Cross-check the Gamow-peak table above against published reaction-rate
 data rather than leaving it as a self-computed illustration.
 Map B-208's real band structure onto the actual sequence of stellar
