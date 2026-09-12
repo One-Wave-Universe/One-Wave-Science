@@ -12,6 +12,7 @@ on:
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
       - 'Virtual_Breadboard/test/solver-convergence.test.js'
       - 'Virtual_Breadboard/test/dc-operating-point.test.js'
+      - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -27,14 +28,12 @@ on:
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
       - 'Virtual_Breadboard/test/solver-convergence.test.js'
       - 'Virtual_Breadboard/test/dc-operating-point.test.js'
+      - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
       - '.github/workflows/breadboard-flashlight-tests.yml'
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   flashlight:
@@ -46,40 +45,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: virtual-breadboard-source-gmin-stepping
-
-      - name: Patch configurable GMIN once
-        working-directory: .
-        shell: python
-        run: |
-          from pathlib import Path
-          p = Path('Virtual_Breadboard/js/circuit.js')
-          s = p.read_text()
-          if 'const solveGmin =' not in s:
-              old = """      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)\n        ? Math.max(1, Math.floor(solverOptions.maxIterations))\n        : 30;"""
-              new = """      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)\n        ? Math.max(1, Math.floor(solverOptions.maxIterations))\n        : 30;\n      const solveGmin = solverOptions && Number.isFinite(solverOptions.gmin)\n        ? Math.max(0, solverOptions.gmin)\n        : GMIN;"""
-              if old not in s: raise SystemExit('solver-options anchor not found')
-              s = s.replace(old, new, 1)
-              old = '          stampG(i, i, GMIN);'
-              if old not in s: raise SystemExit('GMIN stamp anchor not found')
-              s = s.replace(old, '          stampG(i, i, solveGmin);', 1)
-              old = """        relTolerance,\n      };"""
-              new = """        relTolerance,\n        gmin: solveGmin,\n      };"""
-              if old not in s: raise SystemExit('solver metadata anchor not found')
-              s = s.replace(old, new, 1)
-              p.write_text(s)
-
-      - name: Commit GMIN patch if needed
-        working-directory: .
-        run: |
-          if ! git diff --quiet -- Virtual_Breadboard/js/circuit.js; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add Virtual_Breadboard/js/circuit.js
-            git commit -m "Virtual Breadboard: make GMIN solver-configurable"
-            git push
-          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -103,3 +68,6 @@ jobs:
 
       - name: Run true DC operating point qualification
         run: npm run test:dc-op
+
+      - name: Run source and GMIN stepping qualification
+        run: npm run test:stepping
