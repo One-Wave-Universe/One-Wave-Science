@@ -5,13 +5,7 @@ metadata_exit=0
 node graph discovery surfaces already synchronized
 sync_exit=0
 === graph audit ===
-canonical nodes parsed: 199
+canonical nodes/root axioms parsed: 202
 node artifacts parsed: 5
-
-ERRORS
-- Root_Axioms/A+101_One_Field_Ground.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
-- Root_Axioms/A+102_Positive_Displacement_Expression.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
-- Root_Axioms/A+103_Differential_Expression.md: namespace must be NODE or NODE_ARTIFACT, got 'ROOT_AXIOM'
-
-FAIL: 3 error(s)
-audit_exit=1
+PASS: canonical node metadata, root axioms, index coverage, dependencies, artifacts, and locked graph edges all hold
+audit_exit=0
