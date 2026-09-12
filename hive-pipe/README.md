@@ -72,3 +72,30 @@ SSH keys, API tokens, and device secrets must stay outside this repository.
 Until a transport is configured, Hive Pipe is a verified local Jetson runner,
 not a claim of remote terminal access.
 
+## Agent Gateway
+
+`gateway.py` exposes the same named-action queue over authenticated HTTP. It
+binds only to `127.0.0.1:8765`; never bind it directly to a public interface.
+
+Install the per-user service and create separate local tokens for Codex,
+Claude, and Gemini:
+
+```bash
+bash hive-pipe/install_gateway.sh
+```
+
+Check the localhost endpoint with one token:
+
+```bash
+TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/codex.token")"
+curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8765/v1/health
+```
+
+An authenticated reverse tunnel may publish this localhost endpoint. Configure
+the tunnel provider outside the repository, keep its credentials outside the
+repository, require HTTPS, and retain the gateway bearer token as a second
+authentication layer. Each AI gets a different token so access can be revoked
+individually.
+
+The gateway still does not accept raw command strings. Broader terminal actions
+must be added as named actions with their own validation and tests.
