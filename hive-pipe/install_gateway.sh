@@ -3,6 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 REPO_ROOT="$(dirname -- "$SCRIPT_DIR")"
+EXTERNAL_WORK_ROOT="${ONE_WAVE_EXTERNAL_WORK:-$HOME/One-Wave-External-Work}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
 TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
@@ -10,6 +11,7 @@ GATEWAY_SERVICE="$SYSTEMD_DIR/hive-pipe-gateway.service"
 AGENT_SERVICE="$SYSTEMD_DIR/hive-pipe-agent.service"
 
 mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
+mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
 chmod 700 "$CONFIG_DIR" "$TOKEN_DIR"
 
 for agent in codex claude gemini; do
@@ -23,6 +25,7 @@ done
 
 escaped_root="$(printf '%s' "$SCRIPT_DIR" | sed 's/ /\\x20/g')"
 escaped_repo="$(printf '%s' "$REPO_ROOT" | sed 's/ /\\x20/g')"
+escaped_external="$(printf '%s' "$EXTERNAL_WORK_ROOT" | sed 's/ /\\x20/g')"
 {
   echo '[Unit]'
   echo 'Description=One-Wave Hive Pipe Agent Gateway'
@@ -32,15 +35,16 @@ escaped_repo="$(printf '%s' "$REPO_ROOT" | sed 's/ /\\x20/g')"
   echo 'Type=simple'
   echo "WorkingDirectory=$escaped_root"
   echo "Environment=HIVE_PIPE_TOKEN_DIR=$TOKEN_DIR"
+  echo "Environment=ONE_WAVE_EXTERNAL_WORK=$escaped_external"
   echo "ExecStart=/usr/bin/python3 $escaped_root/gateway.py --host 127.0.0.1 --port 8765"
   echo 'Restart=on-failure'
   echo 'RestartSec=3'
   echo 'NoNewPrivileges=true'
   echo 'PrivateTmp=true'
   echo 'ProtectSystem=strict'
-  # The terminal parser may build/edit the checked-out project, but system paths
-  # remain read-only and privilege escalation is still blocked.
-  echo "ReadWritePaths=$escaped_repo"
+  # AI may build/edit the checkout and explicit external-work workspace. System
+  # paths remain read-only and privilege escalation remains blocked.
+  echo "ReadWritePaths=$escaped_repo $escaped_external"
   echo
   echo '[Install]'
   echo 'WantedBy=default.target'
@@ -73,5 +77,6 @@ systemctl --user restart hive-pipe-agent.service hive-pipe-gateway.service
 echo "HIVE_PIPE_GATEWAY_INSTALLED"
 echo "Local endpoint: http://127.0.0.1:8765"
 echo "AI terminal: terminal_pwd / terminal_which / terminal_run via MCP"
-echo "Writable scope: $REPO_ROOT"
+echo "Writable repo: $REPO_ROOT"
+echo "Writable external work: $EXTERNAL_WORK_ROOT"
 echo "Tokens: $TOKEN_DIR (0600; never commit or paste them into the public repository)"
