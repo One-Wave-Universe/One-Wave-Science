@@ -74,6 +74,29 @@ relational coordinates use measured Field weights rather than inserted mass.
   extended measurement, translation covariance, and origin-free outputs.
 - It does not claim a solution to the celestial three-body problem.
 
+## Real per-body spin/EM/parent-wake data (Updated 38-41 wiring)
+
+`solar_system_control.py` now also carries, per body: real observed sidereal
+spin (Point-rotation) periods, a `spin_orbit_ratio` diagnostic, and the
+`HAS_GLOBAL_INTRINSIC_DIPOLE` control flags Updated 39/40 already require
+(False for Venus, Mars, and the Moon; True for Mercury, Earth, and the giant
+planets). These confirm, as data rather than assertion, that Mercury's 3:2
+spin-orbit resonance and the Moon's synchronous lock are the real standard
+gravitational/tidal control facts -- not evidence for a magnetic-lock
+hypothesis for any of these bodies, including Uranus/Neptune (whose own
+rotation is not solar-tide-locked at all; only some of their moons are
+tidally locked to *them*, again by gravity).
+
+`acceleration_receipt`/`step` gained a fourth named channel,
+`external_parent_wake`: a one-way linear tidal-tensor form for an unmodeled
+parent-scale mass distribution (Attack Map section K/M's Great Attractor ->
+cluster -> galaxy -> star nesting). It is kept separate from
+`one_wave_candidate` because an external parent field is legitimately
+allowed to add net momentum to the modeled system (its source isn't
+simulated), unlike an internal exchange among modeled bodies. It defaults to
+the zero tensor: only the mathematical form is fixed here, not a calibrated
+Milky-Way-tide value.
+
 ## Next gates
 
 1. Derive the nonlinear potential and nonlocal kernel from canonical nodes.

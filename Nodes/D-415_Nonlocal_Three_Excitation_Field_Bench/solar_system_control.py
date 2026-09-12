@@ -54,6 +54,44 @@ MASS_KG = {
 NAMES = ("Sun", "Mercury", "Venus", "Earth", "Moon", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
 MASSES = np.array([MASS_KG[n] / SOLAR_MASS_KG for n in NAMES])
 
+MOON_ORBITAL_PERIOD_DAYS = 27.321661  # sidereal month
+
+# Real observed sidereal spin (Point-rotation) periods, days. Negative = retrograde.
+# Source: NASA planetary/lunar/solar fact sheets. These are Gray control facts,
+# not One-Wave outputs -- Updated 38/39 require Mercury's 3:2 resonance and the
+# Moon's synchronous lock to remain standard gravitational/tidal facts unless a
+# specific, evidenced residual is found (see UPDATED_38 "Mercury stress test").
+SPIN_PERIOD_DAYS = {
+    "Sun": 25.05, "Mercury": 58.646, "Venus": -243.025, "Earth": 0.99727,
+    "Moon": MOON_ORBITAL_PERIOD_DAYS, "Mars": 1.02595, "Jupiter": 0.41354,
+    "Saturn": 0.44401, "Uranus": -0.71833, "Neptune": 0.67125,
+}
+
+# Whether a body has a present, global, self-generated (dynamo) magnetic
+# dipole, as opposed to localized crustal remnant magnetism (Mars) or a
+# purely solar-wind-induced envelope (Venus). This is the explicit Updated
+# 39/40 control: Mars and Venus must NOT receive a global EM-shell term.
+HAS_GLOBAL_INTRINSIC_DIPOLE = {
+    "Sun": True, "Mercury": True, "Venus": False, "Earth": True, "Moon": False,
+    "Mars": False, "Jupiter": True, "Saturn": True, "Uranus": True, "Neptune": True,
+}
+
+
+def orbital_period_days(name: str) -> float:
+    """Kepler's third law from the same JPL elements and Gaussian mu already
+    used by `kepler_position`. This is the Gray control period, independent
+    of the candidate spin data above."""
+    if name == "Moon":
+        return MOON_ORBITAL_PERIOD_DAYS
+    a = ELEMENTS[name].a[0]
+    mu = G_AU3_SOLAR_MASS_DAY2 * (MASS_KG["Sun"] + MASS_KG[name]) / SOLAR_MASS_KG
+    return float(2 * pi * sqrt(a**3 / mu))
+
+
+def spin_orbit_ratio(name: str) -> float:
+    """|orbital period / spin period|, e.g. Mercury ~1.5 (its real 3:2 lock)."""
+    return abs(orbital_period_days(name) / SPIN_PERIOD_DAYS[name])
+
 
 def _value(pair: tuple[float, float], centuries: float) -> float:
     return pair[0] + pair[1] * centuries
@@ -98,7 +136,7 @@ def initial_state(jd: float = J2000) -> tuple[np.ndarray, np.ndarray]:
     # A simple epoch-relative lunar state. It is always added to Earth, never
     # advanced as an independent screen-space orb.
     moon_a = 384400.0 / 149597870.7
-    moon_period = 27.321661
+    moon_period = MOON_ORBITAL_PERIOD_DAYS
     phase = 2 * pi * (jd - J2000) / moon_period
     moon_rel = np.array([moon_a * cos(phase), moon_a * sin(phase), 0.0])
     moon_vel_rel = np.array([-moon_a * sin(phase), moon_a * cos(phase), 0.0]) * (2 * pi / moon_period)
@@ -155,26 +193,62 @@ def relativistic_acceleration(r: np.ndarray, v: np.ndarray) -> np.ndarray:
 CandidateLaw = Callable[[np.ndarray, np.ndarray, float], np.ndarray]
 
 
+def external_parent_tidal_acceleration(r: np.ndarray, tensor: np.ndarray | None = None,
+                                       center: np.ndarray | None = None) -> np.ndarray:
+    """One-way linear tidal-tensor acceleration from an unmodeled parent-scale
+    mass distribution (Attack Map section K/M: Great Attractor -> cluster ->
+    galaxy -> star, each level imposing curvature on the level below it,
+    without that parent level being simulated in return).
+
+    This channel is deliberately kept separate from `one_wave_candidate` and
+    from `hybrid_one_wave.close_internal_channel`: an internal exchange among
+    the modeled bodies cannot create net system momentum or angular momentum
+    from nothing, but a real external field (e.g. the Milky Way's tidal field
+    acting on the Solar System) legitimately can, because its source -- the
+    parent -- is not itself part of the simulated system. One-way is a
+    justified approximation here specifically because the mass ratio is
+    extreme (a star system's gravitational backreaction on its host galaxy is
+    real but experimentally negligible); it is not a claim that gravity is
+    ever one-way in principle -- every body already pulls back on every other
+    body it is coupled to in `gravity_acceleration` above.
+
+    `tensor` defaults to the zero matrix: this function only fixes the
+    mathematical FORM a linear/quadrupole external tidal term must take. No
+    specific parent mass distribution (e.g. the real Milky Way galactic tide)
+    is derived or calibrated here -- that remains open future work, matching
+    Attack Map section L/K's rule against inserting an ad hoc value merely to
+    fit data.
+    """
+    tensor = np.zeros((3, 3)) if tensor is None else tensor
+    center = np.zeros(3) if center is None else center
+    return (r - center) @ tensor.T
+
+
 def acceleration_receipt(r: np.ndarray, v: np.ndarray, time: float = 0.0,
                          candidate_law: CandidateLaw | None = None,
-                         relativity: bool = True) -> dict[str, np.ndarray]:
+                         relativity: bool = True,
+                         parent_tensor: np.ndarray | None = None,
+                         parent_center: np.ndarray | None = None) -> dict[str, np.ndarray]:
     """Return named acceleration channels so no mechanism is hidden."""
     return {
         "newtonian": gravity_acceleration(r),
         "relativity_1pn": relativistic_acceleration(r, v) if relativity else np.zeros_like(r),
         "one_wave_candidate": np.zeros_like(r) if candidate_law is None else candidate_law(r, v, time),
+        "external_parent_wake": external_parent_tidal_acceleration(r, parent_tensor, parent_center),
     }
 
 
 def step(r: np.ndarray, v: np.ndarray, dt: float, time: float = 0.0,
          candidate_law: CandidateLaw | None = None,
-         relativity: bool = True) -> tuple[np.ndarray, np.ndarray]:
+         relativity: bool = True,
+         parent_tensor: np.ndarray | None = None,
+         parent_center: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
     """Velocity-Verlet step; optional candidate law is separately auditable."""
-    channels0 = acceleration_receipt(r, v, time, candidate_law, relativity)
+    channels0 = acceleration_receipt(r, v, time, candidate_law, relativity, parent_tensor, parent_center)
     a0 = sum(channels0.values())
     r1 = r + v * dt + 0.5 * a0 * dt * dt
     predicted_v = v + a0 * dt
-    channels1 = acceleration_receipt(r1, predicted_v, time + dt, candidate_law, relativity)
+    channels1 = acceleration_receipt(r1, predicted_v, time + dt, candidate_law, relativity, parent_tensor, parent_center)
     a1 = sum(channels1.values())
     return r1, v + 0.5 * (a0 + a1) * dt
 
