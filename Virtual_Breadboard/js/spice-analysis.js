@@ -4,7 +4,7 @@
  * SPICE-style analysis helpers for the Virtual Breadboard solver.
  *
  * This deliberately sits beside Circuit.solve() instead of refactoring the
- * load-bearing MNA core.  Analysis modes transform only what SPICE itself
+ * load-bearing MNA core. Analysis modes transform only what SPICE itself
  * treats differently from transient simulation, then hand the resulting
  * circuit to the same generic electrical solver.
  */
@@ -32,7 +32,6 @@ function sweepValues(start, stop, step) {
   }
 
   const out = [];
-  const span = Math.abs(stop - start);
   const eps = Math.max(1, Math.abs(start), Math.abs(stop)) * 1e-12;
   const maxPoints = 100000;
   for (let k = 0; k < maxPoints; k++) {
@@ -71,25 +70,7 @@ function sampleProbes(result, probes) {
   return values;
 }
 
-/**
- * Build and solve a true DC operating point (.op-class).
- *
- * DC rules are explicit and history-free:
- *   - capacitors are open circuits and therefore carry 0 A DC current;
- *   - inductors lose only their reactive L/dt term and retain the same real
- *     winding DCR already used by the transient solver;
- *   - a fresh Circuit instance is always used, so capacitor voltage,
- *     inductor current, battery/runtime state, and magnetic transient history
- *     from any earlier simulation cannot leak into this answer.
- *
- * Everything else is still solved by Circuit.solve(), including the same MNA,
- * nonlinear device iteration, GMIN, convergence report, and fault warnings.
- */
-function operatingPoint(elements, options) {
-  options = options || {};
-  const ambientC = options.ambientC;
-  if (ambientC != null) finiteNumber('ambientC', ambientC);
-
+function dcEquivalent(elements) {
   const original = cloneElements(elements);
   const dcElements = cloneElements(elements);
   const capacitorIds = [];
@@ -112,35 +93,138 @@ function operatingPoint(elements, options) {
     return [component];
   });
 
-  const circuit = new Circuit();
-  // dt is irrelevant to the transformed C/L network, but the generic solver
-  // still accepts one because other transient-capable component models share
-  // the same entry point. A fixed positive value keeps that API well-defined.
-  const result = circuit.solve(dcElements, 1, ambientC, options.solverOptions);
+  return { original, dcElements, capacitorIds };
+}
 
-  // Preserve original component IDs as measurable DC quantities. Removed
-  // capacitors are true open circuits, so their DC current is exactly zero.
+function restoreDcMeasurements(result, capacitorIds) {
   for (const id of capacitorIds) result.currents.set(id, 0);
+  return result;
+}
+
+function operatingPoint(elements, options) {
+  options = options || {};
+  const ambientC = options.ambientC;
+  if (ambientC != null) finiteNumber('ambientC', ambientC);
+
+  const { original, dcElements, capacitorIds } = dcEquivalent(elements);
+  const circuit = new Circuit();
+  const result = circuit.solve(dcElements, 0, ambientC, options.solverOptions);
+  restoreDcMeasurements(result, capacitorIds);
 
   result.analysis = {
     type: 'op',
     historyIndependent: true,
     capacitorRule: 'open-circuit',
     inductorRule: 'winding-dcr',
+    continuation: false,
   };
   result.originalElements = original;
   result.dcElements = dcElements;
   return result;
 }
 
+function normalizeSourceScales(values) {
+  const out = values == null ? [0, 0.25, 0.5, 0.75, 1] : Array.from(values);
+  if (!out.length) throw new RangeError('sourceScales must contain at least one value');
+  out.forEach((v, i) => {
+    finiteNumber(`sourceScales[${i}]`, v);
+    if (v < 0 || v > 1) throw new RangeError('sourceScales values must be between 0 and 1');
+  });
+  if (out[out.length - 1] !== 1) out.push(1);
+  return out;
+}
+
+function normalizeGminSteps(values, targetGmin) {
+  const out = values == null ? [1e-3, 1e-5, 1e-7, targetGmin] : Array.from(values);
+  if (!out.length) throw new RangeError('gminSteps must contain at least one value');
+  out.forEach((v, i) => {
+    finiteNumber(`gminSteps[${i}]`, v);
+    if (v < 0) throw new RangeError('gminSteps values must be >= 0');
+  });
+  if (out[out.length - 1] !== targetGmin) out.push(targetGmin);
+  return out;
+}
+
+function scaleIndependentDcSources(elements, scale) {
+  const scaled = cloneElements(elements);
+  for (const component of scaled.components || []) {
+    if (component.type === 'battery' || component.type === 'diffsource') {
+      component.value = (component.value || 0) * scale;
+    }
+  }
+  return scaled;
+}
+
 /**
- * Sweep one independent source through a numeric range.
+ * Solve a DC operating point with continuation.
  *
- * Supported swept sources: battery and diffsource. Each point uses a fresh
- * Circuit by default so history does not silently contaminate the transfer
- * curve. continuation=true retains the older deliberate history/hysteresis
- * experiment mode.
+ * Phase 1: source stepping. Independent DC sources are ramped from zero to
+ * their requested values while reusing the same Circuit instance, so diode,
+ * MOSFET, comparator, clamp, and other fixed-point states from the easier
+ * solution seed the next harder one.
+ *
+ * Phase 2: GMIN stepping. With sources at full value, the artificial shunt
+ * conductance is reduced from an intentionally easy value back to the normal
+ * target GMIN. The final reported result is always the solve at full source
+ * values and target GMIN; intermediate answers are never returned as truth.
  */
+function steppedOperatingPoint(elements, options) {
+  options = options || {};
+  const ambientC = options.ambientC;
+  if (ambientC != null) finiteNumber('ambientC', ambientC);
+  const targetGmin = options.targetGmin == null ? 1e-9 : finiteNumber('targetGmin', options.targetGmin);
+  if (targetGmin < 0) throw new RangeError('targetGmin must be >= 0');
+  const sourceScales = normalizeSourceScales(options.sourceScales);
+  const gminSteps = normalizeGminSteps(options.gminSteps, targetGmin);
+  const baseSolverOptions = Object.assign({}, options.solverOptions || {});
+  const { original, dcElements, capacitorIds } = dcEquivalent(elements);
+  const circuit = new Circuit();
+  const trace = [];
+  let result = null;
+
+  const sourcePhaseGmin = gminSteps[0];
+  for (const sourceScale of sourceScales) {
+    const steppedElements = scaleIndependentDcSources(dcElements, sourceScale);
+    result = circuit.solve(steppedElements, 0, ambientC, Object.assign({}, baseSolverOptions, { gmin: sourcePhaseGmin }));
+    trace.push({
+      phase: 'source',
+      sourceScale,
+      gmin: sourcePhaseGmin,
+      converged: !!(result.solver && result.solver.converged),
+      iterations: result.solver ? result.solver.iterations : null,
+    });
+  }
+
+  const fullSourceElements = scaleIndependentDcSources(dcElements, 1);
+  for (const gmin of gminSteps) {
+    result = circuit.solve(fullSourceElements, 0, ambientC, Object.assign({}, baseSolverOptions, { gmin }));
+    trace.push({
+      phase: 'gmin',
+      sourceScale: 1,
+      gmin,
+      converged: !!(result.solver && result.solver.converged),
+      iterations: result.solver ? result.solver.iterations : null,
+    });
+  }
+
+  restoreDcMeasurements(result, capacitorIds);
+  result.analysis = {
+    type: 'op',
+    historyIndependent: true,
+    capacitorRule: 'open-circuit',
+    inductorRule: 'winding-dcr',
+    continuation: true,
+    method: 'source+gmin-stepping',
+    sourceScales,
+    gminSteps,
+    targetGmin,
+    trace,
+  };
+  result.originalElements = original;
+  result.dcElements = dcElements;
+  return result;
+}
+
 function dcSweep(elements, options) {
   options = options || {};
   const sourceId = options.sourceId;
@@ -197,4 +281,4 @@ function dcSweep(elements, options) {
   };
 }
 
-module.exports = { operatingPoint, dcSweep, sweepValues };
+module.exports = { operatingPoint, steppedOperatingPoint, dcSweep, sweepValues };
