@@ -923,9 +923,97 @@
     return c.type === 'diode' ? DIODE_RON : LED_RON;
   }
 
+  function sparseRow() {
+    const entries = new Map();
+    const target = { _entries: entries };
+    return new Proxy(target, {
+      get(obj, prop) {
+        if (prop === '_entries') return entries;
+        if (typeof prop === 'string' && /^\d+$/.test(prop)) return entries.get(Number(prop)) || 0;
+        return obj[prop];
+      },
+      set(obj, prop, value) {
+        if (typeof prop === 'string' && /^\d+$/.test(prop)) {
+          const col = Number(prop);
+          if (value === 0 || Math.abs(value) < 1e-300) entries.delete(col);
+          else entries.set(col, value);
+          return true;
+        }
+        obj[prop] = value;
+        return true;
+      },
+    });
+  }
+
+  function makeSparseMatrix(n) {
+    return Array.from({ length: n }, () => sparseRow());
+  }
+
+  function sparseNnz(A) {
+    let nnz = 0;
+    for (const row of A) nnz += row && row._entries ? row._entries.size : 0;
+    return nnz;
+  }
+
+  function sparseToDense(A, n) {
+    return A.map((row) => {
+      const out = new Array(n).fill(0);
+      if (row && row._entries) row._entries.forEach((v, c) => { out[c] = v; });
+      else for (let c = 0; c < n; c++) out[c] = row[c] || 0;
+      return out;
+    });
+  }
+
+  function solveSparseLinear(A, bIn) {
+    const n = bIn.length;
+    const rows = A.map((row) => row && row._entries ? new Map(row._entries) : new Map(row.map((v,c)=>[c,v]).filter(([,v])=>v!==0)));
+    const rhs = bIn.slice();
+    const initialNnz = rows.reduce((sum,row)=>sum+row.size,0);
+    let peakNnz = initialNnz;
+    for (let col = 0; col < n; col++) {
+      let piv = col;
+      let maxAbs = Math.abs(rows[col].get(col) || 0);
+      for (let r = col + 1; r < n; r++) {
+        const av = Math.abs(rows[r].get(col) || 0);
+        if (av > maxAbs) { maxAbs = av; piv = r; }
+      }
+      if (maxAbs < 1e-15) continue;
+      if (piv !== col) {
+        [rows[col], rows[piv]] = [rows[piv], rows[col]];
+        [rhs[col], rhs[piv]] = [rhs[piv], rhs[col]];
+      }
+      const pivVal = rows[col].get(col);
+      for (let r = col + 1; r < n; r++) {
+        const rv = rows[r].get(col) || 0;
+        if (rv === 0) continue;
+        const factor = rv / pivVal;
+        rows[r].delete(col);
+        for (const [c, pv] of rows[col]) {
+          if (c <= col) continue;
+          const nv = (rows[r].get(c) || 0) - factor * pv;
+          if (Math.abs(nv) < 1e-15) rows[r].delete(c);
+          else rows[r].set(c, nv);
+        }
+        rhs[r] -= factor * rhs[col];
+      }
+      const nowNnz = rows.reduce((sum,row)=>sum+row.size,0);
+      if (nowNnz > peakNnz) peakNnz = nowNnz;
+    }
+    const x = new Array(n).fill(0);
+    for (let i = n - 1; i >= 0; i--) {
+      const diag = rows[i].get(i) || 0;
+      if (Math.abs(diag) < 1e-15) { x[i] = 0; continue; }
+      let sum = rhs[i];
+      for (const [c, v] of rows[i]) if (c > i) sum -= v * x[c];
+      x[i] = sum / diag;
+    }
+    return { x, stats: { initialNnz, factorNnz: rows.reduce((sum,row)=>sum+row.size,0), peakNnz } };
+  }
+
   function solveLinear(A, bIn) {
     const n = bIn.length;
-    const M = A.map((row, i) => row.concat([bIn[i]]));
+    const denseA = A.length && A[0] && A[0]._entries ? sparseToDense(A, n) : A;
+    const M = denseA.map((row, i) => row.concat([bIn[i]]));
     for (let col = 0; col < n; col++) {
       let piv = col;
       let maxAbs = Math.abs(M[col][col]);
@@ -1379,9 +1467,11 @@
       let stateStable = size === 0;
       let finalA = null;
       let finalB = null;
+      let finalLinearStats = { initialNnz: 0, factorNnz: 0, peakNnz: 0 };
+      let activeLinearSolver = 'dense';
       for (let iter = 0; iter < Math.max(iterations, 1); iter++) {
         iterationsUsed = size === 0 ? 0 : iter + 1;
-        const A = Array.from({ length: size }, () => new Array(size).fill(0));
+        const A = makeSparseMatrix(size);
         const b = new Array(size).fill(0);
         const stampG = (i, j, val) => {
           if (i >= 0 && j >= 0) A[i][j] += val;
@@ -2055,7 +2145,20 @@
           b[rowC] += wave(sensor.value, sensor.freq || 1, (sensor.phase || 0) + 90, t);
         });
 
-        xSol = size ? solveLinear(A, b) : [];
+        if (size) {
+          const requestedLinearSolver = solverOptions && solverOptions.linearSolver ? solverOptions.linearSolver : 'auto';
+          if (!['auto','dense','sparse'].includes(requestedLinearSolver)) throw new Error(`unknown linearSolver '${requestedLinearSolver}'`);
+          activeLinearSolver = requestedLinearSolver === 'auto' ? (size >= 64 ? 'sparse' : 'dense') : requestedLinearSolver;
+          if (activeLinearSolver === 'sparse') {
+            const solved = solveSparseLinear(A, b);
+            xSol = solved.x;
+            finalLinearStats = solved.stats;
+          } else {
+            xSol = solveLinear(A, b);
+            const nnz = sparseNnz(A);
+            finalLinearStats = { initialNnz: nnz, factorNnz: null, peakNnz: null };
+          }
+        } else xSol = [];
         finalA = A;
         finalB = b;
         voltages = new Map();
@@ -2524,6 +2627,12 @@
         maxCurrentTolerance,
         diodeModel: solverOptions && solverOptions.diodeModel === 'newton' ? 'newton' : 'simple',
         mosfetModel: solverOptions && solverOptions.mosfetModel === 'continuous' ? 'continuous' : 'simple',
+        linearSolver: activeLinearSolver,
+        matrixSize: size,
+        matrixNnz: finalLinearStats.initialNnz,
+        matrixDensity: size ? finalLinearStats.initialNnz / (size * size) : 0,
+        factorNnz: finalLinearStats.factorNnz,
+        peakFactorNnz: finalLinearStats.peakNnz,
       };
 
       const currents = new Map();
@@ -3051,7 +3160,7 @@
   }
 
   const api = {
-    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BJT_IS, BJT_BETA_F, BJT_BETA_R, BJT_NF, BJT_NR, bjtSpec, bjtCurrents, bjtLinearization, BATTERY_RINT, VGND_RINT,
+    Circuit, UnionFind, solveLinear, solveSparseLinear, makeSparseMatrix, sparseNnz, sparseToDense, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BJT_IS, BJT_BETA_F, BJT_BETA_R, BJT_NF, BJT_NR, bjtSpec, bjtCurrents, bjtLinearization, BATTERY_RINT, VGND_RINT,
     AC_RINT, MTJ_RINT, wave, pwlValue, pulseValue, transientSourceValue, MOSFET_MODEL_CARDS, NMOS_PARTS, PMOS_PARTS, findMosfetModelCard, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
