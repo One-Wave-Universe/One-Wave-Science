@@ -13,7 +13,7 @@ const {
   Circuit, buildTopologyUnionFind,
   BATTERY_RINT, AC_RINT, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C,
   capacitorESR, capacitorLeakageR, inductorDCR,
-  mosfetChannelCurrent, MOSFET_OFF_LEAKAGE_G,
+  mosfetChannelCurrent, MOSFET_OFF_LEAKAGE_G, bjtLinearization,
 } = CE;
 
 const C = (re, im) => ({ re: re || 0, im: im || 0 });
@@ -122,7 +122,7 @@ function smallSignalAc(elements, options) {
     throw new Error(`AC source '${sourceId}' must be battery, diffsource, acsource, or isource`);
   }
 
-  const supported = new Set(['resistor', 'capacitor', 'inductor', 'battery', 'diffsource', 'acsource', 'isource', 'vccs', 'vcvs', 'cccs', 'ccvs', 'diode', 'led', 'nmos', 'pmos', 'switch', 'pushbutton']);
+  const supported = new Set(['resistor', 'capacitor', 'inductor', 'battery', 'diffsource', 'acsource', 'isource', 'vccs', 'vcvs', 'cccs', 'ccvs', 'diode', 'led', 'nmos', 'pmos', 'npn', 'pnp', 'switch', 'pushbutton']);
   const unsupported = components.filter((c) => !supported.has(c.type));
   if (unsupported.length) throw new Error(`AC analysis does not yet support: ${unsupported.map((c) => `${c.id}:${c.type}`).join(', ')}`);
 
@@ -147,6 +147,7 @@ function smallSignalAc(elements, options) {
   components.forEach((c) => {
     collectNode(c.a); collectNode(c.b); collectNode(c.controlP); collectNode(c.controlN);
     if (c.type === 'nmos' || c.type === 'pmos') { collectNode(c.gate); collectNode(c.drain); collectNode(c.source); }
+    if (c.type === 'npn' || c.type === 'pnp') { collectNode(c.base); collectNode(c.collector); collectNode(c.emitter); }
   });
   const explicitGround = namedNodes.find((n) => /^(gnd|ground|0)$/i.test(n));
   if (explicitGround != null) groundRoot = uf.find(explicitGround);
@@ -161,6 +162,7 @@ function smallSignalAc(elements, options) {
   components.forEach((c) => {
     touch(c.a); touch(c.b);
     if (c.type === 'nmos' || c.type === 'pmos') { touch(c.gate); touch(c.drain); touch(c.source); }
+    if (c.type === 'npn' || c.type === 'pnp') { touch(c.base); touch(c.collector); touch(c.emitter); }
   });
   sourceInternal.forEach((n) => touch(n));
   components.forEach((c) => { if (c.type === 'vccs' || c.type === 'vcvs') { touch(c.controlP); touch(c.controlN); } });
@@ -247,7 +249,15 @@ function smallSignalAc(elements, options) {
       } else if (c.type === 'led') {
         const on = (op.currents.get(c.id) || 0) > 0;
         if (on) stampY(A, a, bb, C(1 / DIODE_RON, 0));
-      } else if (c.type === 'nmos' || c.type === 'pmos') {
+      } else if (c.type === 'npn' || c.type === 'pnp') {
+        const bq = idx(c.base), cq = idx(c.collector), eq = idx(c.emitter);
+        const lin = bjtLinearization(c, opV(c.base), opV(c.collector), opV(c.emitter), ambientC);
+        const cols = [bq, cq, eq];
+        [['base', bq], ['collector', cq], ['emitter', eq]].forEach(([terminal, row]) => {
+          if (row < 0) return;
+          lin.jacobian[terminal].forEach((g, k) => { if (cols[k] >= 0) A[row][cols[k]] = add(A[row][cols[k]], C(g, 0)); });
+        });
+       else if (c.type === 'nmos' || c.type === 'pmos') {
         const gate = idx(c.gate);
         const drain = idx(c.drain);
         const sourceNode = idx(c.source);
