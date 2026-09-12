@@ -19,11 +19,16 @@ jobs:
           ref: canon/complete-node-graph-2026-09-12
       - name: Normalize legacy node metadata
         run: python3 scripts/normalize_legacy_node_metadata.py
+      - name: Synchronize discovery surfaces
+        run: python3 scripts/sync_node_graph_indexes.py
       - name: Run graph audit
         shell: bash
         run: |
           set +e
           {
+            echo '=== metadata check ==='
+            python3 scripts/normalize_legacy_node_metadata.py --check
+            echo "metadata_exit=$?"
             echo '=== sync check ==='
             python3 scripts/sync_node_graph_indexes.py --check
             echo "sync_exit=$?"
@@ -32,20 +37,21 @@ jobs:
             echo "audit_exit=$?"
           } > NODE_GRAPH_AUDIT_RESULTS.txt 2>&1
           cat NODE_GRAPH_AUDIT_RESULTS.txt
-      - name: Commit normalization and audit receipt
+      - name: Commit normalized graph and audit receipt
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add Nodes NODE_GRAPH_AUDIT_RESULTS.txt
+          git add Nodes 00_MASTER_INDEX.md AI_CANONICAL_START_HERE.md NODE_GRAPH_AUDIT_RESULTS.txt
           if git diff --cached --quiet; then
-            echo 'No normalization changes.'
+            echo 'No normalization/synchronization changes.'
             exit 0
           fi
-          git commit -m 'nodes: normalize legacy I-06 metadata'
+          git commit -m 'nodes: normalize and index canonical graph'
           git push origin HEAD:canon/complete-node-graph-2026-09-12
       - name: Require clean audit
         shell: bash
         run: |
+          grep -q '^metadata_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt
           grep -q '^sync_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt
           grep -q '^audit_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt
