@@ -1913,7 +1913,9 @@
           const row = rowInd(k);
           const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-12);
           const dcr = inductorDCR(ind.value);
-          const iPrev = this._indState.get(ind.id) || 0;
+          const iPrev = this._indState.has(ind.id)
+            ? this._indState.get(ind.id)
+            : (Number.isFinite(Number(ind.initialCurrent)) ? Number(ind.initialCurrent) : 0);
           const ia = gi(uf.find(ind.a));
           const ib = gi(uf.find(ind.b));
           if (ia >= 0) {
