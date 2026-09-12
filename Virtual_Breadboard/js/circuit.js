@@ -2566,7 +2566,7 @@
           currents.set(c.id + ':collector', iq.collector);
           currents.set(c.id + ':base', iq.base);
           currents.set(c.id + ':emitter', iq.emitter);
-         else if (c.type === 'nmos' || c.type === 'pmos') {
+        } else if (c.type === 'nmos' || c.type === 'pmos') {
           const spec = mosfetSpec(c);
           const vg = voltages.get(uf.find(c.gate));
           const vs = voltages.get(uf.find(c.source));
