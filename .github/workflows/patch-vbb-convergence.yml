@@ -1,0 +1,67 @@
+name: Patch VBB Solver Convergence
+
+on:
+  push:
+    branches: [virtual-breadboard-solver-convergence]
+    paths:
+      - '.github/workflows/patch-vbb-convergence.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-solver-convergence
+      - name: Patch convergence reporting into solver
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('Virtual_Breadboard/js/circuit.js')
+          s = p.read_text()
+          old = """    solve(elements, dt, ambientC) {\n      const wires = elements.wires || [];"""
+          new = """    solve(elements, dt, ambientC, solverOptions) {\n      const wires = elements.wires || [];"""
+          if old not in s:
+              raise SystemExit('solve signature anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """      const iterations = size === 0 ? 0 : 30;\n      for (let iter = 0; iter < Math.max(iterations, 1); iter++) {"""
+          new = """      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)\n        ? Math.max(1, Math.floor(solverOptions.maxIterations))\n        : 30;\n      const iterations = size === 0 ? 0 : requestedMaxIterations;\n      let iterationsUsed = 0;\n      let stateStable = size === 0;\n      let finalA = null;\n      let finalB = null;\n      for (let iter = 0; iter < Math.max(iterations, 1); iter++) {\n        iterationsUsed = size === 0 ? 0 : iter + 1;"""
+          if old not in s:
+              raise SystemExit('iteration anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """        xSol = size ? solveLinear(A, b) : [];\n        voltages = new Map();"""
+          new = """        xSol = size ? solveLinear(A, b) : [];\n        finalA = A;\n        finalB = b;\n        voltages = new Map();"""
+          if old not in s:
+              raise SystemExit('linear solve anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """        if (!changed) break;\n      }\n\n      const currents = new Map();"""
+          new = """        if (!changed) {\n          stateStable = true;\n          break;\n        }\n      }\n\n      let maxResidual = 0;\n      let maxEquationScale = 0;\n      if (size && finalA && finalB) {\n        for (let i = 0; i < size; i++) {\n          let ax = 0;\n          let scale = Math.abs(finalB[i]);\n          for (let j = 0; j < size; j++) {\n            const term = finalA[i][j] * xSol[j];\n            ax += term;\n            scale += Math.abs(term);\n          }\n          maxResidual = Math.max(maxResidual, Math.abs(ax - finalB[i]));\n          maxEquationScale = Math.max(maxEquationScale, scale);\n        }\n      }\n      const absTolerance = solverOptions && Number.isFinite(solverOptions.absTolerance)\n        ? Math.max(0, solverOptions.absTolerance) : 1e-9;\n      const relTolerance = solverOptions && Number.isFinite(solverOptions.relTolerance)\n        ? Math.max(0, solverOptions.relTolerance) : 1e-6;\n      const residualTolerance = absTolerance + relTolerance * maxEquationScale;\n      const numericalConverged = Number.isFinite(maxResidual) && maxResidual <= residualTolerance;\n      const solver = {\n        converged: stateStable && numericalConverged,\n        stateStable,\n        numericalConverged,\n        iterations: iterationsUsed,\n        maxIterations: iterations,\n        maxResidual,\n        residualTolerance,\n        absTolerance,\n        relTolerance,\n      };\n\n      const currents = new Map();"""
+          if old not in s:
+              raise SystemExit('loop exit anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """    let solverFailed = false;\n    for (const v of result.voltages.values()) if (!Number.isFinite(v)) solverFailed = true;"""
+          new = """    let solverFailed = !!(result.solver && !result.solver.converged);\n    for (const v of result.voltages.values()) if (!Number.isFinite(v)) solverFailed = true;"""
+          if old not in s:
+              raise SystemExit('diagnose anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };"""
+          new = """      if (!solver.converged) {\n        warnings.push(`SOLVER FAILED: nonlinear solve did not converge in ${solver.iterations}/${solver.maxIterations} iterations (stateStable=${solver.stateStable}, residual=${solver.maxResidual}, tolerance=${solver.residualTolerance})`);\n      }\n      return { voltages, currents, warnings, solver, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };"""
+          if old not in s:
+              raise SystemExit('return anchor not found')
+          s = s.replace(old, new, 1)
+          p.write_text(s)
+      - name: Commit solver patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Virtual_Breadboard/js/circuit.js
+          git commit -m "Virtual Breadboard: report nonlinear solver convergence"
+          git push
