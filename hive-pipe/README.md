@@ -1,10 +1,109 @@
-# Hive Pipe
+# Hive Pipe v3
 
-Hive Pipe is the bounded queue between an assistant and the Jetson terminal.
-Version 1 deliberately accepts named, read-only actions instead of arbitrary
-shell text.
+Hive Pipe is the authenticated Jetson-side tool gateway used by AI clients,
+GitHub Actions, and direct remote clients.
 
-## Protocol
+It has two layers:
+
+```text
+MCP / authenticated HTTP
+        |
+        +-- terminal_pwd
+        +-- terminal_which
+        +-- terminal_run(argv, cwd?, timeout?)
+        |
+        +-- bounded named queue actions
+                |
+                v
+          agent.sh -> mudl.py
+```
+
+## Canonical gateway
+
+Use:
+
+```text
+hive-pipe/gateway.py
+hive-pipe/terminal_parser.py
+hive-pipe/install_gateway.sh
+```
+
+The gateway binds to `127.0.0.1:8765` and exposes MCP at `/mcp`.
+
+Do not run the legacy `scripts/jetson_gateway.py` beside Hive Pipe; it uses the
+same port. `scripts/install_jetson_gateway.sh` now delegates to this installer.
+
+## Install on the Jetson
+
+```bash
+cd "$HOME/One-Wave-Science"
+bash hive-pipe/install_gateway.sh
+```
+
+This installs and restarts:
+
+```text
+hive-pipe-agent.service
+hive-pipe-gateway.service
+```
+
+It creates separate client tokens under:
+
+```text
+~/.config/hive-pipe/tokens/
+```
+
+and an explicit external-work area at:
+
+```text
+~/One-Wave-External-Work/
+```
+
+The systemd sandbox keeps system paths read-only while allowing writes to the
+One-Wave checkout and that explicit external-work directory.
+
+## Terminal parser
+
+`terminal_run` accepts a structured argv array. Example MCP call:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "terminal_run",
+    "arguments": {
+      "argv": ["git", "status", "--short", "--branch"],
+      "cwd": "/home/Scales/One-Wave-Science",
+      "timeout": 60
+    }
+  }
+}
+```
+
+The result contains:
+
+```text
+stdout
+stderr
+exit_code
+cwd
+duration_ms
+output_clipped
+timed_out (when applicable)
+```
+
+The parser runs with `shell=False`. It blocks normal AI access to privilege
+escalation, raw-device/formatting tools, power commands, credential/private-key
+paths, and shell `-c/-lc` command strings.
+
+It is intentionally usable for normal development commands such as `git`,
+`python3`, test runners, compilers, and project scripts.
+
+## Named queue actions
+
+The older bounded queue remains for simple named actions:
 
 ```text
 queue/pending/<job-id>.json
@@ -14,106 +113,61 @@ queue/pending/<job-id>.json
         -> queue/done/<job-id>.json
 ```
 
-A request is JSON:
-
-```json
-{
-  "version": 1,
-  "id": "20260912T170000Z-drive-inventory",
-  "action": "inventory_block_devices",
-  "created_utc": "2026-09-12T17:00:00Z"
-}
-```
-
-The runner rejects unknown keys, malformed IDs, duplicate results, symlinks,
-and all actions not listed by `python3 hive-pipe/mudl.py actions`.
-
-## Install on the Jetson
-
-From the canonical checkout:
+List enabled actions with:
 
 ```bash
-cd "$HOME/One-Wave-Science"
-chmod +x hive-pipe/agent.sh hive-pipe/queue_self.sh
+python3 hive-pipe/mudl.py actions
 ```
 
-Run one queued job:
-
-```bash
-bash hive-pipe/agent.sh --once
-```
-
-Or keep the local runner waiting for jobs:
-
-```bash
-bash hive-pipe/agent.sh --watch
-```
-
-## First safe job
-
-```bash
-bash hive-pipe/queue_self.sh inventory_block_devices
-bash hive-pipe/agent.sh --once
-ls hive-pipe/queue/results/
-```
-
-`inventory_block_devices` calls `lsblk` with explicit read-only reporting
-columns. It does not mount, unmount, format, partition, repair, or write to a
-device.
-
-## Transport boundary
-
-This directory defines and tests the Jetson-side queue. A remote assistant can
-submit requests only when `queue/pending` and `queue/results` are exposed by an
-explicit synchronization transport. Do not use `main` as a live command bus and
-do not auto-commit results into the science repository. Transport credentials,
-SSH keys, API tokens, and device secrets must stay outside this repository.
-
-Until a transport is configured, Hive Pipe is a verified local Jetson runner,
-not a claim of remote terminal access.
-
-## Agent Gateway
-
-`gateway.py` exposes the same named-action queue over authenticated HTTP. It
-binds only to `127.0.0.1:8765`; never bind it directly to a public interface.
-
-Install both per-user services (queue worker plus gateway) and create separate
-local tokens for Codex, Claude, and Gemini:
-
-```bash
-bash hive-pipe/install_gateway.sh
-```
-
-Verify that both halves are running:
-
-```bash
-systemctl --user status hive-pipe-agent.service hive-pipe-gateway.service
-```
-
-Check the localhost endpoint with one token:
+## Local test
 
 ```bash
 TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/codex.token")"
-curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:8765/v1/health
+
+curl -sS \
+  -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["printf","AI_TERMINAL_OK"]}}}' \
+  http://127.0.0.1:8765/mcp
 ```
 
-An authenticated reverse tunnel may publish this localhost endpoint. Configure
-the tunnel provider outside the repository, keep its credentials outside the
-repository, require HTTPS, and retain the gateway bearer token as a second
-authentication layer. Each AI gets a different token so access can be revoked
-individually.
+Expected structured output contains `AI_TERMINAL_OK` and exit code `0`.
 
-The gateway still does not accept raw command strings. Broader terminal actions
-must be added as named actions with their own validation and tests.
+## Remote paths
 
-## MCP adapter
+Hive Pipe can be reached through an authenticated reverse tunnel. Keep the
+server bound to loopback and point Cloudflare/another trusted tunnel at:
 
-The same gateway provides a sessionless Streamable HTTP MCP endpoint at `/mcp`.
-It supports `initialize`, `ping`, `tools/list`, and `tools/call`. Every MCP tool
-maps one-to-one to the existing `mudl.ACTIONS` allowlist, takes no arguments, and
-waits for the queue worker's result. Raw shell text and arbitrary paths remain
-invalid, so the adapter cannot write to `Virtual_Breadboard/` or to a disk.
+```text
+http://127.0.0.1:8765
+```
 
-Use the public HTTPS tunnel URL plus `/mcp` when adding the connector. Supply the
-Codex bearer token through the connector's secret/authentication UI; never put
-the token in a chat message, URL, repository file, or Cloudflare command line.
+Remote MCP URL:
+
+```text
+https://YOUR-TUNNEL/mcp
+```
+
+Every request still requires a Hive Pipe bearer token.
+
+The same MCP terminal parser is used by:
+
+- `.github/workflows/jetson-command.yml` for GitHub -> Jetson;
+- `scripts/jetson_remote.sh` for direct HTTPS client -> Jetson;
+- connected MCP-capable AI clients.
+
+SSH remains a separate recovery path and does not depend on Hive Pipe.
+
+## External work
+
+See `External_Work/README.md` and `scripts/external_work_bridge.py` for the
+bidirectional GitHub <-> Jetson-local external-work handoff.
+
+## Full directions
+
+See:
+
+```text
+AI_JETSON_TOOL_GUIDE.md
+JETSON_AI_ACCESS.md
+```
