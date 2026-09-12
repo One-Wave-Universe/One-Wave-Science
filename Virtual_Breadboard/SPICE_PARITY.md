@@ -34,7 +34,7 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 ### P3 — frequency-domain analysis
 
 8. **Small-signal AC analysis (`.ac`-class)** — IMPLEMENTED in `js/ac-analysis.js`. The analyzer first solves a precision DC operating point, zeros independent AC excitation for that bias solve, then builds a complex MNA system at each requested frequency. Resistors, capacitor ESR/leakage, inductor DCR, source impedance, GMIN, diode local conductance, and continuous-MOSFET small-signal derivatives are stamped from the same physical models used elsewhere. Analytic RC, RL, and series-RLC phasors plus a nonlinear diode-bias slope are permanent CI references. Unsupported component classes are rejected explicitly rather than silently ignored.
-9. **Bode output** — magnitude/phase probes and transfer-function plotting.
+9. **Bode output** — IMPLEMENTED in `js/bode-analysis.js`. Named single-ended or differential input/output voltage probes produce `H(jw)=Vout/Vin` from the complex AC phasors, with linear magnitude, dB magnitude, wrapped phase, and continuous unwrapped phase for plotting/export. Permanent CI checks the complex RC transfer against the physical ESR/leakage model, differential-probe gain, sweep ordering/trends, and phase unwrapping. This item provides plot-ready Bode data; a graphical UI renderer is intentionally separate from the solver/analysis truth.
 10. **Pole/zero sanity checks** for simple RC/RL/RLC networks against analytic answers.
 
 ### P4 — sources, controlled elements, and model coverage
