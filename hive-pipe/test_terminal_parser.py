@@ -29,14 +29,16 @@ class TerminalParserTests(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertNotEqual(result["exit_code"], 0)
 
-    def test_blocks_privilege_and_raw_disk_commands(self):
+    def test_blocks_direct_privilege_and_raw_disk_commands(self):
         for argv in (["sudo", "id"], ["mkfs.ext4", "/dev/sdz"], ["reboot"]):
             with self.assertRaises(ValueError):
                 terminal_parser.run(argv)
 
-    def test_blocks_shell_command_strings(self):
-        with self.assertRaises(ValueError):
-            terminal_parser.run(["bash", "-lc", "id"])
+    def test_allows_shell_wrappers_used_by_ai_clients(self):
+        result = terminal_parser.run(["bash", "-lc", "printf PERPLEXITY_SHELL_OK"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["stdout"], "PERPLEXITY_SHELL_OK")
+        self.assertEqual(result["exit_code"], 0)
 
 
 if __name__ == "__main__":
