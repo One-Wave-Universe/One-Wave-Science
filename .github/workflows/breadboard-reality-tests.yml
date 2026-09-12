@@ -1,0 +1,62 @@
+name: Virtual Breadboard - Reality Regression Pack
+
+on:
+  push:
+    paths:
+      - 'Virtual_Breadboard/js/**'
+      - 'Virtual_Breadboard/test/**'
+      - 'Virtual_Breadboard/package.json'
+      - '.github/workflows/breadboard-reality-tests.yml'
+  pull_request:
+    paths:
+      - 'Virtual_Breadboard/js/**'
+      - 'Virtual_Breadboard/test/**'
+      - 'Virtual_Breadboard/package.json'
+      - '.github/workflows/breadboard-reality-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  reality-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Core circuit tests
+        run: npm test
+
+      - name: Qualification pack
+        run: npm run test:qualification
+
+      - name: Primitive component pack
+        run: npm run test:primitives
+
+      - name: Regression builds
+        run: npm run test:regression
+
+      - name: Flashlight calibration controls
+        run: npm run test:flashlight-calibration
+
+      - name: Conventional flashlight reference
+        run: npm run test:flashlight-reference
+
+      - name: Netlist tests
+        run: npm run test:netlist
+
+      - name: Fault-state tests
+        run: npm run test:fault-states
+
+      - name: Existing hand-calculated basic circuits
+        run: npm run test:basic-circuits
+
+      - name: Broad normal-circuit reality pack
+        run: npm run test:normal-circuits
