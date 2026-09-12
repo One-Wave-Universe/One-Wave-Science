@@ -102,7 +102,8 @@ const divider = {
   const phase = AC.phasorPhaseDeg(z);
   const log = runNgspice(`V1 nsrc 0 AC 1\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval}\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.control\nac lin 1 ${f} ${f}\nlet vmag=mag(v(out))\nlet vphase=ph(v(out))\n${emitScalar('vmag')}\n${emitScalar('vphase')}\nquit\n.endc\n.end\n`);
   compare('ac-rc-magnitude', mag, scalar(log, 'vmag'), tolerances.ac.rcMagnitude);
-  compare('ac-rc-phase', phase, scalar(log, 'vphase'), tolerances.ac.rcPhaseDeg);
+  // ngspice ph() is radians in this control-expression path; VBB reports degrees.
+  compare('ac-rc-phase', phase, scalar(log, 'vphase') * 180 / Math.PI, tolerances.ac.rcPhaseDeg);
 }
 
 {
