@@ -185,11 +185,11 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 ```
 
 - `/` is one simultaneous mirrored pair.
-- `-` is the Mirror Gate return/crossover through the shared `(0)` reference.
+- `-` is the handoff from one canonical gate position to the next; Mirror behavior occurs only at M1, M2, and M3.
 - There are six coupled logical operations / twelve pair-side positions, not twelve serial instructions.
 - The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.
 - Four Views are **Direction, Phase, Strength, Reference**.
-- Four Actions are **Inward, Outward, Across, Over**.
+- Four Action **modes** are **Inward, Outward, Across, Over**; they describe what an Action gate may do and are not four primitive Action gates.
 - Two engagement choices are **Everything / Nothing** in this older vocabulary; Updated 43 owns the current executable YES/NO binary choice contract.
 - Three differential moves are **Left / Stay / Right = -1 / 0 / +1** in this older vocabulary; Updated 43 owns the current executable DOWN/HOLD/UP ternary move contract.
 - Older five-level `-2,-1,0,+1,+2` modulation is compatibility shorthand, not the canonical five-state structure. See Updated 44.
@@ -198,7 +198,7 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 
 ### Anti-drift rule
 
-If removing a domain vocabulary changes the six-pair oscillator, that domain representation has leaked into the kernel.
+If removing a domain vocabulary changes the six-step/six-gate Mirror-Action oscillator, that domain representation has leaked into the kernel.
 
 Point/Path/Field, Carrier/Breathing/Phase, dimensions, thermal labels, matter labels, musical mappings, cognition, planetary models, EM validation, and hardware materials are wrappers/instantiations above the invariant engine unless a separate node explicitly derives otherwise.
 
