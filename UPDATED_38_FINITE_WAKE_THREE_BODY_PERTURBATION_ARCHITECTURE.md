@@ -50,6 +50,8 @@ rather than
 
 A body's wake therefore remains independently resolved only while its displacement/gradient/phase structure remains distinguishable from the surrounding parent field.
 
+Node `G-764_External_Parent_Scale_Tidal_Wake.md` applies this same rule one level further out (galaxy-on-solar-system rather than planet-on-planet) and gives it a runnable, separately-audited channel in `solar_system_control.py`. It does not replace the assimilation-criterion problem stated below -- G-764's tensor is exactly as undetermined as this section's missing assimilation criterion, just declared as an explicit YELLOW placeholder rather than left implicit.
+
 The missing mathematical object is an assimilation criterion. Candidate quantities include:
 
 - displacement amplitude relative to parent background;

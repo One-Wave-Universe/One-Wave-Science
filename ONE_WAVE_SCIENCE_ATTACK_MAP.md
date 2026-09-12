@@ -151,6 +151,13 @@ Attack next:
 
 Current direction explores nested displacement/capture relations across scales.
 
+`Nodes/G-764_External_Parent_Scale_Tidal_Wake.md` takes the first concrete
+step here: the mutual-gravity Newtonian baseline already exists in
+`Nodes/D-415_.../solar_system_control.py`, and G-764 adds one candidate
+one-way parent-scale term (defaulting to zero, so the baseline is unchanged
+until it is calibrated) rather than an ad hoc extra force. It has not yet
+done the "test held-out orbital/cluster-scale data" step below.
+
 Attack next:
 
 - build Newtonian baseline first;

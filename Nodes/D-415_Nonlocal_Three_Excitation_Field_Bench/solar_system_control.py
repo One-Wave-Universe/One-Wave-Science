@@ -200,6 +200,10 @@ def external_parent_tidal_acceleration(r: np.ndarray, tensor: np.ndarray | None 
     galaxy -> star, each level imposing curvature on the level below it,
     without that parent level being simulated in return).
 
+    Formalized as Node G-764 (`Nodes/G-764_External_Parent_Scale_Tidal_Wake.md`):
+    see that node for the claim boundary, why this stays separate from the
+    internal-exchange channel, and the open falsification condition.
+
     This channel is deliberately kept separate from `one_wave_candidate` and
     from `hybrid_one_wave.close_internal_channel`: an internal exchange among
     the modeled bodies cannot create net system momentum or angular momentum

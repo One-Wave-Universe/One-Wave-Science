@@ -216,6 +216,9 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
 | G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
 | G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+| G-764 | External Parent-Scale Tidal Wake | One-way parent-scale (e.g. galaxy-on-solar-system) linear tidal channel, kept separate from internal-exchange candidates because an external source may add real net momentum; functional form only, tensor uncalibrated. | YELLOW |
+
+Note: `Nodes/` already contains G-724 through G-763 (mass-effect, mirror-term, Standard-Model-assumption, and harmonic work) that are not yet reflected as rows in this appendix. That backfill is unrelated to G-764 above and is tracked as open `repo/index-integrity` work (see `AI_FOREMAN_WORK_REGISTER.md` section 15), not resolved by this edit.
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)

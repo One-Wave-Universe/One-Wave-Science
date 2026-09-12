@@ -102,7 +102,7 @@ cluster -> galaxy -> star nesting). It is kept separate from
 allowed to add net momentum to the modeled system (its source isn't
 simulated), unlike an internal exchange among modeled bodies. It defaults to
 the zero tensor: only the mathematical form is fixed here, not a calibrated
-Milky-Way-tide value.
+Milky-Way-tide value. Formalized as `Nodes/G-764_External_Parent_Scale_Tidal_Wake.md`.
 
 ## Next gates
 
