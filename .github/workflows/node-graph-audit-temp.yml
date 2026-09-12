@@ -17,7 +17,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: canon/complete-node-graph-2026-09-12
-      - name: Run audit and capture output
+      - name: Normalize legacy node metadata
+        run: python3 scripts/normalize_legacy_node_metadata.py
+      - name: Run graph audit
         shell: bash
         run: |
           set +e
@@ -30,12 +32,20 @@ jobs:
             echo "audit_exit=$?"
           } > NODE_GRAPH_AUDIT_RESULTS.txt 2>&1
           cat NODE_GRAPH_AUDIT_RESULTS.txt
+      - name: Commit normalization and audit receipt
+        shell: bash
+        run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add NODE_GRAPH_AUDIT_RESULTS.txt
-          git commit -m 'ci: capture node graph audit results'
-          git push origin HEAD:canon/complete-node-graph-2026-09-12
-          if grep -q '^sync_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt && grep -q '^audit_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt; then
+          git add Nodes NODE_GRAPH_AUDIT_RESULTS.txt
+          if git diff --cached --quiet; then
+            echo 'No normalization changes.'
             exit 0
           fi
-          exit 1
+          git commit -m 'nodes: normalize legacy I-06 metadata'
+          git push origin HEAD:canon/complete-node-graph-2026-09-12
+      - name: Require clean audit
+        shell: bash
+        run: |
+          grep -q '^sync_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt
+          grep -q '^audit_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt
