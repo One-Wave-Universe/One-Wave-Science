@@ -1,8 +1,12 @@
 ---
-id: G-748
-title: Nested Hexagon Pyramids and Triangle Cube Hex
-status: yellow-geometry
-claim_boundary: combinatorial and Euclidean receipts; not 4D identity; not Mass Effect; not a0
+node_id: "G-748"
+canonical_name: "Nested Hexagon Pyramids and Triangle Cube Hex"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "combinatorial and Euclidean receipts; not 4D identity; not Mass Effect; not a0"
+metadata_standard: "I-06"
 ---
 
 # G-748 — Nested geometry the wave has to carry

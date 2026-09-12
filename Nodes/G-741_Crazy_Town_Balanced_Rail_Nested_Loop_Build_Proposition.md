@@ -1,9 +1,12 @@
 ---
-id: G-741
-title: Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition
-status: proposed-experiment
-tier: yellow-hardware-hypothesis
-claim_boundary: unbuilt low-voltage electronics proposition; no demonstrated computing, actuator, or biological equivalence
+node_id: "G-741"
+canonical_name: "Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "unbuilt low-voltage electronics proposition; no demonstrated computing, actuator, or biological equivalence"
+metadata_standard: "I-06"
 ---
 
 # Node G-741: Crazy Town Build Proposition Experiment

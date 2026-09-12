@@ -1,7 +1,12 @@
 ---
-id: G-754
-title: Cell to Chip to Cube to Rubik to Two Rubiks
-status: yellow-architecture
+node_id: "G-754"
+canonical_name: "Cell to Chip to Cube to Rubik to Two Rubiks"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-architecture"
+metadata_standard: "I-06"
 ---
 
 # G-754 — Scale ladder for the two state machines

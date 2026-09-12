@@ -1,9 +1,10 @@
 ---
-id: G-743
-title: PPF Schema and 2D Hex Graph Trail
-status: yellow-math-trail
-tier: yellow
-claim_boundary: executable schema and graph only; no Mass Effect, no 4D identity, no hardware demonstration
+artifact_id: "G-743"
+parent_node_id: "G-743"
+title: "PPF Schema and 2D Hex Graph Trail"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE"
+metadata_standard: "I-06"
 ---
 
 # G-743 — PPF Schema and 2D Hex Graph Trail

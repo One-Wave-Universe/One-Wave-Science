@@ -1,9 +1,12 @@
 ---
-id: G-738
-title: Center Geometry Classification and Receipt
-status: yellow
-tier: executable-math
-claim_boundary: trajectory classifier; does not declare one universal physical center geometry
+node_id: "G-738"
+canonical_name: "Center Geometry Classification and Receipt"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "trajectory classifier; does not declare one universal physical center geometry"
+metadata_standard: "I-06"
 ---
 
 # Node G-738: Center Geometry Classification and Receipt
@@ -32,8 +35,10 @@ velocity. Units are declared by the caller. Thresholds inherit those units:
 - (epsilon_x): point tolerance for (x);
 - (epsilon_v): point/Hold tolerance for (v);
 - (b_x>epsilon_x): finite-band half-width;
-- (ho_T): maximum coefficient of variation for recurrent return times;
-- (ho_v): maximum coefficient of variation for crossing speeds;
+- (
+ho_T): maximum coefficient of variation for recurrent return times;
+- (
+ho_v): maximum coefficient of variation for crossing speeds;
 - (kappa>1): minimum outside/inside median-speed ratio for a slow-manifold
   candidate.
 

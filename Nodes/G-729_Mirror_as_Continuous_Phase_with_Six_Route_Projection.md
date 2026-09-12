@@ -1,3 +1,14 @@
+---
+node_id: "G-729"
+canonical_name: "Mirror as Continuous Phase with Six-Route Projection"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-729 — Mirror as Continuous Phase with Six-Route Projection
 
 **Status:** YELLOW mathematical operator / physical carrier unresolved  

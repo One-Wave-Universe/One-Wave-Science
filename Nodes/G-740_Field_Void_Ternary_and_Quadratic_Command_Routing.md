@@ -1,9 +1,12 @@
 ---
-id: G-740
-title: Field/Void Ternary and Quadratic Command Routing
-status: proposed-build
-tier: green-hypothesis
-claim_boundary: computational routing contract; not literal neuroanatomy
+node_id: "G-740"
+canonical_name: "Field/Void Ternary and Quadratic Command Routing"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "computational routing contract; not literal neuroanatomy"
+metadata_standard: "I-06"
 ---
 
 # Node G-740: Field/Void Ternary and Quadratic Command Routing

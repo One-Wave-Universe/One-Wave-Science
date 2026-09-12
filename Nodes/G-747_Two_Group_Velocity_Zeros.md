@@ -1,7 +1,12 @@
 ---
-id: G-747
-title: Two Group-Velocity Zeros
-status: split-gate
+node_id: "G-747"
+canonical_name: "Two Group-Velocity Zeros"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "split-gate"
+metadata_standard: "I-06"
 ---
 
 # G-747 — Two Group-Velocity Zeros

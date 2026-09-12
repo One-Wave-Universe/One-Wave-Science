@@ -1,7 +1,12 @@
 ---
-id: G-759
-title: Mass Effect as four-action carry
-status: yellow-bridge
+node_id: "G-759"
+canonical_name: "Mass Effect as four-action carry"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-bridge"
+metadata_standard: "I-06"
 ---
 
 # G-759 — In, out, across, over

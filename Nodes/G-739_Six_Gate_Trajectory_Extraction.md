@@ -1,9 +1,12 @@
 ---
-id: G-739
-title: Six-Gate Trajectory Extraction
-status: yellow
-tier: executable-math
-claim_boundary: measured gate labels for declared trajectories; not a universal physical derivation
+node_id: "G-739"
+canonical_name: "Six-Gate Trajectory Extraction"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "measured gate labels for declared trajectories; not a universal physical derivation"
+metadata_standard: "I-06"
 ---
 
 # Node G-739: Six-Gate Trajectory Extraction
@@ -15,8 +18,13 @@ an animation or imposed as a one-way script. This node defines a conservative
 extractor for:
 
 [
-	ext{Begin}ightarrow	ext{Build}_{coherent}ightarrow	ext{Hold}
-ightarrow	ext{Build}_{unstable}ightarrow	ext{Break}ightarrow	ext{Loop}.
+	ext{Begin}
+ightarrow	ext{Build}_{coherent}
+ightarrow	ext{Hold}
+
+ightarrow	ext{Build}_{unstable}
+ightarrow	ext{Break}
+ightarrow	ext{Loop}.
 ]
 
 The labels describe stability regions around a bidirectional oscillator. They

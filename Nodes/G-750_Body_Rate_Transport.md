@@ -1,7 +1,12 @@
 ---
-id: G-750
-title: Body-Rate Transport Mechanics
-status: split-gate
+node_id: "G-750"
+canonical_name: "Body-Rate Transport Mechanics"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "split-gate"
+metadata_standard: "I-06"
 ---
 
 # G-750 — Body-rate transport

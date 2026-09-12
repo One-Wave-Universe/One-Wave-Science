@@ -1,7 +1,12 @@
 ---
-id: G-763
-title: Scalar differential vector tensor stratum harmonic
-status: yellow-dictionary
+node_id: "G-763"
+canonical_name: "Scalar differential vector tensor stratum harmonic"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-dictionary"
+metadata_standard: "I-06"
 ---
 
 # G-763 — The six words

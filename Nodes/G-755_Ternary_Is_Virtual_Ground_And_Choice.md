@@ -1,7 +1,12 @@
 ---
-id: G-755
-title: Ternary is virtual ground and a choice
-status: yellow-lock-candidate
+node_id: "G-755"
+canonical_name: "Ternary is virtual ground and a choice"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow-lock-candidate"
+metadata_standard: "I-06"
 ---
 
 # G-755 — Ternary is just a virtual ground and a choice
