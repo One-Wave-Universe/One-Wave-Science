@@ -9,12 +9,12 @@ Spine: Gray / 2D / 3D / Mathematics / Predictions / Yellow Audit / Future Work /
 
 Dependencies: Book 1 Ch6 (The Nucleus), Book 5 Ch2 (Stars), Book 5 Ch3 (Supernovae),
               B-207 Threshold, B-208 Threshold Windows, D-405 Harmonic Shell
-Status: YELLOW (structure, inherits real Ch7 mechanism) / YELLOW (sequential-fusion account, new)
+Status: YELLOW (structure, inherits real Ch6 mechanism) / YELLOW (sequential-fusion account, new)
 
 Grounding note: this chapter fills a gap explicitly flagged in both
 Ch2 and Ch3's Yellow Audits ("no One-Wave account of fusion/
 nucleosynthesis exists"). It does this by connecting three already-
-real mechanisms (Ch7's binding-energy account, Ch2's stellar
+real mechanisms (Ch6's binding-energy account, Ch2's stellar
 compression, Ch3's Break Condition) rather than inventing a fourth.
 
 ---
@@ -45,11 +45,11 @@ debated.
 
 In 2D, stellar nucleosynthesis is a sequence of threshold crossings
 (B-207/B-208), each one unlocking access to a more complex,
-higher-binding-energy nuclear configuration (Ch7's real surface-energy
+higher-binding-energy nuclear configuration (Ch6's real surface-energy
 mechanism), with the sequence terminating at iron-56 because that is
-where Ch7's own binding-energy peak already sits.
+where Ch6's own binding-energy peak already sits.
 
-This is not a new binding mechanism. It is Ch7's existing account,
+This is not a new binding mechanism. It is Ch6's existing account,
 applied repeatedly and sequentially rather than once.
 
 ---
@@ -77,7 +77,7 @@ core-collapse event (Ch3) is the Break — the one crossing where no
 new stable configuration is available and B-209's mechanism fires
 instead of B-210's.
 
-Elements heavier than iron, connected honestly: Ch7 already explains
+Elements heavier than iron, connected honestly: Ch6 already explains
 WHY ordinary fusion cannot proceed past iron-56 (surface-energy cost
 exceeds volume-coupling gain beyond that point — adding nucleons
 stops paying off). This chapter does not dispute that; it inherits it
@@ -92,7 +92,7 @@ supernova environment specifically, not stellar cores generally).
 
 ## Mathematics
 
-Inherited directly from Ch7 (real, unmodified):
+Inherited directly from Ch6 (real, unmodified):
 Nuclear binding energy = total surface energy reduction from
 interlocking braids.
 Binding peak at iron-56: surface-to-volume ratio minimum; beyond it,
@@ -101,16 +101,62 @@ E-505).
 Magic numbers from harmonic shell closure (D-05/D-405): 2*pi*R_shell
 = n*lambda_nuclear.
 
+### Gray baseline added: the actual ignition-threshold mechanism
+
+A prior draft of this section tried to make ONE mechanism (D-405 shell
+"availability") answer TWO different physical questions: (a) when does
+a fusion stage ignite, and (b) which product configuration the
+reaction lands on. Those are not the same question, and D-405/Ch6 only
+ever addressed (b) -- nuclear stability/binding of the PRODUCT. They
+say nothing about what makes the REACTANTS able to fuse in the first
+place. This was a real gap, not just an underived placeholder.
+
+The Gray (standard, established) mechanism for (a) is the Coulomb
+barrier between reactant nuclei, overcome by quantum tunneling in the
+high-energy tail of the thermal distribution -- the Gamow peak:
+
+E_0 (keV) = 1.22 * (Z1^2 * Z2^2 * A * T6^2)^(1/3)
+
+where Z1, Z2 are reactant charges, A = A1*A2/(A1+A2) is the reduced
+mass number, and T6 = T / 10^6 K. This is standard nuclear-astrophysics
+math (Gamow 1928; see e.g. Clayton, or Rolfs & Rodney), not a One-Wave
+derivation -- it is cited here as the Gray baseline this chapter's own
+Yellow Audit already said was missing, per the Attack Map's own rule
+that One-Wave terms may only be added after a standard-physics baseline
+is established.
+
+Evaluated at this chapter's own cited stage temperatures:
+
+| Stage | Z1=Z2 | A (reduced) | T | E0 (Gamow peak) |
+|---|---|---|---|---|
+| H+H  | 1 | 0.5 | ~1.5e7 K | ~5.9 keV |
+| He+He | 2 | 2 | ~1.0e8 K | ~83 keV |
+| C+C  | 6 | 6 | ~6.0e8 K | ~1.7 MeV |
+| O+O  | 8 | 8 | ~1.5e9 K | ~5.1 MeV |
+
+E0 rises monotonically and steeply with Z, which is the real reason
+successive fusion stages require successively higher core temperature/
+compression -- not shell "availability." These numbers come directly
+from the formula above at the temperatures this chapter already cites
+in its own Gray section; they have not been cross-checked against
+published reaction-rate literature in this pass, so treat the specific
+keV/MeV values as illustrative-but-computed, not literature-verified.
+
 New in this chapter (candidate, not yet derived in detail):
 Sequential threshold crossing condition: at each fusion stage, core
-compression P_core(t) rises as fuel depletes. Transition to the next
-stage occurs when P_core crosses a stage-specific threshold T_n
-(candidate — B-208's real band structure, applied per-stage, not
-re-derived here). Resolution as Return (B-210) rather than Break
-(B-209) requires a new stable harmonic shell configuration to be
-accessible at the new compression level — this availability condition
-is asserted, not derived, and is the main open mathematical gap in
-this chapter.
+compression P_core(t) rises as fuel depletes, raising core temperature
+and therefore the Gamow peak E0 available for reactant pairs -- this
+is the real ignition-threshold mechanism, now Gray-grounded above,
+replacing the earlier vague "P_core crosses threshold T_n" placeholder.
+Separately, resolution as Return (B-210) rather than Break (B-209)
+still requires a new stable harmonic-shell configuration to be
+accessible for the PRODUCT at the new compression level -- this second,
+product-stability half of the condition still depends on D-405's own
+still-missing energy ladder (D-405: "does not yet quantize energy") and
+remains asserted, not derived. The chapter's earlier single
+"availability condition" was really these two conditions merged into
+one; only the ignition half has a Gray-grounded quantitative treatment
+now.
 
 ---
 
@@ -122,7 +168,7 @@ signature as any other B-207 Threshold crossing resolving as a Return
 specific transition mechanism, only an application of the existing one.
 
 2. The absence of ordinary-fusion nucleosynthesis beyond iron is
-predicted directly from Ch7's existing surface-energy account — not a
+predicted directly from Ch6's existing surface-energy account — not a
 new prediction of this chapter, inherited and restated for context.
 
 3. Elements heavier than iron should correlate specifically with
@@ -136,9 +182,10 @@ convergence between this framework and observation.
 
 ## Yellow Audit
 
-- The "availability condition" for a new stable harmonic-shell
-  configuration at each fusion stage is asserted, not derived — this
-  is the single biggest gap in this chapter
+- The product-stability half of the old "availability condition" (is a
+  new stable harmonic-shell configuration accessible for the product)
+  is still asserted, not derived — it is blocked on D-405's own
+  admitted gap, not something this chapter can close on its own
 - Stage-specific thresholds T_n are not derived from B-208's real
   bands, only proposed as applying "per-stage" without specifying how
   the universal 100-0 band structure maps onto multiple sequential
@@ -147,22 +194,28 @@ convergence between this framework and observation.
   separating ordinary fusion stages from the terminal supernova event
   is a real, checkable candidate but not yet verified against B-208's
   actual mathematical requirements
-- No quantitative connection yet to actual fusion temperatures/
-  pressures (real numbers: ~10^7 K for H fusion, ~10^8 K for He fusion,
-  etc.) — this chapter is structural, not yet quantitative
+- RESOLVED IN PART: the ignition-threshold half now has a quantitative,
+  Gray-grounded mechanism (Gamow peak, above) instead of no connection
+  at all. Not yet resolved: those Gamow-peak numbers are computed here,
+  not checked against published reaction-rate tables, and the model
+  still does not connect Gamow-peak crossing to B-208's (q,a,p) state
+  variables at all -- P_core/T are not currently mapped onto activation
+  `a` in any derived way, only asserted informally as "core compression
+  rises"
 
 ---
 
 ## Future Work
 
-Derive the availability condition for a new harmonic-shell
-configuration becoming accessible at increased compression, rather
-than asserting it.
+Derive D-405's missing energy ladder (E_n as a function of shell
+configuration, not just geometry) so the product-stability half of the
+availability condition can actually be computed rather than asserted.
+Cross-check the Gamow-peak table above against published reaction-rate
+data rather than leaving it as a self-computed illustration.
 Map B-208's real band structure onto the actual sequence of stellar
-fusion stages (H, He, C/O, Ne, Si, up to Fe) rather than leaving "per-
-stage thresholds" unspecified.
-Connect stage-transition compression thresholds to real fusion
-temperature/pressure data as a quantitative check.
+fusion stages (H, He, C/O, Ne, Si, up to Fe), including a derived
+mapping from core temperature/compression to the activation variable
+`a`, rather than leaving "per-stage thresholds" unspecified.
 
 ---
 
@@ -173,7 +226,7 @@ apart the first time fusion runs low. In this account, it steps —
 each threshold crossing resolving into a new, more complex stable
 configuration for as long as one is available, and only truly
 breaking (Ch3) when none is left. Iron is not an arbitrary stopping
-point; it is where Ch7's own real surface-energy account already says
+point; it is where Ch6's own real surface-energy account already says
 the payoff ends.
 
 What makes gold, platinum, uranium — the elements past iron — is not

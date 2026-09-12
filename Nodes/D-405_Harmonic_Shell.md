@@ -14,7 +14,9 @@ metadata_standard: "I-06"
 Dependencies:
 Upstream: D-402 Resonant Mode, A-110 Oscillation
 Downstream: Books — atomic shells, electron orbital model, proton charge radius;
-            D-407 calibration reanalysis; CCD-01
+            D-407 calibration reanalysis; CCD-01; Book5_Ch5_Stellar_Nucleosynthesis.md
+            (blocked on this node's missing energy ladder for its product-stability
+            "availability condition" -- see that chapter's Mathematics/Yellow Audit)
 
 Definition:
 A Harmonic Shell is a bounded standing-wave geometry whose closed path contains
