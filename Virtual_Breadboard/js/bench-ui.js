@@ -99,9 +99,6 @@
         u.union(tnode(p, 0), tnode(p, 2));
         u.union(tnode(p, 2), tnode(p, 3));
       } else if (p.type === 'resistor' && p.value > 0 && p.value <= LOW_OHM) {
-        // A deliberate current shunt / contact / lead below 0.25 ohm is
-        // accepted as the physical 0-spine path. We still keep its current
-        // receipt separately below.
         u.union(tnode(p, 0), tnode(p, 1));
       } else if ((p.type === 'switch' || p.type === 'pushbutton') && p.closed) {
         u.union(tnode(p, 0), tnode(p, 1));
@@ -139,9 +136,6 @@
 
   function findCenterCell(parts, dual, nets) {
     const centerRoot = nets.find(dual.center);
-    // Look for the local midpoint made by a resistor coming down from one
-    // outer rail and another going up from the opposite rail. This is the
-    // exact 10k/10k -> lean receipt topology being qualified now.
     const resistors = parts.filter((p) => p.type === 'resistor' && p.value > LOW_OHM);
     for (const r1 of resistors) {
       for (const r2 of resistors) {
@@ -225,21 +219,19 @@
       if (shunt) {
         const i0 = current(debug, shunt.id);
         const ru = cell.upper.value, rl = cell.lower.value;
-        if (Number.isFinite(i0)) {
+        if (!Number.isFinite(i0)) {
+          errors.push('I₀ shunt exists but has no solved current receipt.');
+        } else {
           notes.push(`I₀ receipt ${(i0 * 1000).toFixed(3)} mA through ${shunt.value} Ω.`);
           const matched = Math.abs(ru - rl) / Math.max(ru, rl) < 0.01;
           if (matched && Math.abs(i0) > I0_ZERO_A) errors.push(`Equal arms but I₀=${(i0 * 1000).toFixed(3)} mA; expected approximately zero.`);
           if (!matched && Math.abs(i0) <= I0_ZERO_A) errors.push(`Arms are unequal (${ru} Ω / ${rl} Ω) but I₀ did not take a measurable sign.`);
         }
       } else {
-        notes.push('0 spine is solid but has no ≤0.25 Ω current shunt; simulator cannot give the required I₀ receipt yet.');
+        errors.push('No ≤0.25 Ω I₀ shunt/current-sense path at the supply 0/CENTER. Required receipt is missing.');
       }
     }
 
-    // Actual solved VGS is the authority. Do not infer ON from a 5 V GPIO
-    // label or from a poster. Flag elevated-source N-MOS devices whose VGS
-    // is below their own threshold while the drain is sitting far above the
-    // source -- the classic dead 12 V high-side-NMOS drawing.
     parts.filter((p) => p.type === 'nmos').forEach((q) => {
       const vg = voltage(tnode(q, 0));
       const vd = voltage(tnode(q, 1));
@@ -257,7 +249,7 @@
       title: errors.length ? 'BENCH REALITY FAIL' : 'BENCH REALITY PASS',
       detail: errors.length
         ? 'Solver output exists, but this circuit does not meet the current physical CELL_V1 contract.'
-        : `±12 V CELL_V1 profile matches; source currents are within 20 mA and the 0/CENTER path is physically plausible. ${notes.join(' ')}`,
+        : `±12 V CELL_V1 profile matches; source currents are within 20 mA, 0/CENTER is solid, and the required I₀ receipt exists. ${notes.join(' ')}`,
       errors,
     };
   }
