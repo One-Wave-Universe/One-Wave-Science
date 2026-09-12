@@ -1052,8 +1052,12 @@
     }
     reset() {
       this._ledState = new Map(); // component id -> boolean (conducting)
-      this._capState = new Map(); // component id -> voltage across it last frame
+      this._capState = new Map(); // component id -> ideal-C voltage last frame
+      this._capPrevState = new Map(); // component id -> ideal-C voltage one additional frame back (Gear2 history)
+      this._capCurrentState = new Map(); // component id -> ideal-C branch current last frame (trapezoidal history)
       this._indState = new Map(); // component id -> current through it last frame
+      this._indPrevState = new Map(); // component id -> current one additional frame back (Gear2 history)
+      this._indVoltageState = new Map(); // component id -> ideal-L voltage last frame (trapezoidal history)
       this._toroidState = new Map(); // toroid id -> array of per-winding currents last frame
       this._fetChannelState = new Map(); // mosfet id -> boolean (channel conducting)
       this._fetDiodeState = new Map(); // mosfet id -> boolean (body diode conducting)
@@ -1114,6 +1118,8 @@
       const components = elements.components || [];
       const ambient = ambientC != null ? ambientC : AMBIENT_C_DEFAULT;
       const uf = buildTopologyUnionFind(components, wires);
+      const integrationMethod = solverOptions && solverOptions.integrationMethod ? String(solverOptions.integrationMethod).toLowerCase() : 'backward-euler';
+      if (!['backward-euler', 'trapezoidal', 'gear2'].includes(integrationMethod)) throw new Error(`unknown integrationMethod '${integrationMethod}'`);
       this._t += dt;
       const t = this._t;
       // one-step-behind thermal update, same pattern as every other
@@ -1550,22 +1556,37 @@
             stampG(ib, iw, -g2);
             stampG(iw, ib, -g2);
           } else if (c.type === 'capacitor') {
-            // real series ESR folds straight into the backward-Euler
-            // companion resistance (Rs + dt/C in series is still just one
-            // resistance), so this is the SAME Norton-source technique as
-            // an ideal cap, just with a real Rs added before inverting --
-            // vPrev here is the voltage across the ideal-C portion alone
-            // (see the state-update comment below for why that matters).
+            // Selectable SPICE-style integration companion for the ideal C
+            // in series with the part's real ESR. Gear2 bootstraps with BE
+            // until a second voltage-history point exists.
             const esr = capacitorESR(c);
-            const gC = 1 / (esr + Math.max(dt, 1e-12) / c.value);
+            const dtSafe = Math.max(dt, 1e-12);
             const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
+            const hasPrev2 = this._capPrevState.has(c.id);
+            const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+            const useTrap = integrationMethod === 'trapezoidal' && this._capCurrentState.has(c.id);
+            let idealG;
+            let historyCurrent;
+            if (useGear2) {
+              idealG = 3 * c.value / (2 * dtSafe);
+              const vPrev2 = this._capPrevState.get(c.id);
+              historyCurrent = c.value * (4 * vPrev - vPrev2) / (2 * dtSafe);
+            } else if (useTrap) {
+              idealG = 2 * c.value / dtSafe;
+              historyCurrent = idealG * vPrev + (this._capCurrentState.get(c.id) || 0);
+            } else {
+              idealG = c.value / dtSafe;
+              historyCurrent = idealG * vPrev;
+            }
+            const denom = 1 + idealG * esr;
+            const gC = idealG / denom;
+            const Ieq = historyCurrent / denom;
             const i = gi(uf.find(c.a));
             const j = gi(uf.find(c.b));
             stampG(i, i, gC);
             stampG(j, j, gC);
             stampG(i, j, -gC);
             stampG(j, i, -gC);
-            const Ieq = gC * vPrev;
             stampI(i, Ieq);
             stampI(j, -Ieq);
             // real parallel leakage/self-discharge path, straight across
@@ -1991,21 +2012,34 @@
           }
         });
 
-        // inductor: dual of the capacitor's backward-Euler model. Its own
-        // current is a state variable (can't be read off node voltages
-        // alone), so it gets an extra branch-current unknown like an ideal
-        // source: V(a) - V(b) - R*iL - (L/dt)*iL = -(L/dt)*iL_prev. The
-        // real winding DCR just adds straight into that same coefficient
-        // -- an inductor's coil is a resistor and an inductor in series,
-        // and backward-Euler already treats L as a resistance (L/dt) plus
-        // a series source, so R and L/dt simply add.
+        // inductor companion using the selected integration method. Gear2
+        // bootstraps with backward Euler until two current-history points
+        // exist; trapezoidal bootstraps until the prior ideal-L voltage is
+        // known. DCR remains a real series resistor in every method.
         inductors.forEach((ind, k) => {
           const row = rowInd(k);
-          const Ldt = Math.max(ind.value, 1e-9) / Math.max(dt, 1e-12);
+          const L = Math.max(ind.value, 1e-9);
+          const dtSafe = Math.max(dt, 1e-12);
           const dcr = inductorDCR(ind.value);
           const iPrev = this._indState.has(ind.id)
             ? this._indState.get(ind.id)
             : (Number.isFinite(Number(ind.initialCurrent)) ? Number(ind.initialCurrent) : 0);
+          const hasPrev2 = this._indPrevState.has(ind.id);
+          const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+          const useTrap = integrationMethod === 'trapezoidal' && this._indVoltageState.has(ind.id);
+          let Leq;
+          let historyRhs;
+          if (useGear2) {
+            Leq = 3 * L / (2 * dtSafe);
+            const iPrev2 = this._indPrevState.get(ind.id);
+            historyRhs = L * (-4 * iPrev + iPrev2) / (2 * dtSafe);
+          } else if (useTrap) {
+            Leq = 2 * L / dtSafe;
+            historyRhs = -Leq * iPrev - (this._indVoltageState.get(ind.id) || 0);
+          } else {
+            Leq = L / dtSafe;
+            historyRhs = -Leq * iPrev;
+          }
           const ia = gi(uf.find(ind.a));
           const ib = gi(uf.find(ind.b));
           if (ia >= 0) {
@@ -2016,8 +2050,8 @@
             A[ib][row] -= 1;
             A[row][ib] -= 1;
           }
-          A[row][row] -= (Ldt + dcr);
-          b[row] += -Ldt * iPrev;
+          A[row][row] -= (Leq + dcr);
+          b[row] += historyRhs;
         });
 
         // Ferrite toroid: N windings sharing one core. Each winding is a
@@ -2627,6 +2661,7 @@
         maxCurrentTolerance,
         diodeModel: solverOptions && solverOptions.diodeModel === 'newton' ? 'newton' : 'simple',
         mosfetModel: solverOptions && solverOptions.mosfetModel === 'continuous' ? 'continuous' : 'simple',
+        integrationMethod,
         linearSolver: activeLinearSolver,
         matrixSize: size,
         matrixNnz: finalLinearStats.initialNnz,
@@ -2642,6 +2677,11 @@
       inductors.forEach((ind, k) => {
         const I = xSol[rowInd(k)] || 0;
         indCurrent.set(ind.id, I);
+        const oldI = this._indState.has(ind.id) ? this._indState.get(ind.id) : (Number.isFinite(Number(ind.initialCurrent)) ? Number(ind.initialCurrent) : 0);
+        if (this._indState.has(ind.id)) this._indPrevState.set(ind.id, oldI);
+        const va = voltages.get(uf.find(ind.a)) || 0;
+        const vb = voltages.get(uf.find(ind.b)) || 0;
+        this._indVoltageState.set(ind.id, (va - vb) - inductorDCR(ind.value) * I);
         this._indState.set(ind.id, I);
       });
       const acCurrent = new Map();
@@ -2720,16 +2760,32 @@
           // stamping comment above); the branch current is whatever the
           // solved terminal voltage and that companion source imply...
           const esr = capacitorESR(c);
-          const gC = 1 / (esr + Math.max(dt, 1e-12) / c.value);
+          const dtSafe = Math.max(dt, 1e-12);
           const gLeak = 1 / capacitorLeakageR(c);
           const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
-          const capBranchI = gC * ((va - vb) - vPrev);
+          const hasPrev2 = this._capPrevState.has(c.id);
+          const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+          const useTrap = integrationMethod === 'trapezoidal' && this._capCurrentState.has(c.id);
+          let idealG, historyCurrent;
+          if (useGear2) {
+            idealG = 3 * c.value / (2 * dtSafe);
+            historyCurrent = c.value * (4 * vPrev - this._capPrevState.get(c.id)) / (2 * dtSafe);
+          } else if (useTrap) {
+            idealG = 2 * c.value / dtSafe;
+            historyCurrent = idealG * vPrev + (this._capCurrentState.get(c.id) || 0);
+          } else {
+            idealG = c.value / dtSafe;
+            historyCurrent = idealG * vPrev;
+          }
+          const denom = 1 + idealG * esr;
+          const gC = idealG / denom;
+          const capBranchI = gC * (va - vb) - historyCurrent / denom;
           const leakI = gLeak * (va - vb);
-          I = capBranchI + leakI; // total current the part draws, ESR branch + leakage, same convention as every other component's a->b current
-          // ...and THAT current is what actually charges the ideal C this
-          // frame (real ESR drops some of (va-vb) across itself first;
-          // only the current through the ideal-C branch moves its charge)
-          this._capState.set(c.id, vPrev + (capBranchI * Math.max(dt, 1e-12)) / c.value);
+          I = capBranchI + leakI;
+          const vCapNow = (va - vb) - esr * capBranchI;
+          if (this._capState.has(c.id)) this._capPrevState.set(c.id, vPrev);
+          this._capState.set(c.id, vCapNow);
+          this._capCurrentState.set(c.id, capBranchI);
           // an electrolytic (value >= ELECTROLYTIC_THRESHOLD) is a real
           // polarized part -- terminals[0]/"a" is the "+" lead by the same
           // convention as the LED/diode anode. Real electrolytics tolerate
