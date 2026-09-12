@@ -3,6 +3,10 @@ name: Virtual Breadboard - Flashlight Tests
 on:
   push:
     paths:
+      - 'Virtual_Breadboard/main.js'
+      - 'Virtual_Breadboard/preload.js'
+      - 'Virtual_Breadboard/index.html'
+      - 'Virtual_Breadboard/style.css'
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
@@ -36,6 +40,10 @@ on:
       - '.github/workflows/breadboard-flashlight-tests.yml'
   pull_request:
     paths:
+      - 'Virtual_Breadboard/main.js'
+      - 'Virtual_Breadboard/preload.js'
+      - 'Virtual_Breadboard/index.html'
+      - 'Virtual_Breadboard/style.css'
       - 'Virtual_Breadboard/js/**'
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
@@ -72,7 +80,7 @@ on:
 jobs:
   flashlight:
     runs-on: ubuntu-latest
-    timeout-minutes: 7
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: Virtual_Breadboard
@@ -85,9 +93,12 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install ngspice reference engine
-        run: sudo apt-get update && sudo apt-get install -y ngspice
+      - name: Install ngspice and desktop display dependencies
+        run: sudo apt-get update && sudo apt-get install -y ngspice xvfb libgtk-3-0 libnss3 libasound2t64
         working-directory: .
+
+      - name: Install desktop dependencies
+        run: npm install --no-audit --no-fund
 
       - name: Run flashlight primitive calibration pack
         run: node test/run_flashlight_calibration.js
@@ -157,3 +168,15 @@ jobs:
 
       - name: Run ngspice cross-check qualification
         run: npm run test:ngspice
+
+      # GitHub's disposable runner cannot configure Electron's SUID sandbox
+      # helper as a normal desktop installation would. --no-sandbox is a CI-
+      # only launch exception; main.js still ships with renderer sandbox:true.
+      - name: Run Electron source desktop acceptance
+        run: xvfb-run --auto-servernum npx electron . --smoke-test --no-sandbox
+
+      - name: Build unpacked Linux x64 desktop application
+        run: npm run dist:linux-dir
+
+      - name: Run packaged Linux x64 desktop acceptance
+        run: xvfb-run --auto-servernum ./dist/linux-unpacked/virtual-breadboard-simulator --smoke-test --no-sandbox
