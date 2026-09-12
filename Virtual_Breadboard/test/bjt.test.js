@@ -91,8 +91,8 @@ function npnCircuit(vbase) {
   check('pnp-mirrored-collector-voltage', v(r,'collector')<0 && v(r,'collector')>-5, `Vc=${v(r,'collector')}`);
 }
 
-// AC linearization must use the BJT Jacobian at the DC operating point. A common-
-// emitter stage is an inverting voltage amplifier; phase should be near 180 degrees.
+// AC uses the same three-terminal Jacobian at the solved operating point. A common-
+// emitter stage must therefore show nontrivial small-signal gain and inversion.
 {
   const ac=smallSignalAc(npnCircuit(0.68),{sourceId:'VB',frequencies:[1000],magnitude:1,solverOptions:{maxIterations:80}});
   const row=ac.rows[0];
