@@ -1,0 +1,22 @@
+{
+  "operatingPoint": {
+    "resistorDivider": { "abs": 0.000002, "rel": 0.000002 },
+    "continuousDiode": { "abs": 0.002, "rel": 0.002 }
+  },
+  "dcSweep": {
+    "resistorDivider": { "abs": 0.000003, "rel": 0.000002 }
+  },
+  "ac": {
+    "rcMagnitude": { "abs": 0.00005, "rel": 0.0005 },
+    "rcPhaseDeg": { "abs": 0.05, "rel": 0 }
+  },
+  "transient": {
+    "rcBackwardEuler": { "abs": 0.003, "rel": 0.003 }
+  },
+  "coverage": {
+    "resistorCapacitor": "direct model match including Virtual Breadboard source resistance, capacitor ESR/leakage, and solver GMIN where material",
+    "diode": "direct first-order Shockley match at a loaded forward operating point: IS=1e-12 A, N=1.8, 25 C, with Newton junction-step limiting only and no hard forward-voltage clamp",
+    "mosfet": "not claimed by this gate: Virtual Breadboard square-law/model-card channel is not a BSIM or textual SPICE .MODEL implementation",
+    "bjt": "not claimed by this gate: Virtual Breadboard first-order Ebers-Moll model is intentionally not a full ngspice Gummel-Poon model card"
+  }
+}

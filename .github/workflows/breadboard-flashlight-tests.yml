@@ -28,6 +28,8 @@ on:
       - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
       - 'Virtual_Breadboard/test/controlled-sources.test.js'
       - 'Virtual_Breadboard/test/bjt.test.js'
+      - 'Virtual_Breadboard/test/ngspice-crosscheck.test.js'
+      - 'Virtual_Breadboard/test/ngspice-tolerances.json'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -59,6 +61,8 @@ on:
       - 'Virtual_Breadboard/test/pole-zero-sanity.test.js'
       - 'Virtual_Breadboard/test/controlled-sources.test.js'
       - 'Virtual_Breadboard/test/bjt.test.js'
+      - 'Virtual_Breadboard/test/ngspice-crosscheck.test.js'
+      - 'Virtual_Breadboard/test/ngspice-tolerances.json'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -68,7 +72,7 @@ on:
 jobs:
   flashlight:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 7
     defaults:
       run:
         working-directory: Virtual_Breadboard
@@ -80,6 +84,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install ngspice reference engine
+        run: sudo apt-get update && sudo apt-get install -y ngspice
+        working-directory: .
 
       - name: Run flashlight primitive calibration pack
         run: node test/run_flashlight_calibration.js
@@ -146,3 +154,6 @@ jobs:
 
       - name: Run continuous Ebers-Moll BJT qualification
         run: npm run test:bjt
+
+      - name: Run ngspice cross-check qualification
+        run: npm run test:ngspice

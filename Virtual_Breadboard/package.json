@@ -35,6 +35,7 @@
     "test:pole-zero": "node test/pole-zero-sanity.test.js",
     "test:controlled-sources": "node test/controlled-sources.test.js",
     "test:bjt": "node test/bjt.test.js",
+    "test:ngspice": "node test/ngspice-crosscheck.test.js",
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
@@ -54,41 +55,21 @@
     "appId": "com.onewavescience.virtualbreadboard",
     "productName": "Virtual Breadboard Simulator",
     "publish": null,
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "main.js",
-      "preload.js",
-      "index.html",
-      "style.css",
-      "js/**/*",
-      "build/icon.png",
-      "!test/**"
-    ],
+    "directories": { "output": "dist" },
+    "files": ["main.js","preload.js","index.html","style.css","js/**/*","build/icon.png","!test/**"],
     "linux": {
-      "target": [
-        { "target": "AppImage", "arch": ["x64"] },
-        { "target": "deb", "arch": ["x64"] }
-      ],
+      "target": [{ "target": "AppImage", "arch": ["x64"] }, { "target": "deb", "arch": ["x64"] }],
       "category": "Education",
       "executableName": "virtual-breadboard-simulator",
       "icon": "build/icon.png",
       "maintainer": "One Wave Science <opensource@one-wave-universe.example>"
     },
     "win": {
-      "target": [
-        { "target": "portable", "arch": ["x64"] },
-        { "target": "zip", "arch": ["x64"] },
-        { "target": "nsis", "arch": ["x64"] }
-      ],
+      "target": [{ "target": "portable", "arch": ["x64"] }, { "target": "zip", "arch": ["x64"] }, { "target": "nsis", "arch": ["x64"] }],
       "icon": "build/icon.png"
     },
     "mac": {
-      "target": [
-        { "target": "dmg", "arch": ["x64", "arm64"] },
-        { "target": "zip", "arch": ["x64", "arm64"] }
-      ],
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }, { "target": "zip", "arch": ["x64", "arm64"] }],
       "icon": "build/icon.png",
       "category": "public.app-category.education",
       "identity": null
