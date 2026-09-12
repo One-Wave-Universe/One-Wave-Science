@@ -19,6 +19,7 @@ on:
       - 'Virtual_Breadboard/test/pwl-pulse-sources.test.js'
       - 'Virtual_Breadboard/test/startup-uic.test.js'
       - 'Virtual_Breadboard/test/sparse-mna.test.js'
+      - 'Virtual_Breadboard/test/adaptive-transient.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -47,6 +48,7 @@ on:
       - 'Virtual_Breadboard/test/pwl-pulse-sources.test.js'
       - 'Virtual_Breadboard/test/startup-uic.test.js'
       - 'Virtual_Breadboard/test/sparse-mna.test.js'
+      - 'Virtual_Breadboard/test/adaptive-transient.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -113,6 +115,9 @@ jobs:
 
       - name: Run sparse MNA qualification
         run: npm run test:sparse-mna
+
+      - name: Run adaptive transient qualification
+        run: npm run test:adaptive-transient
 
       - name: Run SPICE convergence tolerance qualification
         run: npm run test:spice-tolerances
