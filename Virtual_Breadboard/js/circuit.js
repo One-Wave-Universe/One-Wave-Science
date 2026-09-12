@@ -613,40 +613,63 @@
   // magnitude real gate charge a driving source actually has to slew
   // through before the channel can respond, instead of an idealized
   // instant-response gate.
-  const NMOS_PARTS = {
-    1.5: { name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30, ciss: 300e-12 },
-    2.1: { name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 24e-12 },
-  };
-  const PMOS_PARTS = {
-    1.5: { name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30, ciss: 470e-12 },
-    2.1: { name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 40e-12 },
-  };
+  // MOSFET model cards are the single source of device parameters for the
+  // simple switch model, continuous channel model, transient gate charge,
+  // body diode, leakage, ratings, thermal RDS(on) drift, and AC linearization.
+  // The four cards below intentionally preserve the pre-card breadboard
+  // defaults; naming them makes the selection explicit and reusable instead
+  // of hiding it behind the historical numeric `value` selector.
+  const MOSFET_OFF_LEAKAGE_G = 2e-9;
+  const MOSFET_BETA_CAL_VOV = 2.5;
+  const MOSFET_CHANNEL_LAMBDA = 0.02;
+  const MOSFET_MODEL_CARDS = Object.freeze({
+    AO3400A: Object.freeze({ type: 'nmos', name: 'AO3400A-class (logic-level)', vth: 1.5, rdsOn: 0.03, vgsMax: 12, vdsMax: 30, ciss: 300e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
+    '2N7000': Object.freeze({ type: 'nmos', name: '2N7000-class', vth: 2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 24e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
+    AO3401A: Object.freeze({ type: 'pmos', name: 'AO3401A-class (logic-level)', vth: -1.5, rdsOn: 0.05, vgsMax: 12, vdsMax: 30, ciss: 470e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
+    BS250: Object.freeze({ type: 'pmos', name: 'BS250-class', vth: -2.1, rdsOn: 5, vgsMax: 20, vdsMax: 60, ciss: 40e-12, betaCalVov: 2.5, lambda: 0.02, offLeakageG: 2e-9, rdsonTempco: 0.004, bodyDiodeVf: 0.7, bodyDiodeRon: 10 }),
+  });
+  const NMOS_PARTS = { 1.5: MOSFET_MODEL_CARDS.AO3400A, 2.1: MOSFET_MODEL_CARDS['2N7000'] };
+  const PMOS_PARTS = { 1.5: MOSFET_MODEL_CARDS.AO3401A, 2.1: MOSFET_MODEL_CARDS.BS250 };
+  const MOSFET_CARD_FIELDS = ['vth','rdsOn','vgsMax','vdsMax','ciss','betaCalVov','lambda','offLeakageG','rdsonTempco','bodyDiodeVf','bodyDiodeRon'];
+  function findMosfetModelCard(name) {
+    if (name == null) return null;
+    const key = String(name).toUpperCase().replace(/[^A-Z0-9]/g, '');
+    return Object.values(MOSFET_MODEL_CARDS).find((card) => card.name.toUpperCase().replace(/[^A-Z0-9]/g, '').startsWith(key))
+      || MOSFET_MODEL_CARDS[String(name).toUpperCase()] || null;
+  }
   function mosfetSpec(c) {
     const table = c.type === 'pmos' ? PMOS_PARTS : NMOS_PARTS;
-    return table[c.value] || table[1.5];
+    const named = typeof c.modelCard === 'string' ? c.modelCard : c.model;
+    let base = named ? findMosfetModelCard(named) : null;
+    if (named && !base) throw new Error(`Unknown MOSFET model card '${named}'`);
+    if (!base) base = table[c.value] || table[1.5];
+    const inline = c.modelCard && typeof c.modelCard === 'object' ? c.modelCard : null;
+    const merged = Object.assign({}, base, inline || {});
+    MOSFET_CARD_FIELDS.forEach((k) => { if (c[k] != null) merged[k] = c[k]; });
+    const cardType = merged.type || c.type;
+    if (cardType !== c.type) throw new Error(`MOSFET model '${merged.name || named || 'inline'}' is ${cardType}, cannot use it for ${c.type}`);
+    const finitePositive = (v, fallback, floor = 0) => Number.isFinite(Number(v)) ? Math.max(floor, Number(v)) : fallback;
+    merged.type = c.type;
+    merged.name = merged.name || `${c.type.toUpperCase()} inline model`;
+    merged.vth = Number.isFinite(Number(merged.vth)) ? Number(merged.vth) : base.vth;
+    merged.rdsOn = finitePositive(merged.rdsOn, base.rdsOn, 1e-9);
+    merged.vgsMax = finitePositive(merged.vgsMax, base.vgsMax, 0);
+    merged.vdsMax = finitePositive(merged.vdsMax, base.vdsMax, 0);
+    merged.ciss = finitePositive(merged.ciss, base.ciss, 1e-18);
+    merged.betaCalVov = finitePositive(merged.betaCalVov, MOSFET_BETA_CAL_VOV, 1e-6);
+    merged.lambda = finitePositive(merged.lambda, MOSFET_CHANNEL_LAMBDA, 0);
+    merged.offLeakageG = finitePositive(merged.offLeakageG, MOSFET_OFF_LEAKAGE_G, 0);
+    merged.rdsonTempco = finitePositive(merged.rdsonTempco, MOSFET_RDSON_TEMPCO, 0);
+    merged.bodyDiodeVf = finitePositive(merged.bodyDiodeVf, DIODE_VF, 0);
+    merged.bodyDiodeRon = finitePositive(merged.bodyDiodeRon, DIODE_RON, 1e-9);
+    return merged;
   }
-  // real off-state drain-source leakage (IDSS-class): even with the
-  // channel fully off and the body diode reverse-biased, a real MOSFET
-  // still passes a real, tiny leakage current -- datasheets typically
-  // spec a max (often ~1uA), with real typical parts well below that;
-  // this is an honest typical order of magnitude, not that worst-case
-  // limit. Stamped unconditionally (like a real physical leakage path
-  // always present) rather than only when "off", since it's utterly
-  // negligible next to real channel/diode conduction whenever those ARE
-  // active -- no separate on/off bookkeeping needed.
-  const MOSFET_OFF_LEAKAGE_G = 2e-9;
-  // Precision channel model: square-law (Shichman-Hodges-class) large-signal
-  // MOSFET with channel-length modulation. beta is calibrated so the low-Vds
-  // slope at 2.5 V of overdrive matches the existing part's declared RDS(on).
-  // The legacy threshold + fixed-RDS(on) model remains the default.
-  const MOSFET_BETA_CAL_VOV = 2.5;
-  const MOSFET_CHANNEL_LAMBDA = 0.02; // 1/V, modest channel-length modulation
   function mosfetChannelCurrent(c, vg, vd, vs, tempC) {
     const spec = mosfetSpec(c);
     const polarity = c.type === 'pmos' ? -1 : 1;
-    const tempScale = Math.max(0.1, 1 + MOSFET_RDSON_TEMPCO * ((tempC == null ? 25 : tempC) - 25));
+    const tempScale = Math.max(0.1, 1 + spec.rdsonTempco * ((tempC == null ? 25 : tempC) - 25));
     const rdsEff = Math.max(spec.rdsOn * tempScale, 1e-6);
-    const beta = 1 / (rdsEff * MOSFET_BETA_CAL_VOV);
+    const beta = 1 / (rdsEff * spec.betaCalVov);
     const vdsSigned = polarity * (vd - vs);
     let vgsEff;
     let vdsEff;
@@ -668,9 +691,9 @@
     if (!(vov > 0) || !(vdsEff > 0)) return 0;
     let id;
     if (vdsEff < vov) {
-      id = beta * (vov * vdsEff - 0.5 * vdsEff * vdsEff) * (1 + MOSFET_CHANNEL_LAMBDA * vdsEff);
+      id = beta * (vov * vdsEff - 0.5 * vdsEff * vdsEff) * (1 + spec.lambda * vdsEff);
     } else {
-      id = 0.5 * beta * vov * vov * (1 + MOSFET_CHANNEL_LAMBDA * vdsEff);
+      id = 0.5 * beta * vov * vov * (1 + spec.lambda * vdsEff);
     }
     return currentSign * id;
   }
@@ -1517,10 +1540,10 @@
             stampI(s, -IeqGate);
             // real off-state leakage, always present alongside whatever
             // else is conducting (see MOSFET_OFF_LEAKAGE_G's comment)
-            stampG(d, d, MOSFET_OFF_LEAKAGE_G);
-            stampG(s, s, MOSFET_OFF_LEAKAGE_G);
-            stampG(d, s, -MOSFET_OFF_LEAKAGE_G);
-            stampG(s, d, -MOSFET_OFF_LEAKAGE_G);
+            stampG(d, d, spec.offLeakageG);
+            stampG(s, s, spec.offLeakageG);
+            stampG(d, s, -spec.offLeakageG);
+            stampG(s, d, -spec.offLeakageG);
             const continuousMosfet = solverOptions && solverOptions.mosfetModel === 'continuous';
             if (continuousMosfet) {
               const vg0 = previousVoltages.get(uf.find(c.gate)) || 0;
@@ -1537,7 +1560,7 @@
               // silicon channel resistance rises with temperature, the
               // same direction (and rough magnitude) every real MOSFET
               // datasheet's RDS(on)-vs-T curve shows
-              const rdsEff = spec.rdsOn * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
+              const rdsEff = spec.rdsOn * (1 + spec.rdsonTempco * (tempOf(c.id) - 25));
               const g = 1 / rdsEff;
               stampG(d, d, g);
               stampG(s, s, g);
@@ -1550,12 +1573,12 @@
               // complementary orientation: anode at drain, cathode at source.
               const anode = c.type === 'nmos' ? s : d;
               const cathode = c.type === 'nmos' ? d : s;
-              const g = 1 / DIODE_RON;
+              const g = 1 / spec.bodyDiodeRon;
               stampG(anode, anode, g);
               stampG(cathode, cathode, g);
               stampG(anode, cathode, -g);
               stampG(cathode, anode, -g);
-              const Ieq = g * DIODE_VF;
+              const Ieq = g * spec.bodyDiodeVf;
               stampI(anode, Ieq);
               stampI(cathode, -Ieq);
             }
@@ -2051,11 +2074,11 @@
           const cathodeV = f.type === 'nmos' ? vd : vs;
           const vDiode = anodeV - cathodeV;
           const wasOn = this._fetDiodeState.get(f.id);
-          if (!wasOn && vDiode > DIODE_VF) {
+          if (!wasOn && vDiode > spec.bodyDiodeVf) {
             this._fetDiodeState.set(f.id, true);
             changed = true;
           } else if (wasOn) {
-            const i = (vDiode - DIODE_VF) / DIODE_RON;
+            const i = (vDiode - spec.bodyDiodeVf) / spec.bodyDiodeRon;
             if (i < 0) {
               this._fetDiodeState.set(f.id, false);
               changed = true;
@@ -2343,7 +2366,7 @@
                 const vd = voltages.get(uf.find(f.drain)) || 0;
                 const vs = voltages.get(uf.find(f.source)) || 0;
                 const ich = mosfetChannelCurrent(f, vg, vd, vs, tempOf(f.id));
-                precisionCurrents.set('mosfet:' + f.id, ich + (vd - vs) * MOSFET_OFF_LEAKAGE_G);
+                precisionCurrents.set('mosfet:' + f.id, ich + (vd - vs) * mosfetSpec(f).offLeakageG);
               });
             }
             bjts.forEach((q) => {
@@ -2386,7 +2409,7 @@
                 const vg = voltages.get(uf.find(f.gate)) || 0;
                 const vd = voltages.get(uf.find(f.drain)) || 0;
                 const vs = voltages.get(uf.find(f.source)) || 0;
-                seedCurrents.set('mosfet:' + f.id, mosfetChannelCurrent(f, vg, vd, vs, tempOf(f.id)) + (vd - vs) * MOSFET_OFF_LEAKAGE_G);
+                seedCurrents.set('mosfet:' + f.id, mosfetChannelCurrent(f, vg, vd, vs, tempOf(f.id)) + (vd - vs) * mosfetSpec(f).offLeakageG);
               });
             }
             bjts.forEach((q) => {
@@ -2611,12 +2634,12 @@
           // total conventional current from drain to source: the channel
           // (when on) and the body diode (when on) are two parallel paths
           // between the same two nodes, so their currents just add.
-          const rdsEff = spec.rdsOn * (1 + MOSFET_RDSON_TEMPCO * (tempOf(c.id) - 25));
+          const rdsEff = spec.rdsOn * (1 + spec.rdsonTempco * (tempOf(c.id) - 25));
           const continuousMosfet = solverOptions && solverOptions.mosfetModel === 'continuous';
           const channelI = continuousMosfet
             ? mosfetChannelCurrent(c, vg, vd, vs, tempOf(c.id))
             : (this._fetChannelState.get(c.id) ? (vd - vs) / rdsEff : 0);
-          I = channelI + (vd - vs) * MOSFET_OFF_LEAKAGE_G;
+          I = channelI + (vd - vs) * spec.offLeakageG;
           // self-heating from real channel conduction loss only (switching
           // loss is not modeled -- a real device's dominant loss at these
           // small currents/frequencies is conduction, not switching)
@@ -2625,7 +2648,7 @@
           if (this._fetDiodeState.get(c.id)) {
             const anodeV = c.type === 'nmos' ? vs : vd;
             const cathodeV = c.type === 'nmos' ? vd : vs;
-            const diodeI = (anodeV - cathodeV - DIODE_VF) / DIODE_RON; // anode->cathode
+            const diodeI = (anodeV - cathodeV - spec.bodyDiodeVf) / spec.bodyDiodeRon; // anode->cathode
             I += c.type === 'nmos' ? -diodeI : diodeI; // convert to the drain->source convention
           }
           const vgs = vg - vs;
@@ -2980,7 +3003,7 @@
 
   const api = {
     Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BJT_IS, BJT_BETA_F, BJT_BETA_R, BJT_NF, BJT_NR, bjtSpec, bjtCurrents, bjtLinearization, BATTERY_RINT, VGND_RINT,
-    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
+    AC_RINT, MTJ_RINT, MOSFET_MODEL_CARDS, NMOS_PARTS, PMOS_PARTS, findMosfetModelCard, mosfetSpec, mosfetChannelCurrent, mosfetChannelRegion, MOSFET_BETA_CAL_VOV, MOSFET_CHANNEL_LAMBDA, COMPARATOR_SPEC,
     ELECTROLYTIC_THRESHOLD, REVERSE_POLARITY_LIMIT, capacitorESR, capacitorLeakageR, inductorDCR,
     COMPONENT_TOLERANCE, capacitorToleranceFor,
     LATCHRELAY_SPEC, latchRelaySpec,

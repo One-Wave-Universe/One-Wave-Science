@@ -13,7 +13,7 @@ const {
   Circuit, buildTopologyUnionFind,
   BATTERY_RINT, AC_RINT, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C,
   capacitorESR, capacitorLeakageR, inductorDCR,
-  mosfetChannelCurrent, MOSFET_OFF_LEAKAGE_G, bjtLinearization,
+  mosfetChannelCurrent, mosfetSpec, bjtLinearization,
 } = CE;
 
 const C = (re, im) => ({ re: re || 0, im: im || 0 });
@@ -262,13 +262,18 @@ function smallSignalAc(elements, options) {
         const drain = idx(c.drain);
         const sourceNode = idx(c.source);
         const vg = opV(c.gate), vd = opV(c.drain), vs = opV(c.source);
+        const spec = mosfetSpec(c);
         const h = 1e-5;
         const gm = (mosfetChannelCurrent(c, vg + h, vd, vs, ambientC) - mosfetChannelCurrent(c, vg - h, vd, vs, ambientC)) / (2 * h);
-        const gdd = (mosfetChannelCurrent(c, vg, vd + h, vs, ambientC) - mosfetChannelCurrent(c, vg, vd - h, vs, ambientC)) / (2 * h) + MOSFET_OFF_LEAKAGE_G;
-        const gss = (mosfetChannelCurrent(c, vg, vd, vs + h, ambientC) - mosfetChannelCurrent(c, vg, vd, vs - h, ambientC)) / (2 * h) - MOSFET_OFF_LEAKAGE_G;
+        const gdd = (mosfetChannelCurrent(c, vg, vd + h, vs, ambientC) - mosfetChannelCurrent(c, vg, vd - h, vs, ambientC)) / (2 * h) + spec.offLeakageG;
+        const gss = (mosfetChannelCurrent(c, vg, vd, vs + h, ambientC) - mosfetChannelCurrent(c, vg, vd, vs - h, ambientC)) / (2 * h) - spec.offLeakageG;
         stampControlledCurrent(A, drain, sourceNode, gate, gdd, gss, gm);
+        // Ciss is the same lumped gate-source capacitance used by transient
+        // switching. Keeping it here makes the named model card affect AC
+        // input loading too instead of silently disappearing in frequency domain.
+        stampY(A, gate, sourceNode, C(0, omega * spec.ciss));
         const bodyOn = op.mosfetStates && op.mosfetStates.get(c.id) && op.mosfetStates.get(c.id).bodyDiodeOn;
-        if (bodyOn) stampY(A, drain, sourceNode, C(1 / DIODE_RON, 0));
+        if (bodyOn) stampY(A, drain, sourceNode, C(1 / spec.bodyDiodeRon, 0));
       }
     });
 
