@@ -24,6 +24,7 @@
     "test:mosfet-continuous": "node test/mosfet-continuous.test.js",
     "test:mosfet-model-cards": "node test/mosfet-model-cards.test.js",
     "test:pwl-pulse": "node test/pwl-pulse-sources.test.js",
+    "test:startup-uic": "node test/startup-uic.test.js",
     "test:spice-tolerances": "node test/spice-tolerances.test.js",
     "test:ac-analysis": "node test/ac-analysis.test.js",
     "test:bode": "node test/bode-analysis.test.js",
