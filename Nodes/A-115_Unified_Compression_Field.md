@@ -300,3 +300,18 @@ This version fails if one coefficient set cannot connect the claimed views, if r
 ## Status Statement
 
 A-115 is load-bearing because it states the identity and accounting rules being tested. It does not claim established experimental proof.
+
+## Audit Note (E-533)
+
+E-533 executes the Section L cosmology attack from `ONE_WAVE_SCIENCE_ATTACK_MAP.md`
+against Section 5's static cosmic accounting: Type Ia supernova light-curve
+time dilation and the Tolman surface-brightness test independently exclude
+the specific sub-claim that Section 5's static propagation-loss redshift, on
+its own, fully replaces expansion (see Section 6 of E-533 for why this is a
+structural limit, not a calibration gap, and Section 8 for the minimum bar
+any revised mechanism would need to clear). This Direct Failure Condition --
+"if redshift requires hidden expansion terms" -- is the relevant one: E-533
+Section 6 argues any fix that reproduces the observed time dilation must
+itself be checked against exactly this condition before being called
+non-expansion. Sections 1-4 of this node (Mass Effect, gravity/compression,
+Mirror-Gate) are not addressed by this audit and are unaffected by it.

@@ -1,4 +1,13 @@
 
+## Cosmology Attack Executed — Redshift Law Versus Expansion (September 7, 2026)
+
+- Added E-533, executing the `ONE_WAVE_SCIENCE_ATTACK_MAP.md` Section L attack in full: took E-528's explicit redshift law as written and compared it against outside supernova time-dilation, Tolman surface-brightness, CMB blackbody/T(z), and BAO measurements.
+- Result: the sub-claim that E-528's static propagation-loss redshift, alone, fully replaces expansion is excluded by SNe Ia light-curve time dilation (Goldhaber 2001; Blondin 2008) and the Tolman surface-brightness test (Lubin & Sandage 2001). Per I-02, this sub-claim is RED — a recorded outcome, not a claim of victory, and scoped only to that sub-claim.
+- E-533 Section 6 gives the structural reason this cannot be fixed by recalibrating the propagation coefficient: a static background cannot alter emission-to-emission timing at the source, which is what the time-dilation measurement actually constrains. Section 8 specifies the minimum bar any revised mechanism would need to clear, and flags that a mechanism reproducing the time-dilation result must be checked against A-115's own "hidden expansion terms" failure condition before being called non-expansion.
+- Updated E-528's `claim_gate_detail` and Failure Tests section, and A-115's Direct Failure Conditions area, with pointers to E-533. Neither node's top-level gate was changed: whether I-02's Gray-to-Red transform extends to Nodes (as opposed to Book chapters) is flagged in I-02's own Yellow Audit as unresolved, and this change does not resolve it unilaterally.
+- Not affected: A-115 Sections 1-4 (Mass Effect, gravity/compression, Mirror-Gate), or the quasar/white-hole identification of White Energy (E-530) as an astrophysical phenomenon.
+- CMB and BAO tests (E-533 Sections 4-5) are recorded as open requirements, not independent failures — frequency-independence of \(\kappa_\gamma\) and an explicit BAO-scale prediction are both still needed regardless of the Section 2 result.
+
 ## Updated 32 — Repository Integrity Repair
 
 - Established I-06 canonical YAML metadata for every active node and root axiom.
