@@ -16,5 +16,5 @@ rep("          } else if (c.type === 'acsource') {", "          } else if (c.typ
 rep("        // AC source: an ideal source like a battery, but its target value is\n        // the shared sim clock's sinusoid instead of a constant.", "        // Time-domain source: shared MNA/source-impedance primitive for sine,\n        // PWL, and PULSE waveforms; only the commanded voltage differs.")
 rep("          b[row] += wave(ac.value, ac.freq || 1, ac.phase || 0, t);", "          b[row] += transientSourceValue(ac, t);")
 rep("        } else if (c.type === 'acsource') {\n          I = acCurrent.get(c.id) || 0;", "        } else if (c.type === 'acsource' || c.type === 'pwl' || c.type === 'pulse') {\n          I = acCurrent.get(c.id) || 0;")
-rep("    AC_RINT, MTJ_RINT, NMOS_PARTS, PMOS_PARTS, mosfetSpec", "    AC_RINT, MTJ_RINT, wave, pwlValue, pulseValue, transientSourceValue, NMOS_PARTS, PMOS_PARTS, mosfetSpec")
+rep("    AC_RINT, MTJ_RINT, MOSFET_MODEL_CARDS,", "    AC_RINT, MTJ_RINT, wave, pwlValue, pulseValue, transientSourceValue, MOSFET_MODEL_CARDS,")
 p.write_text(s)
