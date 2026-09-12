@@ -79,7 +79,9 @@ function npnCircuit(vbase) {
   check('npn-saturation-beta-collapses', r.currents.get('Q1:collector')/r.currents.get('Q1:base') < BJT_BETA_F/2, `forcedBeta=${r.currents.get('Q1:collector')/r.currents.get('Q1:base')}`);
 }
 
-// PNP circuit is the polarity mirror of the NPN stage.
+// PNP circuit is the polarity mirror of the NPN stage. Compare voltages relative
+// to the emitter because solve() is free to choose a different absolute reference
+// node; only voltage differences are physical.
 {
   const elements={wires:[],components:[
     {id:'VEE',type:'battery',a:'gnd',b:'vee',value:5},
@@ -88,9 +90,10 @@ function npnCircuit(vbase) {
     {id:'Q1',type:'pnp',base:'base',collector:'collector',emitter:'gnd'},
   ]};
   const r=new Circuit().solve(elements,1e-3,25,{maxIterations:80});
+  const vce=v(r,'collector')-v(r,'gnd');
   check('pnp-circuit-converges', r.solver.converged, JSON.stringify(r.solver));
   check('pnp-collector-current-negative', r.currents.get('Q1:collector')<0, `Ic=${r.currents.get('Q1:collector')}`);
-  check('pnp-mirrored-collector-voltage', v(r,'collector')<0 && v(r,'collector')>-5, `Vc=${v(r,'collector')}`);
+  check('pnp-mirrored-collector-voltage', vce<0 && vce>-5, `Vce=${vce}`);
 }
 
 // AC uses the same three-terminal Jacobian at the solved operating point. A common-
