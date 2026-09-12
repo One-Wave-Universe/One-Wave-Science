@@ -1,0 +1,13 @@
+GitHub Actions run: 34672445791
+Workflow: Virtual Breadboard - Flashlight Tests
+Result: success
+
+Passed steps:
+- flashlight primitive calibration pack
+- balanced-cell / nerve / reference regressions
+- conventional flashlight reference
+- SPICE-style DC analysis qualification
+- solver convergence qualification
+
+Head at tested runtime/test changes: 256965e53f5889028e3fec60405e37c37c535905
+Subsequent commits on this branch only remove the temporary patch workflow and add documentation/receipts.
