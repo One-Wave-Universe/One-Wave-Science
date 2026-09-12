@@ -51,12 +51,21 @@ def circulation(phi_ring: Sequence[float]) -> float:
     return g
 
 
-def dipole(a_ring: Sequence[float]) -> Tuple[float, float, float]:
+def dipole(a_ring: Sequence[float], eps: float = 1e-9) -> Tuple[float, float, float]:
     C = S = 0.0
     for k, ak in enumerate(a_ring):
         ang = 2.0 * math.pi * k / 6.0
         C += ak * math.cos(ang)
         S += ak * math.sin(ang)
+    # A balanced ring (equal amplitudes on all six neighbors) has zero
+    # dipole moment and therefore no preferred direction. C and S then
+    # cancel only to floating-point noise (~1e-16), and atan2 of two
+    # near-zero, sign-noisy floats returns an essentially arbitrary angle
+    # rather than the physically meaningful "undefined direction" case.
+    # Below eps, declare theta = 0.0 by convention instead of trusting
+    # that noise.
+    if math.hypot(C, S) < eps:
+        return C, S, 0.0
     return C, S, math.atan2(S, C)
 
 
@@ -65,7 +74,11 @@ def e4(state: State, c: Coeff = Coeff()) -> dict:
     pc, pr = state.phi[0], state.phi[1:]
     G = circulation(pr)
     C, S, th = dipole(ar)
-    R = (sum(ar) / 6.0) / (ac + c.eps)
+    # Guard division by zero only when ac is actually near zero; adding eps
+    # unconditionally would bias every ordinary R by ~eps (it did: R came
+    # out 0.999999999 instead of 1.0 for ac=1.0).
+    ac_safe = ac if abs(ac) > c.eps else math.copysign(c.eps, ac)
+    R = (sum(ar) / 6.0) / ac_safe
     eK = c.aK * (G - c.Gstar) ** 2
     eK += c.bK * sum((ar[i] - ar[(i + 1) % 6]) ** 2 for i in range(6))
     eK += c.gK * ac * sum(1.0 - math.cos(pr[i] - pc) for i in range(6))
