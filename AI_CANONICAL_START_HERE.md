@@ -141,7 +141,7 @@ The current structures are separate:
 2 binary choices
 3 ternary moves
 6 route addresses = 2 x 3
-6 measured oscillator gates
+6 process steps = 6 gates = 3 Mirror gates + 3 Action gates
 5 downstream commitment/readout states (Updated 43)
 5-state self lifecycle: Idle -> Primed -> Executing -> Vectoring -> Resolving (G-742)
 Field/Void ternaries and quadratic routing (G-740)
@@ -187,13 +187,13 @@ F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
 - `/` is one simultaneous mirrored pair.
 - `-` is the Mirror Gate return/crossover through the shared `(0)` reference.
 - There are six coupled logical operations / twelve pair-side positions, not twelve serial instructions.
-- The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.
+- The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.
 - Four Views are **Direction, Phase, Strength, Reference**.
 - Four Actions are **Inward, Outward, Across, Over**.
 - Two engagement choices are **Everything / Nothing** in this older vocabulary; Updated 43 owns the current executable YES/NO binary choice contract.
 - Three differential moves are **Left / Stay / Right = -1 / 0 / +1** in this older vocabulary; Updated 43 owns the current executable DOWN/HOLD/UP ternary move contract.
 - Older five-level `-2,-1,0,+1,+2` modulation is compatibility shorthand, not the canonical five-state structure. See Updated 44.
-- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**; G-739 constrains them as measured stability regions around a bidirectional oscillator.
+- The six process steps are the six gates: **BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3**; G-739 measures behavior at those same positions rather than defining another gate set.
 - There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in this architecture.
 
 ### Anti-drift rule
@@ -219,7 +219,7 @@ Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory,
 5. `Nodes/B-222_Oscillation_Center.md`
 6. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
 
-BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
+BEGIN/M1 is the first Mirror-gate relation at the active shared center/reference region. The six recursive labels are the same six gate positions: three Mirror gates alternating with three Action gates, not a separate measured-gate layer or a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
 
 ## Current Mass-Effect architecture
 
