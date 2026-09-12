@@ -3,17 +3,23 @@ name: Jetson Command Lane
 on:
   workflow_dispatch:
     inputs:
+      argv_json:
+        description: 'Preferred argv JSON array, e.g. ["git","status","--short"]'
+        required: false
+        default: ""
+        type: string
       command:
-        description: "Shell command to run on the Jetson as its normal unprivileged user"
-        required: true
+        description: "Fallback simple command; parsed with shlex (no pipes/redirection/shell operators)"
+        required: false
+        default: ""
         type: string
       cwd:
         description: "Optional Jetson working directory"
         required: false
-        default: ""
+        default: "/home/Scales/One-Wave-Science"
         type: string
       timeout:
-        description: "Timeout in seconds (gateway caps this)"
+        description: "Timeout in seconds (terminal parser caps this at 300)"
         required: false
         default: "120"
         type: string
@@ -33,13 +39,15 @@ concurrency:
 jobs:
   dispatch:
     # Deliberately GitHub-hosted. Do not change this to self-hosted while the
-    # repository is public.
+    # repository is public. GitHub reaches the Jetson only through authenticated
+    # Hive Pipe MCP terminal_run.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       REQUESTED_URL: ${{ inputs.gateway_url }}
       DEFAULT_URL: ${{ secrets.JETSON_GATEWAY_URL }}
       GATEWAY_TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+      ARGV_JSON: ${{ inputs.argv_json }}
       COMMAND: ${{ inputs.command }}
       COMMAND_CWD: ${{ inputs.cwd }}
       COMMAND_TIMEOUT: ${{ inputs.timeout }}
@@ -54,14 +62,18 @@ jobs:
             exit 1
           fi
           if [[ -z "${GATEWAY_TOKEN}" ]]; then
-            echo "::error::Configure JETSON_GATEWAY_TOKEN."
+            echo "::error::Configure JETSON_GATEWAY_TOKEN with a Hive Pipe token."
+            exit 1
+          fi
+          if [[ -z "${ARGV_JSON}" && -z "${COMMAND}" ]]; then
+            echo "::error::Provide argv_json or command."
             exit 1
           fi
           case "${COMMAND_TIMEOUT}" in
             ''|*[!0-9]*) echo "::error::timeout must be an integer"; exit 1 ;;
           esac
 
-      - name: Send command to Jetson
+      - name: Send structured command to Jetson MCP terminal parser
         shell: bash
         run: |
           set -euo pipefail
@@ -70,19 +82,42 @@ jobs:
           python3 - <<'PY'
           import json
           import os
+          import shlex
           import sys
           import urllib.error
           import urllib.request
 
-          payload = {
-              "command": os.environ["COMMAND"],
+          argv_text = os.environ.get("ARGV_JSON", "").strip()
+          if argv_text:
+              try:
+                  argv = json.loads(argv_text)
+              except json.JSONDecodeError as exc:
+                  print(f"invalid argv_json: {exc}", file=sys.stderr)
+                  raise SystemExit(2)
+              if not isinstance(argv, list) or not argv or not all(isinstance(x, str) and x for x in argv):
+                  print("argv_json must be a non-empty JSON array of strings", file=sys.stderr)
+                  raise SystemExit(2)
+          else:
+              argv = shlex.split(os.environ.get("COMMAND", ""))
+              if not argv:
+                  print("command parsed to an empty argv", file=sys.stderr)
+                  raise SystemExit(2)
+
+          arguments = {
+              "argv": argv,
               "timeout": int(os.environ["COMMAND_TIMEOUT"]),
           }
           if os.environ.get("COMMAND_CWD"):
-              payload["cwd"] = os.environ["COMMAND_CWD"]
+              arguments["cwd"] = os.environ["COMMAND_CWD"]
 
+          payload = {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "tools/call",
+              "params": {"name": "terminal_run", "arguments": arguments},
+          }
           req = urllib.request.Request(
-              os.environ["URL"].rstrip("/") + "/v1/exec",
+              os.environ["URL"].rstrip("/") + "/mcp",
               data=json.dumps(payload).encode(),
               headers={
                   "Authorization": "Bearer " + os.environ["GATEWAY_TOKEN"],
@@ -95,18 +130,23 @@ jobs:
                   req,
                   timeout=int(os.environ["COMMAND_TIMEOUT"]) + 15,
               ) as response:
-                  result = json.load(response)
+                  envelope = json.load(response)
           except urllib.error.HTTPError as exc:
               sys.stderr.write(exc.read().decode("utf-8", errors="replace"))
               raise SystemExit(1)
 
+          if "error" in envelope:
+              print(json.dumps(envelope["error"], indent=2), file=sys.stderr)
+              raise SystemExit(1)
+          tool_result = envelope.get("result", {})
+          result = tool_result.get("structuredContent", {})
           sys.stdout.write(result.get("stdout", ""))
           sys.stderr.write(result.get("stderr", ""))
+          if result.get("error"):
+              print(result["error"], file=sys.stderr)
           print(
               f"\n[jetson exit={result.get('exit_code')} "
-              f"duration_ms={result.get('duration_ms')}]"
+              f"cwd={result.get('cwd')} duration_ms={result.get('duration_ms')}]"
           )
-          raise SystemExit(
-              int(result.get("exit_code", 0 if result.get("ok") else 1))
-          )
+          raise SystemExit(int(result.get("exit_code", 0 if result.get("ok") else 1)))
           PY
