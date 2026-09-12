@@ -55,13 +55,13 @@ Times \(\pi\):
 a_0^{(\mathrm{edge})}(c_{\mathrm{eff}}=c)\approx 4.96\times 10^{-18}\,\mathrm{m}.
 \]
 
-A nucleon / alpha spatial scale is order \(1\,\mathrm{fm}=10^{-15}\,\mathrm{m}\). The Gray-control edge length is about **three orders of magnitude smaller**. To force \(a_0\sim 1\,\mathrm{fm}\) one must take
+A nucleon / alpha spatial scale is order \(1\,\mathrm{fm}=10^{-15}\,\mathrm{m}\). The Gray-control edge length is about **three orders of magnitude smaller**. Since \(a_0^{(\mathrm{edge})}\) scales directly with \(c_{\mathrm{eff}}\) in the formula above, closing that gap requires making \(c_{\mathrm{eff}}\) *larger*, not smaller. To force \(a_0\sim 1\,\mathrm{fm}\) one must take
 
 \[
-\frac{c_{\mathrm{eff}}}{c}\sim 2\times 10^{-3}.
+\frac{c_{\mathrm{eff}}}{c}\sim 2\times 10^{2}
 \]
 
-That ratio is an extra input. It is not derived in this node.
+(an earlier draft of this node inverted the fraction and stated \(\sim 2\times 10^{-3}\); that value is what \(c_{\mathrm{eff}}/c\) would need to be if \(a_0\) instead scaled as \(1/c_{\mathrm{eff}}\), which is not what the stated formula says). A required \(c_{\mathrm{eff}}\) roughly 200 times faster than light is not a merely "extra input" — it is a further strike against A1-A4 identifying \(E_{125}\) with this zone-edge picture at all, on top of already remaining undecided in this node.
 
 ## Hoyle / carbon solver rule
 

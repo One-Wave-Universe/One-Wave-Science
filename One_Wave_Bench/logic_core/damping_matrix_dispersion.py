@@ -86,13 +86,28 @@ def matrix_omega_roots(k: float, **kwargs) -> np.ndarray:
     return 1j * matrix_lambda_roots(k, **kwargs)
 
 
-def decoupled_matches_scalar(k: float, c_eff: float, omega0: float, gamma: float, atol: float = 1e-9) -> bool:
-    scalar = set(_snap(omega_temporal_scalar(k, c_eff, omega0, gamma)))
+def decoupled_matches_scalar(k: float, c_eff: float, omega0: float, gamma: float, atol: float = 1e-6) -> bool:
+    """Each decoupled (gx=kappa=0) matrix root must match a scalar root
+    within `atol`, not exactly after rounding.
+
+    The matrix roots come from a quartic (the decoupled case squares the
+    scalar quadratic, since the two identical fields duplicate each root)
+    solved via np.roots' companion-matrix eigenvalues. Root-finding for a
+    repeated root is ill-conditioned: the achievable accuracy degrades to
+    roughly sqrt(machine epsilon) (~1.5e-8 here), not machine epsilon. The
+    previous implementation rounded both sides to 9 decimal places and
+    compared sets, which is finer than that error and made two copies of
+    the same analytic root round to two different values -- failing even
+    though the roots agree to ~8 significant figures. atol=1e-6 keeps a
+    real, falsifiable check with margin over that known conditioning
+    error, rather than silently deciding tolerance never matters (default
+    was declared but unused).
+    """
+    scalar = omega_temporal_scalar(k, c_eff, omega0, gamma)
     mat = matrix_omega_roots(
         k, cF=c_eff, cV=c_eff, wF=omega0, wV=omega0, gF=gamma, gV=gamma, gx=0.0, kappa=0.0
     )
-    snapped = set(_snap(mat))
-    return scalar <= snapped
+    return all(any(abs(s - m) < atol for m in mat) for s in scalar)
 
 
 def _snap(vals) -> Tuple[complex, ...]:

@@ -10,10 +10,16 @@ class BodyRateTransportTests(unittest.TestCase):
         self.assertAlmostEqual(w[2], 3.0, places=12)
 
     def test_tilted_child_pulls_parent_z_into_xy(self):
-        # child frame is rotated 90 deg about x relative to parent
+        # Child frame is rotated +90 deg about x relative to parent, using
+        # the same rot_x(theta) active-rotation matrix the module already
+        # uses elsewhere. With R_child_in_parent = rot_x(+pi/2), the
+        # child's y-axis, expressed in parent coordinates, is
+        # rot_x(pi/2) @ (0,1,0) = (0,0,1) -- i.e. child_y = parent_z. So
+        # parent's z-rotation (0,0,1), expressed in the child frame, must
+        # land entirely on the child's +y axis, not -y.
         w = compose_omega_body((0, 0, 1), (0, 0, 0), rot_x(math.pi / 2))
         self.assertAlmostEqual(w[0], 0.0, places=12)
-        self.assertAlmostEqual(w[1], -1.0, places=12)
+        self.assertAlmostEqual(w[1], 1.0, places=12)
         self.assertAlmostEqual(w[2], 0.0, places=12)
 
     def test_body_and_ground_charts_agree_on_speed(self):
