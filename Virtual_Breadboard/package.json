@@ -22,6 +22,7 @@
     "test:stepping": "node test/source-gmin-stepping.test.js",
     "test:diode-newton": "node test/diode-newton.test.js",
     "test:mosfet-continuous": "node test/mosfet-continuous.test.js",
+    "test:spice-tolerances": "node test/spice-tolerances.test.js",
     "receipts": "node 10_RECEIPTS/generate_receipts.js",
     "simulate": "node simulate.js",
     "dist": "electron-builder",
