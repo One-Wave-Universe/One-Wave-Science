@@ -6,8 +6,9 @@ The primitive is one cycle:
 with process labels:
     BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP
 
-This script patches the AI ingestion surface when --write is used and otherwise
-fails if the old split architecture reappears.
+Normal/permanent CI usage is read-only and fails if the old split architecture
+reappears.  ``--write`` exists only as an explicit migration aid for the AI
+ingestion surface; the permanent workflow never writes repository content.
 """
 
 from __future__ import annotations
