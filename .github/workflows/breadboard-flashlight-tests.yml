@@ -17,6 +17,7 @@ on:
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
       - 'Virtual_Breadboard/test/mosfet-model-cards.test.js'
       - 'Virtual_Breadboard/test/pwl-pulse-sources.test.js'
+      - 'Virtual_Breadboard/test/startup-uic.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -43,6 +44,7 @@ on:
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
       - 'Virtual_Breadboard/test/mosfet-model-cards.test.js'
       - 'Virtual_Breadboard/test/pwl-pulse-sources.test.js'
+      - 'Virtual_Breadboard/test/startup-uic.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
       - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/test/bode-analysis.test.js'
@@ -103,6 +105,9 @@ jobs:
 
       - name: Run PWL and pulse transient-source qualification
         run: npm run test:pwl-pulse
+
+      - name: Run startup and UIC transient qualification
+        run: npm run test:startup-uic
 
       - name: Run SPICE convergence tolerance qualification
         run: npm run test:spice-tolerances
