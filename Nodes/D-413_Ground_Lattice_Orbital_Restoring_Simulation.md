@@ -12,9 +12,23 @@ metadata_standard: "I-06"
 # Node D-413: Ground Lattice Orbital-Restoring Simulation
 
 **Dependencies**  
-Upstream: A-101 Ground Zero, A-102 Displacement, A-103 Differential, A-105 Restoring Response, A-109 Inertial Memory, A-117 Dimensional Integrity, C-317 Boundary-Tension Weave, D-408, D-411, D-412  
+Upstream: A-101 Ground Zero, A-102 Displacement, A-103 Differential, A-105 Restoring Response, A-109 Inertial Memory, A-115 Unified Compression Field, A-117 Dimensional Integrity, C-317 Boundary-Tension Weave, D-408, D-411, D-412  
 Lateral: B-202 Pressure, E-502 Flowback, E-503 Pressure, E-506 Stability  
 Downstream: bounded excitation, circulation emergence, Vortex Phase, quark, proton knot, electrical shell, Mirror Gate, and Mass Effect simulations
+
+## Canonical Node Graph Linkage
+
+D-413 is the runnable gravity/compression laboratory attached to [A-115 Unified Compression Field](A-115_Unified_Compression_Field.md). It is also listed in the repository-level [`00_MASTER_INDEX.md`](../00_MASTER_INDEX.md), so the lab is part of the canonical node graph rather than a standalone demo.
+
+```text
+A-101 Ground / Zero
+-> A-102 Displacement
+-> A-104 Gradient / A-105 Restoring Response
+-> A-115 Unified Compression Field (gravity/compression theory home)
+-> D-413 Ground Lattice Orbital-Restoring Simulation (runnable reduced lab)
+```
+
+The runnable files live in [`D-413_Ground_Lattice_Orbital_Restoring_Simulation/`](D-413_Ground_Lattice_Orbital_Restoring_Simulation/). Results from the lab must be interpreted through this node and A-115; they must not silently promote the imposed curvature well into a derived gravity law.
 
 ## Purpose
 
@@ -107,7 +121,7 @@ The bounded displacement centroid and its shell samples use the same surface int
 
 If the visible depression and the sampled restoring surface disagree, the renderer fails.
 
-The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity.
+The curvature well is **imposed**, not derived. D-413 therefore tests the consequences of a curvature/restoring field but does not claim to derive gravity. The direct A-115 integration target is to replace this imposed Gaussian with a source-derived compression field \(\chi(\mathbf x,t)\) and its gravity view \(\mathbf g_{\rm OW}=-\alpha_g\nabla\chi\).
 
 ## Bounded Displacement Region
 
@@ -225,6 +239,7 @@ These results validate the declared reduced code path only. They do not validate
 
 Before promotion, D-413 must add:
 
+- replace the imposed Gaussian well with an A-115 source-derived \(\chi\) field and test \(\mathbf g_{\rm OW}=-\alpha_g\nabla\chi\);
 - time-step refinement;
 - lattice-radius refinement;
 - boundary-reflection and periodic-boundary comparisons;
