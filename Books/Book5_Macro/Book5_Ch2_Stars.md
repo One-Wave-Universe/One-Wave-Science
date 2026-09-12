@@ -78,10 +78,13 @@ than treating it as settled.
 
 Stellar light and the friction limit:
 A star's light is a traveling lattice pressure oscillation (matching
-Book 1 Ch7's photon definition directly) propagating outward at
+Book 1 Ch7's light-wave definition directly) propagating outward at
 c = v_max (C-309, the friction limit). Nothing new is claimed about
-starlight itself beyond what Ch8 already established for photons
-generally — a star is simply a massive, sustained source of them.
+starlight itself beyond what Ch7 already established generally — a star
+is simply a massive, sustained source of this traveling wave. Photons are
+not emitted objects that travel from the star; they are the discrete
+measurement events registered wherever and whenever that wave later
+crosses a detector threshold (an eye, a telescope sensor, a spectrometer).
 
 ---
 
@@ -118,9 +121,9 @@ criterion directly — measurable as bounded recursive variation in
 stellar structure over time, not requiring separate stellar-specific
 stability mathematics.
 
-3. Starlight should show no deviation from Book 1 Ch7's photon
-predictions (exactly v_max, zero rest mass) regardless of stellar
-source — nothing about being emitted by a star changes what light
+3. Starlight should show no deviation from Book 1 Ch7's light-wave
+predictions (exactly v_max, zero rest Mass Effect) regardless of stellar
+source — nothing about a star sourcing the wave changes what light
 fundamentally is in this framework.
 
 ---
@@ -160,8 +163,9 @@ extreme enough to sustain something resembling fusion. Its surface is
 not where the story ends; it is a gate, the same boundary-reversal
 mechanism already built for the coronal heating problem specifically.
 
-Nothing about starlight is special either — it is Book 1's photon,
-unmodified, just abundant.
+Nothing about starlight is special either — it is Book 1's traveling
+light wave, unmodified, just abundant. Photons are the focal-point
+measurements registered when that wave crosses detector thresholds.
 
 What this chapter does not yet have is any account of fusion itself,
 or of why some Persistent Modes reach stellar scale and others don't.
@@ -171,3 +175,11 @@ Those are real gaps, not glossed over here.
 
 END OF BOOK 5 CHAPTER 2 (DRAFT)
 One wave. Mirror builds.
+
+
+---
+## Updated 44 Addendum — Stars as Direct Low-Coupling Wave Sources
+
+Stars are measured neutrino sources. E-534 integrates that observation without treating neutrinos as separate ghost objects. Stellar fusion-linked transitions, pressure, recurrent boundaries, and collapse are candidate short routes into the same low-coupling wave state space that long-propagating optical waves may approach more gradually.
+
+This does not prove the terminal-wave interpretation. It creates a source-linked calibration population required by E-535. See Book 5 Chapter 6 and One-Wave Times Issue 008.
