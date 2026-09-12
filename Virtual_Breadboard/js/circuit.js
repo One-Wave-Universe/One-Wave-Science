@@ -1319,6 +1319,10 @@
         const stampI = (i, val) => {
           if (i >= 0) b[i] += val;
         };
+        // A limited BJT junction is deliberately NOT yet at the true Newton
+        // expansion point. Do not let stable node voltages alone masquerade
+        // as convergence while the limiter is still walking toward Vbe/Vbc.
+        let bjtJunctionLimitsSettled = true;
         // real output/protection clamp diode: same on/off ideal-diode
         // stamp as the LED/rectifier and MOSFET body-diode models above,
         // just reused here for "this pin cannot swing past its own supply
@@ -1454,10 +1458,19 @@
             const targetVbc = polarity * (vb0 - vc0);
             const limited = bjtLimitedJunctions.get(c.id) || { vbe: 0, vbc: 0 };
             const maxJunctionStep = 0.05; // V per nonlinear iteration
-            const approach = (target, last) => Math.max(last - maxJunctionStep, Math.min(last + maxJunctionStep, target));
+            // Only a jump deeper into forward bias needs exponential limiting.
+            // Reverse-bias moves are safe to take directly; forcing a -5 V
+            // reverse-biased collector junction to crawl in 50 mV steps would
+            // waste ~100 iterations without improving numerical safety.
+            const approach = (target, last) => target > last + maxJunctionStep ? last + maxJunctionStep : target;
             const vbeLin = approach(targetVbe, limited.vbe);
             const vbcLin = approach(targetVbc, limited.vbc);
             bjtLimitedJunctions.set(c.id, { vbe: vbeLin, vbc: vbcLin });
+            const vbeLimitTol = vntol + reltol * Math.max(Math.abs(targetVbe), Math.abs(vbeLin));
+            const vbcLimitTol = vntol + reltol * Math.max(Math.abs(targetVbc), Math.abs(vbcLin));
+            if (Math.abs(targetVbe - vbeLin) > vbeLimitTol || Math.abs(targetVbc - vbcLin) > vbcLimitTol) {
+              bjtJunctionLimitsSettled = false;
+            }
             // Reconstruct an equivalent terminal point carrying the limited
             // junction voltages; the stamped tangent is still a full 3-terminal
             // Ebers-Moll Jacobian and converges to the actual node voltages once
@@ -1976,7 +1989,7 @@
         voltages = new Map();
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
-        let changed = false;
+        let changed = !bjtJunctionLimitsSettled;
         // same on/off ideal-diode fixed-point decision as the LED/diode
         // and MOSFET body-diode blocks below, reused for the vgnd/
         // comparator rail-clamp paths: turn on once the real forward
