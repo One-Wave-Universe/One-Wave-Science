@@ -268,7 +268,7 @@
     // (stamped at every real node) makes an outright singular matrix rare,
     // but a NaN/Infinity anywhere in the solved state is never a real
     // physical answer -- report it as a named failure, not a number.
-    let solverFailed = false;
+    let solverFailed = !!(result.solver && !result.solver.converged);
     for (const v of result.voltages.values()) if (!Number.isFinite(v)) solverFailed = true;
     for (const v of result.currents.values()) if (!Number.isFinite(v)) solverFailed = true;
 
@@ -824,7 +824,7 @@
      *   every component's own self-heating genuinely evolves over
      *   simulated time relative to it from real dissipated power.
      */
-    solve(elements, dt, ambientC) {
+    solve(elements, dt, ambientC, solverOptions) {
       const wires = elements.wires || [];
       const components = elements.components || [];
       const ambient = ambientC != null ? ambientC : AMBIENT_C_DEFAULT;
@@ -1139,8 +1139,16 @@
       let voltages = new Map();
       let xSol = new Array(size).fill(0);
 
-      const iterations = size === 0 ? 0 : 30;
+      const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)
+        ? Math.max(1, Math.floor(solverOptions.maxIterations))
+        : 30;
+      const iterations = size === 0 ? 0 : requestedMaxIterations;
+      let iterationsUsed = 0;
+      let stateStable = size === 0;
+      let finalA = null;
+      let finalB = null;
       for (let iter = 0; iter < Math.max(iterations, 1); iter++) {
+        iterationsUsed = size === 0 ? 0 : iter + 1;
         const A = Array.from({ length: size }, () => new Array(size).fill(0));
         const b = new Array(size).fill(0);
         const stampG = (i, j, val) => {
@@ -1706,6 +1714,8 @@
         });
 
         xSol = size ? solveLinear(A, b) : [];
+        finalA = A;
+        finalB = b;
         voltages = new Map();
         for (const r of roots) voltages.set(r, r === groundRoot ? 0 : xSol[nodeIndex.get(r)]);
 
@@ -2020,8 +2030,44 @@
           }
         });
 
-        if (!changed) break;
+        if (!changed) {
+          stateStable = true;
+          break;
+        }
       }
+
+      let maxResidual = 0;
+      let maxEquationScale = 0;
+      if (size && finalA && finalB) {
+        for (let i = 0; i < size; i++) {
+          let ax = 0;
+          let scale = Math.abs(finalB[i]);
+          for (let j = 0; j < size; j++) {
+            const term = finalA[i][j] * xSol[j];
+            ax += term;
+            scale += Math.abs(term);
+          }
+          maxResidual = Math.max(maxResidual, Math.abs(ax - finalB[i]));
+          maxEquationScale = Math.max(maxEquationScale, scale);
+        }
+      }
+      const absTolerance = solverOptions && Number.isFinite(solverOptions.absTolerance)
+        ? Math.max(0, solverOptions.absTolerance) : 1e-9;
+      const relTolerance = solverOptions && Number.isFinite(solverOptions.relTolerance)
+        ? Math.max(0, solverOptions.relTolerance) : 1e-6;
+      const residualTolerance = absTolerance + relTolerance * maxEquationScale;
+      const numericalConverged = Number.isFinite(maxResidual) && maxResidual <= residualTolerance;
+      const solver = {
+        converged: stateStable && numericalConverged,
+        stateStable,
+        numericalConverged,
+        iterations: iterationsUsed,
+        maxIterations: iterations,
+        maxResidual,
+        residualTolerance,
+        absTolerance,
+        relTolerance,
+      };
 
       const currents = new Map();
       const warnings = [];
@@ -2499,7 +2545,10 @@
         });
       });
 
-      return { voltages, currents, warnings, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };
+      if (!solver.converged) {
+        warnings.push(`SOLVER FAILED: nonlinear solve did not converge in ${solver.iterations}/${solver.maxIterations} iterations (stateStable=${solver.stateStable}, residual=${solver.maxResidual}, tolerance=${solver.residualTolerance})`);
+      }
+      return { voltages, currents, warnings, solver, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };
     }
   }
 
