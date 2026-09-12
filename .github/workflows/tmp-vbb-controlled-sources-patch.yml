@@ -1,5 +1,10 @@
 name: tmp-vbb-controlled-sources-patch
 on:
+  push:
+    branches: [virtual-breadboard-controlled-sources]
+    paths:
+      - '.github/workflows/tmp-vbb-controlled-sources-patch.yml'
+      - '.github/scripts/patch_vbb_controlled_sources.py'
   workflow_dispatch:
 permissions:
   contents: write
