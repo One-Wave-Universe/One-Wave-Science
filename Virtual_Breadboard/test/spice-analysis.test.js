@@ -31,11 +31,33 @@ console.log('=== SPICE-style DC sweep qualification ===');
 }
 
 {
-  // 0..10V source, real battery Rint, two 1k resistors.  Analytic answer:
-  // I = Vs / (Rint + R1 + R2), Vmid = I*R2.
+  // 0..10V source, real battery Rint, two 1k resistors. The production
+  // solver deliberately stamps GMIN=1e-9 S from every non-ground node to
+  // ground so partially-wired breadboards stay numerically solvable. A
+  // microvolt-grade qualification must therefore include that declared
+  // numerical conductance in the independent nodal equations rather than
+  // pretending the solver solves a different matrix.
+  //
+  // KCL:
+  //   vin: (vin-Vs)/Rint + (vin-mid)/R1 + GMIN*vin = 0
+  //   mid: (mid-vin)/R1 + mid/R2 + GMIN*mid = 0
   const R1 = 1000;
   const R2 = 1000;
-  const total = CircuitEngine.BATTERY_RINT + R1 + R2;
+  const Rint = CircuitEngine.BATTERY_RINT;
+  const GMIN = 1e-9; // mirrors the explicitly documented/stamped solver floor
+
+  function expectedDivider(Vs) {
+    const a11 = 1 / Rint + 1 / R1 + GMIN;
+    const a12 = -1 / R1;
+    const a21 = -1 / R1;
+    const a22 = 1 / R1 + 1 / R2 + GMIN;
+    const b1 = Vs / Rint;
+    const det = a11 * a22 - a12 * a21;
+    const vin = (b1 * a22) / det;
+    const mid = (-a21 * b1) / det;
+    return { mid, currentR1: (vin - mid) / R1 };
+  }
+
   const elements = {
     wires: [],
     components: [
@@ -54,10 +76,9 @@ console.log('=== SPICE-style DC sweep qualification ===');
 
   check('dc-sweep-row-count', sweep.rows.length === 6, `rows=${sweep.rows.length}`);
   sweep.rows.forEach((row) => {
-    const expectedI = row.sourceValue / total;
-    const expectedMid = expectedI * R2;
-    near(`divider-vmid-at-${row.sourceValue}V`, row.values['V(mid)'], expectedMid, 1e-6);
-    near(`divider-current-at-${row.sourceValue}V`, row.values['I(R1)'], expectedI, 1e-9);
+    const expected = expectedDivider(row.sourceValue);
+    near(`divider-vmid-at-${row.sourceValue}V`, row.values['V(mid)'], expected.mid, 1e-9);
+    near(`divider-current-at-${row.sourceValue}V`, row.values['I(R1)'], expected.currentR1, 1e-12);
     check(`finite-at-${row.sourceValue}V`, row.finite === true);
   });
 }
