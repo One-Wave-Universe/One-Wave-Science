@@ -552,10 +552,15 @@ Unresolved:
 2. Need to separate wave heating, reconnection heating, turbulence, and pressure-release terms.
 3. Need to determine whether switchbacks are a cause of heating, a result of heating, or a transport signature.
 4. Need mathematical connection between Mirror Gate reversal and observed magnetic-field switchbacks.
-5. Need simulation showing stable condition where T_cor > T_s from boundary energy deposition.
+5. Need simulation showing stable condition where T_cor > T_s from boundary energy deposition. PARTIALLY ADDRESSED: see G-715_Stellar_Boundary_Reversal_Bench/ for a dimensionless two-layer toy that reaches a T_cor > T_s steady state under a release channel, with a conduction-only control that cannot reverse the ordering and an energy-conservation check. This is a toy stability demonstration only; it does not derive the release fraction or coefficients from MHD/reconnection physics and does not compare to real solar data.
 6. Need density correction so temperature is not confused with total heat content.
 7. Need connection to Bronze One-Wave Conversion Grammar without falsely promoting this function to Bronze.
 ```
+
+Bench: `Nodes/G-715_Stellar_Boundary_Reversal_Bench/` (`boundary_release_bench.py`,
+`test_boundary_release_bench.py`). Run `python3 -m unittest -v
+test_boundary_release_bench.py` from that directory. See its README for
+what the bench establishes and its honest limits. Status remains YELLOW.
 
 Science alignment:
 
