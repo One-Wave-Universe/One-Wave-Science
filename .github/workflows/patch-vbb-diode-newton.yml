@@ -1,0 +1,68 @@
+name: Patch VBB Diode Newton
+
+on:
+  push:
+    branches: [virtual-breadboard-diode-newton]
+    paths:
+      - '.github/workflows/patch-vbb-diode-newton.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-diode-newton
+      - name: Patch diode Newton model into solver
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('Virtual_Breadboard/js/circuit.js')
+          s = p.read_text()
+
+          old = """  const DIODE_VF = 0.7; // volts, generic silicon rectifier (e.g. 1N4001-class)\n  const DIODE_RON = 5; // ohms, approximate forward dynamic resistance\n  const GMIN = 1e-9;"""
+          new = """  const DIODE_VF = 0.7; // volts, generic silicon rectifier (e.g. 1N4001-class)\n  const DIODE_RON = 5; // ohms, approximate forward dynamic resistance\n  const DIODE_IS = 1e-12; // A, generic silicon saturation current for precision/Newton mode\n  const DIODE_N = 1.8; // emission coefficient for a generic small silicon rectifier\n  const THERMAL_VOLTAGE_25C = 0.025852; // V = kT/q at 25 C\n  const GMIN = 1e-9;"""
+          if old not in s: raise SystemExit('constant anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """      let voltages = new Map();\n      let xSol = new Array(size).fill(0);"""
+          new = """      let voltages = new Map();\n      let xSol = new Array(size).fill(0);\n      let previousVoltages = new Map();"""
+          if old not in s: raise SystemExit('previous-voltage anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """          } else if (c.type === 'led' || c.type === 'diode') {\n            if (this._ledState.get(c.id)) {\n              const vf = forwardVoltage(c);\n              const g = 1 / forwardRon(c);\n              const i = gi(uf.find(c.a));\n              const j = gi(uf.find(c.b));\n              stampG(i, i, g);\n              stampG(j, j, g);\n              stampG(i, j, -g);\n              stampG(j, i, -g);\n              const Ieq = g * vf;\n              stampI(i, Ieq);\n              stampI(j, -Ieq);\n            }"""
+          new = """          } else if (c.type === 'led' || c.type === 'diode') {\n            const diodeModel = solverOptions && solverOptions.diodeModel === 'newton' && c.type === 'diode'\n              ? 'newton' : 'simple';\n            if (diodeModel === 'newton') {\n              const i = gi(uf.find(c.a));\n              const j = gi(uf.find(c.b));\n              const va0 = previousVoltages.get(uf.find(c.a)) || 0;\n              const vb0 = previousVoltages.get(uf.find(c.b)) || 0;\n              const vdRaw = va0 - vb0;\n              const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);\n              const nvt = DIODE_N * vt;\n              const vd = Math.max(-5, Math.min(0.8, vdRaw));\n              const ev = Math.exp(vd / nvt);\n              const id0 = DIODE_IS * (ev - 1);\n              const gd = Math.max(DIODE_IS / nvt, DIODE_IS * ev / nvt);\n              const ieq = id0 - gd * vd;\n              stampG(i, i, gd);\n              stampG(j, j, gd);\n              stampG(i, j, -gd);\n              stampG(j, i, -gd);\n              stampI(i, -ieq);\n              stampI(j, ieq);\n            } else if (this._ledState.get(c.id)) {\n              const vf = forwardVoltage(c);\n              const g = 1 / forwardRon(c);\n              const i = gi(uf.find(c.a));\n              const j = gi(uf.find(c.b));\n              stampG(i, i, g);\n              stampG(j, j, g);\n              stampG(i, j, -g);\n              stampG(j, i, -g);\n              const Ieq = g * vf;\n              stampI(i, Ieq);\n              stampI(j, -Ieq);\n            }"""
+          if old not in s: raise SystemExit('diode stamp anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """        diodes.forEach((d) => {\n          const va = voltages.get(uf.find(d.a));\n          const vb = voltages.get(uf.find(d.b));\n          const vd = va - vb;\n          const vf = forwardVoltage(d);\n          const wasOn = this._ledState.get(d.id);\n          if (!wasOn && vd > vf) {\n            this._ledState.set(d.id, true);\n            changed = true;\n          } else if (wasOn && vd < vf - 0.05) {\n            this._ledState.set(d.id, false);\n            changed = true;\n          }\n        });"""
+          new = """        diodes.forEach((d) => {\n          if (solverOptions && solverOptions.diodeModel === 'newton' && d.type === 'diode') return;\n          const va = voltages.get(uf.find(d.a));\n          const vb = voltages.get(uf.find(d.b));\n          const vd = va - vb;\n          const vf = forwardVoltage(d);\n          const wasOn = this._ledState.get(d.id);\n          if (!wasOn && vd > vf) {\n            this._ledState.set(d.id, true);\n            changed = true;\n          } else if (wasOn && vd < vf - 0.05) {\n            this._ledState.set(d.id, false);\n            changed = true;\n          }\n        });\n\n        if (solverOptions && solverOptions.diodeModel === 'newton') {\n          let diodeDelta = 0;\n          diodes.forEach((d) => {\n            if (d.type !== 'diode') return;\n            const va = voltages.get(uf.find(d.a)) || 0;\n            const vb = voltages.get(uf.find(d.b)) || 0;\n            const pva = previousVoltages.get(uf.find(d.a)) || 0;\n            const pvb = previousVoltages.get(uf.find(d.b)) || 0;\n            diodeDelta = Math.max(diodeDelta, Math.abs((va - vb) - (pva - pvb)));\n          });\n          if (diodeDelta > 1e-9) changed = true;\n        }\n        previousVoltages = new Map(voltages);"""
+          if old not in s: raise SystemExit('diode state anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """        } else if (c.type === 'led' || c.type === 'diode') {\n          const on = this._ledState.get(c.id);\n          I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;"""
+          new = """        } else if (c.type === 'led' || c.type === 'diode') {\n          if (c.type === 'diode' && solverOptions && solverOptions.diodeModel === 'newton') {\n            const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);\n            const nvt = DIODE_N * vt;\n            const vd = Math.max(-5, Math.min(0.8, va - vb));\n            I = DIODE_IS * (Math.exp(vd / nvt) - 1);\n          } else {\n            const on = this._ledState.get(c.id);\n            I = on ? (va - vb - forwardVoltage(c)) / forwardRon(c) : 0;\n          }"""
+          if old not in s: raise SystemExit('diode current anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """        gmin: solveGmin,\n      };"""
+          new = """        gmin: solveGmin,\n        diodeModel: solverOptions && solverOptions.diodeModel === 'newton' ? 'newton' : 'simple',\n      };"""
+          if old not in s: raise SystemExit('solver metadata anchor not found')
+          s = s.replace(old, new, 1)
+
+          old = """    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, BATTERY_RINT, VGND_RINT,"""
+          new = """    Circuit, UnionFind, solveLinear, LED_VF, LED_RON, LED_WALLPLUG_EFFICIENCY, ledLightOutputW, DIODE_VF, DIODE_RON, DIODE_IS, DIODE_N, THERMAL_VOLTAGE_25C, BATTERY_RINT, VGND_RINT,"""
+          if old not in s: raise SystemExit('export anchor not found')
+          s = s.replace(old, new, 1)
+
+          p.write_text(s)
+      - name: Commit solver patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Virtual_Breadboard/js/circuit.js
+          git commit -m "Virtual Breadboard: add continuous diode Newton mode"
+          git push
