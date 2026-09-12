@@ -6,15 +6,36 @@ on:
       - canon/complete-node-graph-2026-09-12
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   audit:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Check synchronized discovery surfaces
-        run: python3 scripts/sync_node_graph_indexes.py --check
-      - name: Audit canonical node graph
-        run: python3 scripts/node_graph_integrity.py
+        with:
+          ref: canon/complete-node-graph-2026-09-12
+      - name: Run audit and capture output
+        shell: bash
+        run: |
+          set +e
+          {
+            echo '=== sync check ==='
+            python3 scripts/sync_node_graph_indexes.py --check
+            echo "sync_exit=$?"
+            echo '=== graph audit ==='
+            python3 scripts/node_graph_integrity.py
+            echo "audit_exit=$?"
+          } > NODE_GRAPH_AUDIT_RESULTS.txt 2>&1
+          cat NODE_GRAPH_AUDIT_RESULTS.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add NODE_GRAPH_AUDIT_RESULTS.txt
+          git commit -m 'ci: capture node graph audit results'
+          git push origin HEAD:canon/complete-node-graph-2026-09-12
+          if grep -q '^sync_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt && grep -q '^audit_exit=0$' NODE_GRAPH_AUDIT_RESULTS.txt; then
+            exit 0
+          fi
+          exit 1
