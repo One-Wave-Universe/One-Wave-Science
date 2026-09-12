@@ -22,8 +22,9 @@ near('one-shot-returns-low',pulseValue({...p,period:0},20),0);
 near('dispatcher-pwl',transientSourceValue({type:'pwl',points:[[0,1],[1,3]]},0.5),2);
 near('dispatcher-pulse',transientSourceValue({type:'pulse',v1:-1,v2:1,delay:0,rise:0,width:1,fall:0,period:2},0.5),1);
 // Loaded source: 5 V PULSE through the existing 1-ohm source impedance into 99 ohm.
+// Explicitly anchor the reference node, as a real bench circuit must.
 const c=new Circuit();
-const elements={wires:[],components:[
+const elements={wires:[{a:'gnd',b:'gnd'}],components:[
  {id:'VP',type:'pulse',a:'out',b:'gnd',v1:0,v2:5,delay:0,rise:0,fall:0,width:1,period:2},
  {id:'R',type:'resistor',a:'out',b:'gnd',value:99},
 ]};
