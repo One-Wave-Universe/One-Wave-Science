@@ -1,95 +1,166 @@
-# Jetson AI Access — Terminal, GitHub, and Gateway
+# Jetson AI Access — Canonical Bidirectional Paths
 
-## Goal
+## Priority
 
-The Jetson must remain reachable through more than one route so an AI worker is
-not stranded when one route fails.
+AI terminal access must have more than one usable route. The canonical terminal
+engine is **Hive Pipe v3** on the Jetson. SSH remains an independent recovery
+path. GitHub reaches Hive Pipe through an authenticated HTTPS tunnel, and the
+Jetson reaches GitHub through normal git/gh authentication.
 
 ```text
-AI / operator
-   ├── 1. SSH terminal ---------------------> Jetson login shell
-   ├── 2. GitHub workflow_dispatch --------> GitHub-hosted runner
-   │                                            |
-   │                                            v
-   └── 3. HTTPS gateway / Cloudflare ------> 127.0.0.1:8765
-                                                |
-                                                v
-                                      normal Jetson user shell
+                         GITHUB
+                     /            \
+        workflow_dispatch          git fetch/pull/push + PR
+                 |                       ^
+                 v                       |
+      GitHub-hosted runner               |
+                 |                       |
+                 v                       |
+         HTTPS / Cloudflare              |
+                 |                       |
+                 v                       |
+         HIVE PIPE MCP :8765 <-----------+---- Jetson normal user
+          /mcp terminal_run
+                 ^
+                 |
+       direct HTTPS/MCP client
+
+Independent recovery route:
+AI/operator ---------------- SSH ----------------> Jetson normal-user shell
+
+External work handoff:
+GitHub External_Work/inbox  -->  ~/One-Wave-External-Work/inbox
+GitHub External_Work/outbox <--  ~/One-Wave-External-Work/outbox
 ```
 
-All three routes intentionally execute as a **normal non-root user**. Root
-access is not required for routine building, testing, git work, or user-level
-services. `sudo` stays an explicit human-controlled escalation.
+All routine routes run as the normal Jetson user. `sudo`, raw-disk formatting,
+power commands, and shell `-c/-lc` strings are blocked by the AI terminal parser.
 
-## Why GitHub does not run directly on a self-hosted Jetson runner
+## One canonical gateway
 
-This repository is public. GitHub warns that public repositories should not use
-normal self-hosted runners because untrusted pull-request code can compromise
-the runner machine.
+Use:
 
-The GitHub lane therefore stays on `ubuntu-latest` and sends an authenticated
-command to the Jetson gateway. No pull-request event executes Jetson commands.
+```text
+hive-pipe/gateway.py
+hive-pipe/terminal_parser.py
+hive-pipe/install_gateway.sh
+```
 
-## 1. Bring up the local gateway
+Do **not** start `scripts/jetson_gateway.py` alongside Hive Pipe. Both use port
+8765. `scripts/install_jetson_gateway.sh` is now only a compatibility entrypoint
+that delegates to the Hive Pipe installer and can migrate the older gateway
+bearer token into the Hive Pipe Codex token.
 
-On the Jetson, in the real checkout:
+## 1. Install/restart Hive Pipe on the Jetson
+
+From the real checkout:
 
 ```bash
-cd /home/Scales/One-Wave-Science
+cd "$HOME/One-Wave-Science"
 git pull --ff-only origin main
-bash scripts/install_jetson_gateway.sh
+bash hive-pipe/install_gateway.sh
 ```
 
-The installer:
+The installer creates and starts:
 
-- generates a strong bearer token under `~/.config/hive-pipe/gateway.token`;
-- backs up an existing `hive-pipe-gateway.service` unit before replacing it;
-- writes a user-level `hive-pipe-gateway.service`;
-- binds the gateway to `127.0.0.1:8765` only;
-- refuses to run the gateway as root;
-- enables restart-on-failure.
-
-Check it:
-
-```bash
-systemctl --user status hive-pipe-gateway.service
-curl -sS http://127.0.0.1:8765/healthz
+```text
+hive-pipe-agent.service
+hive-pipe-gateway.service
 ```
 
-Local command test:
+It also creates per-client tokens:
+
+```text
+~/.config/hive-pipe/tokens/codex.token
+~/.config/hive-pipe/tokens/claude.token
+~/.config/hive-pipe/tokens/gemini.token
+```
+
+and the external-work workspace:
+
+```text
+~/One-Wave-External-Work/inbox
+~/One-Wave-External-Work/work
+~/One-Wave-External-Work/outbox
+```
+
+Check both services:
 
 ```bash
-TOKEN="$(cat ~/.config/hive-pipe/gateway.token)"
+systemctl --user is-active hive-pipe-agent.service hive-pipe-gateway.service
+```
+
+Expected:
+
+```text
+active
+active
+```
+
+## 2. Local MCP terminal test
+
+Use one local token without pasting it into chat:
+
+```bash
+TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/codex.token")"
+
 curl -sS \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
-  --data '{"command":"uname -a","timeout":30}' \
-  http://127.0.0.1:8765/v1/exec
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["printf","AI_TERMINAL_OK"]}}}' \
+  http://127.0.0.1:8765/mcp
 ```
 
-## 2. Expose the gateway through the existing Cloudflare tunnel
+The structured result must contain:
 
-The gateway stays on loopback. Point Cloudflare at:
+```text
+AI_TERMINAL_OK
+exit_code: 0
+```
+
+Available terminal tools:
+
+```text
+terminal_pwd
+terminal_which
+terminal_run
+```
+
+`terminal_run` returns stdout, stderr, exit code, cwd, timing, timeout state, and
+output-clipping state.
+
+## 3. Direct HTTPS / Cloudflare path
+
+The gateway stays bound to:
+
+```text
+127.0.0.1:8765
+```
+
+Point the authenticated Cloudflare tunnel at:
 
 ```text
 http://127.0.0.1:8765
 ```
 
-For the current quick-tunnel setup, the `https://...trycloudflare.com` URL can
-be supplied as the `gateway_url` input to the GitHub workflow each time the URL
-changes.
+The remote MCP URL is:
 
-For a stable named tunnel, save the stable HTTPS URL as the GitHub Actions
-secret `JETSON_GATEWAY_URL`.
+```text
+https://YOUR-TUNNEL/mcp
+```
 
-Do **not** put the bearer token in the repository or a workflow input. Save the
-contents of `~/.config/hive-pipe/gateway.token` as the GitHub Actions secret
-`JETSON_GATEWAY_TOKEN`.
+The tunnel is transport only. Hive Pipe still requires its bearer token.
 
-The public tunnel is only transport. The `/v1/exec` endpoint independently
-requires the bearer token.
+For a stable tunnel, configure GitHub Actions secrets:
 
-## 3. GitHub -> Jetson command path
+```text
+JETSON_GATEWAY_URL=https://YOUR-STABLE-TUNNEL
+JETSON_GATEWAY_TOKEN=<contents of the authorized Hive Pipe token>
+```
+
+Never commit those values.
+
+## 4. GitHub -> Jetson
 
 Workflow:
 
@@ -97,130 +168,189 @@ Workflow:
 .github/workflows/jetson-command.yml
 ```
 
-It has only `workflow_dispatch`. It does **not** run on `push` or
-`pull_request`.
+It runs only through `workflow_dispatch`; pull requests do not automatically
+execute on the Jetson.
 
-Inputs:
+Preferred input is a structured argv JSON array:
 
-- `command`: shell command to run;
-- `cwd`: optional Jetson directory;
-- `timeout`: requested timeout;
-- `gateway_url`: optional current quick-tunnel URL.
-
-Examples of deliberate commands:
-
-```bash
-uname -a
-systemctl --user is-active hive-pipe-gateway.service
-cd /home/Scales/One-Wave-Science && git status --short
+```json
+["git","status","--short"]
 ```
 
-An AI with authorized GitHub Actions/API access can dispatch that workflow.
-A human can dispatch it from the GitHub Actions page. Both reach the same
-authenticated gateway.
+with cwd:
 
-## 4. Direct terminal / SSH path
+```text
+/home/Scales/One-Wave-Science
+```
 
-Enable the SSH server:
+The workflow sends an MCP `tools/call` request for `terminal_run`. It no longer
+uses the obsolete `/v1/exec` endpoint.
+
+A simple fallback `command` input is still available for manual use. It is
+parsed with Python `shlex` into argv and does not provide pipes, redirection, or
+shell operators.
+
+Examples:
+
+```json
+["uname","-a"]
+["git","status","--short","--branch"]
+["python3","scripts/external_work_bridge.py","status"]
+```
+
+## 5. Direct remote client -> Jetson
+
+`scripts/jetson_remote.sh` also uses Hive Pipe MCP `terminal_run`.
+
+Example:
 
 ```bash
-cd /home/Scales/One-Wave-Science
+export JETSON_GATEWAY_URL='https://YOUR-TUNNEL'
+export JETSON_GATEWAY_TOKEN='authorized-token'
+
+scripts/jetson_remote.sh \
+  --cwd /home/Scales/One-Wave-Science \
+  -- git status --short --branch
+```
+
+External workspace example:
+
+```bash
+scripts/jetson_remote.sh \
+  --cwd /home/Scales/One-Wave-External-Work \
+  -- find . -maxdepth 2 -type f
+```
+
+## 6. SSH -> Jetson independent path
+
+Enable SSH with:
+
+```bash
+cd "$HOME/One-Wave-Science"
 bash scripts/enable_jetson_ssh.sh
 ```
 
-That starts OpenSSH and preserves the existing login account. It does not add a
-key unless `AI_SSH_PUBLIC_KEY` is supplied.
-
-To authorize a particular AI/terminal client, obtain that client's **public**
-key, then on the Jetson:
+Optionally add an authorized client's **public** key:
 
 ```bash
 AI_SSH_PUBLIC_KEY='ssh-ed25519 AAAA... ai-worker-name' \
   bash scripts/enable_jetson_ssh.sh
 ```
 
-Never copy the corresponding private key into the repository.
-
-From an authorized terminal:
+Then:
 
 ```bash
 ssh Scales@JETSON_IP
 ```
 
-This is the full normal-user shell route and does not depend on GitHub or the
-gateway.
+SSH does not depend on Cloudflare, GitHub Actions, or Hive Pipe and is the
+independent recovery route.
 
-## 5. Direct HTTPS client path
+## 7. Jetson -> GitHub
 
-Any authorized AI/tool that can make HTTPS requests can use the gateway without
-GitHub.
-
-For shell clients:
+The Jetson checkout uses normal git authentication. Verify the remote first:
 
 ```bash
-export JETSON_GATEWAY_URL='https://CURRENT-TUNNEL.example'
-export JETSON_GATEWAY_TOKEN='the token'
-scripts/jetson_remote.sh --cwd /home/Scales/One-Wave-Science -- 'git status --short'
+cd "$HOME/One-Wave-Science"
+git remote -v
+git fetch origin
 ```
 
-You can keep those two exports in `~/.config/hive-pipe/remote.env` on a trusted
-client. Keep that file out of git.
-
-## Emergency stop and recovery
-
-Stop command execution immediately without destroying configuration:
+For outbound AI work, never silently push to `main`. Use a task branch:
 
 ```bash
-touch ~/.config/hive-pipe/DISABLED
+git switch -c ai/my-task
+git status --short
+git add <reviewed-paths>
+git diff --cached
+git commit -m 'Describe the task'
+git push -u origin HEAD
 ```
 
-The health endpoint stays up and reports `disabled: true`, but `/v1/exec`
-returns HTTP 503.
+Then open a PR with an authenticated GitHub client/`gh` when available.
 
-Resume:
+Hive Pipe `terminal_run` permits normal `git fetch`, `git pull`, `git commit`,
+and task-branch `git push`. Repository policy—not a hidden shell—controls when a
+write should be published.
+
+If `git fetch` works but `git push` does not, outbound GitHub authentication is
+the missing piece; fix the Jetson's GitHub SSH/token/credential setup rather
+than creating another terminal bridge.
+
+## 8. GitHub <-> external Jetson work
+
+Repo handoff paths:
+
+```text
+External_Work/inbox/
+External_Work/outbox/
+```
+
+Jetson-local paths:
+
+```text
+~/One-Wave-External-Work/inbox/
+~/One-Wave-External-Work/work/
+~/One-Wave-External-Work/outbox/
+```
+
+### GitHub -> Jetson external work
+
+After the repo receives files under `External_Work/inbox/`:
 
 ```bash
-rm -f ~/.config/hive-pipe/DISABLED
+cd "$HOME/One-Wave-Science"
+git pull --ff-only origin main
+python3 scripts/external_work_bridge.py pull
 ```
 
-Stop the gateway entirely:
+The files appear under `~/One-Wave-External-Work/inbox/`.
+
+### Jetson external work -> GitHub
+
+Put reviewable results under:
+
+```text
+~/One-Wave-External-Work/outbox/
+```
+
+Then:
 
 ```bash
-systemctl --user stop hive-pipe-gateway.service
+cd "$HOME/One-Wave-Science"
+python3 scripts/external_work_bridge.py publish
+git status --short External_Work/outbox
 ```
 
-Disable autostart:
+The bridge copies them to `External_Work/outbox/` but does not commit or push.
+Publish them through a task branch/PR.
 
-```bash
-systemctl --user disable --now hive-pipe-gateway.service
-```
+See `External_Work/README.md` for the handoff rules.
 
-SSH remains an independent recovery path.
+## 9. Access matrix
 
-## Logs
+| Direction | Path | Depends on |
+|---|---|---|
+| AI/operator -> Jetson | SSH | LAN/SSH + authorized key |
+| AI/client -> Jetson | HTTPS `/mcp` | tunnel + Hive Pipe token |
+| GitHub -> Jetson | `Jetson Command Lane` | Actions secrets + tunnel + Hive Pipe |
+| Jetson -> GitHub | git/gh | Jetson GitHub credentials |
+| GitHub -> external work | `External_Work/inbox` + bridge pull | git sync + local workspace |
+| external work -> GitHub | bridge publish + task branch/PR | git push credentials |
 
-Gateway requests and command metadata go to the user service journal:
-
-```bash
-journalctl --user -u hive-pipe-gateway.service -n 100 --no-pager
-```
-
-GitHub keeps the hosted workflow log separately. Direct SSH activity is handled
-by the normal OpenSSH/system journal.
-
-## Acceptance test
+## 10. Acceptance test
 
 Do these in order:
 
-1. Local gateway health returns `ok: true`.
-2. Local authenticated `/v1/exec` returns `JETSON_GATEWAY_OK`.
-3. Cloudflare URL returns `/healthz`.
-4. GitHub `Jetson Command Lane` dispatch of `uname -a` returns the Jetson
-   kernel/architecture.
-5. Direct `ssh Scales@JETSON_IP` works with an authorized key.
-6. Create `~/.config/hive-pipe/DISABLED`; GitHub/gateway commands fail closed
-   while SSH still works.
-7. Remove `DISABLED`; gateway commands work again.
+1. `hive-pipe-agent.service` is active.
+2. `hive-pipe-gateway.service` is active.
+3. Local MCP `terminal_run` returns `AI_TERMINAL_OK`.
+4. Direct remote `scripts/jetson_remote.sh -- uname -a` returns Jetson output.
+5. GitHub `Jetson Command Lane` with `["uname","-a"]` returns Jetson output.
+6. `ssh Scales@JETSON_IP` works independently.
+7. `git fetch origin` works on the Jetson.
+8. A disposable task branch can be pushed from Jetson to GitHub.
+9. External-work bridge `pull` moves a test file GitHub -> Jetson local inbox.
+10. External-work bridge `publish` moves a test file Jetson local outbox -> repo outbox.
 
-Once all seven pass, there are three independent usable access paths:
-**SSH terminal, GitHub dispatch, and direct HTTPS gateway**.
+When all ten pass, both directions and the independent recovery paths are live.
