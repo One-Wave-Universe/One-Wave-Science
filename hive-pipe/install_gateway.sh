@@ -5,7 +5,8 @@ SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
 TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
-SERVICE_FILE="$SYSTEMD_DIR/hive-pipe.service"
+GATEWAY_SERVICE="$SYSTEMD_DIR/hive-pipe-gateway.service"
+AGENT_SERVICE="$SYSTEMD_DIR/hive-pipe-agent.service"
 
 mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
 chmod 700 "$CONFIG_DIR" "$TOKEN_DIR"
@@ -39,11 +40,31 @@ escaped_root="$(printf '%s' "$SCRIPT_DIR" | sed 's/ /\\x20/g')"
   echo
   echo '[Install]'
   echo 'WantedBy=default.target'
-} > "$SERVICE_FILE"
+} > "$GATEWAY_SERVICE"
+
+{
+  echo '[Unit]'
+  echo 'Description=One-Wave Hive Pipe Queue Worker'
+  echo 'After=network.target'
+  echo
+  echo '[Service]'
+  echo 'Type=simple'
+  echo "WorkingDirectory=$escaped_root"
+  echo "ExecStart=/usr/bin/bash $escaped_root/agent.sh --watch"
+  echo 'Restart=on-failure'
+  echo 'RestartSec=3'
+  echo 'NoNewPrivileges=true'
+  echo 'PrivateTmp=true'
+  echo 'ProtectSystem=strict'
+  echo "ReadWritePaths=$escaped_root/queue"
+  echo
+  echo '[Install]'
+  echo 'WantedBy=default.target'
+} > "$AGENT_SERVICE"
 
 systemctl --user daemon-reload
-systemctl --user enable --now hive-pipe.service
+systemctl --user disable --now hive-pipe.service 2>/dev/null || true
+systemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service
 echo "HIVE_PIPE_GATEWAY_INSTALLED"
 echo "Local endpoint: http://127.0.0.1:8765"
 echo "Tokens: $TOKEN_DIR (0600; never commit or paste them into the public repository)"
-
