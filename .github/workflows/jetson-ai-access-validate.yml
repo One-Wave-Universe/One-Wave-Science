@@ -1,0 +1,71 @@
+name: Jetson AI Access Validate
+
+on:
+  push:
+    paths:
+      - 'JETSON_AI_ACCESS.md'
+      - 'scripts/jetson_gateway.py'
+      - 'scripts/install_jetson_gateway.sh'
+      - 'scripts/enable_jetson_ssh.sh'
+      - 'scripts/jetson_remote.sh'
+      - '.github/workflows/jetson-command.yml'
+      - '.github/workflows/jetson-ai-access-validate.yml'
+  pull_request:
+    paths:
+      - 'JETSON_AI_ACCESS.md'
+      - 'scripts/jetson_gateway.py'
+      - 'scripts/install_jetson_gateway.sh'
+      - 'scripts/enable_jetson_ssh.sh'
+      - 'scripts/jetson_remote.sh'
+      - '.github/workflows/jetson-command.yml'
+      - '.github/workflows/jetson-ai-access-validate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Shell syntax
+        run: |
+          bash -n scripts/install_jetson_gateway.sh
+          bash -n scripts/enable_jetson_ssh.sh
+          bash -n scripts/jetson_remote.sh
+
+      - name: Python syntax
+        run: python3 -m py_compile scripts/jetson_gateway.py
+
+      - name: Gateway smoke test
+        run: |
+          set -euo pipefail
+          export HOME="$RUNNER_TEMP/home"
+          mkdir -p "$HOME/.config/hive-pipe"
+          python3 - <<'PY' > "$HOME/.config/hive-pipe/gateway.token"
+          print("test-token-" + "x" * 48)
+          PY
+          python3 scripts/jetson_gateway.py >"$RUNNER_TEMP/gateway.log" 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for _ in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8765/healthz >/dev/null && break
+            sleep 0.2
+          done
+          RESULT="$(
+            curl -fsS \
+              -H 'Authorization: Bearer test-token-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \
+              -H 'Content-Type: application/json' \
+              --data '{"command":"printf JETSON_GATEWAY_OK","timeout":5}' \
+              http://127.0.0.1:8765/v1/exec
+          )"
+          python3 - "$RESULT" <<'PY'
+          import json, sys
+          result = json.loads(sys.argv[1])
+          assert result["ok"] is True, result
+          assert result["stdout"] == "JETSON_GATEWAY_OK", result
+          print("gateway smoke: PASS")
+          PY
