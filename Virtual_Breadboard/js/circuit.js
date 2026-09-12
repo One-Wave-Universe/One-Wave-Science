@@ -1098,6 +1098,7 @@
       this._batteryChargeC = new Map(); // battery id -> real remaining charge in Coulombs, only tracked for batteries with a real capacityAh given
       this._batteryEnergyJ = new Map(); // battery id -> real cumulative energy delivered in Joules, same opt-in batteries
       this._hbridgeThermalFault = new Map(); // hbridge id -> boolean, latched true once real self-heating crosses thermalShutdownC (stays latched -- a real thermally-shutdown part doesn't silently resume)
+      this._lastDt = null; // previous accepted solve dt; required by variable-step Gear2/BDF2 history
       this._t = 0; // running sim clock (seconds), shared by every AC/MTJ source
     }
 
@@ -1120,6 +1121,7 @@
       const uf = buildTopologyUnionFind(components, wires);
       const integrationMethod = solverOptions && solverOptions.integrationMethod ? String(solverOptions.integrationMethod).toLowerCase() : 'backward-euler';
       if (!['backward-euler', 'trapezoidal', 'gear2'].includes(integrationMethod)) throw new Error(`unknown integrationMethod '${integrationMethod}'`);
+      const previousDt = this._lastDt;
       this._t += dt;
       const t = this._t;
       // one-step-behind thermal update, same pattern as every other
@@ -1563,14 +1565,18 @@
             const dtSafe = Math.max(dt, 1e-12);
             const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
             const hasPrev2 = this._capPrevState.has(c.id);
-            const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+            const useGear2 = integrationMethod === 'gear2' && hasPrev2 && previousDt > 0;
             const useTrap = integrationMethod === 'trapezoidal' && this._capCurrentState.has(c.id);
             let idealG;
             let historyCurrent;
             if (useGear2) {
-              idealG = 3 * c.value / (2 * dtSafe);
+              const hp = previousDt;
+              const a0 = (2 * dtSafe + hp) / (dtSafe * (dtSafe + hp));
+              const a1 = -(dtSafe + hp) / (dtSafe * hp);
+              const a2 = dtSafe / (hp * (dtSafe + hp));
+              idealG = c.value * a0;
               const vPrev2 = this._capPrevState.get(c.id);
-              historyCurrent = c.value * (4 * vPrev - vPrev2) / (2 * dtSafe);
+              historyCurrent = -c.value * (a1 * vPrev + a2 * vPrev2);
             } else if (useTrap) {
               idealG = 2 * c.value / dtSafe;
               historyCurrent = idealG * vPrev + (this._capCurrentState.get(c.id) || 0);
@@ -2025,14 +2031,18 @@
             ? this._indState.get(ind.id)
             : (Number.isFinite(Number(ind.initialCurrent)) ? Number(ind.initialCurrent) : 0);
           const hasPrev2 = this._indPrevState.has(ind.id);
-          const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+          const useGear2 = integrationMethod === 'gear2' && hasPrev2 && previousDt > 0;
           const useTrap = integrationMethod === 'trapezoidal' && this._indVoltageState.has(ind.id);
           let Leq;
           let historyRhs;
           if (useGear2) {
-            Leq = 3 * L / (2 * dtSafe);
+            const hp = previousDt;
+            const a0 = (2 * dtSafe + hp) / (dtSafe * (dtSafe + hp));
+            const a1 = -(dtSafe + hp) / (dtSafe * hp);
+            const a2 = dtSafe / (hp * (dtSafe + hp));
+            Leq = L * a0;
             const iPrev2 = this._indPrevState.get(ind.id);
-            historyRhs = L * (-4 * iPrev + iPrev2) / (2 * dtSafe);
+            historyRhs = L * (a1 * iPrev + a2 * iPrev2);
           } else if (useTrap) {
             Leq = 2 * L / dtSafe;
             historyRhs = -Leq * iPrev - (this._indVoltageState.get(ind.id) || 0);
@@ -2764,12 +2774,16 @@
           const gLeak = 1 / capacitorLeakageR(c);
           const vPrev = this._capState.has(c.id) ? this._capState.get(c.id) : capInitialV(c);
           const hasPrev2 = this._capPrevState.has(c.id);
-          const useGear2 = integrationMethod === 'gear2' && hasPrev2;
+          const useGear2 = integrationMethod === 'gear2' && hasPrev2 && previousDt > 0;
           const useTrap = integrationMethod === 'trapezoidal' && this._capCurrentState.has(c.id);
           let idealG, historyCurrent;
           if (useGear2) {
-            idealG = 3 * c.value / (2 * dtSafe);
-            historyCurrent = c.value * (4 * vPrev - this._capPrevState.get(c.id)) / (2 * dtSafe);
+            const hp = previousDt;
+            const a0 = (2 * dtSafe + hp) / (dtSafe * (dtSafe + hp));
+            const a1 = -(dtSafe + hp) / (dtSafe * hp);
+            const a2 = dtSafe / (hp * (dtSafe + hp));
+            idealG = c.value * a0;
+            historyCurrent = -c.value * (a1 * vPrev + a2 * this._capPrevState.get(c.id));
           } else if (useTrap) {
             idealG = 2 * c.value / dtSafe;
             historyCurrent = idealG * vPrev + (this._capCurrentState.get(c.id) || 0);
@@ -3211,6 +3225,7 @@
       if (!solver.converged) {
         warnings.push(`SOLVER FAILED: nonlinear solve did not converge in ${solver.iterations}/${solver.maxIterations} iterations (stateStable=${solver.stateStable}, residual=${solver.maxResidual}, tolerance=${solver.residualTolerance})`);
       }
+      this._lastDt = dt;
       return { voltages, currents, warnings, solver, mosfetStates, coreStates, coreFlux, comparatorStates, latchStates, hbridgeStates, schmittStates, batteryStates, uf, groundRoot, hasCircuit: true };
     }
   }
