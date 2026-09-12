@@ -61,7 +61,9 @@ A nucleon / alpha spatial scale is order \(1\,\mathrm{fm}=10^{-15}\,\mathrm{m}\)
 \frac{c_{\mathrm{eff}}}{c}\sim 2\times 10^{2}
 \]
 
-(an earlier draft of this node inverted the fraction and stated \(\sim 2\times 10^{-3}\); that value is what \(c_{\mathrm{eff}}/c\) would need to be if \(a_0\) instead scaled as \(1/c_{\mathrm{eff}}\), which is not what the stated formula says). A required \(c_{\mathrm{eff}}\) roughly 200 times faster than light is not a merely "extra input" — it is a further strike against A1-A4 identifying \(E_{125}\) with this zone-edge picture at all, on top of already remaining undecided in this node.
+(an earlier draft of this node inverted the fraction and stated \(\sim 2\times 10^{-3}\); that value is what \(c_{\mathrm{eff}}/c\) would need to be if \(a_0\) instead scaled as \(1/c_{\mathrm{eff}}\), which is not what the stated formula says).
+
+This is not a "faster than light is forbidden" argument imported from relativity — that is not this framework's own criterion. **C-309 Friction Limit / Propagation Ceiling** already defines the actual bound this lattice candidate answers to: \(c_{\rm lat}=\sqrt{\beta_{\max}}\,\Delta x/\Delta t\), set by the lattice's own coupling and discretization parameters, not by an externally imposed light-speed cap. C-309 also lists "the parameter regime in which the long-wave signal speed matches measured \(c\)" as an *open* Yellow item, not a fixed identity. So the honest statement of the gap is: A4 assumes \(c_{\mathrm{eff}}\) is "already known from vacuum density and compressibility," and closing the a0 gap requires that same \(c_{\mathrm{eff}}\) to run about 200 times past the Gray \(c_{\mathrm{eff}}\approx c\) anchor. Whether a lattice with real \(\beta_{\max}\), \(\Delta x\), \(\Delta t\) can produce that is a question for C-309's own formula, not a relativity veto. Until C-309's dispersion relation is derived from accepted lattice variables (its own Yellow Audit, item 1), this required jump is an unresolved gap in A1-A4, not an automatically fatal one.
 
 ## Hoyle / carbon solver rule
 
