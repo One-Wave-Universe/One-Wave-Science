@@ -27,6 +27,7 @@
     "test:startup-uic": "node test/startup-uic.test.js",
     "test:sparse-mna": "node test/sparse-mna.test.js",
     "test:adaptive-transient": "node test/adaptive-transient.test.js",
+    "test:integration-methods": "node test/integration-methods.test.js",
     "test:spice-tolerances": "node test/spice-tolerances.test.js",
     "test:ac-analysis": "node test/ac-analysis.test.js",
     "test:bode": "node test/bode-analysis.test.js",
