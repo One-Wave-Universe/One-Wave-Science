@@ -7,10 +7,12 @@ on:
       - 'Root_Axioms/**'
       - '00_MASTER_INDEX.md'
       - 'AI_CANONICAL_START_HERE.md'
+      - 'UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md'
       - 'LEGACY_ID_ALIAS_REGISTRY.json'
       - 'scripts/node_graph_integrity.py'
       - 'scripts/sync_node_graph_indexes.py'
       - 'scripts/normalize_legacy_node_metadata.py'
+      - 'scripts/six_gate_canon_lock.py'
       - '.github/workflows/node-graph-integrity.yml'
   push:
     branches:
@@ -20,10 +22,12 @@ on:
       - 'Root_Axioms/**'
       - '00_MASTER_INDEX.md'
       - 'AI_CANONICAL_START_HERE.md'
+      - 'UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md'
       - 'LEGACY_ID_ALIAS_REGISTRY.json'
       - 'scripts/node_graph_integrity.py'
       - 'scripts/sync_node_graph_indexes.py'
       - 'scripts/normalize_legacy_node_metadata.py'
+      - 'scripts/six_gate_canon_lock.py'
       - '.github/workflows/node-graph-integrity.yml'
   workflow_dispatch:
 
@@ -40,5 +44,7 @@ jobs:
         run: python3 scripts/normalize_legacy_node_metadata.py --check
       - name: Check synchronized discovery surfaces
         run: python3 scripts/sync_node_graph_indexes.py --check
+      - name: Check six-step six-gate Mirror-Action canon
+        run: python3 scripts/six_gate_canon_lock.py
       - name: Audit canonical node graph
         run: python3 scripts/node_graph_integrity.py
