@@ -1,0 +1,23 @@
+name: tmp-vbb-pwl-pulse-roadmap
+on:
+  push:
+    branches: [virtual-breadboard-pwl-pulse-sources]
+    paths:
+      - '.github/workflows/tmp-vbb-pwl-pulse-roadmap.yml'
+      - '.github/scripts/mark_vbb_pwl_pulse_done.py'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-pwl-pulse-sources
+      - run: python .github/scripts/mark_vbb_pwl_pulse_done.py
+      - run: |
+          git config user.name "Mark Wright"
+          git config user.email "markluvsoliviaduh@gmail.com"
+          git add Virtual_Breadboard/SPICE_PARITY.md
+          git commit -m "Virtual Breadboard: mark PWL and pulse sources implemented"
+          git push origin HEAD:virtual-breadboard-pwl-pulse-sources
