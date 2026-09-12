@@ -112,7 +112,11 @@ class CellParser:
 
     @staticmethod
     def _binary_choice(text: str) -> str:
-        if any(word in text for word in ("no", "stop", "deny", "unsafe", "reject")):
+        # Whole-word matching: "no" in text (substring) also matches inside
+        # "unknown", turning an unrecognized signal into a hard NO/DENY
+        # instead of the intended DEFER. Match against split tokens instead.
+        words = text.split()
+        if any(word in words for word in ("no", "stop", "deny", "unsafe", "reject")):
             return "NO"
         if text:
             return "YES"
@@ -120,9 +124,10 @@ class CellParser:
 
     @staticmethod
     def _field_move(text: str) -> FieldMove:
-        if any(word in text for word in ("go", "run", "faster", "expand", "express", "up")):
+        words = text.split()
+        if any(word in words for word in ("go", "run", "faster", "expand", "express", "up")):
             return FieldMove.EXPRESS
-        if any(word in text for word in ("slow", "compress", "reduce", "down")):
+        if any(word in words for word in ("slow", "compress", "reduce", "down")):
             return FieldMove.COMPRESS
         return FieldMove.HOLD
 
@@ -130,7 +135,7 @@ class CellParser:
     def _void_check(text: str, binary_choice: str) -> VoidMove:
         if binary_choice == "NO":
             return VoidMove.DENY
-        if not text or any(word in text for word in ("unknown", "maybe", "unclear")):
+        if not text or any(word in text.split() for word in ("unknown", "maybe", "unclear")):
             return VoidMove.DEFER
         return VoidMove.CONFIRM
 
