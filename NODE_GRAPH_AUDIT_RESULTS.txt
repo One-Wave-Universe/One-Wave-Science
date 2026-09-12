@@ -2,7 +2,7 @@
 node graph discovery surfaces already synchronized
 sync_exit=0
 === graph audit ===
-canonical nodes parsed: 166
+canonical nodes parsed: 167
 
 WARNINGS
 - master index does not list B-206c (Nodes/B-206c_Four_Actions.md)
@@ -10,6 +10,7 @@ WARNINGS
 - master index does not list B-226 (Nodes/B-226_Research_Discovery_Invention_Loop.md)
 - master index does not list B-227 (Nodes/B-227_Time_Scale_Bottleneck_Loop.md)
 - master index does not list C-323 (Nodes/C-323_Four_Forces_as_Displacement_Regimes.md)
+- master index does not list D-417 (Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md)
 - master index does not list E-531 (Nodes/E-531_Dual_Harmonic_Propagation_Operator.md)
 - master index does not list E-532 (Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md)
 - master index does not list G-724 (Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md)
@@ -257,5 +258,5 @@ ERRORS
 - Nodes/G-763_Scalar_to_Harmonic.md: missing metadata key claim_gate_detail
 - Nodes/G-763_Scalar_to_Harmonic.md: missing metadata key metadata_standard
 
-FAIL: 237 error(s), 12 warning(s)
+FAIL: 237 error(s), 13 warning(s)
 audit_exit=1
