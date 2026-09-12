@@ -1,7 +1,0 @@
-from pathlib import Path
-p=Path('Virtual_Breadboard/SPICE_PARITY.md')
-s=p.read_text()
-old='18. Trapezoidal/Gear integration choices with ringing/stiffness tests.'
-new="18. **Trapezoidal/Gear integration choices with ringing/stiffness tests** — IMPLEMENTED for ordinary capacitor and inductor transient companions through `solverOptions.integrationMethod`, with `backward-euler` preserved as the default/reference, `trapezoidal` using the proper prior-current/prior-voltage history companions, and `gear2` using second-order BDF coefficients. Gear2 uses a backward-Euler bootstrap until two history points exist and uses the mathematically correct variable-step BDF2 coefficients when adaptive stepping changes `dt`; the prior accepted timestep is persisted/restored with the rest of circuit state. Real capacitor ESR/leakage and inductor DCR remain in every method. Permanent qualification checks an independent analytic RC solution including source resistance/ESR/leakage, the expected trapezoidal alternating behavior on a stiff RC while Gear2 damps that numerical ringing, and an underdamped RLC ring-down where trapezoidal preserves physical oscillation better than backward Euler's numerical damping. Toroid/magnetic-core integration remains on its existing dedicated dynamics rather than being silently reinterpreted by this option."
-if old not in s: raise SystemExit('roadmap anchor missing')
-p.write_text(s.replace(old,new,1))
