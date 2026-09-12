@@ -70,6 +70,8 @@ function npnCircuit(vbase) {
 
 // Heavy base drive must move the device into saturation: collector falls below base,
 // activating both junctions rather than pretending beta remains constant forever.
+// This is deliberately a hard numerical case and must converge with junction limiting;
+// the test is not relaxed to avoid the saturated Ebers-Moll region.
 {
   const r=new Circuit().solve(npnCircuit(0.82),1e-3,25,{maxIterations:120});
   check('npn-saturation-converges', r.solver.converged, JSON.stringify(r.solver));
