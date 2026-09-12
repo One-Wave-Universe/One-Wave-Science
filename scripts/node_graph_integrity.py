@@ -20,7 +20,7 @@ ALIAS_REGISTRY = ROOT / "LEGACY_ID_ALIAS_REGISTRY.json"
 D413_README = ROOT / "Nodes" / "D-413_Ground_Lattice_Orbital_Restoring_Simulation" / "README.md"
 AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
 
-REQUIRED_META = (
+NODE_REQUIRED = (
     "node_id",
     "canonical_name",
     "namespace",
@@ -28,6 +28,14 @@ REQUIRED_META = (
     "lifecycle",
     "classification",
     "claim_gate_detail",
+    "metadata_standard",
+)
+ARTIFACT_REQUIRED = (
+    "artifact_id",
+    "parent_node_id",
+    "title",
+    "namespace",
+    "lifecycle",
     "metadata_standard",
 )
 ALLOWED_GATES = {"BROWN", "GRAY", "GREEN", "YELLOW", "BRONZE", "SILVER", "GOLD", "RED"}
@@ -43,7 +51,7 @@ ALLOWED_LIFECYCLES = {
 NODE_ID_RE = re.compile(r"\b([A-G]-\d{3}[a-z]?)\b")
 DEP_LINE_RE = re.compile(r"^\s*(?:\*\*)?(Upstream|Downstream|Lateral)\s*:\s*(.*)$", re.IGNORECASE)
 
-# These reciprocal edges are architecture locks.  The source must name the
+# These reciprocal edges are architecture locks. The source must name the
 # target downstream, and the target must name the source upstream.
 LOCKED_EDGES = (
     ("C-311", "C-319"),
@@ -63,7 +71,6 @@ LOCKED_EDGES = (
     ("D-413", "D-416"),
 )
 
-LOCKED_INDEX_IDS = ("C-319", "C-320", "D-416")
 LOCKED_README_IDS = ("A-115", "C-311", "C-319", "C-320", "D-413", "D-416")
 
 
@@ -75,23 +82,26 @@ def parse_scalar(raw: str) -> str:
 
 
 def parse_frontmatter(path: Path, text: str) -> tuple[dict[str, str], list[str]]:
-    errors: list[str] = []
     if not text.startswith("---\n"):
         return {}, [f"{path.relative_to(ROOT)}: missing YAML front matter"]
     end = text.find("\n---\n", 4)
     if end < 0:
         return {}, [f"{path.relative_to(ROOT)}: unterminated YAML front matter"]
-    block = text[4:end]
     meta: dict[str, str] = {}
-    for line in block.splitlines():
+    for line in text[4:end].splitlines():
         if not line.strip() or line.lstrip().startswith("#") or ":" not in line:
             continue
         key, value = line.split(":", 1)
         meta[key.strip()] = parse_scalar(value)
-    for key in REQUIRED_META:
+    return meta, []
+
+
+def require_keys(path: Path, meta: dict[str, str], keys: tuple[str, ...]) -> list[str]:
+    errors: list[str] = []
+    for key in keys:
         if not meta.get(key):
             errors.append(f"{path.relative_to(ROOT)}: missing metadata key {key}")
-    return meta, errors
+    return errors
 
 
 def load_aliases() -> tuple[set[str], set[str]]:
@@ -121,10 +131,9 @@ def dependency_map(text: str) -> dict[str, set[str]]:
 
 def main() -> int:
     errors: list[str] = []
-    warnings: list[str] = []
     nodes: dict[str, Path] = {}
-    texts: dict[str, str] = {}
     deps: dict[str, dict[str, set[str]]] = {}
+    artifacts: list[tuple[Path, str]] = []
 
     for directory in NODE_DIRS:
         if not directory.exists():
@@ -132,8 +141,30 @@ def main() -> int:
             continue
         for path in sorted(directory.glob("*.md")):
             text = path.read_text(encoding="utf-8")
-            meta, meta_errors = parse_frontmatter(path, text)
-            errors.extend(meta_errors)
+            meta, frontmatter_errors = parse_frontmatter(path, text)
+            errors.extend(frontmatter_errors)
+            if not meta:
+                continue
+
+            namespace = meta.get("namespace")
+            if namespace == "NODE_ARTIFACT":
+                errors.extend(require_keys(path, meta, ARTIFACT_REQUIRED))
+                if meta.get("metadata_standard") != "I-06":
+                    errors.append(f"{path.relative_to(ROOT)}: artifact metadata_standard must be I-06")
+                if meta.get("lifecycle") not in ALLOWED_LIFECYCLES:
+                    errors.append(f"{path.relative_to(ROOT)}: invalid artifact lifecycle {meta.get('lifecycle')!r}")
+                parent = meta.get("parent_node_id")
+                if parent:
+                    artifacts.append((path, parent))
+                continue
+
+            if namespace != "NODE":
+                errors.append(
+                    f"{path.relative_to(ROOT)}: namespace must be NODE or NODE_ARTIFACT, got {namespace!r}"
+                )
+                continue
+
+            errors.extend(require_keys(path, meta, NODE_REQUIRED))
             node_id = meta.get("node_id")
             if not node_id:
                 continue
@@ -143,7 +174,6 @@ def main() -> int:
                 )
                 continue
             nodes[node_id] = path
-            texts[node_id] = text
             deps[node_id] = dependency_map(text)
             if meta.get("gate") not in ALLOWED_GATES:
                 errors.append(f"{path.relative_to(ROOT)}: invalid gate {meta.get('gate')!r}")
@@ -153,6 +183,15 @@ def main() -> int:
                 errors.append(f"{path.relative_to(ROOT)}: metadata_standard must be I-06")
 
     aliases, dispositions = load_aliases()
+
+    # Artifact parents must resolve after all canonical nodes have been loaded.
+    for path, parent in artifacts:
+        if parent in nodes or parent in aliases:
+            continue
+        if parent in dispositions:
+            errors.append(f"{path.relative_to(ROOT)}: parent node {parent} is retired/dispositioned")
+        else:
+            errors.append(f"{path.relative_to(ROOT)}: unresolved parent_node_id {parent}")
 
     # Dependency lines must resolve to a canonical node or declared alias.
     for source, groups in sorted(deps.items()):
@@ -165,18 +204,13 @@ def main() -> int:
                 else:
                     errors.append(f"{source} {kind}: unresolved canonical node id {ref}")
 
-    # The master index is the repository-wide discovery surface for A-G nodes.
+    # Every canonical A-G node must be discoverable from the master index.
     index_text = MASTER_INDEX.read_text(encoding="utf-8")
-    for node_id in sorted(nodes):
+    for node_id, path in sorted(nodes.items()):
         if node_id.startswith("A+"):
             continue
         if not re.search(rf"\|\s*{re.escape(node_id)}\s*\|", index_text):
-            warnings.append(f"master index does not list {node_id} ({nodes[node_id].relative_to(ROOT)})")
-
-    # New bridge nodes are mandatory index entries, not warnings.
-    for node_id in LOCKED_INDEX_IDS:
-        if not re.search(rf"\|\s*{re.escape(node_id)}\s*\|", index_text):
-            errors.append(f"master index missing locked node {node_id}")
+            errors.append(f"master index does not list {node_id} ({path.relative_to(ROOT)})")
 
     # Architecture-lock edges must be reciprocal.
     for source, target in LOCKED_EDGES:
@@ -208,18 +242,15 @@ def main() -> int:
         errors.append("AI_CANONICAL_START_HERE.md missing")
 
     print(f"canonical nodes parsed: {len(nodes)}")
-    if warnings:
-        print("\nWARNINGS")
-        for item in warnings:
-            print(f"- {item}")
+    print(f"node artifacts parsed: {len(artifacts)}")
     if errors:
         print("\nERRORS")
         for item in errors:
             print(f"- {item}")
-        print(f"\nFAIL: {len(errors)} error(s), {len(warnings)} warning(s)")
+        print(f"\nFAIL: {len(errors)} error(s)")
         return 1
 
-    print(f"PASS: node graph integrity holds ({len(warnings)} warning(s))")
+    print("PASS: canonical node metadata, index coverage, dependencies, artifacts, and locked graph edges all hold")
     return 0
 
 
