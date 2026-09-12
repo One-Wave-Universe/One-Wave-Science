@@ -16,6 +16,7 @@ on:
       - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
+      - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -35,6 +36,7 @@ on:
       - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/test/mosfet-continuous.test.js'
       - 'Virtual_Breadboard/test/spice-tolerances.test.js'
+      - 'Virtual_Breadboard/test/ac-analysis.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -86,3 +88,6 @@ jobs:
 
       - name: Run SPICE convergence tolerance qualification
         run: npm run test:spice-tolerances
+
+      - name: Run small-signal AC analysis qualification
+        run: npm run test:ac-analysis
