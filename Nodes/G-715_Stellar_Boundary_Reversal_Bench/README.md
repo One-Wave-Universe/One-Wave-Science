@@ -6,6 +6,12 @@ This directory is the first runnable bench for Node
 simulation showing stable condition where T_cor > T_s from boundary
 energy deposition").
 
+`physics-atlas/index.html`'s "Star / Corona" scene links back to this
+directory as its connected Node. That scene is purely cinematic (its own
+words: "No fusion network, radiative transfer, or MHD is claimed") and does
+not run or read this bench's control-vs-hypothesis test. This bench, not
+that scene, is where the actual T_cor > T_s evidence lives.
+
 ## What this bench is
 
 A two-compartment, deterministic ODE toy in **arbitrary model units**,

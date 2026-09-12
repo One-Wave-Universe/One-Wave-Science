@@ -15,6 +15,12 @@ metadata_standard: "I-06"
 Upstream: A-104 Gradient, A-115 Unified Compression Field, E-509 Propagation Limit, C-311 Electric-Magnetic Duality
 Downstream: Book 1 Ch7 Photon, Book 1 Ch9 No Observer Effect, Book 5 cosmic transport, E-529, E-530
 
+`physics-atlas/index.html`'s "Redshift Ladder" scene links back to this
+node as its connected source. That scene is a generic normalized
+wavelength-stretch visual and does not implement the propagation law
+below or fetch any comparison dataset. This node's equations, not that
+scene, are what the Failure Tests section actually applies to.
+
 ## Hard Constraint
 
 One-Wave contains no expansion of space. This node must not use a cosmological scale factor, Hubble expansion term, or wavelength stretching by metric expansion.

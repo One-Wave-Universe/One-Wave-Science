@@ -1,5 +1,12 @@
 # Nonlocal Three-Excitation Field Bench
 
+`physics-atlas/index.html`'s "Bound Orbit" and "Three-Body Figure Eight"
+scenes link back to this directory as their connected Node. That atlas is a
+separate, self-contained cinematic scaffold (its own small toy integrator) --
+it does not read this bench's actual state, equations, or receipts. This
+README, `solar_system_control.py`, and the receipts these tests produce
+remain the authoritative source for orbital/three-body claims.
+
 This directory contains the first runnable One-Wave three-excitation bench.
 It advances one complex nonlinear Field on a periodic 2D triangular lattice,
 uses a strictly positive global kernel, and extracts three extended excitation
