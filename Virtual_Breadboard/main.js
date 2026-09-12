@@ -71,6 +71,12 @@ async function runDesktopSmoke(win) {
     if (!/Virtual Breadboard Simulator/.test(ui.title)) throw new Error(`unexpected title: ${ui.title}`);
 
     const acceptance = await win.webContents.executeJavaScript(`(async () => {
+      // Clear is a real, deliberate safety prompt for a real user
+      // (window.confirm) -- app.js's own behavior is untouched. In this
+      // headless acceptance run there is no user to answer it, and Electron's
+      // native confirm() blocks the renderer indefinitely waiting for one, so
+      // this smoke script (only) answers its own prompts affirmatively.
+      window.confirm = () => true;
       localStorage.removeItem('virtual-breadboard-save');
       document.getElementById('btnClear').click();
       document.getElementById('presetLed').click();
