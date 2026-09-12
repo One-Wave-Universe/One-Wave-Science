@@ -56,17 +56,12 @@ new="""            if (diodeModel === 'newton') {
               const targetVd = va0 - vb0;
               const lastVd = diodeLimitedJunctions.get(c.id) || 0;
               const maxJunctionStep = 0.05;
-              // Forward exponential growth needs limiting; reverse-bias moves
-              // are numerically harmless and can be taken directly.
               const vd = targetVd > lastVd + maxJunctionStep ? lastVd + maxJunctionStep : targetVd;
               diodeLimitedJunctions.set(c.id, vd);
               const limitTol = vntol + reltol * Math.max(Math.abs(targetVd), Math.abs(vd));
               if (Math.abs(targetVd - vd) > limitTol) diodeJunctionLimitsSettled = false;
               const vt = THERMAL_VOLTAGE_25C * ((tempOf(c.id) + 273.15) / 298.15);
               const nvt = DIODE_N * vt;
-              // Exponent guard is only a floating-point overflow guard at an
-              // astronomically high current; unlike the former 0.8 V clamp it
-              // does not affect ordinary silicon-diode operating points.
               const exponent = Math.max(-100, Math.min(40, vd / nvt));
               const ev = Math.exp(exponent);
               const id0 = DIODE_IS * (ev - 1);
@@ -90,9 +85,9 @@ newcurr="""                const nvt = DIODE_N * vt;
                 const exponent = Math.max(-100, Math.min(40, vj / nvt));
                 precisionCurrents.set('diode:' + d.id, DIODE_IS * (Math.exp(exponent) - 1));
 """
-if s.count(oldcurr) != 2:
-    raise SystemExit('expected two precision-current clamp blocks, found '+str(s.count(oldcurr)))
-s=s.replace(oldcurr,newcurr,2)
+if s.count(oldcurr) != 1:
+    raise SystemExit('expected one precision-current clamp block, found '+str(s.count(oldcurr)))
+s=s.replace(oldcurr,newcurr,1)
 
 rep("""            const nvt = DIODE_N * vt;
             const vd = Math.max(-5, Math.min(0.8, va - vb));
