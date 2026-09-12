@@ -36,8 +36,6 @@ function runNgspice(body) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vbb-ngspice-'));
   const net = path.join(dir, 'case.cir');
   const log = path.join(dir, 'case.log');
-  // SPICE reserves the first physical line as a title. Always provide one
-  // so the first actual component is not silently discarded by ngspice.
   fs.writeFileSync(net, `Virtual Breadboard ngspice cross-check\n${body}`);
   const p = spawnSync('ngspice', ['-b', '-o', log, net], { encoding: 'utf8' });
   const text = fs.existsSync(log) ? fs.readFileSync(log, 'utf8') : `${p.stdout || ''}\n${p.stderr || ''}`;
@@ -102,7 +100,6 @@ const divider = {
   const phase = AC.phasorPhaseDeg(z);
   const log = runNgspice(`V1 nsrc 0 AC 1\nRsrc nsrc vin 1\nR1 vin out 999\nResr out cnode ${esr}\nC1 cnode 0 ${Cval}\nRleak out 0 ${rleak}\nRg1 nsrc 0 1g\nRg2 vin 0 1g\nRg3 out 0 1g\n.control\nac lin 1 ${f} ${f}\nlet vmag=mag(v(out))\nlet vphase=ph(v(out))\n${emitScalar('vmag')}\n${emitScalar('vphase')}\nquit\n.endc\n.end\n`);
   compare('ac-rc-magnitude', mag, scalar(log, 'vmag'), tolerances.ac.rcMagnitude);
-  // ngspice ph() is radians in this control-expression path; VBB reports degrees.
   compare('ac-rc-phase', phase, scalar(log, 'vphase') * 180 / Math.PI, tolerances.ac.rcPhaseDeg);
 }
 
@@ -111,7 +108,10 @@ const divider = {
   const cap = { id: 'C1', type: 'capacitor', value: Cval, a: 'out', b: 'gnd', initialV: 0 };
   const esr = CE.capacitorESR(cap);
   const rleak = CE.capacitorLeakageR(cap);
-  const dt = 1e-4, steps = 10, tStop = dt * steps;
+  // ngspice chooses internal timesteps adaptively even with Gear order 1.
+  // Use a fine fixed VBB step so both methods approximate the same physical
+  // 1 ms RC transient closely without weakening the declared tolerance.
+  const dt = 1e-5, steps = 100, tStop = dt * steps;
   const elements = {
     wires: [],
     components: [
