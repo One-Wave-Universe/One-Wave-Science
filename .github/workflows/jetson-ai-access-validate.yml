@@ -4,19 +4,25 @@ on:
   push:
     paths:
       - 'JETSON_AI_ACCESS.md'
-      - 'scripts/jetson_gateway.py'
+      - 'AI_JETSON_TOOL_GUIDE.md'
+      - 'External_Work/**'
+      - 'hive-pipe/**'
       - 'scripts/install_jetson_gateway.sh'
       - 'scripts/enable_jetson_ssh.sh'
       - 'scripts/jetson_remote.sh'
+      - 'scripts/external_work_bridge.py'
       - '.github/workflows/jetson-command.yml'
       - '.github/workflows/jetson-ai-access-validate.yml'
   pull_request:
     paths:
       - 'JETSON_AI_ACCESS.md'
-      - 'scripts/jetson_gateway.py'
+      - 'AI_JETSON_TOOL_GUIDE.md'
+      - 'External_Work/**'
+      - 'hive-pipe/**'
       - 'scripts/install_jetson_gateway.sh'
       - 'scripts/enable_jetson_ssh.sh'
       - 'scripts/jetson_remote.sh'
+      - 'scripts/external_work_bridge.py'
       - '.github/workflows/jetson-command.yml'
       - '.github/workflows/jetson-ai-access-validate.yml'
   workflow_dispatch:
@@ -33,39 +39,43 @@ jobs:
 
       - name: Shell syntax
         run: |
+          bash -n hive-pipe/agent.sh
+          bash -n hive-pipe/install_gateway.sh
           bash -n scripts/install_jetson_gateway.sh
           bash -n scripts/enable_jetson_ssh.sh
           bash -n scripts/jetson_remote.sh
 
       - name: Python syntax
-        run: python3 -m py_compile scripts/jetson_gateway.py
+        run: |
+          python3 -m py_compile \
+            hive-pipe/gateway.py \
+            hive-pipe/mudl.py \
+            hive-pipe/terminal_parser.py \
+            scripts/external_work_bridge.py
 
-      - name: Gateway smoke test
+      - name: Hive Pipe MCP terminal tests
+        run: python3 -m unittest discover -s hive-pipe -p 'test_*.py' -v
+
+      - name: External work bridge smoke test
         run: |
           set -euo pipefail
-          export HOME="$RUNNER_TEMP/home"
-          mkdir -p "$HOME/.config/hive-pipe"
-          python3 - <<'PY' > "$HOME/.config/hive-pipe/gateway.token"
-          print("test-token-" + "x" * 48)
-          PY
-          python3 scripts/jetson_gateway.py >"$RUNNER_TEMP/gateway.log" 2>&1 &
-          PID=$!
-          trap 'kill "$PID" 2>/dev/null || true' EXIT
-          for _ in $(seq 1 30); do
-            curl -fsS http://127.0.0.1:8765/healthz >/dev/null && break
-            sleep 0.2
-          done
-          RESULT="$(
-            curl -fsS \
-              -H 'Authorization: Bearer test-token-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \
-              -H 'Content-Type: application/json' \
-              --data '{"command":"printf JETSON_GATEWAY_OK","timeout":5}' \
-              http://127.0.0.1:8765/v1/exec
-          )"
-          python3 - "$RESULT" <<'PY'
-          import json, sys
-          result = json.loads(sys.argv[1])
-          assert result["ok"] is True, result
-          assert result["stdout"] == "JETSON_GATEWAY_OK", result
-          print("gateway smoke: PASS")
-          PY
+          export ONE_WAVE_EXTERNAL_WORK="$RUNNER_TEMP/One-Wave-External-Work"
+          mkdir -p External_Work/inbox External_Work/outbox
+          printf 'from-github\n' > External_Work/inbox/ci-github-to-jetson.txt
+          python3 scripts/external_work_bridge.py pull
+          test "$(cat "$ONE_WAVE_EXTERNAL_WORK/inbox/ci-github-to-jetson.txt")" = "from-github"
+          printf 'from-jetson\n' > "$ONE_WAVE_EXTERNAL_WORK/outbox/ci-jetson-to-github.txt"
+          python3 scripts/external_work_bridge.py publish
+          test "$(cat External_Work/outbox/ci-jetson-to-github.txt)" = "from-jetson"
+          echo "external work bridge: PASS"
+
+      - name: GitHub command lane uses MCP terminal parser
+        run: |
+          set -euo pipefail
+          grep -q '"name": "terminal_run"' .github/workflows/jetson-command.yml
+          grep -q ' + "/mcp"' .github/workflows/jetson-command.yml
+          if grep -q '/v1/exec' .github/workflows/jetson-command.yml; then
+            echo "::error::Jetson Command Lane still references legacy /v1/exec"
+            exit 1
+          fi
+          echo "github -> jetson MCP route: PASS"
