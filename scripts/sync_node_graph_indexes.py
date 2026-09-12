@@ -3,6 +3,7 @@
 
 The curated master tables stay hand-authored. This tool owns:
 - the C-319/C-320/D-416 bridge rows and AI ingestion path;
+- corrected load-bearing architecture rows whose canonical node meaning changed;
 - an auto-generated supplement listing every canonical I-06 NODE that is not
   already represented in the curated master tables.
 
@@ -24,6 +25,13 @@ NODE_DIRS = (ROOT / "Nodes", ROOT / "Root_Axioms")
 C319_ROW = "| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |"
 C320_ROW = "| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |"
 D416_ROW = "| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | GREEN |"
+
+CURATED_REPLACEMENTS = {
+    "| B-206b | Four Views | The four directional relationships (Inward/Outward/Across/Over) of a field mode at its boundary — perspectives, not separate forces. | YELLOW |":
+        "| B-206b | Four Views — Direction, Phase, Strength, Reference | Four descriptive readout modes available to Mirror-gate evaluation; they are not four Mirror gates and do not change the six-gate count. | YELLOW |",
+    "| G-711 | Gate 7 | The review gate — Gates 1–6 build state, Gate 7 reviews it. | GREEN |":
+        "| G-711 | Namika — Inter-System Relation (No Internal Gate 7) | A complete system has six internal gates; Namika names a higher-order relation between complete six-gate systems and is not an internal seventh gate. | YELLOW |",
+}
 
 SUPPLEMENT_START = "<!-- AUTO-NODE-REGISTRY:START -->"
 SUPPLEMENT_END = "<!-- AUTO-NODE-REGISTRY:END -->"
@@ -123,8 +131,13 @@ def build_supplement(base_text: str) -> str:
 
 
 def sync_master(text: str) -> str:
-    # First keep the load-bearing bridge in its semantic tables.
     text = strip_supplement(text)
+
+    # Keep load-bearing curated rows aligned with their canonical nodes.
+    for old, new in CURATED_REPLACEMENTS.items():
+        if old in text:
+            text = text.replace(old, new)
+
     if "| C-319 |" not in text:
         anchor = "| C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |"
         require_once(text, anchor, "C-318 master-index row")
