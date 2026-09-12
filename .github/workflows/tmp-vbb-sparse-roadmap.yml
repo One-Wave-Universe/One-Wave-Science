@@ -1,0 +1,23 @@
+name: tmp-vbb-sparse-roadmap
+on:
+  push:
+    branches: [virtual-breadboard-sparse-mna]
+    paths:
+      - '.github/workflows/tmp-vbb-sparse-roadmap.yml'
+      - '.github/scripts/mark_vbb_sparse_done.py'
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: virtual-breadboard-sparse-mna
+      - run: python .github/scripts/mark_vbb_sparse_done.py
+      - run: |
+          git config user.name "Mark Wright"
+          git config user.email "markluvsoliviaduh@gmail.com"
+          git add Virtual_Breadboard/SPICE_PARITY.md
+          git commit -m "Virtual Breadboard: mark sparse MNA implemented"
+          git push origin HEAD:virtual-breadboard-sparse-mna
