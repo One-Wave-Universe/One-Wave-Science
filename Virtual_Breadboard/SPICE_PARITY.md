@@ -47,7 +47,7 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 
 ### P5 — solver robustness/performance
 
-16. Sparse matrix representation and factorization for large breadboards.
+16. **Sparse matrix representation and factorization for large breadboards** — IMPLEMENTED in the generic MNA core. Matrix assembly now stores only stamped nonzero coefficients while preserving the existing `A[row][col]` stamp semantics, so proven device stamps do not need a parallel sparse-only implementation. The preserved dense Gauss-Jordan solver remains selectable as `linearSolver: 'dense'`; `linearSolver: 'sparse'` uses sparse row maps with partial-pivot forward elimination/back-substitution, and `auto` selects sparse for matrices of 64 unknowns or more. Solver metadata reports matrix size, nonzero count/density, factor nonzeros, peak fill, and the active linear solver. Permanent qualification compares a 200x200 sparse system against the dense reference and verifies a real 100-section resistor ladder gives identical node voltages while auto-selecting sparse storage.
 17. Adaptive transient timestep with local-error control.
 18. Trapezoidal/Gear integration choices with ringing/stiffness tests.
 19. Deterministic convergence diagnostics: worst node/branch residual and reason for failure.
