@@ -13,6 +13,7 @@ on:
       - 'Virtual_Breadboard/test/solver-convergence.test.js'
       - 'Virtual_Breadboard/test/dc-operating-point.test.js'
       - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
+      - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -29,6 +30,7 @@ on:
       - 'Virtual_Breadboard/test/solver-convergence.test.js'
       - 'Virtual_Breadboard/test/dc-operating-point.test.js'
       - 'Virtual_Breadboard/test/source-gmin-stepping.test.js'
+      - 'Virtual_Breadboard/test/diode-newton.test.js'
       - 'Virtual_Breadboard/package.json'
       - 'One_Wave_Bench/flashlight/**'
       - 'ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md'
@@ -71,3 +73,6 @@ jobs:
 
       - name: Run source and GMIN stepping qualification
         run: npm run test:stepping
+
+      - name: Run continuous diode Newton qualification
+        run: npm run test:diode-newton
