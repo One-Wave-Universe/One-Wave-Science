@@ -23,6 +23,30 @@ Exact memory may not be overwritten by generative recall
 D-413 well is imposed; V_eff is the conservative skeleton only
 ```
 
+## Magnetism / Gravity canonical bridge
+
+Before any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:
+
+1. `Nodes/C-311_Electric_Magnetic_Duality.md` — magnetic field is the rotational field view used by the framework.
+2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md` — planar control geometry only.
+3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — required native 3D geometry before planetary interpretation.
+4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.
+5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.
+6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.
+7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.
+8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.
+
+Locked interpretation:
+
+```text
+magnetic rotational state
+-> reorganizes lattice pathways
+-> changes directional accessibility of an existing compression/restoring field
+-> can alter distributed restoring response and torque if the coupling survives tests
+```
+
+Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field.  Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance.  Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.
+
 ## Current update handoff
 
 0. `UPDATED_49_MINIVERSE_DREAMWORLD_AI_GUIDE.md`
