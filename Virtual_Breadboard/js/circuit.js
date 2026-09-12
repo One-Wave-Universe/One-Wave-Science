@@ -1142,6 +1142,9 @@
       const requestedMaxIterations = solverOptions && Number.isFinite(solverOptions.maxIterations)
         ? Math.max(1, Math.floor(solverOptions.maxIterations))
         : 30;
+      const solveGmin = solverOptions && Number.isFinite(solverOptions.gmin)
+        ? Math.max(0, solverOptions.gmin)
+        : GMIN;
       const iterations = size === 0 ? 0 : requestedMaxIterations;
       let iterationsUsed = 0;
       let stateStable = size === 0;
@@ -1176,7 +1179,7 @@
         for (const r of roots) {
           if (r === groundRoot) continue;
           const i = gi(r);
-          stampG(i, i, GMIN);
+          stampG(i, i, solveGmin);
         }
 
         components.forEach((c) => {
@@ -2067,6 +2070,7 @@
         residualTolerance,
         absTolerance,
         relTolerance,
+        gmin: solveGmin,
       };
 
       const currents = new Map();
