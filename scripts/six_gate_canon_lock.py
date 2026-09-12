@@ -23,17 +23,25 @@ REPLACEMENTS = {
     "- The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.": "- The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.",
     "- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**; G-739 constrains them as measured stability regions around a bidirectional oscillator.": "- The six process steps are the six gates: **BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3**; G-739 measures behavior at those same positions rather than defining another gate set.",
     "BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor.": "BEGIN/M1 is the first Mirror-gate relation at the active shared center/reference region. The six recursive labels are the same six gate positions: three Mirror gates alternating with three Action gates, not a separate measured-gate layer or a universal one-way conveyor.",
+    "- `-` is the Mirror Gate return/crossover through the shared `(0)` reference.": "- `-` is the handoff from one canonical gate position to the next; Mirror behavior occurs only at M1, M2, and M3.",
+    "- Four Actions are **Inward, Outward, Across, Over**.": "- Four Action **modes** are **Inward, Outward, Across, Over**; they describe what an Action gate may do and are not four primitive Action gates.",
+    "If removing a domain vocabulary changes the six-pair oscillator, that domain representation has leaked into the kernel.": "If removing a domain vocabulary changes the six-step/six-gate Mirror-Action oscillator, that domain representation has leaked into the kernel.",
 }
 
 REQUIRED = (
     "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
     "M1 -> A1 -> M2 -> A2 -> M3 -> A3",
     "BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3",
+    "Mirror behavior occurs only at M1, M2, and M3",
+    "not four primitive Action gates",
 )
 
 FORBIDDEN = (
     "6 measured oscillator gates",
     "three physical Mirror Gates traversed in two orientations to realize the six logical positions",
+    "`-` is the Mirror Gate return/crossover",
+    "- Four Actions are **Inward, Outward, Across, Over**.",
+    "changes the six-pair oscillator",
 )
 
 CANON_FILES = (
