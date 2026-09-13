@@ -17,6 +17,7 @@
     "test:musical-equipment": "node test/musical-equipment-qualification.test.js",
     "test:musical-ngspice": "node test/musical-equipment-ngspice.test.js",
     "test:musical-stress": "node test/musical-equipment-stress.test.js",
+    "test:musical-faults": "node test/musical-equipment-faults.test.js",
     "test:netlist": "node test/netlist.test.js",
     "test:fault-states": "node test/fault-states.test.js",
     "test:basic-circuits": "node test/basic-circuits.test.js",
