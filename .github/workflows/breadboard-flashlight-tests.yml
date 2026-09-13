@@ -12,6 +12,7 @@ on:
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
       - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
+      - 'Virtual_Breadboard/test/musical-equipment-qualification.test.js'
       - 'Virtual_Breadboard/test/regression-builds/**'
       - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
@@ -50,6 +51,7 @@ on:
       - 'Virtual_Breadboard/test/flashlight-calibration/**'
       - 'Virtual_Breadboard/test/run_flashlight_calibration.js'
       - 'Virtual_Breadboard/test/conventional-flashlight-reference.test.js'
+      - 'Virtual_Breadboard/test/musical-equipment-qualification.test.js'
       - 'Virtual_Breadboard/test/regression-builds/**'
       - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
@@ -115,6 +117,9 @@ jobs:
 
       - name: Run conventional flashlight reference only
         run: node test/conventional-flashlight-reference.test.js
+
+      - name: Run musical-equipment qualification
+        run: npm run test:musical-equipment
 
       - name: Run SPICE-style DC analysis qualification
         run: npm run test:spice-analysis
