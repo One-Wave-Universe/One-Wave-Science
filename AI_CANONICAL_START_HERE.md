@@ -4,6 +4,10 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
+## Open research: Jetson Dreamscape translator
+
+**Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
+
 ## Miniverse / Dreamworld / XYZ Field
 
 When the task is local world-building, energy-sphere internal state, interdimensional wrappers, or Dream Engine design, read this pair before inventing coordinates:

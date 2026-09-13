@@ -14,6 +14,10 @@ No AI should infer that everything listed here is equally mature. Each work item
 
 ---
 
+## Open research: Jetson Dreamscape translator
+
+**Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
+
 ## 1. Foreman operating rule
 
 Every new work branch must answer five questions before coding:
