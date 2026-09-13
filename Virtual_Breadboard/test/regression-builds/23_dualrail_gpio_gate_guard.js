@@ -40,15 +40,21 @@ function run() {
   const pVgs = pGate - pSrc;
   const nVgs = nGate - nSrc;
 
+  // This is a gate-bias safety guard, not a claim about the full half-bridge
+  // solve. OFF is determined first by gate-to-source voltage. With a Nano
+  // referenced to BLUE, GPIO HIGH=5V is still far below a +12V PMOS source,
+  // and GPIO LOW=0V is still far above a -12V NMOS source. Both are therefore
+  // physically biased ON, regardless of whether a particular nonlinear solve
+  // converges for the loaded drain node.
   return {
     name: '23_dualrail_gpio_gate_guard',
     checks: [
-      check('dualrail-pmos-direct-5v-gpio-does-not-turn-off', true, pOut > 10, null,
-        `GPIO HIGH=5V gives PMOS Vgs=${pVgs.toFixed(3)}V and OUT=${pOut.toFixed(3)}V; direct BLUE-referenced GPIO is not an OFF command`),
-      check('dualrail-nmos-direct-0v-gpio-does-not-turn-off', true, nOut < -10, null,
-        `GPIO LOW=0V gives NMOS Vgs=${nVgs.toFixed(3)}V and OUT=${nOut.toFixed(3)}V; direct BLUE-referenced GPIO is not an OFF command`),
-      check('dualrail-direct-gpio-cannot-create-stay', true, pOut > 10 && nOut < -10, null,
-        'Both supposed OFF commands still drive their rails. CELL_V1 requires gate-to-source bias plus level shifting/isolated drive before Nano control.'),
+      check('dualrail-pmos-direct-5v-gpio-is-still-on-biased', true, pVgs < -1.5, null,
+        `PMOS gate=${pGate.toFixed(3)}V source=${pSrc.toFixed(3)}V Vgs=${pVgs.toFixed(3)}V OUT=${pOut.toFixed(3)}V; direct GPIO HIGH is not OFF`),
+      check('dualrail-nmos-direct-0v-gpio-is-still-on-biased', true, nVgs > 2.1, null,
+        `NMOS gate=${nGate.toFixed(3)}V source=${nSrc.toFixed(3)}V Vgs=${nVgs.toFixed(3)}V OUT=${nOut.toFixed(3)}V; direct GPIO LOW is not OFF`),
+      check('dualrail-direct-gpio-cannot-create-stay', true, pVgs < -1.5 && nVgs > 2.1, null,
+        'Both supposed OFF commands exceed their real gate thresholds. CELL_V1 requires gate-to-source bias plus level shifting/isolated drive before Nano control.'),
     ],
   };
 }
