@@ -15,6 +15,7 @@ on:
       - 'Virtual_Breadboard/test/musical-equipment-qualification.test.js'
       - 'Virtual_Breadboard/test/musical-equipment-ngspice.test.js'
       - 'Virtual_Breadboard/test/musical-equipment-stress.test.js'
+      - 'Virtual_Breadboard/test/musical-equipment-faults.test.js'
       - 'Virtual_Breadboard/test/regression-builds/**'
       - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
@@ -56,6 +57,7 @@ on:
       - 'Virtual_Breadboard/test/musical-equipment-qualification.test.js'
       - 'Virtual_Breadboard/test/musical-equipment-ngspice.test.js'
       - 'Virtual_Breadboard/test/musical-equipment-stress.test.js'
+      - 'Virtual_Breadboard/test/musical-equipment-faults.test.js'
       - 'Virtual_Breadboard/test/regression-builds/**'
       - 'Virtual_Breadboard/test/run_regression_builds.js'
       - 'Virtual_Breadboard/test/spice-analysis.test.js'
@@ -130,6 +132,9 @@ jobs:
 
       - name: Run musical-equipment active/load stress pack
         run: npm run test:musical-stress
+
+      - name: Run musical-equipment fault qualification
+        run: npm run test:musical-faults
 
       - name: Run SPICE-style DC analysis qualification
         run: npm run test:spice-analysis
