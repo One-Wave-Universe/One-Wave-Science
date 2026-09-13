@@ -14,6 +14,7 @@
     "test:regression": "node test/run_regression_builds.js",
     "test:flashlight-calibration": "node test/run_flashlight_calibration.js",
     "test:flashlight-reference": "node test/conventional-flashlight-reference.test.js",
+    "test:musical-equipment": "node test/musical-equipment-qualification.test.js",
     "test:netlist": "node test/netlist.test.js",
     "test:fault-states": "node test/fault-states.test.js",
     "test:basic-circuits": "node test/basic-circuits.test.js",
