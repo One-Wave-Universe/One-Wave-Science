@@ -130,7 +130,27 @@ Mass Effect / compressed structure
 - The path from diffuse field energy into neutrino Return Modes is open.
 - The path from Return Modes into compact reservoirs is open.
 - The global static balance has not been simulated across a population.
+- UNACCOUNTED SINK: `lambda_C * U_C` in the `dU_C/dt` equation has no
+  destination anywhere in the stated system. `P_cap` and `P_nu` are
+  transfers in (they should appear as matching drains in whichever
+  channel's own balance equation sources them), and `D_W*h*U_C` correctly
+  reappears as `P_W`, the source term in `dE_W/dt`. But `lambda_C*U_C`
+  does not reappear as a `+lambda_C*U_C` term in `E_gamma`, `E_chi`,
+  `E_nu`, or `E_W`'s equations, and is absent from the Cosmic Loop
+  diagram. As currently written, this term breaks the claimed
+  `dE_tot/dt = 0` for `E_tot = E_gamma+E_chi+E_nu+E_C+E_W` -- energy
+  leaves the compact reservoir through it with no accounted destination.
+  Either `lambda_C` must be shown to be exactly zero, or an explicit
+  `+lambda_C*U_C` source term needs to be added to one of the other four
+  channels' balance equations (most likely E_chi, if it represents
+  leakage back into the general compression field outside the
+  Mirror-Gate/White-Energy release channel) before the Bronze
+  Requirement's "total energy must remain constant" claim can be tested
+  at all -- right now the system as written cannot pass that test even
+  in principle, independent of simulation.
 
 ## Bronze Requirement
 
 Run a closed-domain simulation with photon transport loss, field storage, Return-Mode transport, compact capture, and threshold White Energy release. Total energy must remain constant within numerical tolerance while the system reaches a stationary circulation rather than secular growth or decay.
+
+Prerequisite, per the Yellow Audit's unaccounted-sink item: give `lambda_C*U_C` an explicit destination (or set it to zero) before running this simulation. As the equations are currently written, no simulation of this system can pass the "total energy remains constant" test, since the ODE itself does not conserve `E_tot` -- this is a modeling gap to fix first, not something a longer or more careful simulation run would reveal.

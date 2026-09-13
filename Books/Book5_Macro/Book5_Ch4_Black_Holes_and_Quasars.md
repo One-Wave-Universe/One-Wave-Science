@@ -248,10 +248,39 @@ compression and Mass Effect
 - Neutrino deposition into compact reservoirs is not derived.
 - Population-scale static energy balance has not been simulated.
 - No expansion variable is permitted in future One-Wave equations.
+- UNACCOUNTED SINK (E-530): the compact reservoir's `lambda_C*U_C` decay
+  term has no destination anywhere in E-530's stated system -- it does
+  not reappear as a source term in any of the other four energy
+  channels, and the "closed accounting domain" claim (`dE_tot/dt=0`)
+  does not currently hold as written. See E-530's Yellow Audit; this
+  must be fixed in the equations before any simulation of this chapter's
+  Cosmic Loop is meaningful.
+- NOT YET ADDRESSED AT ALL: event-horizon scaling with mass/size. The
+  candidate black-hole condition above (`Delta_x`'s lattice-step
+  structure failing) says nothing about why observed event horizons
+  scale the way they do with mass, or what determines the size of the
+  affected region in this framework.
+- NOT YET ADDRESSED AT ALL: why only some active galactic nuclei produce
+  strong quasar-scale ejections while others (e.g. many with comparably
+  large central black holes) do not. The M^4=I closure is proposed as
+  the ejection mechanism in general, with no candidate variable
+  (rotation, accretion rate, boundary condition, surrounding
+  displacement) yet identified as what turns that closure on or off for
+  a given object. Both of these are required before this chapter's
+  model can be compared against real AGN population data, not optional
+  refinements.
 
 ## Future Work
 
-1. Simulate E-528 through E-530 as one closed energy-conserving system.
+1. Simulate E-528 through E-530 as one closed energy-conserving system --
+   blocked until E-530's lambda_C*U_C sink is given a destination or set
+   to zero; see that node's Yellow Audit.
 2. Calibrate a static redshift coefficient without image blurring or unexplained heating.
 3. Derive Return-Mode production and deposition coefficients.
 4. Map compact-reservoir parameters to quasar observations without reverse fitting.
+5. Derive a candidate relationship between event-horizon scaling and
+   this chapter's tear/convergence-point condition, rather than leaving
+   the size of the affected region unaddressed.
+6. Identify a candidate variable that distinguishes AGN that eject
+   strongly from those that do not, and state it as a testable
+   prediction before checking it against real AGN data -- not after.
