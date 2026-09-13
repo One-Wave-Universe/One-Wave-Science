@@ -5,6 +5,7 @@ SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 REPO_ROOT="$(dirname -- "$SCRIPT_DIR")"
 PROJECT_ROOT="${ONE_WAVE_PROJECT_ROOT:-$HOME/One-Wave-Science}"
 EXTERNAL_WORK_ROOT="${ONE_WAVE_EXTERNAL_WORK:-$HOME/One-Wave-External-Work}"
+ALLOWED_ROOTS_INPUT="${HIVE_PIPE_ALLOWED_ROOTS:-$PROJECT_ROOT:$EXTERNAL_WORK_ROOT}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
 TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
@@ -33,6 +34,39 @@ escaped_root="$(escape_systemd_path "$SCRIPT_DIR")"
 escaped_repo="$(escape_systemd_path "$REPO_ROOT")"
 escaped_external="$(escape_systemd_path "$EXTERNAL_WORK_ROOT")"
 write_paths="$escaped_repo $escaped_external"
+allowed_roots=""
+IFS=':' read -r -a requested_roots <<< "$ALLOWED_ROOTS_INPUT"
+for requested_root in "${requested_roots[@]}"; do
+  [[ -n "$requested_root" ]] || continue
+  if [[ "$requested_root" != /* ]]; then
+    echo "HIVE_PIPE_INSTALL_ERROR: allowed root must be absolute: $requested_root" >&2
+    exit 2
+  fi
+  resolved_root="$(readlink -f -- "$requested_root")"
+  if [[ ! -d "$resolved_root" ]]; then
+    echo "HIVE_PIPE_INSTALL_ERROR: allowed root is not a directory: $resolved_root" >&2
+    exit 2
+  fi
+  case "$resolved_root" in
+    /|/etc|/usr|/var|/boot|/dev|/proc|/sys)
+      echo "HIVE_PIPE_INSTALL_ERROR: broad/system root refused: $resolved_root" >&2
+      exit 2
+      ;;
+    "$HOME"/*|/mnt/*|/media/*|/run/media/*) ;;
+    *)
+      echo "HIVE_PIPE_INSTALL_ERROR: root must be under HOME, /mnt, /media, or /run/media: $resolved_root" >&2
+      exit 2
+      ;;
+  esac
+  [[ -z "$allowed_roots" ]] || allowed_roots="$allowed_roots:"
+  allowed_roots="$allowed_roots$resolved_root"
+  write_paths="$write_paths $(escape_systemd_path "$resolved_root")"
+done
+if [[ -z "$allowed_roots" ]]; then
+  echo "HIVE_PIPE_INSTALL_ERROR: no authorized work roots" >&2
+  exit 2
+fi
+escaped_allowed_roots="$(escape_systemd_path "$allowed_roots")"
 if [[ -d "$PROJECT_ROOT" && "$PROJECT_ROOT" != "$REPO_ROOT" ]]; then
   escaped_project="$(escape_systemd_path "$PROJECT_ROOT")"
   write_paths="$write_paths $escaped_project"
@@ -51,6 +85,7 @@ fi
   echo "Environment=HIVE_PIPE_TOKEN_DIR=$TOKEN_DIR"
   echo "Environment=ONE_WAVE_EXTERNAL_WORK=$escaped_external"
   echo "Environment=ONE_WAVE_PROJECT_ROOT=$(escape_systemd_path "$PROJECT_ROOT")"
+  echo "Environment=HIVE_PIPE_ALLOWED_ROOTS=$escaped_allowed_roots"
   echo "ExecStart=/usr/bin/python3 $escaped_root/gateway.py --host 127.0.0.1 --port 8765"
   echo 'Restart=on-failure'
   echo 'RestartSec=3'
@@ -98,5 +133,6 @@ if [[ -n "$escaped_project" ]]; then
   echo "Writable canonical checkout: $PROJECT_ROOT"
 fi
 echo "Writable external work: $EXTERNAL_WORK_ROOT"
+echo "Authorized terminal roots: $allowed_roots"
 echo "Tokens: $TOKEN_DIR (0600; never commit or paste them into the public repository)"
 echo "Default clients: codex, claude, gemini, perplexity"
