@@ -61,13 +61,26 @@ RC across station, never a cap in BLUE
 
 Live one winding. Others STAY.
 
-High = P-MOS source on +12, drain on PHASE. Low = 2N7000 source on −12, drain on PHASE. Nano GND = BLUE. P-MOS ON = GPIO LOW. N-MOS ON = GPIO HIGH. Confirm 2N7000 flat-toward-you: S G D.
+High = P-MOS source on +12, drain on PHASE. Low = 2N7000 source on −12, drain on PHASE.
+
+**Do not connect a BLUE-referenced Nano GPIO directly to either gate on the ±12 V build.** A 0/5 V GPIO cannot make STAY with sources sitting at ±12 V: PMOS gate=5 V still gives VGS≈−7 V, and NMOS gate=0 V still gives VGS≈+12 V. That leaves both devices biased ON instead of OFF.
+
+For the first physical bench proof, use local gate-to-source bias and manual commands:
+
+- P-MOS OFF: 10 k gate→+12/source. P-MOS ON: add 10 k gate→BLUE, giving gate≈+6 V and VGS≈−6 V.
+- 2N7000 OFF: 10 k gate→−12/source. 2N7000 ON: add 10 k gate→BLUE, giving gate≈−6 V and VGS≈+6 V.
+- STAY: both command-to-BLUE resistors removed; gate-to-source resistors hold both devices OFF.
+- Never install both ON-command resistors on one phase at once.
+
+Nano control comes later through a proper level-shifted or isolated gate-drive stage. The permanent regression `23_dualrail_gpio_gate_guard.js` exists specifically to stop direct-GPIO drift from returning.
 
 ---
 
 ## 3. Parts
 
-Dual ±12 V with current knobs (50 mA first). 830 breadboard. 3× AO3401 breakout (P-MOS) + 3× 2N7000. 6× 220 Ω, 6× 10 k pulldown, 2× 10 k 1% law, 4× 100 nF, 3× 1 k first load, 1 Ω shunt, DMM, USB 5 V, SS49E Hall. Optional: TLE2426 if only 9 V exists, 10 µF+100 k MEM, Nano, small star motor after receipts. No 2212 on 2N7000.
+Dual ±12 V with current knobs (20 mA first, 50 mA only after the 1 k load receipts pass). 830 breadboard. 3× AO3401 breakout (P-MOS) + 3× 2N7000. 6× 220 Ω optional gate series resistors, 12× 10 k for the six gate-source/command divider legs, 2× 10 k 1% law, 4× 100 nF, 3× 1 k first load, 1 Ω shunt, DMM, USB 5 V, SS49E Hall. Optional: TLE2426 if only 9 V exists, 10 µF+100 k MEM, Nano only after gate-level shifting, small star motor after receipts. No 2212 on 2N7000.
+
+For the first single-phase proof you only need one AO3401 + one 2N7000, four 10 k gate-network resistors, the two 10 k law resistors, and one 1 k load.
 
 Single-9 V variant: TLE2426 IN=+9 COMMON=supply− OUT=BLUE. Then stay tiny current so OUT is not a motor return.
 
@@ -75,21 +88,21 @@ Single-9 V variant: TLE2426 IN=+9 COMMON=supply− OUT=BLUE. Then stay tiny curr
 
 ## 4. Build
 
-Supply OFF. Knobs 50 mA.
+Supply OFF. Knobs 20 mA for the first phase proof.
 
 **A. Rails.** +12 RED, −12 BLACK, 0 BLUE. 100 nF at the posts. Two 10 k to BLUE. I_0 shunt in BLUE at home. ON. V+≈+12, V−≈−12, I_0≈0. Pull one 10 k: I_0 moves, G sits. Plug back.
 
-**B. Star.** Three 1 k from PA PB PC to one knot on BLUE.
+**B. Star.** Three 1 k from PA PB PC to one knot on BLUE. For the very first proof, populate PA only.
 
-**C. Nerve A.** P-MOS + 2N7000 as above, pulldowns so STAY is default. Table: STAY / +1 / −1 with I_0 and V_PA. Never both ON.
+**C. Nerve A — manual first, no Nano.** Wire the P-MOS gate with 10 k to +12/source and the 2N7000 gate with 10 k to −12/source. Verify both gates equal their own sources before power-on: that is STAY. Then command one device at a time by adding its separate 10 k gate→BLUE resistor. Expected approximate gate targets are +6 V for P-MOS ON and −6 V for NMOS ON. Table: STAY / +1 / STAY / −1 / STAY while recording I_0 and V_PA. Never both ON.
 
-**D. B and C.** Copy. Walk A+1, STAY, B+1, STAY, C+1.
+**D. B and C.** Copy only after A passes. Walk A+1, STAY, B+1, STAY, C+1.
 
 **E. Hall** at star, 5 V vs BLUE. Log walk and STAY-after-walk.
 
-**F. Brain scripts** on the laptop. You are both states.
+**F. Brain scripts** on the laptop. You are both states. Do not connect Nano GPIO to the ±12 gate network until a separate level-shifted/isolated driver has its own receipt.
 
-**G. Muscle.** Swap 1 k for coils or a small star motor. Star stays on BLUE. Knob must not peg.
+**G. Muscle.** Swap 1 k for coils or a small star motor only after the resistor-load receipts are clean. Star stays on BLUE. Raise the current knob from 20 mA toward 50 mA only if the measured load requires it and nothing pegs or heats.
 
 ---
 
@@ -98,7 +111,12 @@ Supply OFF. Knobs 50 mA.
 ```
 V+ ____  V− ____  VG ____
 I_0 both 10k ____   pull one 10k ____
-A+1 ____ A-1 ____ B+1 ____ C+1 ____
+A STAY: VPA ____ I_0 ____
+A +1:   VgateH ____ VPA ____ I_0 ____
+A STAY: VPA ____ I_0 ____
+A -1:   VgateL ____ VPA ____ I_0 ____
+A STAY: VPA ____ I_0 ____
+B+1 ____ C+1 ____
 Hall quiet ____ Hall walk ____ Hall STAY after ____
 override: body silent? ____
 ```
@@ -107,7 +125,7 @@ override: body silent? ____
 
 ## 6. Illegal
 
-Cap in BLUE. Two phases driven. Both FETs on one phase. Field forcing engage after Void said 0. Blind override (no I_0/Hall). Motor current through TLE OUT. Stamp on a switching spike.
+Cap in BLUE. Two phases driven. Both FETs on one phase. Direct BLUE-referenced 0/5 V GPIO on ±12 gate nodes. Field forcing engage after Void said 0. Blind override (no I_0/Hall). Motor current through TLE OUT. Stamp on a switching spike.
 
 ---
 
