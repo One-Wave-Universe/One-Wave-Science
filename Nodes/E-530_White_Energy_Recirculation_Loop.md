@@ -149,6 +149,18 @@ Mass Effect / compressed structure
   at all -- right now the system as written cannot pass that test even
   in principle, independent of simulation.
 
+## Downstream use: AGN ejection-selectivity (Book 5 Ch4)
+
+Book 5 Ch4 now uses this node's existing `h` hysteresis (on above
+`U_on`, off below `U_off`) as its candidate answer for why only some
+active galactic nuclei produce strong ejections: an object whose
+`P_cap`/`P_nu` never pushes `U_C` above `U_on` simply never switches on,
+without needing a different mechanism from one that does. This is a new
+claim resting on this node's existing math, not a change to it -- but it
+means the unaccounted-sink problem above must be fixed before that
+downstream claim can be trusted numerically, since it changes `U_C`'s
+own trajectory.
+
 ## Bronze Requirement
 
 Run a closed-domain simulation with photon transport loss, field storage, Return-Mode transport, compact capture, and threshold White Energy release. Total energy must remain constant within numerical tolerance while the system reaches a stationary circulation rather than secular growth or decay.

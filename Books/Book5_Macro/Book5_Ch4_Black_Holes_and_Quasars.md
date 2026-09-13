@@ -173,6 +173,79 @@ behind itself. A propagating fracture is the different regime in which
 scar length grows. The mathematical distinction now exists; the claim
 that an astrophysical black hole is such a defect remains unverified.
 
+### Event-horizon scaling (candidate, conditional on A-115's own open item)
+
+A-115 section 2 already states the exterior/far-field target this
+framework's compression field must hit (not yet derived from the
+underlying field equation -- A-115's own "Yellow completion" list still
+has "derive chi(r) from sources" as open):
+
+```text
+Phi_OW(r) -> -G*M_eff/r,   Phi_OW = alpha_g * chi
+```
+
+which gives, in that same exterior regime, `chi(r) -> -G*M_eff/(alpha_g*r)`.
+
+Combining this with this chapter's own tear condition (a tear occurs
+where `chi` crosses a critical threshold `chi_crit`, past which C-309's
+`v_max` becomes undefined) and solving `|chi(R_tear)| = chi_crit`
+(verified symbolically):
+
+```text
+R_tear = G*M_eff / (alpha_g * chi_crit)
+```
+
+This predicts the tear radius scales **linearly with mass** -- the same
+scaling as the real Schwarzschild radius, not a competing prediction.
+Matching it exactly to `R_s = 2*G*M/c^2` pins down a specific,
+falsifiable calibration target rather than leaving two free constants:
+
+```text
+chi_crit = c^2 / (2*alpha_g)
+```
+
+If a derived alpha_g does not produce this chi_crit (once chi_crit is
+independently derived from whatever makes C-309's v_max undefined),
+that is a real quantitative failure of this candidate, not something to
+re-tune away.
+
+**Honest limits:** this is conditional on A-115's own not-yet-derived
+exterior form, so it shows internal consistency between two already-
+written pieces, not a first-principles derivation of event-horizon
+scaling from the underlying field equation. It also assumes the
+exterior 1/r form extends up to the tear radius itself; A-106's own
+Derrick-theorem analysis (used elsewhere this session) shows a bound
+field profile is not simply its asymptotic far-field form near the
+localized structure, so this boundary assumption needs its own
+justification before this candidate can be trusted quantitatively.
+
+### Why only some AGN eject strongly (already implicit in E-530, made explicit)
+
+This does not need a new mechanism -- E-530's own hysteretic threshold
+model already answers it, once the connection is stated. The release
+state `h` switches on only when `U_C >= U_on` and off when `U_C <=
+U_off`. An object whose accretion supply (`P_cap`, `P_nu`) is too low,
+or too intermittent, to ever push `U_C` above `U_on` simply stays in
+`h=0`: continuous quiet accretion, no strong ejection -- not a
+different mechanism from an object that does eject, just a trajectory
+that never crosses the same threshold. A high-supply object crosses
+`U_on` repeatedly and cycles through release events.
+
+This reuses E-530's existing math rather than proposing new mechanism,
+and it lines up with a real, independent observation this framework did
+not need to explain away: real AGN jet power is known (Gray) to
+correlate with accretion state and black-hole spin (e.g. the
+Blandford-Znajek mechanism), so a candidate follow-up is to identify
+`P_cap`'s dependence on rotation explicitly, rather than treating it as
+a free accretion-rate parameter alone.
+
+**Honest limits:** this explains the qualitative on/off structure, not
+a quantitative duty cycle. Mapping `U_on`, `U_off`, `P_cap` to real
+observables (accretion rate, spin, AGN population statistics) is
+untouched, and E-530's own unaccounted-sink problem (`lambda_C*U_C`,
+above) needs fixing before any of these thresholds can be trusted
+numerically.
+
 ---
 
 
@@ -255,20 +328,21 @@ compression and Mass Effect
   does not currently hold as written. See E-530's Yellow Audit; this
   must be fixed in the equations before any simulation of this chapter's
   Cosmic Loop is meaningful.
-- NOT YET ADDRESSED AT ALL: event-horizon scaling with mass/size. The
-  candidate black-hole condition above (`Delta_x`'s lattice-step
-  structure failing) says nothing about why observed event horizons
-  scale the way they do with mass, or what determines the size of the
-  affected region in this framework.
-- NOT YET ADDRESSED AT ALL: why only some active galactic nuclei produce
-  strong quasar-scale ejections while others (e.g. many with comparably
-  large central black holes) do not. The M^4=I closure is proposed as
-  the ejection mechanism in general, with no candidate variable
-  (rotation, accretion rate, boundary condition, surrounding
-  displacement) yet identified as what turns that closure on or off for
-  a given object. Both of these are required before this chapter's
-  model can be compared against real AGN population data, not optional
-  refinements.
+- RESOLVED IN PART: event-horizon scaling now has a candidate --
+  combining A-115's own required exterior limit with this chapter's
+  tear condition gives `R_tear = G*M_eff/(alpha_g*chi_crit)`, linear in
+  mass like the real Schwarzschild radius, with a specific calibration
+  target `chi_crit = c^2/(2*alpha_g)` rather than two free constants.
+  This is conditional on A-115's exterior form (itself not yet derived
+  from the field equation) and on the far-field profile extending to
+  the tear radius (not independently justified) -- see "Event-horizon
+  scaling" above.
+- RESOLVED IN PART: AGN ejection-selectivity is already implicit in
+  E-530's existing hysteresis (h switches on only above U_on) rather
+  than needing a new mechanism -- see "Why only some AGN eject
+  strongly" above. Still open: mapping U_on/U_off/P_cap to real
+  accretion-rate and spin observables, and E-530's own unaccounted-sink
+  problem needs fixing before these thresholds mean anything numerically.
 
 ## Future Work
 
@@ -278,9 +352,12 @@ compression and Mass Effect
 2. Calibrate a static redshift coefficient without image blurring or unexplained heating.
 3. Derive Return-Mode production and deposition coefficients.
 4. Map compact-reservoir parameters to quasar observations without reverse fitting.
-5. Derive a candidate relationship between event-horizon scaling and
-   this chapter's tear/convergence-point condition, rather than leaving
-   the size of the affected region unaddressed.
-6. Identify a candidate variable that distinguishes AGN that eject
-   strongly from those that do not, and state it as a testable
-   prediction before checking it against real AGN data -- not after.
+5. Derive chi(r) from A-115's underlying field equation (its own open
+   item) so the event-horizon scaling candidate above stops being
+   conditional on an unverified exterior form.
+6. Derive chi_crit independently (from whatever makes C-309's v_max
+   undefined) and check it against c^2/(2*alpha_g) -- a real
+   quantitative test this candidate can fail.
+7. Map P_cap's dependence on accretion rate and black-hole spin
+   explicitly, then compare the predicted eject/no-eject duty cycle
+   against real AGN population statistics.

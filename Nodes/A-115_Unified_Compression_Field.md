@@ -280,6 +280,9 @@ Mass Effect / displacement
 
 - derive \(\chi(r)\) from sources,
 - recover or replace the inverse-square limit,
+  (Book 5 Ch4 now depends on this exterior limit conditionally, for a
+  candidate event-horizon-scaling derivation -- deriving \(\chi(r)\)
+  properly would remove that dependency's conditional status),
 - derive the extended wake profile without fitting it by hand,
 - derive the four-interaction work metric, the actual gate-crossing path, the scale-free gate-to-mass ratio, and one explicit energy calibration route,
 - derive the E-528 propagation coefficient from field variables,
