@@ -44,6 +44,22 @@ SENSITIVE_PARTS = (
 )
 
 
+def _configured_roots() -> tuple[Path, ...]:
+    """Resolve the explicit work roots exported by the systemd installer."""
+    roots = [HOME]
+    for raw in os.environ.get("HIVE_PIPE_ALLOWED_ROOTS", "").split(os.pathsep):
+        raw = raw.strip()
+        if not raw:
+            continue
+        path = Path(raw).expanduser().resolve()
+        if path.is_dir():
+            roots.append(path)
+    return tuple(dict.fromkeys(roots))
+
+
+ALLOWED_ROOTS = _configured_roots()
+
+
 def _clip(text: str) -> tuple[str, bool]:
     raw = text.encode("utf-8", errors="replace")
     if len(raw) <= MAX_OUTPUT:
@@ -51,20 +67,23 @@ def _clip(text: str) -> tuple[str, bool]:
     return raw[:MAX_OUTPUT].decode("utf-8", errors="replace") + "\n[output clipped]\n", True
 
 
-def _inside_home(path: Path) -> bool:
-    try:
-        path.relative_to(HOME)
-        return True
-    except ValueError:
-        return False
+def _inside_allowed_root(path: Path) -> bool:
+    for root in ALLOWED_ROOTS:
+        try:
+            path.relative_to(root)
+            return True
+        except ValueError:
+            continue
+    return False
 
 
 def _validate_cwd(cwd: str | None) -> Path:
     target = REPO_ROOT if not cwd else Path(cwd).expanduser().resolve()
     if not target.is_dir():
         raise ValueError(f"cwd is not a directory: {target}")
-    if not _inside_home(target):
-        raise ValueError("cwd must stay inside the Jetson user's home directory")
+    if not _inside_allowed_root(target):
+        allowed = ", ".join(str(root) for root in ALLOWED_ROOTS)
+        raise ValueError(f"cwd must stay inside an authorized Jetson work root: {allowed}")
     return target
 
 

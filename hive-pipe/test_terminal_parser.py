@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+import tempfile
+from pathlib import Path
 import unittest
+from unittest import mock
 
 import terminal_parser
 
@@ -10,6 +13,21 @@ class TerminalParserTests(unittest.TestCase):
         result = terminal_parser.pwd()
         self.assertTrue(result["ok"])
         self.assertEqual(result["cwd"], str(terminal_parser.REPO_ROOT))
+
+    def test_explicit_external_root_is_allowed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (terminal_parser.HOME, root)):
+                result = terminal_parser.pwd(str(root))
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["cwd"], str(root))
+
+    def test_directory_outside_authorized_roots_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (terminal_parser.HOME,)):
+                with self.assertRaisesRegex(ValueError, "authorized Jetson work root"):
+                    terminal_parser.pwd(str(root))
 
     def test_which_finds_python(self):
         result = terminal_parser.which("python3")

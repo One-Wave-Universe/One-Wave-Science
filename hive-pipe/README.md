@@ -138,6 +138,27 @@ reverse tunnel. The same parser is used by GitHub -> Jetson, direct HTTPS
 clients, and connected MCP-capable AI clients. SSH remains the independent
 recovery path.
 
+## External drives
+
+The default terminal roots are the canonical checkout and
+`~/One-Wave-External-Work`. To authorize dedicated work directories on mounted
+external drives, reinstall with an explicit colon-separated list:
+
+```bash
+HIVE_PIPE_ALLOWED_ROOTS="/home/Scales/One-Wave-Science:/mnt/lattice:/mnt/sandbox" \
+  bash hive-pipe/install_gateway.sh
+```
+
+Only name the dedicated work directories, never a whole drive root. Each path
+must already exist and be writable by `Scales`. The installer accepts roots
+under the user's home, `/mnt`, `/media`, or `/run/media`; it refuses broad
+system roots. The same list is enforced twice: by the terminal parser and by
+the systemd `ReadWritePaths` sandbox. Raw-device, formatting, mounting, sudo,
+and power commands remain blocked.
+
+Use `inventory_block_devices` first to identify the two drives. Keep persistent
+lattice work and disposable experiments in separate authorized directories.
+
 ## External work
 
 See `External_Work/README.md` and `scripts/external_work_bridge.py` for the
