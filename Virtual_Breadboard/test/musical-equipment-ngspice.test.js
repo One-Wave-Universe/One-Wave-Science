@@ -114,7 +114,8 @@ function clipNetlist(vin, asymmetric = false) {
   ];
   if (asymmetric) lines.push('DN1 0 nneg DM', 'DN2 nneg out DM');
   else lines.push('DN 0 out DM');
-  lines.push(`.model DM D(IS=${CE.DIODE_IS} N=${CE.DIODE_N})`, '.temp 25', 'RGsrc src 0 1g', 'RGout out 0 1g', 'RGneg nneg 0 1g');
+  lines.push(`.model DM D(IS=${CE.DIODE_IS} N=${CE.DIODE_N})`, '.temp 25', 'RGsrc src 0 1g', 'RGout out 0 1g');
+  if (asymmetric) lines.push('RGneg nneg 0 1g');
   return lines.join('\n');
 }
 
@@ -179,19 +180,19 @@ for (const asymmetric of [false, true]) {
   }
 }
 
-// First-order tweeter crossover including the exact VBB capacitor ESR/leakage.
+// First-order tweeter crossover. Match VBB's real capacitor topology exactly:
+// source -> ESR -> ideal C -> tweeter, with leakage across the two external
+// capacitor terminals (source and tweeter), not a shunt capacitor to ground.
 {
   const cap = { id: 'CX', type: 'capacitor', value: 22e-6, a: 'src', b: 'tweet' };
   const elements = { wires: [], components: [
     { id: 'VIN', type: 'battery', value: 0, a: 'src', b: 'gnd' }, cap,
     { id: 'RT', type: 'resistor', value: 8, a: 'tweet', b: 'gnd' },
   ] };
-  const net = `V1 nsrc 0 AC 1\nRbat nsrc src ${CE.BATTERY_RINT}\nRESR src cx ${CE.capacitorESR(cap)}\nCX cx 0 22u\nRLEAK src 0 ${CE.capacitorLeakageR(cap)}\nRT tweet 0 8\nW1 cx tweet 0\nRG1 src 0 1g\nRG2 cx 0 1g\nRG3 tweet 0 1g`;
-  // ngspice has no W element for an ideal wire; use a 1 micro-ohm resistor.
-  const ngNet = net.replace('W1 cx tweet 0', 'RWIRE cx tweet 1u');
+  const net = `V1 nsrc 0 AC 1\nRbat nsrc src ${CE.BATTERY_RINT}\nRESR src cx ${CE.capacitorESR(cap)}\nCX cx tweet 22u\nRLEAK src tweet ${CE.capacitorLeakageR(cap)}\nRT tweet 0 8\nRG1 src 0 1g\nRG2 cx 0 1g\nRG3 tweet 0 1g`;
   for (const f of [100, 5000]) {
     compare(`tweeter-crossover-${f}Hz`, vbbMag(elements, f, 'tweet'),
-      ngAcScalar(ngNet, f, 'mag(v(tweet))', `xo_${f}`), 3e-3, 1e-3);
+      ngAcScalar(net, f, 'mag(v(tweet))', `xo_${f}`), 3e-3, 1e-3);
   }
 }
 
