@@ -1,14 +1,20 @@
 # Future tech playground
 
-Daydream / later-scale stories. **Not** CELL_V1. **Not** VBB stamps.
+Still **One-Wave-Science**. Play pages here. Physics and the cell stay next door.
 
-## Kitty Hawk
+## Science parent
 
-- `../GRAV/KITTY_HAWK.md` — hull field, off-hull sheath, SiC nerves, slip
-- `../GRAV/KITTY_HAWK_SKIN.md` — dust intake, rip emergency-only, white dump, dissipating defense
-- `../GRAV/KITTY_HAWK_CREW.md` — human + AI, punk vs control, no merge
-- `../GRAV/KITTY_HAWK_HIVE.md` — hive encounter, enter Void, cut rigid loops
-- `../GRAV/FIELD_TAP_SLIP_125.md` — tap, slip, 125 GeV as scale
-- `../GRAV/GRAVITY_MAGNETISM.md` — B / B_g rhyme
+- `../FIGURED.md`
+- `../MATH.md`
+- `../GRAV/FOUR_INTERACTIONS.md`
+- `../GRAV/ONE_WAVE_PHYSICS.md`
+- `../Virtual_Breadboard/LOCK.md`
 
-Rip shield stays emergency-only. Parallel flames. Cell lock stays `../Virtual_Breadboard/LOCK.md` and `../FIGURED.md`.
+## Ship (here)
+
+- `KITTY_HAWK.md`
+- `KITTY_HAWK_SKIN.md`
+- `KITTY_HAWK_CREW.md`
+- `KITTY_HAWK_HIVE.md`
+
+`GRAV/KITTY_HAWK.md` is a redirect only.
