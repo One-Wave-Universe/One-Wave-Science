@@ -1,0 +1,17 @@
+name: Jetson CERN Simple Sanity
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - '.github/workflows/jetson-cern-simple.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ACTIONS_OK
