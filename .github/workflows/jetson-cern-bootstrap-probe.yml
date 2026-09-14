@@ -1,0 +1,26 @@
+name: Jetson CERN Bootstrap Probe
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - '.github/workflows/jetson-cern-bootstrap-probe.yml'
+      - 'scripts/jetson_cern_probe_via_hive.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Probe Jetson through canonical Hive Pipe MCP
+        env:
+          JETSON_GATEWAY_URL: ${{ secrets.JETSON_GATEWAY_URL }}
+          JETSON_GATEWAY_TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+        run: python3 scripts/jetson_cern_probe_via_hive.py
