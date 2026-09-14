@@ -5,6 +5,7 @@ import unittest
 from gwosc_strain_wave import (
     analyze_segment,
     extract_centered_segment,
+    gwosc_sample_rate_hz,
     parse_gzipped_ascii_strain,
     select_strain_file,
 )
@@ -22,6 +23,12 @@ class GWOSCWaveTests(unittest.TestCase):
         self.assertAlmostEqual(receipt.strongest_bins[0]["frequency_Hz"], f0)
         self.assertGreater(receipt.strongest_bins[0]["psd_strain2_per_Hz"], 0.0)
         self.assertGreater(receipt.band_power_strain2, 0.0)
+
+    def test_gwosc_rate_labels_map_to_exact_rates(self):
+        self.assertEqual(gwosc_sample_rate_hz(4), 4096.0)
+        self.assertEqual(gwosc_sample_rate_hz(16), 16384.0)
+        with self.assertRaises(ValueError):
+            gwosc_sample_rate_hz(8)
 
     def test_ascii_parser_ignores_headers_and_preserves_values(self):
         text = "# strain\n% metadata\n1.0e-21\n-2.5e-22\n0\n"
