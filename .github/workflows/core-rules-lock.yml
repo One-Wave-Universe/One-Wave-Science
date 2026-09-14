@@ -1,4 +1,4 @@
-name: Core Rules Lock
+name: Core Rules And Math Backbone Lock
 
 on:
   pull_request:
@@ -10,32 +10,95 @@ permissions:
   contents: read
 
 jobs:
-  verify-core-rules-lock:
+  verify-core-and-math-locks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Verify locked core rules
+      - name: Verify byte-exact locked files
         shell: bash
         run: |
           set -euo pipefail
-          FILE="CORE_RULES_LOCK.md"
-          EXPECTED="570ded09d644a183cf6e5a35cc95b3c21ae7a97393716fe82e3c4c9d08771170"
 
-          if [[ ! -f "$FILE" ]]; then
-            echo "CORE RULES LOCK FAILURE: $FILE is missing."
-            exit 1
+          verify_hash() {
+            local file="$1"
+            local expected="$2"
+
+            if [[ ! -f "$file" ]]; then
+              echo "LOCK FAILURE: $file is missing."
+              exit 1
+            fi
+
+            local actual
+            actual="$(sha256sum "$file" | awk '{print $1}')"
+
+            if [[ "$actual" != "$expected" ]]; then
+              echo "LOCK FAILURE: $file changed."
+              echo "Expected: $expected"
+              echo "Actual:   $actual"
+              exit 1
+            fi
+
+            echo "$file verified: $actual"
+          }
+
+          verify_hash "CORE_RULES_LOCK.md" "a83135e31777564d9c4ed605673535d6b0269eefce453b3822fe4b105fa28801"
+          verify_hash "MATH_BACKBONE/00_MATH_BACKBONE_LOCK.md" "562a59079607145c6aa93a46acd74324a3bf25efe289f3123525f44444d5fc13"
+
+      - name: Require pre and post update record
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          set -euo pipefail
+
+          for marker in "CORE-RULES-PRE:" "MATH-BACKBONE:" "CORE-RULES-POST:"; do
+            if ! grep -Fq "$marker" <<<"$PR_BODY"; then
+              echo "UPDATE RECORD FAILURE: missing $marker"
+              exit 1
+            fi
+          done
+
+          echo "Pre-reference, math record, and post-check are present."
+
+      - name: Protect adopted core from ordinary edits
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "${{ github.base_ref }}"
+
+          BASE="origin/${{ github.base_ref }}"
+
+          if git cat-file -e "$BASE:CORE_RULES_LOCK.md" 2>/dev/null; then
+            if ! git diff --quiet "$BASE...HEAD" -- CORE_RULES_LOCK.md; then
+              echo "CORE RULES LOCK FAILURE: CORE_RULES_LOCK.md already exists on the base branch and cannot be changed by an ordinary PR."
+              exit 1
+            fi
           fi
 
-          ACTUAL="$(sha256sum "$FILE" | awk '{print $1}')"
+          echo "Core rules adoption/edit check passed."
 
-          if [[ "$ACTUAL" != "$EXPECTED" ]]; then
-            echo "CORE RULES LOCK FAILURE"
-            echo "Expected: $EXPECTED"
-            echo "Actual:   $ACTUAL"
-            echo "CORE_RULES_LOCK.md is immutable. Restore the canonical file exactly."
-            exit 1
-          fi
+      - name: Enforce append-only math backbone
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="origin/${{ github.base_ref }}"
 
-          echo "CORE_RULES_LOCK.md verified: $ACTUAL"
+          while IFS=$'\t' read -r status path rest; do
+            [[ -z "${status:-}" ]] && continue
+
+            if [[ "$status" != A* ]]; then
+              echo "MATH BACKBONE FAILURE: existing canonical math may not be modified, deleted, renamed, or replaced."
+              echo "Change: $status $path ${rest:-}"
+              echo "Add a new versioned math file instead."
+              exit 1
+            fi
+          done < <(git diff --name-status "$BASE...HEAD" -- MATH_BACKBONE/)
+
+          echo "Math backbone append-only check passed."
