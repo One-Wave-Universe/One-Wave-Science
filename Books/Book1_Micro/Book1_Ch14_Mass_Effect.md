@@ -13,6 +13,14 @@ C-311 Electric-Magnetic Duality, C-317 Boundary-Tension Weave, C-322 Mirror-Gate
 
 ---
 
+**Structural note (Books master chapter map, 2026-09):** this chapter
+has no 2D or 3D conceptual-interpretation section and no `Spine:`
+declaration line, unlike every other Book1/Book5/Book2 chapter
+(including Ch15, its closest sibling, which has full 2D/3D content
+despite similar header wording differences). It goes straight from
+Gray into technical derivation. Not filled in here -- see
+`Books/00_MASTER_CHAPTER_MAP.md`.
+
 ## Gray - Standard Physics Reference
 
 Established physics uses mass as the coefficient relating force and acceleration and uses relativistic rest-energy relations for energy bookkeeping. Particle physics also uses Higgs-field coupling language for elementary masses, while most measured proton mass is associated with strong-interaction energy.
