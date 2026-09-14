@@ -44,14 +44,7 @@ The strongest criticism is not "this sounds strange." The strongest criticism is
 
 A mathematical object can predict motion without proving that the mathematical representation is literally the thing doing the moving.
 
-Examples:
-
-- spacetime geometry in general relativity,
-- wavefunctions and Hilbert-space state vectors in quantum mechanics,
-- Feynman diagrams in perturbation theory,
-- probability amplitudes,
-- effective potentials,
-- coordinate systems and gauge choices.
+Examples include spacetime geometry, wavefunctions, state vectors, Feynman diagrams, probability amplitudes, effective potentials, coordinates, and gauge choices.
 
 The audit question is always:
 
@@ -71,90 +64,54 @@ Therefore this book audits **standard physics foundations around the Standard Mo
 
 1. **Measured Fact vs Mathematical Model vs Interpretation**
 2. **The Map Is Not Automatically the Mechanism**
-   - equations as representations
-   - coordinates and gauges
-   - geometry versus physical ontology
-   - model success versus ontological uniqueness
-3. **Parameters, Fits, Renormalization, and Effective Theories**
-4. **Probability Is Not Automatically Mechanism**
+3. **Parameters, Fits, Renormalization, Effective Theories, and Probability**
 
 ### Part II — Quantum Measurement and the Observer Myth
 
-5. **The Observer Effect: What the Detector Actually Does**
-6. **One Wave, Many Detector Locations**
-7. **Double Slit Without Mysticism**
-8. **Schrödinger's Cat: A Thought Experiment, Not a Dead-and-Alive Cat Claim**
-   - what Schrödinger was criticizing
-   - microscopic superposition versus macroscopic record
-   - decoherence and measurement
-   - why the cat story is not itself experimental evidence
-9. **Entanglement: Measured Correlation vs Interpretation**
-   - actual coincidence counts and correlations
-   - Bell/CHSH
-   - what locality assumptions are constrained
-   - what "spooky action" language adds and what it does not
-10. **Bell and the Limit of the Simple Shared-Phase Story**
-   - local hidden-variable bound
-   - quantum target
-   - preserved One-Wave sign-detector result S = 2
-   - what kind of field model would actually have to be derived
+4. **The Observer Effect: What the Detector Actually Does**
+5. **One Wave, Many Detector Locations**
+6. **Double Slit Without Mysticism**
+7. **Schrödinger's Cat: A Thought Experiment, Not a Dead-and-Alive Cat Claim**
+8. **Entanglement: Measured Correlation vs Interpretation**
+9. **Bell and the Limit of the Simple Shared-Phase Story**
 
 ### Part III — Particle Language and Field Reality
 
-11. **What Is Actually Detected When We Say 'Particle'?**
-12. **Virtual Particles: Calculation Tool or Literal Objects?**
-13. **Force Carriers and Exchange Language**
-14. **Mass, Higgs Coupling, and What 'Gives Mass' Really Means**
+10. **What Is Actually Detected When We Say 'Particle'?**
+11. **Virtual Particles: Calculation Tool or Literal Objects?**
+12. **Force Carriers and Exchange Language**
+13. **Mass, Higgs Coupling, and What 'Gives Mass' Really Means**
 
 ### Part IV — Quantum Formalism: Strong Math, Open Ontology
 
-15. **Wavefunction: State of Knowledge, Physical Field, or Calculation Object?**
-16. **Superposition: Equation vs Literal Story**
-17. **Collapse: Postulate, Effective Update, or Physical Process?**
-18. **Uncertainty: Measurement Disturbance vs State Structure**
+14. **Wavefunction: State of Knowledge, Physical Field, or Calculation Object?**
+15. **Superposition: Equation vs Literal Story**
+16. **Collapse: Postulate, Effective Update, or Physical Process?**
+17. **Uncertainty: Measurement Disturbance vs State Structure**
 
 ### Part V — Relativity and Dynamics
 
-19. **Does Geometry 'Tell Matter How to Move'?**
-   - geodesics and the metric
-   - Einstein field equation
-   - coordinate descriptions versus invariant observables
-   - curvature as mathematically inferred structure
-   - what is directly tested: clocks, orbits, lensing, redshift, waves
-   - where the slogan is useful and where it becomes ontology by metaphor
-
-20. **The Three-Body Problem: Unsolved Does Not Mean Unpredictable**
-   - deterministic equations
-   - no general elementary closed-form solution
-   - numerical integration
-   - chaos and sensitivity to initial conditions
-   - special solutions and stability regions
-   - distinction between mathematical difficulty and failure of the underlying laws
-
-21. **Orbital Mechanics: Prediction First, Mechanism Second**
-   - measured trajectories
-   - Newtonian and relativistic predictions
-   - perturbation theory
-   - resonance and precession
-   - One-Wave replacement requirements
+18. **Does Geometry 'Tell Matter How to Move'?**
+19. **The Three-Body Problem: Unsolved Does Not Mean Unpredictable**
+20. **Orbital Mechanics: Prediction First, Mechanism Second**
 
 ### Part VI — Cosmology Assumption Audit
 
-22. **Redshift: Observation First, Explanation Second**
-23. **Expansion: What Is Directly Observed and What Is Inferred?**
-24. **Dark Matter: Observational Need vs Ontological Claim**
-25. **Dark Energy: Parameterization vs Mechanism**
-26. **Black Holes: Observables vs Interior Story**
+21. **Redshift: Observation First, Explanation Second**
+22. **Expansion: What Is Directly Observed and What Is Inferred?**
+23. **Dark Matter: Observational Need vs Ontological Claim**
+24. **Dark Energy: Parameterization vs Mechanism**
+25. **Black Holes: Observables vs Interior Story**
 
 ### Part VII — One-Wave Challenge Chapters
 
-27. **Can One Consistent Field Replace the Particle-First Ontology?**
-28. **Can Detector Coupling Reproduce Born Statistics?**
-29. **Can One-Wave Reproduce Bell/CHSH Without Hiding the Assumption It Breaks?**
-30. **Can One-Wave Reproduce Three-Body and Orbital Dynamics From the Same Primitive?**
-31. **Can Redshift Be Derived Without Expansion and Still Pass All Major Observational Tests?**
-32. **Can Gravity, Inertia, Mass, and Lensing Come From One Displacement/Restoring Rule?**
-33. **What Would Falsify One-Wave?**
+26. **Can One Consistent Field Replace the Particle-First Ontology?**
+27. **Can Detector Coupling Reproduce Born Statistics?**
+28. **Can One-Wave Reproduce Bell/CHSH Without Hiding the Assumption It Breaks?**
+29. **Can One-Wave Reproduce Three-Body and Orbital Dynamics From the Same Primitive?**
+30. **Can Redshift Be Derived Without Expansion and Still Pass All Major Observational Tests?**
+31. **Can Gravity, Inertia, Mass, and Lensing Come From One Displacement/Restoring Rule?**
+32. **What Would Falsify One-Wave?**
 
 ## Mandatory chapter structure
 
@@ -173,15 +130,6 @@ Every chapter must use this order:
 11. Kill test
 12. PASS / FAIL / YELLOW / OPEN
 13. `CORE-RULES-POST`
-
-## Primary reference anchors
-
-- CERN — The Standard Model: https://home.cern/science/physics/standard-model/
-- Particle Data Group — Review of Particle Physics: https://pdg.lbl.gov/
-- Nobel Prize 2022 — Bell inequality experiments: https://www.nobelprize.org/prizes/physics/2022/
-- American Physical Society / Physical Review literature for measurement, decoherence, Bell tests, QFT, gravitation, orbital dynamics, and particle phenomenology.
-
-These references establish accepted theory and experimental targets. They do not validate One-Wave.
 
 ## Core thesis of the book
 
