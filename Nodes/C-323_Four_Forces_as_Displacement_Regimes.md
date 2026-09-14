@@ -16,7 +16,7 @@ metadata_standard: "I-06"
 
 **Dependencies**  
 Upstream: A-102 Displacement, A-105 Restoring Response, A-106 Pressure Response, A-115 Unified Compression Field, C-311 Electric-Magnetic Duality, C-318 Four-Interaction Mass-Effect Response, C-322 Mirror-Gate 125 GeV Boundary Response, E-532 Bound/Unbound + Finite Wake  
-Lateral: D-408 Sixfold Lattice, D-414 Four-Interaction Shell, D-415 Hexagonal Lattice Force Dynamics (bond *responses*)  
+Lateral: D-408 Sixfold Lattice, D-414 Four-Interaction Shell, D-417 Hexagonal Lattice Interaction Dynamics (bond *responses*)  
 Downstream: hexagonal interaction runs, wake profile derivation, residual spectrum
 
 ## Purpose
@@ -182,7 +182,7 @@ No row introduces a new substance. Every row is a limit or derivative of \(\math
 
 ## Required next work
 
-1. Discretize \(\sigma_{ij}\) on D-408 as bond **responses** (D-415 language, not forces).  
+1. Discretize \(\sigma_{ij}\) on D-408 as bond **responses** (D-417 language, not forces).  
 2. Derive \(g_{\rm wake}(r)\) from the field equation with coefficients fixed independently of any galaxy fit.  
 3. Close the A-115 / C-318 bridge from one stable four-interaction profile to both local Mass-Effect tensor and far-field gravity-source amplitude.  
 4. Lattice runs: single bound core, wake profile, opposite-orientation cancellation, high-curvature short residual, rear-compression migration — under D-412 discipline.

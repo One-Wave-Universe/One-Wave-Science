@@ -1,3 +1,14 @@
+---
+node_id: "G-727"
+canonical_name: "Two Choice, Three Move, and Recursive Point–Path–Field"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-727 — Two Choice, Three Move, and Recursive Point–Path–Field
 
 **Status:** YELLOW finite logic / proposed dynamics  

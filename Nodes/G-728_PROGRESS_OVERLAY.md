@@ -1,3 +1,12 @@
+---
+artifact_id: "G-728_PROGRESS_OVERLAY"
+parent_node_id: "G-728"
+title: "G-728 progress overlay (2026-09-05)"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE"
+metadata_standard: "I-06"
+---
+
 # G-728 progress overlay (2026-09-05)
 
 Read this with `G-728_Mathematics_Attack_Laundry_List.md`. Boxes on the laundry list that still show empty are superseded here when named.

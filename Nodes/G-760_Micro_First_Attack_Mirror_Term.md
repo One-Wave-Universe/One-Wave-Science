@@ -1,7 +1,12 @@
 ---
-id: G-760
-title: Micro first attack — Mirror term on the seven-cell
-status: yellow
+node_id: "G-760"
+canonical_name: "Micro first attack — Mirror term on the seven-cell"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow"
+metadata_standard: "I-06"
 ---
 
 # G-760 — Attack the Mirror term first

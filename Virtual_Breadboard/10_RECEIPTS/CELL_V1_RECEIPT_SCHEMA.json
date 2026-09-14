@@ -1,0 +1,19 @@
+{
+  "schema": "cell-v1-receipt/1",
+  "dc_left_positive": 0.0,
+  "dc_right_negative": 0.0,
+  "virtual_ground_middle": 0.0,
+  "i_virtual_ground": 0.0,
+  "ac_phase_left": 0.0,
+  "ac_phase_right": 0.0,
+  "rc_integrated_differential": 0.0,
+  "gate_plus": "hold",
+  "gate_center": "hold",
+  "gate_minus": "hold",
+  "ternary_resolution": 0,
+  "magnetic_hold_direction": 0,
+  "return_target": "controller_rail_origin",
+  "v_g_far_minus_v_g_home": 0.0,
+  "thermal_ok": true,
+  "pass": false
+}

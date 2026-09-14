@@ -1,6 +1,10 @@
 ---
-id: G-728-E1-STAMP
-title: Official E1 split stamp
+artifact_id: "G-728-E1-STAMP"
+parent_node_id: "G-728"
+title: "Official E1 split stamp"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE"
+metadata_standard: "I-06"
 ---
 
 # G-728 E1 stamp (2026-09-05)

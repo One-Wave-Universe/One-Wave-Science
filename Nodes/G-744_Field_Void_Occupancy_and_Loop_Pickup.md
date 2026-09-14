@@ -1,9 +1,10 @@
 ---
-id: G-744
-title: Field-Void Occupancy, Five Lifecycle Verbs, and Loop Pickup
-status: yellow-domain-wrapper
-tier: yellow
-claim_boundary: domain vocabulary over Updated 43 / G-742 / G-740; not an invariant-kernel change
+artifact_id: "G-744"
+parent_node_id: "G-744"
+title: "Field-Void Occupancy, Five Lifecycle Verbs, and Loop Pickup"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE"
+metadata_standard: "I-06"
 ---
 
 # G-744 — Field-Void Occupancy and Loop Pickup

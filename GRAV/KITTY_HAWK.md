@@ -1,0 +1,4 @@
+# Moved
+
+Ship pages live in `../FUTURE_TECH_PLAYGROUND/`.
+This folder stays science: `ONE_WAVE_PHYSICS.md` `FOUR_INTERACTIONS.md` `GLUONIC_SURFACE_TENSION.md` `QCD_BAG_PRESSURE.md` `GRAVITY_MAGNETISM.md` `FIELD_TAP_SLIP_125.md`.

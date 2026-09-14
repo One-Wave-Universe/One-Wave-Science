@@ -1,7 +1,12 @@
 ---
-id: G-758
-title: Nudged elastic band between seven-cell wells
-status: yellow
+node_id: "G-758"
+canonical_name: "Nudged elastic band between seven-cell wells"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "yellow"
+metadata_standard: "I-06"
 ---
 
 # G-758 — NEB

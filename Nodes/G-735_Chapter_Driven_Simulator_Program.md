@@ -1,3 +1,14 @@
+---
+node_id: "G-735"
+canonical_name: "Chapter-Driven Simulator Program"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-735 — Chapter-Driven Simulator Program
 
 **Status:** Active implementation authority  

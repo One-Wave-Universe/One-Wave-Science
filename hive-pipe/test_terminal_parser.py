@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+import tempfile
+from pathlib import Path
 import unittest
+from unittest import mock
 
 import terminal_parser
 
@@ -10,6 +13,21 @@ class TerminalParserTests(unittest.TestCase):
         result = terminal_parser.pwd()
         self.assertTrue(result["ok"])
         self.assertEqual(result["cwd"], str(terminal_parser.REPO_ROOT))
+
+    def test_explicit_external_root_is_allowed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (terminal_parser.HOME, root)):
+                result = terminal_parser.pwd(str(root))
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["cwd"], str(root))
+
+    def test_directory_outside_authorized_roots_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (terminal_parser.HOME,)):
+                with self.assertRaisesRegex(ValueError, "authorized Jetson work root"):
+                    terminal_parser.pwd(str(root))
 
     def test_which_finds_python(self):
         result = terminal_parser.which("python3")
@@ -29,14 +47,16 @@ class TerminalParserTests(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertNotEqual(result["exit_code"], 0)
 
-    def test_blocks_privilege_and_raw_disk_commands(self):
+    def test_blocks_direct_privilege_and_raw_disk_commands(self):
         for argv in (["sudo", "id"], ["mkfs.ext4", "/dev/sdz"], ["reboot"]):
             with self.assertRaises(ValueError):
                 terminal_parser.run(argv)
 
-    def test_blocks_shell_command_strings(self):
-        with self.assertRaises(ValueError):
-            terminal_parser.run(["bash", "-lc", "id"])
+    def test_allows_shell_wrappers_used_by_ai_clients(self):
+        result = terminal_parser.run(["bash", "-lc", "printf PERPLEXITY_SHELL_OK"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["stdout"], "PERPLEXITY_SHELL_OK")
+        self.assertEqual(result["exit_code"], 0)
 
 
 if __name__ == "__main__":

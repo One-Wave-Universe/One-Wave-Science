@@ -24,6 +24,7 @@ jobs:
         run: |
           bash -n hive-pipe/agent.sh
           bash -n hive-pipe/install_gateway.sh
+          bash -n hive-pipe/create_client_token.sh
       - name: Python syntax
         run: |
           python3 -m py_compile \
@@ -32,3 +33,8 @@ jobs:
             hive-pipe/terminal_parser.py
       - name: Hive Pipe tests
         run: python3 -m unittest discover -s hive-pipe -p 'test_*.py' -v
+      - name: Perplexity first-class client config
+        run: |
+          grep -q 'codex claude gemini perplexity' hive-pipe/install_gateway.sh
+          grep -q 'X-API-Key' hive-pipe/gateway.py
+          grep -q 'PERPLEXITY_SHELL_OK' hive-pipe/test_terminal_parser.py

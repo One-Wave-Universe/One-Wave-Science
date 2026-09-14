@@ -1,8 +1,12 @@
 ---
-id: G-746
-title: E1 Scalar Dual Problem and Matrix Handoff
-status: split-gate
-claim_boundary: GREEN only for the assumed scalar PDE; YELLOW for lattice identity, matrix physics, and E5
+node_id: "G-746"
+canonical_name: "E1 Scalar Dual Problem and Matrix Handoff"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "GREEN only for the assumed scalar PDE; YELLOW for lattice identity, matrix physics, and E5"
+metadata_standard: "I-06"
 ---
 
 # G-746 / E1 — Scalar Dual Problem

@@ -1,3 +1,14 @@
+---
+node_id: "G-732"
+canonical_name: "Vortex Trial-Profile Diagnostic Repair"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-732 — Vortex Trial-Profile Diagnostic Repair
 
 **Status:** YELLOW diagnostics / stationary bound mode open  

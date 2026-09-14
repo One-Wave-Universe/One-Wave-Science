@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**  
 Upstream: A-116 Three-Dimensional Spherical Default, A-117 Dimensional Integrity, D-408 Sixfold 2D Lattice, D-411 Mirrored Axis Pairs, D-412 Lattice Simulation Standard, C-317 Boundary-Tension Weave  
-Downstream: bounded-excitation simulation, Vortex-Phase simulation, Three-Vortex-Knot simulation, electrical-shell simulation, Mass-Effect response simulation
+Downstream: C-319 Magnetic Lattice Reorganization, C-320 Magnetic-Compression Path Coupling, D-416 Planetary Rotation-Magnetic Coupling Test Matrix, bounded-excitation simulation, Vortex-Phase simulation, Three-Vortex-Knot simulation, electrical-shell simulation, Mass-Effect response simulation
 
 ## Definition
 
@@ -94,6 +94,22 @@ where candidate meanings include:
 
 The exact physical update law remains to be derived and tested. These variables are a simulation interface, not proof of mechanism.
 
+## Magnetic-Reorganization and Gravity Handoff
+
+D-409 is the required native-dimensional geometry for C-319 and C-320 once their planar controls are complete.
+
+C-319 may attach a directional reorganization state to the twelve-neighbor shell. C-320 may then test whether that reorganized accessibility changes the expression of an A-115 compression gradient. Neither node may discard out-of-plane routes and then claim a planetary result from a flat slice.
+
+The locked cross-node route is:
+
+```text
+C-311 magnetic rotational projection
+-> C-319 directional reorganization on D-409 geometry
+-> C-320 path-weighted A-115 restoring response
+-> C-306/C-307 torque and angular accounting
+-> D-416 planetary test matrix
+```
+
 ## Required 3D Behaviors
 
 The 3D lattice must be capable of displaying and measuring:
@@ -106,7 +122,8 @@ The 3D lattice must be capable of displaying and measuring:
 - Boundary-Tension Weave strain,
 - Mirror-Gate approach and crossing,
 - translation by sequential displacement and reconstruction,
-- front compression, side transfer, and rear recovery.
+- front compression, side transfer, and rear recovery,
+- directional path reorganization and recovery under C-319 controls.
 
 ## Relation to Flower-of-Life and Metatron Views
 
@@ -129,7 +146,9 @@ A proton candidate requires one continuous volumetric bounded excitation contain
 5. localized bounded-excitation formation;
 6. perturbation recovery;
 7. FCC versus HCP stacking comparison;
-8. 2D slice/projection comparison with measured information loss.
+8. 2D slice/projection comparison with measured information loss;
+9. C-319 magnetic-reorganization ON/OFF and rotate-field controls;
+10. C-320 baseline-accessibility recovery test `K_L -> I`.
 
 ## Failure / Falsification
 
@@ -137,4 +156,5 @@ The close-packed candidate fails if:
 
 - another 3D coordination produces demonstrably better isotropy and stable recurrence under the same laws;
 - twelvefold local coordination cannot preserve bounded modes without imposed hard walls;
-- the claimed 2D/3D correspondence cannot be defined without losing the quantities used by the physical interpretation.
+- the claimed 2D/3D correspondence cannot be defined without losing the quantities used by the physical interpretation;
+- C-319/C-320 require a preferred hidden 2D plane to generate their claimed effect.

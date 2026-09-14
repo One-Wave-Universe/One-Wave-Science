@@ -78,7 +78,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-205 | Mirror | The flip operation between Expression and Compression states. | GREEN |
 | B-206 | Paired Loop | Reciprocal exchange between two systems alternating Expression/Compression while sharing state. | GREEN |
 | B-206a | Shared Boundary | The common reference interface between paired regions. | YELLOW |
-| B-206b | Four Views | The four directional relationships (Inward/Outward/Across/Over) of a field mode at its boundary — perspectives, not separate forces. | YELLOW |
+| B-206b | Four Views — Direction, Phase, Strength, Reference | Four descriptive readout modes available to Mirror-gate evaluation; they are not four Mirror gates and do not change the six-gate count. | YELLOW |
 | B-207 | Threshold State | Three-variable state `(q,a,p)` separating integrity, activation, and compressive/expressive polarity. | YELLOW |
 | B-208 | Threshold Windows | Separate provisional windows for activation, polarity, and integrity; low energy is not automatically break. | YELLOW |
 | B-209 | Break Condition | Integrity `q` falls below a break boundary; activation alone cannot define break. | YELLOW |
@@ -98,7 +98,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
 | B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
 | B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
-### Appendix C — Applied Mechanics & Conflict-Resolution (20 active files)
+### Appendix C — Applied Mechanics & Conflict-Resolution (22 active files)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | C-301 | Mirror Gate | The physical location/scale/boundary condition where Mirror (B-205) operates. | GREEN |
@@ -119,9 +119,11 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-316 | Charge Sign and Direction Conflation | Ch11's internal wording conflict is corrected; signed pressure, gradient direction, and whole-mode phase are now separate quantities. | YELLOW |
 | C-317 | Boundary-Tension Weave | Continuous 3D surface/volume coupling binds Vortex Phases; Tension-Link excitations are weave modes and Knot Lock has the line-tension limit `E_neck=tau_T L`, `F_lock=tau_T`. | GREEN |
 | C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
+| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |
+| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
 | C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
-### Appendix D — Resonance, Modal & Dimensional Structure (15 nodes)
+### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
@@ -139,6 +141,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
 | D-414 | Four-Interaction Shell Simulation | Reduced visualization of four coupled micro-scale channels driven by real datasets as wave inputs; candidate geometry and couplings, not a universal four-interaction derivation. | YELLOW |
 | D-415 | Nonlocal Three-Excitation One-Field Bench | Runnable six-neighbor triangular-lattice bench evolving one globally connected nonlinear Field and measuring three extended excitations with origin-free relational receipts; candidate kernel and potential remain underived. | YELLOW |
+| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | GREEN |
 ### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -196,7 +199,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-708 | Persistence B | Interpretation that convergence (G-707) indicates successful balance. | YELLOW |
 | G-709 | Regulated-Response Balance | Regulated response under feedback — scaled, not absent or excessive. | GREEN |
 | G-710 | "Grow The Fuck Up" Gate | The transition from unregulated reaction to regulated response. | GREEN |
-| G-711 | Gate 7 | The review gate — Gates 1–6 build state, Gate 7 reviews it. | GREEN |
+| G-711 | Namika — Inter-System Relation (No Internal Gate 7) | A complete system has six internal gates; Namika names a higher-order relation between complete six-gate systems and is not an internal seventh gate. | YELLOW |
 | G-712 | Evaluation Mathematics | Formal mechanism for how E(Δₙ) produces a quantified signal (not yet derived). | YELLOW |
 | G-713 | Modulation Mathematics | Bounded cost-minimizing selection among Hold/Increase/Decrease/Redirect/Stabilize/Reject/Admit. | YELLOW |
 | G-714 | Decision Mathematics | Formal selection mechanism for Return vs. Break in the Threshold system. | YELLOW |
@@ -322,6 +325,8 @@ The old missing physics address I-09 is dissolved. Its intended content now has 
 | I-03 | Cross-Platform Packet Intake | Requires duplicate, lineage, and delta checks before evaluating incoming packet quality. |
 | I-04 | Scale Recurrence vs. Duplication | Prevents cross-scale instances from being flattened into same-scale duplicates. |
 | I-05 | Active Hypothesis vs. Quarantine | Keeps unproven but open One-Wave research active while separating it from verified claims and superseded source history. |
+| I-06 | Canonical Node Metadata and Alias Resolution | Defines the required YAML front-matter fields (node_id, gate, lifecycle, etc.) every canonical node and artifact must carry, and how legacy IDs resolve. |
+| I-07 | Gate Colors and Metals | Names the gate-color ladder and its ordering; see `GATE_COLORS.md`. |
 
 **Gate/color lifecycle (applies to every node at every tier):**
 Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internally proven math, not experimentally validated) → Bronze → Silver → Gold. Red is reserved exclusively for post-experiment outcomes.
@@ -440,3 +445,26 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 
 - I-01 Rule 16: no expansion of space in canonical One-Wave math.
 - I-01 Rule 17: use the terminology legend and 3D sphere-like default in One-Wave interpretation layers.
+
+<!-- AUTO-NODE-REGISTRY:START -->
+## Auto-synchronized canonical node registry supplement
+
+These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.
+
+| Node | Name | Definition / source | Gate |
+|---|---|---|---|
+| A-110a | Wave Equation Derivation | Foundation Extension. Source: `Nodes/A-110a_Wave_Equation_Derivation.md`. | YELLOW |
+| A-114a | Exact Dispersion Roots | Foundation Extension. Source: `Nodes/A-114a_Exact_Dispersion_Roots.md`. | YELLOW |
+| A-114b | Dispersion Trail — Next Ten Questions | Trail / Compare-to-Repo. Source: `Nodes/A-114b_Dispersion_Trail.md`. | YELLOW |
+| B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
+| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
+| B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
+| B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
+| B-228 | Compression Energy Chains | Analogy / Scale Bridge — not established biochemistry identity. Source: `Nodes/B-228_Compression_Energy_Chains.md`. | YELLOW |
+| B-229 | One Wave Biology | Reinterpretation / Simplification — not a replacement textbook. Source: `Nodes/B-229_One_Wave_Biology.md`. | YELLOW |
+| C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
+| C-324 | No Entanglement — Detector Map | Principle / Measurement Mathematics. Source: `Nodes/C-324_No_Entanglement_Detector_Map.md`. | YELLOW |
+| D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
+| E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
+| E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
+<!-- AUTO-NODE-REGISTRY:END -->

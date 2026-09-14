@@ -1,9 +1,12 @@
 ---
-id: G-745
-title: Zone-Edge 125 GeV Lattice-Constant Hypothesis
-status: yellow-hypothesis
-tier: yellow
-claim_boundary: unit conversion plus named assumptions; not a first-principles derivation of a_0; does not change C-322 or Mass Effect
+node_id: "G-745"
+canonical_name: "Zone-Edge 125 GeV Lattice-Constant Hypothesis"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "unit conversion plus named assumptions; not a first-principles derivation of a_0; does not change C-322 or Mass Effect"
+metadata_standard: "I-06"
 ---
 
 # G-745 — Zone-Edge 125 GeV to a_0 (Yellow, not derived)

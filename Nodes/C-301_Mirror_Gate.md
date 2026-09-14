@@ -2,10 +2,10 @@
 node_id: "C-301"
 canonical_name: "Mirror Gate"
 namespace: "NODE"
-gate: "YELLOW"
+gate: "GREEN"
 lifecycle: "ACTIVE"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "Implementation crossover is canonical; scale-specific physical origin remains open"
+claim_gate_detail: "Canonical role: three Mirror gates occupy three of the six primitive gate positions; the other three positions are Action gates"
 metadata_standard: "I-06"
 ---
 
@@ -13,85 +13,83 @@ metadata_standard: "I-06"
 
 ## Definition
 
-The Mirror Gate is the shared-reference crossover event/boundary between two opposed sides of one relational oscillator.
+A Mirror Gate is the read/compare/reflect gate of the shared-reference oscillator. It evaluates the opposed relation through the shared `(0)` reference and hands the resolved relation to the following Action gate.
 
-In the canonical state-machine notation:
-
-```text
-F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
-```
-
-- `/` means **one simultaneous mirrored pair state**. It is not a serial gate separator.
-- `-` means the **Mirror Gate crossover**: the opposed oscillations return toward their shared reference `(0)`, meet/cross, phase-shift, and emerge in the next alternating orientation.
-
-The engine begins from the shared middle/reference `-(0)+`, not from an isolated serial `F1` instruction.
-
-## Six Logical Pair Positions
-
-The invariant logical sequence is:
+The full primitive is not six Mirror crossovers. It is one six-gate cycle:
 
 ```text
-F1/V6
- -
-V5/F2
- -
-F3/V4
- -
-V3/F4
- -
-F5/V2
- -
-V1/F6
- -
-F1/V6 ...
+Mirror 1 -> Action 1 -> Mirror 2 -> Action 2 -> Mirror 3 -> Action 3 -> loop
 ```
 
-Dynamic orientation alternates:
+Therefore:
 
 ```text
-F/V -> V/F -> F/V -> V/F -> F/V -> V/F
+3 Mirror gates + 3 Action gates = 6 gates = 6 steps
 ```
 
-The twelve labels are the two sides of six coupled pair positions, not twelve independent serial instructions.
-
-## Current VTC Physical Interpretation
-
-The current hardware design uses **three physical Mirror Gates**, each traversed in two orientations/phases, to express the six logical pair positions.
+## Mapping to the six process steps
 
 ```text
-3 physical Mirror Gates x 2 orientations = 6 logical pair positions
+Gate 1  BEGIN = Mirror 1
+Gate 2  BUILD = Action 1
+Gate 3  HOLD  = Mirror 2
+Gate 4  BUILD = Action 2
+Gate 5  BREAK = Mirror 3
+Gate 6  LOOP  = Action 3
 ```
 
-This is an engineering interpretation to be validated by the VTC bench program; it is not claimed as a universal physical count at every scale.
+The step names and gate positions are the same six positions. They are not parallel six-count systems.
 
-## Local Crossover Sequence
+## Field/Void paired view
+
+The existing paired notation is retained as a view of those same positions:
 
 ```text
-mirrored peak/trough relation
- -> return toward local reference
- -> meet at (0)
- -> cross
- -> phase shift / handedness update
- -> next mirrored pair orientation
+BEGIN / Mirror 1 = F1/V6
+BUILD / Action 1 = V5/F2
+HOLD  / Mirror 2 = F3/V4
+BUILD / Action 2 = V3/F4
+BREAK / Mirror 3 = F5/V2
+LOOP  / Action 3 = V1/F6
 ```
 
-The new consequence can become the reference/input for the next relation.
+`/` means one simultaneous opposed Field/Void relation. The two sides are not separate serial gates.
 
-## Across and Over
+A Mirror gate may involve return toward the shared reference, comparison/crossover, and phase/orientation update as part of its read/reflect operation. That does **not** insert an extra Mirror gate between each of the six positions.
 
-From `B-206c`:
+## Local Mirror -> Action handoff
 
 ```text
-Across = establish/carry the relation through the shared reference/boundary.
-Over   = complete the crossover/phase shift and emerge in the next orientation.
+opposed relation arrives
+ -> Mirror gate reads relation against shared reference
+ -> mirror/reference resolution is produced
+ -> paired Action gate changes/carries the relation
+ -> resulting state becomes input to the next Mirror gate
 ```
 
-## Physical-Hardware Boundary
+This is the repeating primitive at all three Mirror/Action pairs.
 
-A VTC implementation may use linked opposed switching elements, magnetic coupling, differential sensing, or another physical mechanism. The Mirror Gate node defines the relational crossover; it does not assume one specific material implementation.
+## Physical-hardware boundary
 
-## Yellow Audit
+A VTC implementation may use linked opposed switching elements, magnetic coupling, differential sensing, or another physical mechanism. There are three primitive Mirror-gate roles in the six-gate cycle and three primitive Action-gate roles.
 
-- Slash/dash notation and crossover semantics are implementation-canonical.
-- The three-physical-gate VTC realization requires bench validation.
-- Claims that the same physical mechanism explains quantum, atomic, biological, collider, or cosmological behavior remain separate hypotheses and are not established by the compute architecture alone.
+Hardware may realize one gate role with multiple devices, phases, windings, or paths. Those implementation details do not multiply the logical gate count.
+
+## Relationship to views/actions vocabulary
+
+Higher routing layers may use vocabularies such as Direction/Phase/Strength/Reference or Inward/Outward/Across/Over. Those are descriptive views or action modes available **inside** a gate role. They are not four extra primitive Action gates and do not alter the six-gate count.
+
+## Anti-drift rule
+
+Reject any interpretation that says:
+
+- six steps plus six separate gates;
+- six Mirror gates between six step positions;
+- three Mirror gates used twice create six Mirror-gate positions;
+- route addresses or view/action labels add primitive gates.
+
+The canonical count is fixed:
+
+```text
+M1 -> A1 -> M2 -> A2 -> M3 -> A3 -> M1 ...
+```

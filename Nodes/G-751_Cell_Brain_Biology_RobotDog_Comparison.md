@@ -1,8 +1,12 @@
 ---
-id: G-751
-title: Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs
-status: yellow-comparison
-claim_boundary: mapping table only; does not change Updated 43/44 kernel; does not claim Spot/Unitree identity
+node_id: "G-751"
+canonical_name: "Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "mapping table only; does not change Updated 43/44 kernel; does not claim Spot/Unitree identity"
+metadata_standard: "I-06"
 ---
 
 # G-751 — Compare the builds, do not merge them

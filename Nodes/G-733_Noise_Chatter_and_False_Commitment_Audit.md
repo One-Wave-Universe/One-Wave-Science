@@ -1,3 +1,14 @@
+---
+node_id: "G-733"
+canonical_name: "Noise, Chatter, and False-Commitment Audit"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-733 — Noise, Chatter, and False-Commitment Audit
 
 **Status:** YELLOW deterministic audit / physical noise model open  

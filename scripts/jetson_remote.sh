@@ -5,17 +5,21 @@ usage() {
   cat <<'EOF'
 Usage:
   JETSON_GATEWAY_URL=https://... JETSON_GATEWAY_TOKEN=... \
-    scripts/jetson_remote.sh [--cwd PATH] [--timeout SECONDS] -- COMMAND...
+    scripts/jetson_remote.sh [--cwd PATH] [--timeout SECONDS] -- COMMAND ARG...
 
 Examples:
-  scripts/jetson_remote.sh -- 'uname -a'
-  scripts/jetson_remote.sh --cwd "$HOME/One-Wave-Science" -- 'git status --short'
+  scripts/jetson_remote.sh -- uname -a
+  scripts/jetson_remote.sh --cwd "$HOME/One-Wave-Science" -- git status --short
+  scripts/jetson_remote.sh --cwd "$HOME/One-Wave-External-Work" -- find . -maxdepth 2 -type f
 
 The URL/token may also be placed in:
   ~/.config/hive-pipe/remote.env
 with shell lines:
   export JETSON_GATEWAY_URL='https://...'
   export JETSON_GATEWAY_TOKEN='...'
+
+Arguments are sent as a structured argv array to Hive Pipe MCP terminal_run.
+No shell parsing, pipes, redirection, sudo, raw-disk formatting, or shell -c.
 EOF
 }
 
@@ -55,21 +59,25 @@ done
 : "${JETSON_GATEWAY_URL:?set JETSON_GATEWAY_URL}"
 : "${JETSON_GATEWAY_TOKEN:?set JETSON_GATEWAY_TOKEN}"
 
-COMMAND="$*"
-
-python3 - "$JETSON_GATEWAY_URL" "$JETSON_GATEWAY_TOKEN" "$CWD" "$TIMEOUT" "$COMMAND" <<'PY'
+python3 - "$JETSON_GATEWAY_URL" "$JETSON_GATEWAY_TOKEN" "$CWD" "$TIMEOUT" "$@" <<'PY'
 import json
 import sys
 import urllib.error
 import urllib.request
 
-url, token, cwd, timeout, command = sys.argv[1:]
-payload = {"command": command, "timeout": int(timeout)}
+url, token, cwd, timeout, *argv = sys.argv[1:]
+arguments = {"argv": argv, "timeout": int(timeout)}
 if cwd:
-    payload["cwd"] = cwd
+    arguments["cwd"] = cwd
+payload = {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {"name": "terminal_run", "arguments": arguments},
+}
 
 req = urllib.request.Request(
-    url.rstrip("/") + "/v1/exec",
+    url.rstrip("/") + "/mcp",
     data=json.dumps(payload).encode(),
     headers={
         "Authorization": "Bearer " + token,
@@ -78,14 +86,19 @@ req = urllib.request.Request(
     method="POST",
 )
 try:
-    with urllib.request.urlopen(req, timeout=int(timeout) + 15) as r:
-        result = json.load(r)
-except urllib.error.HTTPError as e:
-    body = e.read().decode("utf-8", errors="replace")
-    print(body, file=sys.stderr)
+    with urllib.request.urlopen(req, timeout=int(timeout) + 15) as response:
+        envelope = json.load(response)
+except urllib.error.HTTPError as exc:
+    print(exc.read().decode("utf-8", errors="replace"), file=sys.stderr)
     raise SystemExit(1)
 
+if "error" in envelope:
+    print(json.dumps(envelope["error"], indent=2), file=sys.stderr)
+    raise SystemExit(1)
+result = envelope.get("result", {}).get("structuredContent", {})
 sys.stdout.write(result.get("stdout", ""))
 sys.stderr.write(result.get("stderr", ""))
+if result.get("error"):
+    print(result["error"], file=sys.stderr)
 raise SystemExit(int(result.get("exit_code", 0 if result.get("ok") else 1)))
 PY

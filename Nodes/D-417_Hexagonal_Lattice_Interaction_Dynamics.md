@@ -1,5 +1,5 @@
 ---
-node_id: "D-415"
+node_id: "D-417"
 canonical_name: "Hexagonal Lattice Interaction Dynamics"
 namespace: "NODE"
 gate: "YELLOW"
@@ -9,14 +9,14 @@ claim_gate_detail: "YELLOW — discrete equations written from C-323 + D-408 + A
 metadata_standard: "I-06"
 ---
 
-# Node D-415: Hexagonal Lattice Interaction Dynamics
+# Node D-417: Hexagonal Lattice Interaction Dynamics
 
-**Former title:** Hexagonal Lattice Force Dynamics  
-**Reason for rename:** One-Wave has interactions and restoring responses, not forces.
+**Former file/id:** `D-415_Hexagonal_Lattice_Force_Dynamics.md`  
+**Reason for rename:** D-415 is already the canonical Nonlocal Three-Excitation One-Field Bench. This lattice-interaction node is retained as D-417 so both mechanisms have unique canonical IDs. The title also keeps One-Wave interaction/restoring-response language rather than force language.
 
 **Dependencies**  
 Upstream: D-408 Sixfold 2D Triangular-Hexagonal Lattice, C-323 Displacement Interaction Regimes, A-115 Unified Compression Field, E-532 Bound/Unbound + Finite Wake, E-531 Dual-Harmonic Propagation, A-105 Restoring Response, D-412 Lattice Simulation Standard  
-Lateral: D-413 Ground Lattice Orbital Restoring Simulation, D-414 Four-Interaction Shell  
+Lateral: D-413 Ground Lattice Orbital Restoring Simulation, D-414 Four-Interaction Shell, D-415 Nonlocal Three-Excitation One-Field Bench  
 Downstream: multi-core wake tests, core migration, residual spectrum runs
 
 ## Purpose

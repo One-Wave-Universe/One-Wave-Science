@@ -1,3 +1,14 @@
+---
+node_id: "G-731"
+canonical_name: "Ground, Center, and Coherent Hold Separation"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-731 — Ground, Center, and Coherent Hold Separation
 
 **Status:** YELLOW finite classifier / physical thresholds uncalibrated  

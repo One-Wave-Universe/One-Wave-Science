@@ -1,3 +1,14 @@
+---
+node_id: "G-736"
+canonical_name: "Standard Model Interpretation Overlay for Micro Simulators"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-736 — Standard Model Interpretation Overlay for Micro Simulators
 
 **Status:** YELLOW visualization contract / mechanism mapping open  

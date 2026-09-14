@@ -7,98 +7,26 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
 }
 cd "$ROOT"
 
-command -v python3 >/dev/null 2>&1 || {
-  echo "ERROR: python3 is required" >&2
-  exit 1
-}
-command -v systemctl >/dev/null 2>&1 || {
-  echo "ERROR: systemd/systemctl is required" >&2
-  exit 1
-}
-command -v curl >/dev/null 2>&1 || {
-  echo "ERROR: curl is required" >&2
+CANONICAL="$ROOT/hive-pipe/install_gateway.sh"
+[[ -f "$CANONICAL" ]] || {
+  echo "ERROR: missing canonical Hive Pipe installer: $CANONICAL" >&2
   exit 1
 }
 
+# Compatibility migration: PR #84 used ~/.config/hive-pipe/gateway.token.
+# Hive Pipe v3 uses per-client tokens. Preserve the old token as the Codex token
+# when possible so an existing GitHub/remote client does not suddenly lose access.
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hive-pipe"
-UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
-TOKEN_FILE="$CONFIG_DIR/gateway.token"
-SERVICE_FILE="$UNIT_DIR/hive-pipe-gateway.service"
-
-mkdir -p "$CONFIG_DIR" "$STATE_DIR" "$UNIT_DIR"
-chmod 700 "$CONFIG_DIR"
-
-if [[ ! -s "$TOKEN_FILE" ]]; then
-  python3 - <<'PY' > "$TOKEN_FILE"
-import secrets
-print(secrets.token_urlsafe(48))
-PY
-  chmod 600 "$TOKEN_FILE"
-  echo "Generated $TOKEN_FILE"
-else
-  chmod 600 "$TOKEN_FILE"
-  echo "Keeping existing token at $TOKEN_FILE"
+OLD_TOKEN="$CONFIG_DIR/gateway.token"
+CODEX_TOKEN="$CONFIG_DIR/tokens/codex.token"
+if [[ -s "$OLD_TOKEN" && ! -e "$CODEX_TOKEN" ]]; then
+  mkdir -p "$(dirname -- "$CODEX_TOKEN")"
+  chmod 700 "$CONFIG_DIR" "$(dirname -- "$CODEX_TOKEN")"
+  cp "$OLD_TOKEN" "$CODEX_TOKEN"
+  chmod 600 "$CODEX_TOKEN"
+  echo "Migrated existing gateway token to $CODEX_TOKEN"
 fi
 
-if [[ -f "$SERVICE_FILE" ]]; then
-  BACKUP="$SERVICE_FILE.bak.$(date +%Y%m%d-%H%M%S)"
-  cp -a "$SERVICE_FILE" "$BACKUP"
-  echo "Backed up existing unit to $BACKUP"
-fi
-
-PYTHON="$(command -v python3)"
-GATEWAY="$ROOT/scripts/jetson_gateway.py"
-
-cat > "$SERVICE_FILE" <<EOF
-[Unit]
-Description=One-Wave Jetson AI command gateway
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-WorkingDirectory=$ROOT
-ExecStart=$PYTHON $GATEWAY
-Restart=on-failure
-RestartSec=2
-Environment=PYTHONUNBUFFERED=1
-Environment=HIVE_GATEWAY_HOST=127.0.0.1
-Environment=HIVE_GATEWAY_PORT=8765
-NoNewPrivileges=yes
-PrivateTmp=yes
-
-[Install]
-WantedBy=default.target
-EOF
-
-systemctl --user daemon-reload
-systemctl --user enable hive-pipe-gateway.service >/dev/null
-systemctl --user restart hive-pipe-gateway.service
-
-for _ in $(seq 1 30); do
-  if curl -fsS http://127.0.0.1:8765/healthz >/dev/null 2>&1; then
-    break
-  fi
-  sleep 0.2
-done
-
-if ! curl -fsS http://127.0.0.1:8765/healthz; then
-  echo >&2
-  echo "ERROR: gateway did not become healthy" >&2
-  systemctl --user --no-pager --full status hive-pipe-gateway.service >&2 || true
-  exit 1
-fi
-
-echo
-echo "Gateway installed and healthy."
-echo "Bearer token stays OUTSIDE git:"
-echo "  $TOKEN_FILE"
-echo
-echo "To print it only when you intentionally need to configure a client:"
-echo "  cat '$TOKEN_FILE'"
-echo
-echo "Emergency stop:"
-echo "  touch '$CONFIG_DIR/DISABLED'"
-echo "Resume:"
-echo "  rm -f '$CONFIG_DIR/DISABLED'"
+echo "scripts/install_jetson_gateway.sh is now a compatibility entrypoint."
+echo "Canonical gateway: hive-pipe/install_gateway.sh (MCP terminal parser)."
+exec bash "$CANONICAL"

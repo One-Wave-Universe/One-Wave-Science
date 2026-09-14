@@ -1,3 +1,14 @@
+---
+node_id: "G-728"
+canonical_name: "Mathematics Attack Laundry List"
+namespace: "NODE"
+gate: "BROWN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-728 — Mathematics Attack Laundry List
 
 **Status:** Active execution queue  

@@ -1,3 +1,14 @@
+---
+node_id: "G-734"
+canonical_name: "Asymmetric Center-Origin Oscillator Reference"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-734 — Asymmetric Center-Origin Oscillator Reference
 
 **Status:** YELLOW dimensionless mechanics / Field derivation open  

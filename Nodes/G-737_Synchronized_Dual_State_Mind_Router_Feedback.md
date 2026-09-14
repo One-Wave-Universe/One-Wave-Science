@@ -1,9 +1,12 @@
 ---
-id: G-737
-title: Synchronized Dual-State Mind — Fast Router and Consequence Feedback
-status: proposed
-tier: green-hypothesis
-claim_boundary: computational architecture; not proof of consciousness or literal neuroanatomy
+node_id: "G-737"
+canonical_name: "Synchronized Dual-State Mind — Fast Router and Consequence Feedback"
+namespace: "NODE"
+gate: "GREEN"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "computational architecture; not proof of consciousness or literal neuroanatomy"
+metadata_standard: "I-06"
 ---
 
 # Node G-737: Synchronized Dual-State Mind

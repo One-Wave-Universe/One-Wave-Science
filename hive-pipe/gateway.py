@@ -172,7 +172,7 @@ def handle_mcp(payload: object) -> dict | None:
         return {"jsonrpc": "2.0", "id": request_id, "result": {
             "protocolVersion": MCP_PROTOCOL,
             "capabilities": {"tools": {"listChanged": False}},
-            "serverInfo": {"name": "one-wave-hive-pipe", "version": "3.0"},
+            "serverInfo": {"name": "one-wave-hive-pipe", "version": "3.1"},
         }}
     if method == "ping":
         return {"jsonrpc": "2.0", "id": request_id, "result": {}}
@@ -198,7 +198,7 @@ def handle_mcp(payload: object) -> dict | None:
 
 
 class GatewayHandler(BaseHTTPRequestHandler):
-    server_version = "HivePipe/3"
+    server_version = "HivePipe/3.1"
 
     def log_message(self, message: str, *args: object) -> None:
         print(f"{self.address_string()} - {message % args}", file=sys.stderr)
@@ -214,15 +214,29 @@ class GatewayHandler(BaseHTTPRequestHandler):
         if body:
             self.wfile.write(body)
 
+    def supplied_token(self) -> str:
+        """Accept common MCP/API-key auth forms without weakening token checks."""
+        authorization = self.headers.get("Authorization", "").strip()
+        for prefix in ("Bearer ", "ApiKey ", "API-Key "):
+            if authorization.lower().startswith(prefix.lower()):
+                return authorization[len(prefix):].strip()
+        for header_name in ("X-API-Key", "Api-Key"):
+            value = self.headers.get(header_name, "").strip()
+            if value:
+                return value
+        return ""
+
     def authenticated(self) -> bool:
-        header = self.headers.get("Authorization", "")
-        supplied = header[7:] if header.startswith("Bearer ") else ""
+        supplied = self.supplied_token()
         return bool(supplied) and any(hmac.compare_digest(supplied, token) for token in self.server.tokens)
 
     def require_auth(self) -> bool:
         if self.authenticated():
             return True
-        self.send_json(HTTPStatus.UNAUTHORIZED, {"error": "unauthorized"})
+        self.send_json(HTTPStatus.UNAUTHORIZED, {
+            "error": "unauthorized",
+            "accepted_auth": ["Authorization: Bearer", "X-API-Key", "Api-Key"],
+        })
         return False
 
     def read_payload(self) -> object:

@@ -1,3 +1,14 @@
+---
+node_id: "G-730"
+canonical_name: "History, Phase, and Hysteresis Commitment Map"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Legacy G-Series / Canonicalized Node"
+claim_gate_detail: "Metadata normalized conservatively; in-body evidence and limitations remain authoritative."
+metadata_standard: "I-06"
+---
+
 # G-730 — History, Phase, and Hysteresis Commitment Map
 
 **Status:** YELLOW control mathematics / semantics comparison open  

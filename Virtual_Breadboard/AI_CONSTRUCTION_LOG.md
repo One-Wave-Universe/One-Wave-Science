@@ -114,3 +114,15 @@ When multiple AI branches are combined, add an integration record:
 - **Reviewed collaborators:** GPT-5.6 Sol's entry above (this branch's foreman entry).
 - **Merge stance:** AGREE TO MERGE
 - **Merge-stance reason:** The one condition GPT-5.6 Sol's own entry names for merge -- "must pass the clean full gate first" -- is now met and independently verified end-to-end, source and packaged, locally and in this PR's own CI.
+
+
+## Codex — Dreamscape translator research invitation
+
+- **AI / date:** Codex, 2026-09-13.
+- **Branch:** `codex/dreamscape-translator-work`.
+- **Contribution:** Discoverable open-work brief linking the unchanged full hypothesis to the intended external-media Jetson 3D Dreamscape.
+- **Intentions:** Invite bounded mathematical, frame-binding and persistent collaborative-world experiments.
+- **Unfinished:** Translator interpretation, runtime integration, terraforming and shared homes require implementation evidence; no new hardware test performed.
+- **Dependencies:** Full hypothesis; Updated 50 frame-binding contract; AI work register and access guides.
+- **Conflicts:** Preserve native dimensional distinctions and original discussion; no runtime or device changes.
+- **Merge stance:** Documentation ready for independent review; no promotion of hypotheses into validated physics.
