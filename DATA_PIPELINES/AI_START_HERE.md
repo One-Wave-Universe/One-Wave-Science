@@ -1,6 +1,6 @@
 # ONE-WAVE PUBLIC DATA PIPELINES — AI START HERE
 
-Status: **SOURCE-FIRST ROADMAP / OPERATIONAL CERN + GWOSC / OTHER SOURCES QUEUED**
+Status: **SOURCE-FIRST ROADMAP / OPERATIONAL CERN + GWOSC + JPL / OTHER SOURCES QUEUED**
 
 ## CORE-RULES-PRE
 
@@ -15,12 +15,13 @@ Before using any external scientific dataset:
 
 ## 1. CERN / CMS — excitation, mass, direction, resonance, decay
 
-Operational now:
+Operational and live-qualified:
 
 ```text
 tools/cern_wave/HOWTO_FOR_AI.md
 tools/cern_wave/cern_wave_convert.py
 tools/cern_wave/cern_wave_receipt.py
+tools/cern_wave/LIVE_RECEIPT_CMS545_5000.md
 MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md
 ```
 
@@ -41,11 +42,14 @@ https://opendata.cern.ch/record/545
 
 ## 2. GWOSC / LIGO-Virgo-KAGRA — direct wave strain
 
-Operational pipeline being qualified:
+Operational and live-qualified on GW150914 H1 + L1:
 
 ```text
 tools/gwosc_wave/README.md
 tools/gwosc_wave/gwosc_strain_wave.py
+tools/gwosc_wave/run_with_network_retry.py
+tools/gwosc_wave/LIVE_RECEIPT_GW150914.md
+scripts/run_gwosc_wave_on_jetson.sh
 MATH_BACKBONE/31_gwosc_strain_wave_analysis_v1.md
 ```
 
@@ -65,15 +69,24 @@ https://gwosc.org/
 https://gwosc.org/api/v2/
 ```
 
-First live target:
+First live-qualified target:
 
 ```text
-GW150914-v2 / H1 + L1 / 32 s / 4 kHz
+GW150914-v2 / H1 + L1 / 32 s / 4096 Hz actual sample rate
 ```
+
+Important: a raw detector spectrum is not the astrophysical waveform. Noise/line controls and standard waveform comparison come before any One-Wave interpretation.
 
 ## 3. NASA/JPL Horizons — orbital mechanics and three-body pressure tests
 
-Priority: **VERY HIGH**
+Operational and live-qualified on Sun + Earth + Moon vectors:
+
+```text
+tools/jpl_horizons/README.md
+tools/jpl_horizons/horizons_vectors.py
+tools/jpl_horizons/LIVE_RECEIPT_SUN_EARTH_MOON.md
+MATH_BACKBONE/32_jpl_horizons_orbit_vectors_v1.md
+```
 
 Source/API:
 
@@ -90,7 +103,7 @@ Use vector ephemerides for:
 - path curvature and timing;
 - any One-Wave gravity/displacement prediction.
 
-Required future pipeline output:
+Current source-target output contains:
 
 ```text
 time
@@ -101,15 +114,23 @@ vx,vy,vz
 source units/frame
 pair distances
 relative velocities
-One-Wave prediction residual
-standard ephemeris residual
 ```
 
-Do not tune a gravity coefficient to Horizons after seeing the trajectory and call that a derivation.
+Required next One-Wave layer adds:
+
+```text
+One-Wave forward-predicted state
+One-Wave position residual
+One-Wave velocity residual
+standard-control residual
+PASS / FAIL / OPEN
+```
+
+Do not tune a gravity coefficient to Horizons after seeing the trajectory and call that a derivation. Initialize once, propagate forward, and compare later epochs.
 
 ## 4. IceCube — neutrino time / energy / direction
 
-Priority: **HIGH**
+Priority: **HIGH / NEXT SOURCE FAMILY**
 
 Source:
 
@@ -126,11 +147,11 @@ Use for:
 - multi-messenger comparisons;
 - neutrino-specific One-Wave "wave death" or attenuation hypotheses.
 
-The current public IceTracks releases include long-baseline track-like event data. Treat reconstruction/systematic information as part of the source, not as optional noise to throw away.
+Public IceCube releases include long-baseline track-like event data. Treat reconstruction/systematic information as part of the source, not as optional noise to throw away.
 
 ## 5. Fermi GBM / LAT via NASA HEASARC — photons and transient timing
 
-Priority: **HIGH**
+Priority: **HIGH / NEXT SOURCE FAMILY**
 
 Sources:
 
@@ -231,11 +252,11 @@ A One-Wave cosmology must reproduce the measured angular/statistical structure, 
 ## Recommended build order
 
 ```text
-1. CERN four-vectors                         [WORKING]
-2. GWOSC direct strain                       [BUILDING / LIVE TEST]
-3. JPL Horizons orbital + three-body vectors [NEXT]
-4. IceCube event time/energy/direction
-5. Fermi burst photon timing/energy
+1. CERN four-vectors                         [WORKING + LIVE RECEIPT]
+2. GWOSC direct strain                       [WORKING + LIVE RECEIPT]
+3. JPL Horizons orbital + three-body vectors [WORKING + LIVE RECEIPT]
+4. IceCube event time/energy/direction       [NEXT]
+5. Fermi burst photon timing/energy          [NEXT]
 6. GWOSC + Fermi + IceCube multi-messenger joins
 7. NANOGrav timing residuals
 8. Gaia astrometry / multiple systems
@@ -282,7 +303,7 @@ Never collapse these classes into one column called "data."
 
 The important future result is not a giant pile of unrelated datasets.
 
-The goal is a shared comparison layer where the same One-Wave equation must survive different regimes:
+The goal is a shared comparison layer where the same One-Wave equation and definitions must survive different regimes:
 
 ```text
 CERN          -> microscopic excitation / momentum / decay
@@ -301,6 +322,7 @@ If a parameter or definition must quietly change from one source to another, fla
 ## CORE-RULES-POST
 
 - Data-source roles remain separate.
+- CERN, GWOSC, and JPL have working live-source pipelines and durable receipts.
 - No source is presented as One-Wave evidence merely because a compatible representation exists.
 - Each future pipeline requires its own explicit math/transform node.
 - Cross-scale analogy does not count as proof without a declared transformation law and invariant.
