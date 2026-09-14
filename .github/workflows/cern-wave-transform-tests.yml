@@ -7,11 +7,13 @@ on:
     paths:
       - 'tools/cern_wave/**'
       - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
+      - 'MATH_BACKBONE/30A_cern_csv_rounding_interval_v1.md'
       - '.github/workflows/cern-wave-transform-tests.yml'
   pull_request:
     paths:
       - 'tools/cern_wave/**'
       - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
+      - 'MATH_BACKBONE/30A_cern_csv_rounding_interval_v1.md'
       - '.github/workflows/cern-wave-transform-tests.yml'
   workflow_dispatch:
 
@@ -50,7 +52,10 @@ jobs:
           assert summary['objects'] == 10000, summary
           assert summary['max_frequency_Hz'] > summary['min_frequency_Hz'] > 0, summary
           assert summary['max_de_broglie_wavelength_m'] > summary['min_de_broglie_wavelength_m'] > 0, summary
-          assert summary['max_abs_pair_mass_delta_GeV'] < 0.01, summary
+          assert summary['pair_rounding_inconsistent_objects'] == 0, summary
+          assert summary['max_pair_mass_rounding_gap_GeV'] == 0, summary
+          # Preserve the center-value discrepancy as a receipt; do not hide it.
+          assert summary['max_abs_pair_mass_delta_GeV'] > 0, summary
           print(json.dumps(summary, indent=2, sort_keys=True))
           PY
 
