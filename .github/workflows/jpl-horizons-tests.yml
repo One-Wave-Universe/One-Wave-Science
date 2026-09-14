@@ -1,0 +1,66 @@
+name: JPL Horizons Orbital Target Tests
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - 'tools/jpl_horizons/**'
+      - 'MATH_BACKBONE/32_jpl_horizons_orbit_vectors_v1.md'
+      - '.github/workflows/jpl-horizons-tests.yml'
+  pull_request:
+    paths:
+      - 'tools/jpl_horizons/**'
+      - 'MATH_BACKBONE/32_jpl_horizons_orbit_vectors_v1.md'
+      - '.github/workflows/jpl-horizons-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        env:
+          PYTHONPATH: tools/jpl_horizons
+        run: python3 -m unittest -v tools/jpl_horizons/test_horizons_vectors.py
+
+      - name: Live JPL Sun Earth Moon vectors
+        run: |
+          python3 tools/jpl_horizons/horizons_vectors.py \
+            --bodies 10,399,301 \
+            --center '500@0' \
+            --start 2026-09-01 \
+            --stop 2026-09-05 \
+            --step '1 d' \
+            --output /tmp/sun-earth-moon.json
+
+      - name: Validate orbital receipt
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('/tmp/sun-earth-moon.json').read_text())
+          assert len(r['bodies']) == 3, r
+          assert {b['body_id'] for b in r['bodies']} == {'10','399','301'}, r
+          assert all(len(b['rows']) >= 4 for b in r['bodies']), r
+          assert all(b['api_signature'].get('version') for b in r['bodies']), r
+          assert len(r['pairs']) == 3, r
+          pairs = {frozenset((p['body_a_name'], p['body_b_name'])): p for p in r['pairs']}
+          em = pairs[frozenset(('Earth','Moon'))]
+          es = pairs[frozenset(('Earth','Sun'))]
+          assert len(em['rows']) >= 4, em
+          assert len(es['rows']) >= 4, es
+          em_dist = [x['distance_km'] for x in em['rows']]
+          es_dist = [x['distance_km'] for x in es['rows']]
+          assert min(em_dist) > 300000 and max(em_dist) < 500000, em_dist
+          assert min(es_dist) > 1.3e8 and max(es_dist) < 1.7e8, es_dist
+          print('JPL_HORIZONS_TARGET_PASS')
+          print('Earth-Moon km range:', min(em_dist), max(em_dist))
+          print('Earth-Sun km range:', min(es_dist), max(es_dist))
+          PY
