@@ -18,11 +18,10 @@ import hashlib
 import json
 import math
 import pathlib
-import sys
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, asdict
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 USER_AGENT = "One-Wave-GWOSC-source-first/1.0"
 TRANSFORM_VERSION = "gwosc-strain-wave-v1"
@@ -52,13 +51,23 @@ def _request_bytes(url: str, timeout: int = 90) -> bytes:
         return response.read()
 
 
-def _request_json(url: str) -> Dict[str, object]:
-    return json.loads(_request_bytes(url).decode("utf-8"))
+def _request_json(url: str, timeout: int = 90) -> Dict[str, object]:
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as response:
+        raw = response.read()
+    try:
+        return json.loads(raw.decode("utf-8"))
+    except json.JSONDecodeError as exc:
+        preview = raw[:240].decode("utf-8", errors="replace").replace("\n", " ")
+        raise ValueError(f"GWOSC API did not return JSON for {url}: {preview!r}") from exc
 
 
 def _api_url(path: str, params: Optional[Dict[str, object]] = None) -> str:
     url = API_ROOT.rstrip("/") + "/" + path.lstrip("/")
-    query = {"format": "api"}
+    query = {"format": "json"}
     if params:
         query.update({k: v for k, v in params.items() if v is not None})
     return url + "?" + urllib.parse.urlencode(query)
@@ -78,7 +87,13 @@ def list_strain_files(event_version: str) -> List[Dict[str, object]]:
             raise ValueError("GWOSC strain-files response has no results list")
         rows.extend(x for x in page_rows if isinstance(x, dict))
         next_url = page.get("next")
-        url = str(next_url) if next_url else None
+        if next_url:
+            text = str(next_url)
+            if "format=api" in text:
+                text = text.replace("format=api", "format=json")
+            url = text
+        else:
+            url = None
     return rows
 
 
