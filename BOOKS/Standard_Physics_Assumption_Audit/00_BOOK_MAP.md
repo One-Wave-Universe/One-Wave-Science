@@ -51,142 +51,37 @@ Therefore this book audits **standard physics foundations around the Standard Mo
 ### Part I — How to Audit Physics Without Cheating
 
 1. **Measured Fact vs Mathematical Model vs Interpretation**
-   - operational definitions
-   - direct vs inferred quantities
-   - model-dependent reconstruction
-   - why a correct prediction does not automatically prove an ontology
-
 2. **Parameters, Fits, Renormalization, and Effective Theories**
-   - fitted parameters vs derived parameters
-   - what renormalization actually does
-   - where approximation enters
-   - legitimate parameter estimation vs reverse fitting
-
 3. **Probability Is Not Automatically Mechanism**
-   - distributions
-   - amplitudes
-   - Born probabilities
-   - statistical prediction vs physical explanation
 
 ### Part II — Quantum Measurement and the Observer Myth
 
 4. **The Observer Effect: What the Detector Actually Does**
-   - detector interaction vs conscious observer
-   - wave/apparatus coupling
-   - decoherence
-   - what collapse language means operationally
-   - what remains unresolved
-
 5. **One Wave, Many Detector Locations**
-   - spatially extended wave solutions
-   - interference before detection
-   - local detector coupling
-   - why multiple possible detector sites do not by themselves require consciousness
-   - what must still be derived to reproduce click statistics
-
 6. **Double Slit Without Mysticism**
-   - measured screen distribution
-   - field amplitude through two paths
-   - interference term
-   - which-way coupling
-   - decoherence
-   - One-Wave alternative and kill tests
-
 7. **Bell, Entanglement, and the Limit of the Simple Shared-Phase Story**
-   - Bell assumptions
-   - CHSH
-   - local hidden-variable bound
-   - quantum target
-   - preserved failed One-Wave sign-detector result S = 2
-   - what kind of field model would actually have to be derived
 
 ### Part III — Particle Language and Field Reality
 
 8. **What Is Actually Detected When We Say 'Particle'?**
-   - localized detector events
-   - tracks
-   - calorimeter deposits
-   - field excitations
-   - particle ontology vs operational event
-
 9. **Virtual Particles: Calculation Tool or Literal Objects?**
-   - perturbation theory
-   - internal lines
-   - gauge dependence
-   - where popular explanations over-literalize diagrams
-
 10. **Force Carriers and Exchange Language**
-    - what scattering amplitudes calculate
-    - where exchange-particle language is useful
-    - where it becomes metaphor
-
 11. **Mass, Higgs Coupling, and What 'Gives Mass' Really Means**
-    - Higgs mechanism
-    - fermion masses
-    - composite mass
-    - binding energy
-    - what remains unexplained by parameter values
 
 ### Part IV — Quantum Formalism: Strong Math, Open Ontology
 
 12. **Wavefunction: State of Knowledge, Physical Field, or Calculation Object?**
-    - interpretations
-    - empirical equivalence where applicable
-    - what experiments constrain
-
 13. **Superposition: Equation vs Literal Story**
-    - linear combinations
-    - interference
-    - eigenstates
-    - what is measured
-    - what cannot be dismissed without reproducing statistics
-
 14. **Collapse: Postulate, Effective Update, or Physical Process?**
-    - textbook projection
-    - decoherence
-    - measurement models
-    - unresolved measurement problem
-
 15. **Uncertainty: Measurement Disturbance vs State Structure**
-    - Robertson relation
-    - preparation uncertainty
-    - detector disturbance
-    - common myth corrections
 
 ### Part V — Cosmology Assumption Audit
 
 16. **Redshift: Observation First, Explanation Second**
-    - measured spectral shift
-    - Doppler, gravitational, cosmological interpretations
-    - required quantitative tests for alternatives
-
 17. **Expansion: What Is Directly Observed and What Is Inferred?**
-    - distance-redshift relation
-    - time dilation
-    - surface brightness
-    - CMB and BAO constraints
-    - no-expansion alternatives and kill tests
-
 18. **Dark Matter: Observational Need vs Ontological Claim**
-    - rotation curves
-    - lensing
-    - clusters
-    - structure formation
-    - modified-gravity / medium alternatives and their constraints
-
 19. **Dark Energy: Parameterization vs Mechanism**
-    - accelerated-expansion inference
-    - cosmological constant
-    - equation of state
-    - what is measured vs inferred
-
 20. **Black Holes: Observables vs Interior Story**
-    - orbital dynamics
-    - horizons
-    - accretion emission
-    - gravitational waves
-    - imaging
-    - what alternative lattice/propagation models would have to reproduce
 
 ### Part VI — One-Wave Challenge Chapters
 
