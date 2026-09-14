@@ -32,7 +32,10 @@ jobs:
 
       - name: Live GWOSC GW150914 H1 + L1 analysis
         run: |
-          python3 tools/gwosc_wave/gwosc_strain_wave.py \
+          python3 tools/gwosc_wave/run_with_network_retry.py \
+            --attempts 3 \
+            --base-delay 3 \
+            -- \
             --event-version GW150914-v2 \
             --detectors H1,L1 \
             --sample-rate-khz 4 \
