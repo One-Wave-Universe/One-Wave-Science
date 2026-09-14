@@ -26,6 +26,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 USER_AGENT = "One-Wave-GWOSC-source-first/1.0"
 TRANSFORM_VERSION = "gwosc-strain-wave-v1"
 API_ROOT = "https://gwosc.org/api/v2"
+GWOSC_SAMPLE_RATE_HZ = {4: 4096.0, 16: 16384.0}
 
 
 @dataclass
@@ -43,6 +44,13 @@ class SpectrumReceipt:
     band_power_strain2: float
     spectral_centroid_Hz: Optional[float]
     strongest_bins: List[Dict[str, float]]
+
+
+def gwosc_sample_rate_hz(label_kHz: int) -> float:
+    try:
+        return GWOSC_SAMPLE_RATE_HZ[int(label_kHz)]
+    except (KeyError, ValueError) as exc:
+        raise ValueError(f"unsupported GWOSC sample-rate label: {label_kHz!r} kHz") from exc
 
 
 def _request_bytes(url: str, timeout: int = 90) -> bytes:
@@ -282,7 +290,7 @@ def extract_centered_segment(
     n = int(round(window_seconds * sample_rate_Hz))
     if not _is_power_of_two(n):
         raise ValueError(
-            f"window_seconds * sample_rate must be an exact power of two; got {n} samples"
+            f"window_seconds * sample rate must be an exact power of two; got {n} samples"
         )
     center_index = int(round((center_gps - file_gps_start) * sample_rate_Hz))
     start = center_index - n // 2
@@ -319,7 +327,8 @@ def analyze_detector(
         (raw_dir / name).write_bytes(payload)
 
     samples = parse_gzipped_ascii_strain(payload)
-    sample_rate_Hz = float(int(row["sample_rate_kHz"]) * 1000)
+    label_kHz = int(row["sample_rate_kHz"])
+    sample_rate_Hz = gwosc_sample_rate_hz(label_kHz)
     file_start = float(row["gps_start"])
     segment, location = extract_centered_segment(
         samples,
@@ -344,6 +353,7 @@ def analyze_detector(
         "source_sha256": sha256,
         "source_gps_start": file_start,
         "source_duration_s": int(row["duration"]),
+        "source_sample_rate_label_kHz": label_kHz,
         "source_sample_rate_Hz": sample_rate_Hz,
         "source_samples_parsed": len(samples),
         "source_expected_samples": expected,
