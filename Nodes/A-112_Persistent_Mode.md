@@ -13,7 +13,15 @@ metadata_standard: "I-06"
 
 Dependencies:
 Upstream: A-111
-Downstream: A-112a Traveling Lattice Rupture; all object nodes in Books 1-6. Bridge node between foundation language and applied objects.
+Downstream: A-112a Traveling Lattice Rupture; all object nodes in Books
+1-6. Bridge node between foundation language and applied objects.
+CORRECTION (verified against the actual Books/ directory): only Book1
+(17 chapters), Book2 (1 chapter), and Book5 (5 chapters) currently have
+real chapter content. Book3_Medium and Book4_Large exist only as
+`00_Scope_and_Status` stub files with zero chapters, and there is no
+Book6 directory at all. "All object nodes in Books 1-6" overstates
+current coverage; the accurate statement is Books 1, 2, and 5, with 3
+and 4 scoped-but-unwritten and 6 not yet started.
 
 Definition:
 A Persistent Mode is a recursively stable non-ground-state pattern.
@@ -41,6 +49,18 @@ M(t) = integral W(x) * delta_psi(x,t) dx
 component specifically). The excitation is not "created" by, or
 identical to, its measurement — M(t) is a real sampling of a real,
 independently-persisting delta_psi.
+
+PRECISION NOTE (checked against E-525's actual text): E-525 defines its
+operator over the FULL field, R(t) = integral W(x)*psi(x,t) dx, not
+over delta_psi. Since psi = psi_0 + delta_psi, substituting gives
+R(t) = integral W(x)*psi_0(x,t) dx + M(t) -- so M(t) equals E-525's R(t)
+only if the background term integral W(x)*psi_0 dx vanishes or is
+separately subtracted (e.g. by calibrating the detector against Ground
+before the excitation arrives). Neither this node nor E-525 states that
+assumption. Calling M(t) a direct use of "E-525's real operator" is
+therefore imprecise: it is a background-subtracted adaptation of it,
+requiring one additional, currently unstated step, not a plain
+substitution.
 
 A Persistent Mode is a repeatable excitation pattern that must keep
 re-satisfying its own stability criterion. Persistence describes the
@@ -78,6 +98,11 @@ Yellow Audit:
 - Persistence timescale not specified
 - Failure conditions not yet formalized
 - Bridge to books: all downstream objects depend on this node being resolved
+- "Books 1-6" overstated actual coverage (corrected above to 1, 2, 5;
+  3/4 are scope-only stubs, 6 does not exist)
+- M(t)'s claimed direct use of E-525's operator requires an unstated
+  background-subtraction assumption (corrected above); the background
+  term's vanishing/subtraction is not derived or justified anywhere yet
 
 Future Work:
 Construct recursive update rule. Seed initial mode. Iterate over increasing time.

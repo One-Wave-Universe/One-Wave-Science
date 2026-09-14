@@ -77,5 +77,10 @@ a specific sensor) rather than leaving it fully general.
 Connect R(t) to an actual measured quantity (voltage, energy) via
 E-518's energy density, closing the gap between this abstract operator
 and something a real Wave Reader (C-315) could output.
+A-112 adapts this operator to sample delta_psi (the excitation)
+specifically rather than the full psi this node defines -- that adaptation
+is only valid if the background term `integral W(x)*psi_0 dx` vanishes
+or is separately subtracted, which neither node currently derives or
+states as an assumption. Resolve here or in A-112, not silently.
 
 ---
