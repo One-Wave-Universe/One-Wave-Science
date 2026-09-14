@@ -1,0 +1,85 @@
+name: Jetson CERN Bootstrap Probe
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - '.github/workflows/jetson-cern-bootstrap-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GATEWAY_URL: ${{ secrets.JETSON_GATEWAY_URL }}
+      GATEWAY_TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+    steps:
+      - name: Verify configured relay
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GATEWAY_URL" || { echo 'JETSON_GATEWAY_URL missing'; exit 1; }
+          test -n "$GATEWAY_TOKEN" || { echo 'JETSON_GATEWAY_TOKEN missing'; exit 1; }
+
+      - name: Probe Jetson through Hive Pipe MCP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, sys, urllib.request, urllib.error
+
+          command = r'''printf '=== JETSON CERN PROBE ===\n'
+hostname
+uname -m
+python3 --version
+git status --short --branch
+printf '%s\n' '--- command availability ---'
+for x in openclaw curl wget git python3 pip3; do
+  printf '%s=' "$x"
+  command -v "$x" || true
+done
+printf '%s\n' '--- CERN network test ---'
+python3 -c "import urllib.request; r=urllib.request.urlopen('https://opendata.cern.ch', timeout=15); print('cern_http_status=', r.status)"
+'''
+          payload = {
+              'jsonrpc': '2.0',
+              'id': 1,
+              'method': 'tools/call',
+              'params': {
+                  'name': 'terminal_run',
+                  'arguments': {
+                      'argv': ['bash', '-lc', command],
+                      'cwd': '/home/Scales/One-Wave-Science',
+                      'timeout': 60,
+                  },
+              },
+          }
+          req = urllib.request.Request(
+              os.environ['GATEWAY_URL'].rstrip('/') + '/mcp',
+              data=json.dumps(payload).encode(),
+              headers={
+                  'Authorization': 'Bearer ' + os.environ['GATEWAY_TOKEN'],
+                  'Content-Type': 'application/json',
+              },
+              method='POST',
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=75) as response:
+                  envelope = json.load(response)
+          except Exception as exc:
+              print('JETSON_RELAY_ERROR:', repr(exc), file=sys.stderr)
+              raise
+          if 'error' in envelope:
+              print(json.dumps(envelope['error'], indent=2), file=sys.stderr)
+              raise SystemExit(1)
+          result = envelope.get('result', {}).get('structuredContent', {})
+          sys.stdout.write(result.get('stdout', ''))
+          sys.stderr.write(result.get('stderr', ''))
+          print(f"\n[jetson exit={result.get('exit_code')} cwd={result.get('cwd')} duration_ms={result.get('duration_ms')}]")
+          raise SystemExit(int(result.get('exit_code', 0 if result.get('ok') else 1)))
+          PY
