@@ -1,0 +1,68 @@
+name: GWOSC Wave Pipeline Tests
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - 'tools/gwosc_wave/**'
+      - 'MATH_BACKBONE/31_gwosc_strain_wave_analysis_v1.md'
+      - '.github/workflows/gwosc-wave-tests.yml'
+  pull_request:
+    paths:
+      - 'tools/gwosc_wave/**'
+      - 'MATH_BACKBONE/31_gwosc_strain_wave_analysis_v1.md'
+      - '.github/workflows/gwosc-wave-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Synthetic/unit qualification
+        env:
+          PYTHONPATH: tools/gwosc_wave
+        run: python3 -m unittest -v tools/gwosc_wave/test_gwosc_strain_wave.py
+
+      - name: Live GWOSC GW150914 H1 + L1 analysis
+        run: |
+          python3 tools/gwosc_wave/gwosc_strain_wave.py \
+            --event-version GW150914-v2 \
+            --detectors H1,L1 \
+            --sample-rate-khz 4 \
+            --duration 32 \
+            --window-seconds 4 \
+            --band-min-hz 20 \
+            --band-max-hz 512 \
+            --top-bins 12 \
+            --output /tmp/gw150914-wave.json
+
+      - name: Validate live receipt
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('/tmp/gw150914-wave.json').read_text())
+          assert r['event_version'] == 'GW150914-v2', r
+          assert len(r['detectors']) == 2, r
+          assert {d['detector'] for d in r['detectors']} == {'H1', 'L1'}, r
+          for d in r['detectors']:
+              assert d['source_sample_count_matches_metadata'] is True, d
+              a = d['analysis']
+              assert a['n_samples'] == 16384, a
+              assert abs(a['df_Hz'] - 0.25) < 1e-12, a
+              assert a['rms_strain'] > 0, a
+              assert a['peak_abs_strain'] > 0, a
+              assert a['band_power_strain2'] > 0, a
+              assert 20 <= a['spectral_centroid_Hz'] <= 512, a
+              assert len(a['strongest_bins']) == 12, a
+              assert all(20 <= x['frequency_Hz'] <= 512 for x in a['strongest_bins']), a
+          print('GWOSC_TRANSFORM_PASS')
+          print(json.dumps(r, indent=2, sort_keys=True))
+          PY
