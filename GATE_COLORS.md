@@ -1,27 +1,35 @@
-# Gate colors (One Wave, this repo)
+# Gates and metals (One Wave)
 
-These colors are **not** traffic-light proven/unproven.
+Not a traffic light. Not “proven / unproven” as green / yellow.
 
-## GREEN
+## Dirt and growth
 
-**Room for growth.**
-The loop may expand. More scale, more cells, more questions.
-Green does not mean experimentally proven. Green means the path is open.
+**BROWN** — seeds in the dirt. An idea planted. No road yet.
 
-## YELLOW
+**GREEN** — room for growth. The seed may expand. Open path. Not a proof.
 
-**Yellow brick road.**
-Here is the math and the One Wave assumptions.
-Not experimentally proven.
-You can walk the road. You cannot claim the city at the end is measured.
+**GREY** — Standard Model blockage. Real wall. Not invincible. You go around, through, or you wait. Grey is not God.
 
-## What nothing is yet
+## The road
 
-**None of this science is verified as proven.**
-We are doing exploratory math and building logical assumptions.
-A node marked defined, a chapter, a Cell-0 spec — still assumption until a bench log or a named experiment actually returns.
+**YELLOW** — yellow brick road. Math plus One Wave assumptions. You can walk it. The city is not measured.
 
-Do not use GREEN to mean "true."
-Do not use YELLOW to mean "wrong."
+**Math alone stops here.** Algebra, nodes, derivations — yellow brick road.
 
-Older nodes that say `GREEN = Defined` are using a leftover ladder. Prefer this file.
+## Statue and road beyond
+
+**BRONZE BUST** — simulations plus extensive work. The face is formed. Still not the living city.
+
+**SILVER STATUE** — further hardening. Simulations and long work *might* reach silver. Not promised by a pretty equation.
+
+**GOLDEN ROAD** — past statue. Not claimed from chat or from a PDF.
+
+## Honest ceiling right now
+
+Almost everything in this repo is **brown → green → yellow**, with **grey** sitting on official physics where we refuse to kneel.
+
+Cell-0 logs, long sims, repeated builds — those are how you *aim* at bronze. Nothing here is golden. Nothing here is proven.
+
+Do not use GREEN to mean true.
+Do not use YELLOW to mean junk.
+Do not use GREY to mean forbidden forever.
