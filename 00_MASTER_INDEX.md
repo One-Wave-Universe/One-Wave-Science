@@ -183,7 +183,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
 | F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
 | F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
-### Appendix G — Evaluation, Modulation & Governance (30 nodes)
+### Appendix G — Evaluation, Modulation & Governance (70+ nodes; count approximate due to the G-743/G-744 ID collisions noted below)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
 | G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
@@ -216,9 +216,52 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
 | G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
 | G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous CPU/GPU/NPU runtime allocation paired with a dual six-gate control scheme. | GREEN |
+| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Shared Build/Hold/Release grammar applied across domains, plus a coupled-mind (paired-agent) extension. | GREEN |
+| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld / Mega City | Programmed-city Dream Engine architecture; Homeworld as a rendered city, not the mind itself. | GREEN |
+| G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Finite logic for the 2-choice/3-move primitive recast as a recursive Point–Path–Field structure. | YELLOW |
+| G-728 | Mathematics Attack Laundry List | Active execution queue for outstanding math derivations; tasks inherit the gate of their own evidence. Includes supporting receipts `G-728_E1_STAMP.md` and `G-728_PROGRESS_OVERLAY.md` (same ID, not a collision — tracking artifacts for this one queue). | ACTIVE QUEUE |
+| G-729 | Mirror as Continuous Phase with Six-Route Projection | Mirror operator reframed as continuous phase with a six-route projection; physical carrier unresolved. | YELLOW |
+| G-730 | History, Phase, and Hysteresis Commitment Map | Commitment map combining history, phase, and hysteresis; semantics comparison against B-208 open. | YELLOW |
+| G-731 | Ground, Center, and Coherent Hold Separation | Separates Ground/Zero, dynamical center, and coherent-hold state as distinct variables. | YELLOW |
+| G-732 | Vortex Trial-Profile Diagnostic Repair | Diagnostic corrections to vortex trial-profile fitting; stationary bound mode still open. | YELLOW |
+| G-733 | Noise, Chatter, and False-Commitment Audit | Deterministic audit distinguishing real commitment from noise/chatter; physical noise model open. | YELLOW |
+| G-734 | Asymmetric Center-Origin Oscillator Reference | Dimensionless reference oscillator with an asymmetric center/origin; Field derivation open. | YELLOW |
+| G-735 | Chapter-Driven Simulator Program | Implementation authority requiring simulators to be driven by declared chapter content, not invented ad hoc. | ACTIVE |
+| G-736 | Standard Model Interpretation Overlay for Micro Simulators | Visualization contract overlaying Standard Model labels on micro simulators without claiming mechanism equivalence. | YELLOW |
+| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Proposed dual-state (fast router / consequence feedback) mind architecture. | PROPOSED |
+| G-738 | Center Geometry Classification and Receipt | Classifier and receipt schema for center geometry. | YELLOW |
+| G-739 | Six-Gate Trajectory Extraction | Extracts six-gate oscillator trajectories from trial data. | YELLOW |
+| G-740 | Field/Void Ternary and Quadratic Command Routing | Proposed build: ternary Field/Void state routed through quadratic command paths. | PROPOSED-BUILD |
+| G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Proposed physical experiment: balanced-rail nested-loop hardware. | PROPOSED-EXPERIMENT |
+| G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Proposed build: loop continuity without language dependency, plus a reconstructable language adapter. | PROPOSED-BUILD |
+| G-743 | PPF Schema and 2D Hex Graph Trail | Math trail formalizing the Point–Path–Field schema on a 2D hex graph. **ID COLLISION** — see note below. | YELLOW-MATH-TRAIL |
+| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Demonstrated quadrature rotating-field hardware for the views-up/actions-down primitive. **ID COLLISION** — see note below. | GREEN |
+| G-744 | Field/Void Occupancy, Five Lifecycle Verbs, and Loop Pickup | Domain wrapper combining Field/Void occupancy state with the five-verb lifecycle and loop-pickup resumption. **ID COLLISION** — see note below. | YELLOW-DOMAIN-WRAPPER |
+| G-744 | Literal One-Cell Breadboard Build — Real Parts and Math | A literal, real-parts single-cell breadboard build with accompanying math. **ID COLLISION** — see note below. | YELLOW |
+| G-745 | Zone-Edge 125 GeV Lattice-Constant Hypothesis | Unit-conversion candidate for a lattice constant from the 125 GeV Mirror-Gate anchor; not a derivation. | YELLOW-HYPOTHESIS |
+| G-746 | E1 Scalar Dual Problem and Matrix Handoff | Exact scalar damped dispersion formulas (GREEN) plus a matrix wrapper/physical closure (YELLOW). | SPLIT-GATE |
+| G-747 | Two Group-Velocity Zeros | Identifies two distinct group-velocity zero conditions in the damped dispersion relation. | SPLIT-GATE |
+| G-748 | Nested Hexagon Pyramids and Triangle Cube Hex | Geometric candidate for nested hexagonal pyramid / triangle-cube-hex packing. | YELLOW-GEOMETRY |
+| G-749 | C2 Point Rotation and Angular-Momentum Receipt | C2 point-rotation operator with an angular-momentum bookkeeping receipt. | SPLIT-GATE |
+| G-750 | Body-Rate Transport Mechanics | Parent/child body-rate composition formulas (audited and one test corrected this session). | SPLIT-GATE |
+| G-751 | Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs | Comparison map between primitive-cell/brain-cell abstractions, real biology, and layered robot-dog control. | YELLOW-COMPARISON |
+| G-752 | Triad Brain from Three Loops | Candidate brain architecture built from three coupled loops. | YELLOW-ARCHITECTURE |
+| G-753 | Brain versus 3:1 Three-Winding Nerve | Compares the triad-brain candidate against a 3:1 three-winding nerve control analogy. | YELLOW-ARCHITECTURE |
+| G-754 | Cell to Chip to Cube to Rubik to Two Rubiks | Scale-recursion candidate from single cell through chip/cube/Rubik's-cube-like state machines. | YELLOW-ARCHITECTURE |
+| G-755 | Ternary Is Virtual Ground and a Choice | Candidate lock: ternary state reinterpreted as virtual ground plus one choice bit. | YELLOW-LOCK-CANDIDATE |
+| G-756 | Build Contract Square-Away | Squares away the build contract terms used across the hardware-build nodes. | YELLOW-ARCHITECTURE |
+| G-757 | Discrete Four-Interaction Energy on the Seven-Cell | Discrete E4 energy functional on the D-408 seven-cell (two real numerical bugs fixed this session — see `One_Wave_Bench/micro/e4_seven_cell.py`). Includes supporting receipt `G-757_HESSIAN_RECEIPT.md` (same ID, not a collision). | YELLOW |
+| G-758 | Nudged Elastic Band Between Seven-Cell Wells | NEB saddle-point search between seven-cell energy wells; not yet converged. | YELLOW |
+| G-759 | Mass Effect as Four-Action Carry | Candidate bridge from C-318's four-interaction Mass Effect to a four-action carry description. | YELLOW-BRIDGE |
+| G-760 | Micro First Attack — Mirror Term on the Seven-Cell | First attack on realizing a Mirror term within the seven-cell energy functional. | YELLOW |
+| G-761 | Standard Model Assumptions versus One-Wave Node Equations | Direct confrontation of Standard Model assumptions against existing One-Wave node equations. | YELLOW-CONFRONTATION |
+| G-762 | Four Balanced Interactions | Candidate architecture requiring all four C-318 interactions to balance together. | YELLOW-ARCHITECTURE |
+| G-763 | Scalar, Differential, Vector, Tensor, Stratum, Harmonic | Terminology dictionary mapping One-Wave vocabulary onto standard mathematical-object classes. | YELLOW-DICTIONARY |
 | G-764 | External Parent-Scale Tidal Wake | One-way parent-scale (e.g. galaxy-on-solar-system) linear tidal channel, kept separate from internal-exchange candidates because an external source may add real net momentum; functional form only, tensor uncalibrated. | YELLOW |
 
-Note: `Nodes/` already contains G-724 through G-763 (mass-effect, mirror-term, Standard-Model-assumption, and harmonic work) that are not yet reflected as rows in this appendix. That backfill is unrelated to G-764 above and is tracked as open `repo/index-integrity` work (see `AI_FOREMAN_WORK_REGISTER.md` section 15), not resolved by this edit.
+**ID collisions found while backfilling (new finding, not previously tracked in `DUPLICATE_NAME_DISAMBIGUATION.md`, which covers shared terminology between distinct IDs, not literal ID reuse):** `G-743` and `G-744` each name two substantively different, unrelated node concepts — unlike `G-728`/`G-757`, where the second file is clearly a supporting receipt/tracking artifact for the same topic. See `DUPLICATE_NAME_DISAMBIGUATION.md` for the full entry. Not renamed here — renumbering either file risks breaking cross-references from other nodes/chapters that were not exhaustively traced in this pass; flagged for deliberate resolution instead.
+
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
