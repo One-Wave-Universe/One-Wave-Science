@@ -52,9 +52,23 @@ The audit question is always:
 
 The book must never confuse "the equation works" with "one particular story about what the equation means is uniquely proven."
 
+## AI access principle
+
+AI lowers the barrier to advanced formalization, symbolic work, simulation, and proof assistance. It does not lower the burden of proof.
+
+The leveling effect is:
+
+**more people can subject an idea to PhD-level mathematical scrutiny.**
+
+It is not:
+
+**any idea becomes valid once AI produces complicated equations for it.**
+
+See `01A_AI_Levels_The_Playing_Field_But_Does_Not_Replace_Validation.md`.
+
 ## Scope correction
 
-The phrase "Standard Model" is too narrow for several common claims this book needs to audit. The Standard Model is specifically the quantum field theory of the electromagnetic, weak, and strong interactions and associated matter fields. Measurement, collapse, decoherence, Bell inequalities, wavefunction interpretation, spacetime curvature, the three-body problem, and cosmological expansion belong partly or primarily to broader quantum foundations, classical mechanics, quantum field theory, general relativity, and cosmology.
+The phrase "Standard Model" is too narrow for several common claims this book needs to audit. The Standard Model is specifically the quantum field theory of the electromagnetic, weak, and strong interactions and associated matter fields. Measurement, collapse, decoherence, Bell inequalities, wavefunction interpretation, spacetime curvature, the three-body problem, string theory, and cosmological expansion belong partly or primarily to broader quantum foundations, classical mechanics, quantum field theory, general relativity, quantum gravity research, and cosmology.
 
 Therefore this book audits **standard physics foundations around the Standard Model**, while labeling which framework each claim actually belongs to.
 
@@ -63,6 +77,9 @@ Therefore this book audits **standard physics foundations around the Standard Mo
 ### Part I — How to Audit Physics Without Cheating
 
 1. **Measured Fact vs Mathematical Model vs Interpretation**
+
+**Interlude 1A — AI Levels the Playing Field, But Does Not Replace Validation**
+
 2. **The Map Is Not Automatically the Mechanism**
 3. **Parameters, Fits, Renormalization, Effective Theories, and Probability**
 
@@ -88,6 +105,14 @@ Therefore this book audits **standard physics foundations around the Standard Mo
 15. **Superposition: Equation vs Literal Story**
 16. **Collapse: Postulate, Effective Update, or Physical Process?**
 17. **Uncertainty: Measurement Disturbance vs State Structure**
+
+**Interlude 17A — String Theory: Extra Dimensions, Consistency, and Flexibility**
+- why critical dimensions arise from consistency/anomaly cancellation
+- 10D superstrings and 11D M-theory
+- compactification
+- landscape/vacuum-selection freedom
+- fit versus prediction
+- testability and underdetermination
 
 ### Part V — Relativity and Dynamics
 
@@ -139,16 +164,20 @@ Where a popular explanation is stronger than the experiment warrants, say so.
 Where the mathematics is exact and experimentally successful, preserve it.
 Where an interpretation is optional, label it optional.
 Where a slogan turns a mathematical representation into a literal causal story, separate the two.
+Where a mathematically consistent framework has large model-selection freedom, distinguish consistency from prediction.
+Where AI helps formalize an idea, use it to expose assumptions and build tests rather than to manufacture authority.
 Where One-Wave offers an alternative, derive it against the same data.
 Where One-Wave fails, preserve the failure.
 
 CORE-RULES-POST:
 - Core rules rechecked.
 - No accepted measurement has been discarded.
-- No Standard Model, quantum, relativity, orbital-mechanics, or cosmology claim has been labeled false merely because One-Wave proposes a different ontology.
+- No Standard Model, quantum, relativity, string-theory, orbital-mechanics, or cosmology claim has been labeled false merely because One-Wave proposes a different ontology.
 - Mathematics is required in every technical chapter and may not be summarized away.
 - Bell/CHSH remains a hard constraint on any detector/shared-wave account.
 - Three-body difficulty is not misrepresented as failure of mechanics; numerical and special solutions remain part of the Gray reference.
 - Spacetime-geometry language is audited as representation/ontology separately from the experimentally successful predictions of relativity.
+- String critical dimensions are preserved as consistency results; compactification/landscape flexibility is audited separately as a prediction/selection problem.
+- AI is treated as an access and verification amplifier, not a truth machine.
 - Schrödinger's cat is treated as a foundations thought experiment, not an experimental claim that literal cats are observed in alive/dead superpositions.
 - Book status: YELLOW scaffold until individual chapters are completed and audited.
