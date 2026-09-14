@@ -1,5 +1,5 @@
 ---
-node_id: "G-764"
+node_id: "G-766"
 canonical_name: "External Parent-Scale Tidal Wake"
 namespace: "NODE"
 gate: "YELLOW"
@@ -9,7 +9,7 @@ claim_gate_detail: "YELLOW (functional form fixed; no calibrated parent tensor, 
 metadata_standard: "I-06"
 ---
 
-# Node G-764: External Parent-Scale Tidal Wake
+# Node G-766: External Parent-Scale Tidal Wake
 
 **Dependencies**
 Upstream: `UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md` (its "local wake -> assimilation boundary -> parent reference field" rule), `ONE_WAVE_SCIENCE_ATTACK_MAP.md` section K (Gravity/orbital/nested-wake) and section M (Scale recursion), D-415.

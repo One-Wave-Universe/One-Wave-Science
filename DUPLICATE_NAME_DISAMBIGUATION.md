@@ -31,3 +31,20 @@ Resolution requires: grep every node/chapter for references to each
 means from context, assign one of the two files a fresh ID, and update
 every referencing file to match before this can be closed. Do not
 resolve by silently picking one file to keep.
+
+## G-764 near-miss (caught before merge, 2026-09)
+
+A same-session example of exactly this failure mode, caught early: a
+new node was drafted as `G-764` ("External Parent-Scale Tidal Wake")
+without checking sibling branches first. `origin/science/g764-six-route-
+commitment-map` already had a real, unrelated `G-764` ("Six-Route
+Commitment Map From Biased Double-Well"), committed two days earlier,
+with `G-765` already built on top of it on
+`origin/science/g765-g764-extractor-validation`. Neither branch was
+merged to main yet, so this never reached a real collision in main, but
+it would have. Renamed the later, unmerged one to `G-766` (confirmed
+free across every branch, not just main) and fixed all five
+cross-references before pushing. Lesson: check `git branch -a` /
+`git ls-tree -r <branch>` across sibling branches for the candidate ID
+before drafting a new node, not just the local `Nodes/` directory and
+`00_MASTER_INDEX.md` -- both of which looked clear and were not.
