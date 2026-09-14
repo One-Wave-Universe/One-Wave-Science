@@ -15,7 +15,8 @@ import math
 import pathlib
 import sys
 import urllib.request
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from decimal import Decimal, InvalidOperation
 from typing import Dict, Iterable, Iterator, List, Optional, TextIO, Tuple
 
 H_GEV_S = 4.135667696e-24
@@ -59,6 +60,57 @@ def _finite_float(value: str, name: str) -> float:
     if not math.isfinite(x):
         raise ValueError(f"{name} is not finite: {value!r}")
     return x
+
+
+def _half_resolution(value: str) -> float:
+    """Half of the displayed decimal quantum, used as a rounding interval.
+
+    Example: '9.6987' is represented to 1e-4, so its rounding half-width is 5e-5.
+    This is a representation bound, not detector uncertainty.
+    """
+    try:
+        d = Decimal(str(value).strip())
+    except (InvalidOperation, ValueError) as exc:
+        raise ValueError(f"cannot infer displayed precision from {value!r}") from exc
+    quantum = float(Decimal(1).scaleb(d.as_tuple().exponent))
+    return abs(quantum) / 2.0
+
+
+def _square_interval(center: float, half_width: float) -> Tuple[float, float]:
+    lo = center - half_width
+    hi = center + half_width
+    max_sq = max(lo * lo, hi * hi)
+    if lo <= 0.0 <= hi:
+        min_sq = 0.0
+    else:
+        min_sq = min(lo * lo, hi * hi)
+    return min_sq, max_sq
+
+
+def pair_mass_rounding_interval(
+    v1: Tuple[float, float, float, float],
+    v2: Tuple[float, float, float, float],
+    half1: Tuple[float, float, float, float],
+    half2: Tuple[float, float, float, float],
+) -> Tuple[float, float]:
+    """Conservative mass interval implied only by displayed four-vector precision."""
+    totals = tuple(a + b for a, b in zip(v1, v2))
+    halves = tuple(a + b for a, b in zip(half1, half2))
+    e2_min, e2_max = _square_interval(totals[0], halves[0])
+    px2_min, px2_max = _square_interval(totals[1], halves[1])
+    py2_min, py2_max = _square_interval(totals[2], halves[2])
+    pz2_min, pz2_max = _square_interval(totals[3], halves[3])
+    m2_min = e2_min - px2_max - py2_max - pz2_max
+    m2_max = e2_max - px2_min - py2_min - pz2_min
+    return math.sqrt(max(m2_min, 0.0)), math.sqrt(max(m2_max, 0.0))
+
+
+def interval_gap(a_lo: float, a_hi: float, b_lo: float, b_hi: float) -> float:
+    if a_hi < b_lo:
+        return b_lo - a_hi
+    if b_hi < a_lo:
+        return a_lo - b_hi
+    return 0.0
 
 
 def derive_wave_view(E: float, px: float, py: float, pz: float, beta_tolerance: float = 5e-4) -> WaveView:
@@ -186,13 +238,32 @@ def iter_converted(
         reconstructed_pair_mass = None
         source_pair_mass = None
         pair_mass_delta = None
+        pair_round_lo = None
+        pair_round_hi = None
+        source_mass_round_lo = None
+        source_mass_round_hi = None
+        pair_rounding_gap = None
+        pair_rounding_consistent = None
         if mode == "paired":
             v1 = vectors[0][1:]
             v2 = vectors[1][1:]
             reconstructed_pair_mass = pair_mass(v1, v2)
+            half1 = tuple(_half_resolution(row[f"{name}1"]) for name in ("E", "px", "py", "pz"))
+            half2 = tuple(_half_resolution(row[f"{name}2"]) for name in ("E", "px", "py", "pz"))
+            pair_round_lo, pair_round_hi = pair_mass_rounding_interval(v1, v2, half1, half2)
             if row.get("M") not in (None, ""):
                 source_pair_mass = _finite_float(row["M"], "M")
                 pair_mass_delta = reconstructed_pair_mass - source_pair_mass
+                source_half = _half_resolution(row["M"])
+                source_mass_round_lo = max(0.0, source_pair_mass - source_half)
+                source_mass_round_hi = source_pair_mass + source_half
+                pair_rounding_gap = interval_gap(
+                    pair_round_lo,
+                    pair_round_hi,
+                    source_mass_round_lo,
+                    source_mass_round_hi,
+                )
+                pair_rounding_consistent = pair_rounding_gap == 0.0
 
         for idx, E, px, py, pz in vectors:
             wave = derive_wave_view(E, px, py, pz)
@@ -216,6 +287,12 @@ def iter_converted(
                 "source_pair_mass_GeV": source_pair_mass,
                 "reconstructed_pair_mass_GeV": reconstructed_pair_mass,
                 "pair_mass_delta_GeV": pair_mass_delta,
+                "pair_mass_rounding_min_GeV": pair_round_lo,
+                "pair_mass_rounding_max_GeV": pair_round_hi,
+                "source_pair_mass_rounding_min_GeV": source_mass_round_lo,
+                "source_pair_mass_rounding_max_GeV": source_mass_round_hi,
+                "pair_mass_rounding_gap_GeV": pair_rounding_gap,
+                "pair_mass_rounding_consistent": pair_rounding_consistent,
             }
             for key, value in asdict(wave).items():
                 out["std_wave_" + key] = _jsonable(value)
@@ -229,11 +306,13 @@ def iter_converted(
             yield out
 
 
-def write_jsonl(rows: Iterable[Dict[str, object]], fp: TextIO) -> Dict[str, float]:
+def write_jsonl(rows: Iterable[Dict[str, object]], fp: TextIO) -> Dict[str, object]:
     count = 0
     warning_mass2 = 0
     warning_beta = 0
+    pair_rounding_inconsistent_objects = 0
     max_pair_delta = 0.0
+    max_pair_rounding_gap = 0.0
     min_frequency = math.inf
     max_frequency = 0.0
     min_wavelength = math.inf
@@ -243,9 +322,14 @@ def write_jsonl(rows: Iterable[Dict[str, object]], fp: TextIO) -> Dict[str, floa
         count += 1
         warning_mass2 += int(bool(row.get("std_wave_mass2_negative_warning")))
         warning_beta += int(bool(row.get("std_wave_beta_gt_one_warning")))
+        if row.get("pair_mass_rounding_consistent") is False:
+            pair_rounding_inconsistent_objects += 1
         delta = row.get("pair_mass_delta_GeV")
         if isinstance(delta, (int, float)):
             max_pair_delta = max(max_pair_delta, abs(float(delta)))
+        gap = row.get("pair_mass_rounding_gap_GeV")
+        if isinstance(gap, (int, float)):
+            max_pair_rounding_gap = max(max_pair_rounding_gap, float(gap))
         f = row.get("std_wave_frequency_Hz")
         if isinstance(f, (int, float)):
             min_frequency = min(min_frequency, float(f))
@@ -258,10 +342,12 @@ def write_jsonl(rows: Iterable[Dict[str, object]], fp: TextIO) -> Dict[str, floa
         "objects": count,
         "mass2_negative_warnings": warning_mass2,
         "beta_gt_one_warnings": warning_beta,
+        "pair_rounding_inconsistent_objects": pair_rounding_inconsistent_objects,
         "max_abs_pair_mass_delta_GeV": max_pair_delta,
-        "min_frequency_Hz": None if min_frequency is math.inf else min_frequency,
+        "max_pair_mass_rounding_gap_GeV": max_pair_rounding_gap,
+        "min_frequency_Hz": None if math.isinf(min_frequency) else min_frequency,
         "max_frequency_Hz": max_frequency,
-        "min_de_broglie_wavelength_m": None if min_wavelength is math.inf else min_wavelength,
+        "min_de_broglie_wavelength_m": None if math.isinf(min_wavelength) else min_wavelength,
         "max_de_broglie_wavelength_m": max_wavelength,
     }
 
