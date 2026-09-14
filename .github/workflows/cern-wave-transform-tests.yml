@@ -1,0 +1,58 @@
+name: CERN Wave Transform Tests
+
+on:
+  push:
+    branches:
+      - chatgpt/cern-wave-jetson-20260914
+    paths:
+      - 'tools/cern_wave/**'
+      - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
+      - '.github/workflows/cern-wave-transform-tests.yml'
+  pull_request:
+    paths:
+      - 'tools/cern_wave/**'
+      - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
+      - '.github/workflows/cern-wave-transform-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unit tests
+        env:
+          PYTHONPATH: tools/cern_wave
+        run: python3 -m unittest -v tools/cern_wave/test_cern_wave_convert.py
+
+      - name: Live CERN Open Data conversion
+        run: |
+          python3 tools/cern_wave/cern_wave_convert.py \
+            --input https://opendata.cern.ch/record/545/files/Dimuon_DoubleMu.csv \
+            --output /tmp/dimuon-wave.jsonl \
+            --summary /tmp/dimuon-wave-summary.json \
+            --source-record CMS-545 \
+            --reference-energy-gev 10 \
+            --bench-frequency-hz 1000 \
+            --max-events 5000
+
+      - name: Validate live transform receipt
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          summary = json.loads(Path('/tmp/dimuon-wave-summary.json').read_text())
+          assert summary['objects'] == 10000, summary
+          assert summary['max_frequency_Hz'] > summary['min_frequency_Hz'] > 0, summary
+          assert summary['max_de_broglie_wavelength_m'] > summary['min_de_broglie_wavelength_m'] > 0, summary
+          assert summary['max_abs_pair_mass_delta_GeV'] < 0.01, summary
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
+
+      - name: Show first transformed object
+        run: head -n 1 /tmp/dimuon-wave.jsonl
