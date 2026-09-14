@@ -14,6 +14,7 @@ These rules are not ordinary documentation. They are the fixed reference boundar
 - Do not move these rules into another file and change their meaning.
 - AI agents, checkers, editors, scripts, and cleanup passes may **reference** this file but may not alter it.
 - A downstream chapter, node, proof, simulation, or experiment that conflicts with a core rule is the thing that must be marked for review. The core rule is not changed to make the downstream work fit.
+- This file may be finalized before initial adoption. After adoption on `main`, changes to the core are outside normal update flow and require an explicit constitutional reset rather than an ordinary content edit.
 
 ## Core Rule 1 — Reference Before Interpretation
 
@@ -119,18 +120,74 @@ For every nontrivial change:
 
 If the same approach fails three times, change angle rather than repeating the same unsupported assumption.
 
+## Core Rule 16 — Core Rules Before And After Every Update
+
+Every repository update must explicitly reference this locked core **before** work begins and explicitly check against this locked core **after** work ends.
+
+The pre-update reference must identify:
+- the relevant core rule numbers;
+- the authoritative node / chapter / math reference being changed;
+- the exact difference being addressed.
+
+The post-update check must state:
+- which core rules were rechecked;
+- what definitions changed, if any;
+- what equations were preserved, added, or superseded;
+- what tests or comparisons were run;
+- what remains YELLOW / OPEN;
+- whether any drift was detected.
+
+An update without both the pre-update reference and the post-update check is incomplete.
+
+## Core Rule 17 — Mathematics Is The Protected Backbone
+
+The mathematics is not a summary layer. It is the scientific backbone.
+
+Canonical equations, definitions, assumptions, dimensions, units, boundary conditions, initial conditions, derivation steps, transformation laws, tolerances, uncertainty bounds, failed branches, and pass/fail comparisons may not be replaced by prose summaries.
+
+Explanations may be added around mathematics. They may not substitute for it.
+
+When a derivation is corrected:
+- preserve the earlier derivation;
+- add a new explicitly versioned derivation;
+- state exactly why the earlier version failed or was superseded;
+- preserve the dependency trail.
+
+No AI, editor, cleanup pass, or chapter rewrite may shorten a mathematical derivation in the canonical math backbone merely because it can be summarized.
+
+## Core Rule 18 — Missing Math Blocks Promotion
+
+If a scientific node makes a quantitative or mechanistic claim whose required mathematics is missing, compressed away, or only described verbally, mark it:
+
+**MATH-REBUILD-REQUIRED**
+
+Such a node may remain exploratory / YELLOW, but it may not be promoted as mathematically established until the required derivation is restored or newly derived and placed in the protected math backbone.
+
 ---
 
 ## Enforcement
 
 This file is the canonical core-rules reference.
 
-Any automation, AI agent, editor, or repository checker should fail closed when a proposed change attempts to modify this file or contradict these rules without explicitly marking the downstream work as unresolved.
+The protected math backbone lives under `MATH_BACKBONE/`.
+
+Once a canonical math file is present on `main`, normal updates are append-only:
+- existing backbone math files may not be deleted;
+- existing backbone math files may not be shortened;
+- existing backbone math files may not be rewritten in place;
+- corrections are added as new versioned files with explicit supersession notes.
+
+Every pull request must carry:
+- `CORE-RULES-PRE:` — the pre-update core reference;
+- `MATH-BACKBONE:` — what math was preserved / added / rebuilt / not applicable;
+- `CORE-RULES-POST:` — the post-update compliance check.
+
+Any automation, AI agent, editor, or repository checker should fail closed when a proposed change attempts to modify this file, diminish protected mathematics, or contradict these rules without explicitly marking the downstream work as unresolved.
 
 The correct response to a conflict is:
 
-**protect the core rule -> expose the conflict -> test the downstream claim.**
+**protect the core rule -> expose the conflict -> protect the math -> test the downstream claim.**
 
 Not:
 
-**change the core rule to preserve the downstream claim.**
+**change the core rule or erase the math to preserve the downstream claim.**
