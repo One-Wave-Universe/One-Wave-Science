@@ -8,12 +8,14 @@ on:
       - 'tools/cern_wave/**'
       - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
       - 'MATH_BACKBONE/30A_cern_csv_rounding_interval_v1.md'
+      - 'MATH_BACKBONE/30B_cern_source_mass_lineage_audit_v1.md'
       - '.github/workflows/cern-wave-transform-tests.yml'
   pull_request:
     paths:
       - 'tools/cern_wave/**'
       - 'MATH_BACKBONE/30_cern_fourvector_to_wave_transform_v1.md'
       - 'MATH_BACKBONE/30A_cern_csv_rounding_interval_v1.md'
+      - 'MATH_BACKBONE/30B_cern_source_mass_lineage_audit_v1.md'
       - '.github/workflows/cern-wave-transform-tests.yml'
   workflow_dispatch:
 
@@ -43,20 +45,31 @@ jobs:
             --bench-frequency-hz 1000 \
             --max-events 5000
 
-      - name: Validate live transform receipt
+      - name: Build event-level audit receipt
+        run: |
+          python3 tools/cern_wave/cern_wave_receipt.py \
+            /tmp/dimuon-wave.jsonl \
+            --output /tmp/dimuon-wave-receipt.json
+
+      - name: Validate transform, not undocumented source lineage
         run: |
           python3 - <<'PY'
           import json
           from pathlib import Path
           summary = json.loads(Path('/tmp/dimuon-wave-summary.json').read_text())
+          receipt = json.loads(Path('/tmp/dimuon-wave-receipt.json').read_text())
           assert summary['objects'] == 10000, summary
+          assert receipt['objects'] == 10000, receipt
+          assert receipt['events'] == 5000, receipt
+          assert summary['beta_gt_one_warnings'] == 0, summary
           assert summary['max_frequency_Hz'] > summary['min_frequency_Hz'] > 0, summary
           assert summary['max_de_broglie_wavelength_m'] > summary['min_de_broglie_wavelength_m'] > 0, summary
-          assert summary['pair_rounding_inconsistent_objects'] == 0, summary
-          assert summary['max_pair_mass_rounding_gap_GeV'] == 0, summary
-          # Preserve the center-value discrepancy as a receipt; do not hide it.
-          assert summary['max_abs_pair_mass_delta_GeV'] > 0, summary
-          print(json.dumps(summary, indent=2, sort_keys=True))
+          # Preserve known source-lineage discrepancy instead of converting it into a fitted tolerance.
+          assert receipt['source_mass_lineage_inconsistent_events'] > 0, receipt
+          assert receipt['max_source_mass_rounding_gap_GeV'] > 0, receipt
+          assert receipt['scaled_analog_frequency_Hz']['max'] > receipt['scaled_analog_frequency_Hz']['min'] > 0, receipt
+          print('TRANSFORM_PASS')
+          print(json.dumps(receipt, indent=2, sort_keys=True))
           PY
 
       - name: Show first transformed object
