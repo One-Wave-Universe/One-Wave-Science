@@ -1,0 +1,41 @@
+name: Core Rules Lock
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify-core-rules-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify locked core rules
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILE="CORE_RULES_LOCK.md"
+          EXPECTED="570ded09d644a183cf6e5a35cc95b3c21ae7a97393716fe82e3c4c9d08771170"
+
+          if [[ ! -f "$FILE" ]]; then
+            echo "CORE RULES LOCK FAILURE: $FILE is missing."
+            exit 1
+          fi
+
+          ACTUAL="$(sha256sum "$FILE" | awk '{print $1}')"
+
+          if [[ "$ACTUAL" != "$EXPECTED" ]]; then
+            echo "CORE RULES LOCK FAILURE"
+            echo "Expected: $EXPECTED"
+            echo "Actual:   $ACTUAL"
+            echo "CORE_RULES_LOCK.md is immutable. Restore the canonical file exactly."
+            exit 1
+          fi
+
+          echo "CORE_RULES_LOCK.md verified: $ACTUAL"
