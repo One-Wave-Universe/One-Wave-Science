@@ -10,7 +10,7 @@ CORE-RULES-PRE:
 
 ## Purpose
 
-This book audits the assumptions, approximations, interpretive language, and explanatory claims that surround modern particle physics, quantum mechanics, and cosmology.
+This book audits the assumptions, approximations, interpretive language, and explanatory claims that surround modern particle physics, quantum mechanics, relativity, and cosmology.
 
 It is deliberately adversarial toward weak explanation, but not toward successful measurement or mathematics.
 
@@ -34,15 +34,34 @@ Instead ask:
 - Which quantities are directly measured and which are inferred?
 - Which assumptions are necessary for the derivation?
 - Which assumptions are merely conventional or interpretive?
-- Which parts are exact, effective, perturbative, renormalized, fitted, statistical, or approximate?
+- Which parts are exact, effective, perturbative, renormalized, fitted, statistical, numerical, or approximate?
 - Does a competing explanation reproduce the same quantitative result?
 - What observation would distinguish the competing explanation?
 
 The strongest criticism is not "this sounds strange." The strongest criticism is a derivation, inconsistency, missing mechanism, hidden free parameter, or failed prediction.
 
+## Foundational audit principle — the map is not automatically the mechanism
+
+A mathematical object can predict motion without proving that the mathematical representation is literally the thing doing the moving.
+
+Examples:
+
+- spacetime geometry in general relativity,
+- wavefunctions and Hilbert-space state vectors in quantum mechanics,
+- Feynman diagrams in perturbation theory,
+- probability amplitudes,
+- effective potentials,
+- coordinate systems and gauge choices.
+
+The audit question is always:
+
+**Is this structure directly measured, mathematically inferred, or an ontology attached to a successful calculation?**
+
+The book must never confuse "the equation works" with "one particular story about what the equation means is uniquely proven."
+
 ## Scope correction
 
-The phrase "Standard Model" is too narrow for several common claims this book needs to audit. The Standard Model is specifically the quantum field theory of the electromagnetic, weak, and strong interactions and associated matter fields. Measurement, collapse, decoherence, Bell inequalities, wavefunction interpretation, and cosmological expansion belong partly or primarily to broader quantum foundations, quantum field theory, general relativity, and cosmology.
+The phrase "Standard Model" is too narrow for several common claims this book needs to audit. The Standard Model is specifically the quantum field theory of the electromagnetic, weak, and strong interactions and associated matter fields. Measurement, collapse, decoherence, Bell inequalities, wavefunction interpretation, spacetime curvature, the three-body problem, and cosmological expansion belong partly or primarily to broader quantum foundations, classical mechanics, quantum field theory, general relativity, and cosmology.
 
 Therefore this book audits **standard physics foundations around the Standard Model**, while labeling which framework each claim actually belongs to.
 
@@ -51,46 +70,91 @@ Therefore this book audits **standard physics foundations around the Standard Mo
 ### Part I — How to Audit Physics Without Cheating
 
 1. **Measured Fact vs Mathematical Model vs Interpretation**
-2. **Parameters, Fits, Renormalization, and Effective Theories**
-3. **Probability Is Not Automatically Mechanism**
+2. **The Map Is Not Automatically the Mechanism**
+   - equations as representations
+   - coordinates and gauges
+   - geometry versus physical ontology
+   - model success versus ontological uniqueness
+3. **Parameters, Fits, Renormalization, and Effective Theories**
+4. **Probability Is Not Automatically Mechanism**
 
 ### Part II — Quantum Measurement and the Observer Myth
 
-4. **The Observer Effect: What the Detector Actually Does**
-5. **One Wave, Many Detector Locations**
-6. **Double Slit Without Mysticism**
-7. **Bell, Entanglement, and the Limit of the Simple Shared-Phase Story**
+5. **The Observer Effect: What the Detector Actually Does**
+6. **One Wave, Many Detector Locations**
+7. **Double Slit Without Mysticism**
+8. **Schrödinger's Cat: A Thought Experiment, Not a Dead-and-Alive Cat Claim**
+   - what Schrödinger was criticizing
+   - microscopic superposition versus macroscopic record
+   - decoherence and measurement
+   - why the cat story is not itself experimental evidence
+9. **Entanglement: Measured Correlation vs Interpretation**
+   - actual coincidence counts and correlations
+   - Bell/CHSH
+   - what locality assumptions are constrained
+   - what "spooky action" language adds and what it does not
+10. **Bell and the Limit of the Simple Shared-Phase Story**
+   - local hidden-variable bound
+   - quantum target
+   - preserved One-Wave sign-detector result S = 2
+   - what kind of field model would actually have to be derived
 
 ### Part III — Particle Language and Field Reality
 
-8. **What Is Actually Detected When We Say 'Particle'?**
-9. **Virtual Particles: Calculation Tool or Literal Objects?**
-10. **Force Carriers and Exchange Language**
-11. **Mass, Higgs Coupling, and What 'Gives Mass' Really Means**
+11. **What Is Actually Detected When We Say 'Particle'?**
+12. **Virtual Particles: Calculation Tool or Literal Objects?**
+13. **Force Carriers and Exchange Language**
+14. **Mass, Higgs Coupling, and What 'Gives Mass' Really Means**
 
 ### Part IV — Quantum Formalism: Strong Math, Open Ontology
 
-12. **Wavefunction: State of Knowledge, Physical Field, or Calculation Object?**
-13. **Superposition: Equation vs Literal Story**
-14. **Collapse: Postulate, Effective Update, or Physical Process?**
-15. **Uncertainty: Measurement Disturbance vs State Structure**
+15. **Wavefunction: State of Knowledge, Physical Field, or Calculation Object?**
+16. **Superposition: Equation vs Literal Story**
+17. **Collapse: Postulate, Effective Update, or Physical Process?**
+18. **Uncertainty: Measurement Disturbance vs State Structure**
 
-### Part V — Cosmology Assumption Audit
+### Part V — Relativity and Dynamics
 
-16. **Redshift: Observation First, Explanation Second**
-17. **Expansion: What Is Directly Observed and What Is Inferred?**
-18. **Dark Matter: Observational Need vs Ontological Claim**
-19. **Dark Energy: Parameterization vs Mechanism**
-20. **Black Holes: Observables vs Interior Story**
+19. **Does Geometry 'Tell Matter How to Move'?**
+   - geodesics and the metric
+   - Einstein field equation
+   - coordinate descriptions versus invariant observables
+   - curvature as mathematically inferred structure
+   - what is directly tested: clocks, orbits, lensing, redshift, waves
+   - where the slogan is useful and where it becomes ontology by metaphor
 
-### Part VI — One-Wave Challenge Chapters
+20. **The Three-Body Problem: Unsolved Does Not Mean Unpredictable**
+   - deterministic equations
+   - no general elementary closed-form solution
+   - numerical integration
+   - chaos and sensitivity to initial conditions
+   - special solutions and stability regions
+   - distinction between mathematical difficulty and failure of the underlying laws
 
-21. **Can One Consistent Field Replace the Particle-First Ontology?**
-22. **Can Detector Coupling Reproduce Born Statistics?**
-23. **Can One-Wave Reproduce Bell/CHSH Without Hiding the Assumption It Breaks?**
-24. **Can Redshift Be Derived Without Expansion and Still Pass All Major Observational Tests?**
-25. **Can Gravity, Inertia, Mass, and Lensing Come From One Displacement/Restoring Rule?**
-26. **What Would Falsify One-Wave?**
+21. **Orbital Mechanics: Prediction First, Mechanism Second**
+   - measured trajectories
+   - Newtonian and relativistic predictions
+   - perturbation theory
+   - resonance and precession
+   - One-Wave replacement requirements
+
+### Part VI — Cosmology Assumption Audit
+
+22. **Redshift: Observation First, Explanation Second**
+23. **Expansion: What Is Directly Observed and What Is Inferred?**
+24. **Dark Matter: Observational Need vs Ontological Claim**
+25. **Dark Energy: Parameterization vs Mechanism**
+26. **Black Holes: Observables vs Interior Story**
+
+### Part VII — One-Wave Challenge Chapters
+
+27. **Can One Consistent Field Replace the Particle-First Ontology?**
+28. **Can Detector Coupling Reproduce Born Statistics?**
+29. **Can One-Wave Reproduce Bell/CHSH Without Hiding the Assumption It Breaks?**
+30. **Can One-Wave Reproduce Three-Body and Orbital Dynamics From the Same Primitive?**
+31. **Can Redshift Be Derived Without Expansion and Still Pass All Major Observational Tests?**
+32. **Can Gravity, Inertia, Mass, and Lensing Come From One Displacement/Restoring Rule?**
+33. **What Would Falsify One-Wave?**
 
 ## Mandatory chapter structure
 
@@ -115,7 +179,7 @@ Every chapter must use this order:
 - CERN — The Standard Model: https://home.cern/science/physics/standard-model/
 - Particle Data Group — Review of Particle Physics: https://pdg.lbl.gov/
 - Nobel Prize 2022 — Bell inequality experiments: https://www.nobelprize.org/prizes/physics/2022/
-- American Physical Society / Physical Review literature for measurement, decoherence, Bell tests, QFT, and particle phenomenology.
+- American Physical Society / Physical Review literature for measurement, decoherence, Bell tests, QFT, gravitation, orbital dynamics, and particle phenomenology.
 
 These references establish accepted theory and experimental targets. They do not validate One-Wave.
 
@@ -126,13 +190,17 @@ Modern physics contains extraordinarily successful mathematics alongside open qu
 Where a popular explanation is stronger than the experiment warrants, say so.
 Where the mathematics is exact and experimentally successful, preserve it.
 Where an interpretation is optional, label it optional.
+Where a slogan turns a mathematical representation into a literal causal story, separate the two.
 Where One-Wave offers an alternative, derive it against the same data.
 Where One-Wave fails, preserve the failure.
 
 CORE-RULES-POST:
 - Core rules rechecked.
 - No accepted measurement has been discarded.
-- No Standard Model, quantum, or cosmology claim has been labeled false merely because One-Wave proposes a different ontology.
+- No Standard Model, quantum, relativity, orbital-mechanics, or cosmology claim has been labeled false merely because One-Wave proposes a different ontology.
 - Mathematics is required in every technical chapter and may not be summarized away.
 - Bell/CHSH remains a hard constraint on any detector/shared-wave account.
+- Three-body difficulty is not misrepresented as failure of mechanics; numerical and special solutions remain part of the Gray reference.
+- Spacetime-geometry language is audited as representation/ontology separately from the experimentally successful predictions of relativity.
+- Schrödinger's cat is treated as a foundations thought experiment, not an experimental claim that literal cats are observed in alive/dead superpositions.
 - Book status: YELLOW scaffold until individual chapters are completed and audited.
