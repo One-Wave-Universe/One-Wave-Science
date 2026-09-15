@@ -22,6 +22,25 @@ What is **not** established by this build:
 
 Those remain later falsification targets. Do not use an LED staying on, a charged capacitor, or an energized coil as proof of magnetic memory or matter hold.
 
+### Locked whole-cell order
+
+```text
+BC-DC binary engage
+  -> TC-AC three mirrored differentials about NET_G
+       A+ - A-
+       B+ - B-
+       C+ - C-
+  -> QC-RC one quadratic differential memory enclosing the resolved whole state
+  -> analog reinjection of measured loss back toward that retained state
+```
+
+The six traversals are three opposing side-pairs, not six unrelated gates.
+Every value is a differential against the same buffered virtual ground. The
+quadratic memory comes after binary engagement and ternary resolution and
+belongs to the whole cell; it is not copied once per station. Reinjection is
+the analog differential between retained whole state and present whole state,
+not a timer and not continuous holding power.
+
 ---
 
 ## 1. Count boundary — do not drift
@@ -371,14 +390,16 @@ negative lean -> negative station receipt
 
 Then increase frequency slowly while watching G-home, G-far, station tap, and HOLD node. Any G oscillation is a failed reference, not useful AC.
 
-### P10 — magnetic sense only
+### P10 — whole-cell quadratic memory, sense only
 
-Add a small sense coil or Hall probe around/near G0. Do **not** close reinjection feedback yet.
+Route the resolved A/B/C differential result into one cell-wide memory plane.
+Add the memristive state readout and magnetic Hall/sense path there—not one
+copy per station. Do **not** close reinjection feedback yet.
 
-The first magnetic question is only:
+The first memory question is:
 
 ```text
-Does measured field/flux follow current and polarity reproducibly?
+Does the whole-state readout distinguish resolved A/B/C histories relative to NET_G?
 ```
 
 The memory question comes later:
@@ -387,6 +408,12 @@ The memory question comes later:
 After electrical drive is removed, is there a repeatable retained magnetic state
 that survives controls and cannot be explained by RC charge or instrument offset?
 ```
+
+### P11–P12 — analog differential reinjection
+
+First reproduce LOW-connect / HIGH-disconnect manually. Then close the analog
+hysteretic loop. The reinjection power path is current-limited and bypasses
+TLE2426 OUT; NET_G remains the reference and imbalance host.
 
 ---
 
@@ -419,14 +446,15 @@ The simulator's permanent qualification is intentionally tighter than the physic
 
 ---
 
-## 11. Magnetic hold experiment after electrical F0 passes
+## 11. Whole-state quadratic memory after electrical F0 passes
 
 A safe first geometry using an available ferrite ring:
 
 ```text
-station-current conductor = one primary pass through ferrite aperture
+resolved A/B/C differential route = primary path through ferrite aperture
 sense winding             = 20–50 turns fine insulated wire on the ferrite
-sense output              = scope/meter only; no reinjection
+whole-state readout       = Hall/sense output plus the memristive state node
+reference                 = NET_G buffered virtual ground
 ```
 
 Run four receipts:
@@ -440,23 +468,41 @@ Only a reproducible drive-off retained signal that reverses with prior polarity 
 
 Do not confuse inductive decay immediately after opening the circuit with remanent memory. Reverse recovery, RC discharge, and scope offset must be separated first.
 
+The memristive state is read only after the A/B/C differentials resolve. It
+records the cell-wide quadratic state; it must not independently command A,
+B, or C and must not create three unrelated memory values. Qualification must
+show that two different ternary histories producing different whole states
+produce distinguishable, repeatable memory readouts relative to NET_G.
+
 ---
 
-## 12. What comes after F0
+## 12. Analog differential reinjection
 
-Do not add active magnetic reinjection, three-winding actuator power, motor load, memristive elements, or XYZ field claims until F0 receipts show that:
+Only after section 11 passes may the memory readout close the analog
+reinjection loop:
 
 ```text
-CENTER stays stiff
-three station taps balance
-three stations lean predictably
-all bilateral legs really block both directions OFF
-all bilateral legs conduct in both intended directions ON
-RC timing matches measured values
-magnetic sensing is reproducible
+retained whole-state reference Q_hold
+present whole-state differential Q_now
+error Q_err = Q_hold - Q_now
+
+|Q_err| below LOW belt     -> source disconnected / coast
+|Q_err| crosses LOW limit  -> enable bounded reinjection
+state returns to HIGH belt -> disconnect source
 ```
 
-Then the next prototype can replace the six temporary floating gate batteries with a coordinated isolated gate-driver/controller layer and test three-winding magnetic actuation without changing the three logical Mirror-gate count.
+The controller is analog and hysteretic. It reacts to measured differential
+state, never elapsed time. Reinjection must enter through a current-limited
+MOSFET path from NET_P/NET_N while the TLE2426 OUT remains a reference and
+imbalance host—never the reinjection power return.
+
+PASS requires less measured source energy than continuous excitation at the
+same state/output tolerance. If the retained signal disappears when drive is
+removed, or the source chatters/PWMs merely to hold position, reinjection
+fails. It is not an energy source and cannot return more energy than supplied.
+
+The motor remains disconnected until electrical F0, whole-state memory, and
+analog reinjection each have their own receipt.
 
 ---
 
