@@ -54,3 +54,15 @@ No cloud service is required just to open and edit the animator.
 ## AI-director boundary
 
 The animator data model is intentionally human-and-AI coeditable, but this local launcher does not pretend to contain ChatGPT. A real director/chat bridge must edit the same reel and motion-library structures rather than generating a second incompatible animation format.
+
+## Universal AI access — required
+
+The GUI is not the only required control surface. Any authorized AI client must be able to inspect and operate the real Animator state through one provider-neutral deterministic interface.
+
+That means ChatGPT, Codex, Claude, Gemini, DeepSeek, Perplexity, local models, and future clients must all use the same canonical project/reel transaction path. Provider adapters may translate tool-call syntax, but they may not create a private animation format or a second state authority.
+
+The full contract is in [`AI_ACCESS_CONTRACT.md`](AI_ACCESS_CONTRACT.md).
+
+Universal AI access remains **IMPLEMENTING** until an automated run proves the complete machine path against the real Animator: inspect -> edit -> save -> reopen -> play/seek -> export -> verify GUI parity -> second-client inspection.
+
+Screen scraping, approximate mouse clicking, blind `.owav` edits, or a provider-specific chat panel do not count as the canonical AI interface.
