@@ -29,7 +29,9 @@ Current state:
 
 - Book 1 Micro: 17 active chapters numbered continuously from Ch1 through Ch17.
 - Book 2 Small/Cellular: one active chapter; expansion requires new nodes first.
-- Book 3 Medium/Human-Biological: scope document only; appendix grounding remains thin.
+- Book 3 Medium/Human-Biological: one active chapter (metabolism/named-net
+  scope, from B-228/B-229); nervous-system and organ-system chapters remain
+  unwritten pending new grounding nodes.
 - Book 4 Large/Planetary-Solar: scope document only; new mechanics must be built before prose.
 - Book 5 Macro: five active chapters.
 

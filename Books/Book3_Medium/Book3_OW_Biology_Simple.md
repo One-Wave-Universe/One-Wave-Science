@@ -2,6 +2,10 @@
 
 Node B-229. Yellow. Leaves the silicon cell on the bench.
 
+Formal chapter version: `Book3_Ch01_Compression_Chains_And_Named_Nets.md`
+(spine format, Yellow Audit, falsifiable predictions). This file stays as
+the original informal sketch.
+
 A living thing is not a mystery fluid. It is membranes (fences), chains (food), packets (ATP), gates (channels), and receipts (copy rules).
 
 Eat = bring a chain in.
