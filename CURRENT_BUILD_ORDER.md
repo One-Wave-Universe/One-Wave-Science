@@ -2,6 +2,28 @@
 
 This file is the current execution order for the practical build program. The rule is: useful device first, measure it honestly, then reuse the proven primitive at the next scale.
 
+## PRIORITY ONE — Map and qualify the recursive cell
+
+The present top priority is `PRIORITY_ONE_CELL_BUILD_MAP.md`.
+
+Before unrelated device expansion, map and qualify this ordered cell path:
+
+```text
+six hex sides (never corners)
+ -> A+/A- DC polarity choice around virtual ground
+ -> B+/B- AC alternation and UP/HOLD/DOWN
+ -> C+/C- rotating/quadratic relation
+ -> Direction/Phase/Strength/Reference Views UP
+ -> Inward/Outward/Across/Over Actions DOWN
+ -> whole-cell mirrored reinjection
+ -> rewritable memristive path reinforcement
+ -> partial-cue reconstruction and autonomous local execution
+```
+
+Virtual ground is the ternary HOLD/zero state. Muscle memory is the progressive lowering of impedance along the exact repeatedly traversed side-to-side path. Rewrite must selectively weaken/replace a learned path rather than requiring global erasure.
+
+Execution order is Build 0 through Build 7 in `PRIORITY_ONE_CELL_BUILD_MAP.md`. Each stage has a hard stop and must produce measurement receipts before the next stage begins.
+
 ## Project 0 — Virtual Breadboard Qualification
 
 Purpose: make the virtual breadboard trustworthy enough to test ordinary electronics and then the balanced builds.
