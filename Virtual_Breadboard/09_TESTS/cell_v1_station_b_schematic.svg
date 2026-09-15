@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8.5in" height="11in" viewBox="0 0 850 1100" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .wire { stroke:#000; stroke-width:2; fill:none; }
+    .jumper { stroke:#000; stroke-width:2; fill:none; stroke-dasharray:6,5; }
+    .dot { fill:#000; }
+    .lbl { font-size:14px; fill:#000; }
+    .lblB { font-size:14px; fill:#000; font-weight:700; }
+    .small { font-size:11px; fill:#333; }
+    .rail-red { fill:#b30000; font-weight:700; }
+    .rail-black { fill:#000; font-weight:700; }
+    .rail-blue { fill:#1a4fa0; font-weight:700; }
+    .box { fill:#fff; stroke:#000; stroke-width:2; }
+    .title { font-size:25px; font-weight:800; fill:#000; }
+    .subtitle { font-size:12px; fill:#333; }
+    .sectionHdr { font-size:14px; font-weight:700; fill:#000; }
+    .warn { fill:#fff4f4; stroke:#b30000; stroke-width:2; }
+    .warnTxt { fill:#7a0000; font-size:12.5px; }
+    .cellHdr { font-size:12px; font-weight:700; fill:#000; }
+    .cell { font-size:12px; fill:#000; }
+    .tblLine { stroke:#000; stroke-width:1; }
+  </style>
+
+  <!-- Border for print alignment -->
+  <rect x="16" y="16" width="818" height="1068" fill="none" stroke="#999" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="40" y="50" class="title">CELL_V1 — Station B — Second Real Build</text>
+  <text x="40" y="70" class="subtitle">One-Wave Science / Virtual_Breadboard. Real parts, real values, no idealized gate drive. Single-phase proof only.</text>
+  <text x="40" y="86" class="subtitle">Wire this only after Station A has passed its receipt (BUILD_25.md steps 8-11). Same topology, second copy.</text>
+  <text x="40" y="102" class="subtitle">Electrically identical to Station A, so the same regression test (24_cell_v1_manual_gate_bias_station_a.js) already covers these numbers.</text>
+
+  <!-- ===================== SCHEMATIC ===================== -->
+
+  <!-- RED rail -->
+  <line x1="60" y1="145" x2="740" y2="145" class="wire" stroke="#b30000"/>
+  <text x="30" y="141" class="rail-red">+12V</text>
+  <text x="30" y="155" class="lbl">RED</text>
+
+  <!-- BLACK rail -->
+  <line x1="60" y1="770" x2="740" y2="770" class="wire" stroke="#000"/>
+  <text x="30" y="766" class="rail-black">−12V</text>
+  <text x="30" y="780" class="lbl">BLACK</text>
+
+  <!-- BLUE rail (home end at left, station leg on right) -->
+  <line x1="130" y1="455" x2="740" y2="455" class="wire" stroke="#1a4fa0"/>
+  <text x="756" y="451" class="rail-blue">0V</text>
+  <text x="756" y="465" class="lbl">BLUE</text>
+
+  <!-- I0 shunt at the BLUE "home end" -->
+  <line x1="60" y1="455" x2="95" y2="455" class="wire" stroke="#1a4fa0"/>
+  <rect x="95" y="445" width="35" height="20" class="box"/>
+  <text x="112" y="459" text-anchor="middle" class="small">1Ω</text>
+  <text x="60" y="437" class="lblB">I<tspan baseline-shift="sub" font-size="10">0</tspan> here</text>
+  <text x="40" y="479" class="small">DMM mA, or 1Ω</text>
+  <text x="40" y="492" class="small">shunt + DMM V</text>
+  <circle cx="60" cy="455" r="3" class="dot"/>
+  <text x="20" y="393" class="small">to supply common /</text>
+  <text x="20" y="405" class="small">"home end" of BLUE</text>
+
+  <!-- ===== Left column: bypass caps + law resistors ===== -->
+  <!-- Bypass cap RED-BLUE -->
+  <line x1="190" y1="145" x2="190" y2="230" class="wire"/>
+  <line x1="176" y1="230" x2="204" y2="230" class="wire" stroke-width="3"/>
+  <line x1="176" y1="238" x2="204" y2="238" class="wire" stroke-width="3"/>
+  <line x1="190" y1="238" x2="190" y2="455" class="wire"/>
+  <text x="210" y="238" class="small">100nF</text>
+
+  <!-- Bypass cap BLACK-BLUE -->
+  <line x1="190" y1="455" x2="190" y2="665" class="wire"/>
+  <line x1="176" y1="665" x2="204" y2="665" class="wire" stroke-width="3"/>
+  <line x1="176" y1="673" x2="204" y2="673" class="wire" stroke-width="3"/>
+  <line x1="190" y1="673" x2="190" y2="770" class="wire"/>
+  <text x="210" y="673" class="small">100nF</text>
+
+  <!-- Law resistor RED-BLUE (10k) -->
+  <line x1="260" y1="145" x2="260" y2="195" class="wire"/>
+  <polyline points="260,195 250,203 270,211 250,219 270,227 260,235" class="wire"/>
+  <line x1="260" y1="235" x2="260" y2="455" class="wire"/>
+  <text x="278" y="219" class="lblB">10kΩ 1%</text>
+  <text x="278" y="235" class="small">"law", RED–BLUE</text>
+
+  <!-- Law resistor BLACK-BLUE (10k) -->
+  <line x1="260" y1="455" x2="260" y2="680" class="wire"/>
+  <polyline points="260,680 250,688 270,696 250,704 270,712 260,720" class="wire"/>
+  <line x1="260" y1="720" x2="260" y2="770" class="wire"/>
+  <text x="278" y="704" class="lblB">10kΩ 1%</text>
+  <text x="278" y="720" class="small">"law", BLACK–BLUE</text>
+
+  <circle cx="190" cy="455" r="3" class="dot"/>
+  <circle cx="260" cy="455" r="3" class="dot"/>
+
+  <!-- ===== Right column: Station A ===== -->
+  <!-- PA node vertical spine -->
+  <line x1="560" y1="245" x2="560" y2="665" class="wire"/>
+  <text x="572" y="459" class="lblB">PB</text>
+
+  <!-- P-MOS box -->
+  <rect x="510" y="190" width="100" height="55" class="box"/>
+  <text x="560" y="212" text-anchor="middle" class="lblB">AO3401A</text>
+  <text x="560" y="227" text-anchor="middle" class="small">P-MOS (Q3)</text>
+  <text x="560" y="240" text-anchor="middle" class="small">S=RED  D=PB</text>
+  <line x1="560" y1="145" x2="560" y2="190" class="wire"/>
+  <text x="566" y="172" class="small">source</text>
+
+  <!-- P-gate divider node: OFF-bias 10k runs straight up to RED, clear of labels -->
+  <circle cx="440" cy="217" r="3" class="dot"/>
+  <line x1="510" y1="217" x2="475" y2="217" class="wire"/>
+  <text x="400" y="213" text-anchor="end" class="lblB">P-gate</text>
+
+  <line x1="440" y1="217" x2="440" y2="185" class="wire"/>
+  <polyline points="440,185 430,177 450,169 430,161 450,153 440,145" class="wire"/>
+  <text x="454" y="178" class="lblB">10kΩ</text>
+  <text x="454" y="191" class="small">OFF bias → RED</text>
+  <text x="454" y="203" class="small">(always installed)</text>
+
+  <!-- ON-command jumper 10k: P-gate node to BLUE (dashed, add for +1) -->
+  <line x1="440" y1="217" x2="380" y2="217" class="wire"/>
+  <line x1="380" y1="217" x2="380" y2="300" class="jumper"/>
+  <polyline points="380,300 370,308 390,316 370,324 390,332 380,340" class="jumper"/>
+  <line x1="380" y1="340" x2="380" y2="455" class="jumper"/>
+  <circle cx="380" cy="455" r="3" class="dot"/>
+  <text x="396" y="318" class="lblB">10kΩ jumper</text>
+  <text x="396" y="331" class="small">ADD to command +1</text>
+  <text x="396" y="344" class="small">(P-gate → BLUE, ≈+6V)</text>
+
+  <text x="478" y="262" class="small">(220Ω gate-lead resistor omitted here</text>
+  <text x="478" y="274" class="small">for clarity — see BOM. No DC current</text>
+  <text x="478" y="286" class="small">flows through it, so no DC effect.)</text>
+
+  <!-- N-MOS box -->
+  <rect x="510" y="620" width="100" height="55" class="box"/>
+  <text x="560" y="642" text-anchor="middle" class="lblB">2N7000</text>
+  <text x="560" y="657" text-anchor="middle" class="small">N-MOS (Q4)</text>
+  <text x="560" y="670" text-anchor="middle" class="small">D=PB  S=BLACK</text>
+  <line x1="560" y1="675" x2="560" y2="770" class="wire"/>
+  <text x="566" y="735" class="small">source</text>
+
+  <!-- N-gate divider node -->
+  <circle cx="440" cy="647" r="3" class="dot"/>
+  <line x1="510" y1="647" x2="475" y2="647" class="wire"/>
+  <text x="400" y="643" text-anchor="end" class="lblB">N-gate</text>
+
+  <line x1="440" y1="647" x2="440" y2="679" class="wire"/>
+  <polyline points="440,679 430,687 450,695 430,703 450,711 440,719" class="wire"/>
+  <line x1="440" y1="719" x2="440" y2="770" class="wire"/>
+  <text x="454" y="691" class="lblB">10kΩ</text>
+  <text x="454" y="704" class="small">OFF bias → BLACK</text>
+  <text x="454" y="716" class="small">(always installed)</text>
+
+  <!-- ON-command jumper 10k: N-gate node to BLUE (dashed, add for -1) -->
+  <line x1="440" y1="647" x2="380" y2="647" class="wire"/>
+  <line x1="380" y1="647" x2="380" y2="560" class="jumper"/>
+  <polyline points="380,560 370,552 390,544 370,536 390,528 380,520" class="jumper"/>
+  <line x1="380" y1="520" x2="380" y2="455" class="jumper"/>
+  <circle cx="380" cy="455" r="3" class="dot"/>
+  <text x="396" y="546" class="lblB">10kΩ jumper</text>
+  <text x="396" y="559" class="small">ADD to command −1</text>
+  <text x="396" y="572" class="small">(N-gate → BLUE, ≈−6V)</text>
+
+  <text x="478" y="608" class="small">(220Ω gate-lead resistor omitted, as above)</text>
+
+  <!-- Load 1k: PA to BLUE -->
+  <line x1="560" y1="455" x2="640" y2="455" class="wire"/>
+  <polyline points="640,455 648,447 656,463 664,447 672,463 680,455" class="wire"/>
+  <line x1="680" y1="455" x2="700" y2="455" class="wire"/>
+  <text x="642" y="437" class="lblB">1kΩ load</text>
+  <text x="642" y="480" class="small">PB → BLUE</text>
+  <circle cx="560" cy="455" r="3" class="dot"/>
+
+  <!-- ===================== STATE TABLE ===================== -->
+  <text x="40" y="815" class="sectionHdr">States (never close both jumpers at once)</text>
+
+  <line x1="40" y1="825" x2="800" y2="825" class="tblLine"/>
+  <text x="50" y="845" class="cellHdr">State</text>
+  <text x="150" y="845" class="cellHdr">P-gate jumper</text>
+  <text x="310" y="845" class="cellHdr">N-gate jumper</text>
+  <text x="470" y="845" class="cellHdr">V(PB)</text>
+  <text x="600" y="845" class="cellHdr">I<tspan baseline-shift="sub" font-size="9">0</tspan> at BLUE</text>
+  <line x1="40" y1="853" x2="800" y2="853" class="tblLine"/>
+
+  <text x="50" y="875" class="cell">STAY</text>
+  <text x="150" y="875" class="cell">out</text>
+  <text x="310" y="875" class="cell">out</text>
+  <text x="470" y="875" class="cell">floats near 0V</text>
+  <text x="600" y="875" class="cell">≈ 0 (leakage only)</text>
+
+  <text x="50" y="898" class="cell">+1</text>
+  <text x="150" y="898" class="cell">IN (add jumper)</text>
+  <text x="310" y="898" class="cell">out</text>
+  <text x="470" y="898" class="cell">≈ +12V</text>
+  <text x="600" y="898" class="cell">≈ +12.6 mA</text>
+
+  <text x="50" y="921" class="cell">−1</text>
+  <text x="150" y="921" class="cell">out</text>
+  <text x="310" y="921" class="cell">IN (add jumper)</text>
+  <text x="470" y="921" class="cell">≈ −12V</text>
+  <text x="600" y="921" class="cell">≈ −12.6 mA</text>
+
+  <text x="50" y="944" class="cell" fill="#7a0000" font-weight="700">both</text>
+  <text x="150" y="944" class="cell" fill="#7a0000">IN</text>
+  <text x="310" y="944" class="cell" fill="#7a0000">IN</text>
+  <text x="470" y="944" class="cell" fill="#7a0000">destructive</text>
+  <text x="600" y="944" class="cell" fill="#7a0000">quiet — see box</text>
+  <line x1="40" y1="954" x2="800" y2="954" class="tblLine"/>
+
+  <text x="40" y="972" class="small">Expected numbers are from the real AO3401A / 2N7000 model (body diode, RDS(on), leakage included) — not an ideal-switch guess.</text>
+  <text x="40" y="985" class="small">Reading ≈12 mA instead of ≈12.6 mA on +1/−1 is the thing worth re-checking, not the other way around.</text>
+
+  <!-- ===================== SAFETY BOX ===================== -->
+  <rect x="40" y="1000" width="770" height="80" rx="6" class="warn"/>
+  <text x="55" y="1020" class="warnTxt" font-weight="700">NEVER install both 10kΩ jumpers at the same time.</text>
+  <text x="55" y="1037" class="warnTxt">I<tspan baseline-shift="sub" font-size="9">0</tspan> will NOT warn you if you do — the fault current runs RED → Q3 → PB → Q4 → BLACK and never touches BLUE.</text>
+  <text x="55" y="1054" class="warnTxt">Watch for heat, smell, or the supply's current-limit tripping instead. Never wire a 0/5V microcontroller GPIO</text>
+  <text x="55" y="1071" class="warnTxt">directly to either gate node — it cannot turn either device fully OFF on this ±12V build.</text>
+
+  <text x="40" y="1096" class="small">One-Wave Science — Virtual_Breadboard/09_TESTS. Single-phase proof only. This is the second of three stations. Station C is one more identical copy, wired only after B passes its own receipt.</text>
+</svg>
