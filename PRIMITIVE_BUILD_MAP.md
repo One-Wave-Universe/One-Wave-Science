@@ -3,7 +3,7 @@
 Date: 2026-08-30
 Status: working integrated architecture; superseded for execution priority by `PRIORITY_ONE_CELL_BUILD_MAP.md`
 
-> **Priority-one authority:** use `PRIORITY_ONE_CELL_BUILD_MAP.md` for the ordered physical/simulated cell build. It locks six side connections, virtual ground as ternary HOLD, `DC -> AC -> RC`, quadratic Views UP then Actions DOWN, whole-cell mirrored reinjection, and rewritable path-reinforcement muscle memory. This older integration map remains useful background but must not override that build order.
+> **Priority-one authority:** use `PRIORITY_ONE_CELL_BUILD_MAP.md` for the ordered physical/simulated cell build. It locks six side terminals as three whole mirrored gates, virtual ground as ternary HOLD, the `DC -> AC -> RC` dependency, new Field/Views UP together with last Void/Actions DOWN, whole-cell mirrored reinjection, and rewritable path-reinforcement muscle memory. This older integration map remains useful background but must not override that build order.
 
 This file assembles the current primitive from the parts already developed across control, memory, routing, scale, and project versions. It is not proof of the complete primitive and it is not yet a final wiring recipe. Its job is to show what the primitive has to contain, what existing technologies can be reused, what data/state must survive each transition, and what integration questions remain.
 
@@ -193,7 +193,7 @@ ternary   <-> ternary
 quadratic <-> quadratic
 ```
 
-These are three mirrored transition pairs, not six independent flips.
+These are three whole state gates, not six independent flips. In each gate the positive terminal carries the new Field state upward while its negative mirror carries the last Void/action state downward; both participate in one live differential around virtual ground.
 
 Current temporal receipt to preserve during testing:
 
