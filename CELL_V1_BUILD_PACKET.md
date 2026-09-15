@@ -1,207 +1,259 @@
 # CELL_V1 Build Packet
 
-**Purpose:** bench-to-lattice build packet for the current CELL_V1 hardware target.
+**Purpose:** current bench-to-lattice build packet for CELL_V1.
 
-**Authority:** geometry is governed by `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md` and the red-line summary in `CELL_V1_ANTI_DRIFT.md`.
+**Current architecture authority:**
 
-**Status:** experimental build plan. Individual ancestor mechanisms exist in hardware, but the combined CELL_V1 has not yet been demonstrated.
+1. `CELL_V1_ANTI_DRIFT.md`
+2. `UPDATED_63_CELL_V1_STATEFUL_MUSCLE_MEMORY_BUILD.md`
+3. `UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md`
+4. `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
 
-## 1. What this build is trying to prove
+**Status:** experimental physical build. The geometry and three-bidirectional-mirror contract are locked; the stateful carrier, path-training law, reinjection efficiency, motor topology, and brain-layer counts must be earned by measurement.
 
-CELL_V1 is not successful merely because six LEDs blink or a motor turns.
-
-The physical prototype must establish this chain:
+## 1. The build in one picture
 
 ```text
-local electrical event
- -> magnetic state transition
- -> retained remanent state after drive removal
- -> retained state changes the next electrical response
- -> returned/recovered energy can be measured
- -> state can propagate through identical edge-connected cells
- -> paths can form a stable rotation
- -> rotations can couple into a larger field
+                     CELL_V1 HEX
+
+              A+                 B+
+                \               /
+                 \             /
+                  \           /
+                   [ STATEFUL ]
+          C- <----[ PROCESS / ]----> C+
+                   [ MEMORY   ]
+                  /     |     \
+                 /      |      \
+              B-        |        A-
+                        |
+                        | repeated successful traversal
+                        v
+                  PATH TRAINING
+                 / muscle memory
+
+PHYSICAL MIRRORS:
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+
+SAME MIRRORS:
+Views / state / relation  UP
+Actions / conditioning   DOWN
+
+ENERGY:
+DC supply -> event -> recovery reservoir -> measured reinjection -> later event
+               V0 = reference only, NOT the reservoir
+
+LOCAL COMMAND:
+TERNARY = DOWN / HOLD / UP
+          also candidate motor/actuator grammar
+
+LOCAL CONTROL:
+within limits -> continue/recover/reinject locally
+strained      -> Views UP -> higher resolution -> Action/Override DOWN
 ```
 
-The primary scaling target is:
+All six external interfaces are on **flat hex sides**, clockwise:
 
 ```text
-Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
-```
-
-## 2. Geometry — do not improvise
-
-All six connection ports are centered on the **flat sides/edges** of the hex.
-
-```text
-CLOCKWISE:
 A+ -> B+ -> C+ -> A- -> B- -> C-
+```
 
-OPPOSITES:
+No corner ports.
+
+## 2. Hard physical rules
+
+### Three bidirectional mirrors
+
+CELL_V1 has exactly three physical bidirectional mirror axes:
+
+```text
 A+ <-> A-
 B+ <-> B-
 C+ <-> C-
 ```
 
-No port is located at a corner/vertex.
+Six directed edges do not mean six separate physical gates. Legacy six-position logic may be used for receipts, but it does not create separate Mirror and Action hardware.
 
-Every cell in the seven-cell flower is the same orientation. Shared flat edges connect matching letters with opposite polarity.
+### Processing is memory
 
-## 3. Target physical package
-
-The scaling target is a compact two-part cell.
-
-### Electronic/top half
-
-- six edge-center interfaces;
-- bidirectional switching/routing;
-- integrated or co-located MOSFETs;
-- gate-drive protection;
-- current/voltage sensing;
-- electrical center/reference distribution;
-- local test points during development.
-
-### Magnetic/bottom half
-
-- one or more hysteretic magnetic paths associated with the A/B/C axes;
-- write/drive winding(s);
-- maintaining/reinjection winding(s);
-- separate sense winding(s) for the instrumented prototype when useful;
-- measurable remanence/hysteresis;
-- thermal/mechanical support.
-
-Do not force the first breadboard to look like the final chip. Prove the physics with accessible components first, then integrate.
-
-## 4. Low-voltage bench frame
-
-Current practical candidate:
+The active physical path must retain the state that affects the next traversal:
 
 ```text
-Supply: +5 V nominal, current limited
-Electrical center: 2.5 V buffered/reference node
-A/B/C signals: measured as differential quantities around the center
+current path state affects flow
+ -> flow changes the same path state
+ -> changed state remains
+ -> next traversal encounters that state
 ```
 
-The `+` and `-` labels are opposed axis orientations, not raw instructions to connect +5 V directly to ground.
+If a separate memory block can be removed and the active path behaves identically, that separate block is not the CELL_V1 processing-memory primitive.
 
-Do not reopen the retired +/-12 V design for CELL_V1.
+### Repetition makes the path
 
-## 5. Prototype parts categories
-
-Exact part numbers remain open until the required voltage/current, magnetic material, switching speed, and winding energy are measured.
-
-Use categories first:
-
-- current-limited 5 V bench supply or protected USB-derived supply;
-- buffered 2.5 V reference / rail-splitter suitable for the measured load;
-- low-voltage MOSFETs appropriate to the selected current range;
-- proper gate resistors/pull-downs and, when a half-bridge is used, shoot-through/dead-time protection;
-- ferrite or another magnetic material with **measurable remanence/hysteresis**;
-- magnet wire for drive/write, memory/reinjection, and sense windings;
-- Schottky or otherwise appropriate low-loss steering devices for the recovery path;
-- low-ESR capacitor for a measured reinjection reservoir;
-- current-sense resistor or current probe;
-- oscilloscope probes at the electrical and sense-winding test points;
-- Hall/field probe if available;
-- temperature measurement at the MOSFETs and magnetic element;
-- fusing/current limiting appropriate to the bench source.
-
-An ordinary switching-supply ferrite may be useful for induction tests but may retain too little remanence to function as useful memory. Measure it rather than assuming it stores state.
-
-## 6. Rev A — one-axis magnetic-memory proof
-
-Build only the A axis first.
+Muscle-memory behaviour means repeated successful use changes the physical path itself:
 
 ```text
-A+ EDGE / DRIVE ---- switch ---- write winding ----+
-                                                    |
-                                               HYSTERETIC
-                                               MAGNETIC PATH
-                                                    |
-A- EDGE / DRIVE ---- switch ---- opposed winding --+
-
-                    sense winding -> oscilloscope
-                    memory/reinject winding -> recovery test
+same route repeats
+ -> same stateful path is modified repeatedly
+ -> later traversal becomes measurably easier / faster / stronger / more likely
 ```
 
-The drawing is functional, not a final winding polarity prescription. Winding dot orientation must be documented during the build.
+Acceptable training observables include lower threshold, lower drive energy, shorter latency, larger retained bias, stronger route preference, or fewer higher-level interventions.
 
-### Test A1 — baseline
+A software usage counter is not sufficient.
 
-Record:
+### DC handles nerve-level recovery and reinjection
 
-- supply voltage;
-- center-reference voltage;
-- A+ and A- quiescent voltages/currents;
-- sense-winding baseline;
-- core temperature.
-
-### Test A2 — positive write
-
-Apply one controlled A+ write pulse. Record magnitude, duration, current, sense waveform, and energy estimate.
-
-### Test A3 — retention
-
-Remove the write drive completely. After defined delays, perform the weakest read that can distinguish state without rewriting it.
-
-Pass condition: a reproducible state-dependent response persists after the drive is removed.
-
-### Test A4 — old state changes new response
-
-Starting from the retained A+ state, apply a standardized probe/new pulse and record its threshold, delay, current, sense waveform, or another agreed observable.
-
-Reset/rewrite to the opposite state and repeat the identical probe.
-
-Pass condition: the later response depends reproducibly on the earlier retained state.
-
-### Test A5 — opposite write
-
-Apply an A- write pulse and verify that the magnetic/electrical readback changes in the expected opposite or distinguishable direction.
-
-### Test A6 — repeatability
-
-Repeat the A+/A- write/read cycle enough times to quantify:
-
-- state margin;
-- variation;
-- drift;
-- heating;
-- write energy;
-- retention time over the tested interval.
-
-Do not call one anomalous pulse memory.
-
-## 7. Rev B — reinjection proof on the same axis
-
-Add a controlled recovery path:
+DC is not discarded once AC behaviour begins. The nerve-level energy loop is:
 
 ```text
-inductive / magnetic return
-        -> steering element
-        -> C_REINJECT
-        -> measured controlled release
-        -> later permitted winding event
+DC supply
+ -> active event
+ -> controlled recovery
+ -> DC-link / reinjection reservoir
+ -> measured later reuse
 ```
 
-Measure independently:
+The center/reference `V0` is not the energy reservoir.
+
+### Ternary controls local motion and motors
 
 ```text
-E_in
-E_stored estimate
-E_returned to reservoir
-E_delivered from reservoir into later event
+DOWN
+HOLD
+UP
+```
+
+is the local ternary movement relation and the candidate motor/actuator command grammar. HOLD is an active balanced state where the implementation requires balance; it is not automatically equivalent to power-off.
+
+### Quadratic views/actions share the mirrors
+
+Views UP include:
+
+```text
+Direction
+Phase
+Strength
+Reference
+```
+
+Actions / conditioning / Override travel DOWN through the **same A/B/C physical mirrors**.
+
+## 3. Candidate physical implementation categories
+
+Do not lock a device before it passes the measurements.
+
+The active stateful path may be tested with:
+
+- hysteretic magnetic structures;
+- memristive/resistive-memory elements;
+- spintronic or magnetoresistive structures;
+- phase-retaining/oscillatory structures;
+- another measured stateful element that both participates in the active path and retains useful history.
+
+Bidirectional nerve connection may use back-to-back MOSFETs or another true bidirectional switch. SiC MOSFETs are candidates for later higher-power nerve/motor domains, but any gate-drive interface must be explicit; do not assume millivolt/microvolt state directly drives a SiC power gate.
+
+## 4. Bench frame
+
+Initial practical frame remains low voltage and current limited.
+
+```text
+Supply: nominal 5 V protected/current-limited source
+Reference: separately buffered/measured center V0
+Energy reservoir: separate DC-link / reinjection capacitor or equivalent
+A/B/C: measured differential paths around V0
+```
+
+Do not reopen the retired +/-12 V CELL_V1 design unless a later measured requirement explicitly forces a different supply architecture.
+
+## 5. Rev 0 — prove reference and reinjection separately
+
+Before claiming learning or motor control, establish clean energy accounting.
+
+Measure:
+
+```text
+V_supply
+I_supply
+V0 and drift
+E_event_in
+V_reservoir before/after
+E_recovered
+E_reused in later event
 losses
+temperature
 ```
 
-Pass condition: recovered energy is measurable and is deliberately reused in a later permitted event.
+Pass: returned energy is measurably collected and deliberately reused in a later permitted event.
 
-Fail condition: the claimed benefit depends on unexplained net energy gain or on hiding source current in the reference network.
+Fail: apparent reinjection depends on reference-node motion, hidden source current, or unexplained gain.
 
-## 8. Rev C — three opposed axes in one CELL_V1
+## 6. Rev A — one A+ <-> A- stateful bidirectional path
 
-Only after one axis has passed memory and recovery tests, reproduce it for B and C.
+Build one axis only:
 
-The cell then exposes:
+```text
+A+ <-> [true bidirectional connection]
+   <-> [active stateful processing-memory path]
+   <-> A-
+```
+
+Required proof:
+
+1. traversal works in both intended directions;
+2. a controlled event changes local physical state;
+3. that state persists for a measured interval;
+4. a later identical probe gives a different response because of the retained state;
+5. the state can be rewritten/reversed;
+6. recovery/reinjection remains separately measurable.
+
+## 7. Rev B — muscle-memory training test
+
+This is now a mandatory build gate.
+
+Choose one standardized A-axis route/task. Repeat it without changing the hardware settings.
+
+For every trial record:
+
+```text
+trial number
+pre-state
+command
+threshold
+latency
+voltage/current
+energy in
+energy recovered
+stateful-path observable
+post-state
+strain/error flag
+higher intervention yes/no
+time since previous trial
+temperature
+```
+
+Compare:
+
+```text
+trained repeated route
+vs
+untrained/opposite/control route
+```
+
+Pass: repetition creates a reproducible physical path bias that changes later behaviour and persists long enough to affect subsequent cycles.
+
+Also test:
+
+- saturation;
+- decay when unused;
+- reversal/retraining;
+- whether a failed/strained route is incorrectly reinforced;
+- whether higher Override can redirect the trained path.
+
+## 8. Rev C — duplicate the proven primitive into B and C
+
+Only after A passes, reproduce the same mechanism for:
 
 ```text
 A+ <-> A-
@@ -209,154 +261,224 @@ B+ <-> B-
 C+ <-> C-
 ```
 
-All six connections remain on flat edge centers.
+Do not hide a weak B or C axis behind a good A result.
 
-For each axis record the same memory and reinjection receipt so a good A axis cannot hide a failing B or C axis.
+Required test points should expose reference, each axis electrical state, each axis stateful-memory observable, and the reinjection reservoir.
 
-Required test points:
+## 9. Rev D — ternary local decision and motor grammar
+
+Demonstrate three distinguishable outcomes:
 
 ```text
-TP_REF       electrical center
-TP_A+ / A-   A-axis electrical state
-TP_B+ / B-   B-axis electrical state
-TP_C+ / C-   C-axis electrical state
-TP_MA/MB/MC  magnetic/sense observables
-TP_R         reinjection reservoir
+DOWN
+HOLD
+UP
 ```
 
-## 9. Rev D — path propagation
+Then map the same relation to a safe dummy load or instrumented actuator:
 
-Connect two identical CELL_V1 modules flat-edge to flat-edge using the canonical matching rule.
+```text
+DOWN = one commanded direction
+HOLD = balanced/resting local state
+UP   = opposite commanded direction
+```
 
-Prove that a state/transition in cell 1 changes cell 2 through the intended connection while recording:
+Exact winding/motor implementation remains experimental. Measure current, phase, torque/position where applicable, and thermal behaviour.
+
+## 10. Rev E — local automatic reinjection vs higher escalation
+
+Define real measured strain variables; do not use a vague hidden `resource` value.
+
+Candidate inputs include:
+
+- voltage margin;
+- current;
+- reservoir energy;
+- temperature;
+- unresolved phase/oscillation;
+- route conflict;
+- repeated local failure.
+
+Target behaviour:
+
+```text
+within limits
+ -> local action settles
+ -> energy recovered/reinjected through DC loop
+ -> trained local path continues without higher intervention
+
+outside limits
+ -> local loop does not blindly repeat
+ -> Views travel UP
+ -> higher level resolves
+ -> Action/Override travels DOWN through same mirror path
+ -> new physical state remains
+```
+
+## 11. Rev F — AC and rotation
+
+DC is the energy/recovery layer. Switching/recurrence produces AC behaviour.
+
+When A/B/C phases are coordinated, test for actual rotation:
+
+```text
+DC -> AC -> ROTATION
+```
+
+or, if magnetic field is what is measured:
+
+```text
+DC -> AC -> RMF
+```
+
+Do not use `RC` for rotation in engineering documents because it normally means resistor-capacitor.
+
+Distinguish:
+
+- simultaneous switching;
+- ringdown;
+- standing oscillation;
+- traveling/circulating phase/state;
+- controlled reversal.
+
+## 12. Rev G — path propagation and distributed training
+
+Connect two identical CELL_V1 modules flat-edge to flat-edge, then three.
+
+Measure:
 
 - amplitude loss;
 - phase/delay;
 - noise;
 - reference disturbance;
-- unwanted coupling to the other four edges;
-- retained-state disturbance.
+- crosstalk;
+- local retained-state disturbance;
+- whether repeated traversal trains the whole route or only one local cell.
 
-Then extend to three cells.
+A valid scalable path uses the same cell primitive at every position.
 
-A scalable path must survive multiple transfers without requiring a different special-purpose cell at each position.
+## 13. Rev H — seven-cell flower
 
-## 10. Rev E — closed rotation
-
-Arrange a small closed path using identical edge interfaces.
-
-The required evidence is not just oscillation. Distinguish among:
-
-- simultaneous switching;
-- damped ringing;
-- standing oscillation;
-- traveling/circulating state/phase;
-- controlled reversal of the circulation.
-
-A claimed field rotation needs phase-resolved measurements around the loop.
-
-## 11. Rev F — seven-cell flower
-
-Build one center CELL_V1 with six identical surrounding cells.
+Build one center + six surrounding identical CELL_V1 cells.
 
 Rules:
 
-- same orientation for all seven;
+- same orientation;
 - flat-edge connections only;
-- no adapter cells;
-- individual cell testability retained;
-- center/reference behavior logged per cell.
+- no adapters;
+- each cell remains individually measurable.
 
-Test in increasing complexity:
+Tests:
 
-1. one outer cell -> center;
-2. center -> one outer cell;
+1. outer -> center;
+2. center -> outer;
 3. two-edge path through center;
-4. perimeter path among surrounding cells where geometry permits;
-5. closed/circulating patterns;
-6. competing or intersecting paths;
-7. retained-state effect on a later whole-flower pattern.
+4. perimeter/closed routes where geometry permits;
+5. competing paths;
+6. route repetition/training;
+7. later whole-flower response after training;
+8. local Override of a trained route.
 
-## 12. Rev G — 3D / volumetric test
+## 14. Scaling experiments after the flower
 
-Do not jump directly to a full brain stack.
+The recurrence remains:
 
-Start with the smallest vertical/depth coupling that distinguishes:
+```text
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
+```
 
-- useful coupling;
-- reinforcement;
-- opposition/cancellation;
-- uncontrolled crosstalk.
+Current explicit test candidates:
 
-A current candidate scale is `3 x 3 x 3`, but the exact lower-scale unit remains open. Prove the interface at the smaller scale first.
+```text
+NERVE:
+2 flowers, normal + mirrored/inverted
 
-A mirror-flipped companion volume is a later candidate for whole-volume memory/checking/reinjection.
+M4:
+2 + 2 flower/volume layers
+candidate four-depth structure for fast Views-UP / Actions-DOWN routing
 
-## 13. Brain and M4 integration remain downstream
+HIGHER BRAIN:
+3 / 3 / 3 volumetric expansion
+and/or 3 x 3 x 3 proven lower-scale units
 
-Do not hard-code the following into the first CELL_V1 PCB:
+HEMISPHERES:
+resolved higher volume <-> mirror-flipped counterpart
+```
 
-- `2 normal + 2 inverted` as mandatory M4 depth;
-- `3 normal + 3 inverted` as mandatory brain depth;
-- `3+ / 3- / 3+` as mandatory hemisphere depth;
-- one dedicated nerve layer;
-- one fixed vertical polarity-flip interval.
+These counts are **not canonized by symmetry**. Each added layer must demonstrate a new measurable function such as correction speed, isolation, reconstruction, conflict resolution, relational capacity, or stable control depth.
 
-Those are architecture candidates. They become hardware requirements only when measurements show the function that each extra layer performs.
+If a layer adds no useful measurable function, remove it.
 
-## 14. Mandatory safety / failure controls
+## 15. Required muscle-memory acceptance curve
 
-- current-limit every early prototype;
+A serious muscle-memory claim needs more than before/after anecdotes.
+
+For a fixed route, graph or tabulate across repeated trials:
+
+```text
+trial number -> activation threshold
+trial number -> latency
+trial number -> drive energy
+trial number -> retained-state observable
+trial number -> recovered energy
+trial number -> intervention count
+```
+
+Then stop training and measure decay over time. Reverse/retrain the route and measure whether the bias can move rather than merely lock permanently.
+
+The preferred result is bounded plasticity:
+
+```text
+useful repetition -> easier local reuse
+strain/error      -> no blind reinforcement
+Override          -> can redirect
+inactivity        -> bounded persistence or measurable decay
+```
+
+## 16. Mandatory failure rules
+
+Stop or revise if:
+
+- any external connection moves to a hex corner;
+- the build becomes six separate physical Mirror/Action gates;
+- UP and DOWN require separate hardware path species instead of the same mirrors;
+- memory is separate from the active processing path;
+- the training effect exists only in software;
+- `V0` carries recovery current as an energy reservoir;
+- the energy budget implies unexplained gain;
+- one-way body-diode conduction defeats the intended bidirectional gate;
+- trained paths cannot be overridden under declared strain/error conditions;
+- HOLD silently becomes off when active balance is required;
+- a motor turning is used as proof of path memory or rotating field without those measurements;
+- 2-flower, 2+2, 3/3/3, or 3x3x3 counts are promoted without a measured function.
+
+## 17. Bench safety
+
+- current-limit early prototypes;
+- provide intentional inductive-energy return paths before switching coils;
 - prevent MOSFET shoot-through;
-- provide an intentional inductive-energy path before switching coils;
-- instrument the virtual/electrical center so reference collapse cannot masquerade as a state transition;
-- stop on unexpected MOSFET or winding heating;
-- do not hot-plug unknown coil configurations into an unprotected bridge;
-- record winding polarity/dot convention before changing connections;
-- do not connect an oscilloscope ground clip in a way that shorts a floating node or center reference;
-- use isolated/differential measurement where the circuit requires it.
+- monitor MOSFET/stateful-element temperature;
+- use differential/isolated probing where required;
+- never let an oscilloscope ground clip short a floating node or V0;
+- record winding polarity and switch orientation before changing connections;
+- stop on unexpected heating or unstable oscillation.
 
-## 15. Required receipt for every serious test
+## 18. Immediate first build
 
-```text
-test_id
-date / build revision
-cell_id / axis / edge
-schematic revision
-core material / geometry
-winding turns and polarity
-supply and current limit
-center-reference voltage
-MOSFET / switch configuration
-command pulse
-measured voltage/current waveform
-sense-winding / field waveform
-retained-state readback
-neighbor response when connected
-reinjection reservoir waveform
-energy accounting
-temperature
-PASS / FAIL
-unexpected behavior
-next single change
-```
+Do not start with the seven-cell flower.
 
-Change one thing, test immediately, compare with the active goal, and do not stack multiple unexplained changes into the same trial.
-
-## 16. First decisive build
-
-The immediate physical build is **not** the 27-unit volume.
-
-It is:
+The first decisive build is now:
 
 ```text
-ONE A+ <-> A- AXIS
+ONE A+ <-> A- BIDIRECTIONAL AXIS
 +
-HYSTERETIC MEMORY
+ACTIVE STATEFUL PROCESSING-MEMORY PATH
 +
-INSTRUMENTED REINJECTION
+MEASURED DC RECOVERY / REINJECTION
 +
-LOW-VOLTAGE DIFFERENTIAL REFERENCE
+REPEATED-PATH MUSCLE-MEMORY TEST
++
+MEASURED STRAIN / OVERRIDE CONDITION
 ```
 
-Once that behaves reproducibly, copy it into B and C without changing the primitive. That is the shortest path to a real CELL_V1 rather than another diagram.
+Only after that works reproducibly do we copy it into B and C, then add ternary motor control, path propagation, rotation, flowers, and volumetric layers.
