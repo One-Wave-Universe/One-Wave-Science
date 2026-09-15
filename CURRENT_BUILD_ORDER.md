@@ -1,63 +1,99 @@
 # CURRENT BUILD ORDER — BALANCED DEVICES TO CELL ARCHITECTURE
 
-This file is the current execution order for the practical build program. The rule is: useful device first, measure it honestly, then reuse the proven primitive at the next scale.
+This file is the current execution order for the practical build program. The rule is: prove the smallest useful physical primitive, measure it honestly, then reuse the proven primitive at the next scale.
 
 ## ACTIVE CELL_V1 validation track
 
-The current CELL_V1 hardware work is governed by:
+Current authority:
 
-- `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`
-- `CELL_V1_BUILD_PACKET.md`
-- `CELL_V1_ANTI_DRIFT.md`
-- `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
+1. `CELL_V1_ANTI_DRIFT.md`
+2. `UPDATED_63_CELL_V1_STATEFUL_MUSCLE_MEMORY_BUILD.md`
+3. `CELL_V1_BUILD_PACKET.md`
+4. `UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md`
+5. `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
 
-This track does not erase the projects below. It tells the older three-winding, balanced-cell, and 3D work exactly what geometry and evidence they now feed.
-
-### Geometry lock before any build
+### Geometry and physical lock
 
 ```text
-PORTS: FLAT SIDES / EDGES ONLY
+FLAT HEX SIDES ONLY
 CLOCKWISE: A+ -> B+ -> C+ -> A- -> B- -> C-
-OPPOSITES: A+<->A-, B+<->B-, C+<->C-
-FLOWER: 7 identical cells, same orientation, edge-to-edge
+MIRRORS:   A+<->A-, B+<->B-, C+<->C-
 ```
 
-Do not fabricate or simulate a corner-connected CELL_V1.
+There are **three physical bidirectional mirrors**. Views travel UP and Actions/conditioning travel DOWN through those same mirrors. Six directed edges, six logical route addresses, and any six-position software receipts are different counts.
+
+### Processing / memory / muscle-memory lock
+
+```text
+state = memory
+state transition = processing
+repeated successful state transition = physical path training
+```
+
+The active path must carry the retained state. Muscle memory must arise from repeated traversal changing that physical path enough to alter later threshold, latency, drive energy, route bias, retained state, or higher-level intervention count. A software counter by itself does not satisfy this gate.
+
+### Nerve-level energy and control
+
+```text
+DC = power + controlled recovery + reinjection
+AC = recurring/alternating path behaviour
+TERNARY = DOWN / HOLD / UP local movement and motor/actuator command
+VIEWS UP = Direction / Phase / Strength / Reference
+ACTIONS DOWN = conditioning / correction / Override through same mirrors
+```
+
+`V0` is reference only, never the recovery reservoir.
+
+Normal local events should settle and reinject locally. Measured strain/error conditions should escalate Views upward instead of blindly repeating a trained path.
 
 ### CELL_V1 build gates
 
-**A. One opposed magnetic axis** — prove write, retention, read, rewrite, and that old magnetic state changes the next standardized response.
+**0. Reference + DC recovery** — prove V0 stability, controlled recovery, later reuse, losses, and heating.
 
-**B. Reinjection on the same axis** — measure recoverable energy separately from magnetic retention; no unexplained gain.
+**A. One A+<->A- stateful bidirectional path** — prove traversal both ways, state change, retention, read, rewrite, and state-dependent next response.
 
-**C. Full three-axis hex** — reproduce the same primitive on A, B, and C and package the six edge-center interfaces without changing the basic mechanism.
+**B. Repeated-path muscle-memory** — repeat a fixed route and prove a physical training curve against an untrained/opposite control. Measure saturation, decay, reversal/retraining, and Override.
 
-**D. Two/three-cell path** — quantify propagation loss, phase/delay, reference disturbance, and retained-state disturbance.
+**C. Three physical A/B/C mirrors** — reproduce the proven primitive on all three axes without changing the mechanism.
 
-**E. Closed rotation** — distinguish a traveling/circulating phase/state from simultaneous switching, ringing, or a static loop.
+**D. Ternary local control** — demonstrate DOWN/HOLD/UP as three distinguishable local states while preserving path memory.
 
-**F. Seven-cell flower** — build one center + six surrounding identical cells, all same orientation, and demonstrate coupled paths/rotations while retaining local observability.
+**E. Automatic local reinjection vs escalation** — within limits, close locally through the DC recovery loop; outside declared limits, send Views UP and accept Action/Override DOWN.
 
-**G. Smallest 3D coupling** — measure useful depth coupling, reinforcement, opposition, and crosstalk before scaling farther.
+**F. Quadratic routing** — reconstruct Direction/Phase/Strength/Reference, demonstrate UP Views and DOWN Actions on the same mirrors, and leave a new local state.
 
-**H. Candidate volume and mirror** — only after smaller gates pass, test `3 x 3 x 3` recursion and a mirror-flipped companion volume for whole-volume memory/comparison/reinjection.
+**G. Motor/actuator analogue** — map ternary DOWN/HOLD/UP to one direction / active balanced hold / opposite direction with safe instrumentation.
 
-Brain/M4 layer counts remain open. Do not make `2+2`, `3+3`, `3+ / 3- / 3+`, or `3 x 3 x 3` mandatory hardware until the smaller tests show what each added depth contributes.
+**H. Two/three-cell path** — quantify propagation loss, delay, noise, reference disturbance, retained-state disturbance, and whether repeated multi-cell routes train as a path.
+
+**I. Closed rotation** — distinguish traveling/circulating phase/state from simultaneous switching, ringdown, or standing oscillation; test reversal.
+
+**J. Seven-cell flower** — one center + six same-orientation identical cells; test competing paths, repeated route training, whole-flower history, and local Override.
+
+**K. Two-flower nerve candidate** — test normal + mirrored/inverted flower pair. Keep it only if it adds a measurable nerve-level function.
+
+**L. `2+2` M4 candidate** — four coupled flower/volume layers; test whether fast Views-UP / Actions-DOWN routing gains measurable latency, isolation, or correction benefit.
+
+**M. `3/3/3` or `3x3x3` higher-brain candidate** — only after smaller layers pass; require measurable relational/reconstruction/control benefit.
+
+**N. Mirrored hemisphere candidate** — pair resolved higher volumes only after the lower volume has stable state, trained paths, reinjection, Views UP, Actions DOWN, and Override.
+
+No layer count becomes canon because it looks symmetric.
 
 ## Project 0 — Virtual Breadboard Qualification
 
-Purpose: make the virtual breadboard trustworthy enough to test ordinary electronics and then the balanced builds.
+Purpose: make the virtual breadboard trustworthy enough to test ordinary electronics and then the CELL_V1 build.
 
-Required permanent regressions:
+Permanent regression families:
 
 1. DC source / resistor / divider
-2. LED + current limiting
+2. LED + limiting
 3. diode / rectifier
-4. capacitor charge-discharge
-5. RC low-pass / high-pass
+4. capacitor charge/discharge
+5. RC filters
 6. inductor / flyback
 7. LC/RLC ringdown
-8. MOSFET low-side / high-side
+8. MOSFET low/high side
 9. push-pull / half bridge
 10. full bridge / differential load
 11. virtual ground under unequal load
@@ -68,175 +104,131 @@ Required permanent regressions:
 16. battery discharge / runtime
 17. reinjection storage loop
 18. balanced differential cell
+19. retained state write/read/rewrite
+20. history-dependent response
+21. controlled recovery into measured reservoir
+22. true bidirectional axis pair around V0
+23. repeated-path training / decay / reversal
+24. ternary DOWN/HOLD/UP around reference
+25. two-cell edge propagation
+26. closed-loop phase/rotation discrimination
+27. seven-cell same-orientation flower
+28. minimal depth coupling / crosstalk
 
-CELL_V1 adds required qualification cases once the underlying component models are trustworthy:
+Every serious simulator test returns expected, actual, tolerance, and PASS/FAIL. Add missing physics capabilities without rewriting working simulator behavior.
 
-19. hysteretic magnetic state write/read/retain/rewrite
-20. history-dependent threshold/response
-21. controlled inductive recovery into a measured reservoir
-22. bidirectional axis pair around a virtual center
-23. two-cell edge propagation
-24. closed-loop phase propagation / rotation discrimination
-25. seven-cell identical-orientation flower
-26. minimal depth coupling / crosstalk test
+## Project 1 — Balanced Flashlight / Useful Energy Test
 
-Every test must return `expected`, `actual`, `tolerance`, and `PASS/FAIL`. Do not rewrite the simulator per build. Add missing physics capabilities while preserving working behavior.
-
-## Project 1 — Balanced 9 V Flashlight
-
-This is the first useful physical proof device.
-
-Goals:
-
-- 9 V battery power
-- stable shared center / virtual ground
-- balanced differential power path
-- low-loss storage
-- hysteretic reinjection: sense drop -> inject energy -> restore target -> disconnect
-- useful LED output at matched perceived brightness
-- battery/runtime measurement against a conventional reference
-- projected battery bars on the wall only when requested
-- modular 3D-printed body and removable electronics tray
-
-Success criterion: same useful light output with a measurable runtime / average-current advantage, or a clear measured explanation of where the losses occur.
+Keep as a useful balanced-power reference device. Measure actual useful output, source current, storage/recovery behaviour, losses, noise, and runtime against a conventional reference. Do not treat it as proof of CELL_V1 cognition or muscle memory.
 
 ## Project 2 — Balanced Speaker + Purpose-Built Amp
 
-Do not chase maximum SPL. Optimize for the right listening volume, low idle power, battery life, symmetry, and noise/interference rejection.
+Use as a differential-drive, noise, symmetry, idle-power, and recovery test platform. Optimize useful listening behaviour rather than maximum SPL.
 
-Speaker targets:
+## Project 3 — Three-Winding / Three-Axis Ternary Nerve and Motor Test
 
-- centered cone rest position
-- mirrored / symmetric magnetic motor geometry
-- modest excursion
-- differential drive
-- measurable inward/outward symmetry
-
-Amp targets:
-
-- differential signal path where practical
-- low quiescent current
-- strong common-mode noise rejection
-- sleep/mute when silent
-- built initially on breadboard/perfboard
-
-Success criterion: same perceived volume with lower idle/average power and/or lower hum/noise/distortion than the reference implementation.
-
-## Project 3 — Three-Winding Ternary Nerve
-
-This remains a useful motor/nerve analogue and component test. It is **not** the canonical CELL_V1 physical geometry.
+This project now feeds the CELL_V1 ternary motor gate.
 
 Targets:
 
-- three coupled windings
-- ternary local control `- / HOLD / +`
-- fast local actuation
-- sensors remain separate inputs
-- vagus-style regulation layer remains separate from motor-control nerves
-- Hall/current/temperature sensing added as needed
-- collect phase, switching, magnetic coupling, and recovery measurements that can feed CELL_V1 A/B/C axis design
+```text
+three-axis or three-phase magnetic control
+DOWN / HOLD / UP local command
+two-way nerve connection
+phase/current/temperature sensing
+measured recovery/reinjection
+```
 
-Success criterion: reproducible local ternary control and measurable magnetic coupling without requiring higher brain layers to manage every transition.
+It is a motor/nerve analogue and component test, not permission to replace the canonical hex geometry.
 
-## Project 4 — DC -> AC -> RC Three-Cell Stack
+## Project 4 — DC -> AC -> ROTATION Test Stack
 
-Current shorthand:
+Use engineering language:
 
-- `BC-DC` — balanced/binary choice represented as a differential DC state around center
-- `TC-AC` — confirmation / out-and-back oscillation around center
-- `QC-RC` — coordinated rotating relationship across axes
+```text
+DC -> AC -> ROTATION
+```
 
-Test stack:
+or `RMF` when a rotating magnetic field is actually measured. Do not use `RC` for rotation because it conventionally means resistor-capacitor.
 
-1. Cell 1: DC differential state
-2. Cell 2: validated handoff into controlled AC / phase behavior
-3. Cell 3: multi-axis field control / rotation
+Required evidence:
 
-Use three-axis field measurement (`Bx`, `By`, `Bz`) to reconstruct the actual resultant vector. Do not assume field geometry from drawings.
-
-This stack is an experimental decomposition of behavior. It must not overwrite the locked CELL_V1 flat-edge port geometry or be treated as proof that three separate physical cells are required for the final primitive.
+- DC energy source and recovery accounting;
+- controlled AC/phase behaviour;
+- ternary route/motor command;
+- multi-axis phase-resolved rotation measurement;
+- reversal;
+- retained path state and repetition effect where claimed.
 
 ## Project 5 — 3D Cell Geometry
 
-Working geometry is now constrained by the CELL_V1 lock:
+3D work inherits CELL_V1:
 
-- one physical CELL_V1 is a six-flat-edge hex interface in its planar face;
-- clockwise edge order is `A+ B+ C+ A- B- C-`;
-- A/B/C are three opposed axes through the center;
-- identical cells form the seven-cell flower without alternating orientation;
-- the hex is the planar connectivity face of a volumetric-capable module, not permission to connect at vertices;
-- horizontal relations use side-to-side connections;
-- depth/vertical coupling must be measured rather than assumed from a drawing;
-- three independent spatial degrees of freedom are required for true 3D steering/field reconstruction.
+- one planar hex has six flat-side interfaces;
+- A/B/C are three bidirectional mirrors;
+- identical cells form same-orientation flowers;
+- depth coupling is measured, not drawn into existence;
+- a lower-scale resolved structure must expose a reusable next-scale interface.
 
-First serious **candidate** scale remains a `3 x 3 x 3 = 27` lower-unit structure, but `lower unit` is now explicitly open: one CELL_V1, one flower, or another proven packaged relation. The smaller scale must demonstrate Point -> Path -> Rotation -> Field before 27-unit counting is promoted to hardware.
+`3x3x3` remains a candidate grain, not a mandatory count.
 
-## Project 6 — Parser-Matrix / Cheap Knockoff Brain
+## Project 6 — Parser / Software Brain Prototype
 
-Software prototype before custom brain hardware.
+Software may model the relational logic, but it must not fake the physical proof.
 
-Primitive thought pair:
+Useful software roles:
 
-- expressive parser: expands candidate interpretations / paths
-- compressive parser: contracts, removes redundancy, keeps the stable representation
+- reconstruct path receipts;
+- compare trained vs untrained routes;
+- identify strain/error conditions;
+- simulate higher-level Views/Actions;
+- test recursive scale interfaces;
+- preserve exact experimental provenance.
 
-Local cluster:
+Software counters may help analyze training, but the physical muscle-memory claim requires a changed hardware path.
 
-- expressive + compressive + resolver/connector
+Whole-system lifecycle remains:
 
-Three clusters of three parsers form the first Point -> Path -> Field parser matrix.
+```text
+Idle -> Primed -> Executing -> Vectoring -> Resolving
+```
 
-Memory rule:
+## Project 7 — First Integrated Volume Processing Test
 
-- parsers are processing and memory
-- persistent parser states + transitions + links are the memory pattern
-- recall = rebuild the relevant parser constellation from a cue
-- do not depend first on a giant transcript archive
+Begin only after lower CELL_V1 gates pass.
 
-Higher hardware/software split:
+A meaningful first volume must show:
 
-- M4/router = fast routing, timing, synchronization, state handoff
-- CPU = Administrator / oversight / commit decisions
-- GPU = Dream / parallel generation and candidate simulation
-- Hailo-8-class accelerator may be tested as an M4/inference-routing helper, but the architecture must not depend on one vendor device
-
-Canonical whole-system lifecycle remains:
-
-`Idle -> Primed -> Executing -> Vectoring -> Resolving`
-
-CELL_V1 scaling is allowed to inform this software model, but hardware layer counts must not be reverse-engineered from parser counts without evidence.
-
-## Project 7 — First Integrated Sphere / Cube Processing Test
-
-Only begin after the lower projects and CELL_V1 gates have produced reusable measurements.
-
-A first sphere/cube test must demonstrate more than raw ternary storage. It should show:
-
-- persistent local states
-- relationship-dependent routing
-- state change across paths
-- partial-cue reconstruction
-- measurable 3D field/state behavior where magnetic hardware is involved
-- differential between two whole-network states as an explicit observable
-- evidence that the lower-scale resolved structure can serve as one next-scale point without erasing its internal state
+- persistent local physical states;
+- repeated-path training;
+- relationship-dependent routing;
+- local automatic recurrence with bounded escalation;
+- upward Views and downward Actions through the same relational interface;
+- partial-cue or state reconstruction if claimed;
+- measurable 3D coupling where magnetic hardware is involved;
+- lower-scale resolved volume behaving as one next-scale point without erasing its internal history.
 
 ## Build law
 
-Do not turn each architecture update into a whole-repository rewrite. Work in coherent subsystem batches: one subsystem, its dependencies, its tests, then stop and measure. The simulator scales upward with the builds rather than being replaced for each build.
-
-For CELL_V1 specifically:
+For CELL_V1:
 
 ```text
 lock geometry
- -> prove one axis
- -> prove memory
- -> prove reinjection
+ -> prove one bidirectional stateful axis
+ -> prove retained processing-memory
+ -> prove DC recovery/reinjection
+ -> prove repeated-path muscle memory
  -> duplicate A/B/C
+ -> prove ternary local/motor control
+ -> prove local reinject vs escalate
+ -> prove Views UP / Actions DOWN
  -> prove path
  -> prove rotation
- -> prove seven-cell field
- -> prove depth
- -> then scale volume
+ -> prove seven-cell flower
+ -> test two-flower nerve candidate
+ -> test 2+2 M4 candidate
+ -> test 3/3/3 or 3x3x3 higher volume
+ -> only then test mirrored hemisphere volumes
 ```
 
-If a lower gate fails, fix that gate instead of hiding the failure inside a larger brain-shaped build.
+If a lower gate fails, fix that gate. Do not hide failure inside a larger brain-shaped build.
