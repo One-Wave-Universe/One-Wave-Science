@@ -110,7 +110,7 @@ Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present glo
 4. `UPDATED_46_ZONE_EDGE_125GEV_A0_QUARANTINE.md`
 5. `UPDATED_45_PPF_HEX_GRAPH_AND_OCCUPANCY_WRAPPER.md`
 6. `Nodes/G-746_Damping_Matrix_Dispersion.md`
-7. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
+7. `Nodes/G-745_Zone_Edge_125GEV_Lattice_Constant_Hypothesis.md`
 8. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
 9. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
 10. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
@@ -306,7 +306,7 @@ Every physical or neural simulation must preserve the native dimensional layer. 
 Required dimensional reading:
 
 1. `Nodes/A-117_Dimensional_Integrity_and_Projection_Declaration.md`
-2. `Nodes/D-408_Sixfold_2D_Triangular-Hexagonal_Lattice.md`
+2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md`
 3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md`
 4. `Nodes/D-410_TwentyFourfold_4D_Field_Void_Recurrence_Shell.md`
 5. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
