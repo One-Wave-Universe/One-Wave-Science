@@ -24,10 +24,10 @@
   <rect x="16" y="16" width="818" height="1068" fill="none" stroke="#999" stroke-width="1"/>
 
   <!-- Title -->
-  <text x="40" y="50" class="title">CELL_V1 — Station C — Third Real Build</text>
-  <text x="40" y="70" class="subtitle">One-Wave Science / Virtual_Breadboard. Real parts, real values, no idealized gate drive. Single-phase proof only.</text>
-  <text x="40" y="86" class="subtitle">Wire this only after Stations A and B have passed their receipts (BUILD_25.md step 21). Same topology, third copy.</text>
-  <text x="40" y="102" class="subtitle">Electrically identical to Station A, so the same regression test (24_cell_v1_manual_gate_bias_station_a.js) already covers these numbers.</text>
+  <text x="40" y="50" class="title">CELL_V1 — One Circuit, Built 3 Times</text>
+  <text x="40" y="70" class="subtitle">One-Wave Science / Virtual_Breadboard. Stations A, B, C are the SAME circuit, wired three times on one board.</text>
+  <text x="40" y="86" class="subtitle">Build A first. Only after A passes its receipt, wire B with its own parts, in the table below. Then C.</text>
+  <text x="40" y="102" class="subtitle">One test file (test/regression-builds/24_cell_v1_manual_gate_bias_station_a.js) verifies all three, since they are electrically identical.</text>
 
   <!-- ===================== SCHEMATIC ===================== -->
 
@@ -92,15 +92,36 @@
   <!-- ===== Right column: Station A ===== -->
   <!-- PA node vertical spine -->
   <line x1="560" y1="245" x2="560" y2="665" class="wire"/>
-  <text x="572" y="459" class="lblB">PC</text>
+  <text x="572" y="459" class="lblB">P_x</text>
 
   <!-- P-MOS box -->
   <rect x="510" y="190" width="100" height="55" class="box"/>
   <text x="560" y="212" text-anchor="middle" class="lblB">AO3401A</text>
-  <text x="560" y="227" text-anchor="middle" class="small">P-MOS (Q5)</text>
-  <text x="560" y="240" text-anchor="middle" class="small">S=RED  D=PC</text>
+  <text x="560" y="227" text-anchor="middle" class="small">P-MOS (Q_odd)</text>
+  <text x="560" y="240" text-anchor="middle" class="small">S=RED  D=P_x</text>
   <line x1="560" y1="145" x2="560" y2="190" class="wire"/>
   <text x="566" y="172" class="small">source</text>
+
+  <!-- Relabeling table: which real parts/node names to use for each of the 3 builds -->
+  <rect x="648" y="150" width="162" height="92" fill="#f5f7fb" stroke="#1a4fa0" stroke-width="1.5" rx="4"/>
+  <text x="729" y="166" text-anchor="middle" class="cellHdr">Build this 3×</text>
+  <line x1="656" y1="173" x2="802" y2="173" class="tblLine"/>
+  <text x="656" y="187" class="cellHdr">Sta.</text>
+  <text x="684" y="187" class="cellHdr">Q_odd</text>
+  <text x="726" y="187" class="cellHdr">Q_even</text>
+  <text x="778" y="187" class="cellHdr">P_x</text>
+  <text x="656" y="204" class="cell">A</text>
+  <text x="684" y="204" class="cell">Q1</text>
+  <text x="726" y="204" class="cell">Q2</text>
+  <text x="778" y="204" class="cell">PA</text>
+  <text x="656" y="219" class="cell">B</text>
+  <text x="684" y="219" class="cell">Q3</text>
+  <text x="726" y="219" class="cell">Q4</text>
+  <text x="778" y="219" class="cell">PB</text>
+  <text x="656" y="234" class="cell">C</text>
+  <text x="684" y="234" class="cell">Q5</text>
+  <text x="726" y="234" class="cell">Q6</text>
+  <text x="778" y="234" class="cell">PC</text>
 
   <!-- P-gate divider node: OFF-bias 10k runs straight up to RED, clear of labels -->
   <circle cx="440" cy="217" r="3" class="dot"/>
@@ -130,8 +151,8 @@
   <!-- N-MOS box -->
   <rect x="510" y="620" width="100" height="55" class="box"/>
   <text x="560" y="642" text-anchor="middle" class="lblB">2N7000</text>
-  <text x="560" y="657" text-anchor="middle" class="small">N-MOS (Q6)</text>
-  <text x="560" y="670" text-anchor="middle" class="small">D=PC  S=BLACK</text>
+  <text x="560" y="657" text-anchor="middle" class="small">N-MOS (Q_even)</text>
+  <text x="560" y="670" text-anchor="middle" class="small">D=P_x  S=BLACK</text>
   <line x1="560" y1="675" x2="560" y2="770" class="wire"/>
   <text x="566" y="735" class="small">source</text>
 
@@ -164,7 +185,7 @@
   <polyline points="640,455 648,447 656,463 664,447 672,463 680,455" class="wire"/>
   <line x1="680" y1="455" x2="700" y2="455" class="wire"/>
   <text x="642" y="437" class="lblB">1kΩ load</text>
-  <text x="642" y="480" class="small">PC → BLUE</text>
+  <text x="642" y="480" class="small">P_x → BLUE</text>
   <circle cx="560" cy="455" r="3" class="dot"/>
 
   <!-- ===================== STATE TABLE ===================== -->
@@ -174,7 +195,7 @@
   <text x="50" y="845" class="cellHdr">State</text>
   <text x="150" y="845" class="cellHdr">P-gate jumper</text>
   <text x="310" y="845" class="cellHdr">N-gate jumper</text>
-  <text x="470" y="845" class="cellHdr">V(PC)</text>
+  <text x="470" y="845" class="cellHdr">V(P_x)</text>
   <text x="600" y="845" class="cellHdr">I<tspan baseline-shift="sub" font-size="9">0</tspan> at BLUE</text>
   <line x1="40" y1="853" x2="800" y2="853" class="tblLine"/>
 
@@ -209,9 +230,9 @@
   <!-- ===================== SAFETY BOX ===================== -->
   <rect x="40" y="1000" width="770" height="80" rx="6" class="warn"/>
   <text x="55" y="1020" class="warnTxt" font-weight="700">NEVER install both 10kΩ jumpers at the same time.</text>
-  <text x="55" y="1037" class="warnTxt">I<tspan baseline-shift="sub" font-size="9">0</tspan> will NOT warn you if you do — the fault current runs RED → Q5 → PC → Q6 → BLACK and never touches BLUE.</text>
+  <text x="55" y="1037" class="warnTxt">I<tspan baseline-shift="sub" font-size="9">0</tspan> will NOT warn you if you do — the fault current runs RED → Q_odd → P_x → Q_even → BLACK and never touches BLUE.</text>
   <text x="55" y="1054" class="warnTxt">Watch for heat, smell, or the supply's current-limit tripping instead. Never wire a 0/5V microcontroller GPIO</text>
   <text x="55" y="1071" class="warnTxt">directly to either gate node — it cannot turn either device fully OFF on this ±12V build.</text>
 
-  <text x="40" y="1096" class="small">One-Wave Science — Virtual_Breadboard/09_TESTS. Third and last station — tie PA/PB/PC to STAR on BLUE once all three pass (ONE_WAVE_CELL.md).</text>
+  <text x="40" y="1096" class="small">One-Wave Science — Virtual_Breadboard/09_TESTS. Same sheet, wired 3 times. After A, B, and C each pass, tie PA/PB/PC to one shared STAR on BLUE.</text>
 </svg>
