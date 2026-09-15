@@ -23,11 +23,12 @@ Turn the clarified ground-referenced recursive cell into an authoritative, test-
 
 ## Locked requirements captured
 
-- six hex sides, never corners;
-- clockwise `A+ B+ C+ A- B- C-`, with three opposed mirror pairs;
+- six hex side terminals, never corners, forming only three whole state gates;
+- clockwise `A+ B+ C+ A- B- C-`, paired as `A+/A-`, `B+/B-`, and `C+/C-`;
+- every gate flip resolves new Field UP together with last Void/action DOWN;
 - virtual ground is the ternary HOLD/zero state;
-- `DC -> AC -> RC` in that order;
-- quadratic Views UP followed by mirrored Actions DOWN;
+- three-gate `DC -> AC -> RC` dependency;
+- quadratic Views UP and mirrored last Actions DOWN coexist in Gate C;
 - reinjection returns the measured consequence of the whole cell;
 - muscle memory is rewritable path-specific impedance reinforcement;
 - recall reconstructs a route from a cue;
@@ -41,7 +42,7 @@ Turn the clarified ground-referenced recursive cell into an authoritative, test-
 
 ## Field notes
 
-The earlier repository already contained most vocabulary but spread it across integration, timing, magnetics, and build-order files. It did not place selective memristive rewrite and whole-path reconstruction into one priority execution map.
+The earlier repository already contained most vocabulary but spread it across integration, timing, magnetics, and build-order files. It did not place selective memristive rewrite and whole-path reconstruction into one priority execution map. A follow-up correction removed the false six-sequential-gate reading: the six terminals form three whole mirrored gates.
 
 ## Void oversight
 
@@ -58,4 +59,3 @@ Decision: `ALLOW` as a documentation/build-order correction. Do not claim compon
 ## Hard stop
 
 Reached. Stop after map, pointers, verification, and branch handoff.
-
