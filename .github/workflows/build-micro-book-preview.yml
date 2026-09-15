@@ -1,0 +1,62 @@
+name: Build Micro Book Preview
+
+on:
+  push:
+    branches:
+      - micro-book-pdf-preview
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pypdf
+      - name: Merge canonical Book 1 chapter PDFs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from pypdf import PdfWriter
+
+          root = Path('Books/Book1_Micro')
+          files = [
+              'Book1_Ch01_What_Is_A_Particle.pdf',
+              'Book1_Ch02_The_Proton.pdf',
+              'Book1_Ch03_Scale_Invariance.pdf',
+              'Book1_Ch04_The_Electron.pdf',
+              'Book1_Ch05_The_Neutron.pdf',
+              'Book1_Ch06_The_Nucleus.pdf',
+              'Book1_Ch07_The_Photon.pdf',
+              'Book1_Ch08_The_Neutrino.pdf',
+              'Book1_Ch09_No_Observer_Effect.pdf',
+              'Book1_Ch10_Time_At_Micro_Scale.pdf',
+              'Book1_Ch11_No_Antimatter.pdf',
+              'Book1_Ch12_Gravity_At_Micro_Scale.pdf',
+              'Book1_Ch13_Electricity_And_Magnetism.pdf',
+              'Book1_Ch14_Mass_Effect.pdf',
+              'Book1_Ch15_The_Higgs_Field_Is_The_Lattice.pdf',
+              'Book1_Ch16_Memory_As_Compressed_State.pdf',
+              'Book1_Ch17_AI_And_Human_Same_Architecture.pdf',
+          ]
+          missing = [f for f in files if not (root / f).exists()]
+          if missing:
+              raise SystemExit('Missing canonical PDFs: ' + ', '.join(missing))
+          writer = PdfWriter()
+          for f in files:
+              writer.append(str(root / f))
+          out = Path('Book1_Micro_CURRENT_REVIEW_COPY.pdf')
+          with out.open('wb') as fp:
+              writer.write(fp)
+          print(f'Wrote {out} from {len(files)} canonical chapter PDFs')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: micro-book-current-review-copy
+          path: Book1_Micro_CURRENT_REVIEW_COPY.pdf
+          if-no-files-found: error
+          retention-days: 7
