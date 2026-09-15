@@ -1,66 +1,103 @@
-# UPDATED 34 — Processing-Is-Memory and Cube-Scale Architecture
+# UPDATED 34 — Processing-Is-Memory and Recursive Scale Architecture
 
-**Status:** Current implementation clarification following Updated 33. This update records the latest hardware/computation interpretation without changing the invariant six-pair oscillator.
+**Status:** Current implementation clarification following Updated 33. This update uses the corrected physical primitive: three bidirectional A/B/C mirrors with Views UP and Actions DOWN through the same paths.
 
 ## 1. Processing Is the Memory
 
-The target VTC architecture is not conventional `CPU -> RAM -> CPU` traffic. The local physical state is intended to be both the stored state and the state being acted on.
+The target architecture is not conventional `CPU -> RAM -> CPU` traffic. The local physical state is intended to be both the stored state and the state being acted on.
 
 ```text
-cell holds state
- -> cell receives a differential relation
- -> local state changes
+stateful path holds local state
+ -> incoming differential/current interacts with that state
+ -> the same local state changes
  -> resulting state remains locally available
- -> neighboring / higher differential reads that state
+ -> the next pass / neighbor / higher relation encounters that changed state
 ```
 
 The target primitive therefore combines:
 
 ```text
-state + memory + computation + routing
+state + memory + processing + routing
 ```
 
-The return path is state-advancing, not an automatic reset:
+This remains an architectural target until write/retain/read/rewrite/propagation are experimentally demonstrated.
+
+## 2. Three physical bidirectional mirrors
+
+CELL_V1 hardware uses:
 
 ```text
-old local state
- -> local decision / differential
- -> higher conditioning or Override if required
- -> lower configuration changes
- -> conditioning returns / releases
- -> resulting configuration remains
- -> resulting configuration is the NEW local state
- -> new state becomes the next upward relation
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
 ```
 
-This is an architectural target, not an experimental fact until retention/read/rewrite tests are passed. If magnetic persistence is claimed, the proof must show write, retain, read with acceptable disturbance, rewrite, and propagation into another identical stage.
+The six hex interfaces are the directed ends of these three mirrors.
 
-## 2. Local Ternary vs. Sparse Binary Oversight
+Do **not** reconstruct the physical cell as three Mirror gates followed by three separate Action gates.
 
-Keep the control burden split by scale.
-
-Local state network:
+Legacy six-position software/receipt labels may remain, but every such position must project onto:
 
 ```text
--1 / 0 / +1
-Direction
-Phase
-Strength
-Reference
+physical axis = A / B / C
+physical direction = UP / DOWN
 ```
 
-Higher supervisory controller:
+where:
 
 ```text
-0 = no intervention / let local network resolve
+UP   = View / state / relation propagation
+DOWN = Action / conditioning / Override propagation
+```
+
+## 3. Local ternary and sparse higher intervention
+
+Keep the control burden local whenever possible.
+
+Local ternary relation:
+
+```text
+DOWN / HOLD / UP
+```
+
+`HOLD` is an active balanced center state, not missing signal.
+
+The same ternary relation is the candidate nerve/motor command grammar:
+
+```text
+one orientation / balanced Hold / opposite orientation
+```
+
+Higher intervention remains sparse:
+
+```text
+0 = no intervention / local network continues
 1 = intervene / trigger / reroute / Override
 ```
 
-The controller does not need to encode every local ternary state if the local network can resolve and retain those states itself. A released Override does not imply restoration of the old local state; the resulting local configuration is read forward as the next state.
+A released Override does not restore the old local state. The resulting configuration is the new state.
 
-## 3. Field / Void Processor-Scale Split
+## 4. Binary route relation
 
-At large scale, Field and Void are opposed processing regions sharing the same relational reference rather than a single central processor emulating both functions.
+The primitive binary relation is:
+
+```text
+YES / NO
+```
+
+Ground/no committed binary choice is separate. NO must not collapse into no signal.
+
+Together:
+
+```text
+2 binary relations x 3 ternary moves = 6 route addresses
+```
+
+This six-route address space is not the same thing as the six directed CELL_V1 edges or any six-position software receipt.
+
+## 5. Field / Void processor-scale split
+
+At large scale, Field and Void may be opposed processing regions sharing the same relational reference.
 
 ```text
                  shared reference/state
@@ -69,24 +106,80 @@ At large scale, Field and Void are opposed processing regions sharing the same r
              +-----------+-----------+
              |                       |
           FIELD                    VOID
-      expressive region       compressive region
+      expressive region       compressive/checking region
              |                       |
              +------ differential ---+
                          |
                       routing
 ```
 
-Because processing and memory are co-located, each side's working memory is primarily the persistent state of its own local cells/clusters. Conventional cache/control memory may still exist around the architecture, but it is not the conceptual source of working state.
+Because processing and memory are co-located, working state is primarily the persistent state of local cells/clusters rather than a mandatory separate giant RAM bank.
 
-## 4. Recursive Differential Contract
+## 6. Views UP / Actions DOWN
+
+The quadratic View descriptors are:
+
+```text
+Direction
+Phase
+Strength
+Reference
+```
+
+They travel UP through the same A/B/C mirrors.
+
+The Action-mode vocabulary is:
+
+```text
+Inward
+Outward
+Across
+Over
+```
+
+Actions and Override travel DOWN through the same A/B/C mirrors.
+
+These View and Action names are descriptors, not separate physical gate types.
+
+## 7. DC / AC / nerve-level power recurrence
+
+At the nerve level:
+
+```text
+DC = supply + controlled energy recovery + reinjection
+AC = alternating/recurring activity through the mirrored paths
+TERNARY = DOWN / HOLD / UP local movement and motor command
+QUADRATIC = Views UP / Actions DOWN
+```
+
+DC is not only the starting bias. It is the candidate power/recovery loop for local nerve recurrence.
+
+The electrical reference `V0` is separate from the energy reservoir. Returned inductive/magnetic energy must be measured and steered into a controlled reservoir/DC link, not into virtual ground.
+
+Candidate local policy:
+
+```text
+state/resources within declared limits
+ -> continue locally
+ -> recover / reinject through DC loop
+
+state/resources outside declared limits
+ -> Views UP
+ -> higher resolution
+ -> Action/Override DOWN
+ -> new local state
+```
+
+The exact resource variables and thresholds remain experimental.
+
+## 8. Recursive differential contract
 
 The same external relation must survive every scale transition.
 
 ```text
 input relation
  -> local mirrored evaluation
- -> local differential
- -> shared differential
+ -> local state transition
  -> output relation
 ```
 
@@ -97,182 +190,91 @@ Hard scaling rule:
 The downward relation must close back into a resulting local state that can travel upward again:
 
 ```text
-UP -> higher relation -> DOWN -> NEW UP
+UP -> higher/local resolution -> DOWN or no-intervention -> NEW STATE -> NEW UP
 ```
 
 If every scale requires a new decoder/controller species, recursion has failed.
 
-## 5. Brain-First Boundary
+## 9. Point / Path / Rotation / Field / Volume
 
-The first machine target is the brain/computer without a body.
-
-The following must run with local or simulated endpoints only:
+The scale contract is:
 
 ```text
-persistent state
- -> upward relation
- -> higher resolution / Oversight
- -> downward relation / Override where required
- -> local physical transition
- -> new persistent state
- -> next upward relation
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
 ```
 
-Sensors, motors, actuators, body feedback, proximity, tilt, temperature, and other Android interfaces are later adapters. They may plug into the same relational interface, but the brain kernel must not require them in order to close its own recurrence.
-
-## 6. Scale Up and Scale Down
-
-Upward aggregation:
+For CELL_V1:
 
 ```text
-primitive state
- -> triad relation
- -> 3-triad / 9-element cluster
- -> 27-position internal volume
- -> cube relation
- -> cube-cluster relation
+one hex
+ -> flat-edge path through identical hexes
+ -> closed/circulating route
+ -> seven-cell / multi-cell field
+ -> stacked 3D volume
+ -> resolved next-scale point
 ```
 
-Downward conditioning:
+The seven-cell flower remains the first locked planar scale unit: one center CELL_V1 plus six identical surrounding cells in the same orientation.
+
+## 10. Volume and brain-scale counts remain hypotheses
+
+Do not turn attractive numerical symmetry into established hardware.
+
+Current candidates include:
 
 ```text
-higher Field/Void relation
- -> cube
- -> cluster
- -> triad
- -> local state transition
- -> resulting state remains locally available
+normal + inverted
+2 flowers
+2+2
+3+3
+3 / 3 / 3
+3+ / 3- / 3+
+3 x 3 x 3
+mirrored hemisphere volumes
 ```
 
-Most activity should remain local; only resolved relations/events need travel upward.
+These remain experiments until measurements show what each added layer/volume contributes.
 
-## 7. Connected Cube Machine
+The `3 x 3 x 3` idea may eventually describe 27 cells, 27 flower-scale points, 27 resolved modules, or another justified grain. The grain is not locked.
 
-The mature machine is a lattice of connected cube modules, not one endlessly enlarged monolith.
+## 11. Bidirectional nerve-gate connection
 
-Each cube must expose the same relational interface it consumes:
+The connection element must support both intended directions without a body diode silently defeating the blocked direction.
 
-```text
-Direction
-Phase
-Strength
-Reference
-```
+Back-to-back MOSFETs or another true bidirectional switch are candidates.
 
-Physical cube interfaces may be arranged over six spatial faces:
+SiC MOSFETs may be tested where power, switching, endurance, or thermal behavior is useful. This does not establish direct millivolt/microvolt gate control; any gate-drive/interface layer must be explicit and measured.
 
-```text
-+X / -X
-+Y / -Y
-+Z / -Z
-```
+The connection switch is not automatically the processing-memory element.
 
-The cube should be externally usable as one larger relational node regardless of the number of internal primitives.
+## 12. Stateful carrier proof
 
-Scale example:
+The exact processing-memory carrier is open.
 
-```text
-1 cube
- -> 3 cubes
- -> 3 x 3 x 3 = 27 cubes
- -> blocks of 27 cubes
- -> recursive larger volumes
-```
+Candidate classes include:
 
-Computational usefulness should come primarily from increasing cell density inside cubes, not from requiring huge hand-sized cube counts.
+- memristive elements;
+- hysteretic magnetic elements;
+- spintronic/magnetoresistive structures;
+- oscillatory stateful structures;
+- other devices whose retained physical state changes subsequent current/signal behavior.
 
-## 8. 3-of-3 Geometry and Mirrored Six
+A candidate passes only if the same active path can demonstrate:
 
-Current structural recursion:
+1. write/change;
+2. retention;
+3. read with bounded disturbance;
+4. rewrite;
+5. changed subsequent behavior;
+6. interaction/propagation into another identical stage.
 
-```text
-3 active elements = 1 triad
-3 triads = 9-element base cluster
-3 cluster planes/orientations = 27-position internal volume
-```
+If memory can be removed from the active path while processing remains unchanged, it is not the intended processing-memory implementation.
 
-Three physical Mirror Gates traversed in two orientations/phases still provide the six logical positions of the current VTC interpretation. Do not silently turn this back into six separate physical Mirror Gates.
+## 13. First compute proof
 
-The mirrored logical positions may be read as:
+Balanced-ternary arithmetic remains a useful finite test because it exercises the three local movement states without redefining the hardware.
 
-```text
-1/6 -> 2/5 -> 3/4 | 4/3 -> 5/2 -> 6/1
-```
-
-`/` denotes one simultaneous mirrored pair. The `3/4 <-> 4/3` relation is the central reversal. The two sides each have their corresponding `6`; the two `6` positions are mirrored counterparts rather than one serial endpoint. This notation is explanatory and must remain consistent with the canonical Field/Void six-pair oscillator.
-
-## 9. Current Signal / Action Interpretation
-
-```text
-INWARD
-signal/relation enters or returns toward reference
-
-DC CHOICE
-EVERYTHING / NOTHING
-engage / do not engage
-
-OUTWARD
-local cell expresses its state/result
-
-AC DIFFERENTIAL
-LEFT / STAY / RIGHT
--1 / 0 / +1
-
-ACROSS
-opposed outputs establish the shared differential
-
-OVER
-resolved relation crosses into the next differential / cluster / scale
-```
-
-The Four Views remain separate:
-
-```text
-Direction
-Phase
-Strength
-Reference
-```
-
-Do not rename the Four Actions back into Views.
-
-The hardware hypothesis in G-741 now tests a more specific sequence:
-
-```text
-shared local V0
- -> first binary millivolt lean
- -> second-loop admission
- -> coupled AC recurrence
- -> ternary Left / Stay / Right routing
- -> mirrored six-position processing
- -> Views up
- -> Actions / Override down
- -> resulting NEW state up
-```
-
-This sequence is not canonical fact until bench measurements support it.
-
-## 10. Physical Role Separation
-
-Do not collapse decision, memory, and connection hardware into one label unless the physical build proves they are the same mechanism.
-
-Current working separation:
-
-```text
-local differential / voltage swing relative to V0 = decision/state variable
-persistent magnetic or oscillatory state = processing-memory candidate
-bidirectional switching element = nerve-gate / connection candidate
-```
-
-Back-to-back MOSFETs or other true bidirectional devices are candidates for the connection role. SiC MOSFETs may be tested in that role where their switching, endurance, thermal, or power-domain properties are useful. This does not establish direct millivolt gate control; the gate-drive interface remains an engineering variable to measure.
-
-One higher Override coordinating three lower nerve-gate flips is a current physical hypothesis. It must remain labeled experimental until one event is shown to cause three reproducible measured transitions without adding hidden decision stages.
-
-## 11. First Compute Proof
-
-The first meaningful computation target remains balanced-ternary arithmetic.
-
-For two input trits A and B, test all nine combinations and measure both sum and carry behavior where required.
+For two input trits A and B, test all nine combinations and measure sum/carry behavior where required.
 
 ```text
 +1 + (-1) -> 0
@@ -280,36 +282,37 @@ For two input trits A and B, test all nine combinations and measure both sum and
 -1 + -1 -> -2 = carry -1, sum +1
 ```
 
-The important proof is not that ternary arithmetic exists historically. It is that the same physical mirrored-differential primitive can:
+The important proof is that the same physical mirrored primitive can:
 
-1. hold/represent a state;
-2. participate in a local computation;
+1. hold/represent state;
+2. use that retained state during a local operation;
 3. leave the result stored locally;
 4. drive another identical stage;
-5. accept a downward relation and settle into a distinguishable new state;
-6. emit that new state upward without restoring the previous state; and
-7. recurse without an expanding translation layer.
+5. accept downward conditioning through the same bidirectional mirror structure;
+6. settle into a distinguishable new state;
+7. emit that state upward; and
+8. recurse without an expanding translation layer.
 
-## 12. Breadboard to True Microfabrication
+## 14. Breadboard to microfabrication
 
-Immediate bench proof uses the available six-pin mechanically ganged pots, passive parts, indicators, oscilloscope, and whatever threshold / switching devices are required by the specific experiment. Device choice must not be treated as proof of the architecture.
-
-The long-term micro version is not a PCB shrink. It is a true microfabricated mixed-signal/magnetic implementation, potentially using patterned thin-film magnetic or magnetoresistive elements, semiconductor differential devices, stacked dies/wafer bonding and vertical interconnects.
+Immediate bench work should prove the primitive before committing to dense integration.
 
 Development sequence:
 
 ```text
-breadboard measured primitive
- -> microfabricated triad test structures
- -> repeated triad test die
- -> stacked 3D die/module
- -> six-face packaged cube
- -> connected cube lattice
+one measured bidirectional stateful mirror path
+ -> reproduce A/B/C
+ -> one complete CELL_V1 hex
+ -> two-hex edge transfer
+ -> multi-cell path / rotation
+ -> seven-cell flower
+ -> stacked field/volume experiment
+ -> only then mirrored higher volumes / brain-scale depth tests
 ```
 
-The first custom wafer/test die should characterize many primitive variants before attempting a dense final cube.
+The long-term micro version may use thin-film magnetic/magnetoresistive structures, memristive structures, semiconductor differential devices, stacked dies/wafer bonding, or vertical interconnects, but device choice is not proof of the architecture.
 
-## 13. Information vs. Addressing Reach
+## 15. Information vs. addressing reach
 
 One balanced ternary trit always contains three possible values and therefore approximately:
 
@@ -317,24 +320,26 @@ One balanced ternary trit always contains three possible values and therefore ap
 log2(3) ~= 1.585 bits
 ```
 
-Recursive reach is different. `n` ternary routing decisions can address `3^n` endpoints. Do not claim one trit contains millions of bits because it can control a hierarchy containing many endpoints.
+Recursive reach is different. `n` ternary routing decisions can address `3^n` endpoints. Do not claim one trit contains millions of bits because it controls a hierarchy containing many endpoints.
 
-## 14. What Would Make This Architecture Distinct
+## 16. What would make the architecture distinct
 
-The novelty claim is not "ternary exists" or "magnetic memory exists." Those are established categories.
+The novelty question is not whether ternary logic, magnetic memory, memristors, bidirectional switches, or regenerative drives exist separately.
 
-The engineering question is whether this specific architecture can use one recursively reusable mirrored-differential primitive so that:
+The engineering question is whether the same recursively reusable three-mirror primitive can realize:
 
 ```text
 state = memory
 state transition = processing
 local differential = decision
-shared differential = routing
-downward relation = conditioning / Override
+binary x ternary = route selection
+Views UP = information/condition report
+Actions DOWN = conditioning / Override
+DC recovery = local power recurrence
 resulting state = next upward signal
 cluster output = next-scale input
 ```
 
-with low enough restoration, timing, translation and supervisory overhead to outperform a conventional multivalued architecture on some measurable task.
+with low enough restoration, translation, timing, and supervisory overhead to be useful on a measurable task.
 
 That is the proof target.

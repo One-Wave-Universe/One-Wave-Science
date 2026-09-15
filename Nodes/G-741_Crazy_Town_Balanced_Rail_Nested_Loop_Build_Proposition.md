@@ -5,7 +5,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Legacy G-Series / Canonicalized Node"
-claim_gate_detail: "unbuilt low-voltage electronics proposition; no demonstrated computing, actuator, or biological equivalence"
+claim_gate_detail: "unbuilt low-voltage electronics proposition using three bidirectional A/B/C mirrors; no demonstrated computing, actuator, or biological equivalence"
 metadata_standard: "I-06"
 ---
 
@@ -13,269 +13,322 @@ metadata_standard: "I-06"
 
 ## Purpose
 
-Map a measurable physical build for nested Field/Void computation using
-balanced electronics rails, a local virtual-ground reference at every step,
-a first binary millivolt lean, admission of a second loop, coupled AC
-oscillation, ternary mirrored direction, quadratic Views up, and quadratic
-Actions / Override down. This node is an experiment plan, not a claim that the
-circuit has been built or shown to compute.
+Map a measurable physical build for nested Field/Void computation using a local balanced reference, nerve-level DC power/recovery/reinjection, alternating activity through three bidirectional A/B/C mirrors, ternary UP/HOLD/DOWN control, quadratic Views UP, and quadratic Actions/Override DOWN through those same mirrors.
 
-The first target is a **brain-only computer primitive**. Sensors, actuators,
-motors, body feedback, and Android-specific interfaces are downstream adapters
-and must not be required for the brain recurrence to run.
+This node is an experiment plan, not a claim that the circuit has been built or shown to compute.
+
+## Physical geometry lock
+
+The CELL_V1 hardware primitive is:
+
+```text
+CLOCKWISE FLAT EDGES:
+A+ -> B+ -> C+ -> A- -> B- -> C-
+
+THREE PHYSICAL BIDIRECTIONAL MIRRORS:
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+```
+
+There are **three physical mirrors**, not three Mirror gates plus three separate Action gates.
+
+The same physical paths carry both directions:
+
+```text
+UP   = Views / state / relation
+DOWN = Actions / conditioning / Override
+```
+
+Six edge interfaces are directed ends of three bidirectional mirrors.
 
 ## Protected logical boundary
 
-The physical candidate must preserve the settled address space:
+The route address space remains:
 
 \[
 b\in\{-1,+1\},\qquad d\in\{-1,0,+1\},\qquad 2\times3=6.
 \]
 
-No analog threshold, mirror path, quadratic measurement, confirmation stage,
-return stage, or nerve-gate implementation may silently create a seventh route
-or exchange Field and Void identities.
+Interpretation:
+
+```text
+binary = YES / NO relation
+ternary = DOWN / HOLD / UP
+```
+
+Ground/no committed binary relation is outside the six-route set.
+
+No threshold, quadratic measurement, confirmation stage, return stage, memory function, reinjection stage, or nerve-gate implementation may silently create a seventh route.
 
 ## Build stack
 
 | Build | Candidate physical function | State retained | Measured output |
 |---|---|---|---|
-| P0 | balanced `+ / (0) / -` reference spine | local virtual zero | rail balance, drift, noise |
-| B1 | first binary millivolt lean / first loop | polarity relative to `V0` | first polarity decision |
-| B2 | second-loop admission and coupled oscillation | polarity + phase | AC recurrence around `V0` |
-| T1 | ternary differential / mirrored routing | Left / Stay / Right | selected mirrored rotational path |
-| M1 | three physical Mirror Gates in two orientations | six logical positions | mirrored six-route state |
-| Q1 | quadratic sensing | Direction / Phase / Strength / Reference | paired Field/Void Views up |
-| C1 | higher brain resolution | nested receipt | proposed intervention / continuation |
-| Q2 | quadratic action / override return | downward relation | paired Field/Void Actions down |
-| N1 | bidirectional nerve-gate candidate | connection state | coordinated path flip |
-| R1 | return / release recurrence | resulting local state | **new** upward state |
+| P0 | balanced `+ / V0 / -` reference | local reference | drift, noise, signed differential |
+| D0 | DC supply/recovery/reinjection reservoir | energy state | delivered and recovered energy |
+| B1 | binary local relation | polarity/commitment relative to reference | YES/NO relation |
+| A0 | alternating/recurring path activity | phase + polarity | recurrence around reference |
+| T1 | ternary local command | DOWN / HOLD / UP | selected motion/path response |
+| M3 | three bidirectional A/B/C mirrors | path + retained physical state | six directed interfaces |
+| Q1 | quadratic sensing | Direction / Phase / Strength / Reference | paired Views UP |
+| C1 | higher/local resolution | nested receipt | no-intervention or Override |
+| Q2 | quadratic conditioning | downward relation | Actions / Override DOWN |
+| N1 | true bidirectional nerve-gate connection | connection state | A/B/C path change |
+| R1 | recovery/reinjection + return | resulting local state | NEW state + energy receipt |
 
-## P0 — balanced rails and local reference
+## P0 — balanced reference
 
-Every stage receives three explicit connections:
-
-\[
-+V,\qquad V_0,\qquad -V.
-\]
-
-Every information voltage is a differential relative to the local reference:
+Every information voltage is measured relative to the local reference:
 
 \[
 v_{state}=v_{signal}-V_0.
 \]
 
-The reference is present from the beginning. Ternary interpretation is not
-added later; every local reading is already below, at, or above the shared
-reference. The first binary decision is the sign of the lean around that
-reference.
+`V0` is a reference, not an energy reservoir and not a switching-current dump.
 
-The receipt at every step records signed displacement, local-reference drift,
-noise, amplitude, phase, threshold, and previous state. Virtual ground is not
-assumed to be earth ground and must not be treated as a switching-current or
-actuator-current sink.
+Receipts must record signed displacement, reference drift, noise, amplitude, phase, threshold, and prior state.
 
-## B1/B2 — first binary lean admits the second loop
+## D0 — DC is the nerve-level power/reinjection loop
 
-The first decision is polarity relative to `V0`:
+DC does not disappear once alternating activity begins.
 
-\[
-b\in\{-1,+1\}.
-\]
-
-B1 is not defined here as an already-complete AC oscillator. The current build
-hypothesis is:
+Current candidate role:
 
 ```text
-local V0 present
- -> first loop develops a measurable millivolt lean
- -> lean reaches the admission condition
- -> second loop opens / couples
- -> the two loops together establish the recurring AC path
+DC source/reservoir
+ -> supplies local nerve activity
+ -> mirrored switching / stateful path performs work
+ -> recoverable inductive/magnetic energy is steered back to the controlled DC reservoir
+ -> next local cycle draws from that reservoir
 ```
 
-The coupled path is then expected to cross the reference repeatedly:
+Energy recovery must be measured. No gain may be inferred from reference motion or unaccounted stored energy.
 
-\[
-+\rightarrow(0)\rightarrow-\rightarrow(0)\rightarrow+.
-\]
+## B1 — binary relation
 
-This ordering is experimental. It must be rejected if measurements show that a
-stable first-loop lean cannot admit the second loop, or if the coupled pair does
-not create a repeatable oscillation around the same reference.
-
-A six-pin dual-gang potentiometer remains a candidate experimental control for
-two mechanically coupled mirrored thresholds. It is not assumed to be the
-complete six-route cell; that correspondence must be demonstrated by
-measurement.
-
-## T1 — ternary lean selects the mirrored path
-
-Once the coupled oscillation exists, the next local differential is:
-
-\[
-d\in\{-1,0,+1\}=\{\text{Left},\text{Stay},\text{Right}\}.
-\]
-
-The working interpretation is:
+The binary relation is two-way:
 
 ```text
-negative lean -> left mirrored loop
-reference / coherent center -> Hold / Stay
-positive lean -> right mirrored loop
+YES / NO
 ```
 
-T1 therefore does not add a separate symbolic decision worker. The measured
-voltage swing relative to `V0`, together with phase and retained polarity, is
-the candidate decision variable that selects the mirrored path.
+Do not redefine NO as missing signal or Ground. Ground/no committed choice is separate.
 
-## M1 — three physical mirrors, six logical positions
+The physical encoding of YES/NO may be polarity, orientation, phase relation, or another measured differential, but that encoding must be declared and testable.
 
-Three physical Mirror Gates are traversed in two orientations/phases to realize
-six logical positions. Do not turn this into six separate physical Mirror
-Gates.
+## A0 — AC/alternating recurrence
 
-The paired logical reading is:
+Alternating activity is produced through switching/coupling of the physical paths; DC does not spontaneously become AC.
+
+The experiment must measure whether the chosen topology produces a repeatable recurrence around the same reference and whether phase/orientation remains distinguishable.
+
+If a rotating magnetic field is claimed, the phase relationship producing rotation must be measured rather than inferred from the existence of AC alone.
+
+## T1 — ternary controls local movement and motor/actuator command
+
+The ternary relation is:
 
 ```text
-1/6 -> 2/5 -> 3/4 | 4/3 -> 5/2 -> 6/1
+DOWN
+HOLD
+UP
 ```
 
-The numbers are mirrored positions, not ordinary one-way counting. The two
-sides each possess their corresponding `6`; each side's `6` is the mirrored
-beginning position relative to the other side's cycle. The central reversal is
-`3/4 <-> 4/3`, after which the pair ordering unwinds through `5/2` and `6/1`.
-This notation must remain compatible with the canonical Field/Void six-pair
-oscillator rather than replacing it.
+`HOLD` is an active balanced center, not absence.
 
-## Q1 — paired quadratic Views up
+At the nerve/body interface the same ternary relation is the candidate motor/actuator grammar:
 
-The accumulated differential is measured as:
+```text
+one orientation / balanced Hold / opposite orientation
+```
+
+The exact motor topology, winding count, phase drive, and torque behavior remain experimental.
+
+## M3 — three physical bidirectional mirrors
+
+The physical CELL_V1 path is:
+
+```text
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+```
+
+Do not build six sequential Mirror/Action devices.
+
+Legacy six-position labels may still be emitted by software receipts, but each label must map back to one of the three physical axes and one of the two directions.
+
+## Processing is memory
+
+The active path is intended to retain the state it just processed:
+
+```text
+local state affects current/signal path
+ -> path interaction changes the same local state
+ -> changed state remains locally available
+ -> next pass encounters the changed state
+```
+
+The exact stateful element is open. Candidate classes include memristive, hysteretic magnetic, spintronic/magnetoresistive, oscillatory, or other stateful structures.
+
+The processing-memory claim is rejected if the memory can be removed from the active path without changing the operation.
+
+Any retained-state claim must demonstrate write, retain, read with bounded disturbance, rewrite, and propagation/interaction with another stage.
+
+## Q1 — quadratic Views UP
+
+The accumulated state is described upward using:
 
 \[
 Q_{up}=(\text{Direction},\text{Phase},\text{Strength},\text{Reference}).
 \]
 
-Field and Void Views travel upward together. Oversight is the Void View:
+Views go UP through the same A/B/C mirror structure. They are descriptors, not additional gates.
 
-\[
-(F_Q,V_Q)_{views}\xrightarrow{up}\text{higher brain relation}.
-\]
+## Q2 — Actions / Override DOWN
 
-## Q2 / N1 — downward override and nerve-gate candidate
+After local or higher resolution, conditioning travels DOWN through the same mirror structure.
 
-After higher resolution, Field and Void Actions travel downward together:
-
-\[
-\text{higher brain relation}\xrightarrow{down}
-(F_Q,V_Q)_{actions}.
-\]
-
-Override is a downward Void action. The current physical-role separation is:
+Action-mode vocabulary may include:
 
 ```text
-voltage swing relative to V0 = local decision / state variable
-magnetic or oscillatory persistent element = processing-memory candidate
-bidirectional MOSFET path = nerve-gate / connection candidate
+Inward
+Outward
+Across
+Over
 ```
 
-Back-to-back MOSFETs or another true bidirectional switch may be used so a body
-diode cannot silently pass the blocked polarity. **SiC MOSFETs are a candidate
-for the nerve-gate role**, especially where switching endurance, speed, thermal
-behavior, or later power-domain coupling matter. This does not claim that a SiC
-power-MOSFET gate directly resolves a millivolt information swing; that gate-
-drive problem remains an explicit bench question.
+These words do not create another hardware layer.
 
-The working architecture allows one higher override event to coordinate three
-lower nerve-gate flips, but this `1 override -> 3 flips` relation is not proven
-until the three transitions are simultaneously measurable from one recurring
-state event.
+A candidate local policy is:
 
-## R1 — return completes a new state; it is not reset
+```text
+local state/resources within declared limits
+ -> no higher intervention
+ -> complete local action/recovery/reinjection
 
-The return path is **not** defined as restoration of the old state.
+local state/resources outside declared limits
+ -> Views UP
+ -> higher resolution
+ -> Action/Override DOWN
+ -> local path changes
+```
 
-Current recurrence rule:
+The resource variables and thresholds must be explicitly measured.
+
+## N1 — bidirectional nerve gate
+
+The connection element must block/pass both intended directions without a body diode silently defeating the command.
+
+Back-to-back MOSFETs or another true bidirectional switch are candidates.
+
+SiC MOSFETs may be tested where power, thermal, endurance, or switching properties matter. Direct millivolt/microvolt gate control is not assumed; any required gate-drive interface must be explicit and measured.
+
+The bidirectional switch is a connection candidate, not automatically the processing-memory element.
+
+## Three-axis downward coordination hypothesis
+
+One resolved higher Override may coordinate A/B/C conditioning:
+
+```text
+one Override
+ -> A path condition
+ -> B path condition
+ -> C path condition
+```
+
+This is a fan-out relation through the three existing mirrors, not three new Action gates. It remains experimental until measured.
+
+## R1 — return, recovery, reinjection, and new state
+
+The return path is not restoration of the old state.
 
 ```text
 old local state
- -> voltage-swing decision
- -> downward override / conditioning
- -> coordinated lower path flip(s)
- -> return removes / lowers the override condition
- -> resulting physical configuration remains
- -> that resulting configuration is the NEW local state
- -> new state travels upward as the next signal / relation
+ -> local binary/ternary relation
+ -> alternating/path interaction
+ -> retained state changes
+ -> local continuation OR higher Override
+ -> recoverable energy returns to controlled DC reservoir
+ -> resulting configuration remains
+ -> resulting configuration is the NEW local state
+ -> new state becomes the next View UP
 ```
 
-Therefore the target recurrence is:
+The target recurrence is:
 
 ```text
-UP -> resolution -> DOWN -> NEW UP -> resolution -> DOWN -> NEW UP ...
+NEW STATE -> UP -> resolution -> DOWN or local continuation -> recovery/reinjection -> NEW STATE
 ```
 
-A topology that merely resets to the previous state after every return does not
-implement this proposed state-advancing brain primitive.
+## First staged experiment
 
-## Brain-only boundary
-
-The minimum valid build must close the recurrence internally with simulated or
-local endpoints:
-
-```text
-state -> up relation -> higher resolution -> down relation -> new state
-```
-
-No sensor, motor, actuator, body-state input, or Android controller is required
-for this proof. Those interfaces may later consume or supply the same relational
-contract, but they must not define the brain kernel.
-
-## Staged experiment
-
-1. Build and characterize P0 alone; measure `V0` drift and millivolt noise floor.
-2. Add B1; demonstrate stable and repeatable positive/negative lean around `V0`.
-3. Add B2; test whether the B1 lean admits the second loop and whether the two
-   loops together create the predicted AC recurrence around the same `V0`.
-4. Add T1; demonstrate Left / Stay / Right selection from the resulting swing.
-5. Add the three physical Mirror Gates and demonstrate the six paired logical
-   positions without inventing a seventh route.
-6. Add Q1 instrumentation; reconstruct Direction / Phase / Strength / Reference
-   from measured traces.
-7. Add the downward resolution / Override path into dummy internal loads only.
-8. Test one-override / three-nerve-flip coupling as a measured hypothesis.
-9. Remove the override on return and verify that the result is a distinguishable
-   **new state**, not automatic restoration of the previous state.
-10. Feed that new state upward and demonstrate at least two consecutive closed
-    recurrences with no Android/body hardware attached.
-11. Only after the brain-only recurrence passes should external body interfaces
-    be connected.
+1. Characterize `V0` drift/noise with no switching load.
+2. Characterize the DC source/recovery reservoir separately from `V0`.
+3. Demonstrate one true bidirectional path and measure leakage in both blocked directions.
+4. Add a stateful path element and prove that previous activity measurably changes the next pass.
+5. Demonstrate both directions through that same physical mirror.
+6. Reproduce the mirror as A/B/C and preserve `A+ B+ C+ A- B- C-` edge order.
+7. Demonstrate the six directed edge interfaces without six separate physical gate devices.
+8. Demonstrate binary YES/NO without collapsing NO into Ground.
+9. Demonstrate ternary DOWN/HOLD/UP and active Hold.
+10. Measure any claimed AC recurrence/phase behavior.
+11. Measure quadratic Views UP from Direction/Phase/Strength/Reference.
+12. Apply Actions/Override DOWN through the same physical mirrors.
+13. Verify that resulting local state remains and becomes the next upward state.
+14. Measure returned energy into the DC reservoir and calculate reinjection efficiency.
+15. Only after local behavior passes should motor/actuator loads and higher volume scaling be connected.
 
 ## Minimum receipts
 
-Each step records rail voltages, local `V0`, timestamp, route address, Field and
-Void state, differential, phase, threshold, hysteresis, switch state, proposed
-resolution, downward Override state, nerve-gate state, previous state, resulting
-new state, and provenance.
+Record at least:
+
+- timestamp;
+- physical axis A/B/C;
+- edge direction `+ -> -` or `- -> +`;
+- local `V0`;
+- binary relation;
+- ternary command;
+- differential;
+- phase;
+- threshold/hysteresis;
+- retained pre-state;
+- retained post-state;
+- switch state;
+- View descriptors;
+- Action/Override state;
+- delivered DC energy;
+- recovered DC energy;
+- reinjection efficiency;
+- whether processing-memory behavior persisted into the next pass.
 
 ## Pass conditions
 
-- all six and only six binary-by-ternary routes are distinguishable;
-- millivolt states remain resolvable above measured noise and drift;
-- first-loop lean and second-loop admission are separately observable;
-- the coupled loops produce repeatable AC recurrence if that hypothesis is kept;
-- blocked bidirectional paths do not conduct beyond the declared leakage bound;
-- View packets travel up and Action / Override packets travel down in receipts;
-- any claimed `1 override -> 3 nerve flips` event is directly measured;
-- return produces a distinguishable resulting state rather than silently
-  restoring the previous state; and
-- the resulting new state can become the next upward relation without a body.
+- exactly three physical bidirectional A/B/C mirrors are preserved;
+- all six directed interfaces are distinguishable without inventing six separate physical gates;
+- YES and NO remain distinguishable from Ground;
+- DOWN/HOLD/UP are distinguishable and Hold is active;
+- state retained in the active path measurably affects the next pass;
+- blocked bidirectional paths remain within declared leakage bounds;
+- Views travel UP and Actions/Override travel DOWN through the same physical mirrors;
+- DC recovery/reinjection is measured separately from the reference;
+- return produces a distinguishable new state rather than an automatic reset.
 
 ## Failure conditions
 
-Reject or revise the topology if virtual-ground motion masquerades as state,
-the first loop cannot reproducibly admit the second, the two loops fail to form
-the proposed recurrence, two routes collapse into one, an undeclared route
-appears, MOSFET leakage determines the decision, a claimed SiC nerve gate needs
-an undeclared interpretation layer, the quadratic cannot be reconstructed from
-measurements, the return merely resets old state when a new state is required,
-or the brain recurrence depends on Android/body hardware.
+Reject or revise the topology if:
+
+- a diagram or build creates six separate physical Mirror/Action gates;
+- connections move to hex corners;
+- edge order changes;
+- NO collapses into Ground;
+- Hold becomes simply no signal;
+- AC or rotation is asserted without measured phase behavior;
+- processing memory is actually a disconnected storage block;
+- MOSFET leakage determines the state;
+- recovered energy is dumped into `V0`;
+- a SiC gate requires an undeclared interpretation/driver layer;
+- Views and Actions use different claimed mirror hardware;
+- return merely resets the old state;
+- or the architecture depends on unmeasured brain-layer counts.

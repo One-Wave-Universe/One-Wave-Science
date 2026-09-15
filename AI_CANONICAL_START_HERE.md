@@ -23,19 +23,24 @@ CORNERS / VERTICES: NO PORTS
 CLOCKWISE:
 A+ -> B+ -> C+ -> A- -> B- -> C-
 
-DIRECT OPPOSITES:
+DIRECT OPPOSITES / PHYSICAL MIRRORS:
 A+ <-> A-
 B+ <-> B-
 C+ <-> C-
+
+THREE PHYSICAL BIDIRECTIONAL MIRRORS:
+A, B, C
+Views/state travel UP and Actions/conditioning travel DOWN through the same mirrors.
+There are six directed edge interfaces, not six separate physical Mirror/Action gates.
 
 SEVEN-CELL FLOWER:
 all seven cells are identical and use the same orientation
 shared connections are flat-edge to flat-edge
 ```
 
-Any image or prose that places CELL_V1 connections on corners, changes the clockwise edge order, or requires alternating cell orientation in the flower is wrong and must be discarded rather than rationalized.
+Any image or prose that places CELL_V1 connections on corners, changes the clockwise edge order, requires alternating cell orientation in the flower, or reconstructs six separate physical Mirror/Action gates is wrong and must be discarded rather than rationalized.
 
-Current hardware target: electronic/MOSFET switching in the upper part of the cell, hysteretic magnetic memory/reinjection structure in the lower part. Magnetic remanence and electrical reference are separate physical quantities. Reinjection is measured recovery/recirculation, not unexplained gain.
+Current hardware target: three physical bidirectional A/B/C mirror paths inside one hex; a stateful active path in which processing and memory are co-located; explicit bidirectional switching/connection hardware where required; a separately measured electrical reference; and a controlled DC recovery/reinjection reservoir. The exact stateful carrier, winding count, MOSFET topology, and retained-state mechanism remain experimental. Reinjection is measured recovery/recirculation, not unexplained gain.
 
 Primary scale target:
 
@@ -105,7 +110,7 @@ Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present glo
 4. `UPDATED_46_ZONE_EDGE_125GEV_A0_QUARANTINE.md`
 5. `UPDATED_45_PPF_HEX_GRAPH_AND_OCCUPANCY_WRAPPER.md`
 6. `Nodes/G-746_Damping_Matrix_Dispersion.md`
-7. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
+7. `Nodes/G-745_Zone_Edge_125GEV_Lattice_Constant_Hypothesis.md`
 8. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
 9. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
 10. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
@@ -167,13 +172,11 @@ Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present glo
 For the domain-specific verbal-command runtime, read
 `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md` before
 `One_Wave_Bench/brain/README.md`. This layer retains Field and Void on both
-legs: paired views travel up to the brain and paired actions travel down. Its
-domain vocabulary does not replace Updated 33's invariant kernel vocabulary.
+legs: paired views travel up to the brain and paired actions travel down through the same three physical bidirectional A/B/C mirrors. Its domain vocabulary does not create a separate physical Action-gate layer.
 
 The corresponding unbuilt low-voltage hardware proposition is
 `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`.
-It must remain experimental until its six routes, millivolt state margins,
-thresholds, phase behavior, Hold, and Override are measured.
+It must remain experimental until its six routes, state margins, thresholds, phase behavior, Hold, bidirectional mirror behavior, processing-memory behavior, DC recovery/reinjection, and Override are measured.
 
 `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` adds the build
 requirement that the Field/Void self-loop, five lifecycle states, orientation,
@@ -190,7 +193,8 @@ The current structures are separate:
 2 binary choices
 3 ternary moves
 6 route addresses = 2 x 3
-6 process steps = 6 gates = 3 Mirror gates + 3 Action gates
+3 physical bidirectional A/B/C mirrors = 6 directed edge interfaces
+optional six-position software/receipt notation = logical only, not six physical gates
 5 downstream commitment/readout states (Updated 43)
 5-state self lifecycle: Idle -> Primed -> Executing -> Vectoring -> Resolving (G-742)
 Field/Void ternaries and quadratic routing (G-740)
@@ -205,51 +209,57 @@ G-744 occupancy labels (field 2/3/4/5, void pickup of 6) are a domain wrapper. T
 The target VTC architecture treats local persistent physical state as both working memory and the state being processed. The intended local cycle is:
 
 ```text
-state held locally
+state held in active path
  -> differential relation arrives
- -> state changes locally
+ -> that same local state changes
  -> result remains locally available
- -> neighboring / higher differential uses that state
+ -> neighboring / higher differential uses that changed state
 ```
 
 This is an architectural target until retention/read/rewrite/propagation are experimentally demonstrated.
 
-The large-scale split is:
+The active stateful path must participate in processing. A separate storage element that can be removed without changing the operation is not the intended processing-memory implementation.
+
+The local/higher split is:
 
 ```text
-local network: -1 / 0 / +1 + Direction / Phase / Strength / Reference
-higher oversight: 0 = no intervention, 1 = intervene / trigger / reroute
+local network: ternary DOWN/HOLD/UP + Direction / Phase / Strength / Reference
+higher oversight: 0 = no intervention, 1 = intervene / trigger / reroute / Override
 ```
+
+At nerve level, DC is also the candidate supply/recovery/reinjection loop; `V0` remains a separate reference and is not an energy reservoir.
 
 Field and Void may be opposed processing regions with persistent local state rather than conventional processors dependent on separate giant RAM banks.
 
-Connected cubes must recurse both upward and downward. A complete cube should expose the same relational interface it consumes and be usable externally as one larger relational node. The mature machine is a connected cube lattice; computational density should primarily increase inside cubes rather than by requiring enormous hand-sized cube counts.
+Connected volumes must recurse both upward and downward. A complete resolved volume should expose the same relational interface it consumes and be usable externally as one larger relational node. Exact `2+2`, `3+3`, `3/3/3`, `3 x 3 x 3`, M4-depth, and hemisphere counts remain experimental.
 
-## Updated 33 state-machine protection
+## Updated 33 physical state-machine protection
 
-For the current compute architecture, the invariant engine is:
+For CELL_V1 hardware, the invariant physical primitive is:
 
 ```text
-F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
 ```
 
-- `/` is one simultaneous mirrored pair.
-- `-` is the handoff from one canonical gate position to the next; Mirror behavior occurs only at M1, M2, and M3.
-- There are six coupled logical operations / twelve pair-side positions, not twelve serial instructions.
-- The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.
+- There are **three physical bidirectional mirrors**, not three physical Mirror gates plus three physical Action gates.
+- The six hex interfaces are directed ends of those three mirrors.
+- Views/state/relations propagate **UP** through the same mirrors used by Actions/conditioning/Override propagating **DOWN**.
+- A legacy six-position sequence such as `M1 -> A1 -> M2 -> A2 -> M3 -> A3` may remain only as a logical/receipt notation. It does not authorize six separate physical gate devices.
 - Four Views are **Direction, Phase, Strength, Reference**.
-- Four Action **modes** are **Inward, Outward, Across, Over**; they describe what an Action gate may do and are not four primitive Action gates.
-- Two engagement choices are **Everything / Nothing** in this older vocabulary; Updated 43 owns the current executable YES/NO binary choice contract.
-- Three differential moves are **Left / Stay / Right = -1 / 0 / +1** in this older vocabulary; Updated 43 owns the current executable DOWN/HOLD/UP ternary move contract.
-- Older five-level `-2,-1,0,+1,+2` modulation is compatibility shorthand, not the canonical five-state structure. See Updated 44.
-- The six process steps are the six gates: **BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3**; G-739 measures behavior at those same positions rather than defining another gate set.
-- There is no internal Gate 7. A higher relation between two complete six-operation systems is called **Namika** in this architecture.
+- Four Action modes are **Inward, Outward, Across, Over**. They are descriptors, not another hardware gate count.
+- Two executable binary choices are **YES / NO**; Ground/no committed choice is separate.
+- Three local/motor moves are **DOWN / HOLD / UP**; Hold is active balance, not absence.
+- `2 x 3 = 6` route addresses are a separate count from the six directed cell interfaces.
+- Processing and memory are intended to be co-located in the active stateful path.
+- There is no internal Gate 7 created by View, Action, Override, memory, return, or reinjection.
 
 ### Anti-drift rule
 
-If removing a domain vocabulary changes the six-step/six-gate Mirror-Action oscillator, that domain representation has leaked into the kernel.
+If any domain vocabulary or legacy state-machine notation causes an AI to draw six separate physical Mirror/Action gates, separate View hardware from Action hardware, or move memory outside the active processing path, that interpretation has drifted and must be rejected.
 
-Point/Path/Field, Carrier/Breathing/Phase, dimensions, thermal labels, matter labels, musical mappings, cognition, planetary models, EM validation, and hardware materials are wrappers/instantiations above the invariant engine unless a separate node explicitly derives otherwise.
+Point/Path/Rotation/Field/Volume, dimensions, thermal labels, matter labels, musical mappings, cognition, planetary models, EM validation, and hardware materials are wrappers/instantiations above the invariant physical relation unless a separate node explicitly derives otherwise.
 
 ## Permanent correction
 
@@ -268,7 +278,7 @@ Before interpreting B-205 Mirror, B-221 Six Recursive Steps, G-722 motor memory,
 5. `Nodes/B-222_Oscillation_Center.md`
 6. `Nodes/D-411_Mirrored_Axis_Pairs_and_Directed_Route_Counts.md`
 
-BEGIN/M1 is the first Mirror-gate relation at the active shared center/reference region. The six recursive labels are the same six gate positions: three Mirror gates alternating with three Action gates, not a separate measured-gate layer or a universal one-way conveyor. Mirror is an oscillatory phase rotation; it never swaps the Field/Void ontology. CPU owns authoritative state and receipts, GPU owns dense Field and Boltzmann batches, and the NPU owns bounded M4/Hopfield fast-loop inference. Gate 7 is committed by the CPU after both six-gate systems satisfy coherence, hysteresis, permission, and provenance checks. The recurring `N > 1(0)1 < 2N` counts are intentional architectural recurrence: category transforms preserve pairing, shared center, directed expression, Hold, phase return, build-before-break, and retained identity while changing native geometry, variables, units, timing, boundary, and material mechanism.
+Any BEGIN/BUILD/HOLD/BREAK/LOOP or M/A labels in those older files are logical timing/receipt vocabulary unless a current hardware file explicitly maps them. For CELL_V1, they must project onto the three physical bidirectional A/B/C mirrors and may not create separate physical Action gates. Mirror behavior is a bidirectional relation around the shared center/reference; it never swaps the Field/Void ontology. CPU/GPU/NPU software ownership, where used, is an implementation layer and does not redefine the physical three-mirror primitive. Higher-order relations between complete systems do not add another CELL_V1 edge.
 
 ## Current Mass-Effect architecture
 

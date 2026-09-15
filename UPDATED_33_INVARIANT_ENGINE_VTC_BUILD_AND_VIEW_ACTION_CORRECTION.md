@@ -1,73 +1,107 @@
 # UPDATED 33 — Invariant Engine, VTC Build, and View/Action Correction
 
-**Status:** Current implementation handoff. This update protects the invariant state-machine kernel from domain-representation drift and records the current VTC physical build interpretation.
+**Status:** Current implementation handoff. This update supersedes the old physical reading of `3 Mirror gates + 3 Action gates`.
 
-## 1. Primary Correction: Invariant Engine vs. Representations
+## 1. Primary correction
 
 The architecture has a hard boundary:
 
 ```text
-INVARIANT ENGINE
+PHYSICAL CELL
+ -> logical / receipt vocabulary
  -> representation wrappers
- -> physical/domain instantiations
+ -> higher-scale/domain instantiations
 ```
 
-### Anti-Drift Rule
-> If deleting a domain vocabulary changes the six-gate oscillator, the domain representation has leaked into the kernel.
-
-## 2. Canonical Six-Gate Oscillator
-
-The invariant engine has **one six-position cycle**:
+The physical CELL_V1 primitive is **three bidirectional Mirror axes**, not six one-way physical gates.
 
 ```text
-M1 -> A1 -> M2 -> A2 -> M3 -> A3 -> M1 ...
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+
+3 physical bidirectional mirrors
+= 6 directed edge interfaces
 ```
 
-where:
+The clockwise hex order remains:
 
 ```text
-M = Mirror gate
-A = Action gate
+A+ -> B+ -> C+ -> A- -> B- -> C-
 ```
 
-Therefore:
+Ports are on flat sides only.
+
+### Anti-drift rule
+
+> Any six-position software/process notation must project onto the three physical bidirectional A/B/C mirrors. It may not create three additional physical Action gates.
+
+## 2. Six positions are logical/receipt positions, not six physical gates
+
+Legacy notation may still describe a six-position recurrence:
 
 ```text
-3 Mirror gates + 3 Action gates = 6 gates = 6 process steps
+M1 -> A1 -> M2 -> A2 -> M3 -> A3 -> ...
 ```
 
-The older Field/Void paired notation remains a simultaneous relational view of those same six positions:
+but the letters now identify **what is being observed or done at a phase of the recurrence**, not six different physical gate devices.
+
+Physical interpretation:
 
 ```text
-F1/V6 - V5/F2 - F3/V4 - V3/F4 - F5/V2 - V1/F6 - ...
+Mirror A: A+ <-> A-
+Mirror B: B+ <-> B-
+Mirror C: C+ <-> C-
+
+UP direction   = View / state / relation propagation
+DOWN direction = Action / conditioning / Override propagation
 ```
 
-`/` is one simultaneous opposed relation. The two sides are not independent serial gates. `-` is the handoff/transition to the next canonical gate position; it must not be read as an extra Mirror Gate inserted between every step.
+The same mirror/path supports both directions.
 
-The engine originates at the shared `-(0)+` reference.
-
-## 3. Six Process Steps = Six Gates
-
-The process labels and gate positions are the same six positions:
+Do not reconstruct this as:
 
 ```text
-1 BEGIN = Mirror 1
-2 BUILD = Action 1
-3 HOLD  = Mirror 2
-4 BUILD = Action 2
-5 BREAK = Mirror 3
-6 LOOP  = Action 3
+physical Mirror 1 -> separate physical Action 1
+physical Mirror 2 -> separate physical Action 2
+physical Mirror 3 -> separate physical Action 3
 ```
 
-or:
+That physical interpretation is superseded.
+
+## 3. Keep the different six-counts separate
 
 ```text
-BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3 -> BEGIN/M1
+3 physical bidirectional mirrors
+6 directed CELL_V1 edge interfaces
+6 route addresses = 2 binary relations x 3 ternary moves
+6 optional logical/receipt positions
 ```
 
-Do not create six process steps plus another six oscillator gates. Do not multiply three Mirror gates by two orientations to generate a second six-gate count.
+Matching counts do not prove identity.
 
-## 4. Four Views — measurement/state description
+A winding count, MOSFET count, motor phase count, logical step count, and brain-layer count are separate engineering variables unless a measurement or derivation connects them.
+
+## 4. Field / Void mirror rule
+
+Field and Void remain opposed roles around a shared reference. A Mirror operation does not swap their ontology.
+
+Views travel UP and Actions travel DOWN through the same physical mirror relation:
+
+```text
+local retained state
+ -> View UP
+ -> higher/local resolution
+ -> Action or no-intervention DOWN
+ -> resulting local state
+ -> next View UP
+```
+
+The return is state-advancing, not an automatic reset.
+
+## 5. Four Views
+
+The current View descriptors are:
 
 ```text
 Direction
@@ -76,11 +110,11 @@ Strength
 Reference
 ```
 
-Direction = which way relative to reference. Phase = where in the oscillatory cycle. Strength = amplitude/intensity. Reference = the local zero/baseline giving the others meaning.
+They describe what can be measured/read while state propagates upward. They are **not four physical gates**.
 
-These are **view modes** available to a Mirror gate. They are not four primitive Mirror gates.
+## 6. Quadratic Actions
 
-## 5. Four Action Modes — descriptive transformation/routing vocabulary
+The current Action-mode vocabulary is:
 
 ```text
 Inward
@@ -89,310 +123,238 @@ Across
 Over
 ```
 
-These four words are retained only as a **mode vocabulary** describing what one of the three primitive Action gates may do in a particular implementation. They are not four primitive Action gates and do not change the canonical count of three Action gates.
+These are descriptors for downward/outward conditioning and routing. They are **not separate primitive hardware gates** and do not add to the three physical mirrors.
 
-For the current hardware interpretation:
+A higher-level Override is a downward action/conditioning event through the same bidirectional path structure.
 
-- **Inward** = signal/relation enters a local cell or returns toward reference.
-- **Outward** = local cell expresses its resolved relation.
-- **Across** = opposed/mirrored outputs establish a shared differential.
-- **Over** = the resolved differential crosses the connection boundary and becomes input to the next stage/cluster/scale.
+## 7. Binary and ternary roles
 
-Earlier material calling Inward/Outward/Across/Over “Views” is superseded. Material treating them as four primitive Action gates is also superseded.
-
-## 6. DC Choice and AC Ternary Move
-
-The current physical split remains two-layered:
+The executable primitive keeps two binary relations and three ternary moves:
 
 ```text
-DC decision: EVERYTHING / NOTHING
-             engage      do not engage
+BINARY: YES / NO
+TERNARY: DOWN / HOLD / UP
 
-AC/differential decision: LEFT / STAY / RIGHT
-                          -1     0      +1
+2 x 3 = 6 route addresses
 ```
 
-DC decides whether the operation participates. AC/differential behavior resolves direction if participating. Zero is not a third actively driven DC command; it is the balanced/non-action directional result.
+Ground/no committed binary choice remains outside the six-route set.
 
-These choices/moves may form route addresses; they do not add primitive gates.
+`HOLD` is active balance at the shared center/reference, not absence.
 
-## 7. Five-State Modulation
-
-Five coarse states remain separate from the six-step/six-gate execution cycle:
+For nerve/motor use, ternary is also the candidate local motion grammar:
 
 ```text
--2 -1 0 +1 +2
+DOWN  = drive/condition in one orientation
+HOLD  = balanced hold / relaxed controlled center
+UP    = drive/condition in the opposite orientation
 ```
 
-Floor/Low/Middle/High/Ceiling, thermal labels, matter labels and Micro/Small/Mid/Large/Macro are domain representations. Seven-band fine thresholding is also separate.
+The exact actuator implementation remains experimental.
 
-## 8. Three Mirror Gates / Three Action Gates
+## 8. DC / AC / nerve-level reinjection
 
-Current primitive cluster:
+The current nerve-level physical interpretation is:
 
 ```text
-Mirror 1 -> Action 1
-Mirror 2 -> Action 2
-Mirror 3 -> Action 3
+DC = supply + controlled energy recovery + reinjection
+AC = alternating/recurring activity synthesized through the mirrored paths
+TERNARY = local UP/HOLD/DOWN movement and motor command
+QUADRATIC = Views UP / Actions DOWN
 ```
 
-The three Mirror gates are the three read/compare/reference positions. The three Action gates are the three change/carry positions.
+DC is not merely an initial bias that disappears after AC begins. It closes the candidate nerve-level power/recovery loop.
+
+The local electrical reference `V0` is separate from the energy reservoir. Recovered inductive/magnetic energy must be steered into a controlled reservoir/DC link and measured; it must not be dumped into virtual ground.
+
+A candidate local control policy is:
 
 ```text
-3 Mirror + 3 Action = 6 total gate positions
+within declared limits -> continue locally / recover / reinject
+outside declared limits -> View UP -> higher resolution -> Action/Override DOWN
 ```
 
-Orientation, phase, Field/Void side, device count, windings, or complementary physical elements are state/implementation details. They do not multiply the logical gate count.
+The exact resource variables and thresholds remain experimental.
 
-A physical Mirror gate may use two linked/opposed elements plus a differential evaluator, but those components are implementation internals of one Mirror role. A physical Action gate may similarly use multiple devices while remaining one logical Action gate.
+## 9. Processing is memory
 
-Where practical, opposed elements should be one complementary physical switching mechanism: one flips and its mirror responds as part of the same gate event rather than a processor noticing the first and issuing a second independent command.
-
-## 9. Signal Flow Through a Computing Cell
-
-Canonical recurrence:
+The target architecture is stateful compute-in-memory, not conventional `CPU -> RAM -> CPU` traffic.
 
 ```text
-relation arrives
- -> M1 reads/reference-compares
- -> A1 builds/carries
- -> M2 reads/holds/checks
- -> A2 builds/carries
- -> M3 reads/breaks/resolves release
- -> A3 loops/carries result forward
- -> next M1
-```
-
-The result of an Action gate becomes part of the next Mirror gate's input.
-
-### Recursive-interface rule
-
-```text
-OUTPUT relation of level n == INPUT relation expected by level n+1
-```
-
-A higher-level cluster must be substitutable for a lower-level relational node without forcing the surrounding architecture to understand its internal implementation.
-
-## 10. Processing Is the Memory
-
-The target architecture is **stateful compute-in-memory**, not conventional `CPU -> RAM -> CPU` traffic.
-
-```text
-cell holds physical state
- -> cell receives differential
- -> gate cycle evaluates/changes physical state
- -> new state remains locally available
- -> neighboring/higher relation uses that state
+stateful path holds physical state
+ -> current/signal passes through that state
+ -> interaction changes the same local state
+ -> changed state remains locally available
+ -> next pass is processed through the changed state
 ```
 
 Therefore the target primitive combines:
 
 ```text
-state + memory + transition/logic
+state + memory + processing + routing
 ```
 
-and a cluster combines:
+The architecture fails this rule if the claimed memory can be removed from the active processing path while leaving the operation unchanged.
+
+The exact physical carrier is open. Memristive, hysteretic magnetic, spintronic/magnetoresistive, oscillatory, or other stateful paths may be tested. No named device is assumed to satisfy the whole requirement without write/retain/read/rewrite/propagation measurements.
+
+## 10. Bidirectional nerve-gate connection
+
+The nerve/connection element must support the intended bidirectional path.
+
+Candidate implementation:
 
 ```text
-distributed memory + distributed processing + routing
+mV / uV state or differential
+ -> explicit measured interface if needed
+ -> true bidirectional switch
+ -> A/B/C path
 ```
 
-If magnetic remanence/other persistent physical state is used, it must be experimentally demonstrated: write, retain, read, rewrite, and propagate. Processing-is-memory is an architectural target until that physical behavior is measured.
+Back-to-back MOSFETs or another true bidirectional switch are candidates. SiC MOSFETs may be used where their power, thermal, endurance, or switching properties are useful, but they are not assumed to directly resolve millivolt/microvolt information at the gate.
 
-## 11. Hierarchical Field/Void Processor Split
+The switch is not automatically the processing-memory element.
 
-At large scale, Field and Void may be implemented as two opposed processing regions operating on the same relational interface rather than one centralized processor micromanaging all cells.
+## 11. Recursive interface
+
+The same relational contract must survive scaling:
 
 ```text
-             shared reference/state relation
-                       (0)
-                        |
-             +----------+----------+
-             |                     |
-          FIELD                  VOID
-       expression side       compression side
-             |                     |
-             +------ differential--+
-                        |
-                     routing
+OUTPUT relation of level n
+=
+valid INPUT relation for level n+1
 ```
 
-Because processing and state are co-located in the cell network, each side's working memory is primarily the persistent local state of its own cells/clusters, not a mandatory separate giant RAM bank.
-
-A higher supervisory controller should be sparse where possible:
+and downward conditioning must close back into a new local state:
 
 ```text
-0 = local network resolves / no intervention
-1 = intervene / trigger / reroute
+UP -> resolution -> DOWN -> NEW STATE -> NEW UP
 ```
 
-The local network retains richer ternary and view-mode state without changing the six primitive gates.
+If every scale needs a new controller/decoder species, recursion has failed.
 
-## 12. Scale Up AND Scale Down
+## 12. Point / Path / Rotation / Field / Volume
 
-The architecture must recurse in both directions.
-
-Upward:
+The physical scaling ladder remains:
 
 ```text
-local differential
- -> shared differential
- -> cluster relation
- -> cube relation
- -> cube-cluster relation
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
 ```
 
-Downward:
+For CELL_V1:
 
 ```text
-higher relation
- -> select/condition cube
- -> cluster
- -> local six-gate cycle
- -> local physical state/action
+one hex
+ -> edge-to-edge path
+ -> closed/circulating route
+ -> seven-cell / multi-cell field
+ -> stacked 3D volume
+ -> resolved next-scale point
 ```
 
-Most processing should remain local. Only resolved relations/events need propagate to higher levels.
+The exact internal grain of a 3D volume remains experimental.
 
-## 13. Connected Cube Architecture
+## 13. Flower and brain-scale candidates
 
-The long-term machine is a network of **connected cube modules**, not one indefinitely enlarged folded monolith.
+The seven-cell flower is the first locked planar scale assembly: one center hex plus six identical surrounding hexes, all in the same orientation and connected flat-edge to flat-edge.
 
-Each cube should expose the same relational contract it consumes. Physical connections may use the six spatial faces (`+X/-X`, `+Y/-Y`, `+Z/-Z`) as engineering permits.
-
-> A complete cube should be externally usable as one larger relational node.
-
-This allows:
+Current larger-scale candidates remain experiments, not canonized counts:
 
 ```text
-one cube
- -> connected cubes
- -> 3 x 3 x 3 = 27-cube block
- -> blocks of blocks
+normal + inverted
+2 flowers
+2+2
+3+3
+3 / 3 / 3
+3+ / 3- / 3+
+3 x 3 x 3
+mirrored hemisphere volumes
 ```
 
-without redesigning the logical interface at every scale.
+Do not promote numerical symmetry into hardware fact until added depth/function is measured.
 
-## 14. 3-of-3 / Rubik Geometry
+## 14. Hierarchical Field/Void split
 
-Physical grouping may still use triads or three-axis structures, but geometry does not redefine the gate cycle.
+At larger scale, Field and Void may be opposed processing regions sharing the same relational reference.
+
+Most activity should stay local. Higher levels should receive resolved Views/events rather than micromanaging every local transition.
+
+A released Override does not restore the old state by definition. The resulting local configuration is the new state and becomes the next upward relation.
+
+## 15. First compute target
+
+Balanced-ternary arithmetic remains a useful finite compute test because it exercises `-1/0/+1` without changing the physical architecture.
+
+For two trits A and B, test all nine input combinations and measure sum/carry behavior where required.
+
+The proof target is not merely arithmetic correctness. The same physical primitive must be able to:
+
+1. retain a distinguishable local state;
+2. use that state during processing;
+3. leave the result retained locally;
+4. drive another identical stage;
+5. accept downward conditioning through the same bidirectional mirror path;
+6. settle into a distinguishable new state;
+7. emit the new state upward; and
+8. recurse without an expanding translation layer.
+
+## 16. Hardware proof sequence
+
+Do not begin by building six different physical gates.
+
+Use this order:
 
 ```text
-three Mirror/Action pairs = one six-gate cycle
-three spatial axes/orientations = implementation geometry
+prove one bidirectional stateful mirror path
+ -> prove both directions on that same path
+ -> prove retained state changes subsequent behavior
+ -> reproduce as A/B/C
+ -> verify A+<->A-, B+<->B-, C+<->C-
+ -> verify six directed interfaces without six separate gate species
+ -> test binary x ternary route behavior
+ -> test View UP / Action DOWN recurrence
+ -> test DC recovery/reinjection
+ -> connect identical hexes
+ -> build flower
+ -> test stacked/volumetric recurrence
 ```
 
-Do not multiply these counts unless a physical derivation explicitly requires it.
+## 17. Deprecated physical interpretation
 
-## 15. Build Strategy: Breadboard -> Actual Microfabrication
-
-### Immediate proof
-Use available bench components to prove the primitive without adding gate layers.
-
-First prove:
-
-1. one Mirror gate can read an opposed differential relative to reference;
-2. its paired Action gate can produce a measurable state consequence;
-3. that consequence becomes the input to the next Mirror gate;
-4. three Mirror/Action pairs can complete one six-step loop;
-5. state can be retained if a magnetic-memory primitive is claimed;
-6. the next scale uses the same interface rather than an increasingly complex translation layer.
-
-### Micro version
-The actual micro version is not defined as a PCB miniaturization. The long-term target may use lithographically fabricated mixed-signal/magnetic structures, thin-film magnetic or magnetoresistive elements, semiconductor differential circuitry, stacked dies/wafer bonding and vertical interconnect.
-
-Conceptual progression:
+The following wording is retained only when discussing historical software/receipt labels and must **not** be used as the CELL_V1 physical architecture:
 
 ```text
-breadboard measured Mirror/Action pair
- -> three-pair six-gate test structure
- -> repeated six-gate test die
- -> stacked 3D die/module
- -> six-face packaged cube interface
- -> connected cube lattice
+3 physical Mirror gates + 3 physical Action gates = 6 physical gates
+three Mirror/Action hardware pairs
+six separate Mirror/Action devices in series
 ```
 
-The first custom fabrication should be a test vehicle containing many geometry/process variants of the primitive, not an expensive final machine before the primitive is characterized.
-
-## 16. Magnetic Differential Bench Interpretation
-
-Known electromagnetic effects are not being re-proven. The experiment asks whether the topology integrates them into a useful relational compute primitive.
-
-A passive pickup winding measures changing flux:
+For CELL_V1 hardware, replace it with:
 
 ```text
-V = -N dPhi/dt
+3 physical bidirectional mirrors
+6 directed interfaces
+Views UP / Actions DOWN through the same mirrors
 ```
 
-Static remanence is not automatically a persistent DC pickup voltage. Retention must be measured with an appropriate read method.
+## 18. No internal Gate 7
 
-Ideal complementary differential:
+No seventh internal route/gate is created by View, Action, Override, reinjection, return, memory, or higher-scale coordination.
+
+Higher relations between complete systems may have their own names, but they must not be inserted as another physical CELL_V1 edge/gate.
+
+## 19. Canonical dependency direction
 
 ```text
-(A + N) - (-A + N) = 2A
+shared reference / DC energy context
+ -> three physical bidirectional A/B/C mirrors
+ -> local stateful processing-memory path
+ -> binary relation + ternary UP/HOLD/DOWN route
+ -> AC/rotation behavior where physically implemented
+ -> Views UP / Actions DOWN through the same mirrors
+ -> local recovery/reinjection or higher Override
+ -> resulting new local state
+ -> Point/Path/Rotation/Field/Volume recursion
 ```
 
-This gives ideal common-mode cancellation and doubled differential signal amplitude. It does not by itself prove doubled SNR, doubled speed or half power.
-
-## 17. First Compute Target
-
-Start with balanced-ternary arithmetic. Two operand trits each take `-1/0/+1`. A complete one-trit adder must handle all nine input combinations and produce both sum and carry where required.
-
-Example:
-
-```text
-+1 + (-1) -> 0
-```
-
-For overflow:
-
-```text
-+1 + +1 = +2 = (+1 x 3) + (-1 x 1)
--1 + -1 = -2 = (-1 x 3) + (+1 x 1)
-```
-
-One trit contains three states and therefore `log2(3) ~= 1.585` bits of information. Recursive ternary addressing does not make one trit equal millions of bits; `n` ternary decisions can address `3^n` endpoints. Keep information capacity separate from addressing/control reach.
-
-## 18. Point / Path / Field
-
-```text
-Point = local relation/gate behavior
-Path  = neighbor differential/routing
-Field = coordinated cluster/cube behavior
-```
-
-Field, Void and Routing may be different-scale roles of the same invariant relational mechanism rather than different primitive species.
-
-## 19. No Internal Gate 7
-
-One complete system has six internal gates. When two complete six-gate systems establish a shared higher-order relation, the current name is **Namika**. Namika is not an internal seventh gate.
-
-## 20. Display / I-O
-
-A conventional display is sufficient. Translation can expose decimal/binary text while preserving balanced ternary internally. A future native display may expose view-mode data such as Direction, Phase, Strength and Reference without changing the gate count.
-
-## 21. Validation Branches Are Not the Engine
-
-N-body, Mercury EM, MESSENGER magnetometry, packet compression and other scientific tests remain validation branches. They must not redefine the invariant kernel.
-
-## 22. Video Maker Goal
-
-Separate product goal: provider-neutral AI-callable video/audio generation so multiple AI agents can use the repository's video maker as an AI-to-human communication layer. This remains independent of the VTC kernel.
-
-## 23. Canonical Dependency Direction
-
-```text
-shared reference -(0)+
- -> six-step/six-gate oscillator
- -> 3 Mirror + 3 Action roles
- -> optional view/action-mode descriptions
- -> choices / moves / modulation / route addresses
- -> physical implementation
- -> recursive differential interface
- -> processing-is-memory cluster
- -> connected cube module
- -> cube lattice / higher Field-Void split
- -> domain representations and validation branches
-```
-
-Do not reverse this dependency direction.
+Do not reverse this dependency direction, and do not resurrect six separate physical Mirror/Action gates from older terminology.
