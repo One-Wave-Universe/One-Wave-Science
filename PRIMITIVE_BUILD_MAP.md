@@ -1,7 +1,9 @@
 # Primitive Build Map
 
 Date: 2026-08-30
-Status: working integrated architecture
+Status: working integrated architecture; superseded for execution priority by `PRIORITY_ONE_CELL_BUILD_MAP.md`
+
+> **Priority-one authority:** use `PRIORITY_ONE_CELL_BUILD_MAP.md` for the ordered physical/simulated cell build. It locks six side connections, virtual ground as ternary HOLD, `DC -> AC -> RC`, quadratic Views UP then Actions DOWN, whole-cell mirrored reinjection, and rewritable path-reinforcement muscle memory. This older integration map remains useful background but must not override that build order.
 
 This file assembles the current primitive from the parts already developed across control, memory, routing, scale, and project versions. It is not proof of the complete primitive and it is not yet a final wiring recipe. Its job is to show what the primitive has to contain, what existing technologies can be reused, what data/state must survive each transition, and what integration questions remain.
 
@@ -25,7 +27,7 @@ Primitive requirements:
 - one shared center reference;
 - Field and Void retained as coupled opposites;
 - differential state interpreted relative to center;
-- center is reference, not a third binary choice.
+- center is the physical ternary HOLD/zero condition, not another binary polarity.
 
 ## 2. DC binary layer
 
@@ -242,7 +244,7 @@ M4 is not the motor, Dream, Administrator, or long-term archive.
 
 ## 12. Memory is part of the primitive architecture
 
-The primitive cannot be treated as stateless switching. Current architecture treats memory as a combination of persistent local state, relational structure, route history, and reconstruction.
+The primitive cannot be treated as stateless switching. Current architecture treats memory as a combination of persistent local state, relational structure, route history, and reconstruction. For the physical cell, muscle memory specifically means rewritable, path-dependent impedance reinforcement along the exact side-connected route; see `PRIORITY_ONE_CELL_BUILD_MAP.md`.
 
 Memory jobs remain separated:
 
