@@ -1,0 +1,1 @@
+This file accompanies CELL_V1_referenced_parts_breadboard_visual.pdf. See CELL_V1_REFERENCED_PARTS_AND_VISUAL_GUIDE.md for the referenced part list, no-assumption rule, side-only hex geometry, and muscle-memory test requirements.
