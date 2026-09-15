@@ -97,6 +97,8 @@ active
 active
 ```
 
+Emergency stop: run `systemctl --user stop hive-pipe-gateway.service hive-pipe-agent.service`; stopping only the gateway blocks new MCP calls but leaves the queue worker running, and SSH remains independent.
+
 ## 2. Local MCP terminal test
 
 Use one local token without pasting it into chat:
