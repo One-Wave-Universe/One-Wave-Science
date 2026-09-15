@@ -1,17 +1,19 @@
 # Algorythm-Zer0
 
-**Status:** Working canonical draft for the recursive Field/Void algorithm architecture.
+**Status:** Working canonical draft — universal core locked where domain-neutral; unresolved mechanics explicitly separated.
 
-This file collects the current algorithm structure in one place. It defines the architecture and operating vocabulary. Physical interpretations remain hypotheses unless independently measured or derived elsewhere in the repository.
+Algorythm-Zer0 is the proposed universal recursive architecture. The same invariant algorithm is intended to be instantiable in neural, control, hardware, matter, planetary, and simulation domains without changing its core relational grammar.
+
+Application mappings remain hypotheses until independently measured or derived. Do not turn a domain example into a universal definition.
 
 ---
 
-## 1. Core Architecture
-
-The system is:
+# 1. LOCKED CORE ARCHITECTURE
 
 ```text
-TWO RECURSIVE STATE MACHINES + ONE COUPLING LOOP
+TWO RECURSIVE STATE MACHINES
++ ONE COUPLING LOOP
++ ONE SHARED REFERENCE / GROUND
 ```
 
 ```text
@@ -23,15 +25,23 @@ oversight / override
 VOID / COMPRESSIVE MACHINE
 ```
 
-Both machines are bidirectional at every stage.
+Locked:
 
-Every stage is referenced to the same Ground / reference.
-
-The middle is not dead zero. It is an active oscillating balance around the reference.
+- Field and Void are a paired decision unit.
+- Field is the expressive side of the pair.
+- Void is the compressive side of the pair.
+- Both machines are bidirectional.
+- Every decision remains referenced to Ground / the current local reference.
+- The middle is active oscillating balance, not dead/off zero.
+- Field and Void may be phase shifted relative to each other.
+- The phase relationship can change access to the next relation/path.
+- Neither machine is complete by itself.
 
 ---
 
-## 2. Six Algorithm Levels
+# 2. LOCKED SIX ALGORITHM LEVELS
+
+The order is fixed:
 
 ```text
 1. FIELD / VOID
@@ -42,9 +52,9 @@ The middle is not dead zero. It is an active oscillating balance around the refe
    UP / STAY / DOWN
 
 4. VIEW / ACTION
-   Field side = VIEW
-   Void side  = ACTION
-
+   Field side = VIEW UP
+   Void side  = ACTION DOWN
+   relational orientations:
    INWARD / OUTWARD / ACROSS / OVER
 
 5. STATE / SCALE
@@ -59,110 +69,202 @@ The middle is not dead zero. It is an active oscillating balance around the refe
    LOOP
 ```
 
-Field and Void use the same six-level structure.
+Do not reorder these six levels.
 
-Field is expressive.
-
-Void is compressive.
-
-They are paired, not isolated modes.
+The levels are cumulative relational structure, not six unrelated modules.
 
 ---
 
-## 3. Field Recursive State Machine
+# 3. LOCKED UNIVERSAL DEFINITIONS
+
+These definitions are domain-neutral.
+
+## Reference / Ground
+
+The local baseline against which a relation, change, phase, direction, or deviation is measured.
+
+Ground is not automatically an energy source, physical earth ground, voltage zero, temperature, or spatial origin. A domain must declare what its reference physically means.
+
+## Field
+
+The expressive member of the paired process: the side exposing, extending, differentiating, or making a new relation available.
+
+## Void
+
+The compressive member of the paired process: the side constraining, concentrating, resolving, returning, or applying the relation.
+
+## Field/Void Pair
+
+One complete decision relation made from an expressive and compressive side sharing a reference.
+
+## Polarity
+
+Which opposed tendency is currently committed relative to the reference.
+
+A balanced/uncommitted reference condition is not itself a third committed polarity.
+
+## Choice
+
+Commitment to one of the available polarity alternatives after comparison to reference.
+
+## Phase
+
+The relative position/timing of Field and Void oscillation or recurrence.
+
+Phase is relational. It is not identical to amplitude, strength, polarity, state, or scale.
+
+## Move
+
+A ternary change relative to the current relation:
+
+```text
+UP   = advance/increase toward the higher relation
+STAY = actively maintain the current relation
+DOWN = return/decrease toward the lower relation
+```
+
+These are relational moves. They are not literal vertical motion unless a domain maps them that way.
+
+## View
+
+A newly resolved relation made available upward for oversight or a higher recursion level.
+
+## Action
+
+The currently authorized relation applied downward to condition a lower recursion level.
+
+## Inward / Outward / Across / Over
+
+Four universal relational orientations:
+
+```text
+INWARD  = toward the current center/reference or interior relation
+OUTWARD = away from the current center/reference toward exterior relation
+ACROSS  = lateral/cross relation between peers at the current level
+OVER    = supervisory/bridging relation that spans or addresses the current lower relation
+```
+
+These are relational orientations first. A physical implementation may map them to literal geometry.
+
+## State
+
+The currently retained local condition of the process.
+
+## Scale
+
+The extent, reach, or recursion size over which the current condition is being treated as one relation.
+
+## Mini / Small / Middle / Large / Macro
+
+Five ordered scale/state classes from least extent to greatest extent. They are ordinal universal labels until a domain supplies units and thresholds.
+
+## Access
+
+A relation/path currently available for propagation, processing, action, or recursion.
+
+## Open
+
+Make an access relation usable.
+
+## Close
+
+Stop using an access relation without requiring destruction of all retained state.
+
+## Hold
+
+Actively preserve the current relation around its reference without advancing or releasing it.
+
+## Redirect
+
+Change which available path/orientation is used while preserving continuity of the larger process.
+
+## Break / Release
+
+End the current commitment sufficiently for the relation to reorganize, return, or begin another cycle.
+
+## Loop
+
+Feed the resulting process condition back as input to recursion.
+
+## Oversight
+
+Compare the new view upward against the reference and the current/last authorized action downward.
+
+## Override
+
+Intervene in, reroute, hold, reverse, or release an existing downward action when the oversight condition requires it.
+
+## Memory
+
+```text
+PROCESS = MEMORY
+```
+
+Memory is retained process state. The process does not require a separate conceptual memory box.
+
+```text
+state is held in the active process
+→ relation arrives
+→ that same state changes
+→ changed state remains available
+→ next relation acts on the changed state
+```
+
+---
+
+# 4. LOCKED FIELD AND VOID ROLES
+
+## Field recursive machine
 
 ```text
 FIELD
 → polarity choice
 → move
-→ new VIEW
+→ NEW VIEW UP
 → state
 → recursive step
 ↺
 ```
 
-The Field machine carries a **new view upward**.
-
----
-
-## 4. Void Recursive State Machine
+## Void recursive machine
 
 ```text
 VOID
 → polarity choice
 → move
-→ ACTION
+→ LAST/CURRENT ACTION DOWN
 → scale
 → recursive step
 ↺
 ```
 
-The Void machine carries the **last/current action downward**.
+The two are coupled, not separate programs.
 
 ---
 
-## 5. Bidirectional Decision Primitive
-
-Every decision is a Field/Void pair referenced to the same Ground.
-
-```text
-FIELD oscillator
-      ↕
-shared Ground / reference
-      ↕
-VOID oscillator
-```
-
-The pair is phase shifted.
-
-The phase relationship determines whether the system:
-
-```text
-HOLD
-OPEN
-REDIRECT
-CLOSE
-OVERRIDE
-RELEASE
-```
-
-A coherent phase relationship may open a new line of access.
-
-The decision primitive is therefore:
-
-```text
-referenced Field/Void pair
-→ phase relationship
-→ polarity
-→ access condition
-→ next path
-```
-
----
-
-## 6. Oversight / Override Coupling Loop
+# 5. LOCKED COUPLING LOOP
 
 ```text
 NEW VIEW UP
       ↑
-Field / expressive
+FIELD / EXPRESSIVE
       ↕
 OVERSIGHT / OVERRIDE
       ↕
-Void / compressive
+VOID / COMPRESSIVE
       ↓
 LAST ACTION DOWN
 ```
 
-Oversight compares:
+Oversight always compares at minimum:
 
 ```text
-new view
-+ current reference
-+ last action
+NEW VIEW
++ CURRENT REFERENCE
++ LAST/CURRENT ACTION
 ```
 
-Possible outcomes:
+Universal outcome classes are:
 
 ```text
 ALLOW
@@ -172,72 +274,67 @@ OVERRIDE
 BREAK / RELEASE
 ```
 
-The coupling loop is the interaction between the two recursive machines.
+Exactly what measurements trigger each outcome is still open.
 
 ---
 
-## 7. Processing Is Memory
+# 6. LOCKED BIDIRECTIONAL DECISION PRIMITIVE
 
-Memory is not a separate storage box.
-
-```text
-PROCESS = MEMORY
-```
-
-The intended cycle is:
+Every decision uses a referenced Field/Void pair.
 
 ```text
-current process state
-→ process changes that same state
-→ changed state remains locally available
-→ next decision acts on that changed state
-→ loop
+FIELD
+  ↕
+REFERENCE
+  ↕
+VOID
 ```
+
+The universal relation is:
+
+```text
+referenced Field/Void pair
+→ relative phase / polarity relation
+→ commitment condition
+→ access condition
+→ next relation/path
+```
+
+A decision is therefore not defined as an isolated one-way `if/then` gate.
+
+Each stage may receive from and return information/state to adjacent stages while preserving the shared reference.
+
+---
+
+# 7. LOCKED PROCESSING-AS-MEMORY RULE
 
 The retained process relation is the memory.
 
-Relevant retained properties may include:
+Possible retained coordinates include:
 
 ```text
-phase
-open path
-rotation
-state / scale
-recursive position
 reference relation
+phase relation
+polarity commitment
+open/closed access
+current move
+current orientation
+state / scale
+rotation relation
+recursive position
 last action
 new view
+lifecycle position
+structural depth
 ```
+
+This list describes coordinates of one process; it does not authorize separate memory modules for each coordinate.
 
 ---
 
-## 8. Point / Path / Field Geometry
+# 8. LOCKED POINT / PATH / ROTATION / FIELD / VOLUME RECURSION
 
-Three rotation levels:
-
-```text
-POINT ROTATION
-PATH ROTATION
-FIELD ROTATION
-```
-
-Inside each rotation, inspect:
-
-```text
-POINT
-PATH
-FIELD
-```
-
-This creates a recursive 3 × 3 structure:
-
-| Rotation Level | Internal Views |
-|---|---|
-| Point Rotation | Point / Path / Field |
-| Path Rotation | Point / Path / Field |
-| Field Rotation | Point / Path / Field |
-
-Primary scale recursion:
+Universal scale recursion:
 
 ```text
 POINT
@@ -245,15 +342,57 @@ POINT
 → ROTATION
 → FIELD
 → VOLUME
-→ next-scale POINT
+→ NEXT-SCALE POINT
 ↺
 ```
 
+Locked meanings:
+
+```text
+POINT    = one localized relation treated as a unit
+PATH     = connected continuation of relations
+ROTATION = recurring directional relation around a reference
+FIELD    = interacting set of paths/rotations treated together
+VOLUME   = bounded field organization treated as one resolved whole
+NEXT-SCALE POINT = a resolved volume exposed upward as one unit
+```
+
+Rotation classes:
+
+```text
+POINT ROTATION
+PATH ROTATION
+FIELD ROTATION
+```
+
+Inside each rotation the process may be inspected through:
+
+```text
+POINT
+PATH
+FIELD
+```
+
+This produces the recursive 3 × 3 relation:
+
+| Rotation Level | Internal Views |
+|---|---|
+| Point Rotation | Point / Path / Field |
+| Path Rotation | Point / Path / Field |
+| Field Rotation | Point / Path / Field |
+
+Locked separation:
+
+- `point/path/field` as an inspection level is not automatically the same variable as `point/path/field rotation`.
+- A completed lower volume may become a point at the next recursion scale.
+
+Exact promotion thresholds are still open.
+
 ---
 
-## 9. Five-State Lifecycle
+# 9. LOCKED FIVE-STATE SELF LIFECYCLE
 
-The self lifecycle is separate from the six algorithm levels.
+This axis is separate from the six algorithm levels.
 
 ```text
 IDLE
@@ -264,13 +403,23 @@ IDLE
 → IDLE
 ```
 
-This tracks where the process is in its current lifecycle.
+Universal meanings:
+
+```text
+IDLE      = available but not currently committed
+PRIMED    = conditions for commitment are forming
+EXECUTING = committed transition/process is active
+VECTORING = direction/relationship is being resolved or routed
+RESOLVING = result is being incorporated into the retained process before recurrence
+```
+
+Exact transition conditions remain open.
 
 ---
 
-## 10. Structural Depth Ladder
+# 10. LOCKED STRUCTURAL DEPTH LADDER
 
-This is also separate from the lifecycle and six algorithm levels.
+This is a separate coordinate from lifecycle, state/scale, and the six algorithm levels.
 
 ```text
 SCALAR
@@ -281,21 +430,22 @@ SCALAR
 → HARMONIC
 ```
 
-A current process may therefore carry multiple independent coordinates at once, for example:
+Universal meanings:
 
 ```text
-lifecycle = VECTORING
-structure = TENSOR
-side      = FIELD
-move      = UP
-view      = ACROSS
-state     = LARGE
-step      = BUILD
+SCALAR       = one magnitude/value relative to its declared reference
+DIFFERENTIAL = change/difference between related values or states
+VECTOR       = directed magnitude/relation
+TENSOR       = organized relation across multiple directions/components
+STRATUM      = organized layer/network of those relations
+HARMONIC     = recurring coordinated relation across strata/scales
 ```
+
+Do not infer that matching list lengths mean this ladder is the same axis as the six algorithm levels.
 
 ---
 
-## 11. 0–100 Balance Bands
+# 11. LOCKED 0–100 EXPRESSION / COMPRESSION BANDS
 
 ```text
 100–90   extreme expression / danger zone
@@ -307,7 +457,14 @@ step      = BUILD
 10–0     extreme compression / danger zone
 ```
 
-Transition spaces:
+Outer danger zones are retained:
+
+```text
+90–100 → extreme expression / explosion-break danger
+0–10   → extreme compression / implosion-collapse danger
+```
+
+Transition spaces are retained:
 
 ```text
 90–85
@@ -318,57 +475,126 @@ Transition spaces:
 15–10
 ```
 
-These transition spaces may be used as hysteresis / handoff zones so the system does not chatter between neighboring states.
+Locked universal interpretation:
 
-Extreme conditions:
+- The middle is the preferred dynamic stable region, not dead zero.
+- Neither 0 nor 100 is a goal.
+- Distance and direction from the reference may carry different information.
+- The unused gaps are reserved for transition/handoff/hysteresis behavior rather than being silently assigned to neighboring bands.
 
-```text
-90–100 → extreme expression → explosion / break danger
-0–10   → extreme compression → implosion / collapse danger
-```
-
-The operating goal is dynamic balance, not maximum movement toward either extreme.
+Open: exact entry/exit thresholds, dwell time, hysteresis direction, and whether 50 is always the mathematical center or a normalized local reference.
 
 ---
 
-## 12. Matter Mapping
-
-For matter, use at least two measured physical variables rather than forcing all behavior onto one generic scale.
-
-Candidate pair:
+# 12. LOCKED RECURSIVE STEP ORDER
 
 ```text
-TEMPERATURE → expressive threshold
-PRESSURE    → compressive threshold
+BEGIN
+→ BUILD
+→ HOLD
+→ BUILD
+→ BREAK / RELEASE
+→ LOOP
 ```
 
-Their relationship determines matter-state boundaries.
+Universal meanings:
 
-Conceptual ordering:
+```text
+BEGIN         = establish/re-enter the referenced relation
+BUILD 1       = form/strengthen the initial committed relation
+HOLD          = maintain coherent active balance
+BUILD 2       = extend the held relation into its next resolved relation/scale
+BREAK/RELEASE = end or loosen the current commitment so it can reorganize
+LOOP          = feed the resulting process condition into recurrence
+```
+
+The two BUILD positions are intentionally distinct positions in the cycle even if a future implementation uses the same low-level operation for both.
+
+Exact transition triggers remain open.
+
+---
+
+# 13. DOMAIN MAPPING RULE — LOCKED
+
+The universal algorithm defines relationships. Domains supply measurements.
+
+Do not redefine the universal words to fit a domain.
+
+Examples:
+
+```text
+UNIVERSAL
+Field ↔ Void
+Reference
+Phase
+Move
+View/Action
+State/Scale
+Recursion
+```
+
+A domain may then declare mappings such as:
+
+```text
+THERMAL / MATTER EXAMPLE
+Field-side threshold variable: temperature / energetic expression
+Void-side threshold variable: pressure / confinement-compression
+Output: material phase/state relative to a material-specific phase diagram
+```
+
+or:
+
+```text
+NEURAL EXAMPLE
+Field: newly exposed/resolved relation
+Void: current conditioning/action relation
+Output: new view up / authorized action down
+```
+
+or:
+
+```text
+CONTROL EXAMPLE
+Field: measured/emerging deviation or opportunity
+Void: applied constraint/load/control
+Output: hold, redirect, override, or release
+```
+
+The mapping may change. The core grammar does not.
+
+---
+
+# 14. MATTER WRAPPER — CURRENT WORKING MAPPING
+
+Matter requires at least two physical variables rather than forcing phase behavior onto one generic scalar.
+
+```text
+TEMPERATURE → expressive threshold candidate
+PRESSURE    → compressive threshold candidate
+```
+
+Conceptual direction:
 
 ```text
 compression                                      expression
 ←----------------------------------------------------------→
 
-implosion
+implosion danger
 → strongly compressed / frozen solid
 → solid
-→ stable matter region
-→ liquid
+→ liquid / transition region
 → gas
 → plasma
-→ explosion
+→ explosion danger
 ```
 
-This is a conceptual wrapper. Real phase boundaries depend on the material and its pressure-temperature phase diagram.
+This is a wrapper, not a universal law. Actual material phase boundaries depend on substance, pressure, temperature, and other physical conditions.
 
 ---
 
-## 13. Planetary Mapping
+# 15. PLANETARY / ONE-WAVE WRAPPER — CURRENT REPO MAPPING
 
-Current One-Wave repo architecture separates compression source from magnetic path organization.
-
-### Void / compressive side
+## Compressive / Void-side chain
 
 ```text
 displacement
@@ -377,7 +603,7 @@ displacement
 → restoring / gravity response
 ```
 
-### Field / rotational side
+## Rotational / Field-side chain
 
 ```text
 magnetic rotation
@@ -385,7 +611,7 @@ magnetic rotation
 → changes directional accessibility
 ```
 
-### Coupling
+## Coupling
 
 ```text
 compression gradient
@@ -397,26 +623,24 @@ directionally weighted restoring response
 torque / rotation / orbital response
 ```
 
-Do not collapse this to:
+Do not collapse this to `magnetism = gravity`.
 
-```text
-magnetism = gravity
-```
+The current One-Wave repo instead proposes magnetic rotation as a path reorganizer for an existing compression/restoring field.
 
-The current repo model instead treats magnetic rotation as a proposed path reorganizer for an existing compression/restoring field.
+This remains a hypothesis requiring physical validation.
 
 ---
 
-## 14. Recursive Operating Law
+# 16. LOCKED UNIVERSAL OPERATING SKELETON
 
 ```text
-START / EXISTING PROCESS STATE
+EXISTING PROCESS STATE
         ↓
-shared Ground / reference
+REFERENCE / GROUND
         ↓
-read Field ↔ Void pair
+FIELD ↔ VOID PAIR
         ↓
-measure phase relation
+RELATIVE PHASE / POLARITY RELATION
         ↓
 POLARITY CHOICE
         ↓
@@ -429,65 +653,301 @@ INWARD / OUTWARD / ACROSS / OVER
 STATE / SCALE
 MINI / SMALL / MIDDLE / LARGE / MACRO
         ↓
-POINT / PATH / FIELD relation
+POINT / PATH / ROTATION / FIELD / VOLUME RELATION
         ↓
-rotation level
-POINT / PATH / FIELD rotation
+OVERSIGHT:
+NEW VIEW + REFERENCE + LAST ACTION
         ↓
-oversight compares:
-new view + reference + last action
+ALLOW / HOLD / REDIRECT / OVERRIDE / BREAK-RELEASE
         ↓
-ALLOW / HOLD / REDIRECT / OVERRIDE
-        ↓
-recursive step:
+RECURSIVE STEP
 BEGIN → BUILD → HOLD → BUILD → BREAK/RELEASE → LOOP
         ↓
-changed process remains locally available
+CHANGED PROCESS REMAINS AVAILABLE
         ↓
-retained process becomes next input
+RESULT BECOMES INPUT TO THE NEXT RECURSION
         ↺
 ```
 
 ---
 
-## 15. What Still Must Be Defined
+# 17. STILL NEEDED — DO NOT GUESS
 
-The architecture is not yet executable until exact transition laws are specified.
+The following are the real unresolved mechanics. They are intentionally not filled with arbitrary values.
 
-Required next definitions:
+## A. Phase measurement law
+
+Need:
 
 ```text
-1. What exactly is measured for Field and Void phase.
-2. Exact polarity thresholds.
-3. What causes UP vs STAY vs DOWN.
-4. What selects INWARD / OUTWARD / ACROSS / OVER.
-5. What selects MINI / SMALL / MIDDLE / LARGE / MACRO.
-6. What causes BEGIN → BUILD → HOLD → BUILD → BREAK/RELEASE → LOOP.
-7. Exact oversight / override conditions.
-8. Exact point → path → rotation → field → volume promotion conditions.
-9. Exact timing / hysteresis requirements.
-10. Reset / recovery behavior if reference or coherence is lost.
-11. Exact physical outputs for each implementation.
+What exact quantity represents Field phase?
+What exact quantity represents Void phase?
+How is relative phase calculated?
+What is the valid phase range?
 ```
 
-Until these are numerically or logically locked, Algorythm-Zer0 is the architecture and rule skeleton, not a finished executable controller.
+## B. Polarity commitment law
+
+Need exact rule for:
+
+```text
+uncommitted/reference
+→ polarity A
+or
+→ polarity B
+```
+
+Need entry threshold, exit threshold, and reversal rule.
+
+## C. UP / STAY / DOWN transition law
+
+Need exact universal comparison that maps the current pair to:
+
+```text
+UP
+STAY
+DOWN
+```
+
+This must not depend on literal spatial direction.
+
+## D. Orientation selection law
+
+Need exact conditions selecting:
+
+```text
+INWARD
+OUTWARD
+ACROSS
+OVER
+```
+
+Need to define whether more than one orientation may be simultaneously active.
+
+## E. State / Scale transition law
+
+Need exact promotion/demotion rule between:
+
+```text
+MINI
+SMALL
+MIDDLE
+LARGE
+MACRO
+```
+
+Need to distinguish state change from scale change if those become independently measured variables.
+
+## F. Recursive-step transition law
+
+Need exact conditions for:
+
+```text
+BEGIN → BUILD 1
+BUILD 1 → HOLD
+HOLD → BUILD 2
+BUILD 2 → BREAK/RELEASE
+BREAK/RELEASE → LOOP
+LOOP → next BEGIN
+```
+
+## G. Oversight / Override law
+
+Need exact mismatch/coherence conditions for:
+
+```text
+ALLOW
+HOLD
+REDIRECT
+OVERRIDE
+BREAK / RELEASE
+```
+
+Need priority rule when new view and last action disagree.
+
+## H. Point / Path / Rotation / Field / Volume promotion law
+
+Need measurable/logical criteria for:
+
+```text
+POINT → PATH
+PATH → ROTATION
+ROTATION → FIELD
+FIELD → VOLUME
+VOLUME → NEXT-SCALE POINT
+```
+
+## I. Timing law
+
+Need:
+
+```text
+Field/Void update order
+phase lead/lag rule
+minimum dwell time
+sampling/update rate
+whether the two machines alternate, overlap, or continuously co-evolve
+```
+
+## J. Hysteresis law
+
+Need exact use of the gap bands:
+
+```text
+90–85
+75–70
+60–55
+45–40
+30–25
+15–10
+```
+
+Need separate enter/leave rules so oscillation does not become chatter.
+
+## K. Reference adaptation law
+
+Need to determine:
+
+```text
+Is reference fixed, locally adaptive, or recursively inherited?
+When may reference move?
+Who/what is allowed to move it?
+How is drift distinguished from legitimate adaptation?
+```
+
+## L. Rate / acceleration limits
+
+Need to define whether a relation may jump multiple bands/states in one update or must traverse neighboring states.
+
+## M. Boundary / danger response
+
+Need exact response when entering:
+
+```text
+90–100 expression danger
+0–10 compression danger
+```
+
+Need distinction between warning, resolving, override, break/release, and terminal failure.
+
+## N. Conflict law
+
+Need exact behavior if Field and Void simultaneously demand incompatible moves, orientations, scales, or lifecycle transitions.
+
+## O. Scale-coupling law
+
+Need exact rule governing when a lower resolved volume becomes one point for a higher recursion and how higher oversight can act downward without destroying local autonomy/state.
+
+## P. Structural-depth transition law
+
+Need criteria for moving among:
+
+```text
+SCALAR
+DIFFERENTIAL
+VECTOR
+TENSOR
+STRATUM
+HARMONIC
+```
+
+Need to determine whether this is computed automatically from information structure or explicitly assigned.
+
+## Q. Lifecycle transition law
+
+Need exact conditions for:
+
+```text
+IDLE
+→ PRIMED
+→ EXECUTING
+→ VECTORING
+→ RESOLVING
+→ IDLE
+```
+
+## R. Normalization law
+
+Need a universal method for mapping domain-specific measurements into common relational coordinates without pretending unlike physical quantities share units.
+
+## S. Output contract
+
+Each implementation must declare what one resolved loop outputs, for example:
+
+```text
+new internal relation
+new access path
+new action
+motor command
+physical state change
+higher-scale point
+```
+
+The universal algorithm must define the shape of an output; the domain defines its physical meaning.
+
+## T. Conservation / resource accounting
+
+Physical implementations need explicit accounting for energy/work/material/resource transfer. Neural/software implementations need their equivalent bounded-resource accounting where relevant.
+
+The recursion must not silently create gain, information, energy, or authority.
+
+## U. Failure / falsification contract
+
+Each implementation must declare conditions under which its mapping or transition rule is wrong.
+
+Algorythm-Zer0 must not be allowed to explain every possible result after the fact.
 
 ---
 
-## 16. Canonical Short Form
+# 18. CURRENT LOCK / OPEN SUMMARY
+
+## LOCKED
 
 ```text
-TWO RECURSIVE STATE MACHINES
-+ ONE COUPLING LOOP
-+ SHARED GROUND
-+ PHASE-SHIFTED FIELD/VOID DECISIONS
-+ NEW VIEW UP
-+ LAST ACTION DOWN
-+ OVERSIGHT / OVERRIDE
-+ PROCESSING IS MEMORY
-+ POINT/PATH/FIELD RECURSION
-+ FIVE-STATE LIFECYCLE
-+ SIX-LEVEL STRUCTURAL DEPTH
-+ 0–100 EXPRESSION/COMPRESSION BANDS
-+ BEGIN/BUILD/HOLD/BUILD/BREAK-RELEASE/LOOP
+architecture = two recursive state machines + one coupling loop
+pair = Field expressive ↔ Void compressive
+reference = shared Ground at every decision
+middle = active oscillating balance
+six levels = Field/Void → polarity choice → move → view/action → state/scale → recursive steps
+moves = UP / STAY / DOWN
+orientations = INWARD / OUTWARD / ACROSS / OVER
+Field output = new view up
+Void output = last/current action down
+coupling = oversight / override
+memory = process
+scale classes = MINI / SMALL / MIDDLE / LARGE / MACRO
+recursive sequence = BEGIN → BUILD → HOLD → BUILD → BREAK/RELEASE → LOOP
+lifecycle = IDLE → PRIMED → EXECUTING → VECTORING → RESOLVING
+structural depth = SCALAR → DIFFERENTIAL → VECTOR → TENSOR → STRATUM → HARMONIC
+scale recursion = POINT → PATH → ROTATION → FIELD → VOLUME → NEXT-SCALE POINT
+bands = 100–90 / 85–75 / 70–60 / 55–45 / 40–30 / 25–15 / 10–0
+outer bands = expression/compression danger zones
 ```
+
+## OPEN
+
+```text
+exact phase equation
+polarity thresholds
+UP/STAY/DOWN transition equation
+orientation-selection equation
+state/scale thresholds
+recursive-step triggers
+oversight/override thresholds
+point/path/rotation/field/volume promotion thresholds
+timing and phase lead/lag
+hysteresis implementation
+reference adaptation
+rate limits
+danger-zone response
+conflict resolution
+scale coupling
+structural-depth transitions
+lifecycle transitions
+normalization across domains
+output contract
+resource/conservation accounting
+falsification criteria
+```
+
+Do not promote an OPEN item to LOCKED without a derivation, explicit design decision, or measurement.
