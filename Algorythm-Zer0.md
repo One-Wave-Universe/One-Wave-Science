@@ -36,6 +36,20 @@ Locked:
 - Field and Void may be phase shifted relative to each other.
 - The phase relationship can change access to the next relation/path.
 - Neither machine is complete by itself.
+- **Field defines the polarity-choice space for the current domain/context.**
+- **Choice selects from that polarity-choice space and thereby selects the next Field.**
+- Therefore Field is not merely an input value and Choice is not merely a threshold result. They recursively generate one another.
+
+Canonical recursion:
+
+```text
+CURRENT FIELD
+→ defines available polarity choices
+→ CHOICE
+→ selects NEW FIELD
+→ new Field defines the next polarity choices
+↺
+```
 
 ---
 
@@ -45,8 +59,12 @@ The order is fixed:
 
 ```text
 1. FIELD / VOID
+   Field defines the currently available polarity-choice space.
+   Void is the paired compressive relation to that Field.
 
 2. POLARITY CHOICE
+   Choice selects one available polarity relation.
+   That choice selects/establishes the NEW FIELD for continuation.
 
 3. MOVE
    UP / STAY / DOWN
@@ -73,6 +91,8 @@ Do not reorder these six levels.
 
 The levels are cumulative relational structure, not six unrelated modules.
 
+Choice does not eliminate Field. Choice creates/selects the next Field that the remaining process operates within and that later becomes the next recursion's choice-defining context.
+
 ---
 
 # 3. LOCKED UNIVERSAL DEFINITIONS
@@ -87,35 +107,61 @@ Ground is not automatically an energy source, physical earth ground, voltage zer
 
 ## Field
 
-The expressive member of the paired process: the side exposing, extending, differentiating, or making a new relation available.
+The expressive relational context that defines what polarity choices are available now.
+
+Field has two locked jobs:
+
+```text
+1. DEFINE the available polarity-choice space for the current domain/context.
+2. CARRY the expressive relation that becomes available for the next decision.
+```
+
+A Field is therefore not only a measured value. It is the current relational possibility-space.
+
+The same Field function is universal across domains; the domain determines what concrete variables instantiate that Field.
 
 ## Void
 
-The compressive member of the paired process: the side constraining, concentrating, resolving, returning, or applying the relation.
+The compressive member paired with the current Field: the side constraining, concentrating, resolving, returning, or applying the relation.
+
+Void does not independently define a second unrelated choice space. It is the compressive counterpart participating in the same referenced decision relation.
 
 ## Field/Void Pair
 
-One complete decision relation made from an expressive and compressive side sharing a reference.
+One complete referenced decision relation made from an expressive Field and its compressive Void counterpart.
 
 ## Polarity
 
-Which opposed tendency is currently committed relative to the reference.
+One of the opposed relations made available by the current Field relative to reference.
 
 A balanced/uncommitted reference condition is not itself a third committed polarity.
 
 ## Choice
 
-Commitment to one of the available polarity alternatives after comparison to reference.
+Selection among the polarity alternatives defined by the current Field.
+
+Locked consequence:
+
+```text
+FIELD defines choices
+CHOICE selects polarity
+CHOICE selects the NEW FIELD
+NEW FIELD defines the next choices
+```
+
+Choice is therefore generative/routing, not merely a passive label attached after a threshold crossing.
 
 ## Phase
 
 The relative position/timing of Field and Void oscillation or recurrence.
 
-Phase is relational. It is not identical to amplitude, strength, polarity, state, or scale.
+Phase is relational. It is not identical to amplitude, strength, polarity, state, scale, or choice.
+
+Phase may constrain or inform what is available, but phase does not by itself replace Choice.
 
 ## Move
 
-A ternary change relative to the current relation:
+A ternary change relative to the newly selected/current Field:
 
 ```text
 UP   = advance/increase toward the higher relation
@@ -194,6 +240,8 @@ Compare the new view upward against the reference and the current/last authorize
 
 Intervene in, reroute, hold, reverse, or release an existing downward action when the oversight condition requires it.
 
+Override constrains or redirects an existing choice/action; it does not erase the distinction between Field-defined possibilities and Choice.
+
 ## Memory
 
 ```text
@@ -212,13 +260,61 @@ state is held in the active process
 
 ---
 
-# 4. LOCKED FIELD AND VOID ROLES
+# 4. LOCKED FIELD → CHOICE → NEW FIELD RECURSION
+
+This relation is universal and applies before domain-specific mappings.
+
+```text
+CURRENT FIELD
+      ↓
+defines polarity alternatives
+      ↓
+CHOICE
+      ↓
+selects polarity
+      ↓
+selects / establishes NEW FIELD
+      ↓
+MOVE operates inside that new Field
+      ↓
+VIEW / ACTION
+      ↓
+STATE / SCALE
+      ↓
+RECURSIVE STEP
+      ↓
+result participates in the next Field
+      ↺
+```
+
+This prevents a common drift:
+
+```text
+WRONG:
+input threshold → automatic polarity → automatic next state
+```
+
+The universal architecture is instead:
+
+```text
+FIELD → defines possible polarities
+CHOICE → selects among them
+CHOICE → picks the new Field
+PROCESS → develops inside that Field
+```
+
+A specific physical controller may automate Choice according to a policy, but that policy is an implementation of Choice, not the universal definition of Choice.
+
+---
+
+# 5. LOCKED FIELD AND VOID MACHINE ROLES
 
 ## Field recursive machine
 
 ```text
-FIELD
-→ polarity choice
+CURRENT FIELD
+→ defines polarity choices
+→ CHOICE selects NEW FIELD
 → move
 → NEW VIEW UP
 → state
@@ -226,11 +322,13 @@ FIELD
 ↺
 ```
 
+The Field machine carries a **new view upward** and continuously defines the next available polarity-choice space.
+
 ## Void recursive machine
 
 ```text
-VOID
-→ polarity choice
+VOID paired to current/new Field
+→ participates in referenced polarity relation
 → move
 → LAST/CURRENT ACTION DOWN
 → scale
@@ -238,11 +336,13 @@ VOID
 ↺
 ```
 
+The Void machine carries the **last/current action downward**.
+
 The two are coupled, not separate programs.
 
 ---
 
-# 5. LOCKED COUPLING LOOP
+# 6. LOCKED COUPLING LOOP
 
 ```text
 NEW VIEW UP
@@ -274,11 +374,13 @@ OVERRIDE
 BREAK / RELEASE
 ```
 
+Oversight may constrain the next available choice space or intervene in an action. It is not automatically the chooser.
+
 Exactly what measurements trigger each outcome is still open.
 
 ---
 
-# 6. LOCKED BIDIRECTIONAL DECISION PRIMITIVE
+# 7. LOCKED BIDIRECTIONAL DECISION PRIMITIVE
 
 Every decision uses a referenced Field/Void pair.
 
@@ -293,11 +395,12 @@ VOID
 The universal relation is:
 
 ```text
-referenced Field/Void pair
-→ relative phase / polarity relation
-→ commitment condition
-→ access condition
-→ next relation/path
+CURRENT FIELD
+→ defines polarity-choice space
+→ referenced Field/Void relation supplies current conditions
+→ CHOICE selects polarity
+→ CHOICE selects NEW FIELD
+→ access/path develops inside that Field
 ```
 
 A decision is therefore not defined as an isolated one-way `if/then` gate.
@@ -306,16 +409,19 @@ Each stage may receive from and return information/state to adjacent stages whil
 
 ---
 
-# 7. LOCKED PROCESSING-AS-MEMORY RULE
+# 8. LOCKED PROCESSING-AS-MEMORY RULE
 
 The retained process relation is the memory.
 
 Possible retained coordinates include:
 
 ```text
+current Field
+available polarity-choice space
+selected polarity
+new Field
 reference relation
 phase relation
-polarity commitment
 open/closed access
 current move
 current orientation
@@ -332,7 +438,7 @@ This list describes coordinates of one process; it does not authorize separate m
 
 ---
 
-# 8. LOCKED POINT / PATH / ROTATION / FIELD / VOLUME RECURSION
+# 9. LOCKED POINT / PATH / ROTATION / FIELD / VOLUME RECURSION
 
 Universal scale recursion:
 
@@ -352,7 +458,7 @@ Locked meanings:
 POINT    = one localized relation treated as a unit
 PATH     = connected continuation of relations
 ROTATION = recurring directional relation around a reference
-FIELD    = interacting set of paths/rotations treated together
+FIELD    = interacting set of paths/rotations treated together; when active it defines the local polarity-choice space
 VOLUME   = bounded field organization treated as one resolved whole
 NEXT-SCALE POINT = a resolved volume exposed upward as one unit
 ```
@@ -385,12 +491,13 @@ Locked separation:
 
 - `point/path/field` as an inspection level is not automatically the same variable as `point/path/field rotation`.
 - A completed lower volume may become a point at the next recursion scale.
+- Whenever a relation is operating as the current Field, it defines the polarity-choice space at that recursion level.
 
 Exact promotion thresholds are still open.
 
 ---
 
-# 9. LOCKED FIVE-STATE SELF LIFECYCLE
+# 10. LOCKED FIVE-STATE SELF LIFECYCLE
 
 This axis is separate from the six algorithm levels.
 
@@ -407,17 +514,17 @@ Universal meanings:
 
 ```text
 IDLE      = available but not currently committed
-PRIMED    = conditions for commitment are forming
-EXECUTING = committed transition/process is active
-VECTORING = direction/relationship is being resolved or routed
-RESOLVING = result is being incorporated into the retained process before recurrence
+PRIMED    = a Field and its available polarity choices are becoming actionable
+EXECUTING = a selected Field/choice relation is active
+VECTORING = direction/relationship within the selected Field is being resolved or routed
+RESOLVING = result is being incorporated into the retained process before recurrence/new Field definition
 ```
 
 Exact transition conditions remain open.
 
 ---
 
-# 10. LOCKED STRUCTURAL DEPTH LADDER
+# 11. LOCKED STRUCTURAL DEPTH LADDER
 
 This is a separate coordinate from lifecycle, state/scale, and the six algorithm levels.
 
@@ -445,7 +552,7 @@ Do not infer that matching list lengths mean this ladder is the same axis as the
 
 ---
 
-# 11. LOCKED 0–100 EXPRESSION / COMPRESSION BANDS
+# 12. LOCKED 0–100 EXPRESSION / COMPRESSION BANDS
 
 ```text
 100–90   extreme expression / danger zone
@@ -481,12 +588,13 @@ Locked universal interpretation:
 - Neither 0 nor 100 is a goal.
 - Distance and direction from the reference may carry different information.
 - The unused gaps are reserved for transition/handoff/hysteresis behavior rather than being silently assigned to neighboring bands.
+- These bands may constrain a Field's available choices, but they do not universally dictate which Choice must be made.
 
 Open: exact entry/exit thresholds, dwell time, hysteresis direction, and whether 50 is always the mathematical center or a normalized local reference.
 
 ---
 
-# 12. LOCKED RECURSIVE STEP ORDER
+# 13. LOCKED RECURSIVE STEP ORDER
 
 ```text
 BEGIN
@@ -500,12 +608,12 @@ BEGIN
 Universal meanings:
 
 ```text
-BEGIN         = establish/re-enter the referenced relation
-BUILD 1       = form/strengthen the initial committed relation
+BEGIN         = establish/re-enter the referenced Field/Void relation
+BUILD 1       = form/strengthen the initial selected relation
 HOLD          = maintain coherent active balance
 BUILD 2       = extend the held relation into its next resolved relation/scale
 BREAK/RELEASE = end or loosen the current commitment so it can reorganize
-LOOP          = feed the resulting process condition into recurrence
+LOOP          = feed the resulting process condition into the next Field-definition cycle
 ```
 
 The two BUILD positions are intentionally distinct positions in the cycle even if a future implementation uses the same low-level operation for both.
@@ -514,57 +622,56 @@ Exact transition triggers remain open.
 
 ---
 
-# 13. DOMAIN MAPPING RULE — LOCKED
+# 14. DOMAIN MAPPING RULE — LOCKED
 
-The universal algorithm defines relationships. Domains supply measurements.
+The universal Field defines polarity choices. The domain determines what concrete relations those choices mean.
+
+Therefore the universal mapping rule is:
+
+```text
+DOMAIN / CONTEXT
+      ↓
+CURRENT FIELD
+      ↓
+defines the valid polarity-choice pair for that domain/context
+      ↓
+CHOICE
+      ↓
+selects NEW FIELD
+```
 
 Do not redefine the universal words to fit a domain.
 
 Examples:
 
 ```text
-UNIVERSAL
-Field ↔ Void
-Reference
-Phase
-Move
-View/Action
-State/Scale
-Recursion
-```
-
-A domain may then declare mappings such as:
-
-```text
 THERMAL / MATTER EXAMPLE
-Field-side threshold variable: temperature / energetic expression
-Void-side threshold variable: pressure / confinement-compression
-Output: material phase/state relative to a material-specific phase diagram
+Field instantiation may use temperature/energetic expression together with pressure/confinement.
+The Field defines the physically available polarity/transition alternatives for that material state.
+Choice selects the next active Field/state relation.
 ```
-
-or:
 
 ```text
 NEURAL EXAMPLE
-Field: newly exposed/resolved relation
-Void: current conditioning/action relation
-Output: new view up / authorized action down
+Field = current possibility/context relation.
+Field defines the available polarity alternatives.
+Choice selects the new Field.
+New Field produces a new view upward while action conditioning continues downward.
 ```
-
-or:
 
 ```text
 CONTROL EXAMPLE
-Field: measured/emerging deviation or opportunity
-Void: applied constraint/load/control
-Output: hold, redirect, override, or release
+Field = current operational possibility/context.
+Field defines allowed opposed control alternatives.
+Choice selects the new operating Field.
+Oversight may constrain or override unsafe/incoherent selections.
 ```
 
-The mapping may change. The core grammar does not.
+The concrete mapping may change. The Field → Choice → New Field grammar does not.
 
 ---
 
-# 14. MATTER WRAPPER — CURRENT WORKING MAPPING
+# 15. MATTER WRAPPER — CURRENT WORKING MAPPING
 
 Matter requires at least two physical variables rather than forcing phase behavior onto one generic scalar.
 
@@ -588,11 +695,13 @@ implosion danger
 → explosion danger
 ```
 
+In this wrapper, the current material Field defines which transitions/polarities are physically available under the current pressure-temperature conditions; Choice selects the next Field relation that is actually taken.
+
 This is a wrapper, not a universal law. Actual material phase boundaries depend on substance, pressure, temperature, and other physical conditions.
 
 ---
 
-# 15. PLANETARY / ONE-WAVE WRAPPER — CURRENT REPO MAPPING
+# 16. PLANETARY / ONE-WAVE WRAPPER — CURRENT REPO MAPPING
 
 ## Compressive / Void-side chain
 
@@ -631,18 +740,20 @@ This remains a hypothesis requiring physical validation.
 
 ---
 
-# 16. LOCKED UNIVERSAL OPERATING SKELETON
+# 17. LOCKED UNIVERSAL OPERATING SKELETON
 
 ```text
 EXISTING PROCESS STATE
         ↓
 REFERENCE / GROUND
         ↓
-FIELD ↔ VOID PAIR
+CURRENT FIELD ↔ VOID PAIR
         ↓
-RELATIVE PHASE / POLARITY RELATION
+CURRENT FIELD DEFINES POLARITY CHOICES
         ↓
-POLARITY CHOICE
+CHOICE
+        ↓
+SELECTED POLARITY + NEW FIELD
         ↓
 MOVE
 UP / STAY / DOWN
@@ -665,17 +776,44 @@ BEGIN → BUILD → HOLD → BUILD → BREAK/RELEASE → LOOP
         ↓
 CHANGED PROCESS REMAINS AVAILABLE
         ↓
-RESULT BECOMES INPUT TO THE NEXT RECURSION
+RESULT PARTICIPATES IN DEFINING THE NEXT FIELD
         ↺
 ```
 
 ---
 
-# 17. STILL NEEDED — DO NOT GUESS
+# 18. STILL NEEDED — DO NOT GUESS
 
 The following are the real unresolved mechanics. They are intentionally not filled with arbitrary values.
 
-## A. Phase measurement law
+## A. Field-definition law
+
+Need the universal form of:
+
+```text
+current context/process
+→ CURRENT FIELD
+→ available polarity choices
+```
+
+Need to determine what information a Field must contain so it can define valid choices in any domain without hard-coding domain-specific meanings into the universal core.
+
+## B. Choice law / choice policy
+
+Choice itself is locked as selection, not as an automatic threshold.
+
+Still needed:
+
+```text
+What can constrain the available choices?
+Can Choice be free, stochastic, learned, deterministic, or policy-driven depending on implementation?
+What makes a Choice valid/invalid?
+How exactly does the selected polarity instantiate the NEW FIELD?
+```
+
+Do not replace this open policy question with a universal threshold equation.
+
+## C. Phase measurement law
 
 Need:
 
@@ -684,24 +822,12 @@ What exact quantity represents Field phase?
 What exact quantity represents Void phase?
 How is relative phase calculated?
 What is the valid phase range?
+How does phase constrain the Field's available choice space without replacing Choice?
 ```
 
-## B. Polarity commitment law
+## D. UP / STAY / DOWN transition/choice law
 
-Need exact rule for:
-
-```text
-uncommitted/reference
-→ polarity A
-or
-→ polarity B
-```
-
-Need entry threshold, exit threshold, and reversal rule.
-
-## C. UP / STAY / DOWN transition law
-
-Need exact universal comparison that maps the current pair to:
+Need the universal rule for how the selected/new Field exposes or permits:
 
 ```text
 UP
@@ -709,11 +835,11 @@ STAY
 DOWN
 ```
 
-This must not depend on literal spatial direction.
+Need to determine whether Move is always chosen, sometimes forced by physical boundaries, or implementation-dependent.
 
-## D. Orientation selection law
+## E. Orientation selection law
 
-Need exact conditions selecting:
+Need exact conditions/choice structure selecting:
 
 ```text
 INWARD
@@ -724,7 +850,7 @@ OVER
 
 Need to define whether more than one orientation may be simultaneously active.
 
-## E. State / Scale transition law
+## F. State / Scale transition law
 
 Need exact promotion/demotion rule between:
 
@@ -738,7 +864,7 @@ MACRO
 
 Need to distinguish state change from scale change if those become independently measured variables.
 
-## F. Recursive-step transition law
+## G. Recursive-step transition law
 
 Need exact conditions for:
 
@@ -748,10 +874,10 @@ BUILD 1 → HOLD
 HOLD → BUILD 2
 BUILD 2 → BREAK/RELEASE
 BREAK/RELEASE → LOOP
-LOOP → next BEGIN
+LOOP → next Field-definition cycle
 ```
 
-## G. Oversight / Override law
+## H. Oversight / Override law
 
 Need exact mismatch/coherence conditions for:
 
@@ -765,7 +891,9 @@ BREAK / RELEASE
 
 Need priority rule when new view and last action disagree.
 
-## H. Point / Path / Rotation / Field / Volume promotion law
+Need to define whether oversight narrows the next Field's available choice space, directly changes an action, or can do both.
+
+## I. Point / Path / Rotation / Field / Volume promotion law
 
 Need measurable/logical criteria for:
 
@@ -777,7 +905,7 @@ FIELD → VOLUME
 VOLUME → NEXT-SCALE POINT
 ```
 
-## I. Timing law
+## J. Timing law
 
 Need:
 
@@ -787,9 +915,10 @@ phase lead/lag rule
 minimum dwell time
 sampling/update rate
 whether the two machines alternate, overlap, or continuously co-evolve
+when Choice occurs relative to phase and recursion
 ```
 
-## J. Hysteresis law
+## K. Hysteresis law
 
 Need exact use of the gap bands:
 
@@ -804,7 +933,9 @@ Need exact use of the gap bands:
 
 Need separate enter/leave rules so oscillation does not become chatter.
 
-## K. Reference adaptation law
+Hysteresis may constrain available choices but must not silently become the universal chooser.
+
+## L. Reference adaptation law
 
 Need to determine:
 
@@ -815,11 +946,11 @@ Who/what is allowed to move it?
 How is drift distinguished from legitimate adaptation?
 ```
 
-## L. Rate / acceleration limits
+## M. Rate / acceleration limits
 
 Need to define whether a relation may jump multiple bands/states in one update or must traverse neighboring states.
 
-## M. Boundary / danger response
+## N. Boundary / danger response
 
 Need exact response when entering:
 
@@ -828,17 +959,19 @@ Need exact response when entering:
 0–10 compression danger
 ```
 
-Need distinction between warning, resolving, override, break/release, and terminal failure.
+Need distinction between warning, constrained choices, resolving, override, break/release, and terminal failure.
 
-## N. Conflict law
+## O. Conflict law
 
-Need exact behavior if Field and Void simultaneously demand incompatible moves, orientations, scales, or lifecycle transitions.
+Need exact behavior if Field and Void simultaneously expose incompatible constraints, moves, orientations, scales, or lifecycle transitions.
 
-## O. Scale-coupling law
+Need to preserve Choice where alternatives remain genuinely available.
+
+## P. Scale-coupling law
 
 Need exact rule governing when a lower resolved volume becomes one point for a higher recursion and how higher oversight can act downward without destroying local autonomy/state.
 
-## P. Structural-depth transition law
+## Q. Structural-depth transition law
 
 Need criteria for moving among:
 
@@ -851,9 +984,9 @@ STRATUM
 HARMONIC
 ```
 
-Need to determine whether this is computed automatically from information structure or explicitly assigned.
+Need to determine whether this is computed automatically from information structure, selected, or implementation-dependent.
 
-## Q. Lifecycle transition law
+## R. Lifecycle transition law
 
 Need exact conditions for:
 
@@ -866,15 +999,18 @@ IDLE
 → IDLE
 ```
 
-## R. Normalization law
+## S. Normalization law
 
 Need a universal method for mapping domain-specific measurements into common relational coordinates without pretending unlike physical quantities share units.
 
-## S. Output contract
+Normalization must preserve the Field's role as domain/context choice-space rather than reducing Field to one scalar.
+
+## T. Output contract
 
 Each implementation must declare what one resolved loop outputs, for example:
 
 ```text
+new Field
 new internal relation
 new access path
 new action
@@ -885,13 +1021,13 @@ higher-scale point
 
 The universal algorithm must define the shape of an output; the domain defines its physical meaning.
 
-## T. Conservation / resource accounting
+## U. Conservation / resource accounting
 
 Physical implementations need explicit accounting for energy/work/material/resource transfer. Neural/software implementations need their equivalent bounded-resource accounting where relevant.
 
 The recursion must not silently create gain, information, energy, or authority.
 
-## U. Failure / falsification contract
+## V. Failure / falsification contract
 
 Each implementation must declare conditions under which its mapping or transition rule is wrong.
 
@@ -899,7 +1035,7 @@ Algorythm-Zer0 must not be allowed to explain every possible result after the fa
 
 ---
 
-# 18. CURRENT LOCK / OPEN SUMMARY
+# 19. CURRENT LOCK / OPEN SUMMARY
 
 ## LOCKED
 
@@ -908,6 +1044,9 @@ architecture = two recursive state machines + one coupling loop
 pair = Field expressive ↔ Void compressive
 reference = shared Ground at every decision
 middle = active oscillating balance
+Field = universal context/possibility-space that defines polarity choices
+Choice = selects polarity and picks/establishes the NEW FIELD
+recursion = FIELD → choices → CHOICE → NEW FIELD → process → next FIELD
 six levels = Field/Void → polarity choice → move → view/action → state/scale → recursive steps
 moves = UP / STAY / DOWN
 orientations = INWARD / OUTWARD / ACROSS / OVER
@@ -927,10 +1066,13 @@ outer bands = expression/compression danger zones
 ## OPEN
 
 ```text
+universal Field-definition payload
+choice policy / validity constraints
+how selected polarity instantiates new Field
 exact phase equation
-polarity thresholds
-UP/STAY/DOWN transition equation
-orientation-selection equation
+how phase constrains choices without replacing Choice
+UP/STAY/DOWN choice/constraint rule
+orientation-selection rule
 state/scale thresholds
 recursive-step triggers
 oversight/override thresholds
