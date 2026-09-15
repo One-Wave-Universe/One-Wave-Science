@@ -112,9 +112,9 @@ Supply OFF. Knobs 20 mA for the first phase proof.
 V+ ____  V− ____  VG ____
 I_0 both 10k ____   pull one 10k ____
 A STAY: VPA ____ I_0 ____
-A +1:   VgateH ____ VPA ____ I_0 ____
+A +1:   VgateH ____ VPA ____ I_0 ____ (expect ≈+12.6 mA, not +12 mA — see LOCK.md stamp 3)
 A STAY: VPA ____ I_0 ____
-A -1:   VgateL ____ VPA ____ I_0 ____
+A -1:   VgateL ____ VPA ____ I_0 ____ (expect ≈-12.6 mA)
 A STAY: VPA ____ I_0 ____
 B+1 ____ C+1 ____
 Hall quiet ____ Hall walk ____ Hall STAY after ____
@@ -126,6 +126,8 @@ override: body silent? ____
 ## 6. Illegal
 
 Cap in BLUE. Two phases driven. Both FETs on one phase. Direct BLUE-referenced 0/5 V GPIO on ±12 gate nodes. Field forcing engage after Void said 0. Blind override (no I_0/Hall). Motor current through TLE OUT. Stamp on a switching spike.
+
+Both FETs on one phase is a rail-to-rail fault through PA that never touches BLUE — I_0 will not warn you. It shows up as heat, smell, or the supply current-limiting, not as a bad I_0 reading.
 
 ---
 

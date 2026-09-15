@@ -11,8 +11,8 @@
 7. Tie three 1 kΩ to a STAR on BLUE far. Other ends = PA PB PC. Star vs BLUE ~0.
 8. Fit station A only: P-MOS high + 2N7000 low, 220 Ω gates, 10 k pulldowns to OFF.
 9. STAY. Repeat step 5. PA not slammed. I_0 still quiet.
-10. A = +1 (P-MOS ON, N OFF). Write V_PA, I_0. G sits. Back to STAY.
-11. A = −1. Write the opposite I_0. Never both FETs ON.
+10. A = +1 (P-MOS ON, N OFF). Write V_PA, I_0. Expect I_0 ≈ +12.6 mA (not +12 mA — the real 10k gate-bias resistor also draws from BLUE; see `LOCK.md` stamp 3). G sits. Back to STAY.
+11. A = −1. Write the opposite I_0 (≈ −12.6 mA). Never both FETs ON — and if you ever suspect they were, do not look to I_0 to tell you: that fault runs rail-to-rail through PA and never touches BLUE, so I_0 stays quiet while the parts cook. Watch heat/smell/supply current-limit instead.
 12. Copy station B. STAY/STAY. I_0 quiet.
 13. Speaker (32 Ω or 8 Ω+47 Ω) between PA and PB. Not to BLUE.
 14. STAY/STAY: ~0 V across coil, silence. A+1 B−1: click. Swap: click.
