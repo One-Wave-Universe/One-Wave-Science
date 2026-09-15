@@ -13,23 +13,37 @@ The cell is not six independent machines. Reference, decision, movement, view/ac
 
 ## 2. Locked physical geometry
 
-The hexagon has **six side connections, never corner connections**.
+The hexagon has **six side terminals, never corner connections**, but it has only **three whole state gates**. Each gate is one opposed `+/-` mirror pair operating together.
 
-Clockwise side order:
+Clockwise terminal order:
 
 ```text
 A+ -> B+ -> C+ -> A- -> B- -> C- -> A+
 ```
 
-Opposed mirror pairs across the center:
+The three whole gates are the opposed mirror pairs across the center:
 
 ```text
-A+ <-> A-
-B+ <-> B-
-C+ <-> C-
+Gate A = A+ <-> A-
+Gate B = B+ <-> B-
+Gate C = C+ <-> C-
 ```
 
-The center is the cell's local virtual ground and HOLD reference. Neighbor-to-neighbor lattice travel crosses a side. Corners are not electrical gate terminals and must not appear as cell connections in drawings, netlists, board layouts, or simulations.
+The `+` and `-` terminals are not separate gates and are not six serial operations. In every whole gate flip, the `+` half carries the **new Field state upward** while the mirrored `-` half carries the **last Void/action state downward**. The gate resolves their live differential around virtual ground.
+
+```text
+                 ONE WHOLE STATE GATE
+
+                    new Field UP
+                         +
+                         |
+                 virtual ground / HOLD
+                         |
+                         -
+                 last Void/action DOWN
+```
+
+The center is the cell's local virtual ground and HOLD reference. Neighbor-to-neighbor lattice travel crosses a side. Corners are not electrical terminals and must not appear as cell connections in drawings, netlists, board layouts, or simulations.
 
 ## 3. Virtual ground is the ternary center
 
@@ -48,23 +62,26 @@ Bench law:
 - do not use the center conductor as an uncontrolled high-current return;
 - every state receipt is signed relative to this same local center.
 
-## 4. Required operation order
+## 4. Three-gate dependency order
 
 ```text
-DC -> AC -> RC -> quadratic UP -> quadratic DOWN -> reinjection
+Gate A: DC whole-state flip
+ -> Gate B: AC whole-state flip
+ -> Gate C: RC/quadratic whole-state flip
+ -> whole-cell reinjection
 ```
 
-The stages must not be reordered.
+This is a three-layer dependency, not a six-step conveyor. Within every gate, the new upward Field condition and the last downward Void/action condition coexist and resolve as one whole state flip.
 
-### A pair — BC/DC direct choice
+### Gate A — BC/DC whole-state flip
 
-`A+ / A-` creates the first opposed direct-current difference around virtual ground. This is the two-way Field/Void polarity decision.
+`A+` carries the new binary Field engagement upward. `A-` simultaneously carries the last binary Void disposition downward. Their differential around virtual ground resolves engagement against the last accept/override consequence.
 
 Receipt: selected sign, voltage from virtual ground, current, direction, and unselected-side leakage.
 
-### B pair — TC/AC alternating movement
+### Gate B — TC/AC whole-state flip
 
-`B+ / B-` combines the selected direct path with its mirrored return so the state alternates through the live center:
+`B+` carries the new ternary Field movement upward. `B-` simultaneously carries the last ternary Void regulation downward. Their mirrored relation alternates through the live center:
 
 ```text
 + -> 0 -> - -> 0 -> +
@@ -80,17 +97,17 @@ HOLD is a live return to virtual ground, not a deleted oscillator and not a four
 
 Receipt: phase, amplitude, center crossings, UP/HOLD/DOWN decision, and reversal timing.
 
-### C pair — QC/RC rotating/quadratic relation
+### Gate C — QC/RC quadratic whole-state flip
 
-`C+ / C-` receives the resolved AC/ternary movement and produces the rotating relationship. Magnetic feedback begins here, **after** the DC and AC decisions.
+`C+` carries the new quadratic Field View upward. `C-` simultaneously carries the last quadratic Void Action downward. Together they resolve the rotating relationship. Magnetic feedback begins here, **after** the DC and AC dependencies.
 
-The first quadratic direction is upward:
+The new half of the quadratic state is upward:
 
 ```text
 Direction / Phase / Strength / Reference -> Views UP
 ```
 
-The mirrored quadratic direction is downward:
+The last-action mirror of the same quadratic state is downward:
 
 ```text
 Inward / Outward / Across / Over -> Actions DOWN
@@ -100,7 +117,13 @@ Receipt: rotation handedness, phase relationship, field vector, strength, refere
 
 ## 5. Whole-cell mirror and reinjection
 
-Reinjection is not a raw output wire and not a copy of only the C stage. The completed `A -> B -> C -> quadratic UP -> quadratic DOWN` consequence is mirrored as a whole and returned to the same local virtual-ground comparison that begins the next cycle.
+Reinjection is not a raw output wire and not a copy of only the C stage. The completed three-gate consequence is mirrored as a whole and returned to the same local virtual-ground comparison that begins the next cycle.
+
+```text
+Gate A = new binary Field UP    + last binary Void/action DOWN
+Gate B = new ternary Field UP   + last ternary Void/action DOWN
+Gate C = new quadratic View UP  + last quadratic Action DOWN
+```
 
 ```text
 new cue
@@ -170,19 +193,19 @@ The Virtual Breadboard must demonstrate:
 
 Hard stop: do not claim a cell build from static state labels alone.
 
-### Build 1 — one A+/A- DC pair
+### Build 1 — Gate A, one A+/A- DC whole-state pair
 
 Wire one opposed bidirectional pair about a loaded virtual ground. Prove positive, HOLD, negative, reversal, leakage, and center recovery.
 
 Hard stop: no AC until the center survives unequal load and reversal without losing its reference.
 
-### Build 2 — add the B+/B- mirrored AC pair
+### Build 2 — add Gate B, the B+/B- mirrored AC whole-state pair
 
 Close the out-and-back path through virtual ground. Prove both starting directions, repeatable center crossings, UP/HOLD/DOWN, frequency, phase, and break-before-reverse behavior.
 
 Hard stop: no rotating-field claim from one merely oscillating channel.
 
-### Build 3 — add the C+/C- RC/quadratic pair
+### Build 3 — add Gate C, the C+/C- RC/quadratic whole-state pair
 
 Drive a measured orthogonal or multiphase magnetic arrangement. Reconstruct the actual resultant field from sensors; do not infer rotation from LED order or a drawing.
 
@@ -238,10 +261,12 @@ PASS / FAIL against a declared tolerance
 Locked:
 
 - side connections, not corners;
-- clockwise `A+ B+ C+ A- B- C-` and opposed mirror pairs;
+- six side terminals but only three whole state gates;
+- clockwise terminals `A+ B+ C+ A- B- C-`, paired as `A+/A-`, `B+/B-`, and `C+/C-`;
+- every gate flip combines new Field UP with last Void/action DOWN;
 - virtual ground is ternary HOLD/zero;
-- `DC -> AC -> RC` order;
-- quadratic Views UP, then mirrored Actions DOWN;
+- three-gate `DC -> AC -> RC` dependency;
+- quadratic Views UP and mirrored last Actions DOWN are two directions of Gate C, not separate gates;
 - whole-cell reinjection;
 - muscle memory as path-specific impedance reinforcement;
 - selective rewrite capability;
@@ -258,4 +283,3 @@ Still requires engineering selection and receipts:
 - coordinate/address encoding for the larger 3D lattice.
 
 Until those are selected and tested, diagrams are topology maps—not finished breadboard wiring.
-
