@@ -62,10 +62,12 @@ async function runDesktopSmoke(win) {
       scope: !!document.getElementById('scopeCanvas'),
       warnings: !!document.getElementById('warnings'),
       preset: !!document.getElementById('presetLed'),
+      musicPreset: !!document.getElementById('presetMusicPickup'),
+      musicHook: typeof window.__musicPresetIds === 'function',
       debug: typeof window.__debugState === 'function',
       runFast: typeof window.__runFast === 'function'
     }))()`);
-    const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'clear', 'inspector', 'scope', 'warnings', 'preset', 'debug', 'runFast'];
+    const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'clear', 'inspector', 'scope', 'warnings', 'preset', 'musicPreset', 'musicHook', 'debug', 'runFast'];
     const missing = required.filter((key) => !ui[key]);
     if (missing.length) throw new Error(`missing required UI/runtime hooks: ${missing.join(', ')}`);
     if (!/Virtual Breadboard Simulator/.test(ui.title)) throw new Error(`unexpected title: ${ui.title}`);
@@ -103,11 +105,47 @@ async function runDesktopSmoke(win) {
       if (JSON.stringify(normalize(built)) !== JSON.stringify(normalize(loaded))) throw new Error('Load did not restore the saved circuit exactly');
       const run2 = window.__runFast(0.02, 0.001);
       if (!run2 || !run2.voltages || Object.keys(run2.voltages).length === 0) throw new Error('reloaded circuit did not simulate');
+
+      // Every music preset is a shipping build, not a decorative button.
+      // Click each one through the real UI, let its temporary Save/Load payload
+      // rebuild the board, and require a live solve with no safety warnings.
+      const musicIds = window.__musicPresetIds();
+      if (!Array.isArray(musicIds) || musicIds.length < 5) throw new Error('music preset registry is incomplete');
+      const musicRuns = [];
+      for (const id of musicIds) {
+        const button = document.getElementById(id);
+        if (!button) throw new Error('missing music preset button: ' + id);
+        button.click();
+        await new Promise((r) => setTimeout(r, 20));
+        const state = window.__debugState();
+        if (state.parts.length < 3) throw new Error(id + ' did not build a real circuit');
+        const run = window.__runFast(0.03, 0.001);
+        const nodes = run && run.voltages ? Object.keys(run.voltages).length : 0;
+        if (!nodes) throw new Error(id + ' produced no node voltages');
+        if ((run.warnings || []).length) throw new Error(id + ' emitted warnings: ' + run.warnings.join(' | '));
+        musicRuns.push({ id, parts: state.parts.length, nodes });
+      }
+
+      // Music presets deliberately preserve the user's existing Save slot.
+      // Prove that invariant by loading again and getting the pre-music LED
+      // build back exactly.
+      document.getElementById('btnLoad').click();
+      await new Promise((r) => setTimeout(r, 20));
+      const restored = window.__debugState();
+      if (JSON.stringify(normalize(built)) !== JSON.stringify(normalize(restored))) {
+        throw new Error('music presets overwrote the user saved circuit');
+      }
+      const restoredRun = window.__runFast(0.02, 0.001);
+      if (!restoredRun || !Object.keys(restoredRun.voltages || {}).length) throw new Error('restored circuit did not simulate after music presets');
+
       return {
-        partCount: loaded.parts.length,
-        voltageNodes: Object.keys(run2.voltages).length,
-        warningCount: (run2.warnings || []).length,
-        savedBytes: saved.length
+        partCount: restored.parts.length,
+        voltageNodes: Object.keys(restoredRun.voltages).length,
+        warningCount: (restoredRun.warnings || []).length,
+        savedBytes: saved.length,
+        musicPresetCount: musicRuns.length,
+        musicPresetParts: musicRuns.reduce((n, r) => n + r.parts, 0),
+        musicPresetNodes: musicRuns.reduce((n, r) => n + r.nodes, 0)
       };
     })()`);
 
@@ -130,6 +168,7 @@ async function runDesktopSmoke(win) {
     if (exported.length < 10000) throw new Error(`Exported HTML unexpectedly small: ${exported.length} bytes`);
     if (!exported.includes('window.__EXPORT_STATE__')) throw new Error('Exported HTML is missing embedded circuit state');
     if (!exported.includes('Virtual Breadboard Simulator')) throw new Error('Exported HTML is missing the application shell');
+    if (!exported.includes('__musicPresetIds')) throw new Error('Exported HTML is missing the music-lab preset module');
 
     clearTimeout(timer);
     try { fs.unlinkSync(exportPath); } catch (e) { /* ignore */ }
