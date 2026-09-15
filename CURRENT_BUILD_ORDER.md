@@ -9,18 +9,16 @@ The present top priority is `PRIORITY_ONE_CELL_BUILD_MAP.md`.
 Before unrelated device expansion, map and qualify this ordered cell path:
 
 ```text
-six hex sides (never corners)
- -> A+/A- DC polarity choice around virtual ground
- -> B+/B- AC alternation and UP/HOLD/DOWN
- -> C+/C- rotating/quadratic relation
- -> Direction/Phase/Strength/Reference Views UP
- -> Inward/Outward/Across/Over Actions DOWN
+six hex side terminals (never corners), forming three whole gates
+ -> Gate A, A+/A-: new binary Field UP + last binary Void/action DOWN
+ -> Gate B, B+/B-: new ternary Field UP + last ternary Void/action DOWN
+ -> Gate C, C+/C-: new quadratic View UP + last quadratic Action DOWN
  -> whole-cell mirrored reinjection
  -> rewritable memristive path reinforcement
  -> partial-cue reconstruction and autonomous local execution
 ```
 
-Virtual ground is the ternary HOLD/zero state. Muscle memory is the progressive lowering of impedance along the exact repeatedly traversed side-to-side path. Rewrite must selectively weaken/replace a learned path rather than requiring global erasure.
+The runtime is three whole state flips, not six sequential gates. Each `+/-` mirror pair operates together around virtual ground. Virtual ground is the ternary HOLD/zero state. Muscle memory is the progressive lowering of impedance along the exact repeatedly traversed side-to-side path. Rewrite must selectively weaken/replace a learned path rather than requiring global erasure.
 
 Execution order is Build 0 through Build 7 in `PRIORITY_ONE_CELL_BUILD_MAP.md`. Each stage has a hard stop and must produce measurement receipts before the next stage begins.
 
