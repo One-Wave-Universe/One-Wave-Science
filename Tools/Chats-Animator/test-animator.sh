@@ -58,6 +58,18 @@ grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
+grep -q 'state.placementMode = true' app.js
+grep -q "placementMode = false" b7-playback.js
+grep -q "calibration-overlay.*hidden" b7-playback.js
+echo "PASS placement grid enters with PNG placement and leaves before playback"
+
+grep -q 'export-youtube-preset' b13-video-export.js
+grep -q "1920×1080" b13-video-export.js
+grep -q 'videoBitsPerSecond: width >= 1920 ? 12000000 : 8000000' b13-video-export.js
+grep -q 'one-wave-youtube-' b13-video-export.js
+grep -q 'ticks / fps' b13-video-export.js
+echo "PASS YouTube-ready 1080p export contract"
+
 grep -q 'gpt-5.6-sol' assistant_server.py
 grep -q 'gpt-image-2' assistant_server.py
 grep -q 'x/z-image-turbo' assistant_server.py
