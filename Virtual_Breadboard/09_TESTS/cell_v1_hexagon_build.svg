@@ -11,7 +11,7 @@
     .rail-blue { fill:#1a4fa0; font-weight:700; }
     .axisLbl { fill:#4b2e83; font-weight:700; font-size:12.5px; }
     .box { fill:#fff; stroke:#000; stroke-width:2; }
-    .title { font-size:22px; font-weight:800; fill:#000; }
+    .title { font-size:21px; font-weight:800; fill:#000; }
     .subtitle { font-size:11.5px; fill:#333; }
     .warn { fill:#fff4f4; stroke:#b30000; stroke-width:2; }
     .warnTxt { fill:#7a0000; font-size:11.5px; }
@@ -23,93 +23,103 @@
 
   <rect x="16" y="16" width="818" height="1068" fill="none" stroke="#999" stroke-width="1"/>
 
-  <text x="40" y="42" class="title">CELL_V1 — Hexagon Build: 3 Mirrored Axis Pairs</text>
-  <text x="40" y="60" class="subtitle">Corrected again: not 3 stations + 3 empty slots — 3 AXES, each spanning two opposite hexagon vertices through</text>
-  <text x="40" y="74" class="subtitle">one shared center. This is D-411's own vocabulary (Mirrored Axis Pairs): one axis = −d (0) +d. Six vertices,</text>
-  <text x="40" y="88" class="subtitle">three axes, one center — nothing left over. Electrically identical to cell_v1_schematic.svg.</text>
+  <text x="40" y="40" class="title">CELL_V1 — Hexagon Build: Ports on the SIDES, Not the Corners</text>
+  <text x="40" y="58" class="subtitle">Corrected again: PA/PB/PC now land on the midpoint of a hexagon SIDE, not a corner. In a hex tiling each side is</text>
+  <text x="40" y="72" class="subtitle">shared by exactly ONE neighbor cell; each corner is shared by THREE. A side gives one clean cell-to-cell link —</text>
+  <text x="40" y="86" class="subtitle">a corner would leave it ambiguous which of three neighbors (and whose Field/Void) it's actually meeting.</text>
 
   <!-- Rule box -->
-  <rect x="40" y="98" width="770" height="60" rx="5" class="noteBox"/>
-  <text x="54" y="114" class="noteTxt" font-weight="700">Each winding IS one mirrored axis pair: its own +1 / STAY / −1 states are literally D-411's −d (0) +d.</text>
-  <text x="54" y="130" class="noteTxt">The "+d" end (PMOS→RED) and "−d" end (NMOS→BLACK) sit at opposite hexagon vertices; the shared "(0)"</text>
-  <text x="54" y="146" class="noteTxt">is the STAR/BLUE center every axis taps through its own 1kΩ load — same circuit as the flat sheet, per axis.</text>
+  <rect x="40" y="96" width="770" height="58" rx="5" class="noteBox"/>
+  <text x="54" y="112" class="noteTxt" font-weight="700">Still 3 mirrored axis pairs (D-411: −d (0) +d) through the shared STAR/BLUE center — only WHERE each axis</text>
+  <text x="54" y="128" class="noteTxt">meets the hexagon boundary changed, from corner to side-midpoint. Same verified circuit as cell_v1_schematic.svg.</text>
+  <text x="54" y="144" class="noteTxt">Each side-port is this cell's Field/Void meeting point with the one neighbor cell that shares that side.</text>
 
-  <!-- ============ Hexagon guide outline ============ -->
+  <!-- ============ Hexagon guide outline (corners unchanged, just a reference shape) ============ -->
   <polygon points="430,280 611.9,385 611.9,595 430,700 248.1,595 248.1,385"
            fill="none" stroke="#bbb" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <!-- tick marks at the 6 side midpoints, showing where ports now sit -->
+  <circle cx="520.9" cy="332.5" r="3" fill="#bbb"/>
+  <circle cx="520.9" cy="647.5" r="3" fill="#bbb"/>
+  <circle cx="430.0" cy="700.0" r="0" fill="none"/>
+  <circle cx="339.1" cy="647.5" r="3" fill="#bbb"/>
+  <circle cx="339.1" cy="332.5" r="3" fill="#bbb"/>
+  <circle cx="248.1" cy="490.0" r="3" fill="#bbb"/>
+  <circle cx="611.9" cy="490.0" r="3" fill="#bbb"/>
 
-  <!-- ============ 3 axis lines, each ONE node (PA/PB/PC), through the shared center ============ -->
-  <line x1="430.0" y1="280.0" x2="430.0" y2="700.0" class="axisline"/>
-  <line x1="611.9" y1="595.0" x2="248.1" y2="385.0" class="axisline"/>
-  <line x1="248.1" y1="595.0" x2="611.9" y2="385.0" class="axisline"/>
+  <!-- ============ 3 axis lines: PA/PB/PC, each one node, side-midpoint to side-midpoint ============ -->
+  <line x1="520.9" y1="332.5" x2="339.1" y2="647.5" class="axisline"/>
+  <line x1="520.9" y1="647.5" x2="339.1" y2="332.5" class="axisline"/>
+  <line x1="248.1" y1="490.0" x2="611.9" y2="490.0" class="axisline"/>
 
   <!-- ============ RED / BLACK rings ============ -->
-  <circle cx="430" cy="490" r="100" fill="none" stroke="#b30000" stroke-width="2.5"/>
-  <circle cx="430" cy="490" r="140" fill="none" stroke="#000" stroke-width="2.5"/>
+  <circle cx="430" cy="490" r="90" fill="none" stroke="#b30000" stroke-width="2.5"/>
+  <circle cx="430" cy="490" r="125" fill="none" stroke="#000" stroke-width="2.5"/>
 
+  <!-- ============ Connection dots ============ -->
+  <!-- Axis A: + upper-right side, - lower-left side -->
+  <circle cx="475.0" cy="412.1" r="4" fill="#b30000" class="dot"/>
+  <text x="486" y="408" class="small" fill="#b30000">Q1</text>
+  <circle cx="367.5" cy="598.3" r="4" fill="#000" class="dot"/>
+  <text x="330" y="612" class="small">Q2</text>
 
-  <!-- ============ Connection dots: only where an axis's OWN +end crosses RED, own -end crosses BLACK ============ -->
-  <!-- Axis A: + at top (90deg), - at bottom (-90deg) -->
-  <circle cx="430.0" cy="390.0" r="4" fill="#b30000" class="dot"/>
-  <text x="443" y="394" class="small" fill="#b30000">Q1</text>
-  <circle cx="430.0" cy="630.0" r="4" fill="#000" class="dot"/>
-  <text x="443" y="634" class="small">Q2</text>
+  <!-- Axis B: + lower-right side, - upper-left side -->
+  <circle cx="475.0" cy="567.9" r="4" fill="#b30000" class="dot"/>
+  <text x="486" y="580" class="small" fill="#b30000">Q3</text>
+  <circle cx="367.5" cy="381.7" r="4" fill="#000" class="dot"/>
+  <text x="330" y="376" class="small">Q4</text>
 
-  <!-- Axis B: + at lower-right (-30deg), - at upper-left (150deg) -->
-  <circle cx="516.6" cy="540.0" r="4" fill="#b30000" class="dot"/>
-  <text x="524" y="533" class="small" fill="#b30000">Q3</text>
-  <circle cx="308.8" cy="420.0" r="4" fill="#000" class="dot"/>
-  <text x="272" y="416" class="small">Q4</text>
+  <!-- Axis C: + left side, - right side -->
+  <circle cx="340.0" cy="490.0" r="4" fill="#b30000" class="dot"/>
+  <text x="340" y="475" class="small" fill="#b30000" text-anchor="middle">Q5</text>
+  <circle cx="555.0" cy="490.0" r="4" fill="#000" class="dot"/>
+  <text x="555" y="475" class="small" text-anchor="middle">Q6</text>
 
-  <!-- Axis C: + at lower-left (-150deg), - at upper-right (30deg) -->
-  <circle cx="343.4" cy="540.0" r="4" fill="#b30000" class="dot"/>
-  <text x="303" y="533" class="small" fill="#b30000">Q5</text>
-  <circle cx="551.2" cy="420.0" r="4" fill="#000" class="dot"/>
-  <text x="559" y="416" class="small">Q6</text>
+  <!-- ============ Axis node-name labels ============ -->
+  <text x="500" y="500" text-anchor="middle" class="axisLbl">PA</text>
+  <text x="500" y="480" text-anchor="middle" class="axisLbl">PB</text>
+  <text x="430" y="512" text-anchor="middle" class="axisLbl">PC</text>
 
-  <!-- ============ Axis node-name labels, mid-way along each line ============ -->
-  <text x="430" y="342" text-anchor="middle" class="axisLbl">PA</text>
-  <text x="558" y="482" text-anchor="middle" class="axisLbl">PB</text>
-  <text x="300" y="482" text-anchor="middle" class="axisLbl">PC</text>
-
-  <!-- ============ STAR hub + 3 short 1k stubs (drawn before hub circle so hub sits on top) ============ -->
-  <line x1="430.0" y1="445.0" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
-  <line x1="469.0" y1="512.5" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
-  <line x1="391.0" y1="512.5" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
-  <text x="440" y="462" class="small" fill="#1a4fa0">1kΩ</text>
-  <text x="452" y="507" class="small" fill="#1a4fa0">1kΩ</text>
-  <text x="378" y="507" class="small" fill="#1a4fa0">1kΩ</text>
+  <!-- ============ STAR hub + 3 short 1k stubs ============ -->
+  <line x1="450.0" y1="455.4" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
+  <line x1="450.0" y1="524.6" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
+  <line x1="390.0" y1="490.0" x2="430" y2="490" class="wire" stroke="#1a4fa0"/>
+  <text x="452" y="448" class="small" fill="#1a4fa0">1kΩ</text>
+  <text x="452" y="540" class="small" fill="#1a4fa0">1kΩ</text>
+  <text x="388" y="507" class="small" fill="#1a4fa0">1kΩ</text>
   <circle cx="430" cy="490" r="9" fill="#fff" stroke="#1a4fa0" stroke-width="2.5"/>
   <text x="430" y="466" text-anchor="middle" class="rail-blue" font-size="12.5">STAR / BLUE / G</text>
 
-  <!-- ============ End labels at the 6 vertices ============ -->
-  <text x="430" y="264" class="endLbl" font-weight="700">A+ end</text>
-  <text x="430" y="277" class="endLblSm">PMOS→RED · ≈+12V</text>
+  <!-- ============ Side-port end labels ============ -->
+  <text x="545.9" y="279" class="endLbl" font-weight="700">A+ side</text>
+  <text x="545.9" y="292" class="endLblSm">PMOS→RED · ≈+12V</text>
+  <text x="545.9" y="304" class="endLblSm">→ shares this side with 1 neighbor cell</text>
 
-  <text x="430" y="716" class="endLbl" font-weight="700">A− end</text>
-  <text x="430" y="729" class="endLblSm">NMOS→BLACK · ≈−12V</text>
+  <text x="314.1" y="700" class="endLbl" font-weight="700">A− side</text>
+  <text x="314.1" y="713" class="endLblSm">NMOS→BLACK · ≈−12V</text>
 
-  <text x="650.8" y="601" class="endLbl" font-weight="700">B+ end</text>
-  <text x="650.8" y="614" class="endLblSm">PMOS→RED · ≈+12V</text>
+  <text x="545.9" y="680" class="endLbl" font-weight="700">B+ side</text>
+  <text x="545.9" y="693" class="endLblSm">PMOS→RED · ≈+12V</text>
 
-  <text x="209.2" y="369" class="endLbl" font-weight="700">B− end</text>
-  <text x="209.2" y="382" class="endLblSm">NMOS→BLACK · ≈−12V</text>
+  <text x="314.1" y="279" class="endLbl" font-weight="700">B− side</text>
+  <text x="314.1" y="292" class="endLblSm">NMOS→BLACK · ≈−12V</text>
 
-  <text x="209.2" y="601" class="endLbl" font-weight="700">C+ end</text>
-  <text x="209.2" y="614" class="endLblSm">PMOS→RED · ≈+12V</text>
+  <text x="198.1" y="480" class="endLbl" font-weight="700">C+ side</text>
+  <text x="198.1" y="493" class="endLblSm">PMOS→RED</text>
+  <text x="198.1" y="505" class="endLblSm">≈+12V</text>
 
-  <text x="650.8" y="369" class="endLbl" font-weight="700">C− end</text>
-  <text x="650.8" y="382" class="endLblSm">NMOS→BLACK · ≈−12V</text>
+  <text x="661.9" y="480" class="endLbl" font-weight="700">C− side</text>
+  <text x="661.9" y="493" class="endLblSm">NMOS→BLACK</text>
+  <text x="661.9" y="505" class="endLblSm">≈−12V</text>
 
   <!-- ============ Explanation note ============ -->
   <rect x="40" y="762" width="770" height="60" rx="5" class="noteBox"/>
-  <text x="54" y="778" class="noteTxt" font-weight="700">Each axis (PA/PB/PC) is ONE electrical node end to end — PMOS at one vertex, NMOS at the opposite vertex,</text>
-  <text x="54" y="794" class="noteTxt">same coil in between. A dot marks a real connection (Q1 to RED, Q2 to BLACK, etc.); every other crossing on</text>
-  <text x="54" y="810" class="noteTxt">this page — axis lines through the rings, axis lines through each other near center — has no dot: not connected.</text>
+  <text x="54" y="778" class="noteTxt" font-weight="700">Six sides, six ports, three axes — same accounting as before (D-411's 3 pairs → 6 routes → 1 center),</text>
+  <text x="54" y="794" class="noteTxt">just relocated from corner to side-midpoint. A dot marks a real connection; every other crossing on this page —</text>
+  <text x="54" y="810" class="noteTxt">axis through a ring, axis through another axis near center — has no dot: not connected (same convention as before).</text>
 
   <!-- Safety -->
   <rect x="40" y="828" width="770" height="66" rx="6" class="warn"/>
-  <text x="55" y="846" class="warnTxt" font-weight="700">Both-ON is still illegal on every axis, independently — the hexagon layout changes nothing about that.</text>
+  <text x="55" y="846" class="warnTxt" font-weight="700">Both-ON is still illegal on every axis, independently — moving the ports to the sides changes nothing about that.</text>
   <text x="55" y="862" class="warnTxt">Still invisible to I₀ (runs RED ring → Q → that axis's node → Q → BLACK ring, never touches BLUE/STAR) —</text>
   <text x="55" y="878" class="warnTxt">watch heat, smell, or current-limit per axis. Never put a capacitor in either ring or at the hub.</text>
 
@@ -121,6 +131,7 @@
 
   <text x="40" y="1012" class="small">One-Wave Science — Virtual_Breadboard/09_TESTS. Build and pass each axis's own receipt (per cell_v1_schematic.svg,</text>
   <text x="40" y="1026" class="small">reading its own PMOS/NMOS end as PA/PB/PC) before tying it into the shared rings and hub. Per-axis circuit is</text>
-  <text x="40" y="1040" class="small">verified (test 24); this hexagon/mirrored-axis arrangement is a mechanical layout, not yet bench-confirmed as a whole.</text>
+  <text x="40" y="1040" class="small">verified (test 24). The hexagon arrangement, and putting its ports on the sides for clean cell-to-cell tiling, is a</text>
+  <text x="40" y="1054" class="small">mechanical/topological layout — not yet bench-built, and the neighbor-cell Field/Void pairing itself is conceptual here.</text>
 
 </svg>
