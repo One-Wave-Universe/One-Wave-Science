@@ -4,6 +4,47 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
+## CELL_V1 mandatory geometry gate
+
+Before drawing, simulating, fabricating, or extending CELL_V1, read these files in order:
+
+1. `CELL_V1_ANTI_DRIFT.md`
+2. `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`
+3. `CELL_V1_BUILD_PACKET.md`
+4. `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
+5. `CURRENT_BUILD_ORDER.md`
+
+The physical hex geometry is locked:
+
+```text
+PORTS: FLAT SIDES / EDGES ONLY
+CORNERS / VERTICES: NO PORTS
+
+CLOCKWISE:
+A+ -> B+ -> C+ -> A- -> B- -> C-
+
+DIRECT OPPOSITES:
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+
+SEVEN-CELL FLOWER:
+all seven cells are identical and use the same orientation
+shared connections are flat-edge to flat-edge
+```
+
+Any image or prose that places CELL_V1 connections on corners, changes the clockwise edge order, or requires alternating cell orientation in the flower is wrong and must be discarded rather than rationalized.
+
+Current hardware target: electronic/MOSFET switching in the upper part of the cell, hysteretic magnetic memory/reinjection structure in the lower part. Magnetic remanence and electrical reference are separate physical quantities. Reinjection is measured recovery/recirculation, not unexplained gain.
+
+Primary scale target:
+
+```text
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
+```
+
+`3 x 3 x 3`, mirrored volumes, `2+2`, `3+3`, `3+ / 3- / 3+`, M4 physical depth, higher-brain depth, and hemisphere stack counts remain **OPEN hardware hypotheses** until measurements establish what the extra depth contributes. Do not promote numerical symmetry into canon.
+
 ## Open research: Jetson Dreamscape translator
 
 **Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
@@ -53,38 +94,42 @@ Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present glo
 
 ## Current update handoff
 
-0. `UPDATED_49_MINIVERSE_DREAMWORLD_AI_GUIDE.md`
-0b. `AI_GUIDE_LOCAL_MINIVERSE_DREAMWORLD_AND_INTERDIMENSIONAL_ARCHITECTURE.md`
-1. `UPDATED_48_HANDOFF_SYNC_G743_G746.md`
-2. `UPDATED_47_DAMPING_MATRIX_DISPERSION.md`
-3. `UPDATED_46_ZONE_EDGE_125GEV_A0_QUARANTINE.md`
-4. `UPDATED_45_PPF_HEX_GRAPH_AND_OCCUPANCY_WRAPPER.md`
-5. `Nodes/G-746_Damping_Matrix_Dispersion.md`
-6. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
-7. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
-8. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
-9. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
-10. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-11. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
-12. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-13. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
-14. `VTC_BUILD_ARCHITECTURE.md`
-15. `Nodes/B-206b_Four_Views.md`
-16. `Nodes/B-206c_Four_Actions.md`
-17. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
-18. `Nodes/B-223_Three_Moves.md`
-19. `Nodes/B-224_Two_Choices.md`
-20. `Nodes/B-225_Field_Cycle.md`
-21. `Nodes/C-301_Mirror_Gate.md`
-22. `Nodes/G-711_Gate_7.md`
-23. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-24. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
-25. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-26. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
-27. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-28. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
-29. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
-30. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
+0. `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`
+0a. `CELL_V1_ANTI_DRIFT.md`
+0b. `CELL_V1_BUILD_PACKET.md`
+0c. `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
+1. `UPDATED_49_MINIVERSE_DREAMWORLD_AI_GUIDE.md`
+1b. `AI_GUIDE_LOCAL_MINIVERSE_DREAMWORLD_AND_INTERDIMENSIONAL_ARCHITECTURE.md`
+2. `UPDATED_48_HANDOFF_SYNC_G743_G746.md`
+3. `UPDATED_47_DAMPING_MATRIX_DISPERSION.md`
+4. `UPDATED_46_ZONE_EDGE_125GEV_A0_QUARANTINE.md`
+5. `UPDATED_45_PPF_HEX_GRAPH_AND_OCCUPANCY_WRAPPER.md`
+6. `Nodes/G-746_Damping_Matrix_Dispersion.md`
+7. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
+8. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
+9. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
+10. `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
+11. `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+12. `UPDATED_34_PROCESSING_IS_MEMORY_AND_CUBE_SCALE_ARCHITECTURE.md`
+13. `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
+14. `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
+15. `VTC_BUILD_ARCHITECTURE.md`
+16. `Nodes/B-206b_Four_Views.md`
+17. `Nodes/B-206c_Four_Actions.md`
+18. `Nodes/B-221a_Six_Step_Oscillator_Program.md`
+19. `Nodes/B-223_Three_Moves.md`
+20. `Nodes/B-224_Two_Choices.md`
+21. `Nodes/B-225_Field_Cycle.md`
+22. `Nodes/C-301_Mirror_Gate.md`
+23. `Nodes/G-711_Gate_7.md`
+24. `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+25. `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`
+26. `UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+27. `AUDIT_UPDATED_31_VISIBLE_CURVATURE_SURFACE.md`
+28. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
+29. `AUDIT_UPDATED_30_GROUND_LATTICE_SIMULATION.md`
+30. `UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_SIMULATION_STANDARD.md`
+31. `AUDIT_UPDATED_29_ROUTE_GRAMMAR_MOTOR_MEMORY_AND_MUSTACHE_MATH.md`
 
 ## Current Micro node handoff
 
