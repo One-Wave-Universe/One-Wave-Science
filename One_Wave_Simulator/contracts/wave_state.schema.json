@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "one-wave/wave-state-v1",
+  "title": "Wave State v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "source_observation_id", "transform", "field", "validation"],
+  "properties": {
+    "schema_version": {"const": "wave-state-v1"},
+    "status": {"enum": ["ENCODED", "HYPOTHESIS_DERIVED", "VALIDATED", "QUARANTINED"]},
+    "source_observation_id": {"type": "string", "minLength": 1},
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "mode", "parameters", "assumptions"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "mode": {"enum": ["representation", "hypothesis"]},
+        "parameters": {"type": "object"},
+        "assumptions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "field": {
+      "type": "object",
+      "required": ["domain", "components", "units"],
+      "properties": {
+        "domain": {"type": "string"},
+        "components": {"type": "object"},
+        "units": {"type": "object"},
+        "lossiness": {"enum": ["lossless", "lossy", "unknown"]}
+      }
+    },
+    "validation": {"type": "object"}
+  }
+}

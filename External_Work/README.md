@@ -1,72 +1,39 @@
-# External Work Handoff
+# External Work
 
-This directory is the GitHub-visible handoff for work that also needs to exist in
-a Jetson-local external workspace.
+## Purpose
 
-## Direction 1: GitHub -> Jetson external workspace
+`External_Work` is the provenance boundary between third-party data and One Wave analysis. It holds source manifests, source-specific adapters, retrieved payloads, and exported analysis products. Nothing placed here becomes a One Wave physical claim merely by being imported or encoded.
 
-Put reviewable files in:
-
-```text
-External_Work/inbox/
-```
-
-On the Jetson run:
-
-```bash
-python3 scripts/external_work_bridge.py pull
-```
-
-That copies regular files to:
+## Evidence flow
 
 ```text
-~/One-Wave-External-Work/inbox/
+public source record
+  -> raw payload
+  -> normalized observation
+  -> declared transform
+  -> WaveState
+  -> validation report
 ```
 
-The Jetson-local working area is:
+Each transition must retain source identifiers, units, coordinate frames, software version, assumptions, and failure status.
 
-```text
-~/One-Wave-External-Work/work/
-```
+## Layout
 
-## Direction 2: Jetson external workspace -> GitHub
+- `inbox/` — raw or externally retrieved payloads. Do not silently edit source data.
+- `outbox/` — reproducible exports: WaveState payloads, reports, and visualization inputs.
+- `manifests/` — source acquisition and dataset provenance.
+- `adapters/ligo/` — LIGO strain and metadata normalization.
+- `adapters/cern/` — CERN event and metadata normalization.
 
-Place results intended for GitHub review in:
+## Status vocabulary
 
-```text
-~/One-Wave-External-Work/outbox/
-```
+- `RAW`: source record received; no interpretation.
+- `NORMALIZED`: schema, units, and source coordinates standardized.
+- `ENCODED`: represented as a field or wave by an explicit transform.
+- `HYPOTHESIS_DERIVED`: incorporates One Wave assumptions.
+- `VALIDATED`: meets a predeclared held-out or external test.
+- `QUARANTINED`: provenance, integrity, or assumption failure.
 
-Then run:
+## Scientific rule
 
-```bash
-python3 scripts/external_work_bridge.py publish
-```
-
-That stages copies under:
-
-```text
-External_Work/outbox/
-```
-
-The bridge **does not commit or push**. Review the files, use a task branch, then
-commit/push and open a PR. Do not silently write external results directly to
-`main`.
-
-## Status
-
-```bash
-python3 scripts/external_work_bridge.py status
-```
-
-## Rules
-
-- Regular files only; symlinks are refused.
-- Individual files larger than 64 MiB are refused by the bridge.
-- Secrets, tokens, private keys, credentials, and machine identity files do not
-  belong in this handoff.
-- Large generated artifacts should use a deliberate artifact/storage path rather
-  than being dropped into the science repository.
-- `ONE_WAVE_EXTERNAL_WORK=/some/path` may override the default local workspace.
-- The default `hive-pipe/install_gateway.sh` grants the AI terminal parser write
-  access to `~/One-Wave-External-Work` in addition to the checked-out repo.
+A reversible or useful encoding is not evidence that the encoded ontology is physically true. New physical claims require a fixed transform, a competing baseline, and a quantitative prediction assessed on data not used to set the transform.

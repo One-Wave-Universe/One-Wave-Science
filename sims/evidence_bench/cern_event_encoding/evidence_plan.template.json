@@ -1,0 +1,22 @@
+{
+  "experiment_id": "cern-event-encoding-0001",
+  "observation": "Reconstructed collider events from one fixed source release and selection.",
+  "proposed_mechanism": "No mechanism claim in representation-only mode.",
+  "transform_name": "cern_event_to_wave",
+  "transform_version": "0.1.0",
+  "parameters_fixed_before_holdout": {
+    "encoding": "sparse_reconstructed_object_field"
+  },
+  "assumptions": [
+    "Object semantics and units are inherited from the supplied reconstruction record.",
+    "No unmeasured phase or path is inferred."
+  ],
+  "baseline": "A conventional, task-appropriate source representation fixed before evaluation.",
+  "prediction": "State task metric and expected direction before hold-out evaluation.",
+  "development_split": "Declare event IDs and selection before analysis.",
+  "holdout_split": "Declare held-out event IDs and selection before analysis.",
+  "decision_rule": "Specify metric, uncertainty calculation, and falsifying outcome.",
+  "status": "ENCODED",
+  "notes": "Template only; not evidence of a particle-to-wave mechanism.",
+  "metadata": {}
+}

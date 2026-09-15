@@ -1,0 +1,21 @@
+{
+  "experiment_id": "ligo-event-vs-offsource-0001",
+  "observation": "Calibrated strain segment compared with a matched off-source segment.",
+  "proposed_mechanism": "Fill only when a separate One Wave hypothesis transform is specified.",
+  "transform_name": "ligo_strain_to_wave",
+  "transform_version": "0.1.0",
+  "parameters_fixed_before_holdout": {
+    "representation": "time_series"
+  },
+  "assumptions": [
+    "Calibration and data-quality choices are documented in the source manifest."
+  ],
+  "baseline": "Identical statistic evaluated on off-source and time-shifted control segments.",
+  "prediction": "State a numerical or directional outcome before hold-out evaluation.",
+  "development_split": "Declare source record IDs before analysis.",
+  "holdout_split": "Declare source record IDs not used to choose parameters.",
+  "decision_rule": "Specify threshold, uncertainty calculation, and falsifying outcome.",
+  "status": "ENCODED",
+  "notes": "Template only; it contains no source data and no claim.",
+  "metadata": {}
+}
