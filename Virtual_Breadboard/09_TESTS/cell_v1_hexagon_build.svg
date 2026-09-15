@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8.5in" height="11in" viewBox="0 0 850 1100" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .wire { stroke:#000; stroke-width:2; fill:none; }
+    .dot { fill:#000; }
+    .lbl { font-size:14px; fill:#000; }
+    .lblB { font-size:14px; fill:#000; font-weight:700; }
+    .small { font-size:11px; fill:#333; }
+    .rail-red { fill:#b30000; font-weight:700; }
+    .rail-black { fill:#000; font-weight:700; }
+    .rail-blue { fill:#1a4fa0; font-weight:700; }
+    .box { fill:#fff; stroke:#000; stroke-width:2; }
+    .stationBox { fill:#fbfbfe; stroke:#444; stroke-width:1.5; }
+    .title { font-size:22px; font-weight:800; fill:#000; }
+    .subtitle { font-size:11.5px; fill:#333; }
+    .warn { fill:#fff4f4; stroke:#b30000; stroke-width:2; }
+    .warnTxt { fill:#7a0000; font-size:11.5px; }
+    .noteBox { fill:#f5f7fb; stroke:#1a4fa0; stroke-width:1.5; }
+    .noteTxt { fill:#1a3a66; font-size:11.5px; }
+    .cellHdr { font-size:11.5px; font-weight:700; fill:#000; }
+    .cell { font-size:11.5px; fill:#000; }
+    .layerHdr { font-size:14px; font-weight:800; fill:#000; }
+    .sensor { fill:#eee; stroke:#888; stroke-width:1.5; stroke-dasharray:4,3; }
+    .sensorTxt { font-size:10.5px; fill:#666; }
+  </style>
+
+  <rect x="16" y="16" width="818" height="1068" fill="none" stroke="#999" stroke-width="1"/>
+
+  <text x="40" y="42" class="title">CELL_V1 — Hexagon Build (A / B / C at 120°)</text>
+  <text x="40" y="60" class="subtitle">Corrected from the vertical-stack layout: this repo's native geometry (D-408, sixfold 2D lattice) and</text>
+  <text x="40" y="74" class="subtitle">SENSOR_CELLS.md ("the motor head, spoken as a hexagon") both say the real arrangement is a hexagon, not a stack.</text>
+  <text x="40" y="88" class="subtitle">Electrically identical to cell_v1_schematic.svg — three copies of the same station, arranged 120° apart.</text>
+
+  <!-- Rule box -->
+  <rect x="40" y="98" width="770" height="60" rx="5" class="noteBox"/>
+  <text x="54" y="114" class="noteTxt" font-weight="700">Six vertices, 60° apart. Motor windings A/B/C occupy every other vertex (0°/120°/240°) — a tripod, matching</text>
+  <text x="54" y="130" class="noteTxt">the STAR schematic in ONE_WAVE_CELL.md. The three vertices between them are the open sensor-cell positions</text>
+  <text x="54" y="146" class="noteTxt">SENSOR_CELLS.md names (heat / vibe / balance) — not built, not wired here; shown only so the hexagon is honest.</text>
+
+  <!-- ============ Hexagon guide outline ============ -->
+  <polygon points="430,280 611.9,385 611.9,595 430,700 248.1,595 248.1,385"
+           fill="none" stroke="#bbb" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- ============ BLUE spokes (drawn first so rings overlay them) ============ -->
+  <line x1="430.0" y1="280.0" x2="430.0" y2="490.0" class="wire" stroke="#1a4fa0"/>
+  <line x1="611.9" y1="595.0" x2="430.0" y2="490.0" class="wire" stroke="#1a4fa0"/>
+  <line x1="248.1" y1="595.0" x2="430.0" y2="490.0" class="wire" stroke="#1a4fa0"/>
+
+  <!-- ============ RED / BLACK rings ============ -->
+  <circle cx="430" cy="490" r="95" fill="none" stroke="#b30000" stroke-width="2.5"/>
+  <circle cx="430" cy="490" r="135" fill="none" stroke="#000" stroke-width="2.5"/>
+  <text x="490" y="405" class="rail-red" font-size="12">RED bus</text>
+  <text x="497" y="366" class="rail-black" font-size="12">BLACK bus</text>
+
+  <!-- ============ Per-station RED/BLACK tap leads ============ -->
+  <!-- Station A (top, angle 90) -->
+  <line x1="418.3" y1="280.3" x2="424.7" y2="395.1" class="wire" stroke="#b30000"/>
+  <line x1="441.7" y1="280.3" x2="437.5" y2="355.2" class="wire" stroke="#000"/>
+  <circle cx="424.7" cy="395.1" r="3" class="dot" fill="#b30000"/>
+  <circle cx="437.5" cy="355.2" r="3" class="dot"/>
+  <circle cx="430.0" cy="490.0" r="4" class="dot" fill="#1a4fa0"/>
+
+  <!-- Station B (lower right, angle -30) -->
+  <line x1="617.4" y1="584.7" x2="514.8" y2="532.8" class="wire" stroke="#b30000"/>
+  <line x1="605.7" y1="605.0" x2="543.0" y2="563.9" class="wire" stroke="#000"/>
+  <circle cx="514.8" cy="532.8" r="3" class="dot" fill="#b30000"/>
+  <circle cx="543.0" cy="563.9" r="3" class="dot"/>
+
+  <!-- Station C (lower left, angle -150) -->
+  <line x1="254.3" y1="605.0" x2="350.5" y2="542.0" class="wire" stroke="#b30000"/>
+  <line x1="242.6" y1="584.7" x2="309.5" y2="550.9" class="wire" stroke="#000"/>
+  <circle cx="350.5" cy="542.0" r="3" class="dot" fill="#b30000"/>
+  <circle cx="309.5" cy="550.9" r="3" class="dot"/>
+
+  <!-- ============ Hub (STAR / BLUE / G) ============ -->
+  <circle cx="430" cy="490" r="9" fill="#fff" stroke="#1a4fa0" stroke-width="2.5"/>
+  <text x="430" y="466" text-anchor="middle" class="rail-blue" font-size="12.5">STAR / BLUE / G</text>
+
+  <!-- ============ Station boxes ============ -->
+  <!-- A: top -->
+  <rect x="350" y="196" width="160" height="76" class="stationBox"/>
+  <text x="430" y="216" text-anchor="middle" class="layerHdr">Station A</text>
+  <text x="430" y="233" text-anchor="middle" class="cell">Q1 P-MOS + Q2 N-MOS</text>
+  <text x="430" y="248" text-anchor="middle" class="cell">→ node PA</text>
+  <text x="430" y="264" text-anchor="middle" class="cellHdr">+1≈+12V · −1≈−12V · STAY≈0V</text>
+
+  <!-- B: lower right -->
+  <rect x="571" y="580" width="160" height="76" class="stationBox"/>
+  <text x="651" y="600" text-anchor="middle" class="layerHdr">Station B</text>
+  <text x="651" y="617" text-anchor="middle" class="cell">Q3 P-MOS + Q4 N-MOS</text>
+  <text x="651" y="632" text-anchor="middle" class="cell">→ node PB</text>
+  <text x="651" y="648" text-anchor="middle" class="cellHdr">+1≈+12V · −1≈−12V · STAY≈0V</text>
+
+  <!-- C: lower left -->
+  <rect x="119" y="580" width="160" height="76" class="stationBox"/>
+  <text x="199" y="600" text-anchor="middle" class="layerHdr">Station C</text>
+  <text x="199" y="617" text-anchor="middle" class="cell">Q5 P-MOS + Q6 N-MOS</text>
+  <text x="199" y="632" text-anchor="middle" class="cell">→ node PC</text>
+  <text x="199" y="648" text-anchor="middle" class="cellHdr">+1≈+12V · −1≈−12V · STAY≈0V</text>
+
+  <!-- ============ Sensor (open) vertices ============ -->
+  <circle cx="611.9" cy="385" r="16" class="sensor"/>
+  <text x="611.9" y="357" text-anchor="middle" class="sensorTxt">open — sensor</text>
+  <text x="611.9" y="368" text-anchor="middle" class="sensorTxt">position (heat/vibe/</text>
+  <text x="611.9" y="379" text-anchor="middle" class="sensorTxt">balance) — not built</text>
+
+  <circle cx="430" cy="700" r="16" class="sensor"/>
+  <text x="430" y="722" text-anchor="middle" class="sensorTxt">open — sensor position</text>
+  <text x="430" y="733" text-anchor="middle" class="sensorTxt">(SENSOR_CELLS.md) — not built</text>
+
+  <circle cx="248.1" cy="385" r="16" class="sensor"/>
+  <text x="248.1" y="357" text-anchor="middle" class="sensorTxt">open — sensor</text>
+  <text x="248.1" y="368" text-anchor="middle" class="sensorTxt">position (heat/vibe/</text>
+  <text x="248.1" y="379" text-anchor="middle" class="sensorTxt">balance) — not built</text>
+
+  <!-- ============ Honesty note on bus routing ============ -->
+  <rect x="40" y="762" width="770" height="60" rx="5" class="noteBox"/>
+  <text x="54" y="778" class="noteTxt" font-weight="700">RED/BLACK drawn here as two concentric rings — the simplest option, matching a typical 3-phase stator layout.</text>
+  <text x="54" y="794" class="noteTxt">That exact bus shape is a reasonable mechanical choice, not a bench-verified one: a perimeter rail or straight</text>
+  <text x="54" y="810" class="noteTxt">spokes to the supply would be electrically identical. Crossing lines with no dot are NOT connected (standard convention).</text>
+
+  <!-- Safety -->
+  <rect x="40" y="828" width="770" height="66" rx="6" class="warn"/>
+  <text x="55" y="846" class="warnTxt" font-weight="700">Both-ON is still illegal on every station, independently — the hexagon layout changes nothing about that.</text>
+  <text x="55" y="862" class="warnTxt">Still invisible to I₀ (runs RED ring → Q → node → Q → BLACK ring, never touches BLUE/STAR) — watch heat,</text>
+  <text x="55" y="878" class="warnTxt">smell, or current-limit per station. Never put a capacitor in either ring or at the hub.</text>
+
+  <!-- I0 readout -->
+  <line x1="430" y1="499" x2="430" y2="940" class="wire" stroke="#1a4fa0"/>
+  <rect x="412" y="940" width="36" height="20" class="box"/>
+  <text x="430" y="954" text-anchor="middle" class="small">1Ω</text>
+  <text x="456" y="954" class="lblB">I<tspan baseline-shift="sub" font-size="10">0</tspan> here — ONE meter for the whole hexagon</text>
+
+  <text x="40" y="1012" class="small">One-Wave Science — Virtual_Breadboard/09_TESTS. Build and pass each station's own receipt (per cell_v1_schematic.svg)</text>
+  <text x="40" y="1026" class="small">before tying it into the shared rings. Per-station circuit is verified (test 24); this hexagon bus arrangement is a</text>
+  <text x="40" y="1040" class="small">mechanical layout choice, not yet bench-confirmed as a whole.</text>
+
+</svg>
