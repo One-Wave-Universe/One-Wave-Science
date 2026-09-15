@@ -1,8 +1,40 @@
-# CELL_V1 - Real-Hardware Bench Pamphlet
+# CELL_V1 - Hex-First Real-Hardware Bench Pamphlet
 
-## What is real, and what CELL_V1 adds
+## The main object is the hex cell
 
-CELL_V1 does not start from nothing. Its current physical direction combines mechanisms that have already been built separately:
+CELL_V1 is **one repeatable six-edge hex cell**. The magnetic cores, windings, MOSFETs, reference circuit, sensing, and reinjection hardware are all candidate mechanisms **inside that cell**.
+
+```text
+                         [ A+ ]
+                    ______________
+                   /              \
+            [ C- ]/                \[ B+ ]
+                 /   A / B / C      \
+                 \  MAGNETIC +      /
+            [ B- ]\  ELECTRONIC    /[ C+ ]
+                   \______________/
+                         [ A- ]
+```
+
+Ports are centered on the six flat sides. Corners have no port function.
+
+Clockwise order is locked:
+
+```text
+A+ -> B+ -> C+ -> A- -> B- -> C-
+```
+
+Direct opposites:
+
+```text
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+```
+
+## What real hardware contributes inside the hex
+
+The current internal implementation combines mechanisms that have already been built separately:
 
 - **Fluxgate sensors:** one magnetic core with separate excitation, sense, and feedback functions.
 - **Magnetic amplifiers / saturable reactors:** control and maintaining windings that change a larger power path through magnetic saturation.
@@ -10,27 +42,19 @@ CELL_V1 does not start from nothing. Its current physical direction combines mec
 - **Three-phase motor bridges:** six MOSFETs arranged as three A/B/C half-bridges.
 - **Regenerative inverters:** inductive/motor energy returned to a DC-link capacitor.
 
-The combined CELL_V1 topology remains experimental.
+These are the engineering floor for the **inside** of CELL_V1. The combined scalable CELL_V1 remains experimental.
 
-## Locked CELL_V1 geometry
+## Internal A/B/C mechanism
+
+The preferred first internal model is three multifunction magnetic axes corresponding to the three opposite external edge pairs:
 
 ```text
-FLAT EDGE PORTS ONLY
-
-clockwise:
-A+ -> B+ -> C+ -> A- -> B- -> C-
-
-opposites:
-A+ <-> A-
-B+ <-> B-
-C+ <-> C-
+A+ <-> [ A magnetic/electrical axis ] <-> A-
+B+ <-> [ B magnetic/electrical axis ] <-> B-
+C+ <-> [ C magnetic/electrical axis ] <-> C-
 ```
 
-The six edge labels are external cell interfaces. They are not six mandatory magnetic windings.
-
-## Preferred first magnetic element
-
-Instead of an ordinary toroid with six arbitrary windings, test one multifunction magnetic element with separately measurable functions:
+Candidate functions on each magnetic axis:
 
 ```text
 POWER / DRIVE
@@ -39,30 +63,79 @@ SENSE
 FEEDBACK / MAINTAIN
 ```
 
-The exact number of physical windings is determined by the actual core geometry and measured behavior.
+The exact number of physical windings is determined by core geometry and measured behavior. Six external edge ports do **not** require six windings.
 
-A toroid may be useful for the first excitation/sense test. A multi-aperture or shaped ferrite may be better for nonvolatile magnetic memory because transfluxors deliberately separated magnetic paths.
+## One hex must connect to another identical hex
 
-## Three-element A/B/C bench fixture
-
-After one element passes write-retain-read-rewrite testing, copy it into three matched elements:
+The first scale test is not merely whether one magnetic core remembers. It is whether a completed CELL_V1 module can pass a controlled state through a canonical flat edge to an identical neighbor.
 
 ```text
-                 [ A ]
-                  / \
-                 /   \
-              [ C ]-[ B ]
-                   o
-              REFERENCE
+CELL 1                         CELL 2
+A+ B+ C+ A- B- C-   ||   A+ B+ C+ A- B- C-
+                     ^
+                shared flat edge
 ```
 
-The physical triangle is a useful symmetric fixture, not a law derived from 120 electrical degrees.
+Shared edges pair matching axes with opposite outward polarity. No corner connectors or adapter cell are introduced.
 
-The center `o` is the measured electrical reference. Empty geometric space does not create virtual ground.
+## Seven-cell flower - first planar field unit
 
-## Six-MOSFET power stage
+```text
+                 [HEX]
+             [HEX] [HEX]
+          [HEX] [CENTER] [HEX]
+             [HEX] [HEX]
+```
 
-Six MOSFETs are used as three half-bridges:
+The exact drawing geometry is flat-edge hex tiling: one center CELL_V1 plus six identical same-orientation CELL_V1 neighbors.
+
+Every one of the seven cells contains the same A/B/C internal implementation.
+
+The flower is the first place to test:
+
+- cell-to-cell path propagation;
+- closed circulating phase/state;
+- competing routes;
+- retained local memory affecting later whole-flower behavior;
+- combined field state without erasing each cell's local identity.
+
+## Scaling rule
+
+The core recurrence remains:
+
+```text
+ONE HEX CELL
+     ->
+PATH THROUGH IDENTICAL CELLS
+     ->
+CLOSED ROTATION
+     ->
+SEVEN-CELL / MULTI-CELL FIELD
+     ->
+3D VOLUME
+     ->
+NEXT-SCALE POINT
+```
+
+Compact form:
+
+```text
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
+```
+
+Real-hardware grounding changes how one hex is implemented internally. It does **not** replace this scaling rule.
+
+## 3D / volumetric growth
+
+A current candidate is `3 x 3 x 3` recurrence. The exact lower-scale unit is still open: individual cells, flowers, or resolved submodules may eventually be the right grain.
+
+The rule is that the lower-scale unit must expose a reusable relational interface so the architecture can repeat rather than inventing a new connector at every scale.
+
+A mirror-flipped companion volume remains a later candidate for whole-state history, checking, and reinjection.
+
+## Six-MOSFET power stage inside the cell
+
+Six MOSFETs can form three A/B/C half-bridges:
 
 ```text
             +DC BUS
@@ -76,11 +149,13 @@ Six MOSFETs are used as three half-bridges:
             -DC BUS
 ```
 
-This is standard three-phase bridge architecture. It does not mean six independent bidirectional winding channels exist.
+This is a grounded power-stage mechanism. It is **not** the cell's external six-port geometry.
 
-## Reinjection / recovery
+## Reference and reinjection
 
-Use the engineering pattern already used in regenerative drives:
+The electrical reference remains a separately generated, measured node. Empty space or a core center does not create virtual ground.
+
+Returned energy uses the regenerative-drive pattern:
 
 ```text
 magnetic / inductive return
@@ -92,38 +167,37 @@ magnetic / inductive return
  later permitted event
 ```
 
-Do not dump flyback energy into the virtual reference. Keep the reference quiet and measured.
+Do not dump flyback energy into the virtual reference.
 
 ## Shared magnetic floor
 
-A shared magnetic substrate remains an experiment.
-
-Do not assume an ordinary ferromagnetic nanoparticle sheet stores useful spatial memory.
+A shared magnetic substrate remains an experiment, not a required first build.
 
 Required proof:
 
 ```text
-write at A
+write at known location
 remove drive
-measure remanence
-probe A/B/C locations
-compare response with and without prior write
+measure remanence locally
+probe neighboring locations
+compare later response with and without prior write
 ```
 
-Only repeatable spatial history dependence earns the substrate a role in CELL_V1.
+Only repeatable spatial history dependence earns the substrate a role in the scalable cell.
 
-## First build - smallest decisive test
+## Build order - keep the scale path intact
 
-Build one multifunction element first.
+1. Prove one multifunction magnetic element.
+2. Reproduce measured A/B/C internal axes.
+3. Package or emulate them as **one complete CELL_V1 hex**.
+4. Prove one flat-edge transfer between two identical hexes.
+5. Prove a three-cell path.
+6. Prove a closed circulating state/phase.
+7. Build the seven-cell flower.
+8. Test stacked / volumetric coupling.
+9. Only then test mirror-flipped higher volumes and brain-scale organization.
 
-1. Measure normal inductive behavior.
-2. Apply controlled write pulse.
-3. Remove drive completely.
-4. Read retained state with minimal disturbance.
-5. Reverse write and repeat.
-6. Show old state changes the standardized next response.
-7. Measure returned energy into the reservoir independently.
-8. Only then build matched A/B/C copies.
+The cell is not established merely because one core remembers. CELL_V1 is established only when the **hex module** can retain/process state, communicate through its locked edges, and scale through identical copies.
 
 ## Real-world references
 
@@ -138,7 +212,7 @@ Build one multifunction element first.
 ## Hard separation rule
 
 ```text
-HEX INTERFACE GEOMETRY
+HEX CELL + EDGE SCALING
         !=
 MAGNETIC WINDING COUNT
         !=
@@ -147,4 +221,4 @@ POWER SWITCH COUNT
 BRAIN LAYER COUNT
 ```
 
-Prove each layer with measurements before tying the counts together.
+The first line is the architecture. The others are implementation choices that must earn their final form through measurement.
