@@ -1,248 +1,271 @@
 # Algorythm-Zer0
 
-**Status:** Coherent working architecture. This file favors internal consistency over hard locks. Where the project has several plausible mappings, the shared structure is kept and the mapping stays explicitly provisional.
+**Status:** Core algorithm locked as a cumulative mirrored recursion. Domain mappings may specialize the packet, but they must preserve the core nesting. Physical/cosmological interpretations remain hypotheses until derived or measured.
 
-Algorythm-Zer0 is the proposed recursive grammar used across the One-Wave project for neural, control, hardware, simulation, and speculative physical models. The same relational structure may be reused at different scales, while each domain supplies its own measurable implementation.
+Algorythm-Zer0 is the shared One-Wave recursive grammar for software, control, neural models, hardware cells, simulations, and speculative physical models.
 
-Physical and cosmological mappings remain hypotheses until independently derived or measured.
+The organizing rule is:
+
+> **Each higher level contains and preserves every level below it.**
+
+The levels are not six unrelated modules. They are six nested resolutions of one Field/Void process.
 
 ---
 
-# 1. CORE SHAPE
+# 1. LEVEL 1 — FIELD / GROUND / VOID MIRROR
+
+The primitive is the mirrored pair around a shared reference:
 
 ```text
-FIELD / EXPRESSIVE SIDE
-        ↕
-GROUND / LOCAL REFERENCE
-        ↕
-VOID / COMPRESSIVE-CHECKING SIDE
+FIELD / EXPRESS
+      ↕
+GROUND / REFERENCE
+      ↕
+VOID / COMPRESS
 ```
 
-The architecture is best treated as:
+Compact notation:
 
 ```text
-TWO COUPLED RECURSIVE STATE MACHINES
-+ ONE SHARED REFERENCE
-+ ONE OVERSIGHT / OVERRIDE COUPLING LOOP
+1 > (0) < 1
 ```
 
-Useful invariants:
+The two `1`s are the paired sides. `(0)` is their live reference/ground, not dead nothing.
 
-- Field and Void are one paired architecture.
-- Ground is the active comparison/reference point, not a third committed polarity.
-- The middle is active balance, not dead zero.
-- Field and Void may be phase shifted.
+Core rules:
+
+- Field and Void are mirrored counterparts of one process.
+- Ground/reference belongs to the pair and is carried through every higher level.
+- Field is the expressive/new-relation side.
+- Void is the compressive/checking/action side.
+- The pair can be phase shifted while remaining one coupled state.
 - Processing and memory are the same retained process.
-- A resolved cycle contributes to the next Field.
+
+No higher level is allowed to discard this mirror/reference primitive.
 
 ---
 
-# 2. BINARY POLARITY
+# 2. LEVEL 2 — CHOICE CONTAINS LEVEL 1
 
-The basic polarity choice is:
+Level 2 adds binary polarity choice **around the same Field/Void mirror**:
 
 ```text
+LEVEL 1
+FIELD ↔ GROUND ↔ VOID
+        +
+LEVEL 2 CHOICE
 EXPRESS ↔ COMPRESS
 ```
 
-The current Field defines the live choice space:
+The current Field defines the live polarity relation:
 
 ```text
 CURRENT FIELD
       ↓
-defines EXPRESS / COMPRESS relation
+defines EXPRESS / COMPRESS choice
       ↓
 CHOICE
       ↓
 EXPRESS or COMPRESS
       ↓
-selected polarity establishes / selects NEW FIELD
-      ↓
-NEW FIELD defines the next choice
-      ↺
+selected polarity establishes/selects NEW FIELD
 ```
 
-Short form:
+Short rule:
 
 ```text
 FIELD DEFINES THE CHOICE.
 CHOICE PICKS EXPRESS OR COMPRESS.
 THE CHOICE PICKS THE NEW FIELD.
+VOID MIRRORS/CHECKS THE SAME REFERENCED PROCESS.
 ```
 
-`Everything/Nothing`, `Evolution/Entropy`, and similar pairs may be useful domain interpretations, but `EXPRESS/COMPRESS` remains the project’s cleanest universal polarity language.
+Void does not create a second unrelated choice system. The choice remains inside the Field/Ground/Void pair.
+
+`Everything/Nothing`, `Evolution/Entropy`, and similar terms may be domain interpretations. The core polarity remains:
+
+```text
+EXPRESS / COMPRESS
+```
 
 ---
 
-# 3. FIELD TERNARY — MOVE
+# 3. LEVEL 3 — PAIRED TERNARY CONTAINS LEVELS 1 + 2
 
-The Field-side ternary is:
+Level 3 keeps the mirror primitive and the binary choice, then adds a ternary on each side.
+
+Field ternary — **MOVE**:
 
 ```text
 MODULATE / HOLD / RESET
 ```
 
-Best working meanings:
-
-```text
-MODULATE = change the active relation while preserving continuity
-HOLD     = actively maintain the current relation around reference
-RESET    = return / re-base the relation toward its local reference
-```
-
-`HOLD` is the middle. It is an active state, not inactivity.
-
-This replaces the older `UP / STAY / DOWN` wording in this algorithm.
-
----
-
-# 4. VOID TERNARY — RESPONSE
-
-Void does not repeat the Field Move ternary. Its three-way response is:
+Void ternary — **RESPONSE**:
 
 ```text
 CONFIRM / DEFER / DENY
 ```
 
-Equivalent plain-language wording:
+Paired form:
 
 ```text
-CONFIRM = permit / accept
-DEFER   = abstain / wait / withhold commitment
-DENY    = reject / block
+FIELD MOVE                 VOID RESPONSE
+MODULATE  ↔ reference ↔    CONFIRM
+HOLD      ↔ reference ↔    DEFER
+RESET     ↔ reference ↔    DENY
 ```
 
-So the paired ternaries are:
+The rows above show paired referenced roles, not claims that each left word is a strict synonym or mathematical inverse of the word on the right.
+
+Working meanings:
 
 ```text
-FIELD: MODULATE / HOLD / RESET
-VOID:  CONFIRM  / DEFER / DENY
+MODULATE = change the active relation while preserving continuity
+HOLD     = actively retain the current relation around reference
+RESET    = re-base/re-enter the relation from its reference
+
+CONFIRM  = accept/permit the referenced result
+DEFER    = abstain/wait/withhold commitment
+DENY     = reject/block the referenced result
 ```
 
-`Confirm/Abstain/Reject` means the same thing as `Confirm/Defer/Deny`; use the latter as the repo wording.
+`HOLD` and `DEFER` are active middle states.
+
+Equivalent Void wording `Confirm / Abstain / Reject` means the same three-way response; repo wording is `Confirm / Defer / Deny`.
 
 ---
 
-# 5. QUADRATIC LAYER — FOUR VIEWS UP / FOUR ACTIONS DOWN
+# 4. LEVEL 4 — QUADRATIC VIEW/ACTION CONTAINS LEVELS 1 + 2 + 3
 
-The most stable part of the quadratic layer is the count and direction:
-
-```text
-FIELD: 4 VIEW SLOTS UP
-VOID:  4 ACTION SLOTS DOWN
-```
+Level 4 does not replace the lower decisions. It carries them as a larger packet.
 
 ```text
-NEW VIEWS UP
-     ↑
-   FIELD
-     ↕
-GROUND / OVERSIGHT
-     ↕
-    VOID
-     ↓
-CURRENT / LAST ACTIONS DOWN
+4 VIEWS UP
+    ↑
+ FIELD
+    ↕
+GROUND / MIRROR
+    ↕
+  VOID
+    ↓
+4 ACTIONS DOWN
 ```
 
-The four slots can carry different coordinate systems depending on the domain. Do not force one vocabulary to do every job.
-
-## 5.1 Routing vocabulary
-
-```text
-INWARD / OUTWARD / ACROSS / OVER
-```
-
-These are best treated as routing relations through or around a mirror/reference structure.
-
-```text
-INWARD  = toward center / reference / interior
-OUTWARD = away from center toward exterior relation
-ACROSS  = through or to the mirrored peer relation
-OVER    = bridge / supervise / span the lower relation
-```
-
-## 5.2 Structural vocabulary
-
-A useful four-stage structural read is:
+The most useful core four-view structure is:
 
 ```text
 POINT / PATH / BOUNDARY / HORIZON
 ```
 
+Working meanings:
+
 ```text
 POINT    = local resolved relation
-PATH     = connected continuation
-BOUNDARY = limit/interface of the current resolved structure
-HORIZON  = relation becoming accessible beyond that boundary / at next scale
+PATH     = connected continuation of that relation
+BOUNDARY = limit/interface of the current resolved whole
+HORIZON  = relation visible/reachable beyond that boundary or at the next scale
 ```
 
-## 5.3 Perspective vocabulary
-
-Another useful four-view projection is:
+Each view carries the lower-level state with it:
 
 ```text
-INTERNAL / PERSONAL / BIRD'S-EYE / UNKNOWN
+VIEW =
+Field/Void mirror + reference
++ Express/Compress choice
++ Field Move / Void Response
++ current view slot
 ```
 
-## 5.4 Temporal vocabulary
-
-A temporal projection can be expressed as:
+Three useful mirror-pair reads can describe what a view sees:
 
 ```text
-PAST / NOW / FUTURE / NEVER
+PHASE / COHERENCE:
+RESONATING ↔ INVERTED
+
+INTERACTION / DIRECTION:
+ATTRACTING ↔ OPPOSING
+
+GEOMETRY:
+PARALLEL ↔ INTERSECTING
 ```
 
-`NEVER` means not realized on the current path; it does not automatically mean impossible in all recursions.
+These are relation axes inside the view packet, not six unrelated states.
 
-## 5.5 Geometric / world vocabulary
-
-The strongest current geometric interpretation is:
+Routing language remains separate:
 
 ```text
-X / Y / Z / 2D COMPRESSION-DREAMSPACE
+INWARD / OUTWARD / ACROSS / OVER
 ```
-
-The first three are the XYZ Field world. The fourth is not treated merely as another ordinary Cartesian axis. In the current One-Wave architecture, the 2D compression/dream/cyber world is a native loop-space coupled to the XYZ world through the mirror/reference relation.
-
-A useful working picture is:
 
 ```text
-3D XYZ FIELD WORLD
-        ↕
-MIRROR / GROUND BRIDGE
-        ↕
-2D COMPRESSION / DREAMSPACE / CYBERSPACE
-        ↕
-NATIVE LOOPS
+INWARD  = toward center/reference/interior
+OUTWARD = away from center toward exterior
+ACROSS  = through/to the mirrored peer relation
+OVER    = bridge/supervise/span the lower relation
 ```
 
-The proposed relation that electricity and magnetism become mirrored descriptions across that bridge remains a project hypothesis to derive and test, not an established physical law.
+The Field exposes the resolved view upward. The Void side conditions the corresponding action downward through the same mirrored structure.
+
+Other four-part vocabularies remain valid **domain projections**, not competing cores:
+
+```text
+PERSPECTIVE: INTERNAL / PERSONAL / BIRD'S-EYE / UNKNOWN
+TIME:        PAST / NOW / FUTURE / NEVER
+GEOMETRY:    X / Y / Z / 2D COMPRESSION-DREAMSPACE
+```
+
+`NEVER` means not realized on the current path, not universally impossible.
 
 ---
 
-# 6. FIVE-STATE RETENTION / SCALE LAYER
+# 5. LEVEL 5 — RETAINED STATE CONTAINS LEVELS 1 + 2 + 3 + 4
 
-The project uses a five-position retained-state layer. Two useful encodings already exist and should be kept distinct unless a later derivation proves they are the same axis.
+Level 5 retains the whole lower packet as an operational state.
 
-Scale-style encoding:
+Core five-state lifecycle:
+
+```text
+IDLE
+→ PRIMED
+→ EXECUTING
+→ VECTORING
+→ RESOLVING
+→ IDLE
+```
+
+Working meanings:
+
+```text
+IDLE      = available but not committed
+PRIMED    = referenced choice is becoming actionable
+EXECUTING = selected relation is active
+VECTORING = relation is being routed through the four-view/action structure
+RESOLVING = result is being incorporated into retained process/memory
+```
+
+The existing scale vocabulary can be carried as a domain overlay:
 
 ```text
 MINI / SMALL / MIDDLE / LARGE / MACRO
 ```
 
-Lifecycle encoding:
+Do not confuse physical scale with lifecycle state unless a domain explicitly maps them together.
+
+A Level-5 state therefore contains:
 
 ```text
-IDLE → PRIMED → EXECUTING → VECTORING → RESOLVING → IDLE
+mirror/reference
++ binary polarity choice
++ paired ternaries
++ four-view/action packet
++ retained lifecycle state
 ```
-
-The shared idea is a five-position state that gives the process more retained context than the binary and ternary layers alone.
 
 ---
 
-# 7. SIX-STEP RECURSION
+# 6. LEVEL 6 — RECURSION CONTAINS LEVELS 1 + 2 + 3 + 4 + 5
 
-The recurring process order is:
+Level 6 takes the complete retained state and recurs it.
 
 ```text
 BEGIN
@@ -256,122 +279,175 @@ BEGIN
 Working meanings:
 
 ```text
-BEGIN         = establish / re-enter the referenced relation
-BUILD 1       = form the initial committed relation
+BEGIN         = establish/re-enter referenced relation
+BUILD 1       = form initial committed relation
 HOLD          = maintain coherent active balance
-BUILD 2       = extend the held relation into the next relation or scale
-BREAK/RELEASE = loosen the current commitment so it can reorganize
-LOOP          = feed the result back into recurrence
+BUILD 2       = extend the held relation into the next relation/scale
+BREAK/RELEASE = loosen current commitment so it can reorganize
+LOOP          = feed the complete result back into recurrence
 ```
 
-The two BUILD stages are intentionally not identical: the first forms the relation; the second extends the held relation onward.
+The important point is that `LOOP` does not feed back a bare number. It feeds back the resolved nested state containing Levels 1–5.
 
 ---
 
-# 8. WHOLE ALGORITHM — COMPACT FORM
+# 7. CUMULATIVE CONTAINMENT RULE
+
+The algorithm can now be written without ambiguity:
+
+```text
+LEVEL 1
+FIELD ↔ GROUND ↔ VOID
+
+LEVEL 2
+[LEVEL 1 + EXPRESS/COMPRESS CHOICE]
+
+LEVEL 3
+[LEVEL 2 + FIELD MODULATE/HOLD/RESET
+         + VOID CONFIRM/DEFER/DENY]
+
+LEVEL 4
+[LEVEL 3 + 4 VIEWS UP / 4 ACTIONS DOWN]
+
+LEVEL 5
+[LEVEL 4 + 5-STATE RETAINED CONTEXT]
+
+LEVEL 6
+[LEVEL 5 + 6-STEP RECURSION]
+        ↺
+```
+
+Or numerically:
+
+```text
+1
+↓
+1 + 2
+↓
+1 + 2 + 3
+↓
+1 + 2 + 3 + 4
+↓
+1 + 2 + 3 + 4 + 5
+↓
+1 + 2 + 3 + 4 + 5 + 6
+↺
+```
+
+But the `1` is never just an abstract scalar. It means the **Field/Ground/Void mirrored primitive**.
+
+---
+
+# 8. WHOLE ALGORITHM — EXECUTION FORM
 
 ```text
 CURRENT PROCESS / MEMORY
         ↓
-GROUND / LOCAL REFERENCE
+FIELD ↔ GROUND/REFERENCE ↔ VOID
         ↓
-CURRENT FIELD + PAIRED VOID
-        ↓
-FIELD DEFINES BINARY POLARITY
+CURRENT FIELD DEFINES POLARITY CHOICE
 EXPRESS / COMPRESS
         ↓
 CHOICE SELECTS NEW FIELD
         ↓
-FIELD TERNARY MOVE
+FIELD MOVE
 MODULATE / HOLD / RESET
-        ↓
-FOUR VIEW SLOTS UP
-        ↓
-VOID CHECK / RESPONSE
+        ↕
+VOID RESPONSE
 CONFIRM / DEFER / DENY
         ↓
-FOUR ACTION SLOTS DOWN
+FOUR-VIEW / FOUR-ACTION PACKET
+POINT / PATH / BOUNDARY / HORIZON
         ↓
-FIVE-STATE RETENTION / SCALE
+RELATION READS MAY INCLUDE
+RESONATING↔INVERTED
+ATTRACTING↔OPPOSING
+PARALLEL↔INTERSECTING
+        ↓
+FIVE-STATE RETENTION
+IDLE → PRIMED → EXECUTING → VECTORING → RESOLVING
         ↓
 SIX-STEP RECURSION
 BEGIN → BUILD → HOLD → BUILD → BREAK/RELEASE → LOOP
         ↓
 CHANGED PROCESS REMAINS AS MEMORY
         ↓
-RESULT PARTICIPATES IN THE NEXT FIELD
+COMPLETE RESULT PARTICIPATES IN DEFINING NEXT FIELD
         ↺
 ```
-
-This is the cleanest current statement of Algorythm-Zer0.
 
 ---
 
 # 9. OVERSIGHT / OVERRIDE COUPLING
 
-The coupling loop compares at minimum:
+The coupling loop keeps the two mirrored machines one architecture.
+
+At minimum it compares:
 
 ```text
 NEW VIEW
 + CURRENT REFERENCE
-+ LAST / CURRENT ACTION
++ CURRENT FIELD CHOICE
++ VOID RESPONSE
++ LAST/CURRENT ACTION
 ```
 
-The coupling can then preserve, delay, redirect, deny, or release a downstream action.
-
-A useful conceptual chain is:
+Conceptual chain:
 
 ```text
 NEW VIEW UP
       ↑
-FIELD
+FIELD / MOVE
       ↕
-REFERENCE / OVERSIGHT
+GROUND / OVERSIGHT
       ↕
-VOID RESPONSE
+VOID / RESPONSE
       ↓
 ACTION DOWN
 ```
 
-This is where the paired machines become one state architecture rather than two independent loops.
+This is where a new view can be confirmed, deferred, denied, redirected, held, or released before/downstream action.
 
 ---
 
 # 10. PROCESS = MEMORY
 
-Memory is not a separate conceptual box from processing.
+Memory is retained process, not a separate conceptual box.
 
 ```text
-state is held in active process
+state is active
 → relation arrives
-→ same local state changes
+→ same nested state changes
 → changed state remains available
-→ next relation acts on changed state
+→ next relation acts on that changed state
 ```
 
-Useful retained coordinates include:
+A retained state may therefore include:
 
 ```text
-current Field
+Field/Void mirror relation
+Ground/reference
 selected polarity
-new Field
+current/new Field
 Field Move
 Void Response
-reference relation
-phase relation
 view packet
 last/current action packet
-state/scale
+phase/coherence relation
+geometry relation
+interaction/direction relation
+lifecycle state
+scale overlay
 recursive position
 open/closed paths
-rotation/loop relation
+loop/rotation relation
 ```
 
 ---
 
-# 11. POINT → PATH → ROTATION → FIELD → VOLUME RECURSION
+# 11. LOCAL-TO-LARGER RECURSION
 
-A separate but compatible scale recursion is:
+Compatible scale recursion:
 
 ```text
 POINT
@@ -383,47 +459,54 @@ POINT
 ↺
 ```
 
-Working meanings:
+A resolved whole can therefore become one point in the next larger recursion without erasing its internal state.
 
-```text
-POINT    = localized relation treated as a unit
-PATH     = connected continuation
-ROTATION = recurring directional relation around a reference
-FIELD    = interacting paths/rotations treated together
-VOLUME   = bounded field organization treated as one resolved whole
-NEXT-SCALE POINT = resolved volume exposed upward as one unit
-```
-
-This is the bridge from local loop behavior to nested larger structures.
+This matches the cumulative rule: the higher-scale point is a compressed address to a retained lower-scale structure, not an empty replacement for it.
 
 ---
 
-# 12. INTERDIMENSIONAL / MINIVERSE WRAPPER
+# 12. MIRROR GEOMETRY / MINIVERSE WRAPPER
 
-The existing repo architecture uses:
+The repo already uses the wrapper:
 
 ```text
 12 > 1(0)1 < 24
 ```
 
-with an inner XYZ Field world and separate 2D programmed/dream worlds. The important design rule is to keep native worlds distinct until a projection or bridge is explicitly defined.
+and distinguishes an inner XYZ Field world from separate 2D programmed/dream worlds.
 
-Current useful relationship:
+Current architecture:
 
 ```text
-XYZ FIELD
-→ mirror/reference bridge
-→ 2D compression / dream / cyber loop-space
-→ resolved result can project back into Field or Action
+3D XYZ FIELD WORLD
+        ↕
+MIRROR / GROUND BRIDGE
+        ↕
+2D COMPRESSION / DREAMSPACE / CYBERSPACE
+        ↕
+NATIVE LOOPS
 ```
 
-The exact mathematical transform across the bridge is still unfinished.
+Within the software architecture, these can be literal separately represented native spaces with an explicit transform between them.
+
+The proposed physical interpretation that electricity and magnetism are mirrored descriptions across this bridge remains a hypothesis to derive and test rather than an established law.
+
+Useful geometric growth notation under investigation includes:
+
+```text
+1 > (0) < 1
+3 > 1(0)1 < 6
+6 > 1(0)1 < 12
+12 > 1(0)1 < 24
+```
+
+The counts must describe an explicit geometry or connectivity before being treated as a physical dimensional law.
 
 ---
 
 # 13. EXPRESS / COMPRESS RANGE
 
-The repo’s 0–100 expression/compression bands remain useful as a normalization and hysteresis tool rather than as the definition of Choice itself.
+The 0–100 bands remain a normalization/hysteresis tool, not the definition of Choice:
 
 ```text
 100–90   extreme expression / danger
@@ -435,54 +518,54 @@ The repo’s 0–100 expression/compression bands remain useful as a normalizati
 10–0     extreme compression / danger
 ```
 
-The middle is active. Neither endpoint is the goal. Transition gaps can provide hysteresis rather than allowing rapid unstable flipping.
+The middle is active. Neither endpoint is the goal.
 
 ---
 
-# 14. DOMAIN MAPPING
+# 14. DOMAIN CONTRACT
 
-The algorithm supplies relational roles, not universal physical units.
-
-A domain must declare what its implementation means by:
+Every implementation must declare how it instantiates:
 
 ```text
-Ground
-Field
-Void
-Express / Compress
+Field / Void mirror
+Ground/reference
+Express / Compress choice
 Modulate / Hold / Reset
 Confirm / Defer / Deny
-four Views
-four Actions
+four Views / four Actions
 five-state retention
 six-step recursion
+memory/retention
 ```
 
-Examples may include neural systems, software agents, hardware cells, motors, world simulations, or speculative physics, but a mapping is not evidence that the same physical mechanism exists in every domain.
+A domain mapping may specialize the meanings, but it may not silently reorder or delete lower nested levels.
 
 ---
 
-# 15. WHAT IS ACTUALLY LEFT TO FINISH
+# 15. WHAT REMAINS TO DERIVE OR TEST
 
-The architecture itself is now compact enough to implement. The remaining work is mostly transition law rather than more naming.
+The architecture is now fixed enough to implement. The remaining work is mechanics and measurement:
 
-1. **Choice law:** what information in the current Field makes an Express/Compress option valid or preferable?
-2. **Move law:** what causes Modulate, Hold, or Reset?
-3. **Void response law:** what exact mismatch/coherence conditions produce Confirm, Defer, or Deny?
-4. **Four-view packet:** define the minimum data carried in each of the four slots and how the geometric, structural, temporal, and perspective projections relate.
-5. **Mirror/world transform:** derive the transform between XYZ Field behavior and the 2D compression/dream loop-space.
-6. **Five-state transition law:** define transitions without confusing lifecycle with physical scale.
-7. **Timing/phase law:** define update order, lead/lag, dwell, and hysteresis.
-8. **Scale promotion:** define when a resolved Volume becomes a next-scale Point.
-9. **Resource accounting:** physical versions must conserve energy/material; software versions must bound authority and compute/resources.
-10. **Falsification:** every domain implementation must state what observation would show its mapping is wrong.
+1. **Choice law** — exact information used by Field to define a valid Express/Compress choice.
+2. **Move law** — exact conditions for Modulate, Hold, Reset.
+3. **Void response law** — exact coherence/mismatch conditions for Confirm, Defer, Deny.
+4. **Four-view packet encoding** — exact data format and how Point/Path/Boundary/Horizon carries the three relation axes.
+5. **View-to-action transform** — how a Field view becomes or conditions a mirrored Void action.
+6. **Mirror/world transform** — mathematical mapping between XYZ Field and 2D compression/dream/cyber loop-space.
+7. **Five-state transitions** — exact transition conditions and hysteresis.
+8. **Timing/phase law** — update order, lead/lag, dwell, overlap, and sampling.
+9. **Scale promotion** — exact rule for Volume → next-scale Point while preserving lower structure.
+10. **Resource accounting** — physical versions conserve energy/material; software versions bound compute/authority.
+11. **Falsification** — each physical/domain mapping must state what observation would show it is wrong.
+
+These are implementation laws, not reasons to rename the architecture again.
 
 ---
 
 # 16. ONE-LINE FORM
 
 ```text
-REFERENCE → FIELD DEFINES EXPRESS/COMPRESS → CHOICE → NEW FIELD → MODULATE/HOLD/RESET → 4 VIEWS UP → VOID CONFIRM/DEFER/DENY → 4 ACTIONS DOWN → 5-STATE RETENTION → 6-STEP RECURSION → MEMORY/NEXT FIELD ↺
+FIELD↔GROUND↔VOID → FIELD DEFINES EXPRESS/COMPRESS CHOICE → CHOICE SELECTS NEW FIELD → FIELD MODULATE/HOLD/RESET ↔ VOID CONFIRM/DEFER/DENY → 4 VIEWS UP / 4 ACTIONS DOWN → 5-STATE RETENTION → 6-STEP RECURSION → COMPLETE NESTED STATE BECOMES MEMORY/NEXT FIELD ↺
 ```
 
-That is Algorythm-Zer0 in its current most coherent form.
+That is the locked core of Algorythm-Zer0.
