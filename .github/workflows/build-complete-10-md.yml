@@ -1,0 +1,146 @@
+name: Build complete repo as 10 Markdown volumes
+
+on:
+  push:
+    branches:
+      - repo-10-md-complete
+    paths:
+      - .github/workflows/build-complete-10-md.yml
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build 10 complete unsummarized Markdown volumes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import shutil
+
+          root = Path('.')
+          out = root / 'COMPLETE_10_MD'
+          if out.exists():
+              shutil.rmtree(out)
+          out.mkdir()
+
+          volumes = [
+              ('01_CANON_AND_INDEXES.md', [
+                  'master_index','canonical','start_here','canon','architecture','specification','overview','readme','agents.md','guide'
+              ]),
+              ('02_PHYSICS_AND_COSMOLOGY.md', [
+                  'physics','cosmology','gravity','mass','redshift','neutrino','black_hole','black-hole','quasar','wave','field','void','lattice','orbital','three_body','three-body','energy','higgs','koide','confinement'
+              ]),
+              ('03_CELL_HARDWARE_AND_CIRCUITS.md', [
+                  'cell','breadboard','circuit','hardware','mosfet','memrist','spintronic','motor','winding','coil','magnetic','reinjection','virtual_ground','virtual-ground','flashlight','actuator','electronic','rlc','power'
+              ]),
+              ('04_BRAIN_STATE_AND_LATTICE.md', [
+                  'brain','neural','nerve','state_machine','state-machine','state machine','m4','dream','administrator','executor','worker','memory','cognition','hemisphere','instinct','choice','gate','recursive','sensory'
+              ]),
+              ('05_APPS_ANIMATOR_ANDROID_LEARNING.md', [
+                  'animator','animation','android','learner','learning','algebra','app','desktop','electron','gui','scene','frame','motion','ui','ux'
+              ]),
+              ('06_JETSON_AI_ACCESS_AND_TOOLING.md', [
+                  'jetson','hive','terminal','codex','claude','gemini','perplexity','deepseek','ssh','gateway','tool','agent','local_miniverse','miniverse','pipe','mcp','ubuntu'
+              ]),
+              ('07_MATH_SIMULATION_AND_VALIDATION.md', [
+                  'math','equation','simulation','simulator','experiment','validation','test','vbb','spice','ngspice','mna','solver','falsification','qualification','benchmark','measurement','calibration'
+              ]),
+              ('08_RESEARCH_APPENDICES_AND_REFERENCES.md', [
+                  'appendix','paper','research','reference','source','citation','external','ai_readable_packs','study','literature'
+              ]),
+              ('09_LOGS_WORK_REGISTERS_AND_HISTORY.md', [
+                  'log','diary','register','history','roadmap','plan','status','work_register','work-register','progress','todo','journal','changelog','audit','pr_','pull_request'
+              ]),
+              ('10_REMAINDER_COMPLETE.md', []),
+          ]
+
+          # Ignore generated output only. Everything else ending in .md is source corpus.
+          sources = sorted(
+              p for p in root.rglob('*.md')
+              if out not in p.parents and '.git' not in p.parts
+          )
+
+          assigned = {name: [] for name, _ in volumes}
+
+          def score(path_text, keywords):
+              t = path_text.lower().replace(' ', '_')
+              s = 0
+              for kw in keywords:
+                  k = kw.lower().replace(' ', '_')
+                  if k in t:
+                      s += 3 if '/' not in k else 2
+              return s
+
+          for p in sources:
+              rel = p.as_posix()
+              scores = [(score(rel, kws), i, name) for i, (name, kws) in enumerate(volumes[:-1])]
+              best_score, _, best_name = max(scores, key=lambda x: (x[0], -x[1]))
+              if best_score == 0:
+                  best_name = volumes[-1][0]
+              assigned[best_name].append(p)
+
+          seen = []
+          total_source_bytes = 0
+
+          for idx, (name, _) in enumerate(volumes, start=1):
+              dest = out / name
+              members = assigned[name]
+              with dest.open('wb') as f:
+                  title = f'# Complete Repository Markdown — Volume {idx} of 10\n\n'.encode()
+                  f.write(title)
+                  f.write(b'> Source bodies below are copied verbatim and are not summarized or rewritten.\n\n')
+                  f.write(f'## Source files in this volume ({len(members)})\n\n'.encode())
+                  for p in members:
+                      f.write(f'- `{p.as_posix()}`\n'.encode())
+                  f.write(b'\n---\n\n')
+
+                  for p in members:
+                      data = p.read_bytes()
+                      total_source_bytes += len(data)
+                      seen.append(p)
+                      sha = hashlib.sha256(data).hexdigest()
+                      f.write(f'<!-- SOURCE-BEGIN path="{p.as_posix()}" sha256="{sha}" bytes="{len(data)}" -->\n\n'.encode())
+                      f.write(data)
+                      if not data.endswith(b'\n'):
+                          f.write(b'\n')
+                      f.write(f'\n<!-- SOURCE-END path="{p.as_posix()}" -->\n\n---\n\n'.encode())
+
+          source_set = {p.as_posix() for p in sources}
+          seen_paths = [p.as_posix() for p in seen]
+          seen_set = set(seen_paths)
+          duplicates = sorted({p for p in seen_paths if seen_paths.count(p) > 1})
+          missing = sorted(source_set - seen_set)
+          extras = sorted(seen_set - source_set)
+
+          print(f'Source Markdown files: {len(sources)}')
+          print(f'Source Markdown bytes: {total_source_bytes}')
+          for name, _ in volumes:
+              print(f'{name}: {len(assigned[name])} source files, {(out/name).stat().st_size} output bytes')
+
+          if duplicates or missing or extras or len(seen_paths) != len(sources):
+              print('DUPLICATES:', duplicates)
+              print('MISSING:', missing)
+              print('EXTRAS:', extras)
+              raise SystemExit('Completeness verification failed')
+
+          outputs = sorted(out.glob('*.md'))
+          if len(outputs) != 10:
+              raise SystemExit(f'Expected exactly 10 Markdown outputs, got {len(outputs)}')
+
+          print('VERIFIED: every source .md appears exactly once across exactly 10 output .md files.')
+          PY
+
+      - name: Upload 10-volume artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: One-Wave-Science-COMPLETE-10-MD
+          path: COMPLETE_10_MD/*.md
+          if-no-files-found: error
+          compression-level: 6
