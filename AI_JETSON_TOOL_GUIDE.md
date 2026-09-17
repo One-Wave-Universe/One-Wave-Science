@@ -2,6 +2,8 @@
 
 This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or other authorized AI instance.
 
+For the comprehensive access/bridging guide, including GitHub, external drives, CERN Open Data, and LIGO/Virgo/KAGRA GWOSC access, read `AI_ACCESS_BRIDGING_AND_OPEN_DATA_HOWTO.md`.
+
 ## Start here
 
 The canonical Jetson tool path is:
@@ -249,5 +251,6 @@ The service sandbox permits writes to the live Hive Pipe checkout, the canonical
 
 ## Full reference
 
+Read `AI_ACCESS_BRIDGING_AND_OPEN_DATA_HOWTO.md` for the full AI access/data workflow.
 Read `JETSON_AI_ACCESS.md` for setup, tokens, tunnel configuration, all paths,
 and the acceptance tests.
