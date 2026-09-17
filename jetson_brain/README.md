@@ -71,7 +71,7 @@ Expected on a CUDA-enabled Jetson PyTorch install:
 "field_backend": "cuda"
 ```
 
-Void remains CPU by design.
+Void remains CPU by design. On the Jetson verification used for this PR, PyTorch was not installed, so the observed Field backend was `cpu-python`.
 
 ## Test
 
@@ -92,4 +92,4 @@ The focused test verifies multiple arithmetic phrasings, memory recall, local-ca
 
 Persistence, recall, rebuild, lifecycle state, Field/Void routing, and the retained loop are implemented. The old character-hash text drive has been removed. Supported answers currently come only from bounded deterministic resolvers: arithmetic, receipt memory, and a small local canonical-file set. Unsupported questions return `DEFER` rather than fabricated answers. There is no LLM dependency or network fallback.
 
-The six-part recursion receipt is still an exposed logical receipt, not proof that six independently measured runtime transitions occurred. CUDA remains conditional on an installed CUDA-enabled PyTorch build; CPU fallback is valid.
+Void currently verifies the deterministic evidence contract (resolved status, answer, provenance, threshold); it is not a general truth prover. The six-part recursion receipt is still an exposed logical receipt, not proof that six independently measured runtime transitions occurred. CUDA remains conditional on an installed CUDA-enabled PyTorch build; CPU fallback is valid.
