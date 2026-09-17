@@ -27,6 +27,7 @@ required=(
   configure-openai.sh
   launch-animator.sh
   install-ubuntu.sh
+  AI_ACCESS_CONTRACT.md
 )
 
 for file in "${required[@]}"; do
@@ -62,7 +63,7 @@ grep -q 'gpt-5.6-sol' assistant_server.py
 grep -q 'gpt-image-2' assistant_server.py
 grep -q 'x/z-image-turbo' assistant_server.py
 grep -q 'OPENAI_API_KEY' configure-openai.sh
-echo "PASS OpenAI Director + local-first art contract"
+echo "PASS current OpenAI Director + local-first art contract"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
 grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
@@ -72,6 +73,14 @@ echo "PASS live assistant UI contract"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
-echo "PASS external control API contract"
+echo "PASS browser-local deterministic control surface"
 
-echo "SMOKE TEST PASS"
+grep -q 'Universal-access law' AI_ACCESS_CONTRACT.md
+grep -q 'Required universal-AI acceptance test' AI_ACCESS_CONTRACT.md
+grep -q 'IMPLEMENTING' AI_ACCESS_CONTRACT.md
+echo "PASS universal AI access requirements are locked"
+
+echo "NOTE universal external AI access is NOT certified by this static smoke test"
+echo "NOTE certification requires the live AI_ACCESS_CONTRACT acceptance path through an external client/Jetson lane"
+
+echo "SMOKE TEST PASS — static/runtime wiring baseline only"
