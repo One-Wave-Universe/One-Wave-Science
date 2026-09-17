@@ -1,6 +1,6 @@
 {
-  "id": "bridge-smoke-001",
-  "argv": ["printf", "CHATGPT_JETSON_BRIDGE_OK"],
+  "id": "printer-diagnostic-001",
+  "argv": ["bash", "-lc", "printf '\n=== CUPS ===\n'; systemctl is-active cups; printf '\n=== PRINTERS ===\n'; lpstat -t; printf '\n=== USB ===\n'; lsusb; printf '\n=== DEVICES ===\n'; command -v lpinfo >/dev/null 2>&1 && lpinfo -v || true"],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30
 }
