@@ -1,8 +1,10 @@
-# Point -> Path -> Rotation -> Field Recursive Scale Architecture
+# Center / Reference -> Point Rotation -> Path Rotation -> Field Rotation -> Closure -> Resolved Whole Recursive Scale Architecture
 
 ## Status
 
-Architecture note capturing the current One-Wave CELL_V1 scale model.
+Architecture/science note capturing the current One-Wave CELL_V1 recursive scale model.
+
+This is **not Algorythm-Zer0 canon by itself**. It is a domain mapping that may consume Algorythm-Zer0 primitives, but its geometry, physics, scale bands, and hardware claims belong in science nodes/chapters unless separately proven to be universal algorithm machinery.
 
 This remains a design hypothesis and prototype target, not a claim of bench validation. CELL_V1 physical geometry is now governed by:
 
@@ -106,50 +108,79 @@ is a history-dependent transition, not ordinary scalar addition.
 
 The MOSFET routes/drives current; the hysteretic medium is the current candidate for retained state.
 
-## 6. Revised scale rule
+## 6. Renamed PPF scale rule
 
-The primary scale rule is now stated more explicitly as:
+The old label:
 
 ```text
-Point -> Path -> Rotation -> Field -> Volume
+Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
 ```
 
-The older compact form `Point -> Path -> Field` remains the compression summary, but a CELL_V1 hardware implementation must answer whether paths can form stable rotations rather than skipping directly from path to an assumed field.
+is retired because it mixed objects, motions, and scale transitions in one chain.
 
-### Point
+The current descriptive progression is:
 
-One local edge/cell state, or one completed lower-scale relation exposed as a compact next-scale interface.
+```text
+CENTER / REFERENCE
+-> POINT ROTATION
+-> PATH ROTATION
+-> FIELD ROTATION
+-> CLOSURE / BOUNDED BODY
+-> RESOLVED WHOLE / NEXT-SCALE CENTER
+```
 
-### Path
+`PPF` therefore refers to three nested rotational descriptions:
 
-A state transition propagates through connected CELL_V1 edge ports while preserving enough identity, phase, direction, and reference to affect the next cell.
+```text
+POINT ROTATION
+PATH ROTATION
+FIELD ROTATION
+```
 
-### Rotation
+These are **not** the same thing as Algorythm-Zer0 gates, binary/ternary/quadratic counts, lifecycle states, or scale labels.
 
-A closed path supports a traveling/circulating phase/state pattern rather than only simultaneous switching, ringing, or a static loop.
+### Center / Reference
 
-### Field
+The local origin/reference around which the current resolved body or relation is described.
 
-Multiple local paths/rotations become coupled into a coherent larger relation while local states remain observable.
+### Point Rotation
 
-### Volume
+Local intrinsic rotation/orientation around the body's own center/reference.
 
-Fields couple horizontally and through depth so X/Y/Z relationships can reinforce, oppose, intersect, or redirect in a controlled three-dimensional structure.
+### Path Rotation
+
+The body's center follows a curved/orbital path around another reference while retaining its own local state.
+
+### Field Rotation
+
+A larger carrier, shell, field, or collective circulation couples to and carries the local/path motion.
+
+### Closure / Bounded Body
+
+The lower-scale relations form a bounded coherent body rather than remaining an unclosed path or loose field relation.
+
+### Resolved Whole / Next-Scale Center
+
+A completed lower-scale body can be treated as one compact center/reference inside the next larger PPF system while retaining its lower-scale internal structure.
 
 ## 7. Recursive scale boundary
 
-The original recursion remains:
+The recursion is now written without collapsing PPF into a single linear object chain:
 
 ```text
 Scale n:
-Point -> Path -> Rotation -> Field
+CENTER / REFERENCE
+ -> POINT ROTATION
+ -> PATH ROTATION
+ -> FIELD ROTATION
+ -> CLOSURE / BOUNDED BODY
+ -> RESOLVED WHOLE
 
 Scale n+1:
-resolved Field/Volume(n) = Point(n+1)
-Point(n+1) -> Path(n+1) -> Rotation(n+1) -> Field(n+1)
+RESOLVED WHOLE(n) becomes one CENTER / REFERENCE input at scale n+1
 ```
 
-The key compression principle is unchanged:
+The key compression principle remains:
 
 ```text
 many lower-scale relations
@@ -158,10 +189,46 @@ resolved coherent structure
         ↓
 compact relational interface
         ↓
-one effective point at the next scale
+one effective center/reference at the next scale
 ```
 
 The lower scale may retain internal physical memory while the higher scale interacts with its resolved relation.
+
+### Working scale bands
+
+These are exploratory science labels, not Algorythm-Zer0 stages:
+
+```text
+MINI
+  subatomic PPF
+
+SMALL
+  weather / geophysical / planetary / stellar PPF
+
+MEDIUM
+  planetary-system / solar-system PPF
+
+LARGE
+  galaxy -> galaxy group/cluster -> larger cosmic structures
+  including Great-Attractor-scale structure as an exploratory upper-Large reference
+
+MACRO
+  universe-scale PPF
+```
+
+The boundaries remain open until they are defined by measurable relationships rather than object names alone.
+
+At every band, the same descriptive question may be asked:
+
+```text
+What is the local Point rotation?
+What Path rotation carries that center?
+What larger Field rotation carries/couples that path?
+What closes the relation into a bounded body?
+What resolved whole becomes a center at the next scale?
+```
+
+A working One-Wave hypothesis may additionally track child contributions, parent contributions, displacement/closure, wake coupling, and internal/external electric or magnetic shell organization. Those are science-node claims and must not be silently promoted into universal algorithm primitives.
 
 ## 8. Seven-cell flower as the first collective field test
 
@@ -274,7 +341,7 @@ The architecture should be tested in this order:
 8. Build the seven-cell flower and measure coupled paths/rotations.
 9. Add the smallest depth coupling and measure reinforcement/opposition/crosstalk.
 10. Only then test a 3 x 3 x 3 candidate volume and mirror-flipped companion.
-11. Treat a resolved lower-scale field/volume as one input point to a second-scale copy and test whether the recursion survives.
+11. Treat a resolved lower-scale whole as one center/reference input to a second-scale copy and test whether the recursion survives.
 
 ## 15. Current compact statement
 
@@ -291,11 +358,22 @@ OPPOSED AXES:
 MEMORY:
   old remanent state conditions the next transition
 
-SCALE:
-  Point -> Path -> Rotation -> Field -> Volume
+PPF:
+  Point Rotation
+  Path Rotation
+  Field Rotation
 
-RECURSION:
-  completed lower-scale Field/Volume -> next-scale Point
+RECURSIVE DESCRIPTION:
+  Center / Reference
+  -> Point Rotation
+  -> Path Rotation
+  -> Field Rotation
+  -> Closure / Bounded Body
+  -> Resolved Whole / Next-Scale Center
+
+SCALE BANDS:
+  Mini -> Small -> Medium -> Large -> Macro
+  descriptive science labels, not algorithm stages
 
 M4:
   fast higher routing / timing role, not mandatory cell-center geometry
