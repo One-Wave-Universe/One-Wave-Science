@@ -18,23 +18,38 @@ ChatGPT GitHub connector
 
 The worker does not use the remote MCP bearer token because execution occurs on the Jetson itself. It deliberately reuses `hive-pipe/terminal_parser.py`, so blocked programs, sensitive-path checks, timeout/output limits, and authorized work-root checks remain in force.
 
+## Runtime isolation
+
+The bridge no longer depends on the branch state of the user's active `~/One-Wave-Science` checkout. That checkout may be ahead, behind, dirty, or diverged.
+
+The installer creates and owns a private runtime clone at:
+
+```text
+~/.local/share/one-wave-chatgpt-terminal-runtime
+```
+
+Only that bridge runtime is reset to `origin/main`. The user's active project checkout is never merged, reset, rebased, or switched by bridge installation or polling.
+
 ## Files
 
 - `hive-pipe/chatgpt_terminal_pull.py` — polling/execution/result worker
-- `hive-pipe/install_chatgpt_terminal_pull.sh` — user-systemd installer
+- `hive-pipe/install_chatgpt_terminal_pull.sh` — isolated-runtime user-systemd installer
+- `hive-pipe/bootstrap_chatgpt_terminal_pull.sh` — fetch-only bootstrap helper
 - dedicated transport branch: `chatgpt-terminal`
 - request: `.chatgpt-terminal/request.json`
 - result: `.chatgpt-terminal/result.json`
 
-## One-time Jetson activation
+## One-time Jetson activation from a diverged checkout
 
-From the canonical Jetson checkout:
+From inside the existing Jetson checkout:
 
 ```bash
 cd "$HOME/One-Wave-Science"
-git pull --ff-only origin main
-bash hive-pipe/install_chatgpt_terminal_pull.sh
+git fetch origin main
+git show origin/main:hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
 ```
+
+This reads the current installer directly from `origin/main` without merging `main` into the active Jetson branch.
 
 Verify:
 
@@ -48,7 +63,7 @@ Expected:
 active
 ```
 
-This activation does not need a Cloudflare tunnel or GitHub Actions secrets. It does require the Jetson checkout's existing GitHub read/write authentication so it can fetch the command branch and push result commits.
+This activation does not need a Cloudflare tunnel or GitHub Actions secrets. It does require the Jetson's existing GitHub read/write authentication so the runtime can fetch the command branch and push result commits.
 
 ## Request format
 
@@ -63,40 +78,14 @@ This activation does not need a Cloudflare tunnel or GitHub Actions secrets. It 
 
 The worker records request id + request commit locally and will not rerun the same request commit.
 
-## Smoke test
-
-Write this to `.chatgpt-terminal/request.json` on `chatgpt-terminal`:
-
-```json
-{
-  "id": "pull-smoke-001",
-  "argv": ["printf", "CHATGPT_JETSON_PULL_OK"],
-  "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 30
-}
-```
-
-Expected `.chatgpt-terminal/result.json`:
-
-```text
-ok = true
-exit_code = 0
-stdout = CHATGPT_JETSON_PULL_OK
-```
-
 ## Printer diagnostics
 
-After the smoke test, use separate bounded requests so one missing command does not hide other evidence:
+The initial queued request checks CUPS status, configured queues, USB devices, and printer backends. Follow-up requests should stay bounded so one missing command does not hide other evidence.
 
-1. `systemctl --user` is not appropriate for system CUPS; query `systemctl is-active cups` as ordinary user.
-2. `lpstat -t`
-3. `lsusb`
-4. `lpinfo -v` if available
-
-Do not add `sudo` or weaken the terminal parser to repair a printer. If a repair requires root package/service changes, report the exact required privileged action to the operator.
+Do not add `sudo` or weaken the terminal parser to repair a printer. If a repair requires a privileged package/service operation, the bridge reports the exact required action rather than bypassing the safety boundary.
 
 ## Safety / branch isolation
 
-The worker fetches `origin/chatgpt-terminal`, executes only the structured `argv` through the existing parser, then uses a temporary detached git worktree to write `result.json`. The user's active branch/worktree is not switched or reset.
+The worker fetches `origin/chatgpt-terminal`, executes only structured `argv` through the existing parser, then uses a temporary detached git worktree to write `result.json`. The user's active branch/worktree is not switched or reset.
 
-The service runs as the normal user with `NoNewPrivileges=true`, `ProtectSystem=strict`, and a narrow writable state/repo scope.
+The service runs as the normal user with `NoNewPrivileges=true`, `ProtectSystem=strict`, and explicit writable paths for the bridge runtime, bridge state, the project checkout, and the external-work directory.
