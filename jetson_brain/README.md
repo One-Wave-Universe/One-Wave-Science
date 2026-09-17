@@ -88,6 +88,14 @@ PASS deterministic-answer/recall/rebuild
 
 The focused test verifies multiple arithmetic phrasings, memory recall, local-canon lookup, snapshot restart, and forced SQLite-only rebuild.
 
+Published-branch Jetson verification also produced:
+
+```text
+what is two plus two? -> 4 (arithmetic, CONFIRM)
+what are the three moves? -> DOWN / HOLD / UP (local canon, CONFIRM)
+unsupported question -> DEFER: no verified deterministic evidence
+```
+
 ## Current boundary
 
 Persistence, recall, rebuild, lifecycle state, Field/Void routing, and the retained loop are implemented. The old character-hash text drive has been removed. Supported answers currently come only from bounded deterministic resolvers: arithmetic, receipt memory, and a small local canonical-file set. Unsupported questions return `DEFER` rather than fabricated answers. There is no LLM dependency or network fallback.
