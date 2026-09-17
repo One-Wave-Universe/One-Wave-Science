@@ -11,6 +11,21 @@ metadata_standard: "I-06"
 
 # Node G-740: Field/Void Ternary and Quadratic Command Routing
 
+## Scope boundary
+
+This file is a **domain node**, not a replacement for Algorythm-Zer0.
+
+Algorythm-Zer0 owns universal control primitives. This node owns one body/brain/sensor/action interpretation of those primitives. Domain-specific physics, biology, hardware, sensory, environmental, mental, and emotional mappings stay in nodes/chapters unless separately shown to be universal algorithm machinery.
+
+Working semantic distinction:
+
+```text
+FIELD = active interactions
+VOID  = unexpressed potential
+```
+
+The shared reference remains the comparison/balance relation between them; it is not a third polarity.
+
 ## Physical primitive lock
 
 CELL_V1 uses exactly three physical bidirectional Mirror axes:
@@ -84,6 +99,51 @@ Ground/no committed binary choice is outside the six-route set.
 `HOLD` is active balance, not absence.
 
 For nerve/motor use, the same ternary relation is also the candidate local motion command: one orientation / balanced Hold / opposite orientation.
+
+## Domain-state mapping
+
+The same recursive control structure does **not** require every stage to describe the same kind of state. In the current body/brain interpretation, each stage resolves a different domain:
+
+```text
+CHOICE
+  -> ENERGY STATE
+     reserve, strain, reinjection capacity, available power,
+     whether a condition is important enough to propagate
+
+MOVE
+  -> BODY STATE
+     balance, tension, posture, motion, load, local reflex condition
+
+VIEWS UP
+  -> LANDSCAPE / ENVIRONMENT STATE
+     current surroundings, spatial relation, objects, sound scene,
+     terrain, threats, opportunities, external sensor organization
+
+ACTIONS DOWN
+  -> MENTAL / INTENT STATE
+     selected or prepared intervention sent toward lower/local control
+
+CONSEQUENCE
+  -> EMOTIONAL / VALUE STATE
+     whether the result was beneficial/costly, safe/dangerous,
+     attractive/aversive, relieving/stressing, repeat/avoid weighted
+```
+
+The compact flow is:
+
+```text
+ENERGY
+  -> BODY
+  -> LANDSCAPE / ENVIRONMENT
+  -> MENTAL / ACTION
+  -> EMOTIONAL CONSEQUENCE
+  -> RETAINED MEMORY / UPDATED REFERENCE
+  -> next cycle
+```
+
+`CONSEQUENCE` is not a new physical gate. It is the evaluated result of the completed action/state transition and can alter retained memory/reference for the next Choice.
+
+The mapping is currently a working architecture hypothesis. Exact variables, weights, thresholds, and biological correspondence remain open and belong in their appropriate nodes/chapters rather than being silently hard-coded into Algorythm-Zer0.
 
 ## DC / AC / reinjection relationship
 
