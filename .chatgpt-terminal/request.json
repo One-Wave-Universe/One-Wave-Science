@@ -1,0 +1,6 @@
+{
+  "id": "bridge-smoke-001",
+  "argv": ["printf", "CHATGPT_JETSON_BRIDGE_OK"],
+  "cwd": "/home/Scales/One-Wave-Science",
+  "timeout": 30
+}
