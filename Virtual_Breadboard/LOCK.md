@@ -1,5 +1,14 @@
 # LOCK — the cell
 
+## Sole physical build authority
+
+CELL_V1 F0 is the **5 V + TLE2426 buffered-CENTER build** in
+`CELL_V1_FULL_BUILD.md`. It contains three logical Mirror stations, six
+bilateral legs, and twelve physical N-MOSFETs. The motor remains disconnected.
+
+The older `+12 V / 0 V / -12 V` AO3401A/2N7000 documents are retired
+alternatives and must not be combined with CELL_V1 F0.
+
 Kitty Hawk / hive / slip-ship = GRAV play. Not this folder's job.
 
 ## Passed in software
@@ -8,22 +17,27 @@ Kitty Hawk / hive / slip-ship = GRAV play. Not this folder's job.
 |---|---|---|
 | brain | HEX-SPLIT `brain_2state.py` | Field lists, Void cuts |
 | nerve | HEX-SPLIT `nerve_cell.py` | one live winding, hold |
-| 1 rails | `10_RECEIPTS/cell_v1_stamp1_rails.py` | I_0 0 / ±1.2 mA |
-| 2 dummy | `10_RECEIPTS/cell_v1_stamp2_bridge.py` | STAY 0, +1 = +12 mA, −1 = −12 mA |
+| 1 rails | `10_RECEIPTS/cell_v1_stamp1_rails.py` | I_0 0 / ±0.25 mA around virtual ground |
+| 2 dummy | `10_RECEIPTS/cell_v1_stamp2_bridge.py` | STAY 0, +1 = +2.5 mA, −1 = −2.5 mA |
 
 Ideal G. Ideal switches. That is the virtual lock for the *law*, not for body diodes or layout.
 
 ## Copper still owes
 
-BUILD_25 steps 1–11 at 50 mA. Same numbers as stamp 1–2 on a DMM.
+`09_TESTS/CELL_V1_SAFE_BRINGUP.md` P0–P9 at a 10–20 mA initial supply limit,
+recorded in `10_RECEIPTS/CELL_V1_RECEIPT_SCHEMA.json`.
+
+Complete-cell copper additionally owes P10 whole-state quadratic differential
+memory, P11 manual bounded reinjection, and P12 analog hysteretic reinjection.
+Memory follows the binary and ternary layers and encompasses the whole cell.
 
 ## Canonical read (stop hunting)
 
-`ONE_WAVE_CELL.md`  
-`DETAILED_BUILD.md`  
-`BUILD_25.md`  
-`FULL_BODY_ARCHITECTURE.md`  
-`LOCKED_CELL_TOPOLOGY_DC_AC_MIRRORED_GATES.md`
+`CELL_V1_FULL_BUILD.md`
+`01_PARTS/CELL_V1_PARTS_BOM.md`
+`02_CONNECTIONS/CELL_V1_NETLIST.md`
+`09_TESTS/CELL_V1_SAFE_BRINGUP.md`
+`10_RECEIPTS/CELL_V1_RECEIPT_SCHEMA.json`
 
 Run:
 
