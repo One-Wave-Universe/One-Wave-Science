@@ -9,6 +9,7 @@ const $=s=>document.querySelector(s);
 const worldEl=$('#world'),bridgeStatus=$('#bridgeStatus'),worldStatus=$('#worldStatus'),agentList=$('#agentList');
 const chatLog=$('#chatLog'),chatForm=$('#chatForm'),chatInput=$('#chatInput'),benchForm=$('#benchForm');
 const benchName=$('#benchName'),benchAction=$('#benchAction'),benchSummary=$('#benchSummary'),benchFeed=$('#benchFeed');
+const experimentForm=$('#experimentForm'),experimentType=$('#experimentType'),experimentTitle=$('#experimentTitle'),experimentHypothesis=$('#experimentHypothesis'),experimentParameters=$('#experimentParameters'),experimentFeed=$('#experimentFeed');
 const seqReadout=$('#seqReadout'),toastEl=$('#toast');
 
 const renderer=new THREE.WebGLRenderer({antialias:false,powerPreference:'high-performance'});
@@ -22,7 +23,7 @@ const rim=new THREE.PointLight(0xff72d6,20,18);rim.position.set(-7,4,-5);scene.a
 const latticeGroup=new THREE.Group(),roomGroup=new THREE.Group(),avatarGroup=new THREE.Group();scene.add(latticeGroup,roomGroup,avatarGroup);
 
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),benchMeshes=[],avatarObjects=new Map(),labelCache=new Map();
-let manifest=null,state=null,localAgent=localStorage.getItem('miniverseAgentId')||'operator',activeBench=null,lastChatSeq=-1,lastBenchSeq=-1,toastTimer=null;
+let manifest=null,state=null,localAgent=localStorage.getItem('miniverseAgentId')||'operator',activeBench=null,lastChatSeq=-1,lastBenchSeq=-1,lastExperimentSignature='',toastTimer=null;
 const palette={default:0x14303a,reference:0x1f6672,code:0x1d4d80,experiment:0x6b285f,review:0x5c4b1f,storage:0x3a4652,memory:0x3e2a71,router:0x1f6650};
 
 function axialToWorld(q,r){const s=1.37;return new THREE.Vector3(s*Math.sqrt(3)*(q+r/2),0,s*1.5*r);}
@@ -47,6 +48,16 @@ function makeBench(zone,position){
   const screen=new THREE.Mesh(new THREE.BoxGeometry(1.25,.7,.08),mat);screen.position.set(0,1.03,-.32);screen.rotation.x=-.18;
   const glow=new THREE.Mesh(new THREE.PlaneGeometry(1.05,.5),accent);glow.position.set(0,1.03,-.275);glow.rotation.x=-.18;
   [desk,leg1,leg2,screen,glow].forEach(m=>{m.userData.zoneId=zone.id;benchMeshes.push(m);g.add(m);});
+  if(zone.kind==='experiment'){
+    const rackMat=new THREE.MeshStandardMaterial({color:0x2a1530,roughness:.45,metalness:.45});
+    const scope=new THREE.Mesh(new THREE.BoxGeometry(.75,.52,.38),rackMat);scope.position.set(.72,1.22,.02);
+    const scopeFace=new THREE.Mesh(new THREE.PlaneGeometry(.5,.28),new THREE.MeshBasicMaterial({color:0x13091a}));scopeFace.position.set(.72,1.24,.215);
+    const traceMat=new THREE.MeshBasicMaterial({color:0xff79df});
+    [-.12,0,.12].forEach((y,i)=>{const trace=new THREE.Mesh(new THREE.BoxGeometry(.38,.025,.015),traceMat);trace.position.set(.72,1.24+y,.235);trace.rotation.z=(i-1)*.2;g.add(trace);});
+    const meter=new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,.28,8),new THREE.MeshStandardMaterial({color:0x384b53,roughness:.4,metalness:.6}));meter.rotation.z=Math.PI/2;meter.position.set(-.72,1.13,.02);
+    const probe=new THREE.Mesh(new THREE.SphereGeometry(.12,6,4),new THREE.MeshBasicMaterial({color:0x9affff}));probe.position.set(-.72,1.47,.02);
+    [scope,scopeFace,meter,probe].forEach(m=>{m.userData.zoneId=zone.id;benchMeshes.push(m);g.add(m);});
+  }
   const label=makeLabel(zone.label,zone.kind==='experiment'?'#ff7edb':'#8df8ff',.62);label.position.set(0,1.65,0);g.add(label);g.position.copy(position);g.position.y=.05;g.lookAt(0,g.position.y,0);return g;
 }
 function buildLattice(){
@@ -111,15 +122,43 @@ function updateChat(chat){
 function updateBenches(receipts){
   const newest=receipts.length?receipts[receipts.length-1].seq:0;if(newest===lastBenchSeq)return;lastBenchSeq=newest;benchFeed.innerHTML=receipts.slice(-8).reverse().map(r=>'<div class="receipt"><strong>'+esc(r.action)+'</strong> @ '+esc(r.bench_id)+'<br>'+esc(r.summary)+'</div>').join('');
 }
+function formatMeasurements(measurements){
+  if(!measurements)return '';
+  return Object.entries(measurements).map(([k,v])=>'<span class="experiment-measure">'+esc(k)+'='+esc(v)+'</span>').join(' · ');
+}
+function updateExperiments(experiments,order){
+  const ids=(order||[]).filter(id=>experiments&&experiments[id]);
+  const signature=ids.map(id=>id+':'+(experiments[id].run_count||0)+':'+(experiments[id].status||'')).join('|');
+  if(signature===lastExperimentSignature)return;lastExperimentSignature=signature;
+  experimentFeed.innerHTML=ids.slice(-8).reverse().map(id=>{
+    const e=experiments[id],r=e.last_result||{},measure=formatMeasurements(r.measurements||{});
+    return '<div class="experiment-card"><div class="experiment-title">'+esc(e.title)+' · '+esc(e.kind)+'</div><div>ID '+esc(e.id)+' · '+esc(e.status)+' · RUNS '+esc(e.run_count)+'</div>'+(e.hypothesis?'<div>H: '+esc(e.hypothesis)+'</div>':'')+(measure?'<div>'+measure+'</div>':'')+(r.claim_boundary?'<div class="agent-role">'+esc(r.claim_boundary)+'</div>':'')+'</div>';
+  }).join('')||'<div class="agent-role">No experiments yet.</div>';
+}
 function toast(msg){toastEl.textContent=msg;toastEl.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800);}
 async function ensureLocalAgent(){await API.post('/api/join',{agent_id:localAgent,name:localAgent==='operator'?'OPERATOR':localAgent,role:'HUMAN / LOCAL',color:'#ffd36b'});localStorage.setItem('miniverseAgentId',localAgent);}
 async function poll(){
-  try{const p=await API.get('/api/state');manifest=p.manifest;state=p.state;bridgeStatus.textContent='BRIDGE: LIVE';bridgeStatus.style.color='#98ffb4';worldStatus.textContent='LATTICE: '+manifest.cells.length+' CELLS / '+manifest.zones.length+' ZONES';seqReadout.textContent='SEQ '+state.seq;updateAgents(state.agents);updateChat(state.chat);updateBenches(state.bench_receipts);}
+  try{const p=await API.get('/api/state');manifest=p.manifest;state=p.state;bridgeStatus.textContent='BRIDGE: LIVE';bridgeStatus.style.color='#98ffb4';worldStatus.textContent='LATTICE: '+manifest.cells.length+' CELLS / '+manifest.zones.length+' ZONES';seqReadout.textContent='SEQ '+state.seq;updateAgents(state.agents);updateChat(state.chat);updateBenches(state.bench_receipts);updateExperiments(state.experiments||{},state.experiment_order||[]);}
   catch(e){bridgeStatus.textContent='BRIDGE: OFFLINE';bridgeStatus.style.color='#ff6f79';}
 }
 async function init(){const p=await API.get('/api/state');manifest=p.manifest;state=p.state;addRoomShell();buildLattice();await ensureLocalAgent();await poll();setInterval(poll,700);}
 chatForm.addEventListener('submit',async e=>{e.preventDefault();const text=chatInput.value.trim();if(!text)return;try{await API.post('/api/say',{agent_id:localAgent,text:text});chatInput.value='';await poll();}catch(err){toast(err.message);}});
 benchForm.addEventListener('submit',async e=>{e.preventDefault();if(!activeBench)return toast('CLICK A WORKBENCH FIRST');const summary=benchSummary.value.trim();if(!summary)return;try{await API.post('/api/bench',{agent_id:localAgent,bench_id:activeBench,action:benchAction.value,summary:summary});benchSummary.value='';await poll();}catch(err){toast(err.message);}});
+const experimentDefaults={lattice_pulse:{amplitude:1,coupling:.22,retention:.96,steps:18},reference_recovery:{perturbation:1,retention:.82,steps:24,tolerance:.05}};
+experimentType.addEventListener('change',()=>{experimentParameters.value=JSON.stringify(experimentDefaults[experimentType.value]);});
+experimentForm.addEventListener('submit',async e=>{
+  e.preventDefault();
+  let parameters;
+  try{parameters=JSON.parse(experimentParameters.value||'{}');}catch(err){return toast('PARAMETERS MUST BE JSON');}
+  try{
+    const created=await API.post('/api/experiment/create',{agent_id:localAgent,kind:experimentType.value,title:experimentTitle.value.trim(),hypothesis:experimentHypothesis.value.trim(),parameters:parameters});
+    const id=created.result.id;
+    await API.post('/api/experiment/run',{agent_id:localAgent,experiment_id:id});
+    experimentTitle.value='';experimentHypothesis.value='';
+    toast('EXPERIMENT COMPLETE: '+id);
+    await poll();
+  }catch(err){toast(err.message);}
+});
 const keyMap={KeyD:'A+',KeyE:'B+',KeyW:'C+',KeyA:'A-',KeyQ:'B-',KeyS:'C-'};
 addEventListener('keydown',async e=>{if(e.target.matches('textarea,input,select'))return;const direction=keyMap[e.code];if(!direction)return;e.preventDefault();try{await API.post('/api/move',{agent_id:localAgent,direction:direction});await poll();}catch(err){toast(err.message);}});
 renderer.domElement.addEventListener('pointerdown',e=>{const rect=renderer.domElement.getBoundingClientRect();mouse.x=((e.clientX-rect.left)/rect.width)*2-1;mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObjects(benchMeshes,false);if(hits.length){activeBench=hits[0].object.userData.zoneId;const zone=manifest.zones.find(z=>z.id===activeBench);benchName.textContent=zone?zone.label:activeBench;toast('BENCH SELECTED: '+benchName.textContent);}});

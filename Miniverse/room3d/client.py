@@ -59,6 +59,25 @@ def main() -> int:
     body.add_argument("agent_id")
     body.add_argument("spec", help="JSON body-spec file")
 
+    exp_create = sub.add_parser("experiment-create")
+    exp_create.add_argument("agent_id")
+    exp_create.add_argument("kind", choices=["lattice_pulse", "reference_recovery"])
+    exp_create.add_argument("--id", default="")
+    exp_create.add_argument("--title", default="")
+    exp_create.add_argument("--hypothesis", default="")
+    exp_create.add_argument("--parameters", default="{}", help="JSON object")
+
+    exp_run = sub.add_parser("experiment-run")
+    exp_run.add_argument("agent_id")
+    exp_run.add_argument("experiment_id")
+
+    exp_result = sub.add_parser("experiment-result")
+    exp_result.add_argument("agent_id")
+    exp_result.add_argument("experiment_id")
+    exp_result.add_argument("source")
+    exp_result.add_argument("summary")
+    exp_result.add_argument("--measurements", default="{}", help="JSON object")
+
     sub.add_parser("look")
 
     args = parser.parse_args()
@@ -80,6 +99,28 @@ def main() -> int:
     elif args.command == "body":
         spec = json.loads(Path(args.spec).read_text(encoding="utf-8"))
         result = request(args.url, "/api/body", {"agent_id": args.agent_id, "body": spec})
+    elif args.command == "experiment-create":
+        result = request(args.url, "/api/experiment/create", {
+            "agent_id": args.agent_id,
+            "kind": args.kind,
+            "experiment_id": args.id,
+            "title": args.title,
+            "hypothesis": args.hypothesis,
+            "parameters": json.loads(args.parameters),
+        })
+    elif args.command == "experiment-run":
+        result = request(args.url, "/api/experiment/run", {
+            "agent_id": args.agent_id,
+            "experiment_id": args.experiment_id,
+        })
+    elif args.command == "experiment-result":
+        result = request(args.url, "/api/experiment/result", {
+            "agent_id": args.agent_id,
+            "experiment_id": args.experiment_id,
+            "source": args.source,
+            "summary": args.summary,
+            "measurements": json.loads(args.measurements),
+        })
     else:
         result = request(args.url, "/api/bench", {
             "agent_id": args.agent_id,

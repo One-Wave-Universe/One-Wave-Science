@@ -28,6 +28,22 @@ MAX_BODY_PARTS = 32
 AGENT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,31}$", re.I)
 HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 BODY_SHAPES = {"box", "sphere", "cylinder"}
+EXPERIMENT_TYPES = {
+    "lattice_pulse": {
+        "label": "Lattice Pulse Spread",
+        "description": "Abstract signal spread over the stationary 37-cell lattice. Software model only.",
+        "defaults": {"amplitude": 1.0, "coupling": 0.22, "retention": 0.96, "steps": 18},
+    },
+    "reference_recovery": {
+        "label": "Reference Recovery",
+        "description": "Scalar perturbation relaxing toward Baseline Zero. Software model only.",
+        "defaults": {"perturbation": 1.0, "retention": 0.82, "steps": 24, "tolerance": 0.05},
+    },
+}
+EXPERIMENT_ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,47}$", re.I)
+MAX_EXPERIMENTS = 120
+MAX_EXPERIMENT_RUNS = 80
+MAX_MEASUREMENTS = 48
 
 
 def now_ms() -> int:
@@ -46,6 +62,66 @@ def _body_triplet(value: object, field: str, low: float, high: float) -> list[fl
             raise ValueError(f"{field} values must be between {low} and {high}")
         out.append(number)
     return out
+
+
+def _number(value: object, field: str, low: float, high: float) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"{field} must be numeric")
+    number = float(value)
+    if not low <= number <= high:
+        raise ValueError(f"{field} must be between {low} and {high}")
+    return number
+
+
+def _integer(value: object, field: str, low: int, high: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ValueError(f"{field} must be an integer")
+    if not low <= value <= high:
+        raise ValueError(f"{field} must be between {low} and {high}")
+    return value
+
+
+def validate_experiment_parameters(kind: str, supplied: object) -> dict:
+    if kind not in EXPERIMENT_TYPES:
+        raise ValueError(f"unknown experiment type: {kind}")
+    if supplied is None:
+        supplied = {}
+    if not isinstance(supplied, dict):
+        raise ValueError("experiment parameters must be an object")
+    params = dict(EXPERIMENT_TYPES[kind]["defaults"])
+    params.update(supplied)
+    if kind == "lattice_pulse":
+        return {
+            "amplitude": _number(params["amplitude"], "amplitude", -10.0, 10.0),
+            "coupling": _number(params["coupling"], "coupling", 0.0, 0.49),
+            "retention": _number(params["retention"], "retention", 0.0, 1.0),
+            "steps": _integer(params["steps"], "steps", 1, 120),
+        }
+    return {
+        "perturbation": _number(params["perturbation"], "perturbation", -10.0, 10.0),
+        "retention": _number(params["retention"], "retention", 0.0, 1.0),
+        "steps": _integer(params["steps"], "steps", 1, 240),
+        "tolerance": _number(params["tolerance"], "tolerance", 0.000001, 2.0),
+    }
+
+
+def validate_measurements(value: object) -> dict:
+    if value is None:
+        return {}
+    if not isinstance(value, dict) or len(value) > MAX_MEASUREMENTS:
+        raise ValueError(f"measurements must be an object with at most {MAX_MEASUREMENTS} entries")
+    cleaned = {}
+    for key, item in value.items():
+        name = str(key)[:48]
+        if isinstance(item, bool) or item is None:
+            cleaned[name] = item
+        elif isinstance(item, (int, float)):
+            cleaned[name] = float(item)
+        elif isinstance(item, str):
+            cleaned[name] = item[:240]
+        else:
+            raise ValueError(f"measurement {name} must be scalar/string/bool/null")
+    return cleaned
 
 
 def validate_body_spec(spec: object, fallback_color: str) -> dict:
@@ -104,6 +180,8 @@ class WorldStore:
             "agents": {},
             "chat": [],
             "bench_receipts": [],
+            "experiments": {},
+            "experiment_order": [],
             "events": [],
             "started_at": now_ms(),
         }
@@ -115,6 +193,8 @@ class WorldStore:
             data = json.loads(self.state_path.read_text(encoding="utf-8"))
             if data.get("version") != "MINIVERSE_ROOM_STATE_V0":
                 return self._fresh()
+            data.setdefault("experiments", {})
+            data.setdefault("experiment_order", [])
             return data
         except (OSError, ValueError):
             return self._fresh()
@@ -242,6 +322,188 @@ class WorldStore:
             self._save()
             return msg
 
+    def experiment_catalog(self) -> dict:
+        return EXPERIMENT_TYPES
+
+    def _new_experiment_id(self) -> str:
+        return f"exp-{self.state['seq'] + 1:06d}"
+
+    def create_experiment(
+        self,
+        agent_id: str,
+        kind: str,
+        title: str = "",
+        hypothesis: str = "",
+        parameters: object = None,
+        experiment_id: str = "",
+    ) -> dict:
+        with self.lock:
+            agent = self._require_agent(agent_id)
+            if len(self.state["experiments"]) >= MAX_EXPERIMENTS:
+                raise ValueError("experiment store is full")
+            exp_id = experiment_id.strip() or self._new_experiment_id()
+            if not EXPERIMENT_ID_RE.fullmatch(exp_id):
+                raise ValueError("experiment_id must be 1-48 letters/numbers/._-")
+            if exp_id in self.state["experiments"]:
+                raise ValueError(f"experiment already exists: {exp_id}")
+            clean_params = validate_experiment_parameters(kind, parameters)
+            experiment = {
+                "id": exp_id,
+                "kind": kind,
+                "label": EXPERIMENT_TYPES[kind]["label"],
+                "title": (title or EXPERIMENT_TYPES[kind]["label"]).strip()[:100],
+                "hypothesis": (hypothesis or "").strip()[:1000],
+                "parameters": clean_params,
+                "created_by": agent_id,
+                "created_at": now_ms(),
+                "status": "DRAFT",
+                "run_count": 0,
+                "runs": [],
+                "last_result": None,
+            }
+            self.state["experiments"][exp_id] = experiment
+            self.state["experiment_order"].append(exp_id)
+            event = self._event("experiment_create", {
+                "agent_id": agent_id,
+                "experiment_id": exp_id,
+                "kind": kind,
+            })
+            experiment["created_seq"] = event["seq"]
+            self._save()
+            return experiment
+
+    def _run_lattice_pulse(self, parameters: dict) -> dict:
+        values = {cell_id: 0.0 for cell_id in self.cells}
+        center = self.manifest["baseline_zero"]
+        values[center] = parameters["amplitude"]
+        center_trace = [round(values[center], 8)]
+        active_trace = [1 if values[center] else 0]
+        for _ in range(parameters["steps"]):
+            next_values = {}
+            for cell_id, cell in self.cells.items():
+                neighbors = list(cell["neighbors"].values())
+                neighbor_mean = (
+                    sum(values[n] for n in neighbors) / len(neighbors)
+                    if neighbors else values[cell_id]
+                )
+                mixed = values[cell_id] + parameters["coupling"] * (neighbor_mean - values[cell_id])
+                next_values[cell_id] = parameters["retention"] * mixed
+            values = next_values
+            center_trace.append(round(values[center], 8))
+            active_trace.append(sum(1 for value in values.values() if abs(value) >= 0.01))
+        abs_values = {cell_id: abs(value) for cell_id, value in values.items()}
+        return {
+            "model": "abstract_graph_signal_spread",
+            "measurements": {
+                "final_peak_abs": round(max(abs_values.values()), 8),
+                "final_total_abs": round(sum(abs_values.values()), 8),
+                "final_active_cells": float(sum(1 for value in abs_values.values() if value >= 0.01)),
+                "center_final": round(values[center], 8),
+            },
+            "series": {
+                "center_trace": center_trace,
+                "active_cells_trace": active_trace,
+            },
+            "claim_boundary": "Software graph experiment; not a physical One-Wave validation.",
+        }
+
+    def _run_reference_recovery(self, parameters: dict) -> dict:
+        value = parameters["perturbation"]
+        trace = [round(value, 10)]
+        settling_step = None
+        for step in range(1, parameters["steps"] + 1):
+            value *= parameters["retention"]
+            trace.append(round(value, 10))
+            if settling_step is None and abs(value) <= parameters["tolerance"]:
+                settling_step = step
+        return {
+            "model": "scalar_reference_recovery",
+            "measurements": {
+                "final_error_abs": round(abs(value), 10),
+                "settled": settling_step is not None,
+                "settling_step": float(settling_step) if settling_step is not None else None,
+            },
+            "series": {"error_trace": trace},
+            "claim_boundary": "Software control/reference experiment; not a physical validation.",
+        }
+
+    def run_experiment(self, agent_id: str, experiment_id: str) -> dict:
+        with self.lock:
+            self._require_agent(agent_id)
+            try:
+                experiment = self.state["experiments"][experiment_id]
+            except KeyError as exc:
+                raise ValueError(f"unknown experiment: {experiment_id}") from exc
+            if experiment["kind"] == "lattice_pulse":
+                result = self._run_lattice_pulse(experiment["parameters"])
+            elif experiment["kind"] == "reference_recovery":
+                result = self._run_reference_recovery(experiment["parameters"])
+            else:
+                raise ValueError(f"no built-in runner for {experiment['kind']}")
+            run = {
+                "run": experiment["run_count"] + 1,
+                "ts": now_ms(),
+                "agent_id": agent_id,
+                "source": "miniverse_builtin",
+                "status": "COMPLETE",
+                **result,
+            }
+            experiment["run_count"] += 1
+            experiment["status"] = "COMPLETE"
+            experiment["last_result"] = run
+            experiment["runs"].append(run)
+            experiment["runs"] = experiment["runs"][-MAX_EXPERIMENT_RUNS:]
+            self._event("experiment_run", {
+                "agent_id": agent_id,
+                "experiment_id": experiment_id,
+                "run": run["run"],
+                "source": run["source"],
+            })
+            self._save()
+            return run
+
+    def attach_experiment_result(
+        self,
+        agent_id: str,
+        experiment_id: str,
+        source: str,
+        summary: str,
+        measurements: object = None,
+    ) -> dict:
+        with self.lock:
+            self._require_agent(agent_id)
+            try:
+                experiment = self.state["experiments"][experiment_id]
+            except KeyError as exc:
+                raise ValueError(f"unknown experiment: {experiment_id}") from exc
+            source = (source or "external").strip()[:64]
+            summary = (summary or "").strip()[:1000]
+            if not summary:
+                raise ValueError("experiment result summary cannot be empty")
+            run = {
+                "run": experiment["run_count"] + 1,
+                "ts": now_ms(),
+                "agent_id": agent_id,
+                "source": source,
+                "status": "COMPLETE",
+                "summary": summary,
+                "measurements": validate_measurements(measurements),
+                "claim_boundary": "External receipt; source evidence must be checked separately.",
+            }
+            experiment["run_count"] += 1
+            experiment["status"] = "COMPLETE"
+            experiment["last_result"] = run
+            experiment["runs"].append(run)
+            experiment["runs"] = experiment["runs"][-MAX_EXPERIMENT_RUNS:]
+            self._event("experiment_result", {
+                "agent_id": agent_id,
+                "experiment_id": experiment_id,
+                "run": run["run"],
+                "source": source,
+            })
+            self._save()
+            return run
+
     def bench(self, agent_id: str, bench_id: str, action: str, summary: str) -> dict:
         if bench_id not in self.zones:
             raise ValueError(f"unknown bench/zone: {bench_id}")
@@ -273,7 +535,7 @@ class WorldStore:
 
 
 class RoomHandler(BaseHTTPRequestHandler):
-    server_version = "MiniverseRoom/0.2"
+    server_version = "MiniverseRoom/0.3"
 
     @property
     def world(self) -> WorldStore:
@@ -303,10 +565,13 @@ class RoomHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path == "/api/health":
-            self._json(200, {"ok": True, "service": "miniverse-room", "version": "0.2"})
+            self._json(200, {"ok": True, "service": "miniverse-room", "version": "0.3"})
             return
         if path == "/api/state":
             self._json(200, self.world.snapshot())
+            return
+        if path == "/api/experiments/catalog":
+            self._json(200, {"ok": True, "catalog": self.world.experiment_catalog()})
             return
         self._serve_static(path)
 
@@ -329,6 +594,28 @@ class RoomHandler(BaseHTTPRequestHandler):
                 result = self.world.say(body.get("agent_id", ""), body.get("text", ""))
             elif path == "/api/body":
                 result = self.world.set_body(body.get("agent_id", ""), body.get("body"))
+            elif path == "/api/experiment/create":
+                result = self.world.create_experiment(
+                    body.get("agent_id", ""),
+                    body.get("kind", ""),
+                    body.get("title", ""),
+                    body.get("hypothesis", ""),
+                    body.get("parameters"),
+                    body.get("experiment_id", ""),
+                )
+            elif path == "/api/experiment/run":
+                result = self.world.run_experiment(
+                    body.get("agent_id", ""),
+                    body.get("experiment_id", ""),
+                )
+            elif path == "/api/experiment/result":
+                result = self.world.attach_experiment_result(
+                    body.get("agent_id", ""),
+                    body.get("experiment_id", ""),
+                    body.get("source", "external"),
+                    body.get("summary", ""),
+                    body.get("measurements"),
+                )
             elif path == "/api/bench":
                 result = self.world.bench(
                     body.get("agent_id", ""),

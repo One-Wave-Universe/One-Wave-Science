@@ -23,6 +23,19 @@
       <textarea id="benchSummary" rows="2" maxlength="1000" placeholder="Post a workbench receipt..."></textarea><button type="submit">POST RECEIPT</button></form>
       <div id="benchFeed" class="bench-feed"></div>
     </section>
+    <section><h2>EXPERIMENT LAB</h2>
+      <form id="experimentForm" class="stack">
+        <select id="experimentType">
+          <option value="lattice_pulse">LATTICE PULSE SPREAD</option>
+          <option value="reference_recovery">REFERENCE RECOVERY</option>
+        </select>
+        <input id="experimentTitle" maxlength="100" placeholder="Experiment title">
+        <textarea id="experimentHypothesis" rows="2" maxlength="1000" placeholder="Hypothesis / expected behavior"></textarea>
+        <textarea id="experimentParameters" rows="3" spellcheck="false">{"amplitude":1,"coupling":0.22,"retention":0.96,"steps":18}</textarea>
+        <button type="submit">CREATE + RUN</button>
+      </form>
+      <div id="experimentFeed" class="experiment-feed"></div>
+    </section>
   </aside>
   <div class="hud controls"><div class="control-title">HEX BODY CONTROLS</div>
     <div class="key-grid"><span><kbd>Q</kbd>B−</span><span><kbd>W</kbd>C+</span><span><kbd>E</kbd>B+</span><span><kbd>A</kbd>A−</span><span><kbd>S</kbd>C−</span><span><kbd>D</kbd>A+</span></div>

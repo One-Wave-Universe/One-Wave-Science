@@ -218,6 +218,11 @@ state itself.
 
 ## 8. Add coding and experiment workflows
 
+The concrete TEST LAB contract is in `Miniverse/room3d/EXPERIMENT_LAB.md`.
+New experiments must validate parameters server-side, persist definitions/runs,
+carry an explicit evidence/claim boundary, and keep arbitrary source execution
+in authenticated Hive Pipe rather than the room HTTP server.
+
 Use the existing Hive Pipe tools for real work:
 
 \`\`\`text
