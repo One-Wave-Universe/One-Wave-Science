@@ -20,7 +20,10 @@ Jetson reaches GitHub through normal git/gh authentication.
                  |                       |
                  v                       |
          HIVE PIPE MCP :8765 <-----------+---- Jetson normal user
-          /mcp terminal_run
+          /mcp
+           |-- terminal_run
+           |-- python_run
+           +-- cpp_compile_run
                  ^
                  |
        direct HTTPS/MCP client
@@ -34,7 +37,8 @@ GitHub External_Work/outbox <--  ~/One-Wave-External-Work/outbox
 ```
 
 All routine routes run as the normal Jetson user. `sudo`, raw-disk formatting,
-power commands, and shell `-c/-lc` strings are blocked by the AI terminal parser.
+power commands, credential/private-key paths, and other high-risk system operations
+remain blocked. Normal development shell wrappers such as `bash -lc` are supported.
 
 ## One canonical gateway
 
@@ -120,16 +124,36 @@ AI_TERMINAL_OK
 exit_code: 0
 ```
 
-Available terminal tools:
+Available terminal/code tools:
 
 ```text
 terminal_pwd
 terminal_which
 terminal_run
+python_run
+cpp_compile_run
 ```
 
-`terminal_run` returns stdout, stderr, exit code, cwd, timing, timeout state, and
-output-clipping state.
+`terminal_run` executes structured argv. `python_run` accepts Python source
+directly, writes it to a temporary script inside an authorized work root, runs it
+with `python3`, captures stdout/stderr/exit status, and removes the temporary
+source. `cpp_compile_run` accepts C++ source directly, compiles it with `g++`,
+runs the temporary binary, returns compile/runtime receipts, and removes the
+temporary source and binary.
+
+Examples:
+
+```json
+{"name":"python_run","arguments":{"code":"print(6 * 7)","cwd":"/home/Scales/One-Wave-Science"}}
+```
+
+```json
+{"name":"cpp_compile_run","arguments":{"code":"#include <iostream>\nint main(){std::cout << 6*7 << \"\\n\";}","standard":"c++20","cwd":"/home/Scales/One-Wave-Science"}}
+```
+
+Both should return stdout `42`. Direct source is bounded to 12 KiB per call and
+uses the same authenticated non-root Hive Pipe sandbox and authorized work roots
+as `terminal_run`. See `AI_CODE_BRIDGE.md` for the full schemas and limits.
 
 ## 3. Direct HTTPS / Cloudflare path
 
@@ -347,12 +371,14 @@ Do these in order:
 1. `hive-pipe-agent.service` is active.
 2. `hive-pipe-gateway.service` is active.
 3. Local MCP `terminal_run` returns `AI_TERMINAL_OK`.
-4. Direct remote `scripts/jetson_remote.sh -- uname -a` returns Jetson output.
-5. GitHub `Jetson Command Lane` with `["uname","-a"]` returns Jetson output.
-6. `ssh Scales@JETSON_IP` works independently.
-7. `git fetch origin` works on the Jetson.
-8. A disposable task branch can be pushed from Jetson to GitHub.
-9. External-work bridge `pull` moves a test file GitHub -> Jetson local inbox.
-10. External-work bridge `publish` moves a test file Jetson local outbox -> repo outbox.
+4. MCP `python_run` with `print(6 * 7)` returns `42`.
+5. MCP `cpp_compile_run` with a tiny C++ program returns `42`.
+6. Direct remote `scripts/jetson_remote.sh -- uname -a` returns Jetson output.
+7. GitHub `Jetson Command Lane` with `["uname","-a"]` returns Jetson output.
+8. `ssh Scales@JETSON_IP` works independently.
+9. `git fetch origin` works on the Jetson.
+10. A disposable task branch can be pushed from Jetson to GitHub.
+11. External-work bridge `pull` moves a test file GitHub -> Jetson local inbox.
+12. External-work bridge `publish` moves a test file Jetson local outbox -> repo outbox.
 
-When all ten pass, both directions and the independent recovery paths are live.
+When all twelve pass, both directions and the independent recovery paths are live.
