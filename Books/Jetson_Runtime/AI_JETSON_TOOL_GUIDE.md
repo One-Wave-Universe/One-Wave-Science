@@ -251,3 +251,22 @@ The service sandbox permits writes to the live Hive Pipe checkout, the canonical
 
 Read `JETSON_AI_ACCESS.md` for setup, tokens, tunnel configuration, all paths,
 and the acceptance tests.
+
+
+## Official Jetson Orin Nano hardware reference
+
+For the NVIDIA Jetson Orin Nano Developer Kit, use NVIDIA's hardware-layout documentation as the connector/power authority:
+
+https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/hardware_layout.html
+
+Important developer-kit facts from that reference:
+- the USB-C connector is documented for **data only**;
+- the reference carrier board uses the **DC power jack** for power;
+- display output is **DisplayPort** on the documented developer kit;
+- M.2 slots have specific Key-M/Key-E roles and PCIe lane counts.
+
+Do not reuse Jetson Nano (older generation) connector assumptions for Orin Nano.
+
+The terminal/MCP instructions above are repository-specific software architecture. Hardware port/power claims must remain subordinate to the exact NVIDIA board documentation for the actual carrier board in use.
+
+G-778 software/runtime validation rules apply: exact platform, smoke test, expected result, failure path, and rollback/recovery must be retained.
