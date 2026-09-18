@@ -5,7 +5,7 @@
   const Core = window.AnimatorFixedCelCore;
   if (!A || !R || !Core) throw new Error('Fixed-cel demo requires Animator + reel + core');
 
-  const SHEET_URL = '../../Assets/Goblin_Raccoon/gr-walk-right-12-cel-sheet.svg';
+  const SHEET_URL = '/demo-assets/gr-walk-right-12-cel-sheet.svg';
   const ROWS = 3;
   const COLS = 4;
   const HOLD = 2;
