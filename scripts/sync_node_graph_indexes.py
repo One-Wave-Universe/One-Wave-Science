@@ -18,9 +18,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MASTER = ROOT / "00_MASTER_INDEX.md"
-AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
-NODE_DIRS = (ROOT / "Nodes", ROOT / "Root_Axioms")
+MASTER = ROOT / "Nodes" / "Reference" / "00_MASTER_INDEX.md"
+AI_START = ROOT / "Books" / "Repository_Operations" / "AI_CANONICAL_START_HERE.md"
+NODE_DIRS = (ROOT / "Nodes",)
 
 C319_ROW = "| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |"
 C320_ROW = "| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |"
