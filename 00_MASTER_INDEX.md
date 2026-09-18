@@ -453,5 +453,4 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-761 | Standard Model assumptions versus One-Wave node equations | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-761_SM_Assumption_Smash.md`. | YELLOW |
 | G-762 | Four balanced interactions | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-762_Four_Balanced_Interactions.md`. | YELLOW |
 | G-763 | Scalar differential vector tensor stratum harmonic | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-763_Scalar_to_Harmonic.md`. | YELLOW |
-| G-764 | Algorythm-Zer0 XYZ Control / Depth / Structure Canon | Canonical control grammar / executable address contract. Human-readable chapter: `Books/Algorythm_Zer0/Ch01_Control_Depth_Structure.md`. Source: `Nodes/G-764_Algorythm_Zer0_XYZ_Control_Depth_Structure_Canon.md`. | YELLOW |
 <!-- AUTO-NODE-REGISTRY:END -->
