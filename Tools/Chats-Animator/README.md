@@ -10,6 +10,14 @@ The reel is the source of truth. Characters and props are transparent still draw
 
 This is not a single-image tween/moving-frame shortcut.
 
+## Fixed-cel acceptance demo
+
+Click **Load 12-Cel GR Demo** and then **Play**. The demo uses the repository's
+actual 4×3 Goblin Raccoon cel sheet to create twelve reel frames. X, ground
+position, and scale remain fixed across the demo; only the drawing changes.
+At 24 FPS with 2-frame holds this is a direct old-school frame-animation check,
+not a moving-layer trick.
+
 ## Current production features
 
 - configurable FPS reel, default 24 fps;
