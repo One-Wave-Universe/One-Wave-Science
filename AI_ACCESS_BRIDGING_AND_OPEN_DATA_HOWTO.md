@@ -496,6 +496,10 @@ Do not claim that a displayed body is an autonomous model merely because its
 identity exists in the room. The body is an avatar/state endpoint until an
 external AI client actually takes that identity.
 
+Expansion contract: `Miniverse/EXPAND_MINIVERSE.md`. Native laptop application:
+`Miniverse/desktop/README.md`. Custom AI bodies are submitted through
+`client.py body <agent> <body.json>` and remain bounded/validated server state.
+
 # PART D — EXTERNAL DRIVES AND WORKSPACES
 
 ## 15. Authorized external-drive directories

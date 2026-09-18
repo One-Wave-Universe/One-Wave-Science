@@ -24,11 +24,66 @@ MANIFEST_PATH = ROOT / "room_manifest.json"
 DEFAULT_STATE = Path.home() / ".local/share/one-wave/miniverse-room/state.json"
 MAX_BODY = 32 * 1024
 MAX_CHAT = 600
+MAX_BODY_PARTS = 32
 AGENT_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,31}$", re.I)
+HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+BODY_SHAPES = {"box", "sphere", "cylinder"}
 
 
 def now_ms() -> int:
     return int(time.time() * 1000)
+
+
+def _body_triplet(value: object, field: str, low: float, high: float) -> list[float]:
+    if not isinstance(value, list) or len(value) != 3:
+        raise ValueError(f"{field} must be a 3-number array")
+    out: list[float] = []
+    for item in value:
+        if isinstance(item, bool) or not isinstance(item, (int, float)):
+            raise ValueError(f"{field} must contain numbers")
+        number = float(item)
+        if not low <= number <= high:
+            raise ValueError(f"{field} values must be between {low} and {high}")
+        out.append(number)
+    return out
+
+
+def validate_body_spec(spec: object, fallback_color: str) -> dict:
+    if not isinstance(spec, dict):
+        raise ValueError("body must be a JSON object")
+    style = spec.get("style", "voxel16")
+    if style != "voxel16":
+        raise ValueError("body style must be voxel16")
+    scale = spec.get("scale", 1.0)
+    if isinstance(scale, bool) or not isinstance(scale, (int, float)) or not 0.2 <= float(scale) <= 1.5:
+        raise ValueError("body scale must be between 0.2 and 1.5")
+    parts = spec.get("parts")
+    if not isinstance(parts, list) or not 1 <= len(parts) <= MAX_BODY_PARTS:
+        raise ValueError(f"body parts must contain 1-{MAX_BODY_PARTS} entries")
+
+    cleaned = []
+    for index, part in enumerate(parts):
+        if not isinstance(part, dict):
+            raise ValueError(f"body part {index} must be an object")
+        shape = part.get("shape", "box")
+        if shape not in BODY_SHAPES:
+            raise ValueError(f"body part {index} shape must be box, sphere, or cylinder")
+        color = part.get("color", fallback_color)
+        if not isinstance(color, str) or not HEX_COLOR_RE.fullmatch(color):
+            raise ValueError(f"body part {index} color must be #RRGGBB")
+        emissive = part.get("emissive", "#000000")
+        if not isinstance(emissive, str) or not HEX_COLOR_RE.fullmatch(emissive):
+            raise ValueError(f"body part {index} emissive must be #RRGGBB")
+        cleaned.append({
+            "name": str(part.get("name", f"part-{index}"))[:32],
+            "shape": shape,
+            "size": _body_triplet(part.get("size", [0.5, 0.5, 0.5]), f"part {index} size", 0.05, 2.5),
+            "position": _body_triplet(part.get("position", [0, 0.5, 0]), f"part {index} position", -3.0, 3.0),
+            "rotation": _body_triplet(part.get("rotation", [0, 0, 0]), f"part {index} rotation", -6.3, 6.3),
+            "color": color,
+            "emissive": emissive,
+        })
+    return {"style": "voxel16", "scale": float(scale), "parts": cleaned}
 
 
 class WorldStore:
@@ -102,6 +157,8 @@ class WorldStore:
                 "facing": current.get("facing", "A+"),
                 "mirror_state": current.get("mirror_state", "NORMAL"),
                 "scale": current.get("scale", 1),
+                "body": current.get("body"),
+                "body_version": current.get("body_version", 0),
                 "connected": True,
                 "last_seen": now_ms(),
             }
@@ -142,6 +199,21 @@ class WorldStore:
                 "from": before,
                 "to": destination,
                 "direction": direction,
+            })
+            self._save()
+            return agent
+
+    def set_body(self, agent_id: str, spec: object) -> dict:
+        with self.lock:
+            agent = self._require_agent(agent_id)
+            body = validate_body_spec(spec, agent["color"])
+            agent["body"] = body
+            agent["body_version"] = int(agent.get("body_version", 0)) + 1
+            agent["last_seen"] = now_ms()
+            self._event("body", {
+                "agent_id": agent_id,
+                "body_version": agent["body_version"],
+                "part_count": len(body["parts"]),
             })
             self._save()
             return agent
@@ -201,7 +273,7 @@ class WorldStore:
 
 
 class RoomHandler(BaseHTTPRequestHandler):
-    server_version = "MiniverseRoom/0.1"
+    server_version = "MiniverseRoom/0.2"
 
     @property
     def world(self) -> WorldStore:
@@ -231,7 +303,7 @@ class RoomHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         path = urlparse(self.path).path
         if path == "/api/health":
-            self._json(200, {"ok": True, "service": "miniverse-room", "version": "0.1"})
+            self._json(200, {"ok": True, "service": "miniverse-room", "version": "0.2"})
             return
         if path == "/api/state":
             self._json(200, self.world.snapshot())
@@ -255,6 +327,8 @@ class RoomHandler(BaseHTTPRequestHandler):
                 result = self.world.move(body.get("agent_id", ""), body.get("direction", ""))
             elif path == "/api/say":
                 result = self.world.say(body.get("agent_id", ""), body.get("text", ""))
+            elif path == "/api/body":
+                result = self.world.set_body(body.get("agent_id", ""), body.get("body"))
             elif path == "/api/bench":
                 result = self.world.bench(
                     body.get("agent_id", ""),

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import sys
 from urllib.request import Request, urlopen
 
@@ -54,6 +55,10 @@ def main() -> int:
     bench.add_argument("action")
     bench.add_argument("summary")
 
+    body = sub.add_parser("body")
+    body.add_argument("agent_id")
+    body.add_argument("spec", help="JSON body-spec file")
+
     sub.add_parser("look")
 
     args = parser.parse_args()
@@ -72,6 +77,9 @@ def main() -> int:
         result = request(args.url, "/api/move", {"agent_id": args.agent_id, "direction": args.direction})
     elif args.command == "ping":
         result = request(args.url, "/api/ping", {"agent_id": args.agent_id})
+    elif args.command == "body":
+        spec = json.loads(Path(args.spec).read_text(encoding="utf-8"))
+        result = request(args.url, "/api/body", {"agent_id": args.agent_id, "body": spec})
     else:
         result = request(args.url, "/api/bench", {
             "agent_id": args.agent_id,

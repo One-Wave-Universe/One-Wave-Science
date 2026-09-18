@@ -23,3 +23,7 @@ and the existing Hive Pipe AI bridge. The browser is a view of the same state;
 it is not a separate decorative world.
 
 Start here: `Miniverse/room3d/README.md`.
+
+Native laptop app: `Miniverse/desktop/README.md`.
+
+AI/human expansion contract: `Miniverse/EXPAND_MINIVERSE.md`.
