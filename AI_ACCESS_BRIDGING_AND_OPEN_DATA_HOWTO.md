@@ -998,3 +998,36 @@ AI_CODE_BRIDGE.md
 hive-pipe/README.md
 hive-pipe/DEEPSEEK_BRIDGE.md
 JETSON_GEMINI_MINIMAL.md
+External_Work/README.md
+AGENTS.md
+```
+
+For Hive Pipe runtime behavior, prefer the current `hive-pipe/README.md` and `AI_JETSON_TOOL_GUIDE.md` over old examples copied into historical notes.
+
+---
+
+# PART K — OFFICIAL EXTERNAL REFERENCES
+
+CERN:
+
+```text
+https://opendata.cern.ch/
+https://opendata.cern.ch/search
+https://opendata.cern.ch/docs/about
+https://opendata.cern.ch/docs/cms-getting-started-nanoaod
+https://opendata.cern.ch/docs/lhcb-getting-started
+https://github.com/cernopendata/cernopendata-client
+https://cernopendata-client.readthedocs.io/
+```
+
+LIGO / Virgo / KAGRA through GWOSC:
+
+```text
+https://gwosc.org/
+https://gwosc.org/data/
+https://gwosc.org/api/
+https://gwosc.org/api/v2/
+https://gwosc.readthedocs.io/
+```
+
+Use the official portals as the source of truth for current dataset availability, formats, licenses, acknowledgements, and release status.
