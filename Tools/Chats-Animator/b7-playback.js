@@ -36,6 +36,10 @@
   function play() {
     if (playing) return stop();
     R.captureCurrent();
+    A.state.calibrationVisible = false;
+    A.state.placementMode = false;
+    A.renderAll();
+    if ($('toggle-placement')) $('toggle-placement').textContent = 'Placement / Sizing Mode';
     playing = true;
     playIndex = 0;
     if ($('play-button')) $('play-button').textContent = 'Stop';
