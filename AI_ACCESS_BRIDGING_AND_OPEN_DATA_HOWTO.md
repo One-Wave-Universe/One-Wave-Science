@@ -451,6 +451,51 @@ Use SSH for recovery when the MCP/tunnel route is unavailable.
 
 ---
 
+## 14A. Shared 3D Miniverse room bridge
+
+The visible Miniverse room is another client of the same Jetson tool/runtime
+architecture, not a replacement for Hive Pipe.
+
+```text
+AI client
+   |
+   v
+Hive Pipe terminal/Python/C++ tools
+   |
+   +----> Miniverse room CLI ----> shared persistent room state
+   |                                  |
+   |                                  +--> agents / locations
+   |                                  +--> shared chat
+   |                                  +--> workbench receipts
+   |                                  +--> stationary 37-cell lattice
+   |                                  |
+   |                                  v
+   +---------------------------> Three.js 3D browser view
+```
+
+Runtime URL:
+
+```text
+http://127.0.0.1:8787/
+```
+
+AI command examples:
+
+```bash
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py join gemini --name GEMINI --role "AI REVIEWER" --color '#98ffb4'
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py say gemini "Review lane online."
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py move gemini B+
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py bench gemini review REVIEW "checked current result"
+```
+
+An AI can use `python_run` or `cpp_compile_run` for a bounded experiment and
+then post the structured result to WORKSHOP, TEST LAB, or REVIEW through
+`client.py bench`. The browser sees that same receipt on its next state poll.
+
+Do not claim that a displayed body is an autonomous model merely because its
+identity exists in the room. The body is an avatar/state endpoint until an
+external AI client actually takes that identity.
+
 # PART D — EXTERNAL DRIVES AND WORKSPACES
 
 ## 15. Authorized external-drive directories
