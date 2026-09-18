@@ -6,6 +6,10 @@ Algorythm-Zer0 is the proposed recursive grammar used across the One-Wave projec
 
 Physical and cosmological mappings remain hypotheses until independently derived or measured.
 
+**Canonical authority:** `Nodes/G-764_Algorythm_Zer0_XYZ_Control_Depth_Structure_Canon.md`  
+**Readable chapter:** `Books/Algorythm_Zer0/Ch01_Control_Depth_Structure.md`  
+**Rule:** G-764 is the machine-readable contract; this file and the chapter are synchronized readable views, not separate competing canons.
+
 ---
 
 # 1. CORE SHAPE
