@@ -13,6 +13,7 @@ NODE_ARTIFACT documents are intentionally excluded from the master node list.
 from __future__ import annotations
 
 import argparse
+import difflib
 import re
 import sys
 from pathlib import Path
@@ -172,6 +173,13 @@ def sync_file(path: Path, transform, check: bool) -> bool:
     original = path.read_text(encoding="utf-8")
     updated = transform(original)
     changed = updated != original
+    if changed and check:
+        print("".join(difflib.unified_diff(
+            original.splitlines(keepends=True),
+            updated.splitlines(keepends=True),
+            fromfile=str(path.relative_to(ROOT)),
+            tofile=str(path.relative_to(ROOT)) + " (expected)",
+        )))
     if changed and not check:
         path.write_text(updated, encoding="utf-8")
     return changed
