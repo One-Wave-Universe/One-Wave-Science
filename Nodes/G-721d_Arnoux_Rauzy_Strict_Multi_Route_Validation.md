@@ -79,3 +79,7 @@ The directory `Nodes/G-721_Sequence_Validation/` contains finite regression test
 ![Finite route-word factor complexity receipts.](../Nodes/G-721_Sequence_Validation/factor_complexity.png)
 
 The finite Tribonacci reference matches `p(n)=2n+1` through the declared test range. This validates the code and reference construction, not android movement.
+
+## Upstream address normalization
+
+The former monolithic G-721 address authority is retired to a legacy index. Address packets, route arithmetic, parity wrappers, reconstruction, transform separation, alphabet adaptation, bounded scale rail, and adapter rules are now owned by G-764 through G-771. This node consumes those responsibilities and must not redefine them.
