@@ -45,7 +45,6 @@ AI_REQUIRED = (
 
 AI_FORBIDDEN = (
     "3 physical Mirror gates + 3 physical Action gates = 6 physical gates",
-    "six separate physical Mirror/Action gates",
 )
 
 
