@@ -56,3 +56,18 @@ The target is not to replace the breadboard UI with a generic SPICE front end. T
 ## Acceptance rule
 
 No feature is considered SPICE-grade because the waveform looks right. Every analysis mode gets at least one independent analytic reference circuit and, where appropriate, an ngspice comparison. Existing One-Wave-specific hardware primitives stay above the generic electrical solver; they do not get hard-coded into the MNA mathematics.
+
+
+## External simulator authority
+
+ngspice is the external circuit-simulation reference for covered parity claims.
+
+Official documentation:
+- https://ngspice.sourceforge.io/docs.html
+- https://ngspice.sourceforge.io/docs/ngspice-manual.pdf
+
+ngspice documents transient analysis and selectable trapezoidal/Gear integration methods. Virtual Breadboard parity is claimed only for the explicitly cross-checked circuits, analyses, and simplified device models listed above.
+
+Do not promote the present first-order MOSFET/BJT models to BSIM/Gummel-Poon parity without dedicated model-card support and cross-checks.
+
+G-778 and G-779 apply.
