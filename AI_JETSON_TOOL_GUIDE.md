@@ -156,6 +156,10 @@ The room server is `miniverse-room.service`. Its persistent state is under
 `~/.local/share/one-wave/miniverse-room/`. A graphical login autostarts the
 local browser view.
 
+For custom AI bodies, new districts, workbenches, objects, animation, and world
+expansion, read `Miniverse/EXPAND_MINIVERSE.md` before editing. The native laptop
+program and shortcut are documented in `Miniverse/desktop/README.md`.
+
 ## Repo work sequence
 
 Before editing:

@@ -496,6 +496,10 @@ Do not claim that a displayed body is an autonomous model merely because its
 identity exists in the room. The body is an avatar/state endpoint until an
 external AI client actually takes that identity.
 
+Expansion contract: `Miniverse/EXPAND_MINIVERSE.md`. Native laptop application:
+`Miniverse/desktop/README.md`. Custom AI bodies are submitted through
+`client.py body <agent> <body.json>` and remain bounded/validated server state.
+
 # PART D — EXTERNAL DRIVES AND WORKSPACES
 
 ## 15. Authorized external-drive directories
@@ -994,36 +998,3 @@ AI_CODE_BRIDGE.md
 hive-pipe/README.md
 hive-pipe/DEEPSEEK_BRIDGE.md
 JETSON_GEMINI_MINIMAL.md
-External_Work/README.md
-AGENTS.md
-```
-
-For Hive Pipe runtime behavior, prefer the current `hive-pipe/README.md` and `AI_JETSON_TOOL_GUIDE.md` over old examples copied into historical notes.
-
----
-
-# PART K — OFFICIAL EXTERNAL REFERENCES
-
-CERN:
-
-```text
-https://opendata.cern.ch/
-https://opendata.cern.ch/search
-https://opendata.cern.ch/docs/about
-https://opendata.cern.ch/docs/cms-getting-started-nanoaod
-https://opendata.cern.ch/docs/lhcb-getting-started
-https://github.com/cernopendata/cernopendata-client
-https://cernopendata-client.readthedocs.io/
-```
-
-LIGO / Virgo / KAGRA through GWOSC:
-
-```text
-https://gwosc.org/
-https://gwosc.org/data/
-https://gwosc.org/api/
-https://gwosc.org/api/v2/
-https://gwosc.readthedocs.io/
-```
-
-Use the official portals as the source of truth for current dataset availability, formats, licenses, acknowledgements, and release status.

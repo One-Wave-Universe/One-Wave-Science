@@ -1,0 +1,174 @@
+{
+  "style": "voxel16",
+  "scale": 0.72,
+  "parts": [
+    {
+      "name": "base",
+      "shape": "box",
+      "size": [
+        0.95,
+        0.28,
+        0.52
+      ],
+      "position": [
+        0,
+        0.14,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#321c39",
+      "emissive": "#000000"
+    },
+    {
+      "name": "legs",
+      "shape": "box",
+      "size": [
+        0.66,
+        0.62,
+        0.34
+      ],
+      "position": [
+        0,
+        0.58,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#542c63",
+      "emissive": "#000000"
+    },
+    {
+      "name": "torso",
+      "shape": "box",
+      "size": [
+        1.0,
+        0.78,
+        0.58
+      ],
+      "position": [
+        0,
+        1.08,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#ff7edb",
+      "emissive": "#000000"
+    },
+    {
+      "name": "left-shield",
+      "shape": "box",
+      "size": [
+        0.16,
+        0.92,
+        0.58
+      ],
+      "position": [
+        -0.72,
+        1.08,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#6d3265",
+      "emissive": "#7e226f"
+    },
+    {
+      "name": "right-shield",
+      "shape": "box",
+      "size": [
+        0.16,
+        0.92,
+        0.58
+      ],
+      "position": [
+        0.72,
+        1.08,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#6d3265",
+      "emissive": "#7e226f"
+    },
+    {
+      "name": "head",
+      "shape": "box",
+      "size": [
+        0.72,
+        0.58,
+        0.62
+      ],
+      "position": [
+        0,
+        1.72,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#f5b9e7",
+      "emissive": "#000000"
+    },
+    {
+      "name": "visor",
+      "shape": "box",
+      "size": [
+        0.58,
+        0.16,
+        0.06
+      ],
+      "position": [
+        0,
+        1.76,
+        0.34
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#130714",
+      "emissive": "#ff7edb"
+    },
+    {
+      "name": "crown",
+      "shape": "cylinder",
+      "size": [
+        0.5,
+        0.18,
+        0.5
+      ],
+      "position": [
+        0,
+        2.12,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "color": "#ff7edb",
+      "emissive": "#ff7edb"
+    }
+  ]
+}

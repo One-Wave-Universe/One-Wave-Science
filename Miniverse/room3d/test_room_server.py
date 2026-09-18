@@ -34,6 +34,43 @@ class RoomTests(unittest.TestCase):
         rebuilt=server.WorldStore(self.state_path)
         self.assertEqual(rebuilt.state["chat"][-1]["text"],"room bridge online")
         self.assertEqual(rebuilt.state["bench_receipts"][-1]["summary"],"python bridge passed")
+    def test_custom_body_persists_and_versions(self):
+        self.world.join("builder", "BUILDER", "AI", "#62e6ff")
+        spec = {
+            "style": "voxel16",
+            "scale": 0.8,
+            "parts": [{
+                "name": "core",
+                "shape": "sphere",
+                "size": [0.8, 0.8, 0.8],
+                "position": [0, 1, 0],
+                "rotation": [0, 0, 0],
+                "color": "#62e6ff",
+                "emissive": "#001122",
+            }],
+        }
+        agent = self.world.set_body("builder", spec)
+        self.assertEqual(agent["body_version"], 1)
+        self.assertEqual(agent["body"]["parts"][0]["shape"], "sphere")
+        rebuilt = server.WorldStore(self.state_path)
+        self.assertEqual(rebuilt.state["agents"]["builder"]["body_version"], 1)
+        self.assertEqual(rebuilt.state["agents"]["builder"]["body"]["parts"][0]["name"], "core")
+
+    def test_custom_body_rejects_invalid_geometry(self):
+        self.world.join("builder", "BUILDER", "AI")
+        with self.assertRaisesRegex(ValueError, "shape"):
+            self.world.set_body("builder", {
+                "style": "voxel16",
+                "parts": [{
+                    "name": "bad",
+                    "shape": "torus",
+                    "size": [1, 1, 1],
+                    "position": [0, 1, 0],
+                    "rotation": [0, 0, 0],
+                    "color": "#62e6ff",
+                }],
+            })
+
     def test_http_health_and_state(self):
         srv=server.RoomServer(("127.0.0.1",0),self.world)
         thread=threading.Thread(target=srv.serve_forever,daemon=True);thread.start()

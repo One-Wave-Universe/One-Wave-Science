@@ -58,20 +58,53 @@ function buildLattice(){
   });
   const grid=new THREE.GridHelper(23,23,0x173d46,0x0b2830);grid.position.y=-.12;roomGroup.add(grid);
 }
-function box(group,size,pos,color,emissive){
-  const mat=new THREE.MeshStandardMaterial({color:color,roughness:.62,metalness:.15,emissive:emissive||0,emissiveIntensity:emissive?.42:0});const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),mat);mesh.position.set(...pos);mesh.castShadow=true;group.add(mesh);return mesh;
+function defaultBodySpec(agent){
+  const c=agent.color||'#62e6ff',dark='#28505b',pale='#b9f7ff';
+  return {style:'voxel16',scale:.72,parts:[
+    {name:'left-foot',shape:'box',size:[.42,.5,.42],position:[-.23,.25,0],rotation:[0,0,0],color:dark,emissive:'#000000'},
+    {name:'right-foot',shape:'box',size:[.42,.5,.42],position:[.23,.25,0],rotation:[0,0,0],color:dark,emissive:'#000000'},
+    {name:'torso',shape:'box',size:[.95,.74,.52],position:[0,.85,0],rotation:[0,0,0],color:c,emissive:'#000000'},
+    {name:'left-arm',shape:'box',size:[.2,.62,.24],position:[-.61,.86,0],rotation:[0,0,0],color:dark,emissive:'#000000'},
+    {name:'right-arm',shape:'box',size:[.2,.62,.24],position:[.61,.86,0],rotation:[0,0,0],color:dark,emissive:'#000000'},
+    {name:'head',shape:'box',size:[.67,.62,.6],position:[0,1.54,0],rotation:[0,0,0],color:pale,emissive:'#000000'},
+    {name:'visor',shape:'box',size:[.55,.16,.05],position:[0,1.58,.325],rotation:[0,0,0],color:'#061015',emissive:'#7df8ff'},
+    {name:'antenna',shape:'box',size:[.12,.22,.12],position:[0,1.98,0],rotation:[0,0,0],color:c,emissive:'#000000'},
+    {name:'beacon',shape:'box',size:[.22,.1,.22],position:[0,2.09,0],rotation:[0,0,0],color:'#ffd45e',emissive:'#ffd45e'}
+  ]};
+}
+function partGeometry(shape){
+  if(shape==='sphere')return new THREE.SphereGeometry(.5,6,4);
+  if(shape==='cylinder')return new THREE.CylinderGeometry(.5,.5,1,6);
+  return new THREE.BoxGeometry(1,1,1);
 }
 function makeAvatar(agent){
-  const g=new THREE.Group(),c=new THREE.Color(agent.color||'#62e6ff').getHex(),dark=new THREE.Color(c).multiplyScalar(.42).getHex(),pale=new THREE.Color(c).lerp(new THREE.Color(0xffffff),.55).getHex();
-  box(g,[.42,.5,.42],[-.23,.25,0],dark);box(g,[.42,.5,.42],[.23,.25,0],dark);box(g,[.95,.74,.52],[0,.85,0],c);box(g,[.2,.62,.24],[-.61,.86,0],dark);box(g,[.2,.62,.24],[.61,.86,0],dark);box(g,[.67,.62,.6],[0,1.54,0],pale);box(g,[.55,.16,.05],[0,1.58,.325],0x061015,0x7df8ff);box(g,[.12,.22,.12],[0,1.98,0],c);box(g,[.22,.1,.22],[0,2.09,0],0xffd45e,0xffd45e);
-  const label=makeLabel(agent.name.toUpperCase(),agent.color||'#62e6ff',.52);label.position.set(0,2.52,0);g.add(label);g.scale.setScalar(.72);avatarGroup.add(g);return g;
+  const g=new THREE.Group(),spec=agent.body||defaultBodySpec(agent);
+  let maxY=1;
+  spec.parts.forEach(part=>{
+    const emissive=new THREE.Color(part.emissive||'#000000');
+    const mat=new THREE.MeshStandardMaterial({color:part.color,roughness:.62,metalness:.15,emissive:emissive,emissiveIntensity:(part.emissive&&part.emissive!=='#000000')?0.42:0});
+    const mesh=new THREE.Mesh(partGeometry(part.shape),mat);
+    mesh.scale.set(part.size[0],part.size[1],part.size[2]);
+    mesh.position.set(part.position[0],part.position[1],part.position[2]);
+    mesh.rotation.set(part.rotation[0],part.rotation[1],part.rotation[2]);
+    mesh.castShadow=true;mesh.receiveShadow=true;mesh.userData.partName=part.name;g.add(mesh);
+    maxY=Math.max(maxY,part.position[1]+part.size[1]/2);
+  });
+  const label=makeLabel(agent.name.toUpperCase(),agent.color||'#62e6ff',.52);
+  label.position.set(0,maxY+.45,0);g.add(label);g.scale.setScalar(spec.scale||1);
+  g.userData.agentId=agent.id;g.userData.bodyVersion=agent.body_version||0;avatarGroup.add(g);return g;
 }
-function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));}
 function updateAgents(agents){
   const ids=new Set(Object.keys(agents));avatarObjects.forEach((o,id)=>{if(!ids.has(id)){avatarGroup.remove(o);avatarObjects.delete(id);}});
-  Object.values(agents).forEach(a=>{let o=avatarObjects.get(a.id);if(!o){o=makeAvatar(a);avatarObjects.set(a.id,o);}const qr=a.cell.split(',').map(Number),t=axialToWorld(qr[0],qr[1]);t.y=.15;o.userData.target=t;});
-  agentList.innerHTML=Object.values(agents).map(a=>'<div class="agent"><span class="agent-dot" style="background:'+esc(a.color)+'"></span><span class="agent-name">'+esc(a.name)+'</span><span class="agent-role">'+esc(a.role)+' · '+esc(a.cell)+'</span></div>').join('')||'<div class="agent-role">No bodies connected.</div>';
+  Object.values(agents).forEach(a=>{
+    let o=avatarObjects.get(a.id);
+    if(o&&(o.userData.bodyVersion||0)!==(a.body_version||0)){avatarGroup.remove(o);avatarObjects.delete(a.id);o=null;}
+    if(!o){o=makeAvatar(a);avatarObjects.set(a.id,o);}
+    const qr=a.cell.split(',').map(Number),t=axialToWorld(qr[0],qr[1]);t.y=.15;o.userData.target=t;
+  });
+  agentList.innerHTML=Object.values(agents).map(a=>'<div class="agent"><span class="agent-dot" style="background:'+esc(a.color)+'"></span><span class="agent-name">'+esc(a.name)+'</span><span class="agent-role">'+esc(a.role)+' · '+esc(a.cell)+' · BODY '+(a.body_version||0)+'</span></div>').join('')||'<div class="agent-role">No bodies connected.</div>';
 }
+function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));}
 function updateChat(chat){
   const newest=chat.length?chat[chat.length-1].seq:0;if(newest===lastChatSeq)return;lastChatSeq=newest;chatLog.innerHTML=chat.map(m=>'<div class="msg"><span class="msg-name">'+esc(m.name)+'</span><span class="agent-role"> '+esc(m.role)+'</span><br><span class="msg-text">'+esc(m.text)+'</span></div>').join('');chatLog.scrollTop=chatLog.scrollHeight;
 }
