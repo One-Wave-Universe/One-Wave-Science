@@ -116,3 +116,7 @@ Connect clock positions to actual measured guitar frequencies (bridge to the Wav
 Determine whether this node should formally cite B-203 Expression / B-204 Compression as upstream, given the shared directional convention.
 
 ---
+
+## Rabbit-Hop normalization note
+
+The old lateral reference to monolithic G-721 is now decomposed. When this music clock needs machine-readable reversible addressing, use G-764 through G-768 for the shared receipt machinery and G-771 for the adapter contract. Alphabet labeling belongs to G-769 and is not part of the Music Clock.
