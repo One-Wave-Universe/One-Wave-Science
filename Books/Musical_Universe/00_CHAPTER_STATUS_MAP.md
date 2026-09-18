@@ -11,3 +11,5 @@
 | 03 | Small overlay | Ch03 cell | optional overlay |
 | 04 | Medium overlay | Ch04 body | optional overlay |
 | 05 | Large overlay | Ch05 world | optional overlay |
+
+| 06 | reversible note addressing | `Musical_Universe_Ch06_Reversible_Note_Addressing.md` | ACTIVE |
