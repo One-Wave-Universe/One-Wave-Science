@@ -23,6 +23,9 @@ required=(
   c19-local-control-api.js
   c20-five-scale-architecture.js
   c21-copy-paste-assistant-plugin.js
+  c22-fixed-cel-core.js
+  c22-fixed-cel-demo.js
+  c22-fixed-cel-demo.test.js
   assistant_server.py
   configure-openai.sh
   launch-animator.sh
@@ -42,7 +45,8 @@ if command -v node >/dev/null 2>&1; then
   for file in ./*.js; do
     node --check "$file" >/dev/null
   done
-  echo "PASS JavaScript syntax"
+  node c22-fixed-cel-demo.test.js
+  echo "PASS JavaScript syntax + fixed-cel playback invariant"
 else
   echo "SKIP JavaScript syntax: node not installed"
 fi
@@ -56,6 +60,8 @@ grep -q 'c19-local-control-api.js' index.html
 grep -q 'c20-five-scale-architecture.js' index.html
 grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
+grep -q 'c22-fixed-cel-demo.js' index.html
+grep -q 'Load 12-Cel GR Demo' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
 grep -q 'gpt-5.6-sol' assistant_server.py
