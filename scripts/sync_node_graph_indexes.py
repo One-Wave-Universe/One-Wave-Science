@@ -115,7 +115,7 @@ def build_supplement(base_text: str) -> str:
         SUPPLEMENT_START,
         "## Auto-synchronized canonical node registry supplement",
         "",
-        "These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.",
+        "These I-06 canonical nodes exist under `Nodes/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.",
         "",
         "| Node | Name | Definition / source | Gate |",
         "|---|---|---|---|",
