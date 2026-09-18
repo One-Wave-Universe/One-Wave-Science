@@ -99,3 +99,31 @@ A Sturmian trace may schedule two competing movement branches with nonperiodic b
 ## Falsifiers
 
 Reject the exact Sturmian claim when factor complexity, balance, or aperiodicity fails in the valid finite-test range, or when alignment appears only after token deletion, reordering, selective windows, or post-hoc complementing.
+
+## Canonical decomposition
+
+G-721b remains the parent contract. Its jobs are split into child nodes so one file no longer carries generator, validation, anti-collapse, and scheduler responsibilities at once.
+
+- `G-721b1` — Sturmian Mechanical Word Generator
+- `G-721b2` — Sturmian Validation Properties
+- `G-721b3` — Mirror / Reverse / Complement Separation
+- `G-721b4` — Rabbit-Hop Sturmian Branch Scheduler
+
+The child nodes may clarify one responsibility, but they may not redefine the parent equations or the locked G-721 Rabbit-Hop arithmetic.
+
+## Chapter set
+
+Readable exposition lives in:
+
+`Books/Rabbit_Hopping/`
+
+with the ordered chapter path:
+
+1. From Fibonacci to Sturmian
+2. Mechanical Words and the Two Branches
+3. Complexity, Balance, and Aperiodicity
+4. Mirror, Reverse, and Complement Are Different
+5. Scheduling Rabbit Hops Without Replacing Choice
+
+**Authority rule:** Nodes are canonical; chapters explain the nodes and must not silently promote examples or analogies into new grammar.
+
