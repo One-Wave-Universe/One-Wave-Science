@@ -422,6 +422,10 @@ These I-06 canonical nodes exist under `Nodes/` but are not yet placed in the ha
 | D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
+| G-721b1 | Sturmian Mechanical Word Generator | Binary Sequence Generator / Mechanical Word. Source: `Nodes/G-721b1_Sturmian_Mechanical_Word_Generator.md`. | YELLOW |
+| G-721b2 | Sturmian Validation Properties | Sequence Validator / Complexity-Balance-Aperiodicity. Source: `Nodes/G-721b2_Sturmian_Validation_Properties.md`. | YELLOW |
+| G-721b3 | Mirror Reverse Complement Separation | Route Identity / Anti-Collapse Rule. Source: `Nodes/G-721b3_Mirror_Reverse_Complement_Separation.md`. | YELLOW |
+| G-721b4 | Rabbit-Hop Sturmian Branch Scheduler | Rabbit-Hop Route Scheduler / Two-Branch Adapter. Source: `Nodes/G-721b4_Rabbit_Hop_Sturmian_Branch_Scheduler.md`. | YELLOW |
 | G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
 | G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
 | G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
@@ -478,4 +482,5 @@ These I-06 canonical nodes exist under `Nodes/` but are not yet placed in the ha
 | G-777 | Repository Content Normalization and Authority | Repository Governance / Content Placement. Source: `Nodes/G-777_Repository_Content_Normalization_and_Authority.md`. | YELLOW |
 | G-778 | Build Logic Research and Reference Validation Standard | Engineering Validation / Build Qualification. Source: `Nodes/G-778_Build_Logic_Research_and_Reference_Validation_Standard.md`. | YELLOW |
 | G-779 | Active Build Validation Matrix | Engineering Build Status / Evidence Matrix. Source: `Nodes/G-779_Active_Build_Validation_Matrix.md`. | YELLOW |
+| I-07 | Gate Colors and Metals | Canon / Language. Source: `Nodes/I-07_Gate_Colors.md`. | GREEN |
 <!-- AUTO-NODE-REGISTRY:END -->
