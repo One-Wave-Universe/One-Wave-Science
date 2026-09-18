@@ -22,6 +22,8 @@ Primary tools:
 terminal_pwd
 terminal_which
 terminal_run
+python_run
+cpp_compile_run
 ```
 
 Do not assume the old `/v1/exec` gateway is active. Do not start
@@ -114,6 +116,12 @@ A successful result has:
 stdout = AI_TERMINAL_OK
 exit_code = 0
 ```
+
+## Direct Python and C++
+
+The gateway exposes first-class `python_run` and `cpp_compile_run` MCP tools so an
+authorized AI can run bounded source directly without a human terminal relay.
+See `AI_CODE_BRIDGE.md` for schemas, examples, limits, and verification.
 
 ## Repo work sequence
 
