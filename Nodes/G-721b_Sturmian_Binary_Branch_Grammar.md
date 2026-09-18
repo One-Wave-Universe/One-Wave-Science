@@ -99,3 +99,30 @@ A Sturmian trace may schedule two competing movement branches with nonperiodic b
 ## Falsifiers
 
 Reject the exact Sturmian claim when factor complexity, balance, or aperiodicity fails in the valid finite-test range, or when alignment appears only after token deletion, reordering, selective windows, or post-hoc complementing.
+
+## Canonical decomposition
+
+G-721b remains the parent contract. Its jobs are split into child nodes so one file no longer carries generator, validation, anti-collapse, and scheduler responsibilities at once.
+
+- `G-721b1` — Sturmian Mechanical Word Generator
+- `G-721b2` — Sturmian Validation Properties
+- `G-721b3` — Mirror / Reverse / Complement Separation
+- `G-721b4` — Rabbit-Hop Sturmian Branch Scheduler
+
+The child nodes may clarify one responsibility, but they may not redefine the parent equations or the locked G-721 Rabbit-Hop arithmetic.
+
+## Chapter integration
+
+Readable exposition is integrated into the normal Android-brain book:
+
+`Books/Proposed_Android_Brain/Ch06_Balanced_Nonperiodic_Sequence_Schedulers.md`
+
+The address layer below this scheduler is explained in:
+
+`Books/Proposed_Android_Brain/Ch05_Reversible_Route_Receipts.md`
+
+**Authority rule:** Nodes are canonical; chapters explain the nodes and must not silently promote examples or analogies into new grammar.
+
+## Upstream address normalization
+
+G-721 is now a legacy index. This scheduler consumes the decomposed address machinery in G-764 through G-771 and must not redefine it.

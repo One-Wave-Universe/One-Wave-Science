@@ -449,3 +449,7 @@ The One-Wave use of this validator must be revised or rejected when:
 4. ratio alignment survives only after reordering or selecting terms;
 5. the validator begins driving live choice instead of checking committed choice;
 6. Fibonacci-word language is used to promote unrelated lattice or physical claims.
+
+## Upstream address normalization
+
+The former monolithic G-721 address authority is retired to a legacy index. Address packets, route arithmetic, parity wrappers, reconstruction, transform separation, alphabet adaptation, bounded scale rail, and adapter rules are now owned by G-764 through G-771. This node consumes those responsibilities and must not redefine them.

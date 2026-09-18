@@ -129,3 +129,7 @@ and the chromatic per-chord system (E-510-513) exists, or whether they
 should remain fully independent by design.
 
 ---
+
+## Reversible address bridge
+
+Circle-of-Fifths order remains owned by E-514. Reversible machine addressing is supplied separately by G-764 through G-768 under the G-771 adapter contract. The executable music adapter may attach a full route receipt to each fifth-position without redefining the fifths clock itself.

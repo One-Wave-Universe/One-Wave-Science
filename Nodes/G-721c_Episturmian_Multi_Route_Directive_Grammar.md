@@ -83,3 +83,7 @@ General episturmian words do not all have one fixed complexity formula. Exact co
 ## Falsifiers
 
 Reject the episturmian claim if reversal closure fails, the route word cannot be traced to its declared directive construction, symbols disappear contrary to the claim, or the scheduler overrides live sensory Hold/correction.
+
+## Upstream address normalization
+
+The former monolithic G-721 address authority is retired to a legacy index. Address packets, route arithmetic, parity wrappers, reconstruction, transform separation, alphabet adaptation, bounded scale rail, and adapter rules are now owned by G-764 through G-771. This node consumes those responsibilities and must not redefine them.

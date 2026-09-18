@@ -1,22 +1,54 @@
-# Spintronics loop
+# Magnetic / Spintronic Feedback Loop
 
-Not a chute. Down is torque. Up is where it is and what it did.
+**Status:** terminology and experiment boundary.
 
+## Use the terms correctly
+
+Hall sensors, search coils, encoders, ordinary motor windings, and magnetic remanence experiments are **magnetic/electromechanical feedback**.
+
+Call a mechanism **spintronic** only when the actual device physics uses spin-dependent transport or torque, such as magnetic tunnel junction / STT-MRAM / SOT-MRAM-class devices.
+
+References:
+- STT-MRAM review: https://www.nature.com/articles/s44287-024-00111-z
+- SOT-MRAM review: https://www.nature.com/articles/s44306-024-00044-1
+
+## Current CELL_V1 feedback path
+
+A practical first implementation may use:
+
+```text
+command DOWN:
+controller -> gate/driver -> coil or stateful element
+
+view UP:
+current shunt + Hall/search coil/encoder + state readout -> controller
 ```
-TOP         Field lists     Void override     oversight 6:1
 
-UP views    memristor / Hall-of-B / MEM      "what state"
-UP spin     location, phase, I_0, Hall angle "where / what happened"
-DOWN spin   winding current, torque, step    "do"
+Those measurements can report:
+- current;
+- position;
+- field magnitude/direction;
+- retained state;
+- phase/timing.
 
-CELL        A B C → star G
-```
+They are valid feedback without being called spintronics.
 
-Same flip still one seq:
-- command down the live winding
-- location + info back up the mid and the flux probe
-- view state up the memristor node
+## If a real spintronic device is introduced
 
-If spin only goes down, the top layer is blind. Then override is guessing.
-I_0 is already an UP line (vagus). Hall / encoder / search coil is the location UP line.
-Those two are the spintronic return. They are not a fourth winding.
+Record:
+- exact part/device stack;
+- write mechanism;
+- read mechanism;
+- switching threshold/current/voltage;
+- retention;
+- endurance;
+- temperature dependence;
+- whether the same physical element both changes state and stores the state.
+
+Only then may the spintronic label be used for that path.
+
+## One-Wave hypothesis boundary
+
+The idea that views-up and actions-down form one mirrored processing-memory loop remains a hypothesis until a physical implementation demonstrates the claimed coupling.
+
+G-778 applies.

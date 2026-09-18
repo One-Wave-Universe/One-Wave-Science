@@ -87,3 +87,11 @@ If you need more than ~15 mA of imbalance, this part is the wrong host. Move to 
 - Oscillation on OUT with the C_L you mounted.
 - Ternary receipts during NR charge-up.
 - OUT used as the return of a load that should have gone P-to-N.
+
+
+## Manufacturer reference
+
+Texas Instruments product/datasheet authority:
+https://www.ti.com/product/TLE2426
+
+If a value in this note conflicts with the current TI datasheet for the exact package/device suffix being used, the datasheet wins. Measure the actual midpoint under the intended load before promoting the build beyond BENCH-REALITY PASS.

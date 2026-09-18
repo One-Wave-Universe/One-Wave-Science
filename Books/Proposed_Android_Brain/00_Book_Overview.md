@@ -42,3 +42,10 @@ No module gets unilateral irreversible control:
 ## Build Goal
 
 The point is to construct the architecture, observe its behavior, and find out what it does. The project is allowed to explore consciousness without claiming in advance that consciousness has been created.
+
+## Added routing chapters
+
+- **Chapter 5 — Reversible Route Receipts:** decomposed G-764 through G-771 address machinery.
+- **Chapter 6 — Balanced Nonperiodic Sequence Schedulers:** G-721b family as candidate route scheduling above the address layer.
+
+These chapters replace the need for a separate Rabbit-Hopping book island.

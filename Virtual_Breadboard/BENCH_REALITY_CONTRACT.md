@@ -12,33 +12,28 @@ A build may be called **BENCH-QUALIFIED** only when it also passes the bench-rea
 
 ## 1. Current CELL_V1 bench authority
 
-For the present dual-rail bench:
+The current CELL_V1 bench is the locked **single 5 V supply + buffered midpoint** build.
 
 ```text
-+12 V rail
+5 V protected/current-limited source
+        |
+   +----+---------------- P
    |
-  10 k
+ TLE2426 or equivalent verified midpoint host
    |
-   +---------- local / gate experiment
+   +--------------------- G ~= 2.5 V reference
    |
-  solid 0 star ---------------- measure I_0 at controller end
-   |
-  10 k
-   |
--12 V rail
+   +--------------------- N = 0 V supply return
 ```
 
-Physical source architecture:
+The TLE2426 is used as a **low-current signal/reference midpoint**. TI specifies it as a precision half-supply rail splitter with approximately 20 mA typical source/sink capability. It is not the return path for a motor, speaker, or power coil.
 
-```text
-+12 V  ---- positive supply
-  0 V  ---- REAL midpoint / star conductor
--12 V  ---- negative supply
-```
+Reference:
+https://www.ti.com/product/TLE2426
 
-This is **not** a TLE2426 / rail-splitter topology.
+The energy/reinjection reservoir, if used, is a separate DC-link/storage element. `G` is not an energy reservoir.
 
-Do not place `vgnd`, TLE2426, or another synthetic midpoint on top of the true dual-supply 0 V midpoint and call both of them CENTER.
+The retired +/-12 V CELL_V1 bench remains historical only. Do not use it as the current physical authority unless a new measured requirement explicitly reopens it.
 
 ---
 
@@ -63,13 +58,13 @@ Move the mismatch to the opposite arm:
 sign(I_0) must reverse.
 ```
 
-The 0 rail itself must remain a low-impedance reference. A pretty midpoint voltage with no real DC 0 path is a failure.
+The G reference itself must remain a low-impedance reference. A pretty midpoint voltage with no real DC 0 path is a failure.
 
 ---
 
-## 3. CENTER / 0 spine rules
+## 3. CENTER / G spine rules
 
-The 0 spine is a conductor/reference path.
+The G spine is a measured low-current reference path.
 
 Allowed for measurement:
 
@@ -77,7 +72,7 @@ Allowed for measurement:
 - a deliberately small known shunt such as 0.1 ohm at the controller end;
 - real lead/contact resistance explicitly modeled.
 
-Not allowed in series with the 0 spine:
+Not allowed in series with the G spine:
 
 - capacitor;
 - inductor used as the only DC path;
@@ -95,13 +90,9 @@ Every active build must have a source-current receipt.
 
 If resistors, MOSFET channels, LEDs, coils, or other loads are dissipating power, a display showing the supply at `0.00 A` is not an acceptable result unless the solved source current is genuinely below the displayed resolution.
 
-The present F0 bench limit is:
+The first reference qualification is deliberately low current. Keep TLE2426 **imbalance current** comfortably below its approximate 20 mA typical source/sink capability; the initial P1/P2 checks use only a few mA. Board supply current is a separate measurement.
 
-```text
-|I_source| <= 20 mA
-```
-
-That is an **acceptance limit**, not the engine's historical global source limit.
+This is an acceptance boundary for the midpoint/reference experiment, not a motor-current allowance.
 
 Any simulation that requires more than the declared bench limit is physically unqualified even if the MNA solver can still produce a voltage solution.
 
@@ -117,9 +108,7 @@ For an N-MOS:
 VGS = Vgate - Vsource
 ```
 
-A Nano GPIO that swings 0..5 V relative to supply 0 can directly command only a device whose source is referenced appropriately to that same 0 V domain.
-
-It cannot directly turn on a 12 V high-side N-MOS after the source rises. The device becomes a source follower / turns back off as VGS collapses. A real high-side N-MOS requires a bootstrapped, isolated, or otherwise source-referenced gate driver.
+A controller GPIO can directly command only a MOSFET whose required VGS is achieved relative to that MOSFET's actual source. A floating/high-side N-MOS generally requires a source-referenced, bootstrapped, isolated, or dedicated gate driver.
 
 For the present cell work:
 
@@ -142,7 +131,10 @@ CELL_V1: G+ / G0 / G- experiments
 MOTOR:   disconnected
 ```
 
-Later motor work uses a separate ESC/proper three-half-bridge driver with its power return bonded to supply 0 at one star point. Motor stall current never returns through a TLE/synthetic midpoint or the cell's delicate I_0 receipt path.
+Later motor work uses a separate ESC or proper three-half-bridge driver with its own power return to the real supply return. Motor/coil current never returns through the TLE2426 midpoint or the cell's delicate reference-sense path. Standard three-phase BLDC six-step commutation is the comparison baseline; it normally energizes two phases per 60-degree electrical sector.
+
+Reference:
+https://onlinedocs.microchip.com/oxy/GUID-3AFF556D-77AD-488F-9A04-CD7AAB8F7DBC-en-US-1/GUID-A1DD3CA4-D59F-45CF-AA9F-EBBCB9EF37BA.html
 
 ---
 
@@ -190,3 +182,19 @@ Use these terms literally:
 - **PHYSICAL PASS** — measured on actual hardware.
 
 Never promote one level into the next without the missing receipt.
+
+
+---
+
+## 10. External reference requirement
+
+This contract is subordinate to G-778 Build Logic, Research, and Reference Validation Standard.
+
+Any new physical claim must identify:
+- the real reference mechanism;
+- the One-Wave-specific change;
+- a control build;
+- acceptance/failure criteria;
+- a retained measurement receipt.
+
+A MODEL PASS is never promoted to PHYSICAL PASS without actual bench data.

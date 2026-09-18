@@ -1,6 +1,8 @@
 # One-Wave Animator
 
-A simple Windows desktop cartoon-making program.
+**Current verified scope:** scene editor foundation, not yet a complete frame-by-frame animation workstation.
+
+The implemented milestone is a PySide6/Qt desktop scene editor. A full animator claim requires timeline/frame sequencing, playback, persistence of animation data, and export acceptance tests.
 
 ## Step 1 — Scene Editor
 
@@ -93,3 +95,34 @@ pyinstaller --noconsole --onefile --name "One-Wave Animator" main.py
 ```
 
 The executable is written to `dist/One-Wave Animator.exe`.
+
+
+## Build-status acceptance boundary
+
+Current evidence:
+- import background;
+- import transparent character layers;
+- drag/resize/reorder/delete;
+- save/reopen scene;
+- headless model and GUI smoke tests.
+
+This earns **SOFTWARE BUILD / SCENE EDITOR** status.
+
+It does **not** yet earn **FULL ANIMATOR** status.
+
+Full animator acceptance requires the repo's target path:
+
+```text
+install
+-> open
+-> build scene
+-> create real frame-by-frame sequence
+-> save
+-> reopen
+-> play
+-> export
+```
+
+A character merely moving continuously across one canvas is not equivalent to frame-by-frame animation.
+
+G-778/G-779 apply to build-status claims.

@@ -14,11 +14,11 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NODE_DIRS = (ROOT / "Nodes", ROOT / "Root_Axioms")
-MASTER_INDEX = ROOT / "00_MASTER_INDEX.md"
-ALIAS_REGISTRY = ROOT / "LEGACY_ID_ALIAS_REGISTRY.json"
+NODE_DIRS = (ROOT / "Nodes",)
+MASTER_INDEX = ROOT / "Nodes" / "Reference" / "00_MASTER_INDEX.md"
+ALIAS_REGISTRY = ROOT / "Nodes" / "Governance" / "Legacy_ID_Alias_Registry" / "LEGACY_ID_ALIAS_REGISTRY.json"
 D413_README = ROOT / "Nodes" / "D-413_Ground_Lattice_Orbital_Restoring_Simulation" / "README.md"
-AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
+AI_START = ROOT / "Books" / "Repository_Operations" / "AI_CANONICAL_START_HERE.md"
 
 NODE_REQUIRED = (
     "node_id",

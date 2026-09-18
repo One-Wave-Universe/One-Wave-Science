@@ -1,0 +1,486 @@
+# ONE-WAVE FRAMEWORK — MASTER DEFINITIONS LIST
+### Micro Subatomic Structure → Galactic Macro Scale
+Compiled from the current consolidated node repository; updated July 23, 2026.
+Gate values are read from each node's I-06 YAML metadata. Lifecycle and claim-specific detail remain in the source node and are not collapsed into this table.
+Updated 24 mass/Mirror-Gate handoff: `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
+Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
+Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
+Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
+Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
+
+---
+
+## GATE LADDER LEGEND (the "Brick" chart)
+
+Every node and book chapter carries exactly one gate value, read from its own I-06 YAML front matter (nodes) or its Gray comparison section (chapters). This is the full ordered lifecycle, formalized in `Governance_I_Series/I-02_Node_Proof_Trust_Lifecycle.md`; I-01 Rule 2 defers to it. Order is strict and does not skip stages.
+
+| Gate | Applies to | Meaning | Advances when |
+|---|---|---|---|
+| BROWN | Nodes | Ground / new idea. A template slot and an ID exist; nothing built yet. | Math is built and internally tested → GREEN |
+| GREEN | Nodes | Growing, ready to go. Defined and internally consistent; room to grow. | Math is built and internally tested → YELLOW |
+| GRAY | Book chapters (parallel to GREEN) | Standard Model comparison stated in full, without omission — the no-drift reference side (I-01 Rule 1: never rewritten to make the One-Wave section look better by contrast). | C(x,r) stated for every r → YELLOW, or a real experiment forces Standard Model negation → RED |
+| YELLOW | Nodes & chapters | The math is worked out — constrained and testable. ("Yellow brick road": the path to validation.) | Simulation run + metadata attached + first successful validation → BRONZE |
+| BRONZE | Nodes & chapters | Validated once. | Validated in a second, independent application → SILVER |
+| SILVER | Nodes & chapters | Validated twice, independently — integrated. | Extraordinary, extensive validation across applications → GOLD |
+| GOLD | Nodes & chapters | Confirmed. Extraordinary, extensive validation across applications. | Terminal — highest rung. |
+| RED | Chapters only, conditional | Reachable only from GRAY, and only when a real, already-run experiment forces the negation of the Standard Model at that comparison point. Never asserted from math alone. | → GOLD |
+
+Strict order: `Brown < Green < Yellow < Bronze < Silver < Gold` for nodes; `Brown < Gray < Yellow < Bronze < Silver < Gold` for chapters, with the one conditional branch `Gray → Red → Gold`. A composite node receives the most conservative gate among its load-bearing claims (I-06); more advanced sub-claims live in `claim_gate_detail` and never silently promote the whole node.
+
+Every node file under `Nodes/` or `Root_Axioms/` must expose this in machine-readable YAML front matter per I-06 (`node_id`, `gate`, `lifecycle`, etc.) — the `Gate` column below is read directly from that field, not asserted separately.
+
+---
+
+## TERMINOLOGY LEGEND
+
+Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in Gray reference sections; One-Wave names control the interpretation layer.
+
+## TIER 0 — FOUNDATION PRIMITIVES (A-Series)
+*The core recursive chain. Every other node and every book chapter is downstream of this sequence.*
+
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| A-101 | Ground / Zero | The reference state required for measurement. | YELLOW |
+| A-102 | Displacement | The reference-dependent separation between a current field state and Ground/Zero. | YELLOW |
+| A-103 | Differential | Generalized relation Δ(A,B) = A − B; Displacement (A-102) is the specialization against Ground/Zero. | YELLOW |
+| A-104 | Gradient | A-103's Differential applied across spatial relationships. | YELLOW |
+| A-105 | Restoring Response | The field's reaction to gradient imbalance: R_OW = −A(∇ψ). | YELLOW |
+| A-106 | Pressure Response | Field organization from curvature (second-order imbalance): P_OW = (b/2)(∇²ψ)² — derived via Derrick's theorem, curvature gap now closed (FIXED version). | YELLOW |
+| A-107 | Bounded Motion | Motion constrained by the restoring/pressure response; corrected stability criterion I₃ > I₁/2 (previously incorrectly stated as V(x)→∞) — FIXED version. | YELLOW |
+| A-108 | Local Stability | The condition where a small displacement from equilibrium produces a restoring response toward Ground/Zero. | YELLOW |
+| A-109 | Inertial Memory | The persistence of previous state information through recursive change; introduces damping parameter γ. | YELLOW |
+| A-110 | Oscillation | Repeated ground-crossing under bounded motion with inertial memory. | YELLOW |
+| A-111 | Recursion | The repeated self-referential application of the update rule across cycles. | YELLOW |
+| A-112 | Persistent Mode | A stable, self-sustaining recursive field pattern; persistence is structural recurrence, not the Mass-Effect mechanism. | YELLOW |
+| A-112a | Traveling Lattice Rupture | Conservative relocation model: equal opening ahead and reclosure behind transports a localized defect without automatically accumulating a permanent scar. | YELLOW |
+| A-113 | Projection | The extension/expression of a Persistent Mode's structure outward into the field. | YELLOW |
+| A-114 | Dispersion Relation | Exact lattice characteristic equation and small-k frequency law; does not by itself generate D-405 shell energy spacing. | YELLOW |
+| A-115 | Unified Compression Field | Gravity, Extended Compression, and Boundary Resistance are three views of one compression/displacement field; static energy returns through neutrinos and White Energy ejection. | GREEN |
+| A-116 | Three-Dimensional Spherical Default | Physical bounded modes are volumetric and sphere-like at lowest energy; 2D drawings are cross-sections, projections, or explicit negative-space layers. | GREEN |
+| A-117 | Dimensional Integrity and Projection Declaration | Locks 2D, 3D, and 4D as distinct native layers; requires explicit projection metadata and preserves 6:1, 12:1, and 24:1 as different coordination relations. | YELLOW |
+**Core update rule (all tiers inherit this):**
+`ψᵢⁿ⁺¹ = ψᵢⁿ + (1−γ)(ψᵢⁿ−ψᵢⁿ⁻¹) + β(⟨ψⱼⁿ⟩−ψᵢ)`
+
+---
+
+## TIER 1 — STRUCTURAL LANGUAGE LAYER (Appendices B–G)
+*These define the operational vocabulary — how Tier 0 primitives combine, cycle, and get evaluated. Appendices define language; Books apply it.*
+
+### Appendix B — Cycle & Relationship Structure (27 nodes)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| B-201 | Equilibrium Balance | Scalar measure of equilibrium between driving/opposing contributions: B=(k_E·E+k_I·I)−(k_R·R+k_L·L). | GREEN |
+| B-202 | Pressure | Local state generated by imbalance; a field quantity, not a surface quantity. | GREEN |
+| B-203 | Expression | The outward phase of a one-wave oscillation cycle (transmitter half-cycle). | GREEN |
+| B-204 | Compression | The inward phase of a one-wave oscillation cycle (receiver half-cycle). | GREEN |
+| B-205 | Mirror | The flip operation between Expression and Compression states. | GREEN |
+| B-206 | Paired Loop | Reciprocal exchange between two systems alternating Expression/Compression while sharing state. | GREEN |
+| B-206a | Shared Boundary | The common reference interface between paired regions. | YELLOW |
+| B-206b | Four Views — Direction, Phase, Strength, Reference | Four descriptive readout modes available to Mirror-gate evaluation; they are not four Mirror gates and do not change the six-gate count. | YELLOW |
+| B-207 | Threshold State | Three-variable state `(q,a,p)` separating integrity, activation, and compressive/expressive polarity. | YELLOW |
+| B-208 | Threshold Windows | Separate provisional windows for activation, polarity, and integrity; low energy is not automatically break. | YELLOW |
+| B-209 | Break Condition | Integrity `q` falls below a break boundary; activation alone cannot define break. | YELLOW |
+| B-210 | Return | Integrity recovers above a hysteresis return boundary while danger exposure is not increasing. | YELLOW |
+| B-211 | Loop Break | A Break Condition that preserves a future access pathway rather than full separation. | GREEN |
+| B-212 | Loop Counter | Tracks successful returns/loop breaks; determines Hyperloop entry condition. | GREEN |
+| B-213 | Access Line | A persistent recursive pathway from a Loop Break that preserves future exchange. | GREEN |
+| B-214 | Recursive Access Growth | The process by which successive Loop Breaks expand available communication structure. | YELLOW |
+| B-215 | Hyperloop | The recursive operating state reached after repeated successful exchanges/breaks — a higher regime of the same Paired Loop. | GREEN |
+| B-216 | Threshold Mathematics | Bounded vector update, local stability condition, integrity mismatch law, hysteresis, and reset-duration rule. | YELLOW |
+| B-217 | Access Line Mathematics | Formal framework for Access Line persistence/merging/strength/directionality. | YELLOW |
+| B-218 | Hyperloop Mathematics | Formal framework for Hyperloop entry/operation/exit. | YELLOW |
+| B-219 | Pressure Reversal | (definition pending formal extraction) | YELLOW |
+| B-220 | Scale Layer | The recursive-scaling requirement restated across all A-series nodes: preserve meaning across Micro→Small→Medium→Large→Macro. | YELLOW |
+| B-221 | Six Recursive Steps | The abstract six-stage cycle every recursive operational chain instantiates. | YELLOW |
+| B-222 | Oscillation Center | The switching zone a system occupies when neither fully compressed nor expressed. | YELLOW |
+| B-223 | Three Moves | The three fundamental state-change transitions, as a signed vector. | YELLOW |
+| B-224 | Two Choices | The fundamental directional bias applied to any movement. | YELLOW |
+| B-225 | Five-Stage Field Transformation Cycle | FIELD is the input/output envelope; the five internal stages are Compression → Center → Choice → Emergence → Expansion. | YELLOW |
+### Appendix C — Applied Mechanics & Conflict-Resolution (22 active files)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| C-301 | Mirror Gate | The physical location/scale/boundary condition where Mirror (B-205) operates. | GREEN |
+| C-302 | Momentum | p from wave number k: higher k → higher p. | GREEN |
+| C-303 | Kinetic Energy | Encodes motion energy from velocity v. | GREEN |
+| C-304 | Potential | Stored imbalance from compressed displacement. | GREEN |
+| C-305 | Work | Force applied over displacement. | GREEN |
+| C-306 | Torque | Rotational preference from off-center displacement. | GREEN |
+| C-307 | Angular Momentum | Product of angular velocity ω and rotational inertia I. | GREEN |
+| C-308 | Spin-½ | Emerges from 4π closure produced by repeated Mirror crossings. | GREEN |
+| C-309 | Friction Limit / Propagation Ceiling | Separates memory damping from maximum signal speed; neither one creates Mass Effect. | YELLOW |
+| C-310 | Resistance Field | The field's tendency to preserve identity against perturbation — distinct from Friction (γ) and Restoring Response (A-105). | YELLOW |
+| C-311 | Electric/Magnetic Duality | Radial and rotational projections of one pressure field P_c. | YELLOW |
+| C-312 | Hierarchical Sensor/Control Architecture | Four-level hierarchical control architecture for a physical body. | YELLOW |
+| C-313 | Lorentz Invariance Conflict | Flagged real conflict: the discrete update rule's continuum limit produces a *damped* wave equation. | YELLOW |
+| C-314 | Three Frames of Reference | Three distinct, overlapping coordinate systems (external "V2" proposal). | YELLOW |
+| C-315 | Wave Reader V1 | Sensor treating signal/noise as field states via differential nulling between mirrored emitters. | YELLOW |
+| C-316 | Charge Sign and Direction Conflation | Ch11's internal wording conflict is corrected; signed pressure, gradient direction, and whole-mode phase are now separate quantities. | YELLOW |
+| C-317 | Boundary-Tension Weave | Continuous 3D surface/volume coupling binds Vortex Phases; Tension-Link excitations are weave modes and Knot Lock has the line-tension limit `E_neck=tau_T L`, `F_lock=tau_T`. | GREEN |
+| C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |
+| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |
+| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |
+| C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
+| C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
+### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| D-401 | Flux | The field a Persistent Mode threads through space, coupling to other modes. | YELLOW |
+| D-402 | Resonant Mode | A persistent mode whose recursive update returns to itself after k steps. | GREEN |
+| D-403 | Spherical Modes | 3D bounded resonant modes with angular structure/quantum numbers. | YELLOW |
+| D-404 | Nested Resonance | Stable sub-modes existing within a primary resonant mode. | YELLOW |
+| D-405 | Harmonic Shell | Closed-path winding geometry 2πR=nλ; current variable-radius family quantizes geometry, not an energy ladder. | YELLOW |
+| D-406 | Isotope Stability Coupling Density | Candidate outer-shell coupling-density rule for isotope stability; carbon numbers not yet derived. | GREEN |
+| D-407 | Neutron Shell Calibration Reanalysis | Rejects width=spacing conflation; conditional adjacent 7/8 fit gives λ*=0.659395 fm, not yet calibrated. | YELLOW |
+| D-408 | Sixfold 2D Triangular-Hexagonal Lattice | Native 2D six-neighbor geometry; one center plus six surrounding sites forms the seven-cell cluster, with Flower-of-Life and Metatron views treated as overlays, not separate mechanisms. | GREEN |
+| D-409 | Twelvefold 3D Close-Packed Coordination | Native volumetric candidate with one center and twelve nearest neighbors; 2D sixfold views are declared projections. | GREEN |
+| D-410 | Twenty-Fourfold 4D Field/Void Recurrence Shell | Completed Field/Void state cycle around one persistent identity; 24:1 is recurrence coordination, not automatically a spatial neighbor count. | YELLOW |
+| D-411 | Mirrored Axis Pairs and Directed Route Counts | Separates N axis pairs, 2N directed routes, and 2N+1 centered states; requires ratio-domain declarations. | YELLOW |
+| D-412 | Lattice Simulation and State-Driven Visualization Standard | Requires real state updates, raw receipts, graphs, failure regions, and dimensional declarations; rejects decorative animation as simulation. | YELLOW |
+| D-413 | Ground Lattice Orbital-Restoring Simulation | Runnable triangular Ground background with a visibly deformed state-derived curvature surface, Ground-fixed and displacement-fixed views, off-axis restoring orbit, shell torque, ablations, CSV receipts, and explicit Yellow limitations. | YELLOW |
+| D-414 | Four-Interaction Shell Simulation | Reduced visualization of four coupled micro-scale channels driven by real datasets as wave inputs; candidate geometry and couplings, not a universal four-interaction derivation. | YELLOW |
+| D-415 | Nonlocal Three-Excitation One-Field Bench | Runnable six-neighbor triangular-lattice bench evolving one globally connected nonlinear Field and measuring three extended excitations with origin-free relational receipts; candidate kernel and potential remain underived. | YELLOW |
+| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | GREEN |
+### Appendix E — Field Mechanics, Cognition & Applied Extensions (27 nodes)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| E-501 | Zero Compression | The balanced reference state from which compression/expression are measured. | GREEN |
+| E-502 | Flowback | The return tendency of a displaced medium toward equilibrium. | GREEN |
+| E-503 | Pressure (Gradient Form) | Distributed influence from spatial displacement imbalance; from the field's gradient, not scalar balance. | GREEN |
+| E-504 | Surface | Boundary region between two displacement states; minimum-energy surface principle. | GREEN |
+| E-505 | Coupling | Mutual influence between two field components/modes. | GREEN |
+| E-506 | Stability | Bounded persistence under interaction. | GREEN |
+| E-507 | Scale-Invariant Loop | The Paired Loop structure (B-206) operates identically at every scale s — only participants/frequency change. | GREEN |
+| E-508 | Real Persistence Under Loss | Parked node; resolution depends on stability mechanisms established elsewhere. | YELLOW |
+| E-509 | Propagation Limit / Local-Transport Partition | c_L = Δx/Δt is the structural one-cell-per-step ceiling; local/transport bookkeeping cannot be converted into inertia or Mass Effect. | GREEN |
+| E-510 | Music Clock / Harmonic Oscillation | Rotational coordinate system for harmonic relationships, built on A-111's 12-tone relation. | YELLOW |
+| E-511 | Chord Rotation | Re-centers a chord onto its own instance of the E-510 clock. | YELLOW |
+| E-512 | Oscillation Window | Signed position-pair produced once Chord Rotation re-centers a chord. | YELLOW |
+| E-513 | Chord Leaning Direction | Directional lean when a chord's Oscillation Window is asymmetric. | YELLOW |
+| E-514 | Circle of Fifths / Functional Leaning | 12-position fifths clock; clockwise = brighter/sharper, counter = darker/flatter. | YELLOW |
+| E-515 | Observation Windows | Every observer samples a finite window of the same recursive field — not different mechanisms or universes. | YELLOW |
+| E-516 | Pink Noise Scaling Example | Equal energy per octave, applied as a scaling worked example. | YELLOW |
+| E-517 | Negative Space | The unexcited portion of the field where no Persistent Mode is currently expressed. | YELLOW |
+| E-518 | Relativistic Energy Density | External energy-density proposal checked and found compatible with E-503. | YELLOW |
+| E-519 | Three Fundamental Oscillations | Decomposition of a stable structure's oscillation into three nested components. | YELLOW |
+| E-520 | Recursive Self-Modeling Levels | Bounded 2D hexagonal lattice (6 neighbors/cell), tied to Book 2 Ch1 hex-tiling efficiency. | YELLOW |
+| E-521 | Pain/Pleasure Flow Coherence | Hypothesis: pain = turbulent standing-wave bottleneck; pleasure = laminar coherent flow. | YELLOW |
+| E-522 | Cellular/Stellar Scale Invariance | Extension of E-507's same-update-rule claim to cellular and stellar scales specifically. | YELLOW |
+| E-523 | Circle Pit / Vortex Transition | Crowd collective-motion phase transition (Vicsek-style alignment + noise), from real video/simulation data. | YELLOW |
+| E-524 | Kuramoto Lattice Synchronization | N coupled oscillators with phase θᵢ, natural frequency ωᵢ, coupled to neighbors. | YELLOW |
+| E-525 | Focal Point / Measurement Operator | A detector/eye/apparatus is a sampling operator, not a collapse mechanism. | YELLOW |
+| E-526 | Cellular Energy / ATP Kinetics | Standard compartmental model: dU/dt = P_in − P_use − P_loss. | YELLOW |
+| E-527 | Threshold-Triggered Relaxation Oscillator | Product-only cycle disproved; reduced recharge/depletion/hysteresis model validated against its analytic period. | BRONZE |
+| E-528 | Static Redshift Transport | Tired-light energy loss on a static background with explicit field-energy accounting; no expansion variables. | GREEN |
+| E-529 | Low-Coupling Return Mode | Neutrino mapping as a weakly coupled return-transport mode in the cosmic loop. | GREEN |
+| E-530 | White Energy Recirculation Loop | Threshold quasar/white-hole-scale ejection returns stored compression energy without expanding space. | GREEN |
+### Appendix F — Interaction Primitives (8 nodes — most mature tier, all GREEN)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| F-601 | Influence | A change in one bounded state produces a change in another — precondition for all interaction. | GREEN |
+| F-602 | Interaction Differential | Measures imbalance between two interacting states; drives interaction outcomes. | GREEN |
+| F-603 | Transfer | Reciprocal, conserved redistribution of a bounded quantity between states. | GREEN |
+| F-604 | Resonance | Aligned-choice reinforcement; same-phase combination exceeds either alone. | GREEN |
+| F-605 | Interference | Phase-dependent combination — reinforce, reduce, or cancel. | GREEN |
+| F-606 | Reflection | Rejection/return of an incoming state at a boundary. | GREEN |
+| F-607 | Transmission | Acceptance/passage of an incoming state through a boundary (complementary to Reflection). | GREEN |
+| F-608 | Attenuation | Progressive weakening of state strength over distance/time. | GREEN |
+### Appendix G — Evaluation, Modulation & Governance (30 nodes)
+| Node | Name | Definition | Gate |
+|---|---|---|---|
+| G-701 | Evaluation Differential | Difference between current state and response state; input to Evaluation. | GREEN |
+| G-702 | Evaluation | Examines the differential: what changed, where, does it matter, is it coherent/noise, does it require action. | YELLOW |
+| G-703 | Modulation | Determines what action to take from the evaluation signal — acts, where Evaluation does not. | YELLOW |
+| G-704 | Kabeuchi | Constructive differential review: receive → evaluate → modulate. | YELLOW |
+| G-705 | Correction | Applies the modulation signal to update current state. | YELLOW |
+| G-706 | Validation | Confirmation through successful participation in a cycle (not absolute proof). | GREEN |
+| G-707 | Persistence A | Mathematical convergence of the correction cycle. | GREEN |
+| G-708 | Persistence B | Interpretation that convergence (G-707) indicates successful balance. | YELLOW |
+| G-709 | Regulated-Response Balance | Regulated response under feedback — scaled, not absent or excessive. | GREEN |
+| G-710 | "Grow The Fuck Up" Gate | The transition from unregulated reaction to regulated response. | GREEN |
+| G-711 | Namika — Inter-System Relation (No Internal Gate 7) | A complete system has six internal gates; Namika names a higher-order relation between complete six-gate systems and is not an internal seventh gate. | YELLOW |
+| G-712 | Evaluation Mathematics | Formal mechanism for how E(Δₙ) produces a quantified signal (not yet derived). | YELLOW |
+| G-713 | Modulation Mathematics | Bounded cost-minimizing selection among Hold/Increase/Decrease/Redirect/Stabilize/Reject/Admit. | YELLOW |
+| G-714 | Decision Mathematics | Formal selection mechanism for Return vs. Break in the Threshold system. | YELLOW |
+| G-715 | Stellar Boundary Reversal | A "switchback": temporary reversal/fold/kink in solar-wind outward magnetic reference. | YELLOW |
+| G-716 | One-Wave Conversion Grammar | Reusable state-change pattern: compress through ordered layers → zero-point gates → single-crossing identity → full-field re-expression. | BRONZE |
+| G-716a | Conversion Simulation Rule | Executable test of G-716: path 24→12→6→3→1→24 through gate form 1(0)1. | YELLOW |
+| G-717 | Paired Reference Gate | (definition pending formal extraction) | YELLOW |
+| G-718 | Connection Gates | Seven gates describing how two independent systems connect without elimination or domination. | YELLOW |
+| G-719 | Neural System Functional Analogy Map | Receive→Evaluate→Choose→Update, mapped to neurons/circuits vs. software bricks/nodes — explicitly a functional analogy, not an anatomical claim. | YELLOW |
+| G-720 | No Control But Self-Control | Receive → Hold → Commit: external input is not controlled; only the system’s bounded compressive/expressive response and next state are selected. | YELLOW |
+| G-721 | Mirrored Alphabet Rabbit-Hop Coordinate Algorithm | Maps A–Z to signed packets ±(n,2n,2n+1), preserves separate direction/location and recursive/state axes, and compiles words into forward/reverse mirrored hop paths. | YELLOW |
+| G-721a | Fibonacci Word Hop Validation | Fixed Fibonacci regression path for the even/odd branch trace; golden-ratio convergence is a consequence metric, not a movement generator. | YELLOW |
+| G-721b | Sturmian Binary Branch Grammar | General binary branch grammar with mechanical-word, balance, aperiodicity, and p(n)=n+1 validation. | YELLOW |
+| G-721c | Episturmian Multi-Route Directive Grammar | Reversal-aware multi-symbol scheduler; sequence selects route family while -1(0)+1 selects direction or hold. | YELLOW |
+| G-721d | Arnoux-Rauzy Strict Multi-Route Validation | Exact strict-episturmian complexity and special-factor audit, including ternary p(n)=2n+1. | YELLOW |
+| G-721e | Plastic-Padovan Three-Rail Grammar | Candidate substitution grammar for n, 2n, and 2n+1 with plastic-number/Padovan receipts. | YELLOW |
+| G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
+| G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
+| G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
+---
+
+## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
+*Applies Tiers 0–1 to actual particle physics. Every chapter carries a mandatory Gray (Standard Model reference) section.*
+
+| Ch | Title | Core Claim | Status |
+|---|---|---|---|
+| 1 | Persistent Modes / Particle Comparison | What standard physics calls a particle is modeled as a Persistent Mode (A-112), not a point object. | GREEN |
+| 2 | Three-Vortex Knot / Proton Comparison | Three Vortex Phases held by a 3D Boundary-Tension Weave; extraction produces Knot Lock. | GREEN (struct.) / YELLOW (full deriv.) |
+| 3 | Scale Invariance | The same update rule governs every scale; only γ(s) and β(s) change. | GREEN (claim) / YELLOW (proof deferred) |
+| 4 | The Electron — Shell Mode & Charge Shell | Released inner expression pressure forms the charge shell. | GREEN (struct.) / YELLOW (charge shell deriv.) |
+| 5 | The Neutron — Two-Shell Pressure Balance | Two-shell model (R₊=0.7331 fm, R₋=0.8409 fm) passes charge-radius sign/magnitude test. | YELLOW |
+| 6 | The Nucleus — Braided Mode Cluster | Nuclear binding as braided-mode clustering. | YELLOW |
+| 7 | Propagating Light Mode / Photon Comparison | Traveling pressure/electromagnetic mode with zero rest Mass Effect in the current candidate; static redshift transport is E-528. | GREEN (struct.) / YELLOW (full deriv.) |
+| 8 | Low-Coupling Return Mode / Neutrino Comparison | Weakly coupled boundary-release transport; E-529 tests its proposed return-loop role. | YELLOW (low-coupling deriv. incomplete) |
+| 9 | No Observer Effect | Focal Point Coupling (sampling), not wavefunction collapse. | GREEN (claim) / YELLOW (formal model) |
+| 10 | Time at Micro Scale | Resistance and counted update-steps, not a separate dimension. | GREEN (def) / YELLOW (dilation deriv.) |
+| 11 | No Antimatter | Internal pressure phenomenon, not mirror particles. | GREEN (claim) / YELLOW (formal deriv.) |
+| 12 | Gravity at Micro Scale — Ever-Changing Gradient Field | Gradient response (A-105), not force-carrier exchange; null-particle structure. | GREEN (struct.) / YELLOW (full deriv.) |
+| 13 | Electricity & Magnetism | Lattice friction and stress-space; E/M as one pressure field (C-311). | GREEN (struct.) / YELLOW (Maxwell deriv.) |
+| 14 | Mass Effect as Four-Interaction Carried-Pattern Resistance | Defines Mass Effect from translation of the complete bounded recurrence; absolute-energy calibration and spectrum remain open. | YELLOW |
+| 15 | The 125 GeV Mirror-Gate Boundary Response / Higgs Comparison | Treats the observed 125 GeV response as the finite pressure-work barrier to a Mirror flip, not as a generic oscillator frequency. | GREEN (interpretation/form) / YELLOW (numerical derivation) |
+| 16 | Memory as Compressed State | Memory is modeled as a compressed reference/handle plus a reconstructable routine, with formal memory dynamics still open. | GREEN (structure) / YELLOW (formal model) |
+| 17 | AI and Human as the Same Architecture | Compares paired-loop information architecture across different substrates without claiming identical embodiment or consciousness. | GREEN (claim) / YELLOW (formal mapping) |
+
+*(Book 1 chapter numbering was closed in Updated 32; the active sequence is continuous from Ch1 through Ch17.)*
+
+---
+
+## TIER 3 — MACRO APPLICATIONS (Book 5: Galactic / Stellar Scale)
+*Same update rule as Tier 0, same language as Tier 1 — only γ(s), β(s), and structure size change.*
+
+| Ch | Title | Core Claim | Status |
+|---|---|---|---|
+| 1 | Galaxies and the Extended Compression Effect / Dark-Matter Comparison | The extended wake contribution of A-115 is the One-Wave mechanism compared against dark-matter observations. | YELLOW / GREEN (identity test) |
+| 2 | Stars — Sustained Persistent Modes Under Compression | Stars as long-lived Persistent Modes maintained under continuous compression. | YELLOW / YELLOW |
+| 3 | Supernovae — Break Condition at Stellar Scale | Stellar-scale instance of B-209 Break Condition. | YELLOW / YELLOW |
+| 4 | Black Holes, Quasars, and White Energy / Cosmic Mirror Gate | Compact compression reaches a Mirror-Gate threshold and ejects White Energy for static recirculation. | YELLOW (math scaffold) / GREEN (astrophysical identity) |
+| 5 | Stellar Nucleosynthesis — Sequential Complexity Through Threshold Crossings | Fusion sequence as repeated Threshold (B-207) crossings, inheriting Ch6's binding mechanism. | YELLOW / YELLOW |
+
+**Load-bearing structural note (A-115):** Gravity, dark-matter behavior, and Higgs-like resistance are treated as three measurement views of one compression/displacement field, not separate One-Wave substances:
+- **Gravity** = local directional gradient response
+- **Extended Compression Effect** = the One-Wave name for the extended/wake contribution compared against dark-matter observations
+- **Higgs field** = local boundary stiffness/resistance of that same field
+- **White Energy** = population-scale outward return through quasar/white-hole ejection and reinjection; it redistributes stored energy and never means expansion of space
+
+The old missing physics address I-09 is dissolved. Its intended content now has the proper A-series home A-115. C-322 holds the 125 GeV Mirror-Gate boundary-response anchor.
+
+---
+
+## TIER 4 — GOVERNANCE / CROSS-SCALE RULES (Appendix I)
+
+| Node | Name | Definition |
+|---|---|---|
+| I-01 | Special Rules | Formalizes the gate system and Gray/Green/Red lifecycle governing every node in the repository. |
+| I-01 Addendum | HIJKL Resolution | Resolves naming/numbering conflicts across the H/I/J/K/L node ranges. |
+| I-02 | Node Proof / Trust Lifecycle | Governs how a node moves through Brown → Gray/Green → Yellow → Bronze → Silver → Gold, and how Red (post-experiment) outcomes are handled. |
+| I-03 | Cross-Platform Packet Intake | Requires duplicate, lineage, and delta checks before evaluating incoming packet quality. |
+| I-04 | Scale Recurrence vs. Duplication | Prevents cross-scale instances from being flattened into same-scale duplicates. |
+| I-05 | Active Hypothesis vs. Quarantine | Keeps unproven but open One-Wave research active while separating it from verified claims and superseded source history. |
+
+**Gate/color lifecycle (applies to every node at every tier):**
+Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internally proven math, not experimentally validated) → Bronze → Silver → Gold. Red is reserved exclusively for post-experiment outcomes.
+
+---
+
+## SUMMARY: WHAT'S ACTUALLY SETTLED VS. OPEN
+
+**Solidly GREEN (internally consistent, no open Yellow Audit items blocking the core claim):**
+Appendix F entire (8/8 nodes), most of B-201–B-215, C-302–C-305, D-402, G-701/706/707/709/710/711.
+
+**GREEN claim / YELLOW math (structure is right, formal derivation still owed):**
+A-106, A-107 (both now closer after the FIXED versions), Higgs (Ch15), Gravity (Ch12), Photon (Ch7), most Book 1 chapters.
+
+**Fully open YELLOW (real, named, unresolved gaps):**
+- β_neutrino not yet derived from collapse energy (Ch8)
+- Mass-definition reconciliation in Book 5 Ch1
+- Lorentz invariance conflict (C-313) — real, checked, unresolved
+- Charge mapping after C-316 — textual conflict resolved; measured sign/gradient mapping remains underived
+- A-115/C-318/C-322/E-528/E-529/E-530 program - four-interaction response coefficients, absolute-energy calibration, 125 GeV pressure-work derivation, galaxy fits, static redshift transport, neutrino return, and White Energy balance remain open
+- Book 1 numbering is continuous from Ch1 through Ch17 after the Updated 32 renumber
+
+---
+*Compiled from: One_Wave_Complete_Repo_6.zip (primary, 162 files), overlaid with FIXED versions of A-106/A-107, cross-checked against All_Nodes_Complete.zip and All_Nodes_and_Appendicefgs.zip. Source status tags preserved exactly as written in each file — nothing upgraded or downgraded in this compilation.*
+
+---
+
+## ADDENDUM (added after a follow-up check flagged genuine gaps):
+
+**Root_Axioms/ folder (NEW):** A+101, A+102, A+103 — these are NOT duplicates
+of A-101/102/103. A-101 itself lists "A+101 One Field Ground" as its own
+upstream dependency. These root axiom files existed in the original archives
+but were never migrated into the working repo until this pass. Real gap,
+now fixed.
+
+**Book1_Micro/ additions:** Ch16 (Memory as Compressed State) and Ch17 (AI
+and Human Same Architecture) — real, written chapters that were sitting in
+a "Future_Book_Ideas" folder in the original archive and never got promoted
+into the main Book1_Chapters set. Now included.
+
+**Internal_Proofs/ directory (Updated 32 repaired):** Active proof drafts now have a canonical index, clean filenames, and explicit subordinate authority. Raw conversational sources are preserved under `History/Raw_AI_Proof_Discussions/`; current node gate metadata always controls.
+
+**Android_Body/ folder (NEW):** Functional Architecture + Book Ch1 (Bio-
+Inspired Design) — real content, hardware-adjacent, was present in archives
+but not previously categorized anywhere in this repo.
+
+**Virtual_Breadboard/ folder (NEW, merged into main from a feature branch
+via PR #13):** A runnable Electron/browser circuit simulator with a real
+modified-nodal-analysis solver (not a scripted animation) — resistors,
+diodes/LEDs, capacitors, inductors, AC sources, an MTJ quadrature sensor, a
+ferrite toroid with real mutual inductance, a virtual-ground rail splitter,
+and discrete N-/P-channel MOSFETs (real Vgs threshold, RDS(on), and an
+always-on body diode). It deliberately does NOT include any pre-built
+comparator/decision part for Node G-744's window-comparator primitive — an
+earlier "Ternary Cell" macro that hard-coded that decision was removed, so
+the hold/positive/negative behavior has to be discovered and proven by
+wiring the discrete MOSFETs, same as on a real bench (see the Memory-cell
+and Cal C/D calibration boards). Includes a live oscilloscope, an
+AI-assisted circuit-build panel, a headless `simulate.js` CLI (`node
+Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
+automation, and a physics regression suite (`node
+Virtual_Breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
+Full docs: `Virtual_Breadboard/README.md`. See G-744's own file for the
+node-to-software cross-reference and its claim-gate boundary.
+
+**History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md (historical unintegrated draft):** A differently-structured
+neutrino node (function-node format) distinct from Book1 Ch8's chapter
+treatment. Not reconciled against Ch8 — may be an earlier draft, may contain
+independent content. Needs a real comparison pass, not assumed identical.
+
+**Governance fork (Updated 32 resolved):** `I-01_Special_Rules.md` is the sole active I-01 authority. The alternate lifecycle draft is superseded by I-02 and preserved under `History/Superseded_Governance/`. The HIJKL resolution is binding through I-01 Rule 19 and the legacy alias registry.
+
+
+
+## ACTIVE HYPOTHESIS AND PROPOSED BUILD BOOKS
+
+| Book | Purpose | Status |
+|---|---|---|
+| Proposed One-Wave Consciousness | Active research into recursive self-modeling, M4 scale weighing, generative and administrative functions, boundaries, shared access, and cross-scale consciousness questions. | GREEN hypothesis / YELLOW grounding |
+| Proposed Android Brain | Hypothetical One-Wave engineering architecture using Dream Engine, M4, Administrator, Reference Ground, Working Ground, duplex gates, and joint commit rules. | YELLOW proposed build |
+| Android Body | Physical sensor, actuator, power, timing, and hierarchical control design. | YELLOW engineering |
+
+**Governance boundary:** Active hypotheses are not accepted facts, but they are not quarantined merely for being unknown. See I-05.
+
+
+## ACTIVE A–G FORMALIZATIONS FROM THE DISSOLVED H DRAFTS
+
+The accidental H-series was not adopted. Its source text is preserved in
+`History/2026-07-22_H_Index_Dissolution/`, while the active work now lives at
+its proper addresses:
+
+| Node / chapter | Recovered work | Status |
+|---|---|---|
+| B-207, B-208, B-216, G-703, G-713 | Two-axis threshold and modulation: integrity, activation, and polarity separated; bounded update and action-selection math added. | YELLOW |
+| A-112a and Book 5 Ch4 | Traveling lattice rupture: conservative relocation, opening/reclosure balance, velocity, width, and scar variable formalized. | YELLOW |
+| Proposed Consciousness Ch2 | Balanced self and room-for-growth model linked to the same two-axis mathematics without claiming universal biological constants. | YELLOW |
+
+Simulation is the next BRONZE step under I-02.
+
+
+---
+
+## PRESENTATION AND PUBLICATION VIEWS
+
+Canonical technical authority is under `Nodes/`; explanatory/publication material is under `Books/`.
+
+- `Books/Book1_Micro` through `Books/Book5_Macro`: textbook applications.
+- `Books/Android`: anime/manga Proposed Build manual.
+- `Books/Engineer_The_Future`: engineering field manuals.
+- `Books/One_Wave_Times/`: investigative/presentation papers.
+- `Books/Musical_Universe/`: music chapters and adapters.
+- `Books/Repository_System/`: repository organization and presentation rules.
+
+The former `Wiki_Pages/` and `AI_Readable_Packs/` duplicate authority trees were removed by G-777 normalization.
+
+See `Books/Repository_System/PRESENTATION_ARCHITECTURE.md` and `Books/Repository_System/BOOK_SYSTEM_MASTER_PLAN.md`.
+
+## HARD ARCHITECTURE LOCKS
+
+- I-01 Rule 16: no expansion of space in canonical One-Wave math.
+- I-01 Rule 17: use the terminology legend and 3D sphere-like default in One-Wave interpretation layers.
+
+<!-- AUTO-NODE-REGISTRY:START -->
+## Auto-synchronized canonical node registry supplement
+
+These I-06 canonical nodes exist under `Nodes/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.
+
+| Node | Name | Definition / source | Gate |
+|---|---|---|---|
+| A-110a | Wave Equation Derivation | Foundation Extension. Source: `Nodes/A-110a_Wave_Equation_Derivation.md`. | YELLOW |
+| A-114a | Exact Dispersion Roots | Foundation Extension. Source: `Nodes/A-114a_Exact_Dispersion_Roots.md`. | YELLOW |
+| A-114b | Dispersion Trail — Next Ten Questions | Trail / Compare-to-Repo. Source: `Nodes/A-114b_Dispersion_Trail.md`. | YELLOW |
+| B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
+| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
+| B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
+| B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
+| B-228 | Compression Energy Chains | Analogy / Scale Bridge — not established biochemistry identity. Source: `Nodes/B-228_Compression_Energy_Chains.md`. | YELLOW |
+| B-229 | One Wave Biology | Reinterpretation / Simplification — not a replacement textbook. Source: `Nodes/B-229_One_Wave_Biology.md`. | YELLOW |
+| C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
+| C-324 | No Entanglement — Detector Map | Principle / Measurement Mathematics. Source: `Nodes/C-324_No_Entanglement_Detector_Map.md`. | YELLOW |
+| D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
+| E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
+| E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
+| G-721b1 | Sturmian Mechanical Word Generator | Binary Sequence Generator / Mechanical Word. Source: `Nodes/G-721b1_Sturmian_Mechanical_Word_Generator.md`. | YELLOW |
+| G-721b2 | Sturmian Validation Properties | Sequence Validator / Complexity-Balance-Aperiodicity. Source: `Nodes/G-721b2_Sturmian_Validation_Properties.md`. | YELLOW |
+| G-721b3 | Mirror Reverse Complement Separation | Route Identity / Anti-Collapse Rule. Source: `Nodes/G-721b3_Mirror_Reverse_Complement_Separation.md`. | YELLOW |
+| G-721b4 | Rabbit-Hop Sturmian Branch Scheduler | Rabbit-Hop Route Scheduler / Two-Branch Adapter. Source: `Nodes/G-721b4_Rabbit_Hop_Sturmian_Branch_Scheduler.md`. | YELLOW |
+| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
+| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
+| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
+| G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`. | YELLOW |
+| G-728 | Mathematics Attack Laundry List | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-728_Mathematics_Attack_Laundry_List.md`. | BROWN |
+| G-729 | Mirror Operator for the Three Mirror Gates | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
+| G-730 | History, Phase, and Hysteresis Commitment Map | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`. | YELLOW |
+| G-731 | Ground, Center, and Coherent Hold Separation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`. | YELLOW |
+| G-732 | Vortex Trial-Profile Diagnostic Repair | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`. | YELLOW |
+| G-733 | Noise, Chatter, and False-Commitment Audit | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`. | YELLOW |
+| G-734 | Asymmetric Center-Origin Oscillator Reference | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`. | YELLOW |
+| G-735 | Chapter-Driven Simulator Program | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-735_Chapter_Driven_Simulator_Program.md`. | BROWN |
+| G-736 | Standard Model Interpretation Overlay for Micro Simulators | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`. | YELLOW |
+| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | GREEN |
+| G-738 | Center Geometry Classification and Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`. | YELLOW |
+| G-739 | Six-Gate Mirror-Action Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
+| G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | GREEN |
+| G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`. | YELLOW |
+| G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`. | YELLOW |
+| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair. Source: `Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md`. | GREEN |
+| G-744 | Literal One-Cell Breadboard Build — Real Parts and Math | Breadboard / Mixed-Signal / One-Wave Cell Primitive. Source: `Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md`. | YELLOW |
+| G-745 | Zone-Edge 125 GeV Lattice-Constant Hypothesis | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`. | YELLOW |
+| G-746 | E1 Scalar Dual Problem and Matrix Handoff | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-746_Damping_Matrix_Dispersion.md`. | BROWN |
+| G-747 | Two Group-Velocity Zeros | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-747_Two_Group_Velocity_Zeros.md`. | BROWN |
+| G-748 | Nested Hexagon Pyramids and Triangle Cube Hex | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-748_Nested_Hex_Pyramid_Triangle_Cube.md`. | YELLOW |
+| G-749 | C2 Point Rotation and Angular-Momentum Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-749_Point_Rotation_and_Angular_Momentum_Receipt.md`. | BROWN |
+| G-750 | Body-Rate Transport Mechanics | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-750_Body_Rate_Transport.md`. | BROWN |
+| G-751 | Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-751_Cell_Brain_Biology_RobotDog_Comparison.md`. | YELLOW |
+| G-752 | Triad Brain from Three Loops | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-752_Triad_Brain_Three_Loops.md`. | YELLOW |
+| G-753 | Brain versus 3:1 three-winding nerve | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-753_Brain_Versus_Three_Winding_Nerve.md`. | YELLOW |
+| G-754 | Cell to Chip to Cube to Rubik to Two Rubiks | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-754_Cell_Chip_Cube_Rubik_Two_State_Machines.md`. | YELLOW |
+| G-755 | Ternary is virtual ground and a choice | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-755_Ternary_Is_Virtual_Ground_And_Choice.md`. | YELLOW |
+| G-756 | Build contract square-away | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-756_Build_Contract_Square_Away.md`. | YELLOW |
+| G-757 | Discrete four-interaction energy on the seven-cell | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-757_Discrete_E4_Seven_Cell.md`. | YELLOW |
+| G-758 | Nudged elastic band between seven-cell wells | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-758_Nudged_Elastic_Band.md`. | YELLOW |
+| G-759 | Mass Effect as four-action carry | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-759_Mass_Effect_Four_Actions.md`. | YELLOW |
+| G-760 | Micro first attack — Mirror term on the seven-cell | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-760_Micro_First_Attack_Mirror_Term.md`. | YELLOW |
+| G-761 | Standard Model assumptions versus One-Wave node equations | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-761_SM_Assumption_Smash.md`. | YELLOW |
+| G-762 | Four balanced interactions | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-762_Four_Balanced_Interactions.md`. | YELLOW |
+| G-763 | Scalar differential vector tensor stratum harmonic | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-763_Scalar_to_Harmonic.md`. | YELLOW |
+| G-764 | Reversible Address Packet | Address Grammar / Receipt Contract. Source: `Nodes/G-764_Reversible_Address_Packet.md`. | YELLOW |
+| G-765 | Route Families and Operation Order | Reversible Arithmetic / Route Grammar. Source: `Nodes/G-765_Route_Families_and_Operation_Order.md`. | YELLOW |
+| G-766 | Opposite-Parity Wrapper and Shared Boundary | Parity Connector / Nested Address Boundary. Source: `Nodes/G-766_Opposite_Parity_Wrapper_and_Shared_Boundary.md`. | YELLOW |
+| G-767 | Route Provenance and Exact Reconstruction | Inverse Mapping / Reconstruction Receipt. Source: `Nodes/G-767_Route_Provenance_and_Exact_Reconstruction.md`. | YELLOW |
+| G-768 | Mirror Inversion and Traversal Separation | Coordinate Identity / Anti-Collapse Rule. Source: `Nodes/G-768_Mirror_Inversion_and_Traversal_Separation.md`. | YELLOW |
+| G-769 | Alphabet Coordinate Adapter | Symbolic Domain Adapter / Alphabet. Source: `Nodes/G-769_Alphabet_Coordinate_Adapter.md`. | YELLOW |
+| G-770 | Bounded Doubling and Division Rail | Scale Boundary / Exact Integer Reconstruction. Source: `Nodes/G-770_Bounded_Doubling_and_Division_Rail.md`. | YELLOW |
+| G-771 | Reversible Domain Adapter Contract | Cross-Domain Adapter Interface. Source: `Nodes/G-771_Domain_Adapter_Contract.md`. | YELLOW |
+| G-772 | Algorythm-Zer0 X Control | Algorythm-Zer0 Canon / X Control. Source: `Nodes/G-772_Algorythm_Zer0_X_Control.md`. | YELLOW |
+| G-773 | Algorythm-Zer0 Y Structure Rotation | Algorythm-Zer0 Canon / Y Structure-Rotation. Source: `Nodes/G-773_Algorythm_Zer0_Y_Structure_Rotation.md`. | YELLOW |
+| G-774 | Algorythm-Zer0 Z Depth | Algorythm-Zer0 Canon / Z Depth. Source: `Nodes/G-774_Algorythm_Zer0_Z_Depth.md`. | YELLOW |
+| G-775 | Algorythm-Zer0 T Time Change and Four-Branch Lock | Algorythm-Zer0 Canon / T Time-Change / Whole-State Lock. Source: `Nodes/G-775_Algorythm_Zer0_T_Time_Change.md`. | YELLOW |
+| G-776 | Algorythm-Zer0 System Rules Thresholds Variables and Transformations | Algorythm-Zer0 Canon / Shared System Layer. Source: `Nodes/G-776_Algorythm_Zer0_System_Rules_Thresholds_Variables_Transformations.md`. | YELLOW |
+| G-777 | Repository Content Normalization and Authority | Repository Governance / Content Placement. Source: `Nodes/G-777_Repository_Content_Normalization_and_Authority.md`. | YELLOW |
+| G-778 | Build Logic Research and Reference Validation Standard | Engineering Validation / Build Qualification. Source: `Nodes/G-778_Build_Logic_Research_and_Reference_Validation_Standard.md`. | YELLOW |
+| G-779 | Active Build Validation Matrix | Engineering Build Status / Evidence Matrix. Source: `Nodes/G-779_Active_Build_Validation_Matrix.md`. | YELLOW |
+| I-07 | Gate Colors and Metals | Canon / Language. Source: `Nodes/I-07_Gate_Colors.md`. | GREEN |
+<!-- AUTO-NODE-REGISTRY:END -->
