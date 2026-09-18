@@ -129,3 +129,7 @@ Reject this mapping if the three-rail interpretation adds no predictive or contr
 ![Plastic-Padovan generation-length ratios converging toward the plastic number.](../Nodes/G-721_Sequence_Validation/plastic_padovan_convergence.png)
 
 `Nodes/G-721_Sequence_Validation/` stores the exact generation table and validator. The receipt validates the substitution and length recurrence only.
+
+## Upstream address normalization
+
+The former monolithic G-721 address authority is retired to a legacy index. Address packets, route arithmetic, parity wrappers, reconstruction, transform separation, alphabet adaptation, bounded scale rail, and adapter rules are now owned by G-764 through G-771. This node consumes those responsibilities and must not redefine them.
