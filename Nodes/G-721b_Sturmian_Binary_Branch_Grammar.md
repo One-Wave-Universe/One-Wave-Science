@@ -111,19 +111,18 @@ G-721b remains the parent contract. Its jobs are split into child nodes so one f
 
 The child nodes may clarify one responsibility, but they may not redefine the parent equations or the locked G-721 Rabbit-Hop arithmetic.
 
-## Chapter set
+## Chapter integration
 
-Readable exposition lives in:
+Readable exposition is integrated into the normal Android-brain book:
 
-`Books/Rabbit_Hopping/`
+`Books/Proposed_Android_Brain/Ch06_Balanced_Nonperiodic_Sequence_Schedulers.md`
 
-with the ordered chapter path:
+The address layer below this scheduler is explained in:
 
-1. From Fibonacci to Sturmian
-2. Mechanical Words and the Two Branches
-3. Complexity, Balance, and Aperiodicity
-4. Mirror, Reverse, and Complement Are Different
-5. Scheduling Rabbit Hops Without Replacing Choice
+`Books/Proposed_Android_Brain/Ch05_Reversible_Route_Receipts.md`
 
 **Authority rule:** Nodes are canonical; chapters explain the nodes and must not silently promote examples or analogies into new grammar.
 
+## Upstream address normalization
+
+G-721 is now a legacy index. This scheduler consumes the decomposed address machinery in G-764 through G-771 and must not redefine it.
