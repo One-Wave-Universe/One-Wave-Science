@@ -294,6 +294,52 @@ with exit code `0`.
 
 # PART C — CLIENT-SPECIFIC BRIDGES
 
+## Session has no terminal/MCP tools
+
+If an AI says there is no terminal attached, do not treat that as proof the
+Jetson bridge is broken. First separate **gateway health** from **session
+attachment**.
+
+Healthy Hive Pipe v3.2 on the Jetson listens at:
+
+```text
+http://127.0.0.1:8765/mcp
+```
+
+and should list:
+
+```text
+health
+inventory_block_devices
+repo_status
+terminal_pwd
+terminal_which
+terminal_run
+python_run
+cpp_compile_run
+```
+
+If local MCP `initialize` and `tools/list` succeed but the AI chat cannot see
+those tools, reconnect/start that client with the Hive Pipe MCP connector
+attached. A running chat cannot obtain missing MCP tools merely by reading repo
+instructions.
+
+Use the client's own token from:
+
+```text
+~/.config/hive-pipe/tokens/<client>.token
+```
+
+For remote AI products, connect through the current authorized HTTPS tunnel to
+`/mcp`. Do not commit tokens or temporary public tunnel URLs.
+
+After reconnect, the AI must prove access by calling `terminal_pwd`, then a
+real `terminal_run` such as `git status --short --branch`. Until that succeeds,
+repo/terminal claims are unverified and must not be fabricated.
+
+See `AI_JETSON_TOOL_GUIDE.md` for the full failure matrix and recovery sequence.
+
+
 ## 9A. Direct Python and C++ without a human terminal relay
 
 Once an authorized AI is connected to Hive Pipe MCP, it can send bounded source

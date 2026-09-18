@@ -64,6 +64,17 @@ Examples live in `Miniverse/room3d/bodies/`. Accepted body updates increment the
 agent's `body_version`; the renderer rebuilds only that avatar. See
 `Miniverse/EXPAND_MINIVERSE.md` for the body schema, limits, and extension law.
 
+## Experiment lab
+
+TEST LAB now has persistent experiment definitions, bounded built-in runners, run
+measurements, and external Python/C++/Virtual Breadboard result receipts. See
+`Miniverse/room3d/EXPERIMENT_LAB.md`.
+
+Built-in models currently include `lattice_pulse` and `reference_recovery`.
+The room server does not execute arbitrary experiment source; authenticated
+Hive Pipe tools do that and post their scalar measurements back into the same
+lab ledger.
+
 ## 16-bit bodies and controls
 
 Connected agents render as blocky low-resolution cartoon robot/humanoid bodies.

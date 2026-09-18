@@ -71,6 +71,63 @@ class RoomTests(unittest.TestCase):
                 }],
             })
 
+    def test_lattice_pulse_experiment_runs_and_persists(self):
+        self.world.join("field", "FIELD", "AI")
+        exp = self.world.create_experiment(
+            "field",
+            "lattice_pulse",
+            title="pulse test",
+            hypothesis="signal should spread away from baseline",
+            parameters={"amplitude": 1.0, "coupling": 0.2, "retention": 0.95, "steps": 8},
+            experiment_id="pulse-1",
+        )
+        self.assertEqual(exp["status"], "DRAFT")
+        run = self.world.run_experiment("field", "pulse-1")
+        self.assertEqual(run["status"], "COMPLETE")
+        self.assertEqual(run["model"], "abstract_graph_signal_spread")
+        self.assertGreater(run["measurements"]["final_active_cells"], 1)
+        self.assertEqual(len(run["series"]["center_trace"]), 9)
+        rebuilt = server.WorldStore(self.state_path)
+        self.assertEqual(rebuilt.state["experiments"]["pulse-1"]["run_count"], 1)
+        self.assertEqual(rebuilt.state["experiments"]["pulse-1"]["last_result"]["source"], "miniverse_builtin")
+
+    def test_reference_recovery_reports_settling(self):
+        self.world.join("void", "VOID", "AI")
+        self.world.create_experiment(
+            "void",
+            "reference_recovery",
+            parameters={"perturbation": 1.0, "retention": 0.5, "steps": 12, "tolerance": 0.02},
+            experiment_id="recover-1",
+        )
+        run = self.world.run_experiment("void", "recover-1")
+        self.assertTrue(run["measurements"]["settled"])
+        self.assertIsNotNone(run["measurements"]["settling_step"])
+        self.assertLess(run["measurements"]["final_error_abs"], 0.02)
+
+    def test_external_experiment_receipt_is_bounded_and_persistent(self):
+        self.world.join("m4", "M4", "AI")
+        self.world.create_experiment("m4", "reference_recovery", experiment_id="external-1")
+        result = self.world.attach_experiment_result(
+            "m4",
+            "external-1",
+            "cpp_compile_run",
+            "independent C++ cross-check completed",
+            {"exit_code": 0, "max_error": 0.0002, "passed": True},
+        )
+        self.assertEqual(result["source"], "cpp_compile_run")
+        self.assertTrue(result["measurements"]["passed"])
+        rebuilt = server.WorldStore(self.state_path)
+        self.assertEqual(rebuilt.state["experiments"]["external-1"]["run_count"], 1)
+
+    def test_experiment_parameter_validation_rejects_bad_values(self):
+        self.world.join("field", "FIELD", "AI")
+        with self.assertRaisesRegex(ValueError, "coupling"):
+            self.world.create_experiment(
+                "field",
+                "lattice_pulse",
+                parameters={"coupling": 0.9},
+            )
+
     def test_http_health_and_state(self):
         srv=server.RoomServer(("127.0.0.1",0),self.world)
         thread=threading.Thread(target=srv.serve_forever,daemon=True);thread.start()

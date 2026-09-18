@@ -63,6 +63,113 @@ Api-Key: <token>
 
 Never commit or paste tokens into the public repository.
 
+## If an AI says "there is no terminal attached"
+
+Treat that as a **session attachment problem** until proven otherwise. Do not ask
+the AI to invent terminal output, and do not assume the Jetson gateway is down.
+
+The repo cannot make an already-running chat suddenly acquire MCP tools. The AI
+client/orchestrator must start or reconnect the session with the Hive Pipe MCP
+connector attached.
+
+### 1. Verify the Jetson bridge itself
+
+On the Jetson, Hive Pipe should be listening only on loopback:
+
+```bash
+ss -ltnp | grep ':8765'
+```
+
+Expected service:
+
+```text
+127.0.0.1:8765
+one-wave-hive-pipe
+```
+
+Then initialize MCP with that client's token and call `tools/list`. A healthy
+v3.2 gateway exposes at least:
+
+```text
+health
+inventory_block_devices
+repo_status
+terminal_pwd
+terminal_which
+terminal_run
+python_run
+cpp_compile_run
+```
+
+If those tools list correctly, **do not restart or rebuild Hive Pipe just
+because one AI chat cannot see them**.
+
+### 2. Reconnect the AI client/session
+
+Configure the client with:
+
+```text
+MCP endpoint: https://CURRENT-AUTHORIZED-TUNNEL/mcp
+Transport: Streamable HTTP
+Authentication: API key / Bearer token
+Token source on Jetson: ~/.config/hive-pipe/tokens/<client>.token
+```
+
+For a client running locally on the Jetson, the endpoint may be:
+
+```text
+http://127.0.0.1:8765/mcp
+```
+
+A remote client needs the currently authorized HTTPS tunnel/connector path. Do
+not hard-code an expired temporary tunnel URL into the repository.
+
+Start a **new/reconnected AI session** after attaching the connector if the
+product caches its tool list.
+
+### 3. Prove attachment from inside the AI session
+
+The AI should first list/see the Hive Pipe tools. Then call:
+
+```text
+terminal_pwd
+```
+
+and:
+
+```json
+{
+  "name": "terminal_run",
+  "arguments": {
+    "argv": ["git", "status", "--short", "--branch"],
+    "cwd": "/home/Scales/One-Wave-Science",
+    "timeout": 30
+  }
+}
+```
+
+Only after a real tool result returns should the AI claim it inspected the repo.
+
+### 4. Interpret the failure correctly
+
+```text
+Gateway tools/list works, AI session has no MCP tools
+    -> client/session attachment failure
+
+AI session lists tools, terminal_pwd fails authentication
+    -> token/connector authentication failure
+
+AI session lists tools, terminal_run rejects cwd/command
+    -> Hive Pipe safety/authorized-root rejection
+
+Port 8765 not listening / initialize fails locally
+    -> actual Jetson Hive Pipe service failure
+```
+
+A chat that has no tool attachment may still write a proposed patch, but it must
+label it unverified. It must never fabricate HEAD hashes, command output, file
+contents, or test results.
+
 ## Perplexity remote MCP
 
 Perplexity remote custom connectors support API-key authentication. Configure:
@@ -155,6 +262,10 @@ takes an identity and uses the existing authenticated bridge.
 The room server is `miniverse-room.service`. Its persistent state is under
 `~/.local/share/one-wave/miniverse-room/`. A graphical login autostarts the
 local browser view.
+
+TEST LAB has a persistent experiment ledger and visible controls. Built-in
+software experiments plus external Python/C++/Virtual Breadboard receipts are
+documented in `Miniverse/room3d/EXPERIMENT_LAB.md`.
 
 For custom AI bodies, new districts, workbenches, objects, animation, and world
 expansion, read `Miniverse/EXPAND_MINIVERSE.md` before editing. The native laptop
