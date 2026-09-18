@@ -383,15 +383,18 @@ Simulation is the next BRONZE step under I-02.
 
 ## PRESENTATION AND PUBLICATION VIEWS
 
-- `Wiki_Pages/`: Appendix A-G human reference pages.
-- `AI_Readable_Packs/`: lossless/structured machine views, including Appendix A.
+Canonical technical authority is under `Nodes/`; explanatory/publication material is under `Books/`.
+
 - `Books/Book1_Micro` through `Books/Book5_Macro`: textbook applications.
 - `Books/Android`: anime/manga Proposed Build manual.
-- `Books/Engineer_The_Future`: steampunk field manuals.
-- `One_Wave_Times/`: Modern-Day Epicycle and Fake-Mustache investigative papers.
-- `Musical_Universe/`: active content; final presentation format remains undecided.
+- `Books/Engineer_The_Future`: engineering field manuals.
+- `Books/One_Wave_Times/`: investigative/presentation papers.
+- `Books/Musical_Universe/`: music chapters and adapters.
+- `Books/Repository_System/`: repository organization and presentation rules.
 
-See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
+The former `Wiki_Pages/` and `AI_Readable_Packs/` duplicate authority trees were removed by G-777 normalization.
+
+See `Books/Repository_System/PRESENTATION_ARCHITECTURE.md` and `Books/Repository_System/BOOK_SYSTEM_MASTER_PLAN.md`.
 
 ## HARD ARCHITECTURE LOCKS
 
@@ -401,56 +404,25 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 <!-- AUTO-NODE-REGISTRY:START -->
 ## Auto-synchronized canonical node registry supplement
 
-These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.
+These I-06 canonical nodes exist under `Nodes/` but are not yet placed in the hand-curated tier tables above. They remain fully canonical and discoverable here. Supporting `NODE_ARTIFACT` files are intentionally excluded.
 
 | Node | Name | Definition / source | Gate |
 |---|---|---|---|
-| B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
-| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
-| B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
-| B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
-| C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
-| D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
-| E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
-| E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
-| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
-| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
-| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
-| G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`. | YELLOW |
-| G-728 | Mathematics Attack Laundry List | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-728_Mathematics_Attack_Laundry_List.md`. | BROWN |
-| G-729 | Mirror Operator for the Three Mirror Gates | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
-| G-730 | History, Phase, and Hysteresis Commitment Map | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`. | YELLOW |
-| G-731 | Ground, Center, and Coherent Hold Separation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`. | YELLOW |
-| G-732 | Vortex Trial-Profile Diagnostic Repair | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`. | YELLOW |
-| G-733 | Noise, Chatter, and False-Commitment Audit | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`. | YELLOW |
-| G-734 | Asymmetric Center-Origin Oscillator Reference | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`. | YELLOW |
-| G-735 | Chapter-Driven Simulator Program | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-735_Chapter_Driven_Simulator_Program.md`. | BROWN |
-| G-736 | Standard Model Interpretation Overlay for Micro Simulators | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`. | YELLOW |
-| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | GREEN |
-| G-738 | Center Geometry Classification and Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`. | YELLOW |
-| G-739 | Six-Gate Mirror-Action Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
-| G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | GREEN |
-| G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`. | YELLOW |
-| G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`. | YELLOW |
-| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair. Source: `Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md`. | GREEN |
-| G-744 | Literal One-Cell Breadboard Build — Real Parts and Math | Breadboard / Mixed-Signal / One-Wave Cell Primitive. Source: `Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md`. | YELLOW |
-| G-745 | Zone-Edge 125 GeV Lattice-Constant Hypothesis | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`. | YELLOW |
-| G-746 | E1 Scalar Dual Problem and Matrix Handoff | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-746_Damping_Matrix_Dispersion.md`. | BROWN |
-| G-747 | Two Group-Velocity Zeros | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-747_Two_Group_Velocity_Zeros.md`. | BROWN |
-| G-748 | Nested Hexagon Pyramids and Triangle Cube Hex | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-748_Nested_Hex_Pyramid_Triangle_Cube.md`. | YELLOW |
-| G-749 | C2 Point Rotation and Angular-Momentum Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-749_Point_Rotation_and_Angular_Momentum_Receipt.md`. | BROWN |
-| G-750 | Body-Rate Transport Mechanics | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-750_Body_Rate_Transport.md`. | BROWN |
-| G-751 | Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-751_Cell_Brain_Biology_RobotDog_Comparison.md`. | YELLOW |
-| G-752 | Triad Brain from Three Loops | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-752_Triad_Brain_Three_Loops.md`. | YELLOW |
-| G-753 | Brain versus 3:1 three-winding nerve | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-753_Brain_Versus_Three_Winding_Nerve.md`. | YELLOW |
-| G-754 | Cell to Chip to Cube to Rubik to Two Rubiks | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-754_Cell_Chip_Cube_Rubik_Two_State_Machines.md`. | YELLOW |
-| G-755 | Ternary is virtual ground and a choice | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-755_Ternary_Is_Virtual_Ground_And_Choice.md`. | YELLOW |
-| G-756 | Build contract square-away | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-756_Build_Contract_Square_Away.md`. | YELLOW |
-| G-757 | Discrete four-interaction energy on the seven-cell | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-757_Discrete_E4_Seven_Cell.md`. | YELLOW |
-| G-758 | Nudged elastic band between seven-cell wells | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-758_Nudged_Elastic_Band.md`. | YELLOW |
-| G-759 | Mass Effect as four-action carry | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-759_Mass_Effect_Four_Actions.md`. | YELLOW |
-| G-760 | Micro first attack — Mirror term on the seven-cell | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-760_Micro_First_Attack_Mirror_Term.md`. | YELLOW |
-| G-761 | Standard Model assumptions versus One-Wave node equations | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-761_SM_Assumption_Smash.md`. | YELLOW |
-| G-762 | Four balanced interactions | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-762_Four_Balanced_Interactions.md`. | YELLOW |
-| G-763 | Scalar differential vector tensor stratum harmonic | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-763_Scalar_to_Harmonic.md`. | YELLOW |
+| G-764 | Reversible Address Packet | Address Grammar / Receipt Contract. Source: `Nodes/G-764_Reversible_Address_Packet.md`. | YELLOW |
+| G-765 | Route Families and Operation Order | Reversible Arithmetic / Route Grammar. Source: `Nodes/G-765_Route_Families_and_Operation_Order.md`. | YELLOW |
+| G-766 | Opposite-Parity Wrapper and Shared Boundary | Parity Connector / Nested Address Boundary. Source: `Nodes/G-766_Opposite_Parity_Wrapper_and_Shared_Boundary.md`. | YELLOW |
+| G-767 | Route Provenance and Exact Reconstruction | Inverse Mapping / Reconstruction Receipt. Source: `Nodes/G-767_Route_Provenance_and_Exact_Reconstruction.md`. | YELLOW |
+| G-768 | Mirror Inversion and Traversal Separation | Coordinate Identity / Anti-Collapse Rule. Source: `Nodes/G-768_Mirror_Inversion_and_Traversal_Separation.md`. | YELLOW |
+| G-769 | Alphabet Coordinate Adapter | Symbolic Domain Adapter / Alphabet. Source: `Nodes/G-769_Alphabet_Coordinate_Adapter.md`. | YELLOW |
+| G-770 | Bounded Doubling and Division Rail | Scale Boundary / Exact Integer Reconstruction. Source: `Nodes/G-770_Bounded_Doubling_and_Division_Rail.md`. | YELLOW |
+| G-771 | Reversible Domain Adapter Contract | Cross-Domain Adapter Interface. Source: `Nodes/G-771_Domain_Adapter_Contract.md`. | YELLOW |
+| G-772 | Algorythm-Zer0 X Control | Algorythm-Zer0 Canon / X Control. Source: `Nodes/G-772_Algorythm_Zer0_X_Control.md`. | YELLOW |
+| G-773 | Algorythm-Zer0 Y Structure Rotation | Algorythm-Zer0 Canon / Y Structure-Rotation. Source: `Nodes/G-773_Algorythm_Zer0_Y_Structure_Rotation.md`. | YELLOW |
+| G-774 | Algorythm-Zer0 Z Depth | Algorythm-Zer0 Canon / Z Depth. Source: `Nodes/G-774_Algorythm_Zer0_Z_Depth.md`. | YELLOW |
+| G-775 | Algorythm-Zer0 T Time Change and Four-Branch Lock | Algorythm-Zer0 Canon / T Time-Change / Whole-State Lock. Source: `Nodes/G-775_Algorythm_Zer0_T_Time_Change.md`. | YELLOW |
+| G-776 | Algorythm-Zer0 System Rules Thresholds Variables and Transformations | Algorythm-Zer0 Canon / Shared System Layer. Source: `Nodes/G-776_Algorythm_Zer0_System_Rules_Thresholds_Variables_Transformations.md`. | YELLOW |
+| G-777 | Repository Content Normalization and Authority | Repository Governance / Content Placement. Source: `Nodes/G-777_Repository_Content_Normalization_and_Authority.md`. | YELLOW |
+| G-778 | Build Logic Research and Reference Validation Standard | Engineering Validation / Build Qualification. Source: `Nodes/G-778_Build_Logic_Research_and_Reference_Validation_Standard.md`. | YELLOW |
+| G-779 | Active Build Validation Matrix | Engineering Build Status / Evidence Matrix. Source: `Nodes/G-779_Active_Build_Validation_Matrix.md`. | YELLOW |
 <!-- AUTO-NODE-REGISTRY:END -->
+
