@@ -41,6 +41,10 @@ echo "PASS required animator files"
 python3 -m py_compile assistant_server.py
 echo "PASS assistant server syntax"
 
+grep -q 'FIXED_CEL_DEMO_SHEET' assistant_server.py
+grep -q '/demo-assets/gr-walk-right-12-cel-sheet.svg' c22-fixed-cel-demo.js
+echo "PASS fixed-cel demo asset route contract"
+
 if command -v node >/dev/null 2>&1; then
   for file in ./*.js; do
     node --check "$file" >/dev/null
