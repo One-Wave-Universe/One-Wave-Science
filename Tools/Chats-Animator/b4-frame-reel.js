@@ -13,16 +13,22 @@
     frame().snapshot = A.snapshot();
     renderReel();
   }
-  function restore(index) {
+  function restore(index, options = {}) {
     if (index < 0 || index >= frames.length) return;
-    captureCurrent();
+    const capture = options.capture !== false;
+    const onion = options.onion !== false;
+    if (capture) captureCurrent();
     activeIndex = index;
     restoring = true;
     A.restore(frames[index].snapshot);
     restoring = false;
     syncHold();
     renderReel();
-    A.onion?.render?.();
+    if (onion) A.onion?.render?.();
+  }
+
+  function preview(index) {
+    restore(index, { capture: false, onion: false });
   }
   function renderReel() {
     const reel = $('frame-reel');
@@ -32,7 +38,9 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.className = `frame-card${i === activeIndex ? ' active' : ''}`;
-      button.innerHTML = `<strong>Frame ${i + 1}</strong><span>${f.hold}x hold</span>`;
+      const previewAsset = (f.snapshot?.assets || []).find((asset) => asset.kind === 'character') || (f.snapshot?.assets || [])[0];
+      const previewSrc = previewAsset?.src || f.snapshot?.background?.src || '';
+      button.innerHTML = `${previewSrc ? `<img class="frame-thumb" src="${previewSrc}" alt="">` : ''}<strong>Frame ${i + 1}</strong><span>${f.hold}x hold</span>`;
       button.addEventListener('click', () => restore(i));
       reel.appendChild(button);
     });
@@ -81,6 +89,7 @@
     get activeFrame() { return frame(); },
     captureCurrent,
     restore,
+    preview,
     renderReel,
     makeFrame,
     insertAt,
