@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Lock the canonical six-step/six-gate Mirror/Action architecture.
+"""Lock the canonical logical six-step receipt without inventing six physical gates.
 
-Primitive cycle:
+Logical/receipt cycle:
     M1 -> A1 -> M2 -> A2 -> M3 -> A3
 Process labels:
     BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP
+
+Physical CELL_V1 primitive:
+    3 bidirectional A/B/C mirrors = 6 directed edge interfaces
+    Views travel UP and Actions/conditioning travel DOWN through the same mirrors.
 
 Permanent CI is read-only. ``--write`` is only an explicit migration aid for
 Books/Repository_Operations/AI_CANONICAL_START_HERE.md; the permanent workflow never writes repository
@@ -31,20 +35,19 @@ REPLACEMENTS = {
 }
 
 AI_REQUIRED = (
-    "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
-    "M1 -> A1 -> M2 -> A2 -> M3 -> A3",
-    "BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3",
-    "Mirror behavior occurs only at M1, M2, and M3",
-    "not four primitive Action gates",
+    "THREE PHYSICAL BIDIRECTIONAL MIRRORS:",
+    "A+ <-> A-",
+    "B+ <-> B-",
+    "C+ <-> C-",
+    "There are six directed edge interfaces, not six separate physical Mirror/Action gates.",
+    "Views/state travel UP and Actions/conditioning travel DOWN through the same mirrors.",
 )
 
 AI_FORBIDDEN = (
-    "6 measured oscillator gates",
-    "three physical Mirror Gates traversed in two orientations to realize the six logical positions",
-    "`-` is the Mirror Gate return/crossover",
-    "- Four Actions are **Inward, Outward, Across, Over**.",
-    "changes the six-pair oscillator",
+    "3 physical Mirror gates + 3 physical Action gates = 6 physical gates",
+    "six separate physical Mirror/Action gates",
 )
+
 
 MASTER_REQUIRED = (
     "| G-711 | Namika — Inter-System Relation (No Internal Gate 7) |",
@@ -123,10 +126,34 @@ def check() -> list[str]:
             if "not four primitive Action gates" not in text:
                 errors.append("B-206c must define four Action modes, not four primitive Action gates")
             continue
-        if "3 Mirror" not in text or "3 Action" not in text:
-            errors.append(f"{path.relative_to(ROOT)} does not declare 3 Mirror + 3 Action roles")
-        if "6 gates" not in text and "six-gate" not in text.lower():
-            errors.append(f"{path.relative_to(ROOT)} does not anchor the six-gate primitive")
+        if path.name in {
+            "G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md",
+            "UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md",
+        }:
+            lower = text.lower()
+            if "three physical bidirectional" not in lower and "3 physical bidirectional" not in lower:
+                errors.append(f"{path.relative_to(ROOT)} must anchor the three-bidirectional-mirror physical primitive")
+            if "six directed" not in lower and "6 directed" not in lower:
+                errors.append(f"{path.relative_to(ROOT)} must preserve six directed interfaces as interface count, not six devices")
+            if "views" not in lower or "actions" not in lower or "same" not in lower:
+                errors.append(f"{path.relative_to(ROOT)} must keep Views/Actions on the same physical mirrors")
+            continue
+
+        # Logical timing/receipt nodes may retain the six-position M/A sequence.
+        lower = text.lower()
+        if path.name in {
+            "B-221a_Six_Step_Oscillator_Program.md",
+            "G-739_Six_Gate_Trajectory_Extraction.md",
+        }:
+            if "six" not in lower:
+                errors.append(f"{path.relative_to(ROOT)} must preserve the logical six-position recurrence")
+        # Mirror-definition nodes must not be interpreted as creating six physical devices.
+        if path.name in {
+            "C-301_Mirror_Gate.md",
+            "G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md",
+        }:
+            if "mirror" not in lower:
+                errors.append(f"{path.relative_to(ROOT)} must retain the Mirror relation")
 
     return errors
 
@@ -148,7 +175,7 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print("PASS: 6 steps = 6 gates = 3 Mirror + 3 Action; views/action modes remain descriptors; no internal Gate 7")
+    print("PASS: logical six-step receipt preserved; physical CELL_V1 = 3 bidirectional A/B/C mirrors, 6 directed interfaces; Views/Actions share those mirrors; no internal Gate 7")
     return 0
 
 
