@@ -66,7 +66,7 @@ MCP_TOOLS.update({
     "terminal_run": {
         "name": "terminal_run",
         "title": "Terminal Run",
-        "description": "Run a structured argv command on the Jetson and return stdout, stderr, exit code, cwd, and timing. Runs as the normal unprivileged Jetson user; sudo/raw-disk/power commands and shell -c strings are blocked.",
+        "description": "Run structured argv on the Jetson and return stdout, stderr, exit code, cwd, and timing under the existing non-root Hive Pipe sandbox.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -80,6 +80,41 @@ MCP_TOOLS.update({
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
             },
             "required": ["argv"],
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": False},
+    },
+    "python_run": {
+        "name": "python_run",
+        "title": "Python Run",
+        "description": "Run supplied Python source directly as a temporary script on the Jetson. Source is removed after the call; execution stays inside the authenticated non-root Hive Pipe sandbox.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "code": {"type": "string", "minLength": 1, "maxLength": 12288},
+                "args": {"type": "array", "items": {"type": "string"}, "maxItems": 64},
+                "cwd": {"type": "string"},
+                "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+            },
+            "required": ["code"],
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": False},
+    },
+    "cpp_compile_run": {
+        "name": "cpp_compile_run",
+        "title": "C++ Compile And Run",
+        "description": "Compile supplied C++ source with g++, run the temporary binary, return compile/runtime output, then remove source and binary.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "code": {"type": "string", "minLength": 1, "maxLength": 12288},
+                "args": {"type": "array", "items": {"type": "string"}, "maxItems": 64},
+                "cwd": {"type": "string"},
+                "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                "standard": {"type": "string", "enum": ["c++17", "c++20", "c++23"]},
+            },
+            "required": ["code"],
             "additionalProperties": False,
         },
         "annotations": {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": False},
@@ -153,6 +188,25 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
                 cwd=arguments.get("cwd"),
                 timeout=arguments.get("timeout", 60),
             )
+        elif name == "python_run":
+            if not set(arguments).issubset({"code", "args", "cwd", "timeout"}) or "code" not in arguments:
+                raise ValueError("python_run requires code and accepts optional args/cwd/timeout")
+            result = terminal_parser.python_run(
+                arguments["code"],
+                args=arguments.get("args"),
+                cwd=arguments.get("cwd"),
+                timeout=arguments.get("timeout", 60),
+            )
+        elif name == "cpp_compile_run":
+            if not set(arguments).issubset({"code", "args", "cwd", "timeout", "standard"}) or "code" not in arguments:
+                raise ValueError("cpp_compile_run requires code and accepts optional args/cwd/timeout/standard")
+            result = terminal_parser.cpp_compile_run(
+                arguments["code"],
+                args=arguments.get("args"),
+                cwd=arguments.get("cwd"),
+                timeout=arguments.get("timeout", 60),
+                standard=arguments.get("standard", "c++20"),
+            )
         else:
             return mcp_error(request_id, -32602, "Unknown terminal tool")
         return tool_result(request_id, result, failed=not result.get("ok", False))
@@ -172,7 +226,7 @@ def handle_mcp(payload: object) -> dict | None:
         return {"jsonrpc": "2.0", "id": request_id, "result": {
             "protocolVersion": MCP_PROTOCOL,
             "capabilities": {"tools": {"listChanged": False}},
-            "serverInfo": {"name": "one-wave-hive-pipe", "version": "3.1"},
+            "serverInfo": {"name": "one-wave-hive-pipe", "version": "3.2"},
         }}
     if method == "ping":
         return {"jsonrpc": "2.0", "id": request_id, "result": {}}
@@ -183,7 +237,7 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
-        if name in {"terminal_pwd", "terminal_which", "terminal_run"}:
+        if name in {"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
             return handle_terminal_tool(request_id, name, arguments)
         if name not in MCP_TOOLS or arguments != {}:
             return mcp_error(request_id, -32602, "Unknown tool or non-empty arguments")
@@ -198,7 +252,7 @@ def handle_mcp(payload: object) -> dict | None:
 
 
 class GatewayHandler(BaseHTTPRequestHandler):
-    server_version = "HivePipe/3.1"
+    server_version = "HivePipe/3.2"
 
     def log_message(self, message: str, *args: object) -> None:
         print(f"{self.address_string()} - {message % args}", file=sys.stderr)
@@ -252,7 +306,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
             self.send_json(HTTPStatus.OK, {
                 "status": "ok",
                 "actions": sorted(mudl.ACTIONS),
-                "terminal_tools": ["terminal_pwd", "terminal_which", "terminal_run"],
+                "terminal_tools": ["terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"],
                 "mcp": "/mcp",
             })
             return

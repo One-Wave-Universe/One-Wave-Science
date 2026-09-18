@@ -76,7 +76,7 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(
             set(health["terminal_tools"]),
-            {"terminal_pwd", "terminal_which", "terminal_run"},
+            {"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"},
         )
 
     def test_enqueues_and_returns_named_action(self):
@@ -102,14 +102,14 @@ class GatewayTests(unittest.TestCase):
         })
         self.assertEqual(status, 200)
         self.assertEqual(initialized["result"]["serverInfo"]["name"], "one-wave-hive-pipe")
-        self.assertEqual(initialized["result"]["serverInfo"]["version"], "3.1")
+        self.assertEqual(initialized["result"]["serverInfo"]["version"], "3.2")
         status, listed = self.request("/mcp", method="POST", body={
             "jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}
         })
         self.assertEqual(status, 200)
         tools = {tool["name"]: tool for tool in listed["result"]["tools"]}
         self.assertTrue(set(mudl.ACTIONS).issubset(tools))
-        self.assertTrue({"terminal_pwd", "terminal_which", "terminal_run"}.issubset(tools))
+        self.assertTrue({"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}.issubset(tools))
         self.assertTrue(tools["terminal_pwd"]["annotations"]["readOnlyHint"])
         self.assertFalse(tools["terminal_run"]["annotations"]["readOnlyHint"])
 
@@ -141,6 +141,39 @@ class GatewayTests(unittest.TestCase):
         result = called["result"]["structuredContent"]
         self.assertEqual(result["stdout"], "PERPLEXITY_MCP_OK")
         self.assertEqual(result["exit_code"], 0)
+
+    def test_mcp_python_run_executes_supplied_source(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 23, "method": "tools/call",
+            "params": {
+                "name": "python_run",
+                "arguments": {"code": "print(6 * 7)"},
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["stdout"].strip(), "42")
+        self.assertEqual(result["language"], "python")
+        self.assertTrue(result["temporary_source"])
+
+    def test_mcp_cpp_compile_run_executes_supplied_source(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 24, "method": "tools/call",
+            "params": {
+                "name": "cpp_compile_run",
+                "arguments": {
+                    "code": '#include <iostream>\nint main(){std::cout << 42 << "\\n";}',
+                    "standard": "c++20",
+                },
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["stdout"].strip(), "42")
+        self.assertEqual(result["language"], "c++")
+        self.assertEqual(result["phase"], "run")
 
     def test_mcp_terminal_which(self):
         status, called = self.request("/mcp", method="POST", body={

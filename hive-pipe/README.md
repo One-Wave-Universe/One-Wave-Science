@@ -11,6 +11,8 @@ MCP / authenticated HTTP
         +-- terminal_pwd
         +-- terminal_which
         +-- terminal_run(argv, cwd?, timeout?)
+        +-- python_run(code, args?, cwd?, timeout?)
+        +-- cpp_compile_run(code, args?, cwd?, timeout?, standard?)
         |
         +-- bounded named queue actions
                 |
@@ -105,6 +107,16 @@ per-client tokens, normal non-root execution, `NoNewPrivileges`,
 
 Normal development commands, shell pipelines/wrappers, `git`, `python3`, test
 runners, compilers, and project scripts are supported.
+
+
+## Direct Python and C++
+
+Authorized MCP clients can execute bounded source directly without a human
+copying commands into the terminal. `python_run` executes temporary Python
+source; `cpp_compile_run` compiles temporary C++ with `g++`, executes it, and
+returns both compile and runtime receipts. Temporary files are removed after the
+request. The tools use the same non-root service sandbox and authorized work
+roots as `terminal_run`. See `AI_CODE_BRIDGE.md`.
 
 ## Perplexity test
 

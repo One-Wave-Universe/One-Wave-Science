@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
 import time
 from typing import Any
 
@@ -22,6 +23,9 @@ MAX_ARGS = 128
 MAX_ARG_LEN = 4096
 MAX_TIMEOUT = 300
 MAX_OUTPUT = 512 * 1024
+MAX_SOURCE = 12 * 1024
+MAX_TOOL_ARGS = 64
+CPP_STANDARDS = {"c++17", "c++20", "c++23"}
 
 # Direct high-risk system programs remain unavailable through normal AI terminal
 # access. The primary boundaries are still non-root execution, systemd
@@ -41,6 +45,13 @@ SENSITIVE_PARTS = (
     "/.aws/",
     "/.config/hive-pipe/tokens/",
     "/.config/gh/",
+)
+SENSITIVE_SOURCE_TERMS = (
+    ".ssh",
+    ".gnupg",
+    ".aws",
+    "hive-pipe/tokens",
+    ".config/gh",
 )
 
 
@@ -177,3 +188,89 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
             "timed_out": True,
             "duration_ms": int((time.monotonic() - started) * 1000),
         }
+
+def _validate_source(code: Any) -> str:
+    if not isinstance(code, str) or not code.strip():
+        raise ValueError("code must be a non-empty string")
+    if len(code.encode("utf-8")) > MAX_SOURCE:
+        raise ValueError(f"code exceeds {MAX_SOURCE} UTF-8 bytes")
+    lowered = code.lower()
+    if any(term.lower() in lowered for term in SENSITIVE_SOURCE_TERMS):
+        raise ValueError("source references credential/private-key paths")
+    return code
+
+
+def _validate_tool_args(args: Any) -> list[str]:
+    if args is None:
+        return []
+    if not isinstance(args, list) or len(args) > MAX_TOOL_ARGS:
+        raise ValueError(f"args must be a string array with at most {MAX_TOOL_ARGS} entries")
+    if not all(isinstance(arg, str) and len(arg) <= MAX_ARG_LEN for arg in args):
+        raise ValueError(f"every args entry must be a string no longer than {MAX_ARG_LEN} characters")
+    joined = "\n".join(args)
+    for marker in SENSITIVE_PARTS:
+        if marker in joined:
+            raise ValueError("access to credential/private-key paths is disabled")
+    return args
+
+
+def python_run(code: Any, *, args: Any = None, cwd: str | None = None,
+               timeout: int | float = 60) -> dict[str, Any]:
+    """Run supplied Python source as a temporary script inside an authorized root."""
+    source = _validate_source(code)
+    program_args = _validate_tool_args(args)
+    target = _validate_cwd(cwd)
+    with tempfile.TemporaryDirectory(prefix=".hive-pipe-python-", dir=target) as tmp:
+        script = Path(tmp) / "main.py"
+        script.write_text(source, encoding="utf-8")
+        result = run(["python3", str(script), *program_args], cwd=str(target), timeout=timeout)
+    result.update({
+        "language": "python",
+        "runner": shutil.which("python3") or "python3",
+        "temporary_source": True,
+    })
+    return result
+
+
+def cpp_compile_run(code: Any, *, args: Any = None, cwd: str | None = None,
+                    timeout: int | float = 60, standard: str = "c++20") -> dict[str, Any]:
+    """Compile supplied C++ source with g++, execute it, then remove temporary artifacts."""
+    source = _validate_source(code)
+    program_args = _validate_tool_args(args)
+    target = _validate_cwd(cwd)
+    if standard not in CPP_STANDARDS:
+        raise ValueError(f"standard must be one of: {', '.join(sorted(CPP_STANDARDS))}")
+    compiler = shutil.which("g++")
+    if not compiler:
+        raise ValueError("g++ is not installed or not on PATH")
+    with tempfile.TemporaryDirectory(prefix=".hive-pipe-cpp-", dir=target) as tmp:
+        source_path = Path(tmp) / "main.cpp"
+        binary_path = Path(tmp) / "program"
+        source_path.write_text(source, encoding="utf-8")
+        compile_result = run([
+            compiler, f"-std={standard}", "-O2", "-Wall", "-Wextra", "-pedantic",
+            str(source_path), "-o", str(binary_path),
+        ], cwd=str(target), timeout=timeout)
+        if not compile_result.get("ok"):
+            return {
+                "ok": False,
+                "language": "c++",
+                "phase": "compile",
+                "compiler": compiler,
+                "standard": standard,
+                "stdout": compile_result.get("stdout", ""),
+                "stderr": compile_result.get("stderr", ""),
+                "exit_code": compile_result.get("exit_code"),
+                "compile": compile_result,
+                "temporary_source": True,
+            }
+        run_result = run([str(binary_path), *program_args], cwd=str(target), timeout=timeout)
+    run_result.update({
+        "language": "c++",
+        "phase": "run",
+        "compiler": compiler,
+        "standard": standard,
+        "compile": compile_result,
+        "temporary_source": True,
+    })
+    return run_result
