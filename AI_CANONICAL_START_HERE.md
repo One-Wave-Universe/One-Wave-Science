@@ -4,17 +4,6 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
-## Algorythm-Zer0 authority
-
-For the current X/Y/Z control grammar, read:
-
-1. `Nodes/G-764_Algorythm_Zer0_XYZ_Control_Depth_Structure_Canon.md` — authoritative node / executable contract.
-2. `Books/Algorythm_Zer0/Ch01_Control_Depth_Structure.md` — synchronized human-readable chapter.
-3. `Algorythm-Zer0.md` — compact overview.
-
-Do not use `G-747` for Algorythm-Zer0. G-747 is already assigned to Two Group-Velocity Zeros. Any older reference that calls the Algorythm node G-747 is superseded by G-764.
-
-
 ## CELL_V1 mandatory geometry gate
 
 Before drawing, simulating, fabricating, or extending CELL_V1, read these files in order:
