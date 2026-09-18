@@ -375,3 +375,20 @@ Per issue #42 (Phase 2): no six-step flashcard/recursive recall system
 not build a generic workflow framework — `RouterLoop`/`policy.py` are
 concrete and specific to proving this one loop, not a reusable
 state-machine core with its own adapter contract.
+
+
+## Build validation status
+
+The documented parser/builder and router-loop phases are software components with explicit deterministic/unit-test contracts.
+
+A passing unit suite establishes only the implemented software behavior. It does not establish that the teaching sequence is pedagogically effective for a learner.
+
+Pedagogical validation requires a separate user-facing experiment:
+- present the generated problems/rules;
+- record error categories and time-to-answer;
+- compare progression before/after rule explanation;
+- detect repeated failure;
+- change teaching strategy after the declared failure threshold;
+- verify that performance improves rather than merely that the parser stays deterministic.
+
+G-778/G-779 apply.
