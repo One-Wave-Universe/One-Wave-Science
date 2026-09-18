@@ -1,61 +1,94 @@
-# Rotating field, hold, reinjection
+# Rotating-Field Experiment, Hold, and Recovery
 
-Three windings at the star **are** a rotating magnetic field when you walk live-gate around A→B→C.
-That rotation is not decoration. It is how state is carried and how it is put back.
+**Status:** experimental magnetic/control test.  
+**Reference baseline:** conventional three-phase motor commutation.
 
-```
-DC          opposed rails
-AC          live winding ±1, others STAY
-RC          window before stamp
-rotating B  three-phase walk of that AC
-hold        B that remains when all STAY
-reinject    leftover B is the next cycle's baseline
-QC          views UP (what B is now)
-            actions DOWN (torque / spin from the same flip)
-```
+A sequence that energizes spatially separated A/B/C coils can produce a **stepped field-direction sequence** if the winding geometry and current polarity are correct. That must be measured.
 
-One flip. Field turns. New view of B goes up. Last torque goes down. Same `seq`.
+Do not automatically call one-live-coil A→B→C stepping a conventional three-phase rotating magnetic field.
 
-## How the rotation is made
+For a standard three-phase BLDC six-step drive, an electrical cycle is divided into six 60-degree sectors and two of the three phases are normally energized in each sector.
 
-Not a fourth organ. The ternary layer already has three legs.
+Reference:
+https://onlinedocs.microchip.com/oxy/GUID-3AFF556D-77AD-488F-9A04-CD7AAB8F7DBC-en-US-1/GUID-A1DD3CA4-D59F-45CF-AA9F-EBBCB9EF37BA.html
 
-```
-seq n    live A  +1     B STAY  C STAY     B-vector toward A
-seq n+1  live B  +1     C STAY  A STAY     vector steps 120°
-seq n+2  live C  +1     ...                another 120
+## Experiment A — field-direction stepping
+
+Use three physically separated coils with declared orientation.
+
+```text
+step 1 -> energize A with measured polarity/current
+step 2 -> energize B with measured polarity/current
+step 3 -> energize C with measured polarity/current
 ```
 
-Opposite lean (−1) walks the other way. That is bidirectional at center, in flux.
-Hold = all STAY. Drive current dies. If the core / rotor / remanence **keeps an orientation**, that is state hold. If it forgets the instant current dies, you had torque, not a hold loop.
+Measure with a Hall probe, vector magnetometer, or calibrated search-coil geometry.
 
-Reinjection: the next engage does not start from zero. It starts from the B that stayed. DC clothes the same. AC leans on top of that leftover. That is the loop, folded home on G.
+Pass:
+the measured field vector changes direction in the intended ordered sequence.
 
-## Quadratic
+Fail:
+only coil-local amplitude changes, or the measured direction does not follow the declared order.
 
-```
-views UP     what the mid and the flux read now     (memristor / Hall / I_0 + probe)
-actions DOWN what the shaft / spin did              (torque, step, sound)
-```
+This proves **stepped field direction**, not yet smooth rotation.
 
-Same crossing. Spintronics here means: the action layer is the magnetic motion, not a UART packet. It is not a special IC you buy to make the sentence true.
+## Experiment B — conventional comparison
 
-## What has to be true on the bench
+Build or model a conventional three-phase six-step sequence using an appropriate bridge/driver and the same or comparable coil geometry.
 
-1. Three windings (or three coils) on one star = G.
-2. Walk live +1 around A B C. Probe (Hall or a search coil) must show the vector step. That is rotation.
-3. All STAY. Probe for leftover. If it drops to noise in one RC window, hold is empty — only the winding current was the memory.
-4. Engage again with lean = 0. If the leftover B still biases I_0 or the next twitch, reinjection is real.
-5. Views and action share seq on a moving flip.
+Compare:
+- field-vector trajectory;
+- current;
+- ripple;
+- torque/force if a rotor/load is present;
+- reversal.
 
-A toroid with one turn of hookup wire will fail 3. A rotor with reluctance or a core with remanence is the bet for 3–4.
+The One-Wave sequence earns a rotating-field claim only to the extent the measured field actually rotates.
 
-## Same object
+## HOLD
 
-```
-rotating B     = AC walked around three gates
-hold           = STAY + remanence
-reinject       = leftover B is next baseline
-I_0            = vagus of that field
-quadratic      = one flip both ways
-```
+All drive current removed is not automatically HOLD.
+
+A persistent magnetic-state claim requires a drive-off measurement that exceeds:
+- L/R decay;
+- capacitor storage;
+- diode/MOSFET reverse recovery;
+- Hall offset/drift;
+- thermal drift;
+- instrument zero.
+
+If the measured state falls to the control/noise floor, the system had driven field, not retained magnetic memory.
+
+## Recovery / reinjection
+
+Magnetic or inductive energy recovery is real engineering when energy is intentionally routed back to a DC-link/storage element through a defined path.
+
+Measure:
+- energy supplied to the event;
+- reservoir energy before/after;
+- recovered energy;
+- energy reused later;
+- losses.
+
+The virtual midpoint/reference is not the recovery reservoir.
+
+## Views and actions
+
+Sensor return and actuator command may share one logical sequence identifier, but they remain different physical signal paths unless the hardware proves otherwise.
+
+Do not label a shared timestamp or controller state as a shared physical current path.
+
+## Required receipts
+
+For each run record:
+- winding geometry and polarity;
+- current waveform;
+- drive sequence;
+- measured magnetic field vector or calibrated proxy;
+- drive-off decay;
+- reservoir voltage/energy if recovery is claimed;
+- control run;
+- temperature;
+- PASS/FAIL reason.
+
+G-778 applies.
