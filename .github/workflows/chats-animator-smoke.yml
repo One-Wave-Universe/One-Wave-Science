@@ -27,12 +27,27 @@ jobs:
       - name: Verify animator and AI health endpoint serve
         run: |
           curl --fail --silent --show-error http://127.0.0.1:8765/index.html > /tmp/one-wave-index.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/demo-assets/gr-walk-right-12-cel-sheet.svg > /tmp/gr-fixed-cel-sheet.svg
+          grep -q '<svg' /tmp/gr-fixed-cel-sheet.svg
           grep -q 'ONE-WAVE ANIMATOR' /tmp/one-wave-index.html
           grep -q 'c18-director-dialogue.js' /tmp/one-wave-index.html
           grep -q 'c19-local-control-api.js' /tmp/one-wave-index.html
           grep -q 'c20-five-scale-architecture.js' /tmp/one-wave-index.html
           grep -q 'c21-copy-paste-assistant-plugin.js' /tmp/one-wave-index.html
+          grep -q 'c23-runtime-acceptance.js' /tmp/one-wave-index.html
           curl --fail --silent --show-error http://127.0.0.1:8765/api/assistant/health | grep -q '"ok": true'
+      - name: Run real browser Animator integration acceptance
+        run: |
+          BROWSER="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          if [ -z "$BROWSER" ]; then
+            echo "No Chrome/Chromium found on runner" >&2
+            exit 1
+          fi
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu             --virtual-time-budget=9000             --dump-dom 'http://127.0.0.1:8765/index.html?selftest=1'             > /tmp/animator-selftest-dom.html
+          grep -q 'data-animator-selftest="pass"' /tmp/animator-selftest-dom.html
+          grep -q 'data-animator-frames="12"' /tmp/animator-selftest-dom.html
+          grep -q 'data-animator-drawings="12"' /tmp/animator-selftest-dom.html
+          grep -q 'data-animator-playback-readonly="true"' /tmp/animator-selftest-dom.html
       - name: Stop smoke server
         if: always()
         run: |
