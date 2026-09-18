@@ -5,6 +5,7 @@ namespace: "NODE"
 gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Repository Governance / Content Placement"
+claim_gate_detail: "YELLOW: canonical project structure or validation contract; empirical/domain-specific claims remain subject to stated tests and evidence boundaries."
 metadata_standard: "I-06"
 ---
 
