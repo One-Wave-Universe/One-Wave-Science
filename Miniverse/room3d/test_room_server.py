@@ -46,5 +46,3 @@ class RoomTests(unittest.TestCase):
             srv.shutdown();srv.server_close();thread.join()
 
 if __name__=="__main__": unittest.main()
-
-[executed on device: localhost.localdomain (bc358fe4-7a49-4f2d-b583-3f3aaa27fc71)]
