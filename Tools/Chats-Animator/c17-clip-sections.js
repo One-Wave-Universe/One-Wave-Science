@@ -68,12 +68,12 @@
     const { start, end } = normalizeRange();
     try {
       for (let i = start - 1; i < end; i += 1) {
-        R.restore(i);
+        R.preview(i);
         const hold = Math.max(1, Number(R.frames[i].hold) || 1);
         await sleep(hold * 1000 / fps());
       }
     } finally {
-      R.restore(original);
+      R.preview(original);
     }
   }
 

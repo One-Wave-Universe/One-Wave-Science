@@ -1,4 +1,4 @@
-"""Render a layered Goblin Raccoon movement demo.
+"""RETIRED NONCANONICAL DEMO — not an Animator acceptance path.\n\nRender a layered Goblin Raccoon movement demo.
 
 The background camera and transparent character sprite are evaluated as
 independent animation tracks and composited only for the encoded output.
@@ -103,4 +103,7 @@ def render() -> Path:
 
 
 if __name__ == "__main__":
-    print(render())
+    raise SystemExit(
+        "RETIRED: this moving-layer demo is not the One-Wave Animator. "
+        "Use Tools/Chats-Animator and the fixed-cel reel/playback path."
+    )

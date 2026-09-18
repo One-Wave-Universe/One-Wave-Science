@@ -10,6 +10,8 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 APP_DIR = Path(__file__).resolve().parent
+REPO_ROOT = APP_DIR.parents[1]
+FIXED_CEL_DEMO_SHEET = REPO_ROOT / "Assets" / "Goblin_Raccoon" / "gr-walk-right-12-cel-sheet.svg"
 PORT = int(os.environ.get("ONE_WAVE_ANIMATOR_PORT", "8765"))
 CONFIG_DIR = Path.home() / ".config" / "one-wave-animator"
 CONFIG_FILE = CONFIG_DIR / "openai.env"
@@ -286,6 +288,17 @@ class Handler(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path.startswith("/api/assistant/health"):
             return self.send_json(200, health())
+        if self.path == "/demo-assets/gr-walk-right-12-cel-sheet.svg":
+            if not FIXED_CEL_DEMO_SHEET.is_file():
+                return self.send_error(404, "Fixed-cel demo sheet missing")
+            body = FIXED_CEL_DEMO_SHEET.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/svg+xml")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         return super().do_GET()
 
     def do_POST(self):

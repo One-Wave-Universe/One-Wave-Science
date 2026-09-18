@@ -17,8 +17,8 @@
     A.state.calibrationVisible = false;
     A.state.placementMode = false;
     A.renderAll();
-    R.restore(Math.min(playIndex, R.frames.length - 1));
-    A.status('Playback stopped');
+    if (R.frames.length) R.preview(Math.max(0, Math.min(playIndex - 1, R.frames.length - 1)));
+    A.status('Playback stopped — reel unchanged');
   }
   function step() {
     if (!playing || !R.frames.length) return;
@@ -27,7 +27,7 @@
       return;
     }
     const f = R.frames[playIndex];
-    A.restore(f.snapshot);
+    R.preview(playIndex);
     document.getElementById('calibration-overlay')?.setAttribute('hidden', '');
     const delay = Math.max(1, f.hold) * (1000 / fps);
     playIndex += 1;

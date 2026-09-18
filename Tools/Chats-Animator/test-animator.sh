@@ -23,6 +23,10 @@ required=(
   c19-local-control-api.js
   c20-five-scale-architecture.js
   c21-copy-paste-assistant-plugin.js
+  c22-fixed-cel-core.js
+  c22-fixed-cel-demo.js
+  c22-fixed-cel-demo.test.js
+  c23-runtime-acceptance.js
   assistant_server.py
   configure-openai.sh
   launch-animator.sh
@@ -38,11 +42,16 @@ echo "PASS required animator files"
 python3 -m py_compile assistant_server.py
 echo "PASS assistant server syntax"
 
+grep -q 'FIXED_CEL_DEMO_SHEET' assistant_server.py
+grep -q '/demo-assets/gr-walk-right-12-cel-sheet.svg' c22-fixed-cel-demo.js
+echo "PASS fixed-cel demo asset route contract"
+
 if command -v node >/dev/null 2>&1; then
   for file in ./*.js; do
     node --check "$file" >/dev/null
   done
-  echo "PASS JavaScript syntax"
+  node c22-fixed-cel-demo.test.js
+  echo "PASS JavaScript syntax + fixed-cel playback invariant"
 else
   echo "SKIP JavaScript syntax: node not installed"
 fi
@@ -56,12 +65,17 @@ grep -q 'c19-local-control-api.js' index.html
 grep -q 'c20-five-scale-architecture.js' index.html
 grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
+grep -q 'c22-fixed-cel-demo.js' index.html
+grep -q 'Load 12-Cel GR Demo' index.html
+grep -q 'c23-runtime-acceptance.js' index.html
+grep -q 'system-status' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
 grep -q 'gpt-5.6-sol' assistant_server.py
 grep -q 'gpt-image-2' assistant_server.py
 grep -q 'x/z-image-turbo' assistant_server.py
-grep -q 'OPENAI_API_KEY' configure-openai.sh
+grep -q 'openai.env' configure-openai.sh
+grep -q 'Retry AI Connection' configure-openai.sh
 echo "PASS OpenAI Director + local-first art contract"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
@@ -69,6 +83,11 @@ grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
 grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
 grep -q 'Retry AI connection' c21-copy-paste-assistant-plugin.js
 echo "PASS live assistant UI contract"
+
+grep -q "preview(index)" b4-frame-reel.js
+grep -q "R.preview(playIndex)" b7-playback.js
+grep -q "R.preview(i)" c17-clip-sections.js
+echo "PASS playback and clip preview use read-only reel preview"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
