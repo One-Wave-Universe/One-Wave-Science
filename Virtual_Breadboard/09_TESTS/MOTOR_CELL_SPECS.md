@@ -1,68 +1,97 @@
-# Motor cell specs
+# Motor Cell Specs
 
-One winding + one sensor cell on one star. Two tiers. Do not mix them on one breadboard.
+**Status:** experimental actuator interface.  
+**Authority:** G-778 Build Logic / Research / Reference Validation Standard and `Virtual_Breadboard/BENCH_REALITY_CONTRACT.md`.
 
-## F0 — bench nerve (what you build first)
+Do not use the logic-test breadboard as a motor power stage.
 
-| item | spec |
+## F0 — bench nerve / command proof
+
+This tier proves the command and sensing logic with a resistive or very small inductive dummy load.
+
+| item | current authority |
 |---|---|
-| Rails | ±12 V dual, or 9 V + TLE mid |
-| Current cap | 50–100 mA supply knob |
-| High FET | AO3401-class P-MOS, SOT-23 breakout |
-| Low FET | 2N7000 / BS170, **200 mA cont., 500 mA pulse**, Rds ~1–5 Ω |
-| Gate | 220 Ω series, 10 k pulldown to the rail that means OFF |
-| Load first | 1 kΩ to star |
-| Load next | coil or tiny star motor **stall < 80 mA** |
-| Law R | 10 kΩ 1% +G and −G |
-| I_0 shunt | 1 Ω 1 W |
-| Pulse | RC window, then STAY |
-| Hold current | ≈ law + puck electronics, not hover |
+| Supply | nominal 5 V protected/current-limited source |
+| Mid/reference | TLE2426 or equivalent measured midpoint, signal/reference duty only |
+| Initial load | 1 kΩ resistive dummy load |
+| Switching | low-current MOSFET pair only after VGS is measured |
+| Gate | explicit series resistor + OFF bias appropriate to the actual topology |
+| Current | low mA first; midpoint imbalance kept well below TLE2426 capability |
+| Measurement | supply current, midpoint drift, VGS, branch current, temperature |
+| Motor | **not connected in F0** |
 
-2N7000 is the bottleneck. Treat F0 as **80 mA class**, not 4 A class even if the P-MOS could.
+The TLE2426 is a rail splitter/reference part, not a motor return.
 
-## F1 — later actuator (PCB, not protoboard)
+Reference:
+https://www.ti.com/product/TLE2426
 
-| item | spec |
-|---|---|
-| Rails | still ±12 or 4S only after receipts |
-| FETs | matched half-bridge module or ≥4 A logic pair |
-| Stall budget | set by module + current limit, not hope |
-| Inner loop | commercial FC if flying |
-| Nerve | still +1 / STAY / −1, one live pair |
+A 2N7000/BS170 may be useful for low-current switching experiments, but it is not the basis for a motor-current rating. Do not infer a safe motor stall current from a headline absolute-maximum transistor number.
 
-## Sensor cell (built into the motor cell)
+## F1 — real actuator / motor tier
 
-| channel | part | electrical |
-|---|---|---|
-| heat | 10 k NTC 3950 | divider to G, ~0.1 s tau |
-| vibe | 20 mm piezo or analog IMU | vs G, AC couple ok |
-| balance / where | SS49E | 5 V, OUT ~1.0–2.5 V, ~1.4 mV/G |
-| puck power | 5 V vs G | few mA |
+Move off the solderless breadboard.
 
-Heat trip (Void): NTC implying >70 °C can first. Vibe trip: hash ≫ walk-level. Balance: opposite pucks differ > belt.
+Use:
+- a proper three-half-bridge driver / ESC / motor-control module;
+- a power source sized to the motor;
+- explicit current limit or over-current protection;
+- intentional freewheel/flyback paths;
+- dead time where the chosen switching scheme requires it;
+- rotor-position feedback, back-EMF logic, or a declared open-loop startup method;
+- thermal monitoring.
 
-## Timing
+Conventional three-phase BLDC six-step commutation is the comparison baseline. It divides an electrical cycle into six 60-degree sectors and typically energizes two of the three phases in each sector.
 
-| | F0 |
-|---|---|
-| FET edge | slower than body-diode trr (don’t stamp the spike) |
-| RC window | ms, not tens of ns |
-| Hall sample | after window |
-| STAY settle | before next lean |
+Reference:
+https://onlinedocs.microchip.com/oxy/GUID-3AFF556D-77AD-488F-9A04-CD7AAB8F7DBC-en-US-1/GUID-A1DD3CA4-D59F-45CF-AA9F-EBBCB9EF37BA.html
 
-## Pass numbers (write them)
+## Ternary command mapping
 
+The One-Wave command grammar may be tested as:
+
+```text
+DOWN / HOLD / UP
 ```
-V+ V− VG
-I_0 STAY          < 1 mA plus puck
-I_0 +1 pulse      < knob, G sits
-NTC at STAY       ambient
-NTC after 10 pulses   noted, not runaway
-piezo at STAY     quiet
-piezo at pulse    visible
-Hall quiet / walk / STAY-after
-```
+
+but that is a controller abstraction, not a motor topology.
+
+A valid test must define how those three commands map to the real driver:
+- direction/current/torque request;
+- active braking or zero torque;
+- opposite direction/current/torque request.
+
+## Sensor cell
+
+Candidate sensing may include:
+- NTC temperature sensing;
+- Hall magnetic/position sensing;
+- encoder;
+- current shunt;
+- accelerometer/IMU;
+- search coil.
+
+Each sensor must use its actual datasheet transfer function and calibrated threshold. Placeholder thresholds such as “hash >> walk-level” are not acceptance criteria.
+
+## Pass criteria
+
+F0 passes when:
+- the midpoint remains within its declared hold belt;
+- VGS is sufficient for the claimed switch state;
+- measured current matches the modeled range;
+- no unexpected heating occurs;
+- the DOWN/HOLD/UP command states are electrically distinguishable.
+
+F1 passes only when:
+- the motor/actuator responds reproducibly;
+- current, voltage, phase/sector, position/torque where applicable, and temperature are recorded;
+- a conventional driver/control case is available as a comparison;
+- no power current is routed through the virtual midpoint.
 
 ## Not a spec
 
-Hover watts. Human-level hearing. 2212 stall on 2N7000. PWM as hold.
+The following are not valid specifications by themselves:
+- hover watts inferred from symmetry;
+- “spintronic” without an actual spintronic device;
+- motor stall current on a 2N7000 logic-test stage;
+- PWM automatically equaling HOLD;
+- a motor turning as proof of magnetic memory.
