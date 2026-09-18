@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import shutil
 import tempfile
 from pathlib import Path
 import unittest
@@ -51,6 +52,28 @@ class TerminalParserTests(unittest.TestCase):
         for argv in (["sudo", "id"], ["mkfs.ext4", "/dev/sdz"], ["reboot"]):
             with self.assertRaises(ValueError):
                 terminal_parser.run(argv)
+
+    def test_python_run_executes_temporary_source(self):
+        result = terminal_parser.python_run("import sys\nprint(int(sys.argv[1]) + 1)", args=["41"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["stdout"].strip(), "42")
+        self.assertEqual(result["language"], "python")
+        self.assertTrue(result["temporary_source"])
+
+    @unittest.skipUnless(shutil.which("g++"), "g++ required")
+    def test_cpp_compile_run_builds_and_executes(self):
+        result = terminal_parser.cpp_compile_run(
+            '#include <iostream>\nint main(){std::cout << 42 << "\\n";}',
+            standard="c++20",
+        )
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["stdout"].strip(), "42")
+        self.assertEqual(result["language"], "c++")
+        self.assertEqual(result["phase"], "run")
+
+    def test_direct_code_bridge_rejects_oversized_source(self):
+        with self.assertRaisesRegex(ValueError, "code exceeds"):
+            terminal_parser.python_run("x" * (terminal_parser.MAX_SOURCE + 1))
 
     def test_allows_shell_wrappers_used_by_ai_clients(self):
         result = terminal_parser.run(["bash", "-lc", "printf PERPLEXITY_SHELL_OK"])
