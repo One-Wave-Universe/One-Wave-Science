@@ -26,6 +26,7 @@ required=(
   c22-fixed-cel-core.js
   c22-fixed-cel-demo.js
   c22-fixed-cel-demo.test.js
+  c23-runtime-acceptance.js
   assistant_server.py
   configure-openai.sh
   launch-animator.sh
@@ -66,6 +67,8 @@ grep -q 'c18-director-dialogue.js' index.html
 grep -q 'c21-copy-paste-assistant-plugin.js' index.html
 grep -q 'c22-fixed-cel-demo.js' index.html
 grep -q 'Load 12-Cel GR Demo' index.html
+grep -q 'c23-runtime-acceptance.js' index.html
+grep -q 'system-status' index.html
 echo "PASS control/architecture/director/live-AI scripts wired into index"
 
 grep -q 'gpt-5.6-sol' assistant_server.py
@@ -79,6 +82,11 @@ grep -q 'live-ai-creative-partner' c21-copy-paste-assistant-plugin.js
 grep -q '/api/assistant' c21-copy-paste-assistant-plugin.js
 grep -q 'Retry AI connection' c21-copy-paste-assistant-plugin.js
 echo "PASS live assistant UI contract"
+
+grep -q "preview(index)" b4-frame-reel.js
+grep -q "R.preview(playIndex)" b7-playback.js
+grep -q "R.preview(i)" c17-clip-sections.js
+echo "PASS playback and clip preview use read-only reel preview"
 
 grep -q 'OneWaveAnimatorControl' c19-local-control-api.js
 grep -q 'onewave-control-request' c19-local-control-api.js
