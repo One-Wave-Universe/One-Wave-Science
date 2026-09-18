@@ -222,3 +222,21 @@ BRAIN LAYER COUNT
 ```
 
 The first line is the architecture. The others are implementation choices that must earn their final form through measurement.
+
+
+---
+
+## Engineering reference boundary
+
+The component precedents in this pamphlet are grounded as follows:
+
+- TLE2426 virtual midpoint/reference: https://www.ti.com/product/TLE2426
+- conventional three-phase BLDC bridge/commutation: https://onlinedocs.microchip.com/oxy/GUID-3AFF556D-77AD-488F-9A04-CD7AAB8F7DBC-en-US-1/GUID-A1DD3CA4-D59F-45CF-AA9F-EBBCB9EF37BA.html
+- fluxgate excitation/core/sense structures: https://www.mdpi.com/1424-8220/21/4/1500
+- memristive processing-memory research: https://www.nature.com/articles/s41467-024-45670-9
+- STT-MRAM magnetic nonvolatile memory: https://www.nature.com/articles/s44287-024-00111-z
+- historical transfluxor NDRO ferrite memory: https://www.bitsavers.org/pdf/afips/1959-03_%2315.pdf
+
+These references validate the **existence and behavior of the referenced mechanisms separately**.
+
+They do **not** validate the combined CELL_V1 hex, its proposed three-axis processing-memory behavior, reinjection loop, flower scaling, or brain interpretation. Those remain experimental until their own physical receipts pass G-778.
