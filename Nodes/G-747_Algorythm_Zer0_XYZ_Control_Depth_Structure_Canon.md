@@ -48,6 +48,7 @@ Cross-level counter-run (`F1↔V6`, `F2↔V5`, `F3↔V4`, `F4↔V3`, `F5↔V2`, 
 | X, Y, Z independent; matching n does not imply identity | LOCKED |
 | 6×6×6 = 216 legal level addresses | LOCKED |
 | X L1–L6 roles and primitives | LOCKED |
+| X primitive seat no-repeat rule | LOCKED |
 | Y depths 1–6 names and N+N primitive counts | LOCKED |
 | Z progression and N+N primitive counts | LOCKED |
 | L6 exactly six positions per side; slash alternatives are outcomes, not extra seats | LOCKED |
@@ -90,7 +91,7 @@ Cumulative: level N contains levels 1…N.
 | 3 | MOVE | MODULATE / HOLD / RESET | POTENTIAL RESPONSE | ALLOW / RESERVE / CLEAR |
 | 4 | FOUR VIEWS | X / Y / Z / WHOLE | FOUR ACTIONS | PULL / PUSH / FLIP / PASS |
 | 5 | STATE | IDLE / PRIMED / EXECUTING / VECTORING / RESOLVING | SCALE | MICRO / SMALL / MIDDLE / LARGE / MACRO |
-| 6 | RECURSIVE LOOP | BEGIN(HOLD) / BUILD / HOLD(BEGIN) / EXTEND / RELEASE\|BREAK / RETURN(BEGIN,HOLD) | COUNTER-LOOP | RECEIVE(HOLD) / PREPARE / RESERVE(BEGIN) / OFFER / ACCEPT\|REJECT / RESTORE(BEGIN,HOLD) |
+| 6 | RECURSIVE LOOP | BEGIN(HOLD) / BUILD / SUSTAIN(BEGIN) / EXTEND / RELEASE\|BREAK / RETURN(BEGIN,HOLD) | COUNTER-LOOP | RECEIVE(HOLD) / PREPARE / RETAIN(BEGIN) / OFFER / VALIDATE(ACCEPT\|REJECT) / RESTORE(BEGIN,HOLD) |
 
 Same-level L3 correspondence (not the counter-pair): Modulate↔Allow, Hold↔Reserve, Reset↔Clear. Cross-pair for L3 remains F3↔V4.
 
@@ -102,12 +103,65 @@ Polarity is not Choice. Views are viewpoints; Actions are verbs. State is not Sc
 |---|---|---|---|---|---|---|
 | 1 | BEGIN(HOLD) | Begin from already-held reference | 6 | RECEIVE(HOLD) | Receive retained potential | HOLD |
 | 2 | BUILD | Form the new active relation | 5 | PREPARE | Organize potential that could participate | Reference + prior result |
-| 3 | HOLD(BEGIN) | Keep formed relation and origin | 4 | RESERVE(BEGIN) | Keep unused potential and its beginning | BEGIN |
+| 3 | SUSTAIN(BEGIN) | Keep formed relation and origin | 4 | RETAIN(BEGIN) | Keep unused potential and its beginning | BEGIN |
 | 4 | EXTEND | Carry held relation farther | 3 | OFFER | Present potential without expressing it | Held relation |
-| 5 | RELEASE / BREAK | Controlled handoff or forced loss | 2 | ACCEPT / REJECT | Carry-forward decision | Resolved state |
+| 5 | RELEASE / BREAK | Controlled handoff or forced loss | 2 | VALIDATE(ACCEPT / REJECT) | Carry-forward decision; ACCEPT / REJECT remain outcomes, not a second primitive seat | Resolved state |
 | 6 | RETURN(BEGIN,HOLD) | Return while retaining begin+hold | 1 | RESTORE(BEGIN,HOLD) | Restore unexpressed remainder | BEGIN + HOLD + result |
 
-`RELEASE|BREAK` is one seat, two outcomes. `ACCEPT|REJECT` is one seat, two outcomes.
+`RELEASE|BREAK` is one seat with two outcomes. `VALIDATE` is the Void seat; `ACCEPT|REJECT` are its two outcomes and do not create extra primitive seats.
+
+## 5a. X no-repeat audit
+
+X primitive seat labels must be unique within the X branch. Parenthetical carry annotations and slash-separated outcomes do not create extra seats.
+
+Field seat labels (21/21 unique):
+
+```text
+READ
+NEGATIVE / POSITIVE
+MODULATE / HOLD / RESET
+X / Y / Z / WHOLE
+IDLE / PRIMED / EXECUTING / VECTORING / RESOLVING
+BEGIN / BUILD / SUSTAIN / EXTEND / RELEASE / RETURN
+```
+
+Void seat labels (21/21 unique):
+
+```text
+COMPARE
+ACCEPT / REJECT
+ALLOW / RESERVE / CLEAR
+PULL / PUSH / FLIP / PASS
+MICRO / SMALL / MIDDLE / LARGE / MACRO
+RECEIVE / PREPARE / RETAIN / OFFER / VALIDATE / RESTORE
+```
+
+Result: **PASS — 42 X primitive seats / 42 unique seat labels.**
+
+Repairs are semantic-preserving:
+
+- L6 Field `HOLD(BEGIN)` → `SUSTAIN(BEGIN)`; L3 `HOLD` remains the MOVE primitive.
+- L6 Void `RESERVE(BEGIN)` → `RETAIN(BEGIN)`; L3 `RESERVE` remains the POTENTIAL RESPONSE primitive.
+- L6 Void decision seat → `VALIDATE(ACCEPT|REJECT)`; L2 `ACCEPT / REJECT` remain CHOICE primitives while L6 keeps them only as outcomes.
+
+### X cross-mirror audit
+
+The canonical counter-run shape remains:
+
+```text
+F1 ↔ V6
+F2 ↔ V5
+F3 ↔ V4
+F4 ↔ V3
+F5 ↔ V2
+F6 ↔ V1
+```
+
+Structural count/alignment: **PASS**.
+
+Semantic status: **CANDIDATE**, unchanged. This audit does not promote the counter-run to LOCKED; same-level Field/Void jobs remain authoritative and distinct.
+
+---
 
 ## 6. Y Depth — settled primitives
 
@@ -292,6 +346,7 @@ F-747-07: Collapse POINT / PATH / FIELD rotation.
 F-747-08: Let Z6 REENTER or X6 RETURN start an unbounded loop.
 F-747-09: Use this node to invent CELL_V1 Gate 7 or separate View/Action hardware.
 F-747-10: Promote counter-run from CANDIDATE by wording or artwork alone.
+F-747-11: Reuse an X primitive seat label at another X level; parenthetical carry annotations and outcome labels are not additional seats.
 
 ## 15. Advancement criteria
 
