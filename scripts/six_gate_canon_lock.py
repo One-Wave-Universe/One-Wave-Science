@@ -7,7 +7,7 @@ Process labels:
     BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP
 
 Permanent CI is read-only. ``--write`` is only an explicit migration aid for
-AI_CANONICAL_START_HERE.md; the permanent workflow never writes repository
+Books/Repository_Operations/AI_CANONICAL_START_HERE.md; the permanent workflow never writes repository
 content.
 """
 
@@ -17,8 +17,8 @@ import argparse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
-MASTER = ROOT / "00_MASTER_INDEX.md"
+AI_START = ROOT / "Books" / "Repository_Operations" / "AI_CANONICAL_START_HERE.md"
+MASTER = ROOT / "Nodes" / "Reference" / "00_MASTER_INDEX.md"
 
 REPLACEMENTS = {
     "6 measured oscillator gates": "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
@@ -72,7 +72,7 @@ CANON_FILES = (
     ROOT / "Nodes" / "G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md",
     ROOT / "Nodes" / "G-739_Six_Gate_Trajectory_Extraction.md",
     ROOT / "Nodes" / "G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md",
-    ROOT / "UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md",
+    ROOT / "Nodes" / "Archive" / "Updated" / "UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md",
 )
 
 
