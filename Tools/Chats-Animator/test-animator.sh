@@ -74,7 +74,8 @@ echo "PASS control/architecture/director/live-AI scripts wired into index"
 grep -q 'gpt-5.6-sol' assistant_server.py
 grep -q 'gpt-image-2' assistant_server.py
 grep -q 'x/z-image-turbo' assistant_server.py
-grep -q 'OPENAI_API_KEY' configure-openai.sh
+grep -q 'openai.env' configure-openai.sh
+grep -q 'Retry AI Connection' configure-openai.sh
 echo "PASS OpenAI Director + local-first art contract"
 
 grep -q 'one-wave-assistant-plugin/v1' c18-director-dialogue.js
