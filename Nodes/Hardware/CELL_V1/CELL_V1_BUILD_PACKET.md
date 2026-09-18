@@ -4,10 +4,11 @@
 
 **Current architecture authority:**
 
-1. `CELL_V1_ANTI_DRIFT.md`
-2. `UPDATED_63_CELL_V1_STATEFUL_MUSCLE_MEMORY_BUILD.md`
-3. `UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md`
-4. `ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
+1. `Nodes/Hardware/CELL_V1/CELL_V1_ANTI_DRIFT.md`
+2. `Nodes/Archive/Updated/UPDATED_63_CELL_V1_STATEFUL_MUSCLE_MEMORY_BUILD.md` — historical design receipt, not current physical authority
+3. `Nodes/Archive/Updated/UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md` — historical design receipt
+4. `Nodes/Architecture/ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md`
+5. `Nodes/G-778_Build_Logic_Research_and_Reference_Validation_Standard.md`
 
 **Status:** experimental physical build. The geometry and three-bidirectional-mirror contract are locked; the stateful carrier, path-training law, reinjection efficiency, motor topology, and brain-layer counts must be earned by measurement.
 
@@ -482,3 +483,64 @@ MEASURED STRAIN / OVERRIDE CONDITION
 ```
 
 Only after that works reproducibly do we copy it into B and C, then add ternary motor control, path propagation, rotation, flowers, and volumetric layers.
+
+
+## 19. Real engineering / research reference floor
+
+These references establish that the **component mechanisms** are real. They do not establish the combined CELL_V1 architecture.
+
+### Midpoint/reference
+Texas Instruments TLE2426 precision rail splitter:
+https://www.ti.com/product/TLE2426
+
+Use: low-current half-supply reference.  
+Do not use: motor/coil return or energy reservoir.
+
+### Three-phase motor baseline
+Microchip six-step three-phase BLDC commutation:
+https://onlinedocs.microchip.com/oxy/GUID-3AFF556D-77AD-488F-9A04-CD7AAB8F7DBC-en-US-1/GUID-A1DD3CA4-D59F-45CF-AA9F-EBBCB9EF37BA.html
+
+Use: real comparison for three-phase switching, sector sequence, driver topology, current paths, and reversal.
+
+### Fluxgate magnetic sensing
+Review of fluxgate sensor structure and applications:
+https://www.mdpi.com/1424-8220/21/4/1500
+
+Use: precedent for excitation/core/sense magnetic measurement.
+
+### Memristive stateful path
+Hardware memristive neural-network review:
+https://www.nature.com/articles/s41467-024-45670-9
+
+Dynamical memristor review:
+https://www.nature.com/articles/s41578-022-00434-z
+
+Use: evidence that stateful resistive devices can combine storage and computation-like behavior.  
+Not proof: CELL_V1 muscle memory or whole-cell learning.
+
+### Magnetic/spintronic memory
+STT-MRAM status:
+https://www.nature.com/articles/s44287-024-00111-z
+
+SOT-MRAM progress:
+https://www.nature.com/articles/s44306-024-00044-1
+
+Use: precedent for real nonvolatile spin-dependent memory.  
+Not proof: ordinary Hall/coil feedback is spintronics.
+
+### Historical multi-aperture ferrite memory
+Transfluxor memory proceedings:
+https://www.bitsavers.org/pdf/afips/1959-03_%2315.pdf
+
+Use: historical precedent for remanent multi-aperture ferrite storage and nondestructive readout concepts.
+
+## 20. Claim discipline
+
+The following are currently **One-Wave hypotheses / experimental targets**, not established by the references above:
+- one physical path simultaneously implementing processing, memory, muscle-memory training, and reinjection;
+- three mirrored A/B/C axes scaling into the full proposed cell architecture;
+- seven-cell flower producing a new functional field unit;
+- volumetric 2/2, 3/3/3, or 3x3x3 brain-layer scaling;
+- shared physical views-up/actions-down path beyond ordinary bidirectional sensing/control.
+
+Each must earn promotion through the measured revision gates already defined in this packet.
