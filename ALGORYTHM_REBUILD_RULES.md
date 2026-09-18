@@ -30,3 +30,20 @@ Void is not simply nothing.
 ## Rebuild discipline
 
 Do not add a new Algorythm rule, branch primitive, level table, address rule, threshold, or mapping unless it has been explicitly re-verified against the whole-build reference first.
+
+
+## Branch names — re-verified
+
+- X = CONTROL
+- Y = STRUCTURE
+- Z = DEPTH
+- T = TIME / CHANGE
+
+## Notation correction — re-verified
+
+Bidirectional relations must be written bidirectionally.
+
+Correct:
+`+ ↔ (0) ↔ -`
+
+Do not use one-way arrows to represent a bidirectional relation.
