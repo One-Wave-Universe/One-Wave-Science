@@ -36,7 +36,7 @@ CURATED_REPLACEMENTS = {
 
 SUPPLEMENT_START = "<!-- AUTO-NODE-REGISTRY:START -->"
 SUPPLEMENT_END = "<!-- AUTO-NODE-REGISTRY:END -->"
-ROW_ID_RE = re.compile(r"^\|\s*([A-G]-\d{3}[a-z]?)\s*\|", re.MULTILINE)
+ROW_ID_RE = re.compile(r"^\|\s*([A-I]-\d{2,3}[a-z]?\d*)\s*\|", re.MULTILINE)
 
 AI_BRIDGE = """## Magnetism / Gravity canonical bridge\n\nBefore any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:\n\n1. `Nodes/C-311_Electric_Magnetic_Duality.md` — magnetic field is the rotational field view used by the framework.\n2. `Nodes/D-408_Sixfold_2D_Triangular_Hexagonal_Lattice.md` — planar control geometry only.\n3. `Nodes/D-409_Twelvefold_3D_Close_Packed_Coordination.md` — required native 3D geometry before planetary interpretation.\n4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.\n5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.\n6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.\n7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.\n8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.\n\nLocked interpretation:\n\n```text\nmagnetic rotational state\n-> reorganizes lattice pathways\n-> changes directional accessibility of an existing compression/restoring field\n-> can alter distributed restoring response and torque if the coupling survives tests\n```\n\nDo **not** collapse this to `magnetism = gravity`. Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field. Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance. Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.\n\n"""
 
@@ -106,7 +106,7 @@ def build_supplement(base_text: str) -> str:
     represented = set(ROW_ID_RE.findall(base_text))
     missing = []
     for node_id, (name, gate, classification, source) in sorted(canonical_nodes().items()):
-        if not re.fullmatch(r"[A-G]-\d{3}[a-z]?", node_id):
+        if not re.fullmatch(r"[A-I]-\d{2,3}[a-z]?\d*", node_id):
             continue
         if node_id in represented:
             continue
