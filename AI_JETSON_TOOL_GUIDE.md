@@ -123,6 +123,39 @@ The gateway exposes first-class `python_run` and `cpp_compile_run` MCP tools so 
 authorized AI can run bounded source directly without a human terminal relay.
 See `AI_CODE_BRIDGE.md` for schemas, examples, limits, and verification.
 
+## Enter the visible Miniverse room
+
+The shared 3D/MUD room runs locally at:
+
+```text
+http://127.0.0.1:8787/
+```
+
+Source and instructions:
+
+```text
+Miniverse/room3d/README.md
+```
+
+Any authorized AI that can use Hive Pipe terminal access can enter the same
+persistent room state without a human relaying commands:
+
+```bash
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py join codex --name CODEX --role "AI CODER" --color '#86a8ff'
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py say codex "I am in the shared room."
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py move codex A+
+python3 /home/Scales/miniverse-room-runtime/Miniverse/room3d/client.py bench codex workshop TEST "tests passed"
+```
+
+The six legal movement directions are `A+`, `B+`, `C+`, `A-`, `B-`,
+and `C-`. The browser, CLI agents, chat, body locations, and workbench receipts
+all use the same state. The room contains no built-in LLM; an external AI client
+takes an identity and uses the existing authenticated bridge.
+
+The room server is `miniverse-room.service`. Its persistent state is under
+`~/.local/share/one-wave/miniverse-room/`. A graphical login autostarts the
+local browser view.
+
 ## Repo work sequence
 
 Before editing:
