@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>One-Wave Miniverse Room</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+</head>
+<body>
+  <div id="world"></div>
+  <header class="hud topbar">
+    <div><div class="eyebrow">ONE-WAVE // MINIVERSE</div><h1>Sandbox Room <span>v0</span></h1></div>
+    <div class="status-cluster"><div class="status-chip" id="bridgeStatus">BRIDGE: CONNECTING</div><div class="status-chip" id="worldStatus">LATTICE: --</div></div>
+  </header>
+  <aside class="hud sidepanel">
+    <section><h2>ROOM OCCUPANTS</h2><div id="agentList" class="agent-list"></div></section>
+    <section><h2>SHARED CHAT</h2><div id="chatLog" class="chat-log"></div>
+      <form id="chatForm" class="stack"><textarea id="chatInput" rows="2" maxlength="600" placeholder="Talk to everyone in the room..."></textarea><button type="submit">SEND TO ROOM</button></form>
+    </section>
+    <section><h2>ACTIVE WORKBENCH</h2><div id="benchName" class="bench-name">NONE — CLICK A BENCH</div>
+      <form id="benchForm" class="stack"><select id="benchAction"><option>NOTE</option><option>CODE</option><option>TEST</option><option>EXPERIMENT</option><option>REVIEW</option><option>RESULT</option></select>
+      <textarea id="benchSummary" rows="2" maxlength="1000" placeholder="Post a workbench receipt..."></textarea><button type="submit">POST RECEIPT</button></form>
+      <div id="benchFeed" class="bench-feed"></div>
+    </section>
+  </aside>
+  <div class="hud controls"><div class="control-title">HEX BODY CONTROLS</div>
+    <div class="key-grid"><span><kbd>Q</kbd>B−</span><span><kbd>W</kbd>C+</span><span><kbd>E</kbd>B+</span><span><kbd>A</kbd>A−</span><span><kbd>S</kbd>C−</span><span><kbd>D</kbd>A+</span></div>
+    <div class="control-hint">drag = orbit · wheel = zoom · click bench = select</div>
+  </div>
+  <div class="hud footer"><span>STATIC LATTICE // MOVING BODIES // SHARED STATE</span><span id="seqReadout">SEQ 0</span></div>
+  <div id="toast" class="toast"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
