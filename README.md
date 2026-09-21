@@ -153,6 +153,21 @@ When science changes what the system should build, merge that knowledge into the
 
 ---
 
+## One-Wave Field Theory V1 — unverified hypothesis layer
+
+The modular chapter set below is intentionally a **testable hypothesis package**. None of its cross-domain claims are considered verified merely because they are written here. The purpose of placing them in the repository is to make them inspectable, simulatable, measurable, and dismissible if they fail.
+
+The working model proposes a continuous superfluid/crystal-lattice-style field description spanning physical, biological, neural, and astrophysical systems through density, phase, path, rotation, compression, expansion, threshold, and recurrence language.
+
+Repository placement:
+
+- `chapters/` — unverified theoretical and cross-domain claims plus verification criteria.
+- `Nodes/` — modular logic, state mapping, and declarative memory/configuration nodes.
+- `One_Wave_Bench/brain/` — executable associative-memory and brain-loop code.
+- `hardware/` — Wave Reader and physical measurement/prototyping specifications.
+
+A claim should move from **UNVERIFIED** only when a defined test, dataset, measurement, or reproducible simulation supports it. Failed claims should be marked **DISMISSED/FAILED** rather than silently removed.
+
 ## Modular research chapters and prototype modules
 
 A compact cross-domain set now lives under `chapters/`. These files separate established baseline science from One-Wave hypotheses and define explicit test/falsification boundaries:

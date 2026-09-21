@@ -1,33 +1,21 @@
 {
-  "id": "BOLTZMANN_ADMINISTRATOR_V0_1",
-  "status": "experimental",
-  "purpose": "Allocate bounded associative-memory resources across named modalities without redefining canonical Field/Void or CELL_V1 hardware.",
-  "modalities": {
-    "text": {
-      "weight": 1,
-      "capacity": 1024
-    },
-    "melody": {
-      "weight": 1,
-      "capacity": 512
-    },
-    "spatial": {
-      "weight": 1,
-      "capacity": 512
-    },
-    "sensor": {
-      "weight": 1,
-      "capacity": 512
-    }
+  "system_name": "Boltzmann Administrator v1.1 Multimodal",
+  "status": "unverified_experimental",
+  "verification_state": "UNVERIFIED",
+  "memory_bank_allocations": {
+    "language": 0.2,
+    "audio": 0.2,
+    "image": 0.2,
+    "body_pressure": 0.2,
+    "movement_traces": 0.2
   },
-  "policy": {
-    "normalization": "weights normalized across enabled modalities",
-    "eviction": "least-recently-reinforced",
-    "exact_memory_protection": true,
-    "generative_recall_may_overwrite_exact_memory": false
-  },
-  "notes": [
-    "Configuration only; no claim that Boltzmann dynamics are biologically or physically canonical.",
-    "Any runtime using this file must log allocation, retrieval confidence, and rebuild provenance."
+  "primary_authority": "6-mind Administrator",
+  "evidence_boundary": "Configuration proposal only. Allocation fractions and 6-mind Administrator authority are not validated by this file.",
+  "verification_requirements": [
+    "Define what a 6-mind Administrator is operationally.",
+    "Measure recall quality and interference per modality.",
+    "Compare equal 0.20 allocation against alternative allocations.",
+    "Log exact-memory provenance and prevent generative overwrite.",
+    "Mark failed allocation/authority claims DISMISSED rather than silently deleting them."
   ]
 }

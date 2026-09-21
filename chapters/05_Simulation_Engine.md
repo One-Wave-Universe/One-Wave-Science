@@ -1,12 +1,22 @@
 # Chapter 05 — Simulation Engine (BASIS v0.1)
 
-**Status:** implementation specification
+**Status:** UNVERIFIED IMPLEMENTATION SPECIFICATION
 
-## Objective
-Provide a minimal runtime contract for testing One-Wave hypotheses without allowing domain language to bypass units, state definitions, or baseline comparisons.
+## Purpose
 
-## BASIS v0.1 contract
-Each simulation declares:
+BASIS v0.1 is the proposed numerical verification layer for One-Wave claims.
+
+## Proposed stack
+
+- Python
+- NumPy
+- SciPy
+- iterative lattice-density loops
+- vortex/state-transition models
+- CSV telemetry
+- reproducible parameter receipts
+
+## BASIS contract
 
 ```text
 B  Boundary conditions
@@ -17,25 +27,40 @@ S  Stop / falsification criteria
 ```
 
 ## Runtime lifecycle
+
 ```text
 load model
 -> validate schema
 -> initialize state
 -> run control
 -> run hypothesis variant
--> record receipts
+-> log telemetry
 -> compare
 -> classify result
 ```
 
 ## Required result classes
-- PASS: stated test passed
-- FAIL: stated test failed
-- INCONCLUSIVE: test could not discriminate
-- INVALID: units, solver, setup, or data made the run unusable
 
-## Reproducibility receipt
-Every run should record model version, git SHA, parameters, seed where applicable, solver, timestep, tolerances, output hashes, and comparison metric.
+- PASS — predefined test passed
+- FAIL — predefined test failed
+- INCONCLUSIVE — test did not discriminate
+- INVALID — setup, units, solver, or data invalidated the run
+- DISMISSED — repeated valid tests contradict the hypothesis strongly enough to retire that formulation
 
-## Integration
-This chapter is a specification layer. Existing validated simulators and Virtual Breadboard remain authoritative for their own numerical contracts.
+## Minimum telemetry
+
+Every run should record:
+- model version;
+- git SHA;
+- parameters;
+- seed where applicable;
+- solver;
+- timestep;
+- tolerances;
+- state traces;
+- CSV output;
+- output hashes;
+- control result;
+- comparison metric.
+
+Existing validated simulators and Virtual Breadboard remain authoritative for their own numerical contracts.

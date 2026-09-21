@@ -1,34 +1,43 @@
-# Chapter 01 — Continuous Lattice
+# Chapter 01 — Continuous Lattice Mechanics
 
-**Status:** hypothesis / research framework, not established physics
+**Status:** UNVERIFIED HYPOTHESIS — retain for testing or dismissal
 
-## Purpose
-This chapter states the One-Wave continuous-lattice starting hypothesis in a form that can be tested without promoting speculation into fact.
+## Core premise
 
-## Working proposition
-The model treats space as a continuous, deformable wave-bearing medium with locally measurable state rather than as a collection of independent point particles. Observable structures are represented as persistent patterns, paths, rotations, boundaries, and field-scale recurrences in that medium.
+One-Wave Field Theory V1 proposes that the universe operates as a continuous superfluid crystal lattice. Energy, mass, and wave propagation are proposed to arise from continuous density/state variation within this medium rather than from arbitrary fragmentation boundaries used by numerical models.
 
-## Required distinctions
-- A mathematical lattice or graph used in simulation is a discretization of the model, not proof that physical space is literally crystalline.
-- "Superfluid," "crystal," "continuous," and "lattice" describe proposed behaviors or numerical representations and must not be treated as experimentally established together without evidence.
-- Standard measured physics remains the control target for every comparison.
+In this hypothesis, observable structures are persistent density, phase, path, rotation, boundary, and field-scale patterns in the medium.
+
+## Important implementation distinction
+
+A discrete simulation grid is only a numerical approximation. The hypothesis itself is continuous unless a separate derivation establishes a physical discrete spacing.
 
 ## Core scale relation
+
 ```text
 Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
 ```
 
-This relation is an architectural abstraction used throughout the repository. It does not by itself specify a physical material, microscopic spacing, dispersion law, or energy scale.
+## Claims to verify or dismiss
 
-## Test obligations
-Any executable lattice model must declare:
-1. dimensionality and boundary conditions;
-2. state variables and units;
-3. update equations;
-4. conservation or dissipation rules;
-5. calibration data;
-6. falsification criteria;
-7. comparison against an accepted baseline.
+1. A continuous-medium model can reproduce known wave propagation without hidden discretization artifacts.
+2. Stable localized structures can emerge from the proposed dynamics.
+3. Mass/energy observables can be mapped to measurable lattice-state variables.
+4. The model yields at least one discriminating prediction relative to accepted control models.
 
-## Connection to repository canon
-Read `AI_CANONICAL_START_HERE.md`, `Nodes/A-117_Dimensional_Integrity_and_Projection_Declaration.md`, and the D-408/D-409/D-410 geometry nodes before converting this chapter into a simulation or hardware claim.
+## Required verification packet
+
+Every attempted test must declare:
+- dimensionality and boundary conditions;
+- state variables and units;
+- governing equations;
+- numerical method;
+- conservation/dissipation rules;
+- calibration data;
+- control model;
+- measurable prediction;
+- falsification criterion.
+
+## Canon connection
+
+Read `AI_CANONICAL_START_HERE.md`, `Nodes/A-117_Dimensional_Integrity_and_Projection_Declaration.md`, and D-408/D-409/D-410 before implementing this hypothesis.
