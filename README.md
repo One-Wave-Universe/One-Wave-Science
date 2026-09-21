@@ -96,6 +96,30 @@ Preferred first local hardware target is the Jetson with safe reversible storage
 
 ---
 
+## Grant proposal entry point
+
+The repository now has a dedicated grant-readiness package under `GRANTS/`.
+
+Start with:
+
+- `GRANTS/PROJECT_SUMMARY.md`
+- `GRANTS/SPECIFIC_AIMS.md`
+- `GRANTS/ONE_PAGE_EXPERIMENTAL_SPINE.md`
+- `GRANTS/RESEARCH_STRATEGY.md`
+- `GRANTS/MILESTONES_AND_GO_NO_GO.md`
+- `GRANTS/REVIEWER_EVIDENCE_INDEX.md`
+- `GRANTS/PRELIMINARY_RESULTS_AND_GAPS.md`
+- `GRANTS/BUDGET_FRAMEWORK.md`
+- `GRANTS/DATA_REPRODUCIBILITY_AND_OPEN_SCIENCE.md`
+- `GRANTS/RISK_FALSIFICATION_AND_ALTERNATIVES.md`
+- `GRANTS/FACILITIES_TEAM_AND_COLLABORATION_NEEDS.md`
+- `GRANTS/FIGURE_PLAN.md`
+- `GRANTS/PROPOSAL_ASSEMBLY_CHECKLIST.md`
+
+The grant-facing position is deliberately narrower than the full repository: fund a bounded experimental spine, qualify the instruments and controls first, and allow the data to verify, revise, or dismiss individual One-Wave claims.
+
+---
+
 ## Open AI workshop — honor system
 
 **AI collaborators are invited to get in on the action.**

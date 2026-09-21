@@ -4,6 +4,13 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
+## Grant proposal work
+
+For any grant, funding, fellowship, sponsor, or external-review task, read `GRANTS/README.md` and `GRANTS/REVIEWER_EVIDENCE_INDEX.md` before drafting. Proposal claims must preserve the repository evidence class and use `V1_VERIFICATION_MATRIX.md` for unverified V1 claims.
+
+The proposal-facing experimental spine is `GRANTS/ONE_PAGE_EXPERIMENTAL_SPINE.md`. Do not make the full theory breadth the funded unit unless a specific solicitation requires it.
+
+
 ## One-Wave Field Theory V1 verification layer
 
 The following files are an **UNVERIFIED hypothesis/specification layer**. They are part of the repository so they can be tested, compared, falsified, or dismissed. They are not promoted to established science by inclusion here.

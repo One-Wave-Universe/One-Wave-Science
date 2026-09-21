@@ -14,6 +14,47 @@ No AI should infer that everything listed here is equally mature. Each work item
 
 ---
 
+## Grant-readiness program
+
+### Goal
+
+Turn the existing repository into a reviewer-usable experimental program without overstating any unverified scientific claim.
+
+### Authoritative grant package
+
+- `GRANTS/README.md`
+- `GRANTS/PROJECT_SUMMARY.md`
+- `GRANTS/SPECIFIC_AIMS.md`
+- `GRANTS/ONE_PAGE_EXPERIMENTAL_SPINE.md`
+- `GRANTS/RESEARCH_STRATEGY.md`
+- `GRANTS/MILESTONES_AND_GO_NO_GO.md`
+- `GRANTS/REVIEWER_EVIDENCE_INDEX.md`
+- `GRANTS/PRELIMINARY_RESULTS_AND_GAPS.md`
+- `GRANTS/BUDGET_FRAMEWORK.md`
+- `GRANTS/DATA_REPRODUCIBILITY_AND_OPEN_SCIENCE.md`
+- `GRANTS/RISK_FALSIFICATION_AND_ALTERNATIVES.md`
+- `GRANTS/FACILITIES_TEAM_AND_COLLABORATION_NEEDS.md`
+- `GRANTS/FIGURE_PLAN.md`
+- `GRANTS/PROPOSAL_ASSEMBLY_CHECKLIST.md`
+
+### Highest-priority work before submission
+
+1. produce one clean reproducible BASIS control-vs-hypothesis result;
+2. qualify Wave Reader with a known signal and publish the calibration trace;
+3. freeze and measure one CELL_V1 control build;
+4. run one bounded hypothesis comparison under the same procedure;
+5. recruit at least one external technical collaborator/advisor in instrumentation or numerical methods;
+6. create proposal figures from actual data rather than conceptual graphics alone;
+7. tag a frozen preliminary-results release used by the proposal;
+8. tailor the generic package to a specific funding call only after the above evidence packet is stable.
+
+### Grant anti-overclaim rule
+
+Proposal text must never say a hypothesis is demonstrated merely because it has a chapter, simulation, diagram, or hardware plan. Every preliminary-result sentence must point to a repository artifact and evidence class.
+
+---
+
+
 ## Open research: Jetson Dreamscape translator
 
 **Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
