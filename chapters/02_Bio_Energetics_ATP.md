@@ -1,34 +1,41 @@
-# Chapter 02 — Bio-Energetics and ATP
+# Chapter 02 — Bio-Energetics & ATP Mechanics
 
-**Status:** established biology baseline + speculative One-Wave interpretation
+**Status:** UNVERIFIED CROSS-DOMAIN HYPOTHESIS — retain for testing or dismissal
 
-## Established baseline
-ATP hydrolysis and regeneration are central biochemical energy-coupling processes. Cellular work is driven by chemical free-energy differences and enzyme-mediated reaction networks.
+## Baseline to preserve
 
-## One-Wave interpretation to test
-Within the One-Wave framework, biochemical energy transfer may be represented as a change in local field state, coupling, phase relation, or accessible pathway. This is a model translation, not a replacement for biochemical thermodynamics.
+ATP hydrolysis and regeneration are established biochemical energy-coupling processes governed by measurable chemical free-energy differences and enzyme-mediated reaction networks.
 
-The safe translation is:
+## One-Wave hypothesis
+
+One-Wave Field Theory V1 proposes that ATP-linked energy transfer can additionally be modeled as a discrete local density ripple and phase-state shift within the proposed continuous lattice.
+
+It further proposes that biological systems act as tuned resonance nodes that couple local chemical, electrical, mechanical, and thermal gradients into broader field-state changes.
+
+## Strong-form claim
+
 ```text
-measured chemical free-energy change
--> local state transition in the model
--> predicted measurable consequence
+ATP-linked free-energy transfer
+-> local density/phase transition in the proposed medium
+-> measurable downstream field/state consequence
 ```
 
-Do not assert:
-```text
-ATP = lattice phase shift
-```
-as an established identity.
+This is unverified.
 
-## Variables worth mapping
-- free-energy change
-- membrane potential
-- ion gradients
-- reaction rate
-- mechanical work
-- heat generation
-- recovery time
+## Variables to measure
 
-## Validation target
-A useful model must reproduce or predict at least one measured relationship better than a null or conventional control model. If no new measurable prediction results, the lattice language remains only a descriptive wrapper.
+- Gibbs free-energy change;
+- membrane potential;
+- ion gradients;
+- reaction rate;
+- mechanical work;
+- heat generation;
+- electrical activity;
+- recovery time;
+- any predicted phase/density observable.
+
+## Verification or dismissal
+
+The hypothesis survives only if the lattice-state model produces a measurable prediction not already explained equally well by the biochemical control model.
+
+If no distinct measurable effect is found, the lattice interpretation remains descriptive or should be dismissed for that test domain.
