@@ -1,7 +1,9 @@
-# Not the grant package
+# Personal thought experiments
 
-Grant applications use **Builds only**:
+This repository is personal theoretical work and simulations.
 
-https://github.com/One-Wave-Universe/Builds
+It is not Builds.
+It is not a grant package.
+It is not a funded deliverable.
 
-This repository stays public so theory and simulations are not hidden. It is not the funding target.
+Grants use https://github.com/One-Wave-Universe/Builds only.
