@@ -153,6 +153,27 @@ When science changes what the system should build, merge that knowledge into the
 
 ---
 
+## Modular research chapters and prototype modules
+
+A compact cross-domain set now lives under `chapters/`. These files separate established baseline science from One-Wave hypotheses and define explicit test/falsification boundaries:
+
+- `chapters/01_Continuous_Lattice.md`
+- `chapters/02_Bio_Energetics_ATP.md`
+- `chapters/03_Affective_State_Mapping.md`
+- `chapters/04_Macro_Quasar_Bridge.md`
+- `chapters/05_Simulation_Engine.md`
+
+Supporting experimental modules/specifications:
+
+- `Nodes/boltzmann_administrator.json` — bounded multimodal associative-memory allocation configuration.
+- `One_Wave_Bench/brain/hopfield_melody_cells.py` — small inspectable Hopfield associative-memory helper.
+- `Nodes/vtc_zero_logic.md` — VTC reference/Field/Void UI-state mapping that defers to CELL_V1 physical canon.
+- `hardware/wave_reader_v1.md` — measurement-first acquisition specification.
+
+These additions are subordinate to `AI_CANONICAL_START_HERE.md` and do not replace existing validated simulators, CELL_V1 geometry, or evidence classifications.
+
+---
+
 ## Visual layer
 
 Every important system should gain the visual form that best exposes its structure: diagrams, graphs, art, animations, simulations, maps, scope traces, or interactive views.
