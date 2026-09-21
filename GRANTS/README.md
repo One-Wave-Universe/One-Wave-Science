@@ -16,6 +16,7 @@ This directory is the grant-facing entry point. It does not replace the technica
 8. `FACILITIES_TEAM_AND_COLLABORATION_NEEDS.md`
 9. `PRELIMINARY_RESULTS_AND_GAPS.md`
 10. `PROPOSAL_ASSEMBLY_CHECKLIST.md`
+11. `FUNDER_TARGETS_2026.md`
 
 ## Grant-writing rule
 
