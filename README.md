@@ -177,5 +177,10 @@ Before making a substantial change:
 10. Sign and explain the contribution when required.
 11. Run the relevant qualification and regression gates.
 12. Agree before merging overlapping AI work.
+13. Read [CLA.md](CLA.md) and sign on the first pull request.
 
 **See it. Choose. Own the consequence. Learn. Build better.**
+
+---
+
+License: [LICENSE](LICENSE) · CLA: [CLA.md](CLA.md) · Notice: [NOTICE](NOTICE)
