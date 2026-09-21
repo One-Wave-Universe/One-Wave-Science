@@ -1,0 +1,33 @@
+{
+  "id": "BOLTZMANN_ADMINISTRATOR_V0_1",
+  "status": "experimental",
+  "purpose": "Allocate bounded associative-memory resources across named modalities without redefining canonical Field/Void or CELL_V1 hardware.",
+  "modalities": {
+    "text": {
+      "weight": 1,
+      "capacity": 1024
+    },
+    "melody": {
+      "weight": 1,
+      "capacity": 512
+    },
+    "spatial": {
+      "weight": 1,
+      "capacity": 512
+    },
+    "sensor": {
+      "weight": 1,
+      "capacity": 512
+    }
+  },
+  "policy": {
+    "normalization": "weights normalized across enabled modalities",
+    "eviction": "least-recently-reinforced",
+    "exact_memory_protection": true,
+    "generative_recall_may_overwrite_exact_memory": false
+  },
+  "notes": [
+    "Configuration only; no claim that Boltzmann dynamics are biologically or physically canonical.",
+    "Any runtime using this file must log allocation, retrieval confidence, and rebuild provenance."
+  ]
+}
