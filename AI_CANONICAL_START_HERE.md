@@ -4,6 +4,37 @@
 
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
+## One-Wave Field Theory V1 verification layer
+
+The following files are an **UNVERIFIED hypothesis/specification layer**. They are part of the repository so they can be tested, compared, falsified, or dismissed. They are not promoted to established science by inclusion here.
+
+Read this set when working on the continuous-lattice, bio-energetics, affective-state, quasar-scaling, BASIS simulation, Boltzmann/Hopfield memory, VTC-0 mapping, or Wave Reader paths:
+
+1. `chapters/01_Continuous_Lattice.md`
+2. `chapters/02_Bio_Energetics_ATP.md`
+3. `chapters/03_Affective_State_Mapping.md`
+4. `chapters/04_Macro_Quasar_Bridge.md`
+5. `chapters/05_Simulation_Engine.md`
+6. `Nodes/boltzmann_administrator.json`
+7. `One_Wave_Bench/brain/hopfield_melody_cells.py`
+8. `Nodes/vtc_zero_logic.md`
+9. `hardware/wave_reader_v1.md`
+10. `V1_VERIFICATION_MATRIX.md`
+
+Status flow for these claims:
+
+```text
+UNVERIFIED
+-> TEST DEFINED
+-> CONTROL RUN
+-> HYPOTHESIS RUN / MEASUREMENT
+-> PASS | FAIL | INCONCLUSIVE | INVALID
+-> VERIFIED-SCOPE | DISMISSED-SCOPE | REVISE
+```
+
+A result may verify only the exact scope tested. Failed claims should be marked failed/dismissed in the matrix instead of silently deleted or rewritten into a weaker claim.
+
+
 ## CELL_V1 mandatory geometry gate
 
 Before drawing, simulating, fabricating, or extending CELL_V1, read these files in order:
