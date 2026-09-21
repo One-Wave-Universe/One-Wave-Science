@@ -227,6 +227,46 @@ A Node may summarize or route evidence; it may not upgrade a hypothesis to fact 
 
 ---
 
+## One-Wave Field Theory V1 verification program
+
+### Source set
+
+- `chapters/01_Continuous_Lattice.md`
+- `chapters/02_Bio_Energetics_ATP.md`
+- `chapters/03_Affective_State_Mapping.md`
+- `chapters/04_Macro_Quasar_Bridge.md`
+- `chapters/05_Simulation_Engine.md`
+- `Nodes/boltzmann_administrator.json`
+- `One_Wave_Bench/brain/hopfield_melody_cells.py`
+- `Nodes/vtc_zero_logic.md`
+- `hardware/wave_reader_v1.md`
+- `V1_VERIFICATION_MATRIX.md`
+
+### Work order
+
+1. Convert every strong claim into one or more measurable test IDs in `V1_VERIFICATION_MATRIX.md`.
+2. Run accepted/control behavior first.
+3. Run the One-Wave hypothesis or hardware variant with the same measurement contract.
+4. Save parameters, data, plots, and receipts.
+5. Mark each test PASS, FAIL, INCONCLUSIVE, or INVALID.
+6. Promote only the exact tested scope; mark contradicted scope DISMISSED and preserve the historical claim.
+
+### Immediate test tracks
+
+- **LATTICE:** continuous-medium propagation, localized-state stability, and discriminating predictions.
+- **ATP:** test whether the lattice/phase mapping adds a measurable prediction beyond biochemical controls.
+- **AFFECT:** define measurable expansion/compression variables and test against physiological controls without inferring hidden mental state.
+- **QUASAR:** derive dimensionless variables and test whether a common release equation genuinely survives cross-scale comparison.
+- **BASIS:** implement the minimum control/hypothesis/receipt runtime.
+- **MEMORY:** benchmark Hopfield melody recall and Boltzmann allocation proposals against simple baselines.
+- **VTC0:** test LED/state/split-rail mappings against current CELL_V1 reference semantics and hardware constraints.
+- **WAVE-READER:** qualify the proposed ADC/front-end/compute pipeline with known calibration signals before using it on experimental cells.
+
+The goal is not to protect the claims. The goal is to make each one easy to verify, revise, or dismiss.
+
+---
+
+
 ## 7. Science / One-Wave hypothesis work
 
 ### Required discipline
