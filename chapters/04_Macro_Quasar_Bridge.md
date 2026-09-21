@@ -1,33 +1,42 @@
-# Chapter 04 — Macro / Quasar Bridge
+# Chapter 04 — Macro-Astrophysical Bridge (Quasar Connection)
 
-**Status:** speculative cosmology bridge
+**Status:** UNVERIFIED CROSS-SCALE COSMOLOGY HYPOTHESIS
 
-## Purpose
-Explore whether a common mathematical language of storage, pressure, boundary response, transport, and release can compare biological-scale energy handling with high-energy astrophysical systems.
+## Scaling hypothesis
 
-## Strict evidence boundary
-Quasar jets are astrophysical plasma phenomena associated with accreting supermassive black holes and relativistic outflows. Cellular ATP use, orgasm, neural discharge, and quasar ejection occur at radically different scales and mechanisms.
+One-Wave Field Theory V1 proposes that the mathematical threshold structure used for biological energy release, neural pain/pleasure loops, and extreme astrophysical engines may be isomorphic after appropriate normalization.
 
-The repository may compare their abstract dynamics:
+## Proposed cosmic discharge model
+
+Quasars and galactic cores are modeled as macro-scale discharge nodes: gravitational/electromagnetic compression-expansion pressure vents in the proposed continuous lattice.
+
+The strong-form hypothesis is that biological energy cascades and galactic plasma jets may share the same underlying class of continuous field-density dynamics after scale-dependent variables are normalized.
+
+## Abstract recurrence
+
 ```text
-energy accumulation
+energy/state accumulation
 -> constrained transport
--> threshold or instability
+-> threshold / instability
 -> directed release
 -> relaxation / new state
 ```
-but similarity of sequence is not evidence of a shared physical mechanism.
 
-## Research question
-Can one dimensionless dynamical framework describe thresholded release across domains while preserving each domain's actual governing variables?
+## Claims to verify or dismiss
 
-## Falsification requirement
-Any proposed scale bridge must specify:
+1. A common dimensionless model can fit both biological and quasar-scale release data.
+2. The normalized state variables preserve the same equations or invariants across scales.
+3. The model outperforms analogy-only descriptions and domain-specific control models.
+4. The proposed compression/expansion variables map to actual observables in both domains.
+
+## Required falsification package
+
 - dimensionless variables;
-- what is invariant under scaling;
-- what changes with scale;
-- empirical datasets used;
+- scaling transform;
+- invariants;
+- empirical datasets;
 - control models;
-- a failure criterion.
+- residual/error comparison;
+- explicit failure criterion.
 
-Without that, this chapter remains analogy, not physics.
+If those conditions are not met, the bridge remains analogy or is dismissed.
