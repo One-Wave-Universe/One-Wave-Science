@@ -1,34 +1,45 @@
-# Chapter 03 — Affective State Mapping
+# Chapter 03 — Affective-State Mapping (Pleasure & Pain)
 
-**Status:** exploratory cross-domain mapping
+**Status:** UNVERIFIED PHYSIOLOGICAL/STATE-MAPPING HYPOTHESIS
 
-## Goal
-Define a measurable bridge between subjective affect and physical or physiological state without reducing pleasure or pain to a single scalar mechanism.
+## Proposed biological processing engine
 
-## Candidate mapping
-The current exploratory language is:
+The model proposes that living systems navigate local state and density changes through measurable thresholded feedback.
 
-```text
-expansion / lower resistance / harmonic alignment
-<-> pleasant or relieving state
+### Pleasure / expansion
+Proposed mapping:
+- harmonic alignment;
+- lower-resistance signal flow;
+- constructive/coherent pathway interaction;
+- expansion away from a constrained state.
 
-compression / resistance / conflict / overload
-<-> painful or aversive state
-```
+### Pain / compression
+Proposed mapping:
+- higher resistance or friction;
+- forced state boundaries;
+- destructive/conflicting pathway interaction;
+- compression/overload;
+- protective feedback that drives withdrawal or corrective action.
 
-This is a hypothesis-generating map only. Human affect is multi-factorial and cannot be inferred from one electrical, mechanical, neural, or autonomic measurement.
+## Strong-form claim
 
-## Measurement layer
-Candidate observables include:
+Pleasure and pain may correspond to physically distinguishable expansion/compression regimes in the same underlying state-space used elsewhere in the One-Wave model.
+
+This is unverified.
+
+## Candidate observables
+
 - autonomic arousal;
-- respiration and heart-rate dynamics;
+- respiration;
+- heart-rate dynamics;
 - muscular tension;
 - behavioral approach/avoidance;
 - self-report;
-- neural or electrophysiological measures where available.
+- neural/electrophysiological signals;
+- pressure/strain where physically meaningful.
 
-## Threshold discipline
-Thresholds must be calibrated per measured variable. Repository-wide symbolic bands may be used as normalized control coordinates, but they must not be presented as universal biological cutoffs.
+## Verification or dismissal
 
-## Safety/evidence boundary
-This chapter must never be used to diagnose a person, infer hidden mental state, or claim that a particular sensation proves the One-Wave model.
+A valid test must define the physiological variable, threshold, reference state, prediction, and control.
+
+No sensation, self-report, waveform, or resistance value alone is evidence of the One-Wave hypothesis.
