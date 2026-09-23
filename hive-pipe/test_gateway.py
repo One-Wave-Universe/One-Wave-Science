@@ -76,7 +76,7 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(
             set(health["terminal_tools"]),
-            {"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"},
+            {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"},
         )
 
     def test_enqueues_and_returns_named_action(self):
@@ -109,9 +109,20 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         tools = {tool["name"]: tool for tool in listed["result"]["tools"]}
         self.assertTrue(set(mudl.ACTIONS).issubset(tools))
-        self.assertTrue({"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}.issubset(tools))
+        self.assertTrue({"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}.issubset(tools))
         self.assertTrue(tools["terminal_pwd"]["annotations"]["readOnlyHint"])
         self.assertFalse(tools["terminal_run"]["annotations"]["readOnlyHint"])
+
+    def test_mcp_terminal_reference_explains_intervention_levels(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 19, "method": "tools/call",
+            "params": {"name": "terminal_reference", "arguments": {}},
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        reference = called["result"]["structuredContent"]["reference"]
+        self.assertEqual(reference["contract"], "one-wave-terminal-parser-v2")
+        self.assertIn("path_authorization", reference["intervention_levels"])
 
     def test_mcp_terminal_run_returns_real_output(self):
         status, called = self.request("/mcp", method="POST", body={
