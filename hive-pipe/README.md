@@ -1,5 +1,13 @@
 # Hive Pipe v3
 
+Start with [`AI_BRIDGE_START_HERE.md`](../AI_BRIDGE_START_HERE.md). It contains
+the supported route order, exact smoke tests, pull-bridge request/result format,
+and the unified read-only health command:
+
+```bash
+python3 hive-pipe/bridge_doctor.py --profile all
+```
+
 Hive Pipe is the authenticated Jetson-side tool gateway used by AI clients,
 GitHub Actions, and direct remote clients.
 
@@ -8,6 +16,7 @@ It exposes:
 ```text
 MCP / authenticated HTTP
         |
+        +-- terminal_reference
         +-- terminal_pwd
         +-- terminal_which
         +-- terminal_run(argv, cwd?, timeout?)
@@ -75,6 +84,10 @@ This makes clients such as Perplexity remote custom MCP connectors usable
 without forcing one provider-specific header format.
 
 ## Terminal parser
+
+Call `terminal_reference` first when an AI needs the parser workflow, current
+authorized roots and limits, or a structured explanation of where path,
+authentication, package, or human/root intervention is required.
 
 `terminal_run` accepts a structured argv array. It also permits normal shell
 wrappers such as:
