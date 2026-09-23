@@ -32,9 +32,10 @@ git -C "$RUNTIME_ROOT" reset --hard origin/main
 
 cat >"$SERVICE_PATH" <<EOF
 [Unit]
-Description=One-Wave ChatGPT terminal pull bridge
+Description=One-Wave resilient ChatGPT terminal bridge
 After=network-online.target
 Wants=network-online.target
+StartLimitIntervalSec=0
 
 [Service]
 Type=simple
@@ -49,6 +50,8 @@ ProtectHome=read-only
 ReadWritePaths=$RUNTIME_ROOT $STATE_ROOT $SOURCE_REPO %h/One-Wave-External-Work
 Environment=PYTHONUNBUFFERED=1
 Environment=CHATGPT_TERMINAL_DEFAULT_CWD=$SOURCE_REPO
+Environment=CHATGPT_TERMINAL_ROUTES=primary=origin:chatgpt-terminal,backup=origin:chatgpt-terminal-backup
+Environment=HIVE_PIPE_ALLOWED_ROOTS=$SOURCE_REPO:%h/One-Wave-External-Work
 
 [Install]
 WantedBy=default.target
@@ -60,4 +63,5 @@ systemctl --user enable --now one-wave-chatgpt-terminal-pull.service
 printf 'CHATGPT_TERMINAL_PULL_INSTALLED\n'
 printf 'project=%s\n' "$SOURCE_REPO"
 printf 'runtime=%s\n' "$RUNTIME_ROOT"
+printf 'routes=origin:chatgpt-terminal,origin:chatgpt-terminal-backup\n'
 systemctl --user is-active one-wave-chatgpt-terminal-pull.service

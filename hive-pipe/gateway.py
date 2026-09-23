@@ -40,10 +40,17 @@ def action_tool(action: str) -> dict:
 
 MCP_TOOLS = {action: action_tool(action) for action in sorted(mudl.ACTIONS)}
 MCP_TOOLS.update({
+    "terminal_reference": {
+        "name": "terminal_reference",
+        "title": "Terminal Reference",
+        "description": "Explain how to use the bounded terminal, its authorized paths and limits, and when higher-level intervention is required.",
+        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
+    },
     "terminal_pwd": {
         "name": "terminal_pwd",
         "title": "Terminal Pwd",
-        "description": "Return the Jetson terminal working directory available to the AI parser.",
+        "description": "Return the host terminal working directory available to the AI parser.",
         "inputSchema": {
             "type": "object",
             "properties": {"cwd": {"type": "string"}},
@@ -54,7 +61,7 @@ MCP_TOOLS.update({
     "terminal_which": {
         "name": "terminal_which",
         "title": "Terminal Which",
-        "description": "Find an executable on the Jetson PATH.",
+        "description": "Find an executable on the host PATH.",
         "inputSchema": {
             "type": "object",
             "properties": {"name": {"type": "string"}},
@@ -66,7 +73,7 @@ MCP_TOOLS.update({
     "terminal_run": {
         "name": "terminal_run",
         "title": "Terminal Run",
-        "description": "Run structured argv on the Jetson and return stdout, stderr, exit code, cwd, and timing under the existing non-root Hive Pipe sandbox.",
+        "description": "Run structured argv on the host and return stdout, stderr, exit code, cwd, guidance, and timing under the non-root Hive Pipe sandbox.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -87,7 +94,7 @@ MCP_TOOLS.update({
     "python_run": {
         "name": "python_run",
         "title": "Python Run",
-        "description": "Run supplied Python source directly as a temporary script on the Jetson. Source is removed after the call; execution stays inside the authenticated non-root Hive Pipe sandbox.",
+        "description": "Run supplied Python source directly as a temporary script on the host. Source is removed after the call; execution stays inside the authenticated non-root Hive Pipe sandbox.",
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -172,7 +179,11 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
     if not isinstance(arguments, dict):
         return mcp_error(request_id, -32602, "Terminal arguments must be an object")
     try:
-        if name == "terminal_pwd":
+        if name == "terminal_reference":
+            if arguments:
+                raise ValueError("terminal_reference accepts no arguments")
+            result = {"ok": True, "reference": terminal_parser.reference()}
+        elif name == "terminal_pwd":
             if set(arguments) - {"cwd"}:
                 raise ValueError("terminal_pwd accepts only cwd")
             result = terminal_parser.pwd(arguments.get("cwd"))
@@ -211,7 +222,15 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
             return mcp_error(request_id, -32602, "Unknown terminal tool")
         return tool_result(request_id, result, failed=not result.get("ok", False))
     except (OSError, ValueError, subprocess.SubprocessError) as error:
-        return tool_result(request_id, {"ok": False, "error": str(error)}, failed=True)
+        return tool_result(request_id, {
+            "ok": False,
+            "error": str(error),
+            "guidance": terminal_parser.explain_exception(error),
+            "reference": {
+                "tool": "terminal_reference",
+                "contract": terminal_parser.PARSER_CONTRACT,
+            },
+        }, failed=True)
 
 
 def handle_mcp(payload: object) -> dict | None:
@@ -237,7 +256,7 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
-        if name in {"terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
+        if name in {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
             return handle_terminal_tool(request_id, name, arguments)
         if name not in MCP_TOOLS or arguments != {}:
             return mcp_error(request_id, -32602, "Unknown tool or non-empty arguments")
@@ -306,7 +325,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
             self.send_json(HTTPStatus.OK, {
                 "status": "ok",
                 "actions": sorted(mudl.ACTIONS),
-                "terminal_tools": ["terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"],
+                "terminal_tools": ["terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"],
                 "mcp": "/mcp",
             })
             return
