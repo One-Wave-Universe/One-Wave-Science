@@ -1,9 +1,6 @@
 {
-  "id": "ubuntu-layered-ai-studio-smoke-20260923-01",
-  "argv": [
-    "bash",
-    "-lc",
-    "printf 'BRIDGE_HOST='; hostname; printf 'BRIDGE_USER='; id -un; printf 'PACKAGE='; dpkg-query -W -f='${Status} ${Version}\\n' layered-ai-studio 2>/dev/null || true; printf 'DESKTOP_USER='; test -f \"$HOME/Desktop/layered-ai-studio.desktop\" && echo yes || echo no; printf 'DESKTOP_SYSTEM='; test -f /usr/share/applications/layered-ai-studio.desktop && echo yes || echo no"
-  ],
+  "id": "jetson-deepseek-mcp-smoke-20260923-01",
+  "argv": ["python3", "hive-pipe/deepseek_bridge.py", "--mcp-smoke"],
+  "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30
 }
