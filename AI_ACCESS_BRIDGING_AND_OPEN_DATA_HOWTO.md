@@ -1,5 +1,15 @@
 # AI Access, Bridging, GitHub, CERN, and LIGO/GWOSC How-To
 
+For bridge selection, health checks, and exact client request/receipt formats,
+start with [`AI_BRIDGE_START_HERE.md`](AI_BRIDGE_START_HERE.md). Run:
+
+```bash
+python3 hive-pipe/bridge_doctor.py --profile all
+```
+
+This longer guide remains the detailed reference for repository work and public
+scientific data.
+
 **Status:** Operational guide  
 **Verified against repository access docs and official public-data documentation:** 2026-09-17
 
@@ -36,7 +46,7 @@ This guide does **not** grant credentials. Tokens, API keys, SSH keys, and GitHu
                                     |
                  +------------------+------------------+
                  |                  |                  |
-          terminal_pwd       terminal_which      terminal_run
+       terminal_reference    terminal_pwd     terminal_which     terminal_run
                                                      |
                                                      v
                                            Jetson normal-user shell
@@ -219,6 +229,7 @@ https://YOUR-TUNNEL/mcp
 Primary MCP tools:
 
 ```text
+terminal_reference
 terminal_pwd
 terminal_which
 terminal_run
@@ -312,6 +323,7 @@ and should list:
 health
 inventory_block_devices
 repo_status
+terminal_reference
 terminal_pwd
 terminal_which
 terminal_run
