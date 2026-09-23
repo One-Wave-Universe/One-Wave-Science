@@ -155,3 +155,11 @@ Do not add `sudo` or weaken the terminal parser to repair a printer. If a repair
 The worker fetches `origin/chatgpt-terminal`, executes only structured `argv` through the existing parser, then uses a temporary detached git worktree to write `result.json`. The user's active branch/worktree is not switched or reset.
 
 The service runs as the normal user with `NoNewPrivileges=true`, `ProtectSystem=strict`, and explicit writable paths for the bridge runtime, bridge state, the project checkout, and the external-work directory.
+
+## Acceptance test
+
+Run the full existing Hive Pipe suite, including the compatibility tests:
+
+```bash
+PYTHONPATH=hive-pipe python3 -m unittest discover -s hive-pipe -p 'test_*.py' -v
+```
