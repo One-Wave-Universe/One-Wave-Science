@@ -224,7 +224,7 @@ def _validate_cwd(cwd: str | None) -> Path:
         raise ValueError(f"cwd is not a directory: {target}")
     if not _inside_allowed_root(target):
         allowed = ", ".join(str(root) for root in ALLOWED_ROOTS)
-        raise ValueError(f"cwd must stay inside an authorized One-Wave work root: {allowed}")
+        raise ValueError(f"cwd must stay inside an authorized Jetson work root / One-Wave host root: {allowed}")
     return target
 
 
