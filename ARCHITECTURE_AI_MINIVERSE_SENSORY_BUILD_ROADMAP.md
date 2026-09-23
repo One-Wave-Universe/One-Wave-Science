@@ -167,6 +167,162 @@ The body therefore carries memory simply by **being in a state produced by prior
 
 Higher reasoning reads this state rather than reconstructing the whole world from a raw prompt every cycle.
 
+
+---
+
+## 5A. Candidate seven-cell motor/sensory flower
+
+This is a **domain mapping / prototype hypothesis**, not a new CELL_V1 primitive and not bench-validated canon.
+
+It must preserve the current CELL_V1 authorities:
+
+- all seven positions use the same repeatable CELL_V1 physical primitive;
+- all cells keep the same flat-edge geometry and clockwise order `A+ -> B+ -> C+ -> A- -> B- -> C-`;
+- `A+ <-> A-`, `B+ <-> B-`, and `C+ <-> C-` remain the three opposed bidirectional physical axes;
+- the six surrounding positions remain individually observable and connected; their information must not be collapsed into one indistinguishable node;
+- motor, sensor, reflex, memory, and higher-lattice jobs are roles carried by the same primitive family rather than separate hardwired cell species.
+
+### Working functional arrangement
+
+A first body-control experiment may configure the seven-cell flower as:
+
+```text
+six surrounding CELL_V1 positions
+  = sensory / body-state role
+
+one center CELL_V1 position
+  = motor / actuator coordination role
+```
+
+"Sensor cell" and "motor cell" therefore mean **current role**, not different hardware geometry.
+
+### Three direct sensory primitives
+
+Current candidate measurements for the surrounding sensory roles are:
+
+```text
+TEMPERATURE
+RESISTANCE / IMPEDANCE CHANGE
+GYRO / LOCAL ROTATION-ORIENTATION CHANGE
+```
+
+These are intentionally direct local observables. Pressure, strain, load, balance, direction, and other higher descriptions should not automatically consume separate channels when they can be reconstructed from the connected lattice pattern.
+
+Resistance/impedance and temperature must be treated as physically coupled measurements where the chosen sensor material makes them dependent. Calibration must separate a genuinely independent deformation/contact effect from ordinary temperature coefficient before claiming two independent variables.
+
+### A/B/C are geometry, not sensor names
+
+Do **not** assign:
+
+```text
+A = temperature
+B = resistance
+C = gyro
+```
+
+The A/B/C labels remain the three geometric mirrored axes.
+
+Each measurable sensory quantity may be sampled relative to those axes:
+
+```text
+A+ <-> A-
+B+ <-> B-
+C+ <-> C-
+```
+
+so that the architecture can preserve direction and scale without changing the meaning of A/B/C.
+
+### Local differential -> connected state
+
+For a measured quantity `q`, an opposed local differential may be written experimentally as:
+
+```text
+Δq_A = q(A+) - q(A-)
+Δq_B = q(B+) - q(B-)
+Δq_C = q(C+) - q(C-)
+```
+
+The three signed differentials are not themselves the entire body state. The six sensor-role cells remain interconnected, and their combined spatial pattern can carry information that would be redundant to report again as a dedicated scalar.
+
+Working rule:
+
+```text
+LOCAL CELL:
+  measure primitive physical change
+
+OPPOSED A/B/C RELATION:
+  preserve signed differential / direction
+
+CONNECTED SIX-CELL PATTERN:
+  form a combined sensory state
+
+CENTER MOTOR-ROLE CELL:
+  receive/use the locally resolved state
+  while preserving access to directional differences when action requires them
+
+HIGHER LATTICE:
+  consume the resolved state plus only the residual detail that has a WHY FORWARD?
+```
+
+Candidate emergent/combined quantities include balance, orientation context, direction of disturbance, distributed load/strain pattern, and whole-flower condition. These are hypotheses to test; they are not assumed to be recoverable until reconstruction from the six-cell measurements is demonstrated.
+
+### Point / Path / Field compatibility
+
+This sensory mapping must not redefine the current PPF architecture.
+
+The governing recursive description remains:
+
+```text
+CENTER / REFERENCE
+-> POINT ROTATION
+-> PATH ROTATION
+-> FIELD ROTATION
+-> CLOSURE / BOUNDED BODY
+-> RESOLVED WHOLE / NEXT-SCALE CENTER
+```
+
+For the sensory domain, use the following compatibility interpretation:
+
+```text
+POINT:
+  one local cell/edge measurement and its local rotational/orientation state
+
+PATH:
+  propagation and differential relationship through connected A/B/C edges
+
+FIELD:
+  the coupled multi-cell relation produced by interacting paths/rotations
+
+RESOLVED WHOLE:
+  the compact body-state interface exposed upward without repeating every raw sensor value
+```
+
+Thus the intended compression rule is:
+
+```text
+local measurements
+ -> opposed A/B/C differentials
+ -> connected multi-cell relation
+ -> resolved whole-state
+ -> next-scale input
+```
+
+This is an application-layer body/sensory interpretation of the established CELL_V1/PPF scale rule, not a replacement for it.
+
+### Minimum validation before promotion
+
+Before this mapping is treated as more than a candidate:
+
+1. instrument all six surrounding positions independently;
+2. demonstrate calibrated temperature measurement;
+3. demonstrate resistance/impedance change and separate it from temperature coefficient where required;
+4. demonstrate gyro/orientation change with known motion;
+5. show that A/B/C opposed differences preserve direction;
+6. reconstruct at least one claimed combined state from the six-cell pattern without adding a redundant dedicated sensor;
+7. show the center motor-role cell can use that resolved state while individual directional evidence remains inspectable;
+8. compare raw-sensor forwarding against resolved-state forwarding and quantify what information is lost or preserved.
+
+
 ---
 
 ## 6. Miniverse = mind
