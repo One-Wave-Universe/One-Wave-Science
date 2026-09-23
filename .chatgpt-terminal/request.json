@@ -1,6 +1,9 @@
 {
-  "id": "printer-diagnostic-001",
-  "argv": ["bash", "-lc", "printf '\n=== CUPS ===\n'; systemctl is-active cups; printf '\n=== PRINTERS ===\n'; lpstat -t; printf '\n=== USB ===\n'; lsusb; printf '\n=== DEVICES ===\n'; command -v lpinfo >/dev/null 2>&1 && lpinfo -v || true"],
-  "cwd": "/home/Scales/One-Wave-Science",
+  "id": "ubuntu-layered-ai-studio-smoke-20260923-01",
+  "argv": [
+    "bash",
+    "-lc",
+    "printf 'BRIDGE_HOST='; hostname; printf 'BRIDGE_USER='; id -un; printf 'PACKAGE='; dpkg-query -W -f='${Status} ${Version}\\n' layered-ai-studio 2>/dev/null || true; printf 'DESKTOP_USER='; test -f \"$HOME/Desktop/layered-ai-studio.desktop\" && echo yes || echo no; printf 'DESKTOP_SYSTEM='; test -f /usr/share/applications/layered-ai-studio.desktop && echo yes || echo no"
+  ],
   "timeout": 30
 }
