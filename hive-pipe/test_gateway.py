@@ -76,7 +76,7 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(
             set(health["terminal_tools"]),
-            {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"},
+            {"android_reference", "android_run", "terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"},
         )
 
     def test_enqueues_and_returns_named_action(self):
@@ -112,6 +112,42 @@ class GatewayTests(unittest.TestCase):
         self.assertTrue({"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}.issubset(tools))
         self.assertTrue(tools["terminal_pwd"]["annotations"]["readOnlyHint"])
         self.assertFalse(tools["terminal_run"]["annotations"]["readOnlyHint"])
+
+    def test_mcp_android_reference_then_run(self):
+        status, referenced = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 17, "method": "tools/call",
+            "params": {"name": "android_reference", "arguments": {}},
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(referenced["result"]["isError"])
+        token = referenced["result"]["structuredContent"]["reference_token"]
+
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 18, "method": "tools/call",
+            "params": {
+                "name": "android_run",
+                "arguments": {"reference_token": token, "argv": ["printf", "ANDROID_REF_OK"]},
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertFalse(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["decision"], "CONFIRM")
+        self.assertEqual(result["cycle"]["field_act"]["stdout"], "ANDROID_REF_OK")
+
+    def test_mcp_android_run_without_reference_holds(self):
+        status, called = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 16, "method": "tools/call",
+            "params": {
+                "name": "android_run",
+                "arguments": {"reference_token": "", "argv": ["printf", "NO"]},
+            },
+        })
+        self.assertEqual(status, 200)
+        self.assertTrue(called["result"]["isError"])
+        result = called["result"]["structuredContent"]
+        self.assertEqual(result["decision"], "HOLD")
+        self.assertEqual(result["code"], "REFERENCE_REQUIRED")
 
     def test_mcp_terminal_reference_explains_intervention_levels(self):
         status, called = self.request("/mcp", method="POST", body={
