@@ -17,6 +17,7 @@ import time
 
 import mudl
 import terminal_parser
+import android_reference_parser
 
 
 JOB_ROUTE = re.compile(r"^/v1/jobs/([A-Za-z0-9][A-Za-z0-9._-]{0,95})$")
@@ -40,6 +41,39 @@ def action_tool(action: str) -> dict:
 
 MCP_TOOLS = {action: action_tool(action) for action in sorted(mudl.ACTIONS)}
 MCP_TOOLS.update({
+    "android_reference": {
+        "name": "android_reference",
+        "title": "Android Reference",
+        "description": "Issue a one-shot fresh reference token for the next Android action.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"cwd": {"type": "string"}},
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
+    },
+    "android_run": {
+        "name": "android_run",
+        "title": "Android Run",
+        "description": "Run exactly one bounded Android action only when a fresh one-shot reference token still matches the current state.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "reference_token": {"type": "string"},
+                "argv": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "minItems": 1,
+                    "maxItems": 128,
+                },
+                "cwd": {"type": "string"},
+                "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+            },
+            "required": ["reference_token", "argv"],
+            "additionalProperties": False,
+        },
+        "annotations": {"readOnlyHint": False, "destructiveHint": True, "openWorldHint": False},
+    },
     "terminal_reference": {
         "name": "terminal_reference",
         "title": "Terminal Reference",
@@ -179,7 +213,20 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
     if not isinstance(arguments, dict):
         return mcp_error(request_id, -32602, "Terminal arguments must be an object")
     try:
-        if name == "terminal_reference":
+        if name == "android_reference":
+            if set(arguments) - {"cwd"}:
+                raise ValueError("android_reference accepts only optional cwd")
+            result = android_reference_parser.reference(arguments.get("cwd"))
+        elif name == "android_run":
+            if not set(arguments).issubset({"reference_token", "argv", "cwd", "timeout"}) or not {"reference_token", "argv"}.issubset(arguments):
+                raise ValueError("android_run requires reference_token and argv and accepts optional cwd/timeout")
+            result = android_reference_parser.run(
+                arguments["reference_token"],
+                arguments["argv"],
+                cwd=arguments.get("cwd"),
+                timeout=arguments.get("timeout", 60),
+            )
+        elif name == "terminal_reference":
             if arguments:
                 raise ValueError("terminal_reference accepts no arguments")
             result = {"ok": True, "reference": terminal_parser.reference()}
@@ -256,7 +303,7 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
-        if name in {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
+        if name in {"android_reference", "android_run", "terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
             return handle_terminal_tool(request_id, name, arguments)
         if name not in MCP_TOOLS or arguments != {}:
             return mcp_error(request_id, -32602, "Unknown tool or non-empty arguments")
@@ -325,7 +372,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
             self.send_json(HTTPStatus.OK, {
                 "status": "ok",
                 "actions": sorted(mudl.ACTIONS),
-                "terminal_tools": ["terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"],
+                "terminal_tools": ["android_reference", "android_run", "terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"],
                 "mcp": "/mcp",
             })
             return
