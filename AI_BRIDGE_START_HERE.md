@@ -9,7 +9,7 @@ or broken.
 From the repository checkout:
 
 ```bash
-python3 hive-pipe/bridge_doctor.py --profile all
+python3 One_Wave_Bench/hive-pipe/bridge_doctor.py --profile all
 ```
 
 Profiles:
@@ -86,8 +86,8 @@ human/root intervention.
 Install/restart on the Jetson or another intended gateway host:
 
 ```bash
-bash hive-pipe/install_gateway.sh
-python3 hive-pipe/bridge_doctor.py --profile gateway
+bash One_Wave_Bench/hive-pipe/install_gateway.sh
+python3 One_Wave_Bench/hive-pipe/bridge_doctor.py --profile gateway
 ```
 
 The gateway remains loopback-only. Remote clients use the authorized HTTPS
@@ -126,7 +126,7 @@ One-time installation on the machine ChatGPT must operate:
 
 ```bash
 git fetch origin main
-git show origin/main:hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
+git show origin/main:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
 python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/hive-pipe/bridge_doctor.py --profile pull
 ```
 
@@ -166,13 +166,13 @@ permissions restricted to the user. Never commit them.
 Official API adapter:
 
 ```bash
-python3 hive-pipe/deepseek_bridge.py --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py --mcp-smoke
 ```
 
 Free-web/local-session adapter:
 
 ```bash
-python3 hive-pipe/deepseek_web_bridge.py --relay-health --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_web_bridge.py --relay-health --mcp-smoke
 ```
 
 The DeepSeek adapters translate model function calls into the same bounded Hive

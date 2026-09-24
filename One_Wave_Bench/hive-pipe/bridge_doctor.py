@@ -20,7 +20,7 @@ from urllib.request import Request, urlopen
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent
 DEFAULT_MCP_URL = "http://127.0.0.1:8765/mcp"
 
 PASS = "PASS"
@@ -60,14 +60,14 @@ def run(argv: list[str], *, cwd: Path = REPO_ROOT, timeout: int = 30) -> subproc
 def static_checks() -> list[Check]:
     checks: list[Check] = []
     required = [
-        "hive-pipe/gateway.py",
-        "hive-pipe/terminal_parser.py",
-        "hive-pipe/install_gateway.sh",
-        "hive-pipe/chatgpt_terminal_pull.py",
-        "hive-pipe/install_chatgpt_terminal_pull.sh",
-        "hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
-        "hive-pipe/deepseek_bridge.py",
-        "hive-pipe/deepseek_web_bridge.py",
+        "One_Wave_Bench/hive-pipe/gateway.py",
+        "One_Wave_Bench/hive-pipe/terminal_parser.py",
+        "One_Wave_Bench/hive-pipe/install_gateway.sh",
+        "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
+        "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh",
+        "One_Wave_Bench/hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
+        "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
+        "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py",
         "scripts/jetson_remote.sh",
         "scripts/external_work_bridge.py",
         ".github/workflows/jetson-command.yml",
@@ -84,13 +84,13 @@ def static_checks() -> list[Check]:
     ))
 
     python_files = [
-        "hive-pipe/gateway.py",
-        "hive-pipe/mudl.py",
-        "hive-pipe/terminal_parser.py",
-        "hive-pipe/chatgpt_terminal_pull.py",
-        "hive-pipe/bridge_doctor.py",
-        "hive-pipe/deepseek_bridge.py",
-        "hive-pipe/deepseek_web_bridge.py",
+        "One_Wave_Bench/hive-pipe/gateway.py",
+        "One_Wave_Bench/hive-pipe/mudl.py",
+        "One_Wave_Bench/hive-pipe/terminal_parser.py",
+        "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
+        "One_Wave_Bench/hive-pipe/bridge_doctor.py",
+        "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
+        "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py",
         "scripts/external_work_bridge.py",
     ]
     existing_python = [str(REPO_ROOT / path) for path in python_files if (REPO_ROOT / path).is_file()]
@@ -103,11 +103,11 @@ def static_checks() -> list[Check]:
     ))
 
     shell_files = [
-        "hive-pipe/agent.sh",
-        "hive-pipe/install_gateway.sh",
-        "hive-pipe/create_client_token.sh",
-        "hive-pipe/install_chatgpt_terminal_pull.sh",
-        "hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
+        "One_Wave_Bench/hive-pipe/agent.sh",
+        "One_Wave_Bench/hive-pipe/install_gateway.sh",
+        "One_Wave_Bench/hive-pipe/create_client_token.sh",
+        "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh",
+        "One_Wave_Bench/hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
         "scripts/jetson_remote.sh",
         "scripts/install_jetson_gateway.sh",
         "scripts/enable_jetson_ssh.sh",
@@ -123,9 +123,9 @@ def static_checks() -> list[Check]:
 
     contracts: list[tuple[str, list[str]]] = [
         (".github/workflows/jetson-command.yml", ['"name": "terminal_run"', ' + "/mcp"']),
-        ("hive-pipe/install_chatgpt_terminal_pull.sh", ["chatgpt-terminal", "chatgpt-terminal-backup"]),
-        ("hive-pipe/gateway.py", ["terminal_reference", "terminal_run", "python_run", "cpp_compile_run"]),
-        ("hive-pipe/deepseek_bridge.py", ["terminal_pwd", "terminal_which", "terminal_run"]),
+        ("One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh", ["chatgpt-terminal", "chatgpt-terminal-backup"]),
+        ("One_Wave_Bench/hive-pipe/gateway.py", ["terminal_reference", "terminal_run", "python_run", "cpp_compile_run"]),
+        ("One_Wave_Bench/hive-pipe/deepseek_bridge.py", ["terminal_pwd", "terminal_which", "terminal_run"]),
     ]
     contract_failures: list[str] = []
     for relative, markers in contracts:
@@ -208,7 +208,7 @@ def gateway_live_checks(*, required: bool, timeout: int) -> list[Check]:
             "local Hive Pipe MCP",
             FAIL if required else NOT_CONFIGURED,
             "no local codex token found",
-            "Run hive-pipe/create_client_token.sh codex or set HIVE_PIPE_TOKEN_FILE without exposing the token.",
+            "Run One_Wave_Bench/hive-pipe/create_client_token.sh codex or set HIVE_PIPE_TOKEN_FILE without exposing the token.",
         ))
         return checks
     url = os.environ.get("HIVE_PIPE_MCP_URL", DEFAULT_MCP_URL).rstrip("/")
@@ -243,7 +243,7 @@ def pull_live_checks(*, required: bool) -> list[Check]:
             "pull bridge runtime",
             FAIL if required else NOT_CONFIGURED,
             f"not installed at {runtime}",
-            "Run hive-pipe/install_chatgpt_terminal_pull.sh from the checkout of the machine to control.",
+            "Run One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh from the checkout of the machine to control.",
         ))
         return checks
 

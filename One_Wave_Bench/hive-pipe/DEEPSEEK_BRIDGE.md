@@ -6,7 +6,7 @@ This is the no-clipboard route for DeepSeek when using the DeepSeek API.
 human task
    |
    v
-hive-pipe/deepseek_bridge.py
+One_Wave_Bench/hive-pipe/deepseek_bridge.py
    |
    +--> DeepSeek API function call: jetson_pwd / jetson_which / jetson_run
    |
@@ -30,7 +30,7 @@ On the Jetson, from the canonical checkout:
 
 ```bash
 cd "$HOME/One-Wave-Science"
-bash hive-pipe/create_client_token.sh deepseek
+bash One_Wave_Bench/hive-pipe/create_client_token.sh deepseek
 ```
 
 This creates:
@@ -69,7 +69,7 @@ This does not call DeepSeek. It proves the token, endpoint, and Hive Pipe MCP
 shape are correct:
 
 ```bash
-python3 hive-pipe/deepseek_bridge.py --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py --mcp-smoke
 ```
 
 Expected result contains an `ok: true` working-directory response.
@@ -79,7 +79,7 @@ If this fails, fix Hive Pipe before involving the model.
 ## 4. Give DeepSeek a real repo task
 
 ```bash
-python3 hive-pipe/deepseek_bridge.py \
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py \
   'Inspect the current One-Wave-Science git status, read the canonical access docs, and report the smallest next verification command.'
 ```
 
@@ -103,7 +103,7 @@ tunnel and point the client at its `/mcp` URL:
 export HIVE_PIPE_MCP_URL='https://YOUR-TUNNEL/mcp'
 export HIVE_PIPE_TOKEN_FILE='/secure/path/deepseek.token'
 export DEEPSEEK_API_KEY='your-api-key'
-python3 hive-pipe/deepseek_bridge.py 'Check the repo and run the relevant tests.'
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py 'Check the repo and run the relevant tests.'
 ```
 
 You may set `HIVE_PIPE_TOKEN` directly instead of `HIVE_PIPE_TOKEN_FILE`, but do
@@ -157,7 +157,7 @@ DeepSeek's Responses API will execute a native MCP connector.
 The adapter has offline tests in:
 
 ```text
-hive-pipe/test_deepseek_bridge.py
+One_Wave_Bench/hive-pipe/test_deepseek_bridge.py
 ```
 
 They verify:

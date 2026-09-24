@@ -68,5 +68,5 @@ python3 scripts/external_work_bridge.py status
 - Large generated artifacts should use a deliberate artifact/storage path rather
   than being dropped into the science repository.
 - `ONE_WAVE_EXTERNAL_WORK=/some/path` may override the default local workspace.
-- The default `hive-pipe/install_gateway.sh` grants the AI terminal parser write
+- The default `One_Wave_Bench/hive-pipe/install_gateway.sh` grants the AI terminal parser write
   access to `~/One-Wave-External-Work` in addition to the checked-out repo.

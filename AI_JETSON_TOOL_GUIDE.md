@@ -7,7 +7,7 @@ This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or
 The canonical Jetson tool path is:
 
 ```text
-client -> HTTPS/MCP -> hive-pipe/gateway.py -> terminal_parser.py -> Jetson process
+client -> HTTPS/MCP -> One_Wave_Bench/hive-pipe/gateway.py -> terminal_parser.py -> Jetson process
 ```
 
 MCP endpoint:
@@ -49,7 +49,7 @@ They live only on the Jetson under:
 To add any other client:
 
 ```bash
-bash hive-pipe/create_client_token.sh CLIENT_NAME
+bash One_Wave_Bench/hive-pipe/create_client_token.sh CLIENT_NAME
 ```
 
 The gateway accepts the same client token through any of these common forms:

@@ -13,7 +13,7 @@ normal DeepSeek web account
 local Playwright relay on Jetson :3000 (loopback only)
         |
         v
-hive-pipe/deepseek_web_bridge.py
+One_Wave_Bench/hive-pipe/deepseek_web_bridge.py
         |
         v
 existing Hive Pipe /mcp
@@ -123,19 +123,19 @@ does not create an unrestricted shell or bypass the server-side block list.
 Relay only:
 
 ```bash
-python3 hive-pipe/deepseek_web_bridge.py --relay-health
+python3 One_Wave_Bench/hive-pipe/deepseek_web_bridge.py --relay-health
 ```
 
 Hive Pipe only:
 
 ```bash
-python3 hive-pipe/deepseek_web_bridge.py --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_web_bridge.py --mcp-smoke
 ```
 
 Both:
 
 ```bash
-python3 hive-pipe/deepseek_web_bridge.py --relay-health --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_web_bridge.py --relay-health --mcp-smoke
 ```
 
 ## Login failures
@@ -168,7 +168,7 @@ A browser-relay failure does **not** mean the Jetson access path is broken.
 Offline adapter tests:
 
 ```text
-hive-pipe/test_deepseek_web_bridge.py
+One_Wave_Bench/hive-pipe/test_deepseek_web_bridge.py
 ```
 
 They verify:

@@ -133,7 +133,7 @@ def _load_hive_token() -> str:
         token = token_file.read_text(encoding="utf-8").strip()
     except OSError as exc:
         raise RuntimeError(
-            "Hive Pipe token not found. Run `bash hive-pipe/create_client_token.sh deepseek` "
+            "Hive Pipe token not found. Run `bash One_Wave_Bench/hive-pipe/create_client_token.sh deepseek` "
             "on the Jetson, or set HIVE_PIPE_TOKEN/HIVE_PIPE_TOKEN_FILE."
         ) from exc
     if not token:

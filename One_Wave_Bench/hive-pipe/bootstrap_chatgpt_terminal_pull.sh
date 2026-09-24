@@ -11,5 +11,5 @@ fi
 
 git -C "$PROJECT_ROOT" fetch origin main
 ONE_WAVE_PROJECT_ROOT="$PROJECT_ROOT" \
-  git -C "$PROJECT_ROOT" show origin/main:hive-pipe/install_chatgpt_terminal_pull.sh | \
+  git -C "$PROJECT_ROOT" show origin/main:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh | \
   ONE_WAVE_PROJECT_ROOT="$PROJECT_ROOT" bash

@@ -21,7 +21,7 @@ import tempfile
 import time
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 HOME = Path.home().resolve()
 MAX_ARGS = 128
 MAX_ARG_LEN = 4096
