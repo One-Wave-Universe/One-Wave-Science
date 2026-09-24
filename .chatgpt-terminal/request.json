@@ -1,6 +1,9 @@
 {
-  "id": "jetson-deepseek-mcp-smoke-20260923-01",
-  "argv": ["python3", "hive-pipe/deepseek_bridge.py", "--mcp-smoke"],
-  "cwd": "/home/Scales/One-Wave-Science",
+  "id": "bridge-target-probe-20260924-01",
+  "argv": [
+    "bash",
+    "-lc",
+    "printf 'BRIDGE_TARGET_PROBE\\n'; hostname; whoami; pwd; git status --short --branch"
+  ],
   "timeout": 30
 }
