@@ -1,11 +1,11 @@
 {
-  "id": "repo-cleanup-inventory-20260924-01",
+  "id": "bridge-mesh-doctor-20260924-01",
   "argv": [
     "bash",
     "-lc",
-    "printf 'HOST='; hostname; printf '\\nUSER='; whoami; printf '\\nHOME='; printf '%s\\n' \"$HOME\"; printf '\\nREPOS\\n'; find \"$HOME\" -maxdepth 2 -type d \\( -name '.git' -o -name 'One-Wave-*' -o -iname '*build*' -o -iname '*bench*' -o -iname '*myth*' \\) -print 2>/dev/null | sed 's#/.git$##' | sort -u | head -200"
+    "python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/bridges/hive-pipe/bridge_doctor.py --profile all --json"
   ],
-  "timeout": 30,
-  "intention": "Inventory local Science, Builds, Bench, and Mythos repository paths before moving any non-science content.",
-  "consequence": "Read-only filesystem/repository discovery; no files changed or deleted."
+  "timeout": 120,
+  "intention": "Diagnose the full One-Wave bridge mesh from the isolated runtime without changing the active project checkout.",
+  "consequence": "Read-only bridge health check; no files, services, branches, credentials, or datasets are changed."
 }
