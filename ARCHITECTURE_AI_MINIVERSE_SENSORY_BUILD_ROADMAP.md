@@ -311,18 +311,98 @@ local measurements
 
 This is an application-layer body/sensory interpretation of the established CELL_V1/PPF scale rule, not a replacement for it.
 
+### Paired sensor-flower / motor-flower candidate
+
+A stronger current body-control candidate is a **paired flower**, not a single flower with a permanently specialized motor center.
+
+```text
+SENSOR FLOWER
+  Views UP
+  Field + Void sensory relation
+  three opposed differential pairs
+  local body-state reconstruction
+        ⇅
+SHARED SQUARE / BIFILAR BUS-LATTICE ROLE
+  bidirectional coupling
+  reference / state transfer
+  no loss of individual A/B/C evidence
+        ⇅
+MOTOR FLOWER
+  Actions DOWN
+  Field + Void action relation
+  ternary DOWN / HOLD / UP actuator state
+```
+
+All participating cells remain the same CELL_V1 primitive family. "Sensor" and "motor" are current roles, not different cell species.
+
+The sensor flower does **not** require a separate conventional brain attached to every sensor cell if the shared bus plus paired motor-side state can close the local control relation. That is an experiment, not an assumption.
+
+The working directional split is:
+
+```text
+SENSOR SIDE:
+  VIEWS UP
+  preserve Direction / Phase / Strength / Reference
+  preserve Field / Void relation
+  resolve local differentials without erasing raw evidence
+
+MOTOR SIDE:
+  ACTIONS DOWN
+  preserve Field / Void relation
+  execute ternary DOWN / HOLD / UP
+  change the body/actuator state
+
+CLOSED LOOP:
+  sense -> resolve -> act -> changed body -> sense again
+```
+
+The shared square/bifilar bus-lattice role remains experimental. It must not be confused with V0, and it must not silently merge all attached cells into one electrical node.
+
+### Short-term and long-term physical memory target
+
+The paired build should test **two physical retention timescales** in the active path family.
+
+```text
+SHORT-TERM MEMORY:
+  transient state that survives long enough to affect the next local cycles
+  candidate observables:
+    phase
+    charge
+    current
+    temporary magnetic bias
+    short-lived conductance / impedance state
+
+LONG-TERM MEMORY:
+  hysteretic / remanent / trained path bias
+  survives removal of the immediate drive for a declared retention interval
+  measurably changes later traversal
+```
+
+Both remain part of the processing path. A separate software counter or removable RAM block does not satisfy either physical-memory target.
+
+Minimum memory receipts:
+
+1. characterize the fast state's decay curve back toward baseline;
+2. characterize the hysteretic state's retention curve over a longer declared interval;
+3. show that the two timescales can be distinguished experimentally;
+4. show that repeated successful traversal changes the long-retention path bias;
+5. show that short-term state can change or decay without falsely erasing the long-term trained bias;
+6. verify that Views UP and Actions DOWN still traverse the intended CELL_V1 mirror paths.
+
 ### Minimum validation before promotion
 
 Before this mapping is treated as more than a candidate:
 
-1. instrument all six surrounding positions independently;
+1. instrument all six surrounding positions independently on the sensor side;
 2. demonstrate calibrated temperature measurement;
 3. demonstrate resistance/impedance change and separate it from temperature coefficient where required;
 4. demonstrate angular-rate / rotational-change sensing with known motion, and treat absolute orientation as a reconstructed/fused state unless independently measured;
 5. show that A/B/C opposed differences preserve direction;
-6. reconstruct at least one claimed combined state from the six-cell pattern without adding a redundant dedicated sensor;
-7. show the center motor-role cell can use that resolved state while individual directional evidence remains inspectable;
-8. compare raw-sensor forwarding against resolved-state forwarding and quantify what information is lost or preserved.
+6. reconstruct at least one claimed combined state from the sensor-flower pattern without adding a redundant dedicated sensor;
+7. show that the paired motor flower can use that resolved state while individual directional evidence remains inspectable;
+8. compare raw-sensor forwarding against resolved-state forwarding and quantify what information is lost or preserved;
+9. demonstrate the shared bus-lattice can carry the relation bidirectionally without collapsing reference, memory, or per-axis state;
+10. demonstrate distinct short-term and hysteretic long-term retention receipts before calling the pair a complete nervous primitive.
 
 
 ---
