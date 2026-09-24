@@ -107,6 +107,28 @@ fi
 
 {
   echo '[Unit]'
+  echo 'Description=One-Wave Folder Reference Watcher'
+  echo 'After=network.target'
+  echo
+  echo '[Service]'
+  echo 'Type=simple'
+  echo "WorkingDirectory=$escaped_project"
+  echo "Environment=ONE_WAVE_PROJECT_ROOT=$(escape_systemd_path "$PROJECT_ROOT")"
+  echo "Environment=REFERENCE_GATE_LEDGER=$(escape_systemd_path "$REFERENCE_STATE_ROOT/reference-receipts.jsonl")"
+  echo "ExecStart=/usr/bin/python3 $escaped_root/folder_watcher.py --root $(escape_systemd_path "$PROJECT_ROOT") --watch --interval 3"
+  echo 'Restart=always'
+  echo 'RestartSec=2'
+  echo 'NoNewPrivileges=true'
+  echo 'PrivateTmp=true'
+  echo 'ProtectSystem=strict'
+  echo "ReadWritePaths=$write_paths $(escape_systemd_path "$REFERENCE_STATE_ROOT")"
+  echo
+  echo '[Install]'
+  echo 'WantedBy=default.target'
+} > "$WATCHER_SERVICE"
+
+{
+  echo '[Unit]'
   echo 'Description=One-Wave Hive Pipe Queue Worker'
   echo 'After=network.target'
   echo
@@ -127,9 +149,10 @@ fi
 
 systemctl --user daemon-reload
 systemctl --user disable --now hive-pipe.service 2>/dev/null || true
-systemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service
-systemctl --user restart hive-pipe-agent.service hive-pipe-gateway.service
+systemctl --user enable --now one-wave-folder-watcher.service hive-pipe-agent.service hive-pipe-gateway.service
+systemctl --user restart one-wave-folder-watcher.service hive-pipe-agent.service hive-pipe-gateway.service
 echo "HIVE_PIPE_GATEWAY_INSTALLED"
+echo "Folder watcher: one-wave-folder-watcher.service"
 echo "Local endpoint: http://127.0.0.1:8765"
 echo "AI terminal: terminal_pwd / terminal_which / terminal_run via MCP"
 echo "Writable live checkout: $REPO_ROOT"
