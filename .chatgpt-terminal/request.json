@@ -1,14 +1,12 @@
 {
-  "id": "direct-bridge-health-20260924-02",
+  "id": "terminal-live-check-20260924-01",
   "argv": [
-    "python3",
-    "One_Wave_Bench/hive-pipe/bridge_doctor.py",
-    "--profile",
-    "pull",
-    "--json"
+    "bash",
+    "-lc",
+    "printf 'TERMINAL_LIVE\\n'; hostname; whoami; pwd"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 120,
-  "intention": "Verify the repaired Jetson pull bridge is executing from the real One-Wave-Science checkout.",
-  "consequence": "Read-only pull bridge health receipt; no repository files, services, credentials, branches, or datasets are changed."
+  "timeout": 30,
+  "intention": "Verify that ChatGPT can execute a fresh read-only terminal command on the Jetson through the repaired pull bridge.",
+  "consequence": "Print host, user, and working directory only; no files, services, branches, credentials, or datasets are changed."
 }
