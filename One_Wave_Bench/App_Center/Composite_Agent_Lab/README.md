@@ -29,3 +29,23 @@ The default plugins are deterministic and require no cloud keys, so the loop can
 - sandbox = prevents arbitrary provider code from receiving broad machine authority by default
 
 Cloud/local provider credentials belong outside git in user config/environment files.
+
+
+## M4 simulated body
+
+M4 is the persistent processing substrate, not merely a scheduler.
+
+It owns:
+
+- hysteretic action and commit gates
+- lean / polarity
+- pressure / arousal
+- resistance
+- confidence
+- retained reference memory
+- recent successful and failed patterns
+- result reinjection into the next cycle
+
+Field supplies sensory drive and outward action/speech. Void supplies administrative brake/support/contradiction. M4 integrates both, decides whether the action threshold is crossed, and retains the committed result.
+
+This is a software architecture experiment inspired by CELL_V1 concepts; it is not evidence that the physical CELL_V1 mechanism has been demonstrated.
