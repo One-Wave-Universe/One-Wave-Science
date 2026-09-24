@@ -25,6 +25,7 @@ REPO_ROOT=Path(os.environ.get("ONE_WAVE_PROJECT_ROOT", str(SCRIPT_DIR.parent.par
 sys.path.insert(0,str(SCRIPT_DIR))
 import terminal_parser  # noqa:E402
 import reference_receipt  # noqa:E402
+import bridge_doctor  # noqa:E402
 
 STATE_ROOT=Path(os.environ.get("PARSER_GOBLIN_STATE_ROOT",str(Path.home()/".local/state/one-wave-parser-goblin"))).expanduser()
 STATE_FILE=STATE_ROOT/"state.json"
@@ -95,6 +96,24 @@ def load_state():
 def save_state(s):
     s["updated_at"]=now(); atomic_json(STATE_FILE,s)
 
+def doctor_snapshot(profile: str = "all") -> dict[str, Any]:
+    """Run bridge-doctor checks and return structured health."""
+    checks = bridge_doctor.static_checks()
+    if profile in {"gateway", "all"}:
+        checks.extend(bridge_doctor.gateway_live_checks(required=False, timeout=5))
+    if profile in {"pull", "all"}:
+        checks.extend(bridge_doctor.pull_live_checks(required=False))
+    if profile == "all":
+        checks.extend(bridge_doctor.optional_live_checks(5))
+    return {
+        "profile": profile,
+        "exit_code": bridge_doctor.overall_exit(checks),
+        "checks": [
+            {"name": c.name, "status": c.status, "detail": c.detail, "action": c.action}
+            for c in checks
+        ],
+    }
+
 def route_local(req):
     try:
         reference_receipt.require_no_watcher_hold(REPO_ROOT)
@@ -152,6 +171,9 @@ def route_github_actions(req):
     return {"route":"github-actions","accepted":True,"completed":False,"relay_file":str(key_path(relay,req["id"]))}
 
 def try_routes(req,state):
+    doctor=doctor_snapshot("all")
+    state["bridge_doctor"]=doctor
+    save_state(state)
     routes=[route_local,route_hive,route_pull,route_github_actions]
     attempts=[]
     for fn in routes:
@@ -165,7 +187,8 @@ def try_routes(req,state):
 def write_response(req,route,receipt,attempts):
     resp={"id":req["id"],"request_digest":req["digest"],"state":RETURN,"route":route,"received_at":now(),
           "ok":bool(receipt.get("ok")),"exit_code":receipt.get("exit_code"),"stdout":receipt.get("stdout",""),
-          "stderr":receipt.get("stderr",""),"guidance":receipt.get("guidance"),"receipt":receipt,"attempts":attempts}
+          "stderr":receipt.get("stderr",""),"guidance":receipt.get("guidance"),"receipt":receipt,"attempts":attempts,
+          "bridge_doctor":doctor_snapshot("all")}
     atomic_json(key_path(OUTBOX,req["id"]),resp); return resp
 
 def issue_once(state):
@@ -227,6 +250,7 @@ def main():
     s=sub.add_parser("submit"); s.add_argument("--id",required=True); s.add_argument("--cwd"); s.add_argument("--timeout",type=int,default=120)
     s.add_argument("--intention",required=True); s.add_argument("--consequence",required=True); s.add_argument("argv",nargs=argparse.REMAINDER)
     sub.add_parser("status")
+    d=sub.add_parser("doctor"); d.add_argument("--profile",choices=["ci","pull","gateway","all"],default="all")
     ap.add_argument("--watch",action="store_true"); ap.add_argument("--once",action="store_true")
     a=ap.parse_args()
     for d in [STATE_ROOT,INBOX,OUTBOX,STATE_ROOT/"relay",STATE_ROOT/"relay-receipts"]: d.mkdir(parents=True,exist_ok=True)
@@ -235,6 +259,10 @@ def main():
         return submit(a)
     if a.cmd=="status":
         print(json.dumps(load_state(),indent=2,sort_keys=True)); return 0
+    if a.cmd=="doctor":
+        snap=doctor_snapshot(a.profile)
+        print(json.dumps(snap,indent=2,sort_keys=True))
+        return snap["exit_code"]
     state=load_state()
     if a.once:
         return 0 if cycle(state) else 2
