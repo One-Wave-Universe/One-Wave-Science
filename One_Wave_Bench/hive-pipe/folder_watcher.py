@@ -12,8 +12,8 @@ from pathlib import Path
 import subprocess
 import time
 
-WATCHER_DIRNAME = ".watcher"
-POLICY_NAME = "policy.json"
+WATCHER_DIRNAME = ".owatch"
+POLICY_NAME = "folder.json"
 STATE_NAME = "state.json"
 EVENTS_NAME = "events.jsonl"
 HOLD_NAME = "HOLD.json"
