@@ -307,6 +307,7 @@ def load_result(request_id: str) -> dict[str, Any] | None:
 
 def execute_request(request: dict[str, Any], commit: str, source: Route) -> dict[str, Any]:
     try:
+        reference_receipt.require_no_watcher_hold(REPO_ROOT)
         reference_receipt.record({"phase": "issued", "request_id": request["id"],
                                   "intention": request["intention"], "consequence": request["consequence"],
                                   "request_digest": request["digest"], "reference": terminal_parser._project_reference(),
