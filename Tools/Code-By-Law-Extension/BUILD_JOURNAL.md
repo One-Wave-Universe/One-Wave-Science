@@ -2,6 +2,22 @@
 
 Newest verified layer goes first.
 
+## 2026-09-23 — Mediator owns reference and journal
+
+- Project: Code by Law browser extension
+- Build step: insert Mediator as the shared-truth owner around Field/Void collaboration
+- Multi-AI cycle: MEDIATOR -> FIELD -> VOID -> MEDIATOR
+- Mediator supplies the authoritative GitHub reference packet before either role acts
+- Mediator assigns the bounded step, roles, branch/PR lane, and success criteria
+- Field returns implementation/test evidence only
+- Void returns independent ALLOW/CORRECT/HOLD/ESCALATE review only
+- Field and Void do not maintain competing canonical journals or advance the shared checkpoint
+- Mediator writes the single canonical journal entry, resulting checkpoint, unresolved items, and next referenced state
+- GitHub issue #147 updated with the Mediator protocol
+- Tests: PROJECT_TEST_PASS
+- Mozilla lint: 0 errors, 0 notices, 0 warnings
+- Next permitted step: publish Mediator rule to GitHub and verify read-back
+
 ## 2026-09-23 — Field/Void multi-AI bridge
 
 - Project: Code by Law browser extension

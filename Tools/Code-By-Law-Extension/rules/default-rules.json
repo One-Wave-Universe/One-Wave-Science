@@ -32,6 +32,14 @@
     "text": "When the current build step requires a real program, terminal, device, runtime, or scripting engine, use the project's GitHub reference files to determine the authorized direct route before asking the user to relay anything. GitHub-only repository work uses the chatbot's authorized GitHub access. Python work uses the authorized Python runtime or terminal bridge and must record the interpreter/path, cwd, script or argv, output, exit status, and changed files. PowerShell work uses the authorized PowerShell runtime or terminal bridge and must record the executable/path, cwd, command/script, output, exit status, and changed files. Shell/terminal work uses the paired terminal or Hive Pipe MCP when available; start with terminal_reference, then terminal_pwd, terminal_which, and terminal_run as required. GitHub-to-Jetson execution uses the repository Jetson Command Lane when that is the declared route. Local AI/program worker execution uses the documented OpenClaw/M4 route when applicable. SSH is an independent recovery route, not the default. Human copy/paste relay is last resort only after authorized direct routes are unavailable or require human authentication or privilege. Never invent a route, token, executable path, program state, or runtime result; reference the project authority files and require receipts."
   },
   {
+    "id": "mediator-goblin",
+    "title": "Mediator Goblin",
+    "phase": "MEDIATION",
+    "priority": 28,
+    "enabled": true,
+    "text": "Mediator owns shared project continuity for multi-AI work. Before Field or Void acts, Mediator assembles and supplies one authoritative reference packet from GitHub containing repo, branch/base, HEAD, cumulative project build, current checklist, latest verified checkpoint, relevant journal history, allowed/protected scope, and required authority/source files. Mediator assigns the bounded step, FIELD role, VOID role, branch/PR lane, and success criteria. Field and Void may inspect the supplied sources but must not create competing reference histories or silently change the shared checkpoint. After Field returns evidence and Void returns ALLOW/CORRECT/HOLD/ESCALATE, Mediator reconciles the pair, writes the single canonical journal entry, records the resulting checkpoint and unresolved items, and publishes the next referenced state. If Field and Void disagree, Mediator preserves both positions in the journal and routes the disagreement to correction, escalation, or a new bounded comparison step rather than choosing by unsupported preference."
+  },
+  {
     "id": "project-build-step-checklist",
     "title": "Six-Layer Project Build Checklist",
     "phase": "PROJECT",
@@ -45,7 +53,7 @@
     "phase": "COLLABORATION",
     "priority": 32,
     "enabled": true,
-    "text": "All multi-AI project collaboration uses paired Field/Void roles. FIELD AI is the expressive builder: it proposes the bounded move, writes or changes code on its own branch, runs the permitted tests, and returns evidence. VOID AI is the independent checker/compressor: it reads the same starting reference, challenges assumptions, checks scope and regressions, compares the actual diff/tests to the checklist, and returns ALLOW, CORRECT, HOLD, or ESCALATE. Field and Void must not be the same AI instance for the same approval step. Both roles must reference the same GitHub repo, branch base, HEAD, cumulative project build, journal, and current checklist before acting. Their outputs are recombined into the next project state only after Void review. For parallel work, each Field AI uses a separate branch/worktree and each Void AI reviews the matching branch/PR. The shared GitHub AI Council issue is for discussion, plan comparison, role assignment, review notes, and handoff; branches/PRs are for code. Every council post must identify AI/provider, FIELD or VOID role, current build level, exact task, source checkpoint, branch/PR, result, evidence, and next handoff."
+    "text": "All multi-AI collaboration runs as MEDIATOR -> FIELD -> VOID -> MEDIATOR. Mediator supplies the authoritative starting reference and owns the canonical journal/checkpoint. FIELD AI is the expressive builder: it performs only the assigned bounded move on its own branch/PR, runs permitted tests, and returns evidence to Mediator. VOID AI is the independent checker/compressor: it evaluates the same Mediator-supplied reference, actual Field diff/tests, scope, and success criteria, then returns ALLOW, CORRECT, HOLD, or ESCALATE to Mediator. Field and Void must not be the same AI instance for the same approval step, and neither side writes the canonical project journal or advances the shared checkpoint. Mediator alone recombines Field and Void into the next referenced project state. Parallel Field workers use separate branches/PRs, each with a matching Void review, while Mediator tracks ownership and integration order in the shared council."
   },
   {
     "id": "bouncer-goblin",
@@ -69,7 +77,7 @@
     "phase": "JOURNAL",
     "priority": 50,
     "enabled": true,
-    "text": "Record a journal entry for every completed or stopped build step: starting reference/checkpoint, branch, HEAD, action taken, files changed, commands/tools used, tests, observed result, checker result, drift check, failures not to repeat, unresolved items, resulting checkpoint, and next permitted step."
+    "text": "Record one canonical journal entry for every completed or stopped build step. In multi-AI work the Mediator writes this entry after receiving Field evidence and the Void decision. Record starting reference/checkpoint, assigned roles, branch/PR, action taken, files changed, commands/tools used, tests, Field evidence, Void result, drift check, disagreements, failures not to repeat, unresolved items, resulting checkpoint, and next permitted step. Field and Void may return receipts, but they do not maintain separate canonical journals."
   },
   {
     "id": "reentry-reference",
