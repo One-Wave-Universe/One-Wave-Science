@@ -10,6 +10,8 @@ them for routine terminal work.
 from __future__ import annotations
 
 import hashlib
+import json
+from datetime import datetime, timezone
 import os
 from pathlib import Path
 import shlex
@@ -310,6 +312,8 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
         raise ValueError("timeout must be an integer number of seconds")
 
     before = _project_reference()
+    action_digest = hashlib.sha256(json.dumps({"argv": command, "cwd": str(target)}, sort_keys=True).encode()).hexdigest()
+    action_card = {"stamped_at": datetime.now(timezone.utc).isoformat(), "goblin": "reference", "action_sha256": action_digest, "repository": before}
     started = time.monotonic()
     env = os.environ.copy()
     env.setdefault("LANG", "C.UTF-8")
@@ -329,6 +333,8 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
         stderr, stderr_clipped = _clip(completed.stderr)
         after = _project_reference()
         return _with_guidance({
+            "reference_card": action_card,
+            "response_card": {"stamped_at": datetime.now(timezone.utc).isoformat(), "goblin": "checker", "action_sha256": action_digest, "repository": after},
             "reference_before": before,
             "reference_after": after,
             "reference_changed": before != after,
@@ -352,6 +358,8 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
         stderr, stderr_clipped = _clip(err)
         after = _project_reference()
         return _with_guidance({
+            "reference_card": action_card,
+            "response_card": {"stamped_at": datetime.now(timezone.utc).isoformat(), "goblin": "checker", "action_sha256": action_digest, "repository": after},
             "reference_before": before,
             "reference_after": after,
             "reference_changed": before != after,
@@ -397,6 +405,7 @@ def python_run(code: Any, *, args: Any = None, cwd: str | None = None,
     source = _validate_source(code)
     program_args = _validate_tool_args(args)
     target = _validate_cwd(cwd)
+    _project_reference()
     with tempfile.TemporaryDirectory(prefix=".hive-pipe-python-", dir=target) as tmp:
         script = Path(tmp) / "main.py"
         script.write_text(source, encoding="utf-8")
@@ -420,6 +429,7 @@ def cpp_compile_run(code: Any, *, args: Any = None, cwd: str | None = None,
     compiler = shutil.which("g++")
     if not compiler:
         raise ValueError("g++ is not installed or not on PATH")
+    _project_reference()
     with tempfile.TemporaryDirectory(prefix=".hive-pipe-cpp-", dir=target) as tmp:
         source_path = Path(tmp) / "main.cpp"
         binary_path = Path(tmp) / "program"
