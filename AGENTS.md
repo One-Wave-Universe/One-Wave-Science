@@ -14,7 +14,7 @@ without wandering into unrelated work or losing project state.
 ## Canonical Runtime References
 Before dispatching work, read:
 
-- `JETSON_OPENCLAW_RUNTIME.md`
+- `One_Wave_Bench/bridges/docs/JETSON_OPENCLAW_RUNTIME.md`
 - `BRANCH_STEP_PROJECT_TEMPLATE.md`
 - the active Field/Void branch control files
 - current progress/diary/failed-approach/working-feature records

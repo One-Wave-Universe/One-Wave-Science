@@ -13,7 +13,7 @@ UPDATED_50_SCLFS_LATTICE_FRAME_BINDING_VERIFICATION_AND_MINIVERSE_RUNTIME.md
 Miniverse/README.md
 Miniverse/room3d/README.md
 Miniverse/desktop/README.md
-AI_JETSON_TOOL_GUIDE.md
+One_Wave_Bench/bridges/docs/AI_JETSON_TOOL_GUIDE.md
 \`\`\`
 
 The live architecture is:

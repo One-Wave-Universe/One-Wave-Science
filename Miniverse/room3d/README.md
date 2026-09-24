@@ -98,7 +98,7 @@ Override with MINIVERSE_ROOM_STATE=/approved/path/state.json .
 ## Install on Jetson
 
 ~~~bash
-bash Miniverse/room3d/install_jetson_room.sh
+bash One_Wave_Bench/bridges/integrations/install_jetson_room.sh
 ~~~
 
 This installs a non-root user service and a graphical-session autostart launcher.

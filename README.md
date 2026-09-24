@@ -92,7 +92,7 @@ what the next action should be and why
 
 The first prototype starts with **one sandboxed room**, one agent/avatar, bounded perceptions and virtual switches, persistent loop memory, and save/reload continuity. See `MEGA_CITY_LOOPER_OBJECTIVE.md`.
 
-Preferred first local hardware target is the Jetson with safe reversible storage on a verified external drive/container. Access instructions are in `JETSON_ACCESS_AND_TERMINAL.md`. Do not guess IPs, usernames, mount points, or destructively reformat storage.
+Preferred first local hardware target is the Jetson with safe reversible storage on a verified external drive/container. Access instructions are in `One_Wave_Bench/bridges/docs/JETSON_ACCESS_AND_TERMINAL.md`. Do not guess IPs, usernames, mount points, or destructively reformat storage.
 
 ---
 
@@ -151,7 +151,7 @@ The active construction map is:
 
 - `AI_FOREMAN_WORK_REGISTER.md` — repo-wide work needed, authoritative sources, safe parallel branches, and dependencies.
 - `MEGA_CITY_LOOPER_OBJECTIVE.md` — First Looper reference-loop, one-room sandbox, Field/Void relay/parser proposals, Mayor challenge, and Bullshit Alarm governance.
-- `JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
+- `One_Wave_Bench/bridges/docs/JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
 - `One_Wave_Bench/Virtual_Breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
 - `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
 - `ART_VISUAL_GOVERNANCE.md` — visual/art contribution, voting, and current human veto rules.
@@ -229,7 +229,7 @@ Before making a substantial change:
 2. Read `AI_CANONICAL_START_HERE.md`.
 3. Read `AI_FOREMAN_WORK_REGISTER.md`.
 4. If working on the Miniverse/Mega City loop, read `MEGA_CITY_LOOPER_OBJECTIVE.md`.
-5. If working on the Jetson/local runtime, read `JETSON_ACCESS_AND_TERMINAL.md`.
+5. If working on the Jetson/local runtime, read `One_Wave_Bench/bridges/docs/JETSON_ACCESS_AND_TERMINAL.md`.
 6. Find the authoritative file for your work area.
 7. Check whether another contributor already owns overlapping work.
 8. Create or use an isolated branch.

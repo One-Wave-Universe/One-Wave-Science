@@ -18,7 +18,7 @@ Add one executable, receipt-producing rabbit-hop reconstruction slice.
 
 ## REFERENCE FILES
 - `AGENTS.md`
-- `JETSON_OPENCLAW_RUNTIME.md`
+- `One_Wave_Bench/bridges/docs/JETSON_OPENCLAW_RUNTIME.md`
 - `One_Wave_Bench/speculative/ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`
 - `One_Wave_Bench/speculative/ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md`
 - `One_Wave_Bench/brain/rabbit_hop_alphabet.py`

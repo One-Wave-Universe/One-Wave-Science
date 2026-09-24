@@ -27,7 +27,7 @@ with odd outer addresses retained as shared wrappers.
 
 ## REFERENCE FILES
 - `AGENTS.md`
-- `JETSON_OPENCLAW_RUNTIME.md`
+- `One_Wave_Bench/bridges/docs/JETSON_OPENCLAW_RUNTIME.md`
 - `BRANCH_STEP_PROJECT_TEMPLATE.md`
 - `One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
 - `One_Wave_Bench/speculative/AI_Readable_Packs/G-721_Mirrored_Alphabet_Rabbit_Hop.json`

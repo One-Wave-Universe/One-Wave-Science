@@ -4,29 +4,29 @@ on:
   workflow_dispatch:
     inputs:
       argv_json:
-        description: 'Preferred argv JSON array, e.g. ["git","status","--short"]'
+        description: 'Preferred argv JSON array'
         required: false
-        default: ""
+        default: ''
         type: string
       command:
-        description: "Fallback simple command; parsed with shlex (no pipes/redirection/shell operators)"
+        description: 'Fallback simple command parsed with shlex'
         required: false
-        default: ""
+        default: ''
         type: string
       cwd:
-        description: "Optional Jetson working directory"
+        description: 'Optional Jetson working directory'
         required: false
-        default: "/home/Scales/One-Wave-Science"
+        default: '/home/Scales/One-Wave-Science'
         type: string
       timeout:
-        description: "Timeout in seconds (terminal parser caps this at 300)"
+        description: 'Timeout seconds, capped by terminal parser'
         required: false
-        default: "120"
+        default: '120'
         type: string
       gateway_url:
-        description: "Optional current quick-tunnel URL; blank uses JETSON_GATEWAY_URL secret"
+        description: 'Optional gateway URL; blank uses JETSON_GATEWAY_URL'
         required: false
-        default: ""
+        default: ''
         type: string
 
 permissions:
@@ -38,9 +38,6 @@ concurrency:
 
 jobs:
   dispatch:
-    # Deliberately GitHub-hosted. Do not change this to self-hosted while the
-    # repository is public. GitHub reaches the Jetson only through authenticated
-    # Hive Pipe MCP terminal_run.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -51,102 +48,43 @@ jobs:
       COMMAND: ${{ inputs.command }}
       COMMAND_CWD: ${{ inputs.cwd }}
       COMMAND_TIMEOUT: ${{ inputs.timeout }}
-
     steps:
-      - name: Validate dispatch configuration
+      - name: Send command through canonical Hive Pipe MCP route
         shell: bash
         run: |
           set -euo pipefail
-          if [[ -z "${REQUESTED_URL}" && -z "${DEFAULT_URL}" ]]; then
-            echo "::error::Provide gateway_url or configure JETSON_GATEWAY_URL."
-            exit 1
-          fi
-          if [[ -z "${GATEWAY_TOKEN}" ]]; then
-            echo "::error::Configure JETSON_GATEWAY_TOKEN with a Hive Pipe token."
-            exit 1
-          fi
-          if [[ -z "${ARGV_JSON}" && -z "${COMMAND}" ]]; then
-            echo "::error::Provide argv_json or command."
-            exit 1
-          fi
-          case "${COMMAND_TIMEOUT}" in
-            ''|*[!0-9]*) echo "::error::timeout must be an integer"; exit 1 ;;
-          esac
-
-      - name: Send structured command to Jetson MCP terminal parser
-        shell: bash
-        run: |
-          set -euo pipefail
+          [[ -n "${REQUESTED_URL:-$DEFAULT_URL}" ]] || { echo "::error::Missing gateway URL"; exit 1; }
+          [[ -n "${GATEWAY_TOKEN}" ]] || { echo "::error::Missing gateway token"; exit 1; }
+          [[ -n "${ARGV_JSON}" || -n "${COMMAND}" ]] || { echo "::error::Missing command"; exit 1; }
           URL="${REQUESTED_URL:-$DEFAULT_URL}"
           export URL
           python3 - <<'PY'
-          import json
-          import os
-          import shlex
-          import sys
-          import urllib.error
-          import urllib.request
-
-          argv_text = os.environ.get("ARGV_JSON", "").strip()
-          if argv_text:
-              try:
-                  argv = json.loads(argv_text)
-              except json.JSONDecodeError as exc:
-                  print(f"invalid argv_json: {exc}", file=sys.stderr)
-                  raise SystemExit(2)
-              if not isinstance(argv, list) or not argv or not all(isinstance(x, str) and x for x in argv):
-                  print("argv_json must be a non-empty JSON array of strings", file=sys.stderr)
-                  raise SystemExit(2)
-          else:
-              argv = shlex.split(os.environ.get("COMMAND", ""))
-              if not argv:
-                  print("command parsed to an empty argv", file=sys.stderr)
-                  raise SystemExit(2)
-
-          arguments = {
-              "argv": argv,
-              "timeout": int(os.environ["COMMAND_TIMEOUT"]),
-          }
+          import json, os, shlex, sys, urllib.error, urllib.request
+          raw=os.environ.get("ARGV_JSON","").strip()
+          argv=json.loads(raw) if raw else shlex.split(os.environ.get("COMMAND",""))
+          if not isinstance(argv,list) or not argv or not all(isinstance(x,str) and x for x in argv):
+              raise SystemExit("command must resolve to a non-empty argv list")
+          args={"argv":argv,"timeout":int(os.environ["COMMAND_TIMEOUT"])}
           if os.environ.get("COMMAND_CWD"):
-              arguments["cwd"] = os.environ["COMMAND_CWD"]
-
-          payload = {
-              "jsonrpc": "2.0",
-              "id": 1,
-              "method": "tools/call",
-              "params": {"name": "terminal_run", "arguments": arguments},
-          }
-          req = urllib.request.Request(
+              args["cwd"]=os.environ["COMMAND_CWD"]
+          payload={"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": "terminal_run", "arguments": args}}
+          req=urllib.request.Request(
               os.environ["URL"].rstrip("/") + "/mcp",
               data=json.dumps(payload).encode(),
-              headers={
-                  "Authorization": "Bearer " + os.environ["GATEWAY_TOKEN"],
-                  "Content-Type": "application/json",
-              },
+              headers={"Authorization":"Bearer "+os.environ["GATEWAY_TOKEN"],"Content-Type":"application/json"},
               method="POST",
           )
           try:
-              with urllib.request.urlopen(
-                  req,
-                  timeout=int(os.environ["COMMAND_TIMEOUT"]) + 15,
-              ) as response:
-                  envelope = json.load(response)
+              with urllib.request.urlopen(req,timeout=int(os.environ["COMMAND_TIMEOUT"])+15) as response:
+                  envelope=json.load(response)
           except urllib.error.HTTPError as exc:
-              sys.stderr.write(exc.read().decode("utf-8", errors="replace"))
+              sys.stderr.write(exc.read().decode("utf-8",errors="replace"))
               raise SystemExit(1)
-
           if "error" in envelope:
-              print(json.dumps(envelope["error"], indent=2), file=sys.stderr)
+              print(json.dumps(envelope["error"],indent=2),file=sys.stderr)
               raise SystemExit(1)
-          tool_result = envelope.get("result", {})
-          result = tool_result.get("structuredContent", {})
-          sys.stdout.write(result.get("stdout", ""))
-          sys.stderr.write(result.get("stderr", ""))
-          if result.get("error"):
-              print(result["error"], file=sys.stderr)
-          print(
-              f"\n[jetson exit={result.get('exit_code')} "
-              f"cwd={result.get('cwd')} duration_ms={result.get('duration_ms')}]"
-          )
-          raise SystemExit(int(result.get("exit_code", 0 if result.get("ok") else 1)))
+          result=envelope.get("result",{}).get("structuredContent",{})
+          sys.stdout.write(result.get("stdout",""))
+          sys.stderr.write(result.get("stderr",""))
+          raise SystemExit(int(result.get("exit_code",0 if result.get("ok") else 1)))
           PY

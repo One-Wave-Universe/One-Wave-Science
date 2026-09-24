@@ -112,7 +112,7 @@ A successful demo should be understandable from its receipts without needing the
 
 Preferred first hardware target is the Jetson with a dedicated external drive/container for Miniverse/Mega City state. **Do not destructively reformat user storage for the first prototype.** Use an ordinary directory, disk image, database, or other reversible container until the lattice/storage proposal has independent integrity and recovery tests.
 
-Jetson and terminal entrypoint: `JETSON_ACCESS_AND_TERMINAL.md`.
+Jetson and terminal entrypoint: `One_Wave_Bench/bridges/docs/JETSON_ACCESS_AND_TERMINAL.md`.
 
 The external-drive/lattice work remains a separate experimental track. The looper must work using ordinary safe storage first.
 

@@ -50,7 +50,7 @@ Read [the SCLFS frame-binding contract](UPDATED_50_SCLFS_LATTICE_FRAME_BINDING_V
 
 ## Jetson access and external-media boundary
 
-Start with [AI Jetson tool guide](AI_JETSON_TOOL_GUIDE.md), [Jetson access and terminal](JETSON_ACCESS_AND_TERMINAL.md), and [Jetson AI access](JETSON_AI_ACCESS.md). Verify the current checkout, services and access route before claiming a live run. Keep credentials out of Git.
+Start with [AI Jetson tool guide](One_Wave_Bench/bridges/docs/AI_JETSON_TOOL_GUIDE.md), [Jetson access and terminal](One_Wave_Bench/bridges/docs/JETSON_ACCESS_AND_TERMINAL.md), and [Jetson AI access](One_Wave_Bench/bridges/docs/JETSON_AI_ACCESS.md). Verify the current checkout, services and access route before claiming a live run. Keep credentials out of Git.
 
 Target deployment is the dedicated external USB media attached to the Jetson. The internal SSD/NVMe, root and boot are protected. Device letters can change: old `sda`/`sdb` labels are not a current identity check. This documentation change performs no device operations. Hardware experiments must identify the current target and use the existing guarded experimental workflow; record image versus physical-device evidence separately.
 

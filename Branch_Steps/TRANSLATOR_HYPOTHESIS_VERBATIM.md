@@ -6,7 +6,7 @@ HARD START: Original session response retrieved; independent pre-review ALLOW.
 LOCAL REPO ROOT: /tmp/one-wave-hypothesis-verbatim
 ACTIVE BRANCH: codex/translator-hypothesis-verbatim
 BASE HEAD: 52dbf985aee1cbb19ff1e442760f065f7f8ff34d
-REFERENCE: Original assistant response from this task; AGENTS.md; JETSON_OPENCLAW_RUNTIME.md; BRANCH_STEP_PROJECT_TEMPLATE.md.
+REFERENCE: Original assistant response from this task; AGENTS.md; One_Wave_Bench/bridges/docs/JETSON_OPENCLAW_RUNTIME.md; BRANCH_STEP_PROJECT_TEMPLATE.md.
 ALLOWED FILES: One_Wave_Bench/speculative/RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md and this record.
 PROTECTED FEATURES: All runtime, canon, atlas, device and worker code.
 EXACT ACTION: Copy original response verbatim and publish a separate documentation branch.
