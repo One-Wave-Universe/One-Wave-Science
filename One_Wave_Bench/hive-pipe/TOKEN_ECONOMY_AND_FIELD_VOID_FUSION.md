@@ -76,3 +76,7 @@ Break the temporary fusion and return to separate agents when:
 - Goblin Raccoon chooses a materially different route/tool after stubborn repetition.
 - Carrier Pigeon transports only packet deltas and receipt IDs whenever possible.
 - Worker Goblin performs the bounded action.
+
+
+## Runnable composite loop
+The implemented controller is `One_Wave_Bench/hive-pipe/composite_agent_v1.py` with adapter contract `One_Wave_Bench/hive-pipe/COMPOSITE_AGENT_V1.md`. It advances INPUT -> FIELD_PERCEIVE -> VOID_ADMIN -> FIELD_ACT -> RESULT -> VOID_COMMIT -> OUTPUT using one persistent shared state and append-only transition ledger.
