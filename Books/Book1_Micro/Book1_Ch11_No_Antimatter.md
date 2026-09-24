@@ -190,6 +190,41 @@ The asymmetry is small because the boundary conditions are nearly symmetric.
 
 ---
 
+## Experimental Analogue Test — Opposed Internal / Outer EM Shell
+
+**Status: YELLOW — analogue experiment only.**
+
+This experiment does **not** claim that CELL_V1 contains antimatter, that a proton contains a positron shell, or that a successful hardware result would establish the One-Wave antimatter interpretation.
+
+The purpose is narrower: test whether an opposed internal/outer electromagnetic-shell arrangement can produce measurable signed symmetry, inversion, retention, and rewrite behaviour that is structurally comparable to the proposed internal-pressure / outer-boundary relation.
+
+Candidate fixture:
+
+```text
+INNER OPPOSED EM REGION
+        |
+        v
+LOCAL STATE / ROTATION REGION
+        |
+        v
+OUTER ELECTRIC-FIELD SHELL
+        |
+        v
+CONNECTED LATTICE / NEIGHBOR COUPLING
+```
+
+Required controls:
+
+1. measure the inner and outer regions independently;
+2. reverse the inner polarity/reference while holding the outer shell fixed;
+3. reverse the outer shell relation while holding the inner region fixed;
+4. measure whether the resulting response is symmetric, antisymmetric, hysteretic, or unchanged;
+5. separate transient response from retained path bias;
+6. use magnetic rewrite/reversal only as a controlled state manipulation, not as evidence of antimatter;
+7. compare against an ordinary electromagnetic control model before assigning any One-Wave interpretation.
+
+A positive result would show only that the engineered system supports an opposed EM-shell relation with measurable history dependence. It would **not** by itself identify positrons, antiprotons, annihilation physics, or particle internal structure.
+
 ## Yellow Audit
 
 - Pair production derivation from photon pressure splitting not yet formalized

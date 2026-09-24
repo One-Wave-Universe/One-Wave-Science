@@ -163,6 +163,75 @@ The lower-scale relations form a bounded coherent body rather than remaining an 
 
 A completed lower-scale body can be treated as one compact center/reference inside the next larger PPF system while retaining its lower-scale internal structure.
 
+### Cross-domain rotation reference ladder
+
+The words **Point**, **Path**, and **Field** are never shorthand for generic processing stages in this architecture. They mean three nested rotational descriptions:
+
+```text
+POINT ROTATION
+  local spin / circulation / intrinsic rotational state about the local center
+
+PATH ROTATION
+  motion of that resolved center along a curved, orbital, circulating, or otherwise rotational path about another reference
+
+FIELD ROTATION
+  the larger coupled rotational/circulatory structure that carries, constrains, or organizes the point and path relation
+```
+
+The same descriptive questions may be applied across scales without claiming that the underlying force law or material mechanism is identical.
+
+Grounded reference domains:
+
+```text
+PLANET / MOON / STAR
+  Point Rotation = axial rotation
+  Path Rotation  = orbit/revolution about another center
+  Field Rotation = larger system-scale rotational/coupled environment
+
+SOLAR SYSTEM
+  Point Rotation = resolved rotational state of the local system/body under study
+  Path Rotation  = solar-system motion about the galactic center
+  Field Rotation = larger galactic rotational environment
+
+OCEAN / WEATHER
+  Point Rotation = local eddy, vortex, cyclone, or circulation
+  Path Rotation  = migration/circulation of that resolved structure through a larger flow
+  Field Rotation = gyre, atmospheric circulation, or coupled ocean-atmosphere flow that carries/organizes the path
+
+MOTOR / CELL_V1 ANALOGUE
+  Point Rotation = local A/B/C rotational/phase state
+  Path Rotation  = propagation/circulation through connected CELL_V1 paths
+  Field Rotation = coupled multi-cell rotating-field relation
+```
+
+Established observations in astronomy and geophysical fluid dynamics support axial rotation, orbital/revolution motion, eddies, vorticity, gyres, and larger circulation systems. Those observations validate the **usefulness of the three-level rotational description**, not the claim that every domain shares one identical microscopic mechanism.
+
+Exploratory One-Wave mappings:
+
+```text
+PROTON / INTERNAL EM SHELL
+  candidate Point Rotation = local confined circulation / spin-associated internal motion
+  candidate Path Rotation  = internal circulating path relation
+  candidate Field Rotation = collective confining/coupled internal field or shell relation
+
+QUARK / GLUON DOMAIN
+  candidate Point Rotation = local vortex-like or circulation-like substructure, if experimentally supported
+  candidate Path Rotation  = motion/orbital contribution inside the bound hadron relation
+  candidate Field Rotation = collective quark-gluon field structure
+```
+
+Current particle physics supports composite proton structure and contributions from quark/gluon spin and motion, but it does **not** establish literal knotted proton energy coils, quark vortices, or One-Wave internal/external shell geometry. Those remain hypotheses and must earn promotion through a separate measurable model or experimental receipt.
+
+This cross-domain ladder is a **reference/no-drift aid**: it keeps the meaning of Point Rotation, Path Rotation, and Field Rotation fixed while allowing domain-specific implementations to differ.
+
+Reference starting points:
+
+- NASA, *Reference Systems — Rotation and Revolution*: https://science.nasa.gov/learn/basics-of-space-flight/chapter2-1/
+- NASA, *Solar System Facts*: https://science.nasa.gov/solar-system/solar-system-facts/
+- NOAA, *What is an eddy?*: https://oceanservice.noaa.gov/facts/eddy.html
+- NOAA, *What is a gyre?*: https://oceanservice.noaa.gov/facts/gyre.html
+- CERN COMPASS, proton structure and quark/gluon motion contributions: https://home.cern/science/experiments/compass/
+
 ## 7. Recursive scale boundary
 
 The recursion is now written without collapsing PPF into a single linear object chain:
