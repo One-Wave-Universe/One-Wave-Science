@@ -23,6 +23,14 @@ on:
         required: false
         default: "120"
         type: string
+      intention:
+        description: "Why this command advances the current goal"
+        required: true
+        type: string
+      consequence:
+        description: "Expected result and protected state to check"
+        required: true
+        type: string
       gateway_url:
         description: "Optional current quick-tunnel URL; blank uses JETSON_GATEWAY_URL secret"
         required: false
@@ -51,6 +59,8 @@ jobs:
       COMMAND: ${{ inputs.command }}
       COMMAND_CWD: ${{ inputs.cwd }}
       COMMAND_TIMEOUT: ${{ inputs.timeout }}
+      COMMAND_INTENTION: ${{ inputs.intention }}
+      COMMAND_CONSEQUENCE: ${{ inputs.consequence }}
 
     steps:
       - name: Validate dispatch configuration
@@ -67,6 +77,10 @@ jobs:
           fi
           if [[ -z "${ARGV_JSON}" && -z "${COMMAND}" ]]; then
             echo "::error::Provide argv_json or command."
+            exit 1
+          fi
+          if [[ -z "${COMMAND_INTENTION}" || -z "${COMMAND_CONSEQUENCE}" ]]; then
+            echo "::error::intention and consequence are required."
             exit 1
           fi
           case "${COMMAND_TIMEOUT}" in
@@ -106,6 +120,8 @@ jobs:
           arguments = {
               "argv": argv,
               "timeout": int(os.environ["COMMAND_TIMEOUT"]),
+              "intention": os.environ["COMMAND_INTENTION"],
+              "consequence": os.environ["COMMAND_CONSEQUENCE"],
           }
           if os.environ.get("COMMAND_CWD"):
               arguments["cwd"] = os.environ["COMMAND_CWD"]

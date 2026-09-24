@@ -1,5 +1,8 @@
 # AI Direct Python + C++ Bridge
 
+For `python_run` and `cpp_compile_run`, include concrete `intention` and
+`consequence` arguments. Missing fields now return Reference Goblin HOLD.
+
 This bridge lets any authorized MCP-capable AI execute bounded Python and C++
 source directly on the Jetson through the existing authenticated Hive Pipe
 gateway. A human does not need to copy commands between the AI and terminal.

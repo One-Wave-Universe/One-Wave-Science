@@ -33,6 +33,19 @@ Exit meanings:
 `--json` returns the same result in machine-readable form. The doctor is
 read-only. It never changes services, branches, credentials, or files.
 
+## Intention and consequence gate
+
+The gateway checks the canonical checkout before every MCP action and stamps
+both the action and response. Executable tools additionally require a concrete
+`intention` and `consequence` in their arguments. Missing fields or an unreadable
+reference return `Reference Goblin HOLD` before execution. The original issued
+card and observed response are written to a private append-only receipt ledger;
+summaries do not replace that record. The ChatGPT pull worker requires the same
+two fields in each request and records the original result.
+
+This enforces bridge actions. Chat products need their own response gate to
+block an unstamped conversational message.
+
 ## Supported routes and their jobs
 
 | Route | Best use | Health proof | Independent fallback |
@@ -73,7 +86,9 @@ First calls:
   "name": "terminal_run",
   "arguments": {
     "argv": ["git", "status", "--short", "--branch"],
-    "timeout": 30
+    "timeout": 30,
+    "intention": "Inspect the current branch and working tree",
+    "consequence": "Read the status; do not change repository files"
   }
 }
 ```
@@ -110,7 +125,9 @@ Write the **same** request to `.chatgpt-terminal/request.json` on both branches:
 {
   "id": "unique-task-id-001",
   "argv": ["git", "status", "--short", "--branch"],
-  "timeout": 30
+  "timeout": 30,
+  "intention": "Inspect the current branch and working tree",
+  "consequence": "Read the status; do not change repository files"
 }
 ```
 

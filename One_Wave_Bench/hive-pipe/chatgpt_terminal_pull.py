@@ -31,6 +31,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 import terminal_parser  # noqa: E402
+import reference_receipt  # noqa: E402
 
 REQUEST_PATH = ".chatgpt-terminal/request.json"
 RESULT_PATH = ".chatgpt-terminal/result.json"
@@ -266,6 +267,8 @@ def validate_request(raw: str) -> dict[str, Any]:
     default_cwd = os.environ.get("CHATGPT_TERMINAL_DEFAULT_CWD", str(REPO_ROOT))
     cwd = request.get("cwd", default_cwd)
     timeout = request.get("timeout", 120)
+    intention = reference_receipt.required_text(request.get("intention"), "intention")
+    consequence = reference_receipt.required_text(request.get("consequence"), "consequence")
 
     if not isinstance(request_id, str) or not request_id.strip() or len(request_id) > 128:
         raise ValueError("id must be a non-empty string <= 128 characters")
@@ -277,7 +280,8 @@ def validate_request(raw: str) -> dict[str, Any]:
         raise ValueError("cwd must be an absolute path <= 1024 characters")
     if not isinstance(timeout, int) or not 1 <= timeout <= terminal_parser.MAX_TIMEOUT:
         raise ValueError(f"timeout must be an integer from 1 to {terminal_parser.MAX_TIMEOUT}")
-    normalized = {"id": request_id.strip(), "argv": argv, "cwd": cwd, "timeout": timeout}
+    normalized = {"id": request_id.strip(), "argv": argv, "cwd": cwd, "timeout": timeout,
+                  "intention": intention, "consequence": consequence}
     encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":")).encode("utf-8")
     normalized["digest"] = hashlib.sha256(encoded).hexdigest()
     return normalized
@@ -303,8 +307,12 @@ def load_result(request_id: str) -> dict[str, Any] | None:
 
 def execute_request(request: dict[str, Any], commit: str, source: Route) -> dict[str, Any]:
     try:
+        reference_receipt.record({"phase": "issued", "request_id": request["id"],
+                                  "intention": request["intention"], "consequence": request["consequence"],
+                                  "request_digest": request["digest"], "reference": terminal_parser._project_reference(),
+                                  "at": utc_now()})
         parsed = terminal_parser.run(request["argv"], cwd=request["cwd"], timeout=request["timeout"])
-        return {
+        result = {
             "id": request["id"],
             "request_digest": request["digest"],
             "request_commit": commit,
@@ -312,6 +320,13 @@ def execute_request(request: dict[str, Any], commit: str, source: Route) -> dict
             "completed_at": utc_now(),
             **parsed,
         }
+        try:
+            reference_receipt.record({"phase": "observed", "request_id": request["id"],
+                                      "result": result, "at": utc_now()})
+        except OSError as error:
+            result["ok"] = False
+            result["error"] = f"Reference Goblin HOLD: command may have run, but observed receipt could not be stored: {error}"
+        return result
     except Exception as exc:
         return {
             "id": request["id"],

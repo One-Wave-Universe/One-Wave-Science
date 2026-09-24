@@ -5,6 +5,7 @@ SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 REPO_ROOT="$(dirname -- "$(dirname -- "$SCRIPT_DIR")")"
 PROJECT_ROOT="${ONE_WAVE_PROJECT_ROOT:-$REPO_ROOT}"
 EXTERNAL_WORK_ROOT="${ONE_WAVE_EXTERNAL_WORK:-$HOME/One-Wave-External-Work}"
+REFERENCE_STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/one-wave"
 ALLOWED_ROOTS_INPUT="${HIVE_PIPE_ALLOWED_ROOTS:-$PROJECT_ROOT:$EXTERNAL_WORK_ROOT}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"
 TOKEN_DIR="$CONFIG_DIR/tokens"
@@ -14,6 +15,8 @@ AGENT_SERVICE="$SYSTEMD_DIR/hive-pipe-agent.service"
 
 mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
 mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
+mkdir -p "$REFERENCE_STATE_ROOT"
+chmod 700 "$REFERENCE_STATE_ROOT"
 chmod 700 "$CONFIG_DIR" "$TOKEN_DIR"
 
 # First-class AI clients. Additional clients can be added with create_client_token.sh.
@@ -84,6 +87,7 @@ fi
   echo "WorkingDirectory=$escaped_root"
   echo "Environment=HIVE_PIPE_TOKEN_DIR=$TOKEN_DIR"
   echo "Environment=ONE_WAVE_EXTERNAL_WORK=$escaped_external"
+  echo "Environment=REFERENCE_GATE_LEDGER=$(escape_systemd_path "$REFERENCE_STATE_ROOT/reference-receipts.jsonl")"
   echo "Environment=ONE_WAVE_PROJECT_ROOT=$(escape_systemd_path "$PROJECT_ROOT")"
   echo "Environment=HIVE_PIPE_ALLOWED_ROOTS=$escaped_allowed_roots"
   echo "ExecStart=/usr/bin/python3 $escaped_root/gateway.py --host 127.0.0.1 --port 8765"
@@ -95,7 +99,7 @@ fi
   # AI may build/edit the live Hive Pipe checkout, the canonical project checkout
   # when present, and the explicit external-work workspace. System paths remain
   # read-only and privilege escalation remains blocked.
-  echo "ReadWritePaths=$write_paths"
+  echo "ReadWritePaths=$write_paths $(escape_systemd_path "$REFERENCE_STATE_ROOT")"
   echo
   echo '[Install]'
   echo 'WantedBy=default.target'

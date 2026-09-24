@@ -34,7 +34,9 @@ payload = {
     "method": "tools/call",
     "params": {
         "name": "terminal_run",
-        "arguments": {"argv": ["printf", marker], "timeout": 30},
+        "arguments": {"argv": ["printf", marker], "timeout": 30,
+                      "intention": f"Verify {args.client} terminal route",
+                      "consequence": f"Expect {marker} and exit zero without repository changes"},
     },
 }
 request = Request(

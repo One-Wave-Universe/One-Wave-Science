@@ -1,5 +1,10 @@
 # AI Jetson Tool Guide
 
+Executable MCP calls now require `intention` and `consequence` text in their
+arguments. Older JSON examples below illustrate command arguments only; add
+these two fields or the reference goblin holds execution. See
+`AI_BRIDGE_START_HERE.md` for the current contract.
+
 This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or other authorized AI instance.
 
 ## Start here

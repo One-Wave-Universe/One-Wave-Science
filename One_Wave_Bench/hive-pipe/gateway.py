@@ -18,6 +18,7 @@ import sys
 import time
 
 import mudl
+import reference_receipt
 import terminal_parser
 
 
@@ -87,6 +88,7 @@ MCP_TOOLS.update({
                 },
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                "intention": {"type": "string"}, "consequence": {"type": "string"},
             },
             "required": ["argv"],
             "additionalProperties": False,
@@ -104,6 +106,7 @@ MCP_TOOLS.update({
                 "args": {"type": "array", "items": {"type": "string"}, "maxItems": 64},
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                "intention": {"type": "string"}, "consequence": {"type": "string"},
             },
             "required": ["code"],
             "additionalProperties": False,
@@ -122,6 +125,7 @@ MCP_TOOLS.update({
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
                 "standard": {"type": "string", "enum": ["c++17", "c++20", "c++23"]},
+                "intention": {"type": "string"}, "consequence": {"type": "string"},
             },
             "required": ["code"],
             "additionalProperties": False,
@@ -180,6 +184,8 @@ def tool_result(request_id: object, result: dict, *, failed: bool = False) -> di
 def handle_terminal_tool(request_id: object, name: str, arguments: object) -> dict:
     if not isinstance(arguments, dict):
         return mcp_error(request_id, -32602, "Terminal arguments must be an object")
+    if name in {"terminal_run", "python_run", "cpp_compile_run"}:
+        arguments = {key: value for key, value in arguments.items() if key not in {"intention", "consequence"}}
     try:
         if name == "terminal_reference":
             if arguments:
@@ -250,6 +256,13 @@ def _stamped_tool_response(envelope: dict, action_card: dict) -> dict:
     content = result["structuredContent"]
     content["reference_card"] = action_card
     content["response_card"] = response_card
+    try:
+        reference_receipt.record({"phase": "observed", "reference_card": action_card,
+                                  "response_card": response_card, "result": content})
+    except OSError as error:
+        result["isError"] = True
+        content["ok"] = False
+        content["error"] = f"Reference Goblin HOLD: command may have run, but observed receipt could not be stored: {error}"
     result["content"] = [{"type": "text", "text": json.dumps(content, sort_keys=True)}]
     return envelope
 
@@ -277,6 +290,15 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
+        executable = name in {"terminal_run", "python_run", "cpp_compile_run"}
+        if executable:
+            try:
+                if not isinstance(arguments, dict):
+                    raise ValueError("arguments must be an object")
+                intention = reference_receipt.required_text(arguments.get("intention"), "intention")
+                consequence = reference_receipt.required_text(arguments.get("consequence"), "consequence")
+            except ValueError as error:
+                return mcp_error(request_id, -32603, str(error))
         try:
             before = terminal_parser._project_reference()
         except (OSError, ValueError, subprocess.SubprocessError) as error:
@@ -287,6 +309,13 @@ def handle_mcp(payload: object) -> dict | None:
             "action_sha256": hashlib.sha256(json.dumps({"name": name, "arguments": arguments}, sort_keys=True).encode()).hexdigest(),
             "repository": before,
         }
+        if executable:
+            action_card["intention"] = intention
+            action_card["consequence"] = consequence
+        try:
+            reference_receipt.record({"phase": "issued", "reference_card": action_card})
+        except OSError as error:
+            return mcp_error(request_id, -32603, f"Reference Goblin HOLD: receipt storage failed: {error}")
         if name in {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
             return _stamped_tool_response(handle_terminal_tool(request_id, name, arguments), action_card)
         if name not in MCP_TOOLS or arguments != {}:

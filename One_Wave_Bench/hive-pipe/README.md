@@ -141,7 +141,7 @@ TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/perplexity.token")"
 curl -sS \
   -H "X-API-Key: $TOKEN" \
   -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["bash","-lc","printf PERPLEXITY_TERMINAL_OK"]}}}' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["bash","-lc","printf PERPLEXITY_TERMINAL_OK"],"intention":"Verify Perplexity terminal route","consequence":"Expect PERPLEXITY_TERMINAL_OK and exit zero"}}}' \
   http://127.0.0.1:8765/mcp
 ```
 

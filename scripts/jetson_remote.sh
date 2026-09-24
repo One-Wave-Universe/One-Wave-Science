@@ -5,12 +5,10 @@ usage() {
   cat <<'EOF'
 Usage:
   JETSON_GATEWAY_URL=https://... JETSON_GATEWAY_TOKEN=... \
-    scripts/jetson_remote.sh [--cwd PATH] [--timeout SECONDS] -- COMMAND ARG...
+    scripts/jetson_remote.sh --intention TEXT --consequence TEXT [--cwd PATH] [--timeout SECONDS] -- COMMAND ARG...
 
 Examples:
-  scripts/jetson_remote.sh -- uname -a
-  scripts/jetson_remote.sh --cwd "$HOME/One-Wave-Science" -- git status --short
-  scripts/jetson_remote.sh --cwd "$HOME/One-Wave-External-Work" -- find . -maxdepth 2 -type f
+  scripts/jetson_remote.sh --intention 'Inspect host' --consequence 'Read uname output' -- uname -a
 
 The URL/token may also be placed in:
   ~/.config/hive-pipe/remote.env
@@ -31,8 +29,18 @@ fi
 
 CWD=""
 TIMEOUT=120
+INTENTION=""
+CONSEQUENCE=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --intention)
+      INTENTION="${2:?--intention needs text}"
+      shift 2
+      ;;
+    --consequence)
+      CONSEQUENCE="${2:?--consequence needs text}"
+      shift 2
+      ;;
     --cwd)
       CWD="${2:?--cwd needs a path}"
       shift 2
@@ -56,17 +64,19 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ $# -gt 0 ]] || { usage >&2; exit 2; }
+: "${INTENTION:?--intention is required}"
+: "${CONSEQUENCE:?--consequence is required}"
 : "${JETSON_GATEWAY_URL:?set JETSON_GATEWAY_URL}"
 : "${JETSON_GATEWAY_TOKEN:?set JETSON_GATEWAY_TOKEN}"
 
-python3 - "$JETSON_GATEWAY_URL" "$JETSON_GATEWAY_TOKEN" "$CWD" "$TIMEOUT" "$@" <<'PY'
+python3 - "$JETSON_GATEWAY_URL" "$JETSON_GATEWAY_TOKEN" "$CWD" "$TIMEOUT" "$INTENTION" "$CONSEQUENCE" "$@" <<'PY'
 import json
 import sys
 import urllib.error
 import urllib.request
 
-url, token, cwd, timeout, *argv = sys.argv[1:]
-arguments = {"argv": argv, "timeout": int(timeout)}
+url, token, cwd, timeout, intention, consequence, *argv = sys.argv[1:]
+arguments = {"argv": argv, "timeout": int(timeout), "intention": intention, "consequence": consequence}
 if cwd:
     arguments["cwd"] = cwd
 payload = {
