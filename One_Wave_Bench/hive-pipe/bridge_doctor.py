@@ -244,7 +244,7 @@ def pull_live_checks(*, required: bool) -> list[Check]:
         "CHATGPT_TERMINAL_REPO",
         os.environ.get("ONE_WAVE_PROJECT_ROOT", str(REPO_ROOT)),
     )).expanduser().resolve()
-    if not (transport_repo / ".git").is_dir():
+    if not (transport_repo / ".git").exists():
         checks.append(Check(
             "pull bridge transport repo",
             FAIL if required else NOT_CONFIGURED,
