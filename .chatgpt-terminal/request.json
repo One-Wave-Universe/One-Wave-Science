@@ -1,12 +1,12 @@
 {
-  "id": "repo-split-reference-20260924-01",
+  "id": "desktop-commander-recovery-20260924-01",
   "argv": [
     "bash",
     "-lc",
-    "for d in /home/Scales/One-Wave-Science /home/Scales/Builds /home/Scales/Mythos-and-Stories /home/Scales/One-Wave-Builds; do if [ -d \"$d/.git\" ]; then printf '\\n=== %s ===\\n' \"$d\"; git -C \"$d\" status --short --branch; git -C \"$d\" remote -v | sed -n '1,4p'; git -C \"$d\" rev-parse HEAD; fi; done"
+    "printf 'PULL_BRIDGE_LIVE\\n'; hostname; whoami; pwd; git status --short --branch"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Verify the actual local Science, Builds, and Mythos repository checkouts and their clean/dirty state before moving any files across repositories.",
-  "consequence": "Read-only repository identity and status output only; no files, branches, remotes, commits, or services are changed."
+  "intention": "Verify the ChatGPT pull bridge can currently execute a harmless terminal command on the Jetson and report repository status.",
+  "consequence": "Read-only output only; no files, services, branches, credentials, or configuration are changed."
 }
