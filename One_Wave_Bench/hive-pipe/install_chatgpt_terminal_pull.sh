@@ -86,6 +86,10 @@ printf 'runtime_clone=NOT_USED\n'
 printf 'routes=origin:chatgpt-terminal,origin:chatgpt-terminal-backup\n'
 systemctl --user is-active one-wave-chatgpt-terminal-pull.service
 
+# Reconcile only stale local journal entries that are no longer present on
+# either transport route and have no durable result waiting for delivery.
+python3 "$BRIDGE_WORKTREE/One_Wave_Bench/hive-pipe/reconcile_bridge_state.py"
+
 for attempt in 1 2 3 4 5; do
   if ONE_WAVE_PROJECT_ROOT="$SOURCE_REPO" CHATGPT_TERMINAL_REPO="$SOURCE_REPO" \
      python3 "$BRIDGE_WORKTREE/One_Wave_Bench/hive-pipe/bridge_doctor.py" --profile pull; then
