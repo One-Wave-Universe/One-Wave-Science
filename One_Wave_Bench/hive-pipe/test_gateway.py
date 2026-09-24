@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import os
 from pathlib import Path
 import tempfile
 import threading
@@ -11,12 +12,19 @@ from unittest import mock
 
 import gateway
 import mudl
+import reference_receipt
 
 
 class GatewayTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
+        self.ledger = root / "reference-receipts.jsonl"
+        self.ledger_env = mock.patch.dict(os.environ, {
+            "REFERENCE_GATE_LEDGER": str(self.ledger),
+            "ONE_WAVE_PROJECT_ROOT": str(Path(__file__).resolve().parents[2]),
+        })
+        self.ledger_env.start()
         self.paths = mock.patch.multiple(
             mudl,
             QUEUE=root,
@@ -37,6 +45,7 @@ class GatewayTests(unittest.TestCase):
         self.server.server_close()
         self.thread.join()
         self.paths.stop()
+        self.ledger_env.stop()
         self.temp.cleanup()
 
     def request(self, path, *, method="GET", body=None, token="test-token", headers=None):
@@ -133,7 +142,7 @@ class GatewayTests(unittest.TestCase):
             "jsonrpc": "2.0", "id": 20, "method": "tools/call",
             "params": {
                 "name": "terminal_run",
-                "arguments": {"argv": ["printf", "AI_TERMINAL_OK"]},
+                "arguments": {"argv": ["printf", "AI_TERMINAL_OK"], "intention": "Smoke test", "consequence": "Expect AI_TERMINAL_OK"},
             },
         })
         self.assertEqual(status, 200)
@@ -142,13 +151,15 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(result["stdout"], "AI_TERMINAL_OK")
         self.assertEqual(result["exit_code"], 0)
         self.assertIn("cwd", result)
+        phases = [json.loads(line)["phase"] for line in self.ledger.read_text().splitlines()]
+        self.assertEqual(phases, ["issued", "observed"])
 
     def test_mcp_terminal_run_accepts_perplexity_style_bash_lc(self):
         status, called = self.request("/mcp", method="POST", body={
             "jsonrpc": "2.0", "id": 22, "method": "tools/call",
             "params": {
                 "name": "terminal_run",
-                "arguments": {"argv": ["bash", "-lc", "printf PERPLEXITY_MCP_OK"]},
+                "arguments": {"argv": ["bash", "-lc", "printf PERPLEXITY_MCP_OK"], "intention": "Smoke test shell wrapper", "consequence": "Expect PERPLEXITY_MCP_OK"},
             },
         })
         self.assertEqual(status, 200)
@@ -162,7 +173,7 @@ class GatewayTests(unittest.TestCase):
             "jsonrpc": "2.0", "id": 23, "method": "tools/call",
             "params": {
                 "name": "python_run",
-                "arguments": {"code": "print(6 * 7)"},
+                "arguments": {"code": "print(6 * 7)", "intention": "Smoke test Python", "consequence": "Expect 42"},
             },
         })
         self.assertEqual(status, 200)
@@ -180,6 +191,7 @@ class GatewayTests(unittest.TestCase):
                 "arguments": {
                     "code": '#include <iostream>\nint main(){std::cout << 42 << "\\n";}',
                     "standard": "c++20",
+                    "intention": "Smoke test C++", "consequence": "Expect 42",
                 },
             },
         })
@@ -198,6 +210,34 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertFalse(called["result"]["isError"])
         self.assertTrue(called["result"]["structuredContent"]["path"])
+
+    def test_missing_intention_or_consequence_holds_before_execution(self):
+        for args in ({"argv": ["printf", "NEVER"]},
+                     {"argv": ["printf", "NEVER"], "intention": "test"}):
+            _, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 72, "method": "tools/call",
+                "params": {"name": "terminal_run", "arguments": args},
+            })
+            self.assertIn("Reference Goblin HOLD", response["error"]["message"])
+        self.assertFalse(self.ledger.exists())
+
+    def test_observed_ledger_failure_reports_uncertain_execution(self):
+        original = reference_receipt.record
+        def fail_observed(event):
+            if event["phase"] == "observed":
+                raise OSError("ledger full")
+            original(event)
+        with mock.patch.object(reference_receipt, "record", side_effect=fail_observed):
+            _, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 73, "method": "tools/call",
+                "params": {"name": "terminal_run", "arguments": {
+                    "argv": ["printf", "RAN_ONCE"], "intention": "Verify failure receipt",
+                    "consequence": "Report uncertainty without retrying"}},
+            })
+        content = response["result"]["structuredContent"]
+        self.assertTrue(response["result"]["isError"])
+        self.assertEqual(content["stdout"], "RAN_ONCE")
+        self.assertIn("may have run", content["error"])
 
     def test_mcp_tool_call_runs_only_named_action(self):
         def worker():

@@ -84,8 +84,10 @@ DEEPSEEK_TOOLS = [
                     },
                     "cwd": {"type": "string"},
                     "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                    "intention": {"type": "string", "description": "Why this command advances the current goal."},
+                    "consequence": {"type": "string", "description": "Expected result and protected state to check afterward."},
                 },
-                "required": ["argv"],
+                "required": ["argv", "intention", "consequence"],
                 "additionalProperties": False,
             },
         },
@@ -211,8 +213,11 @@ def _validate_tool_call(name: str, arguments: Any) -> tuple[str, dict[str, Any]]
         return "terminal_which", arguments
 
     if name == "jetson_run":
-        if set(arguments) - {"argv", "cwd", "timeout"}:
+        if set(arguments) - {"argv", "cwd", "timeout", "intention", "consequence"}:
             raise ValueError("jetson_run received unknown fields")
+        for label in ("intention", "consequence"):
+            if not isinstance(arguments.get(label), str) or not arguments[label].strip():
+                raise ValueError(f"jetson_run requires {label}")
         argv = arguments.get("argv")
         if not isinstance(argv, list) or not argv or not all(
             isinstance(item, str) and item for item in argv

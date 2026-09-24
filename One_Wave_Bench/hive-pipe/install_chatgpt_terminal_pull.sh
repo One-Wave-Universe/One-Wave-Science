@@ -54,6 +54,8 @@ Environment=PYTHONUNBUFFERED=1
 Environment=CHATGPT_TERMINAL_DEFAULT_CWD=$SOURCE_REPO
 Environment=CHATGPT_TERMINAL_ROUTES=primary=origin:chatgpt-terminal,backup=origin:chatgpt-terminal-backup
 Environment=HIVE_PIPE_ALLOWED_ROOTS=$SOURCE_REPO:$EXTERNAL_WORK_ROOT
+Environment=ONE_WAVE_PROJECT_ROOT=$SOURCE_REPO
+Environment=REFERENCE_GATE_LEDGER=$STATE_ROOT/reference-receipts.jsonl
 
 [Install]
 WantedBy=default.target

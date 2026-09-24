@@ -1,5 +1,9 @@
 # Jetson AI Access — Canonical Bidirectional Paths
 
+Executable MCP calls require `intention` and `consequence` text; unstamped
+historical JSON examples below are incomplete under the current reference
+gate. See `AI_BRIDGE_START_HERE.md` for the current contract.
+
 ## Priority
 
 AI terminal access must have more than one usable route. The canonical terminal

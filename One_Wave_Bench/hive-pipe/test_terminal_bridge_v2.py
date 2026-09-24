@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -90,10 +91,30 @@ class TerminalBridgeV2Tests(unittest.TestCase):
             terminal_parser._validate_argv(["bash", "-lc", "printf ok; sudo true"])
 
     def test_unique_request_digest_is_stable(self):
-        raw = json.dumps({"id": "x", "argv": ["printf", "ok"], "cwd": str(Path.home()), "timeout": 30})
+        raw = json.dumps({"id": "x", "argv": ["printf", "ok"], "cwd": str(Path.home()), "timeout": 30,
+                          "intention": "Verify pull execution", "consequence": "Expect ok and exit zero"})
         first = bridge.validate_request(raw)
         second = bridge.validate_request(raw)
         self.assertEqual(first["digest"], second["digest"])
+
+    def test_pull_holds_missing_intent_and_records_original_result(self):
+        raw = {"id": "receipt-test", "argv": ["printf", "PULL_OK"],
+               "cwd": str(Path(__file__).resolve().parents[2]), "timeout": 30}
+        with self.assertRaisesRegex(ValueError, "intention"):
+            bridge.validate_request(json.dumps(raw))
+        raw.update(intention="Verify pull command", consequence="Expect PULL_OK and exit zero")
+        with tempfile.TemporaryDirectory() as td:
+            with mock.patch.dict(os.environ, {"REFERENCE_GATE_LEDGER": str(Path(td) / "receipts.jsonl"),
+                                             "ONE_WAVE_PROJECT_ROOT": str(Path(__file__).resolve().parents[2]),
+                                             "HIVE_PIPE_ALLOWED_ROOTS": str(Path(__file__).resolve().parents[2])}):
+                request = bridge.validate_request(json.dumps(raw))
+                route = bridge.parse_routes("primary=origin:one")[0]
+                result = bridge.execute_request(request, "test-commit", route)
+                entries = [json.loads(line) for line in (Path(td) / "receipts.jsonl").read_text().splitlines()]
+        self.assertEqual(result["stdout"], "PULL_OK")
+        self.assertEqual([entry["phase"] for entry in entries], ["issued", "observed"])
+        self.assertEqual(entries[0]["intention"], raw["intention"])
+        self.assertEqual(entries[1]["result"]["stdout"], "PULL_OK")
 
 
 if __name__ == "__main__":
