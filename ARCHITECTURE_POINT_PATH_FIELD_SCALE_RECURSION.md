@@ -224,6 +224,14 @@ Current particle physics supports composite proton structure and contributions f
 
 This cross-domain ladder is a **reference/no-drift aid**: it keeps the meaning of Point Rotation, Path Rotation, and Field Rotation fixed while allowing domain-specific implementations to differ.
 
+Reference starting points:
+
+- NASA, *Reference Systems — Rotation and Revolution*: https://science.nasa.gov/learn/basics-of-space-flight/chapter2-1/
+- NASA, *Solar System Facts*: https://science.nasa.gov/solar-system/solar-system-facts/
+- NOAA, *What is an eddy?*: https://oceanservice.noaa.gov/facts/eddy.html
+- NOAA, *What is a gyre?*: https://oceanservice.noaa.gov/facts/gyre.html
+- CERN COMPASS, proton structure and quark/gluon motion contributions: https://home.cern/science/experiments/compass/
+
 ## 7. Recursive scale boundary
 
 The recursion is now written without collapsing PPF into a single linear object chain:
