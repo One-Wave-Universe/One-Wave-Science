@@ -1,0 +1,3 @@
+#!/bin/sh
+export PYTHONPATH="$SNAP:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/python3/dist-packages"
+exec "$SNAP/usr/bin/python3" -m star_forge

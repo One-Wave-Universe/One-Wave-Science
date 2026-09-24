@@ -1,0 +1,45 @@
+name: star-forge
+base: core24
+version: '0.1.0'
+summary: Mediator-led AI workbench for building and validating real projects
+description: |
+  Star Forge coordinates three roles through a continuing
+  Mediator -> Field -> Void -> Mediator loop.
+
+  The Mediator owns the project plan, reference, branch/layer scope,
+  program and bridge selection, journal, project map, checkpoints,
+  anti-drift gates, usefulness checks, and validation maturity.
+
+  Field builds one bounded change at a time. Void independently checks
+  the same reference, code, tests, and evidence before Mediator advances.
+
+  Star Forge is designed to grow into a complete software and electronics
+  workbench with isolated project branches, sandboxes, virtual breadboard,
+  circuit simulation, PCB work, and measured reality validation.
+grade: stable
+confinement: strict
+
+apps:
+  star-forge:
+    command: bin/star-forge
+    desktop: snap/gui/star-forge.desktop
+    extensions: [gnome]
+    plugs:
+      - home
+      - network
+      - network-bind
+
+parts:
+  app:
+    plugin: dump
+    source: .
+    stage-packages:
+      - python3
+      - python3-gi
+      - gir1.2-gtk-4.0
+    stage:
+      - star_forge/**
+      - bin/star-forge
+      - snap/gui/star-forge.desktop
+      - snap/gui/star-forge.svg
+      - usr/share/icons/hicolor/scalable/apps/star-forge.svg
