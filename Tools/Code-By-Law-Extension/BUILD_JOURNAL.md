@@ -2,6 +2,25 @@
 
 Newest verified layer goes first.
 
+## 2026-09-23 — Program bridge routing
+
+- Project: Code by Law browser extension
+- Build step: teach governed chatbots how to reach real programs through authorized project routes
+- GitHub remains the external source of truth
+- Added Program Access Guide rule
+- Added Python runtime bridge guidance
+- Added PowerShell runtime bridge guidance
+- Added shell/terminal bridge guidance
+- Added Hive Pipe / paired-terminal route guidance
+- Added Jetson Command Lane guidance
+- Added OpenClaw/M4 route guidance
+- Preserved SSH as recovery only and human relay as last resort
+- Added default GitHub reference files for terminal/device/runtime authority
+- Required receipts: runtime/executable, cwd, command or script, output, exit status, changed files
+- Tests: PROJECT_TEST_PASS
+- Mozilla lint: 0 errors, 0 notices, 0 warnings
+- Next permitted step: publish bridge rules to GitHub and verify read-back
+
 ## 2026-09-23 — GitHub-only Code by Law path
 
 - Project: Code by Law browser extension

@@ -52,3 +52,21 @@ Every higher checklist carries the complete verified record of every earlier lev
 The source is a Manifest V3 Firefox WebExtension with Firefox Android support declared in the manifest.
 
 Mozilla web-ext lint result for the current build: 0 errors, 0 notices, 0 warnings.
+
+
+## Program and execution bridges
+
+Code by Law remains GitHub-centered, but the GitHub project reference tells the chatbot how to reach real programs when a build step needs them.
+
+Supported route types include:
+
+- GitHub repository tools
+- Python runtimes
+- PowerShell runtimes
+- shell/terminal runtimes
+- Hive Pipe MCP / paired terminal
+- GitHub Jetson Command Lane
+- OpenClaw / M4 local worker
+- SSH recovery
+
+The chatbot must choose the authorized route from the project reference, verify the executable/runtime first, record cwd/command/output/exit status/changed files, and use human relay only as a last resort.

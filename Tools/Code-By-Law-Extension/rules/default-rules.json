@@ -24,6 +24,14 @@
     "text": "Reference the authoritative current project state before every inspection, proposal, edit, command, test, correction, handoff, and response about project state. The reference must include the live repo/branch/worktree/HEAD and relevant source, plus the current Code by Law project build state, the complete cumulative project checklist through the active level, the latest verified checkpoint, and the relevant journal entries including failed approaches and unresolved items. Also check allowed/protected files, relevant tests, current coder/checker roles, and available execution routes for this step. Never reconstruct missing truth from memory. If the project build record or required journal/checkpoint is missing, HOLD and refresh before acting."
   },
   {
+    "id": "program-access-guide",
+    "title": "Program Access Guide",
+    "phase": "ACCESS",
+    "priority": 25,
+    "enabled": true,
+    "text": "When the current build step requires a real program, terminal, device, runtime, or scripting engine, use the project's GitHub reference files to determine the authorized direct route before asking the user to relay anything. GitHub-only repository work uses the chatbot's authorized GitHub access. Python work uses the authorized Python runtime or terminal bridge and must record the interpreter/path, cwd, script or argv, output, exit status, and changed files. PowerShell work uses the authorized PowerShell runtime or terminal bridge and must record the executable/path, cwd, command/script, output, exit status, and changed files. Shell/terminal work uses the paired terminal or Hive Pipe MCP when available; start with terminal_reference, then terminal_pwd, terminal_which, and terminal_run as required. GitHub-to-Jetson execution uses the repository Jetson Command Lane when that is the declared route. Local AI/program worker execution uses the documented OpenClaw/M4 route when applicable. SSH is an independent recovery route, not the default. Human copy/paste relay is last resort only after authorized direct routes are unavailable or require human authentication or privilege. Never invent a route, token, executable path, program state, or runtime result; reference the project authority files and require receipts."
+  },
+  {
     "id": "project-build-step-checklist",
     "title": "Six-Layer Project Build Checklist",
     "phase": "PROJECT",
