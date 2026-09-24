@@ -49,6 +49,13 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(run_once(ROOT,data,load_config()))
             except Exception as e:
                 return self.send_json({"ok":False,"error":f"{type(e).__name__}: {e}"},500)
+        if p=="/api/quality":
+            try:
+                from quality_gate import evaluate
+                from dataclasses import asdict
+                return self.send_json(asdict(evaluate(data,float(data.get("threshold",0.95)))))
+            except Exception as e:
+                return self.send_json({"ok":False,"error":f"{type(e).__name__}: {e}"},500)
         self.send_error(404)
 
 def main():
