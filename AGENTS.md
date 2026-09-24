@@ -11,6 +11,14 @@ The engine must carry bounded software work through:
 
 without wandering into unrelated work or losing project state.
 
+## Reference Point Zero — before any project action
+
+Every AI and tool route begins by resolving the repository on **the machine or connector it is actually using**. Record the repository URL, resolved root, branch/worktree, HEAD, working-tree status, relevant instructions and current project files, and the last matching execution receipt. Compare the intended action with that snapshot before proposing, running, or claiming it. After a change, compare the resulting diff and evidence with the same starting snapshot, then establish a fresh reference for the next step.
+
+The Jetson's canonical checkout is `$HOME/One-Wave-Science`. That address is **Jetson-specific**; a laptop, browser connector, or isolated runner must verify its own root and must not reuse a path or a live-status claim from another machine. A GitHub branch HEAD proves repository state; it does not prove a remote worker ran. A pull request requires a matching result ID on a transport branch, and a direct terminal route requires its own execution receipt. If the needed path, checkout, current instructions, or matching receipt is unavailable, report the exact gap and HOLD that dependent action.
+
+This is a reference protocol, not a frozen commit: the recorded HEAD and project state must be refreshed whenever they change. The browser extension may present and request this reference, but a chat-page prompt alone cannot intercept or approve every tool action. Workers and bridges must apply the same check at their own action boundary.
+
 ## Canonical Runtime References
 Before dispatching work, read:
 
