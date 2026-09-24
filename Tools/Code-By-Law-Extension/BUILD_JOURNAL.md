@@ -2,6 +2,22 @@
 
 Newest verified layer goes first.
 
+## 2026-09-23 — Mediator owns project plan and program selection
+
+- Project: Code by Law browser extension
+- Build step: make Mediator the exclusive project governor
+- Mediator owns the canonical project plan
+- Mediator decomposes the plan into the six cumulative Code by Law levels
+- Mediator chooses the active level, layer, and bounded step
+- Mediator selects the authorized execution program/bridge for each step
+- Supported choices include GitHub tools, Python, PowerShell, shell/terminal, Hive Pipe, Jetson Command Lane, OpenClaw/M4, and SSH recovery when justified
+- Field and Void may recommend alternatives but may not independently switch level/layer/step or execution route
+- Mediator supplies the refreshed reference, assigns roles/branch/PR/success criteria, journals the result, updates the checkpoint/project plan, and chooses the next state
+- GitHub issue #147 updated with project-governor authority
+- Tests: PROJECT_TEST_PASS
+- Mozilla lint: 0 errors, 0 notices, 0 warnings
+- Next permitted step: publish project-governor rule to GitHub and verify read-back
+
 ## 2026-09-23 — Mediator owns reference and journal
 
 - Project: Code by Law browser extension

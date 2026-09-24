@@ -78,7 +78,7 @@ Multi-AI work runs as:
 
 **Mediator -> Field -> Void -> Mediator**
 
-- **Mediator**: supplies the authoritative GitHub reference packet, assigns the bounded step and roles, owns the canonical journal/checkpoint, and publishes the next referenced state.
+- **Mediator**: owns the canonical project plan, decomposes it into the six cumulative levels, chooses the active level/layer/step, selects the authorized program/bridge for that step, supplies the authoritative GitHub reference packet, assigns Field/Void roles and branch/PR ownership, owns the canonical journal/checkpoint, and publishes the next referenced state.
 - **Field AI**: proposes/builds/executes only the assigned step and returns code/test evidence.
 - **Void AI**: independently checks the same starting reference plus the actual Field diff/tests and returns ALLOW / CORRECT / HOLD / ESCALATE.
 
