@@ -11,7 +11,10 @@ dimension declaration).
 |------|---------|
 | `web/index.html` | The shared bench UI. Live D-413 simulation, experiment ledger of real runs, per-case charts, and an experiment composer that emits a request JSON. |
 | `web/fixed_sim.html` | Fixed, reproducible simulation player. Locked-parameter scenarios selected by URL, e.g. `web/fixed_sim.html?scenario=orbit_asymmetric`. Embeddable in wiki pages. |
-| `web/four_interaction_sim.html` | D-414 four-interaction visual bench driven by the shared data bundle. |\n| `docs/breadboard/BREADBOARD_CANONICAL_ARCHITECTURE.md` | Canonical breadboard architecture reference. |\n| `docs/breadboard/BREADBOARD_QUALIFICATION_SUITE.md` | Breadboard qualification and verification plan. |\n| `schema/experiment_protocol.json` | The request/receipt contract (hypothesis, cases, falsifiers, required measurements, control checks, native dimension). |
+| `web/four_interaction_sim.html` | D-414 four-interaction visual bench driven by the shared data bundle. |
+| `docs/breadboard/BREADBOARD_CANONICAL_ARCHITECTURE.md` | Canonical breadboard architecture reference. |
+| `docs/breadboard/BREADBOARD_QUALIFICATION_SUITE.md` | Breadboard qualification and verification plan. |
+| `schema/experiment_protocol.json` | The request/receipt contract (hypothesis, cases, falsifiers, required measurements, control checks, native dimension). |
 | `engine/run_experiment.py` | Headless runner. Imports the canonical D-413 physics (single source of truth) and executes any experiment request, emitting a D-412 receipt + CSVs. |
 | `engine/build_manifest.py` | Scans `runs/` for receipts and writes `runs/manifest.json`, which the bench UI reads. |
 | `runs/` | Real receipts, per-case CSV time series, and the manifest. |
