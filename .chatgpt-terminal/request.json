@@ -1,12 +1,11 @@
 {
-  "id": "desktop-commander-recovery-20260924-01",
+  "id": "repo-cleanup-inventory-20260924-01",
   "argv": [
     "bash",
     "-lc",
-    "printf 'PULL_BRIDGE_LIVE\\n'; hostname; whoami; pwd; git status --short --branch"
+    "printf 'HOST='; hostname; printf '\\nUSER='; whoami; printf '\\nHOME='; printf '%s\\n' \"$HOME\"; printf '\\nREPOS\\n'; find \"$HOME\" -maxdepth 2 -type d \\( -name '.git' -o -name 'One-Wave-*' -o -iname '*build*' -o -iname '*bench*' -o -iname '*myth*' \\) -print 2>/dev/null | sed 's#/.git$##' | sort -u | head -200"
   ],
-  "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Verify the ChatGPT pull bridge can currently execute a harmless terminal command on the Jetson and report repository status.",
-  "consequence": "Read-only output only; no files, services, branches, credentials, or configuration are changed."
+  "intention": "Inventory local Science, Builds, Bench, and Mythos repository paths before moving any non-science content.",
+  "consequence": "Read-only filesystem/repository discovery; no files changed or deleted."
 }
