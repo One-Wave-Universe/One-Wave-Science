@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-120 -120 240 240" width="480" height="480">
+  <rect x="-120" y="-120" width="240" height="240" fill="#1a1208"/>
+  <g fill="none" stroke="#e8a54b" stroke-width="2">
+    <polygon points="100,0 50,86.6 -50,86.6 -100,0 -50,-86.6 50,-86.6"/>
+    <line x1="0" y1="0" x2="100" y2="0"/>
+    <line x1="0" y1="0" x2="50" y2="86.6"/>
+    <line x1="0" y1="0" x2="-50" y2="86.6"/>
+    <line x1="0" y1="0" x2="-100" y2="0"/>
+    <line x1="0" y1="0" x2="-50" y2="-86.6"/>
+    <line x1="0" y1="0" x2="50" y2="-86.6"/>
+  </g>
+  <circle cx="0" cy="0" r="3" fill="#fff4d6"/>
+  <text x="0" y="-100" text-anchor="middle" fill="#fff4d6" font-family="monospace" font-size="10">HEX-SPLIT</text>
+</svg>
