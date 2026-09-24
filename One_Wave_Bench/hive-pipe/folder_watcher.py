@@ -39,7 +39,16 @@ def sha256_file(path: Path) -> str:
 def snapshot(folder: Path) -> dict:
     root=repo_root(folder)
     rel=folder.resolve().relative_to(root)
-    status=git(root,'status','--porcelain','--',str(rel) if str(rel)!='.' else '.')
+    status_lines=git(root,'status','--porcelain','--',str(rel) if str(rel)!='.' else '.').splitlines()
+    status='\n'.join(
+        line for line in status_lines
+        if '/.watcher/state.json' not in line
+        and '/.watcher/events.jsonl' not in line
+        and '/.watcher/HOLD.json' not in line
+        and not line.endswith('.watcher/state.json')
+        and not line.endswith('.watcher/events.jsonl')
+        and not line.endswith('.watcher/HOLD.json')
+    )
     tracked=git(root,'ls-files','--',str(rel) if str(rel)!='.' else '.').splitlines()
     files={}
     for item in tracked:
