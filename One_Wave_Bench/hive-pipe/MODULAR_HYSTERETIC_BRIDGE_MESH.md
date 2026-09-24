@@ -59,3 +59,7 @@ No bridge module is complete until its usage, verification, and recovery directi
 
 ## Goblin control roles
 Read `One_Wave_Bench/hive-pipe/GOBLIN_BRIDGE_ROLES.md` for Doctor, Parser, Reference/Worker two-state machine, Carrier Pigeon, and Goblin Raccoon behavior.
+
+
+## Token economy and temporary Field/Void fusion
+Read `One_Wave_Bench/hive-pipe/TOKEN_ECONOMY_AND_FIELD_VOID_FUSION.md`. Repeated same-path failure triggers the novelty breaker. Field/Void may temporarily operate from one compact shared packet with Void as inner oversight and Field as the sole outward voice/action channel; return to separate operation on material disagreement, token-budget overflow, hard stop, or novelty-triggered route/tool change.
