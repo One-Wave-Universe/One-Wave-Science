@@ -231,8 +231,10 @@ All seven cells in a flower use the same orientation and connect flat-edge to fl
 The following are retained as explicit experiments because they may map useful control depth, but none is proven merely by numerical symmetry:
 
 ```text
-NERVE candidate:
-2 flowers = normal + inverted / mirrored pair
+NERVE / BODY-CONTROL candidate:
+paired sensor flower + motor flower
+shared bus-lattice coupling
+Views UP on the sensor side / Actions DOWN on the motor side
 
 HIGHER-BRAIN candidate:
 3 / 3 / 3 volumetric expansion
@@ -340,11 +342,7 @@ Distinguish traveling/circulating state from simultaneous switching, ringing, or
 
 Build one center + six identical surrounding cells. Test local training, competing paths, retained history, and whole-flower route reuse.
 
-### Rev K — two-flower normal/inverted candidate
-
-Test whether a paired normal/mirrored flower produces a useful new nerve-level function such as faster local correction, reciprocal checking, or stable reinjection. Reject the pair if it adds only duplicate hardware.
-
-### Rev L — paired sensor-flower / motor-flower candidate
+### Rev K — paired sensor-flower / motor-flower candidate
 
 Test two coupled seven-cell flowers with distinct current roles while preserving identical CELL_V1 primitives:
 
@@ -375,7 +373,7 @@ Pass conditions:
 5. Field and Void remain relational roles on both sides rather than separate hardware species;
 6. the same cell primitive can exchange role in a control experiment.
 
-### Rev M — short-term versus long-term physical memory
+### Rev L — short-term versus long-term physical memory
 
 Test two retention bands in the active processing path family:
 
