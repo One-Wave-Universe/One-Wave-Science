@@ -220,3 +220,15 @@ Never guess the username or address. Verify the destination with `whoami`,
 6. Do not ask the human to relay ordinary commands once a live route is proven.
 7. If activation or root work is genuinely required, name that single boundary
    precisely instead of pretending another route succeeded.
+
+
+## Modular hysteretic bridge mesh
+Before declaring a route unavailable, read `One_Wave_Bench/hive-pipe/MODULAR_HYSTERETIC_BRIDGE_MESH.md`.
+
+All bridge work uses the same rule: reference -> probe -> choose route -> execute -> receipt -> update route memory. Forward and reverse directions are verified independently. After three evidence-bearing failures on one route family, switch to a materially different route family instead of repeating the same path.
+
+Browser/UI submissions on configured sites may be gated by `One_Wave_Bench/reference-gate-extension/`. Its reference card must identify source, target, direction, reference, intention, consequence, selected route, and fallback routes before the action is allowed.
+
+
+## Goblin control roles
+Read `One_Wave_Bench/hive-pipe/GOBLIN_BRIDGE_ROLES.md` for Doctor, Parser, Reference/Worker two-state machine, Carrier Pigeon, and Goblin Raccoon behavior.

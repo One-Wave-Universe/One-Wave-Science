@@ -1,0 +1,17 @@
+{
+  "id": "one-wave.composite-agent-lab",
+  "name": "Composite Agent Lab",
+  "version": "0.1.0",
+  "entrypoint": "app.py",
+  "category": "AI / State Machines",
+  "description": "Sandboxed Field/Void composite-agent laboratory with pluggable local, cloud, and parser providers.",
+  "capabilities": [
+    "field-void-loop",
+    "provider-plugins",
+    "parser-plugins",
+    "software-cell",
+    "sandbox",
+    "receipt-ledger"
+  ],
+  "default_port": 8788
+}
