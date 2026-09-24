@@ -58,3 +58,7 @@ The first project-owned local AI provider is `providers/one_wave_local.py`.
 It is intentionally model-agnostic. The local model provides bounded language inference while One-Wave owns M4 state, hysteresis, memory, Field/Void roles, reference control, quality gates, and sandboxed action authority.
 
 See `ONE_WAVE_LOCAL_AI.md`.
+
+
+## AI council workspace
+The structured council protocol is defined in `One_Wave_Bench/App_Center/Composite_Agent_Lab/AI_COUNCIL_PROTOCOL.md`. M4 is chair/body state, Void is admin/inner oversight, Field is the sole outward voice/action, and specialist AIs contribute bounded evidence/proposals through the shared room state.
