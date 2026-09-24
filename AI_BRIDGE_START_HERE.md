@@ -127,7 +127,7 @@ One-time installation on the machine ChatGPT must operate:
 ```bash
 git fetch origin main
 git show origin/main:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
-python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/hive-pipe/bridge_doctor.py --profile pull
+python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/hive-pipe/bridge_doctor.py --profile pull
 ```
 
 The pull worker runs as the normal user and reuses `terminal_parser.py`. It does
