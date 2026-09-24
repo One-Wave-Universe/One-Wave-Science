@@ -78,6 +78,31 @@ def classify_file(path: Path) -> str:
     return "artifact"
 
 
+
+def text_anchors(path: Path) -> list[dict]:
+    """Compact anchors for exact word/sentence/line edits without whole-file rewrite."""
+    if path.suffix.lower() not in {".md", ".txt", ".rst", ".py", ".sh", ".js", ".ts", ".json", ".yaml", ".yml"}:
+        return []
+    try:
+        lines=path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return []
+    anchors=[]
+    for idx,line in enumerate(lines, start=1):
+        stripped=line.strip()
+        if not stripped:
+            continue
+        digest=hashlib.sha256(line.encode("utf-8")).hexdigest()
+        anchors.append({
+            "line":idx,
+            "sha256":digest,
+            "preview":stripped[:180],
+            "kind":"heading" if stripped.startswith("#") else "line",
+        })
+        if len(anchors)>=400:
+            break
+    return anchors
+
 def first_heading(path: Path) -> str | None:
     if path.suffix.lower() not in {".md", ".txt", ".rst"}:
         return None
@@ -116,6 +141,7 @@ def build_index(folder: Path, snap: dict) -> dict:
             "heading": first_heading(p),
             "sha256": digest,
             "bytes": p.stat().st_size if p.exists() else None,
+            "anchors": text_anchors(p),
         })
     authorities=[
         item["path"] for item in files
