@@ -203,7 +203,7 @@ Current candidate measurements for the surrounding sensory roles are:
 ```text
 TEMPERATURE
 RESISTANCE / IMPEDANCE CHANGE
-GYRO / LOCAL ROTATION-ORIENTATION CHANGE
+GYRO / LOCAL ANGULAR-RATE OR ROTATIONAL CHANGE
 ```
 
 These are intentionally direct local observables. Pressure, strain, load, balance, direction, and other higher descriptions should not automatically consume separate channels when they can be reconstructed from the connected lattice pattern.
@@ -281,21 +281,23 @@ CENTER / REFERENCE
 -> RESOLVED WHOLE / NEXT-SCALE CENTER
 ```
 
-For the sensory domain, use the following compatibility interpretation:
+For the sensory domain, preserve the rotation names explicitly:
 
 ```text
-POINT:
-  one local cell/edge measurement and its local rotational/orientation state
+POINT ROTATION:
+  one local cell/edge rotational, phase, or orientation-change measurement about its local reference
 
-PATH:
-  propagation and differential relationship through connected A/B/C edges
+PATH ROTATION:
+  propagation/circulation and differential relationship through connected A/B/C edges
 
-FIELD:
-  the coupled multi-cell relation produced by interacting paths/rotations
+FIELD ROTATION:
+  the coupled multi-cell rotating/circulating relation produced by interacting paths
 
 RESOLVED WHOLE:
   the compact body-state interface exposed upward without repeating every raw sensor value
 ```
+
+Do not shorten these to `POINT -> PATH -> FIELD` in build receipts. The rotation relation is the invariant being tested.
 
 Thus the intended compression rule is:
 
@@ -316,7 +318,7 @@ Before this mapping is treated as more than a candidate:
 1. instrument all six surrounding positions independently;
 2. demonstrate calibrated temperature measurement;
 3. demonstrate resistance/impedance change and separate it from temperature coefficient where required;
-4. demonstrate gyro/orientation change with known motion;
+4. demonstrate angular-rate / rotational-change sensing with known motion, and treat absolute orientation as a reconstructed/fused state unless independently measured;
 5. show that A/B/C opposed differences preserve direction;
 6. reconstruct at least one claimed combined state from the six-cell pattern without adding a redundant dedicated sensor;
 7. show the center motor-role cell can use that resolved state while individual directional evidence remains inspectable;
