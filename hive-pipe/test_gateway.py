@@ -123,6 +123,10 @@ class GatewayTests(unittest.TestCase):
         reference = called["result"]["structuredContent"]["reference"]
         self.assertEqual(reference["contract"], "one-wave-terminal-parser-v2")
         self.assertIn("path_authorization", reference["intervention_levels"])
+        carded = called["result"]["structuredContent"]
+        self.assertEqual(carded["reference_card"]["goblin"], "reference")
+        self.assertEqual(carded["response_card"]["goblin"], "checker")
+        self.assertEqual(carded["reference_card"]["action_sha256"], carded["response_card"]["action_sha256"])
 
     def test_mcp_terminal_run_returns_real_output(self):
         status, called = self.request("/mcp", method="POST", body={
