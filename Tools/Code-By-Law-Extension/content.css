@@ -1,0 +1,14 @@
+#cbl-badge {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+  font: 600 12px/1.2 system-ui, sans-serif;
+  padding: 8px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  cursor: pointer;
+}

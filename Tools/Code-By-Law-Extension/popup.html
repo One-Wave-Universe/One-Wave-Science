@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Code by Law</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <h1>Code by Law</h1>
+    <p class="status">Think → Parse → GitHub Reference → Build Step + Checklist → Bouncer → Act → Checker → Journal → Re-reference</p>
+    <div id="live" class="live">Checking GitHub reference…</div>
+
+    <label for="githubRepo">GitHub project</label>
+    <input id="githubRepo" type="text" placeholder="https://github.com/owner/repo">
+    <label for="githubBranch">Branch</label>
+    <input id="githubBranch" type="text" placeholder="main">
+    <label for="referencePaths">Project build / journal reference files</label>
+    <textarea id="referencePaths" rows="4" placeholder="CURRENT_BUILD_ORDER.md&#10;AI_CURRENT_PROJECT_JOURNAL.md"></textarea>
+
+    <label for="context">Current project context</label>
+    <textarea id="context" rows="4" placeholder="Project goal, constraints, protected state..."></textarea>
+
+    <section class="build-step">
+      <label for="level">Current cumulative level</label>
+      <select id="level">
+        <option value="1">1 — Action</option>
+        <option value="2">2 — Step (contains 1)</option>
+        <option value="3">3 — Layer (contains 1+2)</option>
+        <option value="4">4 — Build Phase (contains 1+2+3)</option>
+        <option value="5">5 — Project State (contains 1+2+3+4)</option>
+        <option value="6">6 — Project Loop (contains 1+2+3+4+5)</option>
+      </select>
+      <label for="stepGoal">Goal for this level</label>
+      <textarea id="stepGoal" rows="2"></textarea>
+      <label for="stepChecklist">Checklist for this level</label>
+      <textarea id="stepChecklist" rows="4"></textarea>
+      <label for="stepResult">Observed result</label>
+      <textarea id="stepResult" rows="2"></textarea>
+      <label for="checkpoint">GitHub checkpoint / receipt</label>
+      <input id="checkpoint" type="text" placeholder="branch / commit / PR / receipt">
+      <label class="verify"><input id="verified" type="checkbox"> Checker verified this level</label>
+      <button id="saveStep">Save cumulative level</button>
+    </section>
+
+    <button id="save">Save project</button>
+    <button id="inject" class="primary">Govern this chat</button>
+    <button id="rules">Manage rules</button>
+    <p id="message" role="status"></p>
+  </main>
+  <script src="lib/project.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

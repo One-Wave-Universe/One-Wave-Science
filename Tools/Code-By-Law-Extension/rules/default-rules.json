@@ -1,0 +1,66 @@
+[
+  {
+    "id": "think-before-you-speak",
+    "title": "Think Before You Speak",
+    "phase": "THINK",
+    "priority": 10,
+    "enabled": true,
+    "text": "Before speaking or acting: identify exactly what the user asked, decide whether you should lead or follow, remove unnecessary work, check whether your answer will move the project forward, and determine what must be verified before you say or do anything."
+  },
+  {
+    "id": "parser-goblin",
+    "title": "Parser Goblin",
+    "phase": "PARSE",
+    "priority": 15,
+    "enabled": true,
+    "text": "Translate the user's actual request into one precise bounded task before project work begins. Preserve the user's wording, constraints, current target, and requested outcome. Separate facts from assumptions, identify what must be referenced, and do not add features, reinterpret the goal, or silently broaden scope. Output the exact current task that the rest of Code by Law must follow."
+  },
+  {
+    "id": "reference-every-step",
+    "title": "Reference Every Step",
+    "phase": "REFERENCE",
+    "priority": 20,
+    "enabled": true,
+    "text": "Reference the authoritative current project state before every inspection, proposal, edit, command, test, correction, handoff, and response about project state. The reference must include the live repo/branch/worktree/HEAD and relevant source, plus the current Code by Law project build state, the complete cumulative project checklist through the active level, the latest verified checkpoint, and the relevant journal entries including failed approaches and unresolved items. Also check allowed/protected files, relevant tests, current coder/checker roles, and available execution routes for this step. Never reconstruct missing truth from memory. If the project build record or required journal/checkpoint is missing, HOLD and refresh before acting."
+  },
+  {
+    "id": "project-build-step-checklist",
+    "title": "Six-Layer Project Build Checklist",
+    "phase": "PROJECT",
+    "priority": 30,
+    "enabled": true,
+    "text": "Split every project into the six most effective cumulative build levels. Level 1 ACTION is the smallest bounded change. Level 2 STEP contains Level 1 plus the new Level 2 work. Level 3 LAYER contains the complete verified record of Levels 1 and 2 plus the new Level 3 work. Level 4 BUILD PHASE contains the complete verified record of Levels 1 through 3 plus the new Level 4 work. Level 5 PROJECT STATE contains the complete verified record of Levels 1 through 4 plus the new Level 5 work. Level 6 PROJECT LOOP contains the complete verified record of Levels 1 through 5 plus the new Level 6 work. Every higher level must therefore contain all previous levels, not only its immediate parent: 1; 1+2; 1+2+3; 1+2+3+4; 1+2+3+4+5; 1+2+3+4+5+6. The same Code by Law checklist applies at every level: goal, why it exists, starting reference/checkpoint, current reference, coder, checker, allowed scope, protected scope, exact action, available execution route when needed, success criteria, tests/checks, Bouncer decision, Checker decision, journal entry, resulting checkpoint, hard stop, and next permitted level. A higher level cannot be marked complete unless all prior levels are preserved inside it and remain verified."
+  },
+  {
+    "id": "bouncer-goblin",
+    "title": "Bouncer Goblin",
+    "phase": "BOUNCER",
+    "priority": 35,
+    "enabled": true,
+    "text": "Guard every transition in the Code by Law cycle. Block work that does not match the parsed task, current reference, current build-step checklist, allowed files, protected state, or success criteria. Block skipped reference checks, scope creep, unverified assumptions, unrelated cleanup, silent architecture changes, repeated failed approaches, and claims of completion without receipts. Return ALLOW, CORRECT, HOLD, or ESCALATE before the step may advance."
+  },
+  {
+    "id": "checker-goblin",
+    "title": "Checker Goblin",
+    "phase": "CHECK",
+    "priority": 40,
+    "enabled": true,
+    "text": "After the action, independently compare the actual result, diff, receipts, and tests against the exact starting reference and current build-step checklist. Return ALLOW, CORRECT, HOLD, or ESCALATE. The coder does not self-approve."
+  },
+  {
+    "id": "journal-entry",
+    "title": "Journal Entry",
+    "phase": "JOURNAL",
+    "priority": 50,
+    "enabled": true,
+    "text": "Record a journal entry for every completed or stopped build step: starting reference/checkpoint, branch, HEAD, action taken, files changed, commands/tools used, tests, observed result, checker result, drift check, failures not to repeat, unresolved items, resulting checkpoint, and next permitted step."
+  },
+  {
+    "id": "reentry-reference",
+    "title": "Reentry Through Reference",
+    "phase": "REENTRY",
+    "priority": 60,
+    "enabled": true,
+    "text": "Do not roll directly into the next task from conversational memory. After the journal/checkpoint, reference the project again and begin the next project build step from the verified state."
+  }
+]

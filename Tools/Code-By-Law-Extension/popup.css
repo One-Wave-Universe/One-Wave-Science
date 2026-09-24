@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  min-width: 330px;
+  background: Canvas;
+  color: CanvasText;
+  font: 14px/1.4 system-ui, sans-serif;
+}
+main { padding: 14px; }
+h1 { margin: 0 0 4px; font-size: 20px; }
+.status { margin: 0 0 12px; opacity: .7; font-size: 12px; }
+label { display: block; font-weight: 650; margin-bottom: 5px; }
+textarea {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+  padding: 8px;
+  border: 1px solid GrayText;
+  border-radius: 8px;
+  background: Field;
+  color: FieldText;
+}
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px 10px;
+  border: 1px solid GrayText;
+  border-radius: 8px;
+  background: ButtonFace;
+  color: ButtonText;
+  cursor: pointer;
+}
+button.primary { font-weight: 750; }
+#message { min-height: 18px; margin: 8px 0 0; font-size: 12px; }
+
+.live {
+  margin: 0 0 10px;
+  padding: 8px;
+  border: 1px solid GrayText;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: pre-line;
+}
+.build-step {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 10px;
+  border: 1px solid GrayText;
+  border-radius: 9px;
+}
+select, input[type="text"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px;
+  border: 1px solid GrayText;
+  border-radius: 7px;
+  background: Field;
+  color: FieldText;
+}
+.verify {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-weight: 600;
+}
