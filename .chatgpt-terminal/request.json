@@ -1,9 +1,12 @@
 {
-  "id": "bridge-target-probe-20260924-01",
+  "id": "jetson-reference-probe-20260924-02",
   "argv": [
     "bash",
     "-lc",
-    "printf 'BRIDGE_TARGET_PROBE\\n'; hostname; whoami; pwd; git status --short --branch"
+    "printf 'JETSON_PULL_EXEC_OK\\n'; hostname; whoami; uname -m; pwd"
   ],
-  "timeout": 30
+  "cwd": "/home/Scales/One-Wave-Science",
+  "timeout": 30,
+  "intention": "Prove the current ChatGPT GitHub pull bridge can fetch and execute one harmless identity command on the Jetson without modifying the project checkout.",
+  "consequence": "Read-only identity output only; no repository files, branches, services, credentials, mounts, or devices are modified."
 }
