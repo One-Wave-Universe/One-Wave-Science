@@ -10,29 +10,28 @@ if [[ "$NAME" == */* || "$NAME" == "." || "$NAME" == ".." ]]; then
 fi
 
 TARGET="$PARENT/$NAME"
-mkdir -p "$TARGET/.owatch"
+mkdir -p "$TARGET/.goblin-holder"
 
-cat >"$TARGET/.owatch/folder.json" <<'JSON'
+cat >"$TARGET/.goblin-holder/holder.json" <<'JSON'
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-goblin-folder-holder-v1",
   "type": "goblin-folder-holder",
   "display_name": "Goblin Folder Holder",
+  "role": "foreman",
+  "discovers": ".owatch/folder.json",
   "mode": "fail_closed",
-  "editing_granularity": ["word", "sentence", "line", "section", "file"],
   "reference_required": true,
   "intention_required": true,
   "consequence_required": true,
-  "source_files_authoritative": true,
-  "intervention": "HOLD",
-  "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span."
+  "commit_gate": true,
+  "rule": "Supervise child watched folders, prevent cross-folder drift, and commit only when the supervised group is clean."
 }
 JSON
 
-cat >"$TARGET/.owatch/.gitignore" <<'EOF'
-state.json
+cat >"$TARGET/.goblin-holder/.gitignore" <<'EOF'
+group-index.json
 events.jsonl
 HOLD.json
-index.json
 EOF
 
 printf 'GOBLIN_FOLDER_HOLDER_CREATED=%s\n' "$TARGET"
