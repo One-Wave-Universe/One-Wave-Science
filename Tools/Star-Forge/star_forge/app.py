@@ -49,9 +49,11 @@ class MainWindow(Gtk.ApplicationWindow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         self.goal = Gtk.Entry(text=self.state["project"].get("goal", ""), placeholder_text="Project goal")
         self.repo = Gtk.Entry(text=self.state["project"].get("repo", ""), placeholder_text="GitHub repository")
+        self.repo_path = Gtk.Entry(text=self.state["project"].get("repo_path", ""), placeholder_text="Local repository checkout path")
         self.branch = Gtk.Entry(text=self.state["project"].get("base_branch", "main"), placeholder_text="Base branch")
         self.head = Gtk.Entry(text=self.state["project"].get("base_head", ""), placeholder_text="Base HEAD")
-        for w in (self.goal, self.repo, self.branch, self.head): box.append(w)
+        self.branch.set_editable(False); self.head.set_editable(False)
+        for w in (self.goal, self.repo, self.repo_path, self.branch, self.head): box.append(w)
         save = Gtk.Button(label="Save project reference"); save.connect("clicked", self.on_save_project); box.append(save)
         self.step_title = Gtk.Entry(placeholder_text="New step title"); box.append(self.step_title)
         self.step_goal = Gtk.Entry(placeholder_text="Step goal"); box.append(self.step_goal)
@@ -139,7 +141,15 @@ class MainWindow(Gtk.ApplicationWindow):
         save_state(self.state)
 
     def on_save_project(self,_):
-        p=self.state["project"]; p["goal"]=self.goal.get_text(); p["repo"]=self.repo.get_text(); p["base_branch"]=self.branch.get_text() or "main"; p["base_head"]=self.head.get_text(); self.refresh()
+        from .state import checked_repo_reference
+        p=self.state["project"]; p["goal"]=self.goal.get_text(); p["repo"]=self.repo.get_text(); p["repo_path"]=self.repo_path.get_text()
+        try:
+            ref=checked_repo_reference(self.state)
+            p["base_branch"]=ref["branch"]; p["base_head"]=ref["head"]
+            self.branch.set_text(ref["branch"]); self.head.set_text(ref["head"])
+        except Exception as e:
+            self.state["council"].append({"time":"","role":"MEDIATOR","text":f"HOLD: {e}"})
+        self.refresh()
     def on_add_step(self,_):
         if self.step_title.get_text().strip(): add_plan_step(self.state,self.step_title.get_text(),self.step_goal.get_text(),self.level.get_selected()+1)
         self.step_title.set_text(""); self.step_goal.set_text(""); self.refresh()
