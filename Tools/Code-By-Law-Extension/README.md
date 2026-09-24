@@ -1,52 +1,35 @@
 # Code by Law Browser Extension
 
-Code by Law governs AI project work through Think Before You Speak, Parser Goblin, Reference Every Step, one Project Build Step + Checklist at a time, Bouncer Goblin enforcement, independent checking, journal entries, checkpoints, and re-reference.
+Code by Law sits between an AI chatbot and a GitHub project.
 
-## Current layer
+Its job is to keep project work on target:
 
-This layer intentionally includes only:
+1. Think Before You Speak
+2. Parser Goblin
+3. Reference GitHub Before Every Step
+4. Cumulative Project Build + Checklist
+5. Bouncer Goblin
+6. Act
+7. Checker Goblin
+8. Journal Entry + Checkpoint
+9. Re-reference GitHub
 
-- Code by Law browser-extension shell;
-- built-in default rules;
-- editable custom rules stored in browser storage;
-- add/edit/disable/delete/import/export rule management;
-- current project-context field;
-- rule-packet injection into supported chat editors.
+## GitHub is the external source of truth
 
-It does not yet connect directly to GitHub, Hive Pipe, Jetson, OpenClaw, or checkpoint storage. Those are separate future layers.
+The popup stores:
 
-## Supported chat sites
+- GitHub repository URL
+- active branch
+- project build / journal reference-file paths
+- current project context
+- cumulative six-level project build
+- local working journal/checkpoints for the governed chat
 
-- ChatGPT
-- Gemini
-- Claude
-- DeepSeek
+Before a governed turn, Code by Law reads the configured GitHub branch HEAD and configured project-build/journal files directly from GitHub and injects that reference into the chatbot.
 
-## Add rules
+Repository changes are performed through the chatbot's authorized GitHub access. Code by Law does not require a Jetson, terminal bridge, localhost companion, or phone-to-laptop relay.
 
-Open the extension options page.
-
-Custom rules are saved separately from built-in defaults. A custom rule with the same ID as a default overrides that default. New IDs add new rules.
-
-The next governed turn uses the updated rules without changing extension code.
-
-## Layer 1 success condition
-
-The extension source must parse, the manifest/default rules must be valid JSON, custom rule management must be isolated from prompt injection, and the extension must remain a thin governance layer rather than a new terminal bridge.
-
-
-## Six nested project levels
-
-Code by Law uses the same checklist recursively at six scales:
-
-1. **Action** — smallest bounded change.
-2. **Step** — contains verified actions.
-3. **Layer** — contains verified steps for one editable responsibility.
-4. **Build Phase** — contains verified layers for one coherent integration phase.
-5. **Project State** — contains verified phases that produce a usable state or release candidate.
-6. **Project Loop** — contains the verified project state and controls completion, reentry, or expansion.
-
-Each level is cumulative, not merely parent-child:
+## Six cumulative project levels
 
 - Level 1 = 1
 - Level 2 = 1 + 2
@@ -55,10 +38,17 @@ Each level is cumulative, not merely parent-child:
 - Level 5 = 1 + 2 + 3 + 4 + 5
 - Level 6 = 1 + 2 + 3 + 4 + 5 + 6
 
-Every higher checklist carries forward the complete verified record of all previous steps.
+Every higher checklist carries the complete verified record of every earlier level. The Bouncer blocks advancement when a prior level is not verified.
 
-## Companion URL
+## Supported chats
 
-The popup stores the Code by Law companion base URL in extension storage. Default: http://127.0.0.1:8766.
+- ChatGPT
+- Gemini
+- Claude
+- DeepSeek
 
-Change this field to point the same extension at an authorized localhost companion, Jetson tunnel, or later bridge without editing extension source.
+## Firefox
+
+The source is a Manifest V3 Firefox WebExtension with Firefox Android support declared in the manifest.
+
+Mozilla web-ext lint result for the current build: 0 errors, 0 notices, 0 warnings.

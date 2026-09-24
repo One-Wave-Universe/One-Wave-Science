@@ -40,8 +40,8 @@ This package explicitly enables Gecko Android support.
 
 For normal Android installation/distribution, the extension must be signed/published through Mozilla Add-ons Android support.
 
-The phone must use a Code by Law companion URL reachable from the phone.
-127.0.0.1 means the phone itself, not the Jetson or laptop.
+Code by Law reads project reference directly from GitHub.
+No local companion, laptop relay, Jetson bridge, or localhost service is required.
 
 Code by Law cycle:
 Think Before You Speak -> Parser Goblin -> Reference Every Step ->

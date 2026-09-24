@@ -1,7 +1,7 @@
 # Firefox on Android
 
-Firefox for Android supports extensions. Code by Law declares gecko_android support in its Firefox manifest.
+Firefox for Android supports extensions. Code by Law declares Gecko Android support in its Firefox manifest.
 
-For ordinary installation on the phone, the extension must be distributed/signed through Mozilla Add-ons Android extension support.
+Code by Law talks directly to GitHub for project reference. No local companion, laptop relay, Jetson bridge, or localhost service is required.
 
-The Code by Law companion URL must be reachable from the phone. 127.0.0.1 is the phone itself.
+For ordinary installation on the phone, the extension must be signed/distributed through Mozilla Add-ons Android support.

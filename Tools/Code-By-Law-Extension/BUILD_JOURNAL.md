@@ -22,7 +22,9 @@ Newest verified layer goes first.
 - Laptop transfer: PASS
 - Laptop Mozilla lint: 0 errors, 0 notices, 0 warnings
 - Laptop Firefox development launch: PASS through web-ext run
-- Next permitted step: publish the checkpointed branch to GitHub through an authorized GitHub route
+- GitHub publication: branch codex/code-by-law-extension created from current remote main
+- GitHub source commit: c9d3ef6c35a3464abe8210982bb4744f0406a0a8
+- Next permitted step: clean retired companion wording, republish docs, then keep GitHub as the only external project bridge
 
 ## 2026-09-23 — Mozilla web-ext lint/build qualification
 
