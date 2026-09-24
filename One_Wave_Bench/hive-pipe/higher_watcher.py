@@ -11,6 +11,8 @@ import subprocess
 import sys
 
 WATCHER_DIRNAME=".owatch"
+HOLDER_DIRNAME=".goblin-holder"
+HOLDER_CONFIG="holder.json"
 HOLD_NAME="HOLD.json"
 INDEX_NAME="index.json"
 
@@ -25,6 +27,26 @@ def run(root: Path, *args: str, check: bool=True):
 
 def repo_root(path: Path) -> Path:
     return Path(run(path,'rev-parse','--show-toplevel').stdout.strip()).resolve()
+
+def holder_root(start: Path) -> Path:
+    current=start.resolve()
+    while True:
+        if (current/HOLDER_DIRNAME/HOLDER_CONFIG).is_file():
+            return current
+        if current.parent == current:
+            raise RuntimeError("No Goblin Folder Holder found above requested path")
+        current=current.parent
+
+
+def child_watchers(holder: Path) -> list[Path]:
+    children=[]
+    for marker in holder.rglob(f"{WATCHER_DIRNAME}/folder.json"):
+        child=marker.parent.parent.resolve()
+        if child == holder:
+            continue
+        children.append(child)
+    return sorted(set(children))
+
 
 def holds(root: Path):
     out=[]
@@ -75,13 +97,19 @@ def main():
     ap.add_argument('--commit-message')
     ap.add_argument('--scope', action='append', default=[], help='Allowed path/folder for this change; repeatable')
     args=ap.parse_args()
-    root=repo_root(Path(args.root).expanduser().resolve())
-    active_holds=holds(root)
+    requested=Path(args.root).expanduser().resolve()
+    root=repo_root(requested)
+    try:
+        holder=holder_root(requested)
+    except RuntimeError:
+        holder=root
+    children=child_watchers(holder)
+    active_holds=holds(holder)
     changed=changed_paths(root)
     receipt=latest_valid_receipt(receipt_ledger())
     result={
-      'at':now(),'root':str(root),'changed_paths':changed,
-      'active_holds':active_holds,'watcher_indexes':len(indexes(root)),
+      'at':now(),'root':str(root),'holder':str(holder),'child_watchers':[str(p) for p in children],
+      'changed_paths':changed,'active_holds':active_holds,'watcher_indexes':len(indexes(holder)),
       'receipt_present':bool(receipt),'requested_scope':args.scope,
     }
     if active_holds:
