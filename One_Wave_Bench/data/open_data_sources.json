@@ -1,0 +1,60 @@
+{
+  "schema": "one-wave-open-data-source-registry-v1",
+  "sources": [
+    {
+      "id": "cern-open-data",
+      "domain": "collider",
+      "coverage": ["ALICE", "ATLAS", "CMS", "LHCb", "CERN public records"],
+      "metadata_url": "https://opendata.cern.ch/",
+      "access": "cernopendata-client / HTTPS / XRootD"
+    },
+    {
+      "id": "hepdata",
+      "domain": "collider-scattering",
+      "coverage": [
+        "published particle-physics scattering tables and distributions",
+        "LHC and non-LHC publications"
+      ],
+      "metadata_url": "https://www.hepdata.net/",
+      "access": "HEPData records / downloads"
+    },
+    {
+      "id": "gwosc",
+      "domain": "gravitational-wave",
+      "coverage": ["LIGO", "Virgo", "KAGRA"],
+      "metadata_url": "https://gwosc.org/api/v2/",
+      "access": "HTTPS API / gwosc client"
+    },
+    {
+      "id": "mast",
+      "domain": "space-telescope",
+      "coverage": ["JWST", "Hubble", "Kepler/K2", "TESS", "GALEX", "MAST HLSP missions"],
+      "metadata_url": "https://mast.stsci.edu/api/v0/",
+      "access": "MAST API / astroquery"
+    },
+    {
+      "id": "heasarc",
+      "domain": "space-high-energy",
+      "coverage": [
+        "Chandra",
+        "Fermi",
+        "Swift",
+        "NuSTAR",
+        "NICER",
+        "IXPE",
+        "XRISM",
+        "XMM-Newton",
+        "HEASARC missions"
+      ],
+      "metadata_url": "https://heasarc.gsfc.nasa.gov/docs/archive/apis.html",
+      "access": "TAP / VO / astroquery / XAMIN"
+    },
+    {
+      "id": "gaia-archive",
+      "domain": "space-catalog",
+      "coverage": ["Gaia astrometry/photometry/spectroscopy"],
+      "metadata_url": "https://gea.esac.esa.int/archive/",
+      "access": "TAP / ADQL"
+    }
+  ]
+}
