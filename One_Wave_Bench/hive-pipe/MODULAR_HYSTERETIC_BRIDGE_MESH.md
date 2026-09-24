@@ -55,3 +55,7 @@ Every new route or repair procedure must be linked from:
 - browser extension reference panel when present
 
 No bridge module is complete until its usage, verification, and recovery directions are posted at the canonical entry points.
+
+
+## Goblin control roles
+Read `One_Wave_Bench/hive-pipe/GOBLIN_BRIDGE_ROLES.md` for Doctor, Parser, Reference/Worker two-state machine, Carrier Pigeon, and Goblin Raccoon behavior.
