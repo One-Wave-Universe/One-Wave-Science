@@ -1,0 +1,21 @@
+{
+  "id": "jetson-reference-probe-20260924-02",
+  "ok": true,
+  "exit_code": 0,
+  "stdout": "JETSON_PULL_EXEC_OK\nlocalhost.localdomain\nScales\naarch64\n/home/Scales/One-Wave-Science\n",
+  "stderr": "",
+  "request_commit": "d08cc1cb1f8d25317e81929757ea3619e59c52c2",
+  "source_route": "origin:chatgpt-terminal",
+  "completed_at": "2026-09-24T16:29:57.668739+00:00",
+  "guidance": {
+    "code": "VERIFIED_COMMAND_COMPLETE",
+    "explanation": "The command completed inside the bounded parser.",
+    "higher_level_required": false,
+    "level": "none",
+    "next_action": "Use the receipt as evidence and verify state before the next mutation."
+  },
+  "reference": {
+    "tool": "terminal_reference",
+    "contract": "one-wave-terminal-parser-v2"
+  }
+}
