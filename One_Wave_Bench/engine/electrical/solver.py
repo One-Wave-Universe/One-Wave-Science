@@ -6,7 +6,7 @@ technique (and the same reasoning for using partial pivoting: small
 matrices with wildly different-magnitude entries, e.g. a milliohm wire
 next to a megohm leakage path, are exactly where naive elimination without
 pivoting silently loses precision) already proven in this repo's sibling
-Virtual_Breadboard/js/circuit.js `solveLinear()`.
+One_Wave_Bench/Virtual_Breadboard/js/circuit.js `solveLinear()`.
 
 This module NEVER hard-codes a circuit's answer. It assembles Kirchhoff's
 current law at every real node and Ohm's law for every real resistor, then
@@ -170,7 +170,7 @@ def solve_dc(circuit) -> SolveResult:
     # source at its + terminal) -- the negative of the conventional
     # "discharging into the load" direction. Flip it so a source actually
     # delivering power into the circuit reads positive, matching real
-    # bench-meter convention (and Virtual_Breadboard/js/circuit.js's
+    # bench-meter convention (and One_Wave_Bench/Virtual_Breadboard/js/circuit.js's
     # battery model, which uses the same convention for the same reason).
     source_currents = {s.id: -x[n_nodes + k] for k, s in enumerate(circuit.sources)}
 

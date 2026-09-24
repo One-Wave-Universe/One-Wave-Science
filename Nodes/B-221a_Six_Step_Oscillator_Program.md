@@ -98,7 +98,7 @@ Higher-order views may describe what a Mirror gate sees. Higher-order action lab
 
 ## Relationship to Five-State Self Lifecycle
 
-The five-state self lifecycle is separately defined by `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`:
+The five-state self lifecycle is separately defined by `One_Wave_Bench/speculative/Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`:
 
 ```text
 IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING

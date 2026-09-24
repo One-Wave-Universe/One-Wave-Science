@@ -3,7 +3,7 @@ Energy accounting for this batch's DC-only scope: a resistive network under
 a constant DC source has constant power, so energy over a run duration is
 simply power * time. (Time-varying energy integration -- for when
 capacitors/inductors arrive in a later batch -- is explicitly out of scope
-here; see Virtual_Breadboard/simulate.js's integrateEnergy for the
+here; see One_Wave_Bench/Virtual_Breadboard/simulate.js's integrateEnergy for the
 trapezoidal version this will eventually need to match in spirit.)
 """
 from __future__ import annotations

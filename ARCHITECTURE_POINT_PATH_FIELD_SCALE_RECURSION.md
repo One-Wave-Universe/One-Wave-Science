@@ -9,8 +9,8 @@ This is **not Algorythm-Zer0 canon by itself**. It is a domain mapping that may 
 This remains a design hypothesis and prototype target, not a claim of bench validation. CELL_V1 physical geometry is now governed by:
 
 - `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`
-- `CELL_V1_ANTI_DRIFT.md`
-- `CELL_V1_BUILD_PACKET.md`
+- `One_Wave_Bench/speculative/CELL_V1_ANTI_DRIFT.md`
+- `One_Wave_Bench/speculative/CELL_V1_BUILD_PACKET.md`
 
 ## 1. Core distinction
 

@@ -18,7 +18,7 @@ Point = local G (free update). Path = κ|ds| (time is cost). Sphere = those thre
 
 Virtual: stamp 1 I_0 = 0 / ±1.2 mA. Stamp 2 STAY 0, lean ±12 mA. `brain_2state.py` lists and cuts. `nerve_cell.py` one live gate.
 
-Copper owes the same DMM numbers. Door: `Virtual_Breadboard/LOCK.md` + `ONE_WAVE_CELL.md` + `BUILD_25.md`.
+Copper owes the same DMM numbers. Door: `One_Wave_Bench/Virtual_Breadboard/LOCK.md` + `ONE_WAVE_CELL.md` + `BUILD_25.md`.
 
 Kitty Hawk is play in `GRAV/`.
 

@@ -458,7 +458,7 @@ master=ROOT/'00_MASTER_INDEX.md'; t=read(master)
 t=re.sub(r'Compiled from .*?updated .*?\.', 'Compiled from the current consolidated node repository; updated July 23, 2026.', t, count=1)
 if 'Updated 32 repository-integrity handoff' not in t:
     insertion='Updated 32 repository-integrity handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.\nMetadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.\nLegacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.\n'
-    t=t.replace('Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.\n', 'Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.\n'+insertion)
+    t=t.replace('Updated 28 alphabet/Fibonacci-word handoff: `One_Wave_Bench/speculative/UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.\n', 'Updated 28 alphabet/Fibonacci-word handoff: `One_Wave_Bench/speculative/UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.\n'+insertion)
 t=t.replace('| B-201 | Balance |','| B-201 | Equilibrium Balance |').replace('| G-709 | Balance |','| G-709 | Regulated-Response Balance |')
 # replace table status with canonical gate
 for nid,meta in node_meta.items():

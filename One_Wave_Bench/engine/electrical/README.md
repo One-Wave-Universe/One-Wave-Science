@@ -25,7 +25,7 @@ electrical/
 Components: `DCVoltageSource`, `Resistor`, `Wire`, `Ground`. Nothing else —
 no MOSFETs, capacitors, inductors, comparators, batteries with internal
 resistance, LEDs, magnetics, or any macro. See
-`../../../Virtual_Breadboard/00_RULES/` for the general layered-architecture
+`../../../One_Wave_Bench/Virtual_Breadboard/00_RULES/` for the general layered-architecture
 discipline this follows: real Kirchhoff/Ohm relationships, not scripted
 expected values; failure (a mismatched, unbalanced network) is valid output,
 never silently corrected.

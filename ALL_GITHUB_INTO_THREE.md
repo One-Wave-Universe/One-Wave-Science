@@ -15,9 +15,9 @@ Hypotheses, thought experiments, math, simulations, theoretical papers, axioms.
 
 ### Move out of this repo when copied (do not leave them only here)
 **To Builds**
-- Virtual_Breadboard/
+- One_Wave_Bench/Virtual_Breadboard/
 - Hardware_Packets/
-- Android_Body/
+- One_Wave_Bench/speculative/Android_Body/
 - CELL_V1_* hardware packets
 - Jetson runtime/access how-tos used as bench tools
 - implementation roadmaps that are build orders, not theories

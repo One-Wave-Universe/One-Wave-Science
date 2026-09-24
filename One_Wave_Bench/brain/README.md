@@ -88,7 +88,7 @@ receive odd wrappers. Alphabet orientation supports `A→Z:1→26` and
 `Z→A:1→26`; inverting that side-to-side axis also inverts logical up/down.
 Polarity, route family, offset, wrapper side, orientation, and traversal remain
 separate receipt fields. The authoritative grammar and examples are locked in
-`RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
+`One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
 
 `rabbit_hop_scale_rail.py` adds the bounded label-independent rail: sources
 `1–12` generate doubled tops and mandatory wrappers; addresses `12–24` divide

@@ -6,11 +6,11 @@ new memory/lattice/movement adapter.
 
 ## Source of truth order
 
-1. `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+1. `One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
 2. `One_Wave_Bench/brain/rabbit_hop_core.py`
 3. the relevant domain adapter and its tests
-4. `Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md`
-5. `RABBIT_HOPPING_MUSIC_ADAPTER.md` for music/neck details
+4. `One_Wave_Bench/speculative/Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md`
+5. `One_Wave_Bench/speculative/RABBIT_HOPPING_MUSIC_ADAPTER.md` for music/neck details
 
 If older shorthand conflicts with #1 or #2, the lock/core wins.
 

@@ -39,7 +39,7 @@ as a generic coarse strength relation around a local reference. That notation ma
 +3(0)3- = full agree
 ```
 
-`Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` separately owns the five-state self lifecycle:
+`One_Wave_Bench/speculative/Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md` separately owns the five-state self lifecycle:
 
 ```text
 IDLE -> PRIMED -> EXECUTING -> VECTORING -> RESOLVING

@@ -40,7 +40,7 @@ On the bench \(E_\text{lean}\) for a 10 ms +1 on 1 kΩ:
 E=0.144\times0.010=1.44\,\mathrm{mJ}
 \]
 
-If leftover B is real, the next hop is cheaper than 1.44 mJ. If leftover is zero, you pay 1.44 mJ every time — no engine, just clicks. That measurement is step 37 of `../Virtual_Breadboard/BUILD_26_50.md`.
+If leftover B is real, the next hop is cheaper than 1.44 mJ. If leftover is zero, you pay 1.44 mJ every time — no engine, just clicks. That measurement is step 37 of `../One_Wave_Bench/speculative/Virtual_Breadboard/BUILD_26_50.md`.
 
 ## Sheath (off-hull) vs skin (on-hull)
 

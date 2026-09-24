@@ -1,6 +1,6 @@
 # KITTY HAWK
 
-Playground ship. Parent science: `../FIGURED.md` `../GRAV/FOUR_INTERACTIONS.md` `../GRAV/ONE_WAVE_PHYSICS.md` `../Virtual_Breadboard/LOCK.md`.
+Playground ship. Parent science: `../FIGURED.md` `../GRAV/FOUR_INTERACTIONS.md` `../GRAV/ONE_WAVE_PHYSICS.md` `../One_Wave_Bench/Virtual_Breadboard/LOCK.md`.
 
 First-flight hull. Same grammar as the cell, scaled until the walk is a skin. Not a 12 V breadboard.
 

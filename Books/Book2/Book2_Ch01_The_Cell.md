@@ -61,7 +61,7 @@ A proposed cross-scale extension groups local units into larger
 sensor and neural hierarchies. That extension is not required to define
 the biological cell itself. Its consciousness interpretation is now
 developed in Books/Proposed_One_Wave_Consciousness, and its build form
-is developed in Books/Proposed_Android_Brain and C-312.
+is developed in One_Wave_Bench/speculative/Books/Proposed_Android_Brain and C-312.
 
 ---
 
@@ -80,7 +80,7 @@ It is the boundary of the Persistent Mode that is the cell.
 Cross-scale neural and consciousness hypotheses were previously embedded
 here. They are preserved in History/Pre_Reorganization/Book2_Ch01_The_Cell_v3_original.md
 and actively developed in Books/Proposed_One_Wave_Consciousness. Their
-engineering implementation is developed in Books/Proposed_Android_Brain.
+engineering implementation is developed in One_Wave_Bench/speculative/Books/Proposed_Android_Brain.
 
 This chapter now limits its canonical biological claim to the cell as a
 bounded signaling and persistent-mode system. It does not close the

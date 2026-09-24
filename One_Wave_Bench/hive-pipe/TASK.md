@@ -6,7 +6,7 @@
 - **HARD START:** verified One-Wave-Science repository; separate branch; clean
   starting state.
 - **ALLOWED FILES:** `One_Wave_Bench/hive-pipe/**` only.
-- **PROTECTED:** `Virtual_Breadboard/**`, Android/control files, external drives,
+- **PROTECTED:** `One_Wave_Bench/Virtual_Breadboard/**`, Android/control files, external drives,
   mounts, partitions, filesystems, credentials, and user data.
 - **ACTION:** accept only named read-only actions; produce deterministic JSON
   results; reject malformed or unknown jobs.

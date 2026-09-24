@@ -9,7 +9,7 @@ matching how a real breadboard row works.
 
 No component here knows about any other component, any build, or any
 project. It knows its own pins and its own value. See
-../../../Virtual_Breadboard/00_RULES/architecture.md for why that separation
+../../../One_Wave_Bench/Virtual_Breadboard/00_RULES/architecture.md for why that separation
 matters -- the same discipline applies here.
 """
 from dataclasses import dataclass

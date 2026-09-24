@@ -152,8 +152,8 @@ The active construction map is:
 - `AI_FOREMAN_WORK_REGISTER.md` — repo-wide work needed, authoritative sources, safe parallel branches, and dependencies.
 - `MEGA_CITY_LOOPER_OBJECTIVE.md` — First Looper reference-loop, one-room sandbox, Field/Void relay/parser proposals, Mayor challenge, and Bullshit Alarm governance.
 - `JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
-- `Virtual_Breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
-- `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
+- `One_Wave_Bench/Virtual_Breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
+- `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
 - `ART_VISUAL_GOVERNANCE.md` — visual/art contribution, voting, and current human veto rules.
 - `AI_CANONICAL_START_HERE.md` — canonical ingestion order and anti-drift authority.
 
@@ -204,10 +204,10 @@ A compact cross-domain set now lives under `chapters/`. These files separate est
 
 Supporting experimental modules/specifications:
 
-- `Nodes/boltzmann_administrator.json` — bounded multimodal associative-memory allocation configuration.
+- `One_Wave_Bench/speculative/Nodes/boltzmann_administrator.json` — bounded multimodal associative-memory allocation configuration.
 - `One_Wave_Bench/brain/hopfield_melody_cells.py` — small inspectable Hopfield associative-memory helper.
 - `Nodes/vtc_zero_logic.md` — VTC reference/Field/Void UI-state mapping that defers to CELL_V1 physical canon.
-- `hardware/wave_reader_v1.md` — measurement-first acquisition specification.
+- `One_Wave_Bench/speculative/hardware/wave_reader_v1.md` — measurement-first acquisition specification.
 
 These additions are subordinate to `AI_CANONICAL_START_HERE.md` and do not replace existing validated simulators, CELL_V1 geometry, or evidence classifications.
 

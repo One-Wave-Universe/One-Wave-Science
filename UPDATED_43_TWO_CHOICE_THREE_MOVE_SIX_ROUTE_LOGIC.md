@@ -194,7 +194,7 @@ Field rotation = circulation/curl of the enclosing carrier or boundary
 A Point, Path, or Field may itself contain lower-scale PPF states. Separate
 frames and receipts must prevent internal rotation from being mistaken for
 orbital rotation or enclosing-Field circulation. The calculation program is
-specified in `MATH_ATTACK_MAP_UPDATED_43.md`.
+specified in `One_Wave_Bench/speculative/MATH_ATTACK_MAP_UPDATED_43.md`.
 
 ## 12. Gray-physics guardrail
 

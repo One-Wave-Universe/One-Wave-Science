@@ -1,6 +1,6 @@
 """
 Measurements read a SolveResult. They never mutate it and never change the
-circuit's answer -- see Virtual_Breadboard/00_RULES/measurement_rules.md's
+circuit's answer -- see One_Wave_Bench/Virtual_Breadboard/00_RULES/measurement_rules.md's
 "measurement is separate from simulation behavior" for why that boundary
 matters.
 
@@ -39,7 +39,7 @@ def source_current(result: SolveResult, s: DCVoltageSource) -> float:
     """Real source branch current, positive when the source is discharging
     (delivering current out of its own + terminal into the external
     circuit) -- the same convention used by
-    Virtual_Breadboard/js/circuit.js's battery model."""
+    One_Wave_Bench/Virtual_Breadboard/js/circuit.js's battery model."""
     return result.source_currents[s.id]
 
 

@@ -147,9 +147,9 @@ Cheap legacy MOSFET assortments may contain parts that do not fully enhance at 3
 The Virtual Breadboard now has two flashlight test levels on `main`:
 
 ```text
-Virtual_Breadboard/test/flashlight-calibration/
-Virtual_Breadboard/test/run_flashlight_calibration.js
-Virtual_Breadboard/test/flashlight-prototype.test.js
+One_Wave_Bench/Virtual_Breadboard/test/flashlight-calibration/
+One_Wave_Bench/Virtual_Breadboard/test/run_flashlight_calibration.js
+One_Wave_Bench/Virtual_Breadboard/test/flashlight-prototype.test.js
 ```
 
 The calibration pack independently checks:

@@ -4,7 +4,7 @@ Compiled from the current consolidated node repository; updated July 23, 2026.
 Gate values are read from each node's I-06 YAML metadata. Lifecycle and claim-specific detail remain in the source node and are not collapsed into this table.
 Updated 24 mass/Mirror-Gate handoff: `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
 Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
-Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
+Updated 28 alphabet/Fibonacci-word handoff: `One_Wave_Bench/speculative/UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
 Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
@@ -112,7 +112,6 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-309 | Friction Limit / Propagation Ceiling | Separates memory damping from maximum signal speed; neither one creates Mass Effect. | YELLOW |
 | C-310 | Resistance Field | The field's tendency to preserve identity against perturbation — distinct from Friction (γ) and Restoring Response (A-105). | YELLOW |
 | C-311 | Electric/Magnetic Duality | Radial and rotational projections of one pressure field P_c. | YELLOW |
-| C-312 | Hierarchical Sensor/Control Architecture | Four-level hierarchical control architecture for a physical body. | YELLOW |
 | C-313 | Lorentz Invariance Conflict | Flagged real conflict: the discrete update rule's continuum limit produces a *damped* wave equation. | YELLOW |
 | C-314 | Three Frames of Reference | Three distinct, overlapping coordinate systems (external "V2" proposal). | YELLOW |
 | C-315 | Wave Reader V1 | Sensor treating signal/noise as field states via differential nulling between mirrored emitters. | YELLOW |
@@ -208,17 +207,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | G-716a | Conversion Simulation Rule | Executable test of G-716: path 24→12→6→3→1→24 through gate form 1(0)1. | YELLOW |
 | G-717 | Paired Reference Gate | (definition pending formal extraction) | YELLOW |
 | G-718 | Connection Gates | Seven gates describing how two independent systems connect without elimination or domination. | YELLOW |
-| G-719 | Neural System Functional Analogy Map | Receive→Evaluate→Choose→Update, mapped to neurons/circuits vs. software bricks/nodes — explicitly a functional analogy, not an anatomical claim. | YELLOW |
 | G-720 | No Control But Self-Control | Receive → Hold → Commit: external input is not controlled; only the system’s bounded compressive/expressive response and next state are selected. | YELLOW |
-| G-721 | Mirrored Alphabet Rabbit-Hop Coordinate Algorithm | Maps A–Z to signed packets ±(n,2n,2n+1), preserves separate direction/location and recursive/state axes, and compiles words into forward/reverse mirrored hop paths. | YELLOW |
-| G-721a | Fibonacci Word Hop Validation | Fixed Fibonacci regression path for the even/odd branch trace; golden-ratio convergence is a consequence metric, not a movement generator. | YELLOW |
-| G-721b | Sturmian Binary Branch Grammar | General binary branch grammar with mechanical-word, balance, aperiodicity, and p(n)=n+1 validation. | YELLOW |
-| G-721c | Episturmian Multi-Route Directive Grammar | Reversal-aware multi-symbol scheduler; sequence selects route family while -1(0)+1 selects direction or hold. | YELLOW |
-| G-721d | Arnoux-Rauzy Strict Multi-Route Validation | Exact strict-episturmian complexity and special-factor audit, including ternary p(n)=2n+1. | YELLOW |
-| G-721e | Plastic-Padovan Three-Rail Grammar | Candidate substitution grammar for n, 2n, and 2n+1 with plastic-number/Padovan receipts. | YELLOW |
-| G-722 | Android Subconscious Motor Memory Architecture | Hybrid Boltzmann candidate reconstruction, Hopfield settling, sequence scheduling, local choice, and binary safety oversight. | GREEN |
-| G-723 | Pisot-Salem-Mahler Motor Stability Audit | Measures contraction, persistent rhythm, expansion, drift, and total algebraic growth; does not generate movement. | YELLOW |
-| G-723a | Advanced Mahler and Regulator Computation Hold | Deninger, Rodriguez-Villegas, and elliptic-dilogarithm methods held until a qualifying polynomial exists. | GREEN |
 ---
 
 ## TIER 2 — MICRO APPLICATIONS (Book 1: Subatomic Structure)
@@ -321,11 +310,11 @@ into the main Book1_Chapters set. Now included.
 
 **Internal_Proofs/ directory (Updated 32 repaired):** Active proof drafts now have a canonical index, clean filenames, and explicit subordinate authority. Raw conversational sources are preserved under `History/Raw_AI_Proof_Discussions/`; current node gate metadata always controls.
 
-**Android_Body/ folder (NEW):** Functional Architecture + Book Ch1 (Bio-
+**One_Wave_Bench/speculative/Android_Body/ folder (NEW):** Functional Architecture + Book Ch1 (Bio-
 Inspired Design) — real content, hardware-adjacent, was present in archives
 but not previously categorized anywhere in this repo.
 
-**Virtual_Breadboard/ folder (NEW, merged into main from a feature branch
+**One_Wave_Bench/Virtual_Breadboard/ folder (NEW, merged into main from a feature branch
 via PR #13):** A runnable Electron/browser circuit simulator with a real
 modified-nodal-analysis solver (not a scripted animation) — resistors,
 diodes/LEDs, capacitors, inductors, AC sources, an MTJ quadrature sensor, a
@@ -338,10 +327,10 @@ the hold/positive/negative behavior has to be discovered and proven by
 wiring the discrete MOSFETs, same as on a real bench (see the Memory-cell
 and Cal C/D calibration boards). Includes a live oscilloscope, an
 AI-assisted circuit-build panel, a headless `simulate.js` CLI (`node
-Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
+One_Wave_Bench/Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
 automation, and a physics regression suite (`node
-Virtual_Breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
-Full docs: `Virtual_Breadboard/README.md`. See G-744's own file for the
+One_Wave_Bench/Virtual_Breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
+Full docs: `One_Wave_Bench/Virtual_Breadboard/README.md`. See G-744's own file for the
 node-to-software cross-reference and its claim-gate boundary.
 
 **History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md (historical unintegrated draft):** A differently-structured
@@ -355,11 +344,11 @@ independent content. Needs a real comparison pass, not assumed identical.
 
 ## ACTIVE HYPOTHESIS AND PROPOSED BUILD BOOKS
 
+**Build implementation material has been relocated to `One_Wave_Bench/speculative/`. This Science index retains only science/hypothesis material and references build work across that boundary when needed.**
+
 | Book | Purpose | Status |
 |---|---|---|
 | Proposed One-Wave Consciousness | Active research into recursive self-modeling, M4 scale weighing, generative and administrative functions, boundaries, shared access, and cross-scale consciousness questions. | GREEN hypothesis / YELLOW grounding |
-| Proposed Android Brain | Hypothetical One-Wave engineering architecture using Dream Engine, M4, Administrator, Reference Ground, Working Ground, duplex gates, and joint commit rules. | YELLOW proposed build |
-| Android Body | Physical sensor, actuator, power, timing, and hierarchical control design. | YELLOW engineering |
 
 **Governance boundary:** Active hypotheses are not accepted facts, but they are not quarantined merely for being unknown. See I-05.
 
@@ -413,39 +402,25 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
-| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
-| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
-| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
 | G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`. | YELLOW |
-| G-728 | Mathematics Attack Laundry List | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-728_Mathematics_Attack_Laundry_List.md`. | BROWN |
 | G-729 | Mirror Operator for the Three Mirror Gates | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
 | G-730 | History, Phase, and Hysteresis Commitment Map | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-730_History_Phase_and_Hysteresis_Commitment_Map.md`. | YELLOW |
 | G-731 | Ground, Center, and Coherent Hold Separation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-731_Ground_Center_and_Coherent_Hold_Separation.md`. | YELLOW |
 | G-732 | Vortex Trial-Profile Diagnostic Repair | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-732_Vortex_Trial_Profile_Diagnostic_Repair.md`. | YELLOW |
 | G-733 | Noise, Chatter, and False-Commitment Audit | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-733_Noise_Chatter_and_False_Commitment_Audit.md`. | YELLOW |
 | G-734 | Asymmetric Center-Origin Oscillator Reference | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`. | YELLOW |
-| G-735 | Chapter-Driven Simulator Program | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-735_Chapter_Driven_Simulator_Program.md`. | BROWN |
 | G-736 | Standard Model Interpretation Overlay for Micro Simulators | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`. | YELLOW |
-| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | GREEN |
 | G-738 | Center Geometry Classification and Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`. | YELLOW |
 | G-739 | Six-Gate Mirror-Action Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
-| G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | GREEN |
-| G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`. | YELLOW |
-| G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`. | YELLOW |
-| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair. Source: `Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md`. | GREEN |
-| G-744 | Literal One-Cell Breadboard Build — Real Parts and Math | Breadboard / Mixed-Signal / One-Wave Cell Primitive. Source: `Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md`. | YELLOW |
 | G-745 | Zone-Edge 125 GeV Lattice-Constant Hypothesis | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`. | YELLOW |
 | G-746 | E1 Scalar Dual Problem and Matrix Handoff | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-746_Damping_Matrix_Dispersion.md`. | BROWN |
 | G-747 | Two Group-Velocity Zeros | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-747_Two_Group_Velocity_Zeros.md`. | BROWN |
 | G-748 | Nested Hexagon Pyramids and Triangle Cube Hex | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-748_Nested_Hex_Pyramid_Triangle_Cube.md`. | YELLOW |
 | G-749 | C2 Point Rotation and Angular-Momentum Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-749_Point_Rotation_and_Angular_Momentum_Receipt.md`. | BROWN |
 | G-750 | Body-Rate Transport Mechanics | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-750_Body_Rate_Transport.md`. | BROWN |
-| G-751 | Primitive Cell and Brain-Cell Skins versus Biology and Layered Robot Dogs | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-751_Cell_Brain_Biology_RobotDog_Comparison.md`. | YELLOW |
-| G-752 | Triad Brain from Three Loops | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-752_Triad_Brain_Three_Loops.md`. | YELLOW |
 | G-753 | Brain versus 3:1 three-winding nerve | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-753_Brain_Versus_Three_Winding_Nerve.md`. | YELLOW |
 | G-754 | Cell to Chip to Cube to Rubik to Two Rubiks | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-754_Cell_Chip_Cube_Rubik_Two_State_Machines.md`. | YELLOW |
 | G-755 | Ternary is virtual ground and a choice | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-755_Ternary_Is_Virtual_Ground_And_Choice.md`. | YELLOW |
-| G-756 | Build contract square-away | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-756_Build_Contract_Square_Away.md`. | YELLOW |
 | G-757 | Discrete four-interaction energy on the seven-cell | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-757_Discrete_E4_Seven_Cell.md`. | YELLOW |
 | G-758 | Nudged elastic band between seven-cell wells | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-758_Nudged_Elastic_Band.md`. | YELLOW |
 | G-759 | Mass Effect as four-action carry | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-759_Mass_Effect_Four_Actions.md`. | YELLOW |

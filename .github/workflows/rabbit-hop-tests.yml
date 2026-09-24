@@ -5,19 +5,19 @@ on:
     paths:
       - 'One_Wave_Bench/brain/rabbit_hop_*.py'
       - 'One_Wave_Bench/brain/test_rabbit_hop_*.py'
-      - 'RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
-      - 'RABBIT_HOPPING_MUSIC_ADAPTER.md'
+      - 'One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
+      - 'One_Wave_Bench/speculative/RABBIT_HOPPING_MUSIC_ADAPTER.md'
       - 'CODEX_LATEST_TRANSLATOR_HANDOFF.md'
-      - 'Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
+      - 'One_Wave_Bench/speculative/Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
       - '.github/workflows/rabbit-hop-tests.yml'
   pull_request:
     paths:
       - 'One_Wave_Bench/brain/rabbit_hop_*.py'
       - 'One_Wave_Bench/brain/test_rabbit_hop_*.py'
-      - 'RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
-      - 'RABBIT_HOPPING_MUSIC_ADAPTER.md'
+      - 'One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md'
+      - 'One_Wave_Bench/speculative/RABBIT_HOPPING_MUSIC_ADAPTER.md'
       - 'CODEX_LATEST_TRANSLATOR_HANDOFF.md'
-      - 'Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
+      - 'One_Wave_Bench/speculative/Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md'
       - '.github/workflows/rabbit-hop-tests.yml'
   workflow_dispatch:
 

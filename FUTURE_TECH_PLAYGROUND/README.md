@@ -6,7 +6,7 @@ Still One-Wave-Science. Play here. Physics and cell next door.
 
 - `../FIGURED.md` `../MATH.md` `../REPO_FIRST.md`
 - `../GRAV/FOUR_INTERACTIONS.md` `../GRAV/ONE_WAVE_PHYSICS.md` `../GRAV/GEM_ANALOG.md`
-- `../Virtual_Breadboard/LOCK.md`
+- `../One_Wave_Bench/Virtual_Breadboard/LOCK.md`
 
 ## Ship
 

@@ -205,9 +205,9 @@ Stop conditions (copy these into branch-steps):
 2. `AI_CANONICAL_START_HERE.md`
 3. `Nodes/A-117_Dimensional_Integrity_and_Projection_Declaration.md`
 4. `Nodes/D-408` `D-409` `D-410` `D-411` `D-412` `D-413`
-5. `Nodes/G-722` `G-724` `G-726` `G-730` `G-740`
+5. `One_Wave_Bench/speculative/Nodes/G-722` `G-724` `G-726` `G-730` `G-740`
 6. `UPDATED_30_GROUND_LATTICE_ORBITAL_RESTORING_SIMULATION.md`
-7. `UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
+7. `One_Wave_Bench/speculative/UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`
 
 ---
 

@@ -4,7 +4,7 @@
 
 ## Authority boundary
 
-For current physical CELL_V1 geometry, `CELL_V1_ANTI_DRIFT.md` and the current build packet remain the geometry authority. This file records additional VTC-0 implementation claims for verification.
+For current physical CELL_V1 geometry, `One_Wave_Bench/speculative/CELL_V1_ANTI_DRIFT.md` and the current build packet remain the geometry authority. This file records additional VTC-0 implementation claims for verification.
 
 ## Zero/reference rule
 

@@ -128,7 +128,7 @@ Read alongside:
 - `AI_CANONICAL_START_HERE.md`
 - `AI_FOREMAN_WORK_REGISTER.md`
 - `MEGA_CITY_LOOPER_OBJECTIVE.md`
-- `Virtual_Breadboard/AI_COLLABORATION.md`
-- `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`
+- `One_Wave_Bench/Virtual_Breadboard/AI_COLLABORATION.md`
+- `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`
 
 Any contributor who discovers a more reliable Jetson access/runtime path should update this file with the tested commands and sign the corresponding construction entry.

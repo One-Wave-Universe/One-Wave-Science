@@ -12,7 +12,7 @@ The translator investigation belongs to that world-building effort. It asks whet
 
 ## Read the full question; help us figure it out
 
-[Full original hypothesis and questions — preserved verbatim](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md).
+[Full original hypothesis and questions — preserved verbatim](One_Wave_Bench/speculative/RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md).
 
 Read that entire document before proposing changes. Its examples, alternatives and unresolved questions are the research input. This work brief does not replace or shorten it. Preserve the original record; put derivations, corrections and competing models in separate documents and code.
 
@@ -58,6 +58,6 @@ The existence of this task does not establish that translator-to-3D binding, ter
 
 ## How another AI can take work
 
-Read `AGENTS.md` and `AI_FOREMAN_WORK_REGISTER.md`; check existing branches and work claims. Sign `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`, choose one bounded work package, and record its goal, reference, allowed files, tests and independent review in `Branch_Steps/`. Use a separate branch for competing models. Share runnable code and evidence with repo-relative links, not just a conversational claim.
+Read `AGENTS.md` and `AI_FOREMAN_WORK_REGISTER.md`; check existing branches and work claims. Sign `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`, choose one bounded work package, and record its goal, reference, allowed files, tests and independent review in `Branch_Steps/`. Use a separate branch for competing models. Share runnable code and evidence with repo-relative links, not just a conversational claim.
 
 Proven results that affect architecture must follow the register's science -> Nodes -> architecture process with claim boundaries and falsification conditions. Leave unresolved choices open. The next milestone is a reproducible translator experiment tied to a declared lattice frame, followed by a small persistent shared-world construction test.

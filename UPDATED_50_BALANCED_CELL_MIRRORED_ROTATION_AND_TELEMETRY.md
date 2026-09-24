@@ -289,7 +289,7 @@ Before changing older canonical files, compare this update against:
 
 - `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
 - `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
-- `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`
+- `One_Wave_Bench/speculative/Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`
 - `ARCHITECTURE_BALANCED_CELL_STACK_PARSER_MATRIX.md`
 - the current state-machine architecture files
 

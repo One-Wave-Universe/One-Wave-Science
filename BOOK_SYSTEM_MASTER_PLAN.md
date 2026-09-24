@@ -6,6 +6,11 @@
 
 The canonical source remains the A-G node architecture. Green/Yellow/Bronze/Silver/Gold describe proof status, not storage location.
 
+
+## Builds/speculative boundary
+
+Implementation-oriented Android, CELL_V1, Hopfield/Boltzmann, rabbit-hop routing, hardware packet, controller/runtime, and build-manual material is housed under `One_Wave_Bench/speculative/`. Science books may cite those implementations, but they are not canonical physics evidence.
+
 ## Presentation families
 
 ### Appendix A-G Wiki System

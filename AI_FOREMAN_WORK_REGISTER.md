@@ -7,8 +7,8 @@ This register complements:
 - `AI_CANONICAL_START_HERE.md`
 - `AGENTS.md`
 - `00_MASTER_INDEX.md`
-- `Virtual_Breadboard/AI_COLLABORATION.md`
-- `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`
+- `One_Wave_Bench/Virtual_Breadboard/AI_COLLABORATION.md`
+- `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md`
 
 No AI should infer that everything listed here is equally mature. Each work item must retain its own status: established engineering, validated simulation, proposal, hypothesis, experiment, story/lesson, or unverified idea.
 
@@ -57,7 +57,7 @@ Proposal text must never say a hypothesis is demonstrated merely because it has 
 
 ## Open research: Jetson Dreamscape translator
 
-**Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
+**Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](One_Wave_Bench/speculative/RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
 
 ## 1. Foreman operating rule
 
@@ -71,7 +71,7 @@ Every new work branch must answer five questions before coding:
 
 If another AI owns overlapping work, use a separate branch/proposal and complete the merge-agreement gate before production integration.
 
-Every Miniverse / Mega City / virtual-world contributor must sign `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` with name/identifier, date, branch/PR, contribution, intentions, unfinished work, dependencies, conflicts, and merge stance.
+Every Miniverse / Mega City / virtual-world contributor must sign `One_Wave_Bench/Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` with name/identifier, date, branch/PR, contribution, intentions, unfinished work, dependencies, conflicts, and merge stance.
 
 ---
 
@@ -124,12 +124,12 @@ Current canonical node ingestion order is maintained in `AI_CANONICAL_START_HERE
 
 ### Authoritative now
 
-- `Virtual_Breadboard/00_RULES/architecture.md`
-- `Virtual_Breadboard/03_ELECTRICAL_CORE/MAP.md`
-- `Virtual_Breadboard/SPICE_PARITY.md`
-- `Virtual_Breadboard/SOLVER_CONVERGENCE.md`
-- `Virtual_Breadboard/js/circuit.js`
-- `Virtual_Breadboard/js/app.js`
+- `One_Wave_Bench/Virtual_Breadboard/00_RULES/architecture.md`
+- `One_Wave_Bench/Virtual_Breadboard/03_ELECTRICAL_CORE/MAP.md`
+- `One_Wave_Bench/Virtual_Breadboard/SPICE_PARITY.md`
+- `One_Wave_Bench/Virtual_Breadboard/SOLVER_CONVERGENCE.md`
+- `One_Wave_Bench/Virtual_Breadboard/js/circuit.js`
+- `One_Wave_Bench/Virtual_Breadboard/js/app.js`
 - permanent qualification workflow
 
 The 20-item SPICE-parity solver roadmap is complete on `main`, including ngspice cross-checks for declared equivalent cases.
@@ -172,8 +172,8 @@ Do not merge overlapping implementations until contributors explicitly agree.
 
 - `UPDATED_49_MINIVERSE_DREAMWORLD_AI_GUIDE.md`
 - `AI_GUIDE_LOCAL_MINIVERSE_DREAMWORLD_AND_INTERDIMENSIONAL_ARCHITECTURE.md`
-- `ARCHITECTURE_AI_MINIVERSE_SENSORY_BUILD_ROADMAP.md`
-- `ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`
+- `One_Wave_Bench/speculative/ARCHITECTURE_AI_MINIVERSE_SENSORY_BUILD_ROADMAP.md`
+- `One_Wave_Bench/speculative/ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`
 - `AI_CANONICAL_START_HERE.md`
 
 Locked distinction: **Homeworld is a programmed city, not the mind itself.** The internal world/body state, Miniverse cognitive world, and graphical city representation must not be collapsed into one layer merely because they can share data.
@@ -214,8 +214,8 @@ Read before changing anything:
 - `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md`
 - `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
 - `UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md`
-- `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`
-- `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`
+- `One_Wave_Bench/speculative/Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`
+- `One_Wave_Bench/speculative/Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`
 - `Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md`
 
 Protected distinctions include:
@@ -277,15 +277,15 @@ A Node may summarize or route evidence; it may not upgrade a hypothesis to fact 
 - `chapters/03_Affective_State_Mapping.md`
 - `chapters/04_Macro_Quasar_Bridge.md`
 - `chapters/05_Simulation_Engine.md`
-- `Nodes/boltzmann_administrator.json`
+- `One_Wave_Bench/speculative/Nodes/boltzmann_administrator.json`
 - `One_Wave_Bench/brain/hopfield_melody_cells.py`
 - `Nodes/vtc_zero_logic.md`
-- `hardware/wave_reader_v1.md`
-- `V1_VERIFICATION_MATRIX.md`
+- `One_Wave_Bench/speculative/hardware/wave_reader_v1.md`
+- `One_Wave_Bench/speculative/V1_VERIFICATION_MATRIX.md`
 
 ### Work order
 
-1. Convert every strong claim into one or more measurable test IDs in `V1_VERIFICATION_MATRIX.md`.
+1. Convert every strong claim into one or more measurable test IDs in `One_Wave_Bench/speculative/V1_VERIFICATION_MATRIX.md`.
 2. Run accepted/control behavior first.
 3. Run the One-Wave hypothesis or hardware variant with the same measurement contract.
 4. Save parameters, data, plots, and receipts.

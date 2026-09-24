@@ -62,5 +62,5 @@ tests without degrading conserved quantities or established orbital results.
 - `One_Wave_Bench/logic_core/six_route_logic.py`
 - `One_Wave_Bench/logic_core/test_six_route_logic.py`
 - `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-- `MATH_ATTACK_MAP_UPDATED_43.md`
+- `One_Wave_Bench/speculative/MATH_ATTACK_MAP_UPDATED_43.md`
 

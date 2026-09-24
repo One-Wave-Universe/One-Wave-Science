@@ -141,9 +141,9 @@ Only measured behavior advances to hardware canon.
 
 Use this update together with:
 
-- `CELL_V1_BOARD_1_BASELINE_TEST_HARNESS.md`
-- `CELL_V1_BUILD_PACKET.md`
-- `CELL_V1_ANTI_DRIFT.md`
+- `One_Wave_Bench/speculative/CELL_V1_BOARD_1_BASELINE_TEST_HARNESS.md`
+- `One_Wave_Bench/speculative/CELL_V1_BUILD_PACKET.md`
+- `One_Wave_Bench/speculative/CELL_V1_ANTI_DRIFT.md`
 - `UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md`
 - `UPDATED_61_CELL_V1_REAL_HARDWARE_GROUNDING.md`
 - `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`

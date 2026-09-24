@@ -5,8 +5,8 @@
 
 ## Added
 
-- `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
-- `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
+- `One_Wave_Bench/speculative/Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
+- `One_Wave_Bench/speculative/Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
 - `One_Wave_Bench/logic_core/ppf_schema.py` + `test_ppf_schema.py` (5 tests)
 - `One_Wave_Bench/logic_core/hex_lattice_graph.py` + `test_hex_lattice_graph.py` (7 tests)
 - `Internal_Proofs/45_PPF_HEX_TRAIL.md`

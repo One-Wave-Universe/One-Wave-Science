@@ -14,6 +14,6 @@ Keep cloud context tiny:
 - No sudo, raw-device formatting, credential handling, or unrestricted external shell authority.
 - Return the smallest useful result or diff. Stop when the bounded task is complete.
 
-For Rabbit-Hop work, read `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md` and use `One_Wave_Bench/brain/rabbit_hop_core.py`; do not fork the arithmetic.
+For Rabbit-Hop work, read `One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md` and use `One_Wave_Bench/brain/rabbit_hop_core.py`; do not fork the arithmetic.
 
 For Jetson operational work, local Qwen/OpenClaw is first-line. Gemini is an external escalation/review worker, not the default for routine tasks.

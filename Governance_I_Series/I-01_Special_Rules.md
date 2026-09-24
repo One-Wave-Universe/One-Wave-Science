@@ -402,7 +402,7 @@ The corrected status is defined by I-05:
 The active material now resides in:
 
 - Books/Proposed_One_Wave_Consciousness
-- Books/Proposed_Android_Brain
+- One_Wave_Bench/speculative/Books/Proposed_Android_Brain
 - G-719 Neural System Functional Analogy Map
 - RECONCILIATION_duplex-gates-packet.md
 

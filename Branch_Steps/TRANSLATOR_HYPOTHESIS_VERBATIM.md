@@ -7,7 +7,7 @@ LOCAL REPO ROOT: /tmp/one-wave-hypothesis-verbatim
 ACTIVE BRANCH: codex/translator-hypothesis-verbatim
 BASE HEAD: 52dbf985aee1cbb19ff1e442760f065f7f8ff34d
 REFERENCE: Original assistant response from this task; AGENTS.md; JETSON_OPENCLAW_RUNTIME.md; BRANCH_STEP_PROJECT_TEMPLATE.md.
-ALLOWED FILES: RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md and this record.
+ALLOWED FILES: One_Wave_Bench/speculative/RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md and this record.
 PROTECTED FEATURES: All runtime, canon, atlas, device and worker code.
 EXACT ACTION: Copy original response verbatim and publish a separate documentation branch.
 SUCCESS CRITERIA / CHECKS: Source and destination bytes identical; 22530 UTF-8 bytes; SHA256 eb9add21e2359025d0a3e4ddd3838675fcb89ba49370f38e6ad64f569f78b4f2.

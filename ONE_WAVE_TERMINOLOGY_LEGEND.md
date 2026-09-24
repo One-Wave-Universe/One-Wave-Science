@@ -111,7 +111,7 @@ where the original retains `k=0`, each ascending route uses
 `k = 1,2,3,...`, `s = -1 or +1`, and `sigma = -1 or +1`.
 The third address always wraps the second address; no complete packet omits it.
 Rabbit Hopping is both an addressing system and a system-communication
-translator. `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md` is authoritative.
+translator. `One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md` is authoritative.
 Side-to-side alphabet inversion also inverts logical up/down wrapper
 orientation. Division beyond mechanical receipt checking remains open.
 

@@ -1,0 +1,80 @@
+{
+  "node_id": "G-721",
+  "name": "Rabbit Hopping Address and System-Communication Translator",
+  "canonical_lock": "One_Wave_Bench/speculative/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md",
+  "purpose": ["addressing system", "system-communication translator"],
+  "status": {
+    "locked": "packet grammar, three currently declared routes, wrappers, connectivity, alphabet orientation, coupled vertical inversion",
+    "open": "broader role of division; only mechanical receipt recovery is implemented",
+    "extension": "more route families may be declared later only by explicit update"
+  },
+  "packet": {
+    "shape": "source_identity | generated_top | mandatory_wrapper_address",
+    "identity_rule": "the source retains its identity and is not replaced by the generated top",
+    "wrapper_rule": "every top has two complete packets: top-1 and top+1; no bare or zero-wrapper packet",
+    "parity_rule": "odd top has even wrappers; even top has odd wrappers"
+  },
+  "routes": [
+    {
+      "id": "ORIGINAL",
+      "top": "N*2",
+      "packets": ["N | N*2 | (N*2)-1", "N | N*2 | (N*2)+1"],
+      "k_domain": "none; represented as 0",
+      "separate_receipt": true
+    },
+    {
+      "id": "ASCENDING_AFTER",
+      "top": "(N*2)+K",
+      "packets": ["N | (N*2)+K | ((N*2)+K)-1", "N | (N*2)+K | ((N*2)+K)+1"],
+      "k_domain": "1,2,3,..."
+    },
+    {
+      "id": "ASCENDING_BEFORE",
+      "top": "(N+K)*2",
+      "packets": ["N | (N+K)*2 | ((N+K)*2)-1", "N | (N+K)*2 | ((N+K)*2)+1"],
+      "k_domain": "1,2,3,..."
+    }
+  ],
+  "normal_A_examples": [
+    {"route": "ORIGINAL", "k": 0, "packets": [[1, 2, 1], [1, 2, 3]]},
+    {"route": "ASCENDING_AFTER", "k": 1, "packets": [[1, 3, 2], [1, 3, 4]]},
+    {"route": "ASCENDING_AFTER", "k": 2, "packets": [[1, 4, 3], [1, 4, 5]]},
+    {"route": "ASCENDING_AFTER", "k": 3, "packets": [[1, 5, 4], [1, 5, 6]]},
+    {"route": "ASCENDING_BEFORE", "k": 1, "packets": [[1, 4, 3], [1, 4, 5]]},
+    {"route": "ASCENDING_BEFORE", "k": 2, "packets": [[1, 6, 5], [1, 6, 7]]},
+    {"route": "ASCENDING_BEFORE", "k": 3, "packets": [[1, 8, 7], [1, 8, 9]]}
+  ],
+  "connectivity": {
+    "rule": "wrappers connect packets across route families and traversal directions",
+    "examples": [
+      "top 4 carries wrappers 3 and 5; top 5 carries wrappers 4 and 6",
+      "tops 4 and 6 share wrapper 5",
+      "equal numeric tops retain distinct route and K receipts"
+    ]
+  },
+  "alphabet": {
+    "normal": "A-Z carries ranks 1-26; original tops run A:2 through Z:52",
+    "inverted": "Z-A carries ranks 1-26; original tops run Z:2 through A:52",
+    "mirror_gate_layouts": ["A-Z(0)Z-A", "Z-A(0)A-Z"],
+    "coupled_vertical_inversion": "side-to-side alphabet inversion also reverses which numeric +/- side is logical lower/upper"
+  },
+  "independent_receipt_fields": ["source identity", "alphabet orientation", "logical wrapper side", "polarity", "traversal direction", "route family", "K"],
+  "division": {
+    "implemented": [
+      "mechanical source-rank recovery from a fully attributed packet",
+      "bounded scale rail: sources 1-12 generate outward and outer addresses 12-24 divide inward"
+    ],
+    "bounded_12_24_rule": {
+      "even_address": "X/2 returns one source",
+      "odd_wrapper_address": "(X-1)/2 and (X+1)/2 return both neighboring sources",
+      "fraction_rule": "do not create half-addresses; odd addresses retain their shared-wrapper role"
+    },
+    "not_locked": "division's broader role outside the bounded 12-24 rail"
+  },
+  "implementation": "One_Wave_Bench/brain/rabbit_hop_alphabet.py",
+  "scale_rail_implementation": "One_Wave_Bench/brain/rabbit_hop_scale_rail.py",
+  "tests": "One_Wave_Bench/brain/test_rabbit_hop_alphabet.py",
+  "scale_rail_tests": "One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py",
+  "gate": "YELLOW",
+  "lifecycle": "ACTIVE"
+}

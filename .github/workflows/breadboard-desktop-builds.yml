@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Virtual_Breadboard
+        working-directory: One_Wave_Bench/Virtual_Breadboard
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,14 +31,14 @@ jobs:
         with:
           name: linux-installers
           path: |
-            Virtual_Breadboard/dist/*.AppImage
-            Virtual_Breadboard/dist/*.deb
+            One_Wave_Bench/Virtual_Breadboard/dist/*.AppImage
+            One_Wave_Bench/Virtual_Breadboard/dist/*.deb
 
   windows:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: Virtual_Breadboard
+        working-directory: One_Wave_Bench/Virtual_Breadboard
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,13 +51,13 @@ jobs:
         with:
           name: windows-installers
           path: |
-            Virtual_Breadboard/dist/*.exe
+            One_Wave_Bench/Virtual_Breadboard/dist/*.exe
 
   macos:
     runs-on: macos-latest
     defaults:
       run:
-        working-directory: Virtual_Breadboard
+        working-directory: One_Wave_Bench/Virtual_Breadboard
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -70,5 +70,5 @@ jobs:
         with:
           name: macos-installers
           path: |
-            Virtual_Breadboard/dist/*.dmg
-            Virtual_Breadboard/dist/*.zip
+            One_Wave_Bench/Virtual_Breadboard/dist/*.dmg
+            One_Wave_Bench/Virtual_Breadboard/dist/*.zip
