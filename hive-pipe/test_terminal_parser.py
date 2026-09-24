@@ -43,6 +43,19 @@ class TerminalParserTests(unittest.TestCase):
         self.assertEqual(result["exit_code"], 0)
         self.assertIn("duration_ms", result)
 
+    def test_run_receipt_contains_actual_reference_on_both_sides(self):
+        result = terminal_parser.run(["printf", "REFERENCE_OK"])
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["reference_before"]["head"], result["reference_after"]["head"])
+        self.assertEqual(result["reference_before"]["root"], str(terminal_parser.REPO_ROOT))
+        self.assertFalse(result["reference_changed"])
+
+    def test_missing_project_reference_blocks_command_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with mock.patch.dict(terminal_parser.os.environ, {"ONE_WAVE_PROJECT_ROOT": directory}):
+                with self.assertRaisesRegex(ValueError, "AGENTS.md missing"):
+                    terminal_parser.run(["printf", "MUST_NOT_RUN"])
+
     def test_nonzero_exit_is_reported(self):
         result = terminal_parser.run(["false"])
         self.assertFalse(result["ok"])
