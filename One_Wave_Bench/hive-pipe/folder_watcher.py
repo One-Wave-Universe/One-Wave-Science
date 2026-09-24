@@ -17,6 +17,7 @@ POLICY_NAME = "policy.json"
 STATE_NAME = "state.json"
 EVENTS_NAME = "events.jsonl"
 HOLD_NAME = "HOLD.json"
+INDEX_NAME = "index.json"
 
 def utc_now():
     return datetime.now(timezone.utc).isoformat()
@@ -60,6 +61,95 @@ def snapshot(folder: Path) -> dict:
       'status':status, 'files':files
     }
 
+
+def classify_file(path: Path) -> str:
+    name = path.name.lower()
+    suffix = path.suffix.lower()
+    if name in {"agents.md", "readme.md", "ai_bridge_start_here.md", "ai_canonical_start_here.md"}:
+        return "authority_or_entrypoint"
+    if "grant" in name or "evidence" in name or "verification" in name:
+        return "evidence_or_validation"
+    if suffix in {".py", ".sh", ".js", ".ts", ".cpp", ".c", ".h", ".hpp"}:
+        return "executable_or_source"
+    if suffix in {".json", ".yaml", ".yml", ".toml", ".ini"}:
+        return "configuration_or_data"
+    if suffix in {".md", ".txt", ".rst"}:
+        return "documentation_or_canon"
+    return "artifact"
+
+
+def first_heading(path: Path) -> str | None:
+    if path.suffix.lower() not in {".md", ".txt", ".rst"}:
+        return None
+    try:
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines()[:80]:
+            stripped=line.strip()
+            if stripped.startswith("#"):
+                return stripped.lstrip("#").strip()[:200] or None
+    except OSError:
+        return None
+    return None
+
+
+def build_index(folder: Path, snap: dict) -> dict:
+    root=Path(snap["repo"])
+    base=folder.resolve()
+    child_dirs={}
+    files=[]
+    for repo_rel, digest in sorted(snap.get("files", {}).items()):
+        p=root/repo_rel
+        try:
+            rel=p.resolve().relative_to(base)
+        except ValueError:
+            continue
+        if any(part == WATCHER_DIRNAME for part in rel.parts):
+            continue
+        top = rel.parts[0] if len(rel.parts) > 1 else None
+        if top:
+            child_dirs.setdefault(top, {"file_count":0, "roles":{}})
+            child_dirs[top]["file_count"] += 1
+            role=classify_file(p)
+            child_dirs[top]["roles"][role]=child_dirs[top]["roles"].get(role,0)+1
+        files.append({
+            "path": str(rel),
+            "role": classify_file(p),
+            "heading": first_heading(p),
+            "sha256": digest,
+            "bytes": p.stat().st_size if p.exists() else None,
+        })
+    authorities=[
+        item["path"] for item in files
+        if item["role"] == "authority_or_entrypoint"
+    ]
+    return {
+        "schema":"one-wave-watcher-index-v1",
+        "generated_at":utc_now(),
+        "folder":str(base),
+        "repo":snap["repo"],
+        "branch":snap["branch"],
+        "head":snap["head"],
+        "authority_files":authorities,
+        "layers":{
+            "folder_summary":{
+                "file_count":len(files),
+                "child_directory_count":len(child_dirs),
+                "status":snap.get("status",""),
+            },
+            "subfolders":child_dirs,
+            "files":files,
+        },
+        "editing_rule":"Descend folder -> subfolder -> file. Source files remain authoritative; this index is navigation only.",
+    }
+
+
+def refresh_index(folder: Path, snap: dict) -> None:
+    wd=folder/WATCHER_DIRNAME
+    wd.mkdir(parents=True, exist_ok=True)
+    (wd/INDEX_NAME).write_text(
+        json.dumps(build_index(folder, snap), indent=2, sort_keys=True)+"\n",
+        encoding="utf-8",
+    )
+
 def load_json(path: Path, default):
     try:return json.loads(path.read_text())
     except Exception:return default
@@ -93,21 +183,25 @@ def check_folder(folder: Path, ledger: Path) -> dict:
     current=snapshot(folder)
     baseline=state.get('baseline')
     if not baseline:
+        refresh_index(folder, current)
         state={'baseline':current,'status':'BASELINED'}
         (wd/STATE_NAME).write_text(json.dumps(state,indent=2,sort_keys=True)+'\n')
         append_event(wd/EVENTS_NAME,{'type':'BASELINE','at':utc_now(),'snapshot':current})
         return {'folder':str(folder),'status':'BASELINED'}
     changed = current.get('files') != baseline.get('files') or current.get('status') != baseline.get('status')
     if not changed:
+        refresh_index(folder, current)
         hold=wd/HOLD_NAME
         return {'folder':str(folder),'status':'HOLD' if hold.exists() else 'CLEAN'}
     if valid_receipt_after(ledger, baseline.get('at',''), folder):
+        refresh_index(folder, current)
         state={'baseline':current,'status':'RECONCILED'}
         (wd/STATE_NAME).write_text(json.dumps(state,indent=2,sort_keys=True)+'\n')
         append_event(wd/EVENTS_NAME,{'type':'RECONCILED_CHANGE','at':utc_now(),'snapshot':current})
         try:(wd/HOLD_NAME).unlink()
         except FileNotFoundError:pass
         return {'folder':str(folder),'status':'RECONCILED'}
+    refresh_index(folder, current)
     hold={
       'status':'HOLD','at':utc_now(),'folder':str(folder.resolve()),
       'reason':'File or Git state changed without a matching post-baseline reference receipt containing intention and consequence.',
