@@ -10,11 +10,70 @@ to hidden marker files for portability through Git and filesystems without xattr
 """
 from __future__ import annotations
 import argparse, json, os, shutil, subprocess, sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 XATTR_KEY = "user.onewave.folder_type"
 HOLDER_TYPE = "goblin-holder"
 OWATCH_TYPE = "owatch"
+REGISTRY_PATH = Path(os.environ.get(
+    "GOBLIN_FOLDER_REGISTRY",
+    str(Path.home()/".local/share/goblin-folder/registry.json"),
+)).expanduser()
+
+def _now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+def _load_registry() -> dict:
+    try:
+        doc=json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
+        if isinstance(doc, dict):
+            doc.setdefault("schema","one-wave-folder-registry-v1")
+            doc.setdefault("folders",{})
+            return doc
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {"schema":"one-wave-folder-registry-v1","folders":{}}
+
+def _save_registry(doc: dict) -> None:
+    REGISTRY_PATH.parent.mkdir(parents=True, exist_ok=True)
+    REGISTRY_PATH.write_text(json.dumps(doc, indent=2, sort_keys=True)+"\n", encoding="utf-8")
+
+def _nearest_holder(path: Path) -> str | None:
+    current=path.resolve().parent
+    while True:
+        if (current/".goblin-holder"/"holder.json").is_file():
+            return str(current)
+        if current.parent == current:
+            return None
+        current=current.parent
+
+def _register(path: Path, kind: str, *, xattr: bool) -> dict:
+    real=path.resolve()
+    doc=_load_registry()
+    marker = ".goblin-holder/holder.json" if kind == HOLDER_TYPE else ".owatch/folder.json"
+    doc["folders"][str(real)] = {
+        "path": str(real),
+        "type": kind,
+        "marker": marker,
+        "xattr": bool(xattr),
+        "holder": None if kind == HOLDER_TYPE else _nearest_holder(real),
+        "registered_at": _now(),
+        "last_verified_at": _now(),
+    }
+    _save_registry(doc)
+    return doc["folders"][str(real)]
+
+def registry_list() -> dict:
+    doc=_load_registry()
+    live={}
+    stale={}
+    for path, entry in sorted(doc.get("folders",{}).items()):
+        p=Path(path)
+        marker=p/entry.get("marker","")
+        (live if p.is_dir() and marker.is_file() else stale)[path]=entry
+    return {"registry":str(REGISTRY_PATH),"live":live,"stale":stale}
+
 
 def _set_xattr(path: Path, value: str) -> bool:
     try:
@@ -50,7 +109,8 @@ def make_holder(path: Path):
         "filesystem_xattr": XATTR_KEY if xattr else None,
     })
     (path/".goblin-holder"/".gitignore").write_text("group-index.json\nevents.jsonl\nHOLD.json\n", encoding="utf-8")
-    return {"path":str(path),"type":HOLDER_TYPE,"xattr":xattr}
+    entry=_register(path,HOLDER_TYPE,xattr=xattr)
+    return {"path":str(path),"type":HOLDER_TYPE,"xattr":xattr,"registry":entry}
 
 def make_owatch(path: Path):
     path.mkdir(parents=True, exist_ok=True)
@@ -67,7 +127,8 @@ def make_owatch(path: Path):
         "filesystem_xattr": XATTR_KEY if xattr else None,
     })
     (path/".owatch"/".gitignore").write_text("state.json\nevents.jsonl\nHOLD.json\nindex.json\n", encoding="utf-8")
-    return {"path":str(path),"type":OWATCH_TYPE,"xattr":xattr}
+    entry=_register(path,OWATCH_TYPE,xattr=xattr)
+    return {"path":str(path),"type":OWATCH_TYPE,"xattr":xattr,"registry":entry}
 
 def detect(path: Path) -> dict:
     if not path.is_dir():
@@ -103,8 +164,12 @@ def main():
     p.add_argument("path")
     p=sub.add_parser("children")
     p.add_argument("path")
+    sub.add_parser("registry")
 
     a=ap.parse_args()
+    if a.cmd=="registry":
+        print(json.dumps(registry_list(), indent=2, sort_keys=True))
+        return
     path=Path(getattr(a,"path",".")).expanduser().resolve()
     if a.cmd=="create-holder":
         result=make_holder(path)
