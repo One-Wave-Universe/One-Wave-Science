@@ -66,6 +66,7 @@ def static_checks() -> list[Check]:
         "One_Wave_Bench/hive-pipe/terminal_parser.py",
         "One_Wave_Bench/hive-pipe/install_gateway.sh",
         "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
+        "One_Wave_Bench/hive-pipe/parser_goblin.py",
         "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh",
         "One_Wave_Bench/hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
         "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
@@ -91,6 +92,7 @@ def static_checks() -> list[Check]:
         "One_Wave_Bench/hive-pipe/terminal_parser.py",
         "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
         "One_Wave_Bench/hive-pipe/bridge_doctor.py",
+        "One_Wave_Bench/hive-pipe/parser_goblin.py",
         "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
         "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py",
         "scripts/external_work_bridge.py",
@@ -203,6 +205,7 @@ def gateway_live_checks(*, required: bool, timeout: int) -> list[Check]:
     checks = [
         service_check("hive-pipe-agent.service", required=required),
         service_check("hive-pipe-gateway.service", required=required),
+        service_check("parser-goblin.service", required=required),
     ]
     token = load_token()
     if not token:
