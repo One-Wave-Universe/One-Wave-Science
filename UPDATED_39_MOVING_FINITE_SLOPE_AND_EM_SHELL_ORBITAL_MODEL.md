@@ -4,7 +4,7 @@
 
 This update supersedes the memory/assimilation interpretation in Updated 38 for the current planetary test architecture.
 
-The working One-Wave hypothesis is an **instantaneous moving network of body-specific finite displacement/slope regions**. Every body moves, every body's active range moves with it, and the range is determined by that body's own potential/slope relative to the surrounding reference state. No stored wake memory, relay memory, or universal cutoff radius is assumed.
+The working One-Wave hypothesis is an **instantaneous moving network of body-specific finite displacement/slope regions**. Every body moves, every body's active range moves with it, and the range is determined by that body's own potential/slope relative to the surrounding reference state. No detached stored wake memory or universal cutoff radius is assumed. Current-state relay through nested parent fields is allowed: a child updates its current parent field, and that resolved parent state becomes the next-scale reference.
 
 This is a canonical **test architecture**, not a claim that the physical hypothesis has been established.
 
@@ -16,7 +16,7 @@ This is a canonical **test architecture**, not a claim that the physical hypothe
 4. All active regions are recomputed at every timestep as all bodies move.
 5. A planet can speed up or slow down because the instantaneous combined slope geometry changes around it.
 6. Intermediate planets matter because they have their own moving slope regions and are themselves being displaced by the combined system.
-7. No memory or information-relay term is added to preserve a vanished interaction.
+7. No detached memory term preserves a vanished interaction. Current-state parent relay is allowed: active child state contributes to the current parent field, which then becomes the reference for the next scale.
 8. Electromagnetic structure is not treated as a direct gravity-like force. The current candidate role of EM is to modify the stability/stiffness/response of the local displacement shell.
 9. Mercury receives an additional Sun–Mercury EM-coupling channel because its intrinsic magnetic shell is embedded much deeper in the solar magnetic environment.
 10. Mars and Venus are controls for the absence of a present intrinsic global dipole: Mars has localized crustal magnetism; Venus has an induced magnetic environment but no Earth-like intrinsic global dynamo field.
@@ -191,7 +191,7 @@ The candidate model must fail if any of the following occur:
 
 `+ extra independently measurable Sun–Mercury coupling state`
 
-`+ no memory`
+`+ no detached stored wake memory; current-state parent relay allowed`
 
 `+ no universal cutoff`
 
