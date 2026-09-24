@@ -90,7 +90,8 @@ class TerminalBridgeV2Tests(unittest.TestCase):
             terminal_parser._validate_argv(["bash", "-lc", "printf ok; sudo true"])
 
     def test_unique_request_digest_is_stable(self):
-        raw = json.dumps({"id": "x", "argv": ["printf", "ok"], "cwd": str(Path.home()), "timeout": 30})
+        raw = json.dumps({"id": "x", "argv": ["printf", "ok"], "cwd": str(Path.home()), "timeout": 30,
+                          "intention": "Verify pull execution", "consequence": "Expect ok and exit zero"})
         first = bridge.validate_request(raw)
         second = bridge.validate_request(raw)
         self.assertEqual(first["digest"], second["digest"])

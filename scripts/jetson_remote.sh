@@ -76,18 +76,32 @@ payload = {
     "params": {"name": "terminal_run", "arguments": arguments},
 }
 
-req = urllib.request.Request(
-    url.rstrip("/") + "/mcp",
-    data=json.dumps(payload).encode(),
-    headers={
-        "Authorization": "Bearer " + token,
-        "Content-Type": "application/json",
-    },
-    method="POST",
-)
-try:
+def call(payload):
+    req = urllib.request.Request(
+        url.rstrip("/") + "/mcp",
+        data=json.dumps(payload).encode(),
+        headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"},
+        method="POST",
+    )
     with urllib.request.urlopen(req, timeout=int(timeout) + 15) as response:
-        envelope = json.load(response)
+        return json.load(response)
+
+reference = call({
+    "jsonrpc": "2.0", "id": 0, "method": "tools/call",
+    "params": {"name": "terminal_reference", "arguments": {
+        "intention": "Run the explicitly supplied remote command",
+        "consequence": "Return actual stdout, stderr, and exit code; review any changed state before another action.",
+        "action": {"name": "terminal_run", "arguments": arguments},
+    }},
+})
+card = reference.get("result", {}).get("structuredContent", {}).get("reference_card")
+if not card:
+    print(json.dumps(reference, indent=2), file=sys.stderr)
+    raise SystemExit("reference HOLD: no reference card issued")
+payload["params"]["arguments"]["reference_card"] = card
+
+try:
+    envelope = call(payload)
 except urllib.error.HTTPError as exc:
     print(exc.read().decode("utf-8", errors="replace"), file=sys.stderr)
     raise SystemExit(1)

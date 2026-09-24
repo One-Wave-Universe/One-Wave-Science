@@ -215,8 +215,13 @@ def gateway_live_checks(*, required: bool, timeout: int) -> list[Check]:
     if not url.endswith("/mcp"):
         url += "/mcp"
     try:
-        reference = post_mcp(url, token, "terminal_reference", {}, timeout)
-        smoke = post_mcp(url, token, "terminal_run", {"argv": ["printf", "ONE_WAVE_BRIDGE_OK"], "timeout": timeout}, timeout + 5)
+        smoke_args = {"argv": ["printf", "ONE_WAVE_BRIDGE_OK"], "timeout": timeout}
+        reference = post_mcp(url, token, "terminal_reference", {
+            "intention": "Verify the local Hive Pipe terminal route",
+            "consequence": "Expect ONE_WAVE_BRIDGE_OK and exit zero; do not change repository files.",
+            "action": {"name": "terminal_run", "arguments": smoke_args},
+        }, timeout)
+        smoke = post_mcp(url, token, "terminal_run", {**smoke_args, "reference_card": reference["reference_card"]}, timeout + 5)
         if reference.get("reference", {}).get("contract") != "one-wave-terminal-parser-v2":
             raise RuntimeError("terminal_reference returned the wrong parser contract")
         if not smoke.get("ok") or smoke.get("stdout") != "ONE_WAVE_BRIDGE_OK":

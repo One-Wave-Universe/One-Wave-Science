@@ -84,8 +84,10 @@ DEEPSEEK_TOOLS = [
                     },
                     "cwd": {"type": "string"},
                     "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                    "intention": {"type": "string", "description": "Why this command advances the current goal."},
+                    "consequence": {"type": "string", "description": "Expected result and protected state to check afterward."},
                 },
-                "required": ["argv"],
+                "required": ["argv", "intention", "consequence"],
                 "additionalProperties": False,
             },
         },
@@ -168,6 +170,25 @@ class HivePipeClient:
     def call(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         if name not in {"terminal_pwd", "terminal_which", "terminal_run"}:
             raise ValueError(f"DeepSeek bridge refuses unknown Hive Pipe tool: {name}")
+        arguments = dict(arguments)
+        if name == "terminal_run":
+            intention = arguments.pop("intention", None)
+            consequence = arguments.pop("consequence", None)
+            for label, value in (("intention", intention), ("consequence", consequence)):
+                if not isinstance(value, str) or not value.strip():
+                    raise ValueError(f"reference HOLD: DeepSeek {label} required")
+            self._request_id += 1
+            reference = self._post_json(self.url, {
+                "jsonrpc": "2.0", "id": self._request_id, "method": "tools/call",
+                "params": {"name": "terminal_reference", "arguments": {
+                    "intention": intention, "consequence": consequence,
+                    "action": {"name": name, "arguments": arguments},
+                }},
+            }, {"Authorization": f"Bearer {self.token}"}, 330)
+            card = reference.get("result", {}).get("structuredContent", {}).get("reference_card")
+            if not card:
+                raise RuntimeError(f"reference HOLD: {json.dumps(reference, sort_keys=True)}")
+            arguments["reference_card"] = card
         self._request_id += 1
         payload = {
             "jsonrpc": "2.0",
@@ -211,8 +232,11 @@ def _validate_tool_call(name: str, arguments: Any) -> tuple[str, dict[str, Any]]
         return "terminal_which", arguments
 
     if name == "jetson_run":
-        if set(arguments) - {"argv", "cwd", "timeout"}:
+        if set(arguments) - {"argv", "cwd", "timeout", "intention", "consequence"}:
             raise ValueError("jetson_run received unknown fields")
+        for label in ("intention", "consequence"):
+            if not isinstance(arguments.get(label), str) or not arguments[label].strip():
+                raise ValueError(f"jetson_run requires {label}")
         argv = arguments.get("argv")
         if not isinstance(argv, list) or not argv or not all(
             isinstance(item, str) and item for item in argv

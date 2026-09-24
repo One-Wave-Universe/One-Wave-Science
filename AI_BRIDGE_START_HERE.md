@@ -33,6 +33,34 @@ Exit meanings:
 `--json` returns the same result in machine-readable form. The doctor is
 read-only. It never changes services, branches, credentials, or files.
 
+## Fail-closed reference gate
+
+Before every Hive Pipe `terminal_run`, `python_run`, or `cpp_compile_run`, call
+`terminal_reference` with the exact intended tool and its arguments, a concrete
+intention, and the consequence to check. The gateway reads the current checkout
+HEAD, working state, and canonical instruction files and returns a timestamped
+`reference_card`. Supply that card in the executable tool's arguments. The card
+is valid for one matching call within five minutes. Missing, reused, altered,
+expired, or stale cards return `reference HOLD` without running the command.
+
+Example pair:
+
+```json
+{"name":"terminal_reference","arguments":{"intention":"Inspect the current repo state","consequence":"Read the branch and status; do not modify files","action":{"name":"terminal_run","arguments":{"argv":["git","status","--short","--branch"],"timeout":30}}}}
+```
+
+```json
+{"name":"terminal_run","arguments":{"argv":["git","status","--short","--branch"],"timeout":30,"reference_card":<exact card returned above>}}
+```
+
+The host stores the original issued card, authorization, and observed command
+receipt in a private `reference-receipts.jsonl` ledger. A summary is never a
+substitute for that record. The GitHub pull worker also requires `intention`
+and `consequence` in each request and stamps a card before executing it.
+
+This gate covers these bridge execution routes. It does not control an AI
+product's own chat responses; those need a client-side response gate.
+
 ## Supported routes and their jobs
 
 | Route | Best use | Health proof | Independent fallback |
@@ -62,20 +90,11 @@ python_run
 cpp_compile_run
 ```
 
-First calls:
+First calls: read the parser contract, then use the stamped pair shown above
+with the exact intended command and its card.
 
 ```json
 {"name":"terminal_reference","arguments":{}}
-```
-
-```json
-{
-  "name": "terminal_run",
-  "arguments": {
-    "argv": ["git", "status", "--short", "--branch"],
-    "timeout": 30
-  }
-}
 ```
 
 Omit `cwd` unless the actual target checkout path has been verified. Every
@@ -110,7 +129,9 @@ Write the **same** request to `.chatgpt-terminal/request.json` on both branches:
 {
   "id": "unique-task-id-001",
   "argv": ["git", "status", "--short", "--branch"],
-  "timeout": 30
+  "timeout": 30,
+  "intention": "Inspect the current branch and working tree",
+  "consequence": "Read the status receipt; do not change repository files"
 }
 ```
 

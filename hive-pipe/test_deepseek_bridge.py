@@ -31,6 +31,8 @@ class DeepSeekBridgeTests(unittest.TestCase):
 
         def fake_post(url, payload, headers, timeout):
             seen.update(url=url, payload=payload, headers=headers, timeout=timeout)
+            if payload["params"]["name"] == "terminal_reference":
+                return {"result": {"structuredContent": {"reference_card": {"id": "test-card"}}}}
             return {
                 "jsonrpc": "2.0",
                 "id": payload["id"],
@@ -45,14 +47,14 @@ class DeepSeekBridgeTests(unittest.TestCase):
             token="test-token",
             post_json=fake_post,
         )
-        result = client.call("terminal_run", {"argv": ["printf", "BRIDGE_OK"]})
+        result = client.call("terminal_run", {"argv": ["printf", "BRIDGE_OK"], "intention": "Smoke test", "consequence": "Expect BRIDGE_OK"})
         self.assertEqual(result["stdout"], "BRIDGE_OK")
         self.assertEqual(seen["payload"]["method"], "tools/call")
         self.assertEqual(
             seen["payload"]["params"],
             {
                 "name": "terminal_run",
-                "arguments": {"argv": ["printf", "BRIDGE_OK"]},
+                "arguments": {"argv": ["printf", "BRIDGE_OK"], "reference_card": {"id": "test-card"}},
             },
         )
         self.assertEqual(seen["headers"]["Authorization"], "Bearer test-token")
@@ -66,7 +68,7 @@ class DeepSeekBridgeTests(unittest.TestCase):
         result = deepseek_bridge.dispatch_tool(
             mcp,
             "jetson_run",
-            {"argv": ["git", "status", "--short"], "timeout": 30},
+            {"argv": ["git", "status", "--short"], "timeout": 30, "intention": "Inspect status", "consequence": "Read status without editing"},
         )
         self.assertTrue(result["ok"])
         self.assertEqual(
@@ -74,7 +76,7 @@ class DeepSeekBridgeTests(unittest.TestCase):
             [
                 (
                     "terminal_run",
-                    {"argv": ["git", "status", "--short"], "timeout": 30},
+                    {"argv": ["git", "status", "--short"], "timeout": 30, "intention": "Inspect status", "consequence": "Read status without editing"},
                 )
             ],
         )
@@ -113,7 +115,7 @@ class DeepSeekBridgeTests(unittest.TestCase):
                                         "function": {
                                             "name": "jetson_run",
                                             "arguments": json.dumps(
-                                                {"argv": ["git", "status", "--short"]}
+                                                {"argv": ["git", "status", "--short"], "intention": "Inspect status", "consequence": "Read status without editing"}
                                             ),
                                         },
                                     }

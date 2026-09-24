@@ -68,6 +68,8 @@ class DeepSeekWebBridgeTests(unittest.TestCase):
                                                 {
                                                     "argv": ["git", "status", "--short"],
                                                     "cwd": "/home/Scales/One-Wave-Science",
+                                                    "intention": "Inspect status",
+                                                    "consequence": "Read status without editing",
                                                 }
                                             ),
                                         },
@@ -96,6 +98,8 @@ class DeepSeekWebBridgeTests(unittest.TestCase):
                     {
                         "argv": ["git", "status", "--short"],
                         "cwd": "/home/Scales/One-Wave-Science",
+                        "intention": "Inspect status",
+                        "consequence": "Read status without editing",
                     },
                 )
             ],

@@ -1,5 +1,9 @@
 # AI Direct Python + C++ Bridge
 
+**Reference gate:** The `python_run` and `cpp_compile_run` examples below need
+a fresh `reference_card` from `terminal_reference` for that exact action.
+See `AI_BRIDGE_START_HERE.md`; an unstamped executable call returns HOLD.
+
 This bridge lets any authorized MCP-capable AI execute bounded Python and C++
 source directly on the Jetson through the existing authenticated Hive Pipe
 gateway. A human does not need to copy commands between the AI and terminal.

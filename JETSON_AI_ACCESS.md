@@ -1,5 +1,10 @@
 # Jetson AI Access — Canonical Bidirectional Paths
 
+**Reference gate:** Before an executable MCP call, obtain a one-use
+`reference_card` for the exact action using `terminal_reference`, intention,
+and consequence as shown in `AI_BRIDGE_START_HERE.md`. The unstamped curl and
+JSON examples below show command syntax but will now be rejected by the gateway.
+
 ## Priority
 
 AI terminal access must have more than one usable route. The canonical terminal

@@ -16,12 +16,14 @@ import sys
 import time
 
 import mudl
+import reference_gate
 import terminal_parser
 
 
 JOB_ROUTE = re.compile(r"^/v1/jobs/([A-Za-z0-9][A-Za-z0-9._-]{0,95})$")
 MAX_BODY = 16384
 MCP_PROTOCOL = "2025-06-18"
+REFERENCE_GATE = reference_gate.Gate()
 
 
 def action_tool(action: str) -> dict:
@@ -43,8 +45,11 @@ MCP_TOOLS.update({
     "terminal_reference": {
         "name": "terminal_reference",
         "title": "Terminal Reference",
-        "description": "Explain how to use the bounded terminal, its authorized paths and limits, and when higher-level intervention is required.",
-        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
+        "description": "Read the terminal rules and issue a one-use reference card bound to one intended executable action.",
+        "inputSchema": {"type": "object", "properties": {
+            "intention": {"type": "string"}, "consequence": {"type": "string"},
+            "action": {"type": "object"},
+        }, "additionalProperties": False},
         "annotations": {"readOnlyHint": True, "destructiveHint": False, "openWorldHint": False},
     },
     "terminal_pwd": {
@@ -85,6 +90,7 @@ MCP_TOOLS.update({
                 },
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                "reference_card": {"type": "object"},
             },
             "required": ["argv"],
             "additionalProperties": False,
@@ -102,6 +108,7 @@ MCP_TOOLS.update({
                 "args": {"type": "array", "items": {"type": "string"}, "maxItems": 64},
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
+                "reference_card": {"type": "object"},
             },
             "required": ["code"],
             "additionalProperties": False,
@@ -120,6 +127,7 @@ MCP_TOOLS.update({
                 "cwd": {"type": "string"},
                 "timeout": {"type": "integer", "minimum": 1, "maximum": 300},
                 "standard": {"type": "string", "enum": ["c++17", "c++20", "c++23"]},
+                "reference_card": {"type": "object"},
             },
             "required": ["code"],
             "additionalProperties": False,
@@ -180,9 +188,16 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
         return mcp_error(request_id, -32602, "Terminal arguments must be an object")
     try:
         if name == "terminal_reference":
-            if arguments:
-                raise ValueError("terminal_reference accepts no arguments")
             result = {"ok": True, "reference": terminal_parser.reference()}
+            if arguments:
+                if set(arguments) != {"intention", "consequence", "action"}:
+                    raise ValueError("reference card requires intention, consequence, and action")
+                result["reference_card"] = REFERENCE_GATE.issue(**arguments)
+                root = Path(result["reference_card"]["reference"]["repo"])
+                result["reference_text"] = {
+                    name: (root / name).read_text(encoding="utf-8")
+                    for name in reference_gate.REFERENCE_FILES
+                }
         elif name == "terminal_pwd":
             if set(arguments) - {"cwd"}:
                 raise ValueError("terminal_pwd accepts only cwd")
@@ -192,25 +207,32 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
                 raise ValueError("terminal_which requires exactly name")
             result = terminal_parser.which(arguments["name"])
         elif name == "terminal_run":
-            if not set(arguments).issubset({"argv", "cwd", "timeout"}) or "argv" not in arguments:
-                raise ValueError("terminal_run requires argv and accepts optional cwd/timeout")
+            if not set(arguments).issubset({"argv", "cwd", "timeout", "reference_card"}) or "argv" not in arguments:
+                raise ValueError("terminal_run requires argv and accepts optional cwd/timeout/reference_card")
+            card = REFERENCE_GATE.consume(arguments.get("reference_card"), {"name": name, "arguments": {k: v for k, v in arguments.items() if k != "reference_card"}})
             result = terminal_parser.run(
                 arguments["argv"],
                 cwd=arguments.get("cwd"),
                 timeout=arguments.get("timeout", 60),
             )
+            REFERENCE_GATE.complete(card, result)
+            result["reference_card"] = card
         elif name == "python_run":
-            if not set(arguments).issubset({"code", "args", "cwd", "timeout"}) or "code" not in arguments:
+            if not set(arguments).issubset({"code", "args", "cwd", "timeout", "reference_card"}) or "code" not in arguments:
                 raise ValueError("python_run requires code and accepts optional args/cwd/timeout")
+            card = REFERENCE_GATE.consume(arguments.get("reference_card"), {"name": name, "arguments": {k: v for k, v in arguments.items() if k != "reference_card"}})
             result = terminal_parser.python_run(
                 arguments["code"],
                 args=arguments.get("args"),
                 cwd=arguments.get("cwd"),
                 timeout=arguments.get("timeout", 60),
             )
+            REFERENCE_GATE.complete(card, result)
+            result["reference_card"] = card
         elif name == "cpp_compile_run":
-            if not set(arguments).issubset({"code", "args", "cwd", "timeout", "standard"}) or "code" not in arguments:
+            if not set(arguments).issubset({"code", "args", "cwd", "timeout", "standard", "reference_card"}) or "code" not in arguments:
                 raise ValueError("cpp_compile_run requires code and accepts optional args/cwd/timeout/standard")
+            card = REFERENCE_GATE.consume(arguments.get("reference_card"), {"name": name, "arguments": {k: v for k, v in arguments.items() if k != "reference_card"}})
             result = terminal_parser.cpp_compile_run(
                 arguments["code"],
                 args=arguments.get("args"),
@@ -218,6 +240,8 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
                 timeout=arguments.get("timeout", 60),
                 standard=arguments.get("standard", "c++20"),
             )
+            REFERENCE_GATE.complete(card, result)
+            result["reference_card"] = card
         else:
             return mcp_error(request_id, -32602, "Unknown terminal tool")
         return tool_result(request_id, result, failed=not result.get("ok", False))

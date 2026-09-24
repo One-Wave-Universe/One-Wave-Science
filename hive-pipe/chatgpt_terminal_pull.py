@@ -31,6 +31,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 import terminal_parser  # noqa: E402
+import reference_gate  # noqa: E402
 
 REQUEST_PATH = ".chatgpt-terminal/request.json"
 RESULT_PATH = ".chatgpt-terminal/result.json"
@@ -266,6 +267,8 @@ def validate_request(raw: str) -> dict[str, Any]:
     default_cwd = os.environ.get("CHATGPT_TERMINAL_DEFAULT_CWD", str(REPO_ROOT))
     cwd = request.get("cwd", default_cwd)
     timeout = request.get("timeout", 120)
+    intention = reference_gate.required_text(request.get("intention"), "intention")
+    consequence = reference_gate.required_text(request.get("consequence"), "consequence")
 
     if not isinstance(request_id, str) or not request_id.strip() or len(request_id) > 128:
         raise ValueError("id must be a non-empty string <= 128 characters")
@@ -277,7 +280,8 @@ def validate_request(raw: str) -> dict[str, Any]:
         raise ValueError("cwd must be an absolute path <= 1024 characters")
     if not isinstance(timeout, int) or not 1 <= timeout <= terminal_parser.MAX_TIMEOUT:
         raise ValueError(f"timeout must be an integer from 1 to {terminal_parser.MAX_TIMEOUT}")
-    normalized = {"id": request_id.strip(), "argv": argv, "cwd": cwd, "timeout": timeout}
+    normalized = {"id": request_id.strip(), "argv": argv, "cwd": cwd, "timeout": timeout,
+                  "intention": intention, "consequence": consequence}
     encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":")).encode("utf-8")
     normalized["digest"] = hashlib.sha256(encoded).hexdigest()
     return normalized
@@ -303,13 +307,19 @@ def load_result(request_id: str) -> dict[str, Any] | None:
 
 def execute_request(request: dict[str, Any], commit: str, source: Route) -> dict[str, Any]:
     try:
+        action = {"name": "terminal_run", "arguments": {"argv": request["argv"], "cwd": request["cwd"], "timeout": request["timeout"]}}
+        gate = reference_gate.Gate()
+        card = gate.issue(intention=request["intention"], consequence=request["consequence"], action=action)
+        gate.consume(card, action)
         parsed = terminal_parser.run(request["argv"], cwd=request["cwd"], timeout=request["timeout"])
+        gate.complete(card, parsed)
         return {
             "id": request["id"],
             "request_digest": request["digest"],
             "request_commit": commit,
             "source_route": source.key,
             "completed_at": utc_now(),
+            "reference_card": card,
             **parsed,
         }
     except Exception as exc:

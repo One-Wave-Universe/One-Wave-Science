@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import os
 from pathlib import Path
 import tempfile
 import threading
@@ -11,12 +12,17 @@ from unittest import mock
 
 import gateway
 import mudl
+import reference_gate
 
 
 class GatewayTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
+        self.ledger_env = mock.patch.dict(os.environ, {"REFERENCE_GATE_LEDGER": str(root / "reference-receipts.jsonl"),
+                                                    "ONE_WAVE_PROJECT_ROOT": str(Path(__file__).resolve().parent.parent)})
+        self.ledger_env.start()
+        self.ledger = root / "reference-receipts.jsonl"
         self.paths = mock.patch.multiple(
             mudl,
             QUEUE=root,
@@ -37,6 +43,7 @@ class GatewayTests(unittest.TestCase):
         self.server.server_close()
         self.thread.join()
         self.paths.stop()
+        self.ledger_env.stop()
         self.temp.cleanup()
 
     def request(self, path, *, method="GET", body=None, token="test-token", headers=None):
@@ -47,6 +54,18 @@ class GatewayTests(unittest.TestCase):
         request = Request(self.base + path, data=data, headers=request_headers, method=method)
         with urlopen(request) as response:
             return response.status, json.loads(response.read())
+
+    def stamped(self, name, arguments):
+        _, response = self.request("/mcp", method="POST", body={
+            "jsonrpc": "2.0", "id": 100, "method": "tools/call",
+            "params": {"name": "terminal_reference", "arguments": {
+                "intention": f"Verify {name}",
+                "consequence": "Read the returned exit code and output; preserve repository state.",
+                "action": {"name": name, "arguments": arguments},
+            }},
+        })
+        self.assertFalse(response["result"]["isError"])
+        return {**arguments, "reference_card": response["result"]["structuredContent"]["reference_card"]}
 
     def test_requires_authentication(self):
         with self.assertRaises(HTTPError) as caught:
@@ -129,7 +148,7 @@ class GatewayTests(unittest.TestCase):
             "jsonrpc": "2.0", "id": 20, "method": "tools/call",
             "params": {
                 "name": "terminal_run",
-                "arguments": {"argv": ["printf", "AI_TERMINAL_OK"]},
+                "arguments": self.stamped("terminal_run", {"argv": ["printf", "AI_TERMINAL_OK"]}),
             },
         })
         self.assertEqual(status, 200)
@@ -138,13 +157,15 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(result["stdout"], "AI_TERMINAL_OK")
         self.assertEqual(result["exit_code"], 0)
         self.assertIn("cwd", result)
+        phases = [json.loads(line)["phase"] for line in self.ledger.read_text().splitlines()]
+        self.assertEqual(phases, ["issued", "authorized", "observed"])
 
     def test_mcp_terminal_run_accepts_perplexity_style_bash_lc(self):
         status, called = self.request("/mcp", method="POST", body={
             "jsonrpc": "2.0", "id": 22, "method": "tools/call",
             "params": {
                 "name": "terminal_run",
-                "arguments": {"argv": ["bash", "-lc", "printf PERPLEXITY_MCP_OK"]},
+                "arguments": self.stamped("terminal_run", {"argv": ["bash", "-lc", "printf PERPLEXITY_MCP_OK"]}),
             },
         })
         self.assertEqual(status, 200)
@@ -158,7 +179,7 @@ class GatewayTests(unittest.TestCase):
             "jsonrpc": "2.0", "id": 23, "method": "tools/call",
             "params": {
                 "name": "python_run",
-                "arguments": {"code": "print(6 * 7)"},
+                "arguments": self.stamped("python_run", {"code": "print(6 * 7)"}),
             },
         })
         self.assertEqual(status, 200)
@@ -173,10 +194,10 @@ class GatewayTests(unittest.TestCase):
             "jsonrpc": "2.0", "id": 24, "method": "tools/call",
             "params": {
                 "name": "cpp_compile_run",
-                "arguments": {
+                "arguments": self.stamped("cpp_compile_run", {
                     "code": '#include <iostream>\nint main(){std::cout << 42 << "\\n";}',
                     "standard": "c++20",
-                },
+                }),
             },
         })
         self.assertEqual(status, 200)
@@ -194,6 +215,39 @@ class GatewayTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertFalse(called["result"]["isError"])
         self.assertTrue(called["result"]["structuredContent"]["path"])
+
+    def test_executable_tools_hold_without_fresh_reference(self):
+        for name, arguments in (
+            ("terminal_run", {"argv": ["printf", "SHOULD_NOT_RUN"]}),
+            ("python_run", {"code": "print('SHOULD_NOT_RUN')"}),
+            ("cpp_compile_run", {"code": "int main() { return 0; }"}),
+        ):
+            _, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 70, "method": "tools/call",
+                "params": {"name": name, "arguments": arguments},
+            })
+            self.assertTrue(response["result"]["isError"])
+            self.assertIn("reference HOLD", response["result"]["structuredContent"]["error"])
+
+    def test_reference_card_rejects_changed_action_and_replay(self):
+        original = {"argv": ["printf", "SAFE"]}
+        stamped = self.stamped("terminal_run", original)
+        for arguments in ({**stamped, "argv": ["printf", "CHANGED"]}, stamped):
+            _, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 71, "method": "tools/call",
+                "params": {"name": "terminal_run", "arguments": arguments},
+            })
+            self.assertTrue(response["result"]["isError"])
+
+    def test_reference_card_holds_if_repository_changes(self):
+        stamped = self.stamped("terminal_run", {"argv": ["printf", "NEVER"]})
+        with mock.patch.object(reference_gate, "snapshot", return_value={"head": "changed"}):
+            _, response = self.request("/mcp", method="POST", body={
+                "jsonrpc": "2.0", "id": 72, "method": "tools/call",
+                "params": {"name": "terminal_run", "arguments": stamped},
+            })
+        self.assertTrue(response["result"]["isError"])
+        self.assertIn("repository changed", response["result"]["structuredContent"]["error"])
 
     def test_mcp_tool_call_runs_only_named_action(self):
         def worker():

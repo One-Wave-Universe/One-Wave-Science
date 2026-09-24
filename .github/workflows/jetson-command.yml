@@ -116,21 +116,33 @@ jobs:
               "method": "tools/call",
               "params": {"name": "terminal_run", "arguments": arguments},
           }
-          req = urllib.request.Request(
-              os.environ["URL"].rstrip("/") + "/mcp",
-              data=json.dumps(payload).encode(),
-              headers={
-                  "Authorization": "Bearer " + os.environ["GATEWAY_TOKEN"],
-                  "Content-Type": "application/json",
-              },
-              method="POST",
-          )
+          def call(body):
+              req = urllib.request.Request(
+                  os.environ["URL"].rstrip("/") + "/mcp",
+                  data=json.dumps(body).encode(),
+                  headers={
+                      "Authorization": "Bearer " + os.environ["GATEWAY_TOKEN"],
+                      "Content-Type": "application/json",
+                  },
+                  method="POST",
+              )
+              with urllib.request.urlopen(req, timeout=int(os.environ["COMMAND_TIMEOUT"]) + 15) as response:
+                  return json.load(response)
           try:
-              with urllib.request.urlopen(
-                  req,
-                  timeout=int(os.environ["COMMAND_TIMEOUT"]) + 15,
-              ) as response:
-                  envelope = json.load(response)
+              reference = call({
+                  "jsonrpc": "2.0", "id": 0, "method": "tools/call",
+                  "params": {"name": "terminal_reference", "arguments": {
+                      "intention": "Run the human-dispatched Jetson command",
+                      "consequence": "Report actual stdout, stderr, and exit code; inspect changed state before another action.",
+                      "action": {"name": "terminal_run", "arguments": arguments},
+                  }},
+              })
+              card = reference.get("result", {}).get("structuredContent", {}).get("reference_card")
+              if not card:
+                  print(json.dumps(reference), file=sys.stderr)
+                  raise SystemExit("reference HOLD: no card issued")
+              payload["params"]["arguments"]["reference_card"] = card
+              envelope = call(payload)
           except urllib.error.HTTPError as exc:
               sys.stderr.write(exc.read().decode("utf-8", errors="replace"))
               raise SystemExit(1)

@@ -1,5 +1,10 @@
 # AI Jetson Tool Guide
 
+**Reference gate:** Every executable MCP example below requires a fresh
+`reference_card` from `terminal_reference` for that exact action. Follow the
+stamped call pair in `AI_BRIDGE_START_HERE.md`. Unstamped examples are historical
+argument illustrations and now return `reference HOLD`.
+
 This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or other authorized AI instance.
 
 ## Start here

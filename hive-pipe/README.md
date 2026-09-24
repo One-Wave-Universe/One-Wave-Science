@@ -133,19 +133,12 @@ roots as `terminal_run`. See `AI_CODE_BRIDGE.md`.
 
 ## Perplexity test
 
-After installing the current gateway:
+After installing the current gateway, use the stamped MCP call pair in
+`AI_BRIDGE_START_HERE.md`. Direct unstamped calls must return `reference HOLD`.
+The token is read locally; never paste it into the repository.
 
-```bash
-TOKEN="$(cat "$HOME/.config/hive-pipe/tokens/perplexity.token")"
-
-curl -sS \
-  -H "X-API-Key: $TOKEN" \
-  -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":["bash","-lc","printf PERPLEXITY_TERMINAL_OK"]}}}' \
-  http://127.0.0.1:8765/mcp
-```
-
-Expected output contains `PERPLEXITY_TERMINAL_OK` and exit code `0`.
+For an authenticated local probe use `bridge_doctor.py --profile gateway`.
+It stamps and executes a `ONE_WAVE_BRIDGE_OK` terminal call, checking exit 0.
 
 For a Perplexity remote custom connector use:
 
