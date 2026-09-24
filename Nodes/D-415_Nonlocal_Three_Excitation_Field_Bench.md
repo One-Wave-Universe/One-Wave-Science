@@ -96,6 +96,17 @@ The trace additionally records:
 Passing these tests validates the implementation path only.  It does not
 validate the candidate One-Wave law.
 
+## Current architecture links
+
+D-415 is the runnable nonlocal whole-field bench for the three-body challenge.
+
+Use with:
+- D-418 for finite-range current-state parent relay;
+- D-419 for nested parent/child rotational bookkeeping;
+- `NOBEL_READINESS/CHALLENGE_03_THREE_BODY.md` for the proof target.
+
+The global Field state must not be replaced by three independently summed body forces merely to recover a familiar picture.
+
 ## Failure conditions and next work
 
 The present law remains YELLOW because the potential and kernel are candidate
