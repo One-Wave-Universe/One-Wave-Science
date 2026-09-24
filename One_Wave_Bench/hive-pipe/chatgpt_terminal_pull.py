@@ -28,7 +28,7 @@ import time
 from typing import Any, Iterable
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent.parent
+REPO_ROOT = Path(os.environ.get("CHATGPT_TERMINAL_REPO", os.environ.get("ONE_WAVE_PROJECT_ROOT", str(SCRIPT_DIR.parent.parent)))).expanduser().resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 import terminal_parser  # noqa: E402
 import reference_receipt  # noqa: E402
