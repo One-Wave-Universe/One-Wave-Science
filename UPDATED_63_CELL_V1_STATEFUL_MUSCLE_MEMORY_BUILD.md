@@ -234,10 +234,6 @@ The following are retained as explicit experiments because they may map useful c
 NERVE candidate:
 2 flowers = normal + inverted / mirrored pair
 
-M4 candidate:
-2 + 2 flowers or resolved flower-volumes
-= four-layer volumetric test for Views UP / Actions DOWN separation
-
 HIGHER-BRAIN candidate:
 3 / 3 / 3 volumetric expansion
 and/or 3 x 3 x 3 lower-scale units
