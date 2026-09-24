@@ -49,3 +49,12 @@ It owns:
 Field supplies sensory drive and outward action/speech. Void supplies administrative brake/support/contradiction. M4 integrates both, decides whether the action threshold is crossed, and retains the committed result.
 
 This is a software architecture experiment inspired by CELL_V1 concepts; it is not evidence that the physical CELL_V1 mechanism has been demonstrated.
+
+
+## One-Wave Local AI
+
+The first project-owned local AI provider is `providers/one_wave_local.py`.
+
+It is intentionally model-agnostic. The local model provides bounded language inference while One-Wave owns M4 state, hysteresis, memory, Field/Void roles, reference control, quality gates, and sandboxed action authority.
+
+See `ONE_WAVE_LOCAL_AI.md`.
