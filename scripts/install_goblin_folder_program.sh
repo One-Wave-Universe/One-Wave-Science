@@ -5,8 +5,12 @@ REPO_ROOT="${ONE_WAVE_PROJECT_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null 
 PROGRAM_SRC="$REPO_ROOT/scripts/goblin_folder.py"
 BIN_DIR="$HOME/.local/bin"
 APP_DIR="$HOME/.local/share/applications"
+REGISTRY_DIR="$HOME/.local/share/goblin-folder"
 
-mkdir -p "$BIN_DIR" "$APP_DIR"
+mkdir -p "$BIN_DIR" "$APP_DIR" "$REGISTRY_DIR"
+if [[ ! -f "$REGISTRY_DIR/registry.json" ]]; then
+  printf '%s\n' '{"schema":"one-wave-folder-registry-v1","folders":{}}' > "$REGISTRY_DIR/registry.json"
+fi
 install -m 0755 "$PROGRAM_SRC" "$BIN_DIR/goblin-folder"
 
 cat >"$APP_DIR/goblin-folder.desktop" <<EOF
@@ -18,6 +22,16 @@ Exec=$BIN_DIR/goblin-folder type %f
 Terminal=true
 Categories=Development;Utility;
 MimeType=inode/directory;
+EOF
+
+cat >"$APP_DIR/goblin-folder-registry.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=Goblin Folder Registry
+Comment=List registered Goblin Folder Holders and OWATCH nodes
+Exec=$BIN_DIR/goblin-folder registry
+Terminal=true
+Categories=Development;Utility;
 EOF
 
 # Nemo: direct context actions.
@@ -92,4 +106,5 @@ if command -v update-desktop-database >/dev/null 2>&1; then
 fi
 
 echo "GOBLIN_FOLDER_PROGRAM_INSTALLED=$BIN_DIR/goblin-folder"
-"$BIN_DIR/goblin-folder" type "$REPO_ROOT"
+echo "GOBLIN_FOLDER_REGISTRY=$REGISTRY_DIR/registry.json"
+"$BIN_DIR/goblin-folder" registry
