@@ -1,0 +1,16 @@
+{
+  "peers": {
+    "dell": {
+      "routes": [
+        {"type": "mcp", "url": "https://AUTHORIZED-DELL-TUNNEL", "token_file": "~/.config/one-wave-bridge/dell.token"},
+        {"type": "ssh", "host": "USER@VERIFIED_DELL_ADDRESS", "identity_file": "~/.ssh/id_ed25519"}
+      ]
+    },
+    "jetson": {
+      "routes": [
+        {"type": "mcp", "url": "https://AUTHORIZED-JETSON-TUNNEL", "token_file": "~/.config/one-wave-bridge/jetson.token"},
+        {"type": "ssh", "host": "USER@VERIFIED_JETSON_ADDRESS", "identity_file": "~/.ssh/id_ed25519"}
+      ]
+    }
+  }
+}
