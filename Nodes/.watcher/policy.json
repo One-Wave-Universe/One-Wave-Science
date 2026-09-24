@@ -1,0 +1,10 @@
+{
+  "schema": "one-wave-folder-watcher-v1",
+  "folder": "Nodes",
+  "mode": "fail_closed",
+  "require_reference_for_changes": true,
+  "require_intention": true,
+  "require_consequence": true,
+  "intervention": "HOLD",
+  "rule": "Unknown state is inspected, never assumed. Unreferenced changes stop further AI mutation until reconciled."
+}
