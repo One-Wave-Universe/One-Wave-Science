@@ -404,9 +404,6 @@ Required measurements:
 
 Do not promote "short-term" or "long-term" memory from naming alone. Each must have a declared observable and retention interval.
 
-### Rev N — 2+2 M4 candidate
-
-Test four coupled flower/volume layers as a candidate fast routing layer. The specific target is whether upward Views and downward Actions can coexist with lower latency or better isolation than the paired sensor/motor build.
 
 ### Rev M — 3/3/3 higher-brain candidate
 
