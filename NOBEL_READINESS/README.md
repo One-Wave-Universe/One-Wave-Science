@@ -51,6 +51,10 @@ Required:
 
 Mathematics can prove the prediction follows from the model. Observation is still required to establish that the model describes nature.
 
+## Current master map
+
+Start with `MASTER_CHALLENGE_MAP.md` for the integrated chain linking the derivation candidates to canonical Nodes and major challenge programs.
+
 ## Read order
 
 1. `PROOF_LADDER.md` — classify every important claim.
