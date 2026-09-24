@@ -1,12 +1,12 @@
 {
-  "id": "jetson-reference-probe-20260924-02",
+  "id": "repo-split-reference-20260924-01",
   "argv": [
     "bash",
     "-lc",
-    "printf 'JETSON_PULL_EXEC_OK\\n'; hostname; whoami; uname -m; pwd"
+    "for d in /home/Scales/One-Wave-Science /home/Scales/Builds /home/Scales/Mythos-and-Stories /home/Scales/One-Wave-Builds; do if [ -d \"$d/.git\" ]; then printf '\\n=== %s ===\\n' \"$d\"; git -C \"$d\" status --short --branch; git -C \"$d\" remote -v | sed -n '1,4p'; git -C \"$d\" rev-parse HEAD; fi; done"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Prove the current ChatGPT GitHub pull bridge can fetch and execute one harmless identity command on the Jetson without modifying the project checkout.",
-  "consequence": "Read-only identity output only; no repository files, branches, services, credentials, mounts, or devices are modified."
+  "intention": "Verify the actual local Science, Builds, and Mythos repository checkouts and their clean/dirty state before moving any files across repositories.",
+  "consequence": "Read-only repository identity and status output only; no files, branches, remotes, commits, or services are changed."
 }
