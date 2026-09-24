@@ -1,11 +1,14 @@
 {
-  "id": "bridge-mesh-doctor-20260924-01",
+  "id": "direct-bridge-health-20260924-02",
   "argv": [
-    "bash",
-    "-lc",
-    "python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/bridges/hive-pipe/bridge_doctor.py --profile all --json"
+    "python3",
+    "One_Wave_Bench/hive-pipe/bridge_doctor.py",
+    "--profile",
+    "pull",
+    "--json"
   ],
+  "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 120,
-  "intention": "Diagnose the full One-Wave bridge mesh from the isolated runtime without changing the active project checkout.",
-  "consequence": "Read-only bridge health check; no files, services, branches, credentials, or datasets are changed."
+  "intention": "Verify the repaired Jetson pull bridge is executing from the real One-Wave-Science checkout.",
+  "consequence": "Read-only pull bridge health receipt; no repository files, services, credentials, branches, or datasets are changed."
 }
