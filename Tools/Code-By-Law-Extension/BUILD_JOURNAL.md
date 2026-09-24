@@ -2,6 +2,21 @@
 
 Newest verified layer goes first.
 
+## 2026-09-23 — Field/Void multi-AI bridge
+
+- Project: Code by Law browser extension
+- Build step: change AI-to-AI collaboration from a flat council to paired Field/Void architecture
+- Field AI: proposes/builds/executes on its own branch and returns evidence
+- Void AI: independently checks/challenges/compresses and returns ALLOW/CORRECT/HOLD/ESCALATE
+- Same AI instance cannot self-approve its Field work as Void for the same step
+- Both roles reference the same GitHub base HEAD, cumulative checklist, journal, and checkpoint
+- Parallel Field workers use separate branches/PRs with matching Void reviews
+- GitHub issue #147 is the shared AI discussion/planning/handoff room
+- Branches/PRs remain coding/review lanes
+- Tests: PROJECT_TEST_PASS
+- Mozilla lint: 0 errors, 0 notices, 0 warnings
+- Next permitted step: publish Field/Void bridge rule to GitHub and verify read-back
+
 ## 2026-09-23 — Program bridge routing
 
 - Project: Code by Law browser extension

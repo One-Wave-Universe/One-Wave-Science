@@ -40,6 +40,14 @@
     "text": "Split every project into the six most effective cumulative build levels. Level 1 ACTION is the smallest bounded change. Level 2 STEP contains Level 1 plus the new Level 2 work. Level 3 LAYER contains the complete verified record of Levels 1 and 2 plus the new Level 3 work. Level 4 BUILD PHASE contains the complete verified record of Levels 1 through 3 plus the new Level 4 work. Level 5 PROJECT STATE contains the complete verified record of Levels 1 through 4 plus the new Level 5 work. Level 6 PROJECT LOOP contains the complete verified record of Levels 1 through 5 plus the new Level 6 work. Every higher level must therefore contain all previous levels, not only its immediate parent: 1; 1+2; 1+2+3; 1+2+3+4; 1+2+3+4+5; 1+2+3+4+5+6. The same Code by Law checklist applies at every level: goal, why it exists, starting reference/checkpoint, current reference, coder, checker, allowed scope, protected scope, exact action, available execution route when needed, success criteria, tests/checks, Bouncer decision, Checker decision, journal entry, resulting checkpoint, hard stop, and next permitted level. A higher level cannot be marked complete unless all prior levels are preserved inside it and remain verified."
   },
   {
+    "id": "field-void-ai-bridge",
+    "title": "Field / Void AI Bridge",
+    "phase": "COLLABORATION",
+    "priority": 32,
+    "enabled": true,
+    "text": "All multi-AI project collaboration uses paired Field/Void roles. FIELD AI is the expressive builder: it proposes the bounded move, writes or changes code on its own branch, runs the permitted tests, and returns evidence. VOID AI is the independent checker/compressor: it reads the same starting reference, challenges assumptions, checks scope and regressions, compares the actual diff/tests to the checklist, and returns ALLOW, CORRECT, HOLD, or ESCALATE. Field and Void must not be the same AI instance for the same approval step. Both roles must reference the same GitHub repo, branch base, HEAD, cumulative project build, journal, and current checklist before acting. Their outputs are recombined into the next project state only after Void review. For parallel work, each Field AI uses a separate branch/worktree and each Void AI reviews the matching branch/PR. The shared GitHub AI Council issue is for discussion, plan comparison, role assignment, review notes, and handoff; branches/PRs are for code. Every council post must identify AI/provider, FIELD or VOID role, current build level, exact task, source checkpoint, branch/PR, result, evidence, and next handoff."
+  },
+  {
     "id": "bouncer-goblin",
     "title": "Bouncer Goblin",
     "phase": "BOUNCER",

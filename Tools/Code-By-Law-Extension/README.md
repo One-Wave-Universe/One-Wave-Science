@@ -70,3 +70,17 @@ Supported route types include:
 - SSH recovery
 
 The chatbot must choose the authorized route from the project reference, verify the executable/runtime first, record cwd/command/output/exit status/changed files, and use human relay only as a last resort.
+
+
+## Field / Void multi-AI architecture
+
+Every cooperating AI joins as one side of a Field/Void pair.
+
+- **Field AI**: proposes, builds, edits, executes, and produces evidence.
+- **Void AI**: independently checks, challenges, compresses, validates, and returns ALLOW / CORRECT / HOLD / ESCALATE.
+
+The same AI instance cannot approve its own Field work as Void for that step.
+
+Both sides begin from the same GitHub reference, cumulative build checklist, journal, and checkpoint. Field work happens on a dedicated branch/PR. Void reviews that exact branch/PR. The reviewed result becomes the next referenced state.
+
+The GitHub AI Council issue is the shared discussion/planning/handoff room; branches and pull requests are the work/review lanes.
