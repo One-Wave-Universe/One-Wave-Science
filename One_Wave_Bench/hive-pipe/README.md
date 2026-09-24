@@ -1,6 +1,6 @@
 # Hive Pipe v3
 
-Start with [`AI_BRIDGE_START_HERE.md`](../../AI_BRIDGE_START_HERE.md). It contains
+Start with [`One_Wave_Bench/AI_BRIDGE_START_HERE.md`](../AI_BRIDGE_START_HERE.md) and [`BRIDGE_DIRECTIONS.md`](BRIDGE_DIRECTIONS.md). It contains
 the supported route order, exact smoke tests, pull-bridge request/result format,
 and the unified read-only health command:
 

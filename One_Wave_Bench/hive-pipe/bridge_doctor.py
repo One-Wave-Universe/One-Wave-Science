@@ -60,6 +60,8 @@ def run(argv: list[str], *, cwd: Path = REPO_ROOT, timeout: int = 30) -> subproc
 def static_checks() -> list[Check]:
     checks: list[Check] = []
     required = [
+        "One_Wave_Bench/AI_BRIDGE_START_HERE.md",
+        "One_Wave_Bench/hive-pipe/BRIDGE_DIRECTIONS.md",
         "One_Wave_Bench/hive-pipe/gateway.py",
         "One_Wave_Bench/hive-pipe/terminal_parser.py",
         "One_Wave_Bench/hive-pipe/install_gateway.sh",
