@@ -12,7 +12,7 @@ ChatGPT GitHub connector
   -> chatgpt-terminal branch
   -> .chatgpt-terminal/request.json
   -> laptop/Jetson user service polls primary and backup Git routes
-  -> hive-pipe/terminal_parser.py
+  -> One_Wave_Bench/hive-pipe/terminal_parser.py
   -> local non-root command on the machine running the service
   -> .chatgpt-terminal/result.json
   -> target-machine git push
@@ -20,7 +20,7 @@ ChatGPT GitHub connector
 ```
 
 The worker does not use the remote MCP bearer token because execution occurs on
-the target machine itself. It deliberately reuses `hive-pipe/terminal_parser.py`,
+the target machine itself. It deliberately reuses `One_Wave_Bench/hive-pipe/terminal_parser.py`,
 so blocked programs (including inside shell wrappers), sensitive-path checks,
 timeout/output limits, and authorized work-root checks remain in force.
 
@@ -68,9 +68,9 @@ Only that bridge runtime is reset to `origin/main`. The user's active project ch
 
 ## Files
 
-- `hive-pipe/chatgpt_terminal_pull.py` — polling/execution/result worker
-- `hive-pipe/install_chatgpt_terminal_pull.sh` — isolated-runtime user-systemd installer
-- `hive-pipe/bootstrap_chatgpt_terminal_pull.sh` — fetch-only bootstrap helper
+- `One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py` — polling/execution/result worker
+- `One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh` — isolated-runtime user-systemd installer
+- `One_Wave_Bench/hive-pipe/bootstrap_chatgpt_terminal_pull.sh` — fetch-only bootstrap helper
 - dedicated transport branch: `chatgpt-terminal`
 - request: `.chatgpt-terminal/request.json`
 - result: `.chatgpt-terminal/result.json`
@@ -82,7 +82,7 @@ From inside the existing checkout on the machine to control:
 ```bash
 cd "$HOME/One-Wave-Science"
 git fetch origin main
-git show origin/main:hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
+git show origin/main:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
 ```
 
 This reads the current installer directly from `origin/main` without merging
@@ -161,5 +161,5 @@ The service runs as the normal user with `NoNewPrivileges=true`, `ProtectSystem=
 Run the full existing Hive Pipe suite, including the compatibility tests:
 
 ```bash
-PYTHONPATH=hive-pipe python3 -m unittest discover -s hive-pipe -p 'test_*.py' -v
+PYTHONPATH=One_Wave_Bench/hive-pipe python3 -m unittest discover -s One_Wave_Bench/hive-pipe -p 'test_*.py' -v
 ```

@@ -5,7 +5,7 @@ the supported route order, exact smoke tests, pull-bridge request/result format,
 and the unified read-only health command:
 
 ```bash
-python3 hive-pipe/bridge_doctor.py --profile all
+python3 One_Wave_Bench/hive-pipe/bridge_doctor.py --profile all
 ```
 
 Hive Pipe is the authenticated Jetson-side tool gateway used by AI clients,
@@ -34,9 +34,9 @@ MCP / authenticated HTTP
 Use:
 
 ```text
-hive-pipe/gateway.py
-hive-pipe/terminal_parser.py
-hive-pipe/install_gateway.sh
+One_Wave_Bench/hive-pipe/gateway.py
+One_Wave_Bench/hive-pipe/terminal_parser.py
+One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 The gateway binds to `127.0.0.1:8765` and exposes MCP at `/mcp`.
@@ -47,7 +47,7 @@ same port. `scripts/install_jetson_gateway.sh` delegates to this installer.
 
 ```bash
 cd "$HOME/One-Wave-Science"
-bash hive-pipe/install_gateway.sh
+bash One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 This installs/restarts `hive-pipe-agent.service` and
@@ -65,7 +65,7 @@ Tokens live under `~/.config/hive-pipe/tokens/` and remain outside git.
 Add another client with:
 
 ```bash
-bash hive-pipe/create_client_token.sh CLIENT_NAME
+bash One_Wave_Bench/hive-pipe/create_client_token.sh CLIENT_NAME
 ```
 
 ## Authentication
@@ -171,7 +171,7 @@ external drives, reinstall with an explicit colon-separated list:
 
 ```bash
 HIVE_PIPE_ALLOWED_ROOTS="/home/Scales/One-Wave-Science:/mnt/lattice:/mnt/sandbox" \
-  bash hive-pipe/install_gateway.sh
+  bash One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 Only name the dedicated work directories, never a whole drive root. Each path

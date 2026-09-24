@@ -36,7 +36,7 @@ class BridgeDoctorTests(unittest.TestCase):
         self.assertEqual(check.status, bridge_doctor.NOT_CONFIGURED)
 
     def test_pull_installer_prepares_both_routes_and_external_work_root(self):
-        installer = (bridge_doctor.REPO_ROOT / "hive-pipe/install_chatgpt_terminal_pull.sh").read_text()
+        installer = (bridge_doctor.REPO_ROOT / "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh").read_text()
         self.assertIn("chatgpt-terminal-backup", installer)
         self.assertIn("EXTERNAL_WORK_ROOT", installer)
         self.assertIn("bridge_doctor.py\" --profile pull", installer)

@@ -153,7 +153,7 @@ chmod 600 "$RELAY_HOME/.api-key" "$RELAY_HOME/state.json" 2>/dev/null || true
 
 export DEEPSEEK_WEB_BASE_URL="http://127.0.0.1:$PORT"
 export DEEPSEEK_WEB_API_KEY_FILE="$RELAY_HOME/.api-key"
-python3 "$REPO_ROOT/hive-pipe/deepseek_web_bridge.py" --relay-health --mcp-smoke
+python3 "$REPO_ROOT/One_Wave_Bench/hive-pipe/deepseek_web_bridge.py" --relay-health --mcp-smoke
 
 echo "DEEPSEEK_WEB_RELAY_READY"
 echo "worker: bash scripts/deepseek_web_worker.sh 'your task'"

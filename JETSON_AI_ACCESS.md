@@ -45,9 +45,9 @@ remain blocked. Normal development shell wrappers such as `bash -lc` are support
 Use:
 
 ```text
-hive-pipe/gateway.py
-hive-pipe/terminal_parser.py
-hive-pipe/install_gateway.sh
+One_Wave_Bench/hive-pipe/gateway.py
+One_Wave_Bench/hive-pipe/terminal_parser.py
+One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 Do **not** start `scripts/jetson_gateway.py` alongside Hive Pipe. Both use port
@@ -62,7 +62,7 @@ From the real checkout:
 ```bash
 cd "$HOME/One-Wave-Science"
 git pull --ff-only origin main
-bash hive-pipe/install_gateway.sh
+bash One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 The installer creates and starts:

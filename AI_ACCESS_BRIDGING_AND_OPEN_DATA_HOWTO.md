@@ -4,7 +4,7 @@ For bridge selection, health checks, and exact client request/receipt formats,
 start with [`AI_BRIDGE_START_HERE.md`](AI_BRIDGE_START_HERE.md). Run:
 
 ```bash
-python3 hive-pipe/bridge_doctor.py --profile all
+python3 One_Wave_Bench/hive-pipe/bridge_doctor.py --profile all
 ```
 
 This longer guide remains the detailed reference for repository work and public
@@ -185,9 +185,9 @@ If `git fetch origin` works but `git push` fails, the problem is GitHub write au
 Use:
 
 ```text
-hive-pipe/gateway.py
-hive-pipe/terminal_parser.py
-hive-pipe/install_gateway.sh
+One_Wave_Bench/hive-pipe/gateway.py
+One_Wave_Bench/hive-pipe/terminal_parser.py
+One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 Do not start the old `scripts/jetson_gateway.py` beside Hive Pipe. Both use port `8765`.
@@ -196,7 +196,7 @@ Install or restart from the Jetson checkout:
 
 ```bash
 cd "$HOME/One-Wave-Science"
-bash hive-pipe/install_gateway.sh
+bash One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 Check services:
@@ -272,12 +272,12 @@ Create another client token with:
 
 ```bash
 cd "$HOME/One-Wave-Science"
-bash hive-pipe/create_client_token.sh CLIENT_NAME
+bash One_Wave_Bench/hive-pipe/create_client_token.sh CLIENT_NAME
 ```
 
 Never commit a token or paste it into public repo files.
 
-The gateway accepts common authentication forms including Bearer token and API-key headers. See `AI_JETSON_TOOL_GUIDE.md` and `hive-pipe/README.md` for the current forms.
+The gateway accepts common authentication forms including Bearer token and API-key headers. See `AI_JETSON_TOOL_GUIDE.md` and `One_Wave_Bench/hive-pipe/README.md` for the current forms.
 
 ## 9. Local MCP smoke test
 
@@ -429,7 +429,7 @@ Example:
 }
 ```
 
-Perplexity-specific setup is documented in `AI_JETSON_TOOL_GUIDE.md` and `hive-pipe/README.md`.
+Perplexity-specific setup is documented in `AI_JETSON_TOOL_GUIDE.md` and `One_Wave_Bench/hive-pipe/README.md`.
 
 Gemini also has a separate official CLI lane documented in `JETSON_GEMINI_MINIMAL.md`. That lane is distinct from Hive Pipe credentials.
 
@@ -441,23 +441,23 @@ Create its Hive Pipe token:
 
 ```bash
 cd "$HOME/One-Wave-Science"
-bash hive-pipe/create_client_token.sh deepseek
+bash One_Wave_Bench/hive-pipe/create_client_token.sh deepseek
 ```
 
 Smoke-test the Jetson half first:
 
 ```bash
-python3 hive-pipe/deepseek_bridge.py --mcp-smoke
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py --mcp-smoke
 ```
 
 Then, only if the external DeepSeek API is intentionally being used, configure its API credential outside git and run:
 
 ```bash
-python3 hive-pipe/deepseek_bridge.py \
+python3 One_Wave_Bench/hive-pipe/deepseek_bridge.py \
   'Inspect the current git status and report the smallest next verification command.'
 ```
 
-Full details: `hive-pipe/DEEPSEEK_BRIDGE.md`.
+Full details: `One_Wave_Bench/hive-pipe/DEEPSEEK_BRIDGE.md`.
 
 ## 12. GitHub Actions -> Jetson
 
@@ -566,7 +566,7 @@ Hive Pipe can be reinstalled with explicitly allowed work roots, for example:
 
 ```bash
 HIVE_PIPE_ALLOWED_ROOTS="/home/Scales/One-Wave-Science:/mnt/lattice:/mnt/sandbox" \
-  bash hive-pipe/install_gateway.sh
+  bash One_Wave_Bench/hive-pipe/install_gateway.sh
 ```
 
 Do not authorize an entire drive root merely for convenience. Create dedicated writable directories and authorize only those.
@@ -1053,14 +1053,14 @@ Read these when details change:
 AI_JETSON_TOOL_GUIDE.md
 JETSON_AI_ACCESS.md
 AI_CODE_BRIDGE.md
-hive-pipe/README.md
-hive-pipe/DEEPSEEK_BRIDGE.md
+One_Wave_Bench/hive-pipe/README.md
+One_Wave_Bench/hive-pipe/DEEPSEEK_BRIDGE.md
 JETSON_GEMINI_MINIMAL.md
 External_Work/README.md
 AGENTS.md
 ```
 
-For Hive Pipe runtime behavior, prefer the current `hive-pipe/README.md` and `AI_JETSON_TOOL_GUIDE.md` over old examples copied into historical notes.
+For Hive Pipe runtime behavior, prefer the current `One_Wave_Bench/hive-pipe/README.md` and `AI_JETSON_TOOL_GUIDE.md` over old examples copied into historical notes.
 
 ---
 

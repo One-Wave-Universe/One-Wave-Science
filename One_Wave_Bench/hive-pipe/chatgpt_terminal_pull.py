@@ -28,7 +28,7 @@ import time
 from typing import Any, Iterable
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
+REPO_ROOT = SCRIPT_DIR.parent.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 import terminal_parser  # noqa: E402
 

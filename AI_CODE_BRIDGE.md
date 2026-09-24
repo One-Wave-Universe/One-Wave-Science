@@ -139,7 +139,7 @@ From the canonical Jetson checkout:
 ```bash
 cd /home/Scales/One-Wave-Science
 git pull --ff-only origin main
-bash hive-pipe/install_gateway.sh
+bash One_Wave_Bench/hive-pipe/install_gateway.sh
 systemctl --user is-active hive-pipe-agent.service hive-pipe-gateway.service
 ```
 
@@ -150,5 +150,5 @@ See also:
 ```text
 AI_JETSON_TOOL_GUIDE.md
 JETSON_AI_ACCESS.md
-hive-pipe/README.md
+One_Wave_Bench/hive-pipe/README.md
 ```

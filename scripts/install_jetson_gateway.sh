@@ -7,7 +7,7 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
 }
 cd "$ROOT"
 
-CANONICAL="$ROOT/hive-pipe/install_gateway.sh"
+CANONICAL="$ROOT/One_Wave_Bench/hive-pipe/install_gateway.sh"
 [[ -f "$CANONICAL" ]] || {
   echo "ERROR: missing canonical Hive Pipe installer: $CANONICAL" >&2
   exit 1
@@ -28,5 +28,5 @@ if [[ -s "$OLD_TOKEN" && ! -e "$CODEX_TOKEN" ]]; then
 fi
 
 echo "scripts/install_jetson_gateway.sh is now a compatibility entrypoint."
-echo "Canonical gateway: hive-pipe/install_gateway.sh (MCP terminal parser)."
+echo "Canonical gateway: One_Wave_Bench/hive-pipe/install_gateway.sh (MCP terminal parser)."
 exec bash "$CANONICAL"

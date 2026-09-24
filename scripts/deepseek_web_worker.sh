@@ -63,4 +63,4 @@ fi
 
 export DEEPSEEK_WEB_BASE_URL="http://127.0.0.1:$PORT"
 export DEEPSEEK_WEB_API_KEY_FILE="$RELAY_HOME/.api-key"
-exec python3 "$REPO_ROOT/hive-pipe/deepseek_web_bridge.py" "$@"
+exec python3 "$REPO_ROOT/One_Wave_Bench/hive-pipe/deepseek_web_bridge.py" "$@"

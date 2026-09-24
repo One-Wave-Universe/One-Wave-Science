@@ -17,7 +17,7 @@ Relay endpoint:
   DEEPSEEK_WEB_BASE_URL defaults to http://127.0.0.1:3000
 
 Hive Pipe authentication and command boundaries are inherited unchanged from
-hive-pipe/deepseek_bridge.py.
+One_Wave_Bench/hive-pipe/deepseek_bridge.py.
 """
 
 from __future__ import annotations
