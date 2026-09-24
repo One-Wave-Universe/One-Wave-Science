@@ -26,3 +26,19 @@ Then open `http://127.0.0.1:8790/`.
 
 ## Boundary
 This is a software model for exercising the CELL_V1 architecture. It does not establish that the physical hardware implementation has been proven.
+
+
+## Miniverse integration target
+
+The next integration is:
+
+```text
+Miniverse body load / pressure / strain / gyro-style signals
+    -> A/B/C differential inputs
+    -> CELL_V1 Petri Dish state
+    -> lean / hysteresis / memory / reinjection
+    -> M4 body-state packet
+    -> Field/Void council loop
+```
+
+That keeps the visible cell as the inspectable software primitive underneath the AI body instead of hiding the state inside the model.
