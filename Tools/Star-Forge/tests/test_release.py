@@ -1,4 +1,5 @@
-import os, tempfile
+import os, tempfile, subprocess
+from pathlib import Path
 os.environ["XDG_DATA_HOME"] = tempfile.mkdtemp()
 
 from star_forge.state import (
@@ -9,6 +10,7 @@ from star_forge.state import (
 
 s=load_state()
 s["project"]["goal"]="Build useful, simple, verified programs"
+assert not s["project"]["repo_path"]
 step=add_plan_step(s,"Build smallest program","Create one bounded program and test it",2)
 set_step_scope(
     s, step["id"],
@@ -23,9 +25,24 @@ upsert_toc_entry(
     program="python",tests=["tests/test_hello.py"],
     validation_stage="CONCEPT",purpose="Prove Star Forge build loop"
 )
+try:
+    assign_pair(s,"Field AI","Void AI")
+except ValueError as exc:
+    assert "Reference HOLD" in str(exc)
+else:
+    raise AssertionError("Assignment passed without a verified checkout")
+checkout = Path(tempfile.mkdtemp())
+def git(*args):
+    subprocess.run(["git", "-C", str(checkout), *args], check=True, capture_output=True)
+git("init", "-b", "main")
+(checkout / "AGENTS.md").write_text("Reference before action.\n")
+git("add", "AGENTS.md")
+git("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-m", "baseline")
+s["project"]["repo_path"] = str(checkout)
 a=assign_pair(s,"Field AI","Void AI")
 assert a["branch"]=="field/first-program"
 assert a["allowed_files"]==["src/hello.py","tests/test_hello.py"]
+assert a["reference"]["verified_checkout"]["head"]
 
 blocked=False
 try:
@@ -34,8 +51,23 @@ except ValueError:
     blocked=True
 assert blocked
 
+try:
+    resolve_active(s,"ALLOW","Field test PASS; Void independently checked diff and result.")
+except ValueError as exc:
+    assert "assigned branch" in str(exc)
+else:
+    raise AssertionError("Unmoved checkout passed")
+
+git("switch", "-c", "field/first-program")
+(checkout / "src").mkdir()
+(checkout / "src/hello.py").write_text("print('hello')\n")
+git("add", "src/hello.py")
+git("-c", "user.name=Test", "-c", "user.email=test@example.invalid", "commit", "-m", "first program")
+
 resolve_active(s,"ALLOW","Field test PASS; Void independently checked diff and result.")
 assert s["project"]["status"]=="COMPLETE"
+assert s["journal"][0]["original_reference"] == a["reference"]
+assert s["journal"][0]["observed_checkout"]["branch"] == "field/first-program"
 
 record_validation_evidence(s,"CIRCUIT_SIMULATION","Simulator passed",source="future-ngspice")
 set_usefulness(

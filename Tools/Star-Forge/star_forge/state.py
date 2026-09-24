@@ -1,6 +1,8 @@
 from __future__ import annotations
 import json
 import os
+import hashlib
+import subprocess
 import shutil
 import time
 import uuid
@@ -19,6 +21,7 @@ DEFAULT_STATE = {
     "project": {
         "name": "Star Forge",
         "repo": "https://github.com/One-Wave-Universe/One-Wave-Science",
+        "repo_path": "",
         "base_branch": "main",
         "base_head": "",
         "goal": "",
@@ -73,6 +76,31 @@ DEFAULT_STATE = {
 
 def now():
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+def checked_repo_reference(state):
+    """Read the real checkout; never accept a typed HEAD as reference proof."""
+    raw = state["project"].get("repo_path", "")
+    if not raw or not Path(raw).is_dir():
+        raise ValueError("Reference HOLD: choose an existing local repository checkout.")
+    path = Path(raw).expanduser().resolve()
+    def git(*args):
+        result = subprocess.run(["git", "-C", str(path), *args], capture_output=True, text=True, timeout=10)
+        if result.returncode:
+            raise ValueError(f"Reference HOLD: git {' '.join(args)} failed: {result.stderr.strip()}")
+        return result.stdout.strip()
+    root = Path(git("rev-parse", "--show-toplevel")).resolve()
+    if root != path:
+        raise ValueError("Reference HOLD: select the repository root, not a subdirectory.")
+    head = git("rev-parse", "HEAD")
+    branch = git("branch", "--show-current")
+    status = git("status", "--porcelain", "-uno")
+    if not branch:
+        raise ValueError("Reference HOLD: choose a named branch or worktree.")
+    authority = root / "AGENTS.md"
+    if not authority.is_file():
+        raise ValueError("Reference HOLD: AGENTS.md is missing from the checkout.")
+    return {"time": now(), "root": str(root), "branch": branch, "head": head,
+            "status": status, "agents_sha256": hashlib.sha256(authority.read_bytes()).hexdigest()}
 
 def app_data_dir():
     base = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share"))
@@ -215,6 +243,9 @@ def assign_pair(state, field_name, void_name):
     step = active_step(state)
     if not step:
         raise ValueError("No active project step.")
+    verified_reference = checked_repo_reference(state)
+    state["project"]["base_branch"] = verified_reference["branch"]
+    state["project"]["base_head"] = verified_reference["head"]
     bridge = choose_bridge(state, step)
     if not bridge:
         state["project"]["status"] = "HOLD"
@@ -232,7 +263,7 @@ def assign_pair(state, field_name, void_name):
         "protected_files": step.get("protected_files", []),
         "validation_stage": step.get("validation_stage") or state.get("validation", {}).get("stage"),
         "status": "assigned",
-        "reference": mediator_reference(state),
+        "reference": {**mediator_reference(state), "verified_checkout": verified_reference},
         "created_at": now(),
     }
     state["assignments"].append(assignment)
@@ -253,18 +284,29 @@ def resolve_active(state, verdict, evidence, unresolved=""):
     if not step:
         raise ValueError("No active project step.")
     assignment = next((a for a in reversed(state["assignments"]) if a["step_id"] == step["id"]), None)
+    observed = None
 
     if verdict == "ALLOW":
         if not assignment:
             raise ValueError("Mediator cannot ALLOW without a Field/Void assignment.")
         if not assignment.get("reference"):
             raise ValueError("Mediator cannot ALLOW without a supplied reference packet.")
+        if not assignment["reference"].get("verified_checkout"):
+            raise ValueError("Mediator cannot ALLOW without a verified checkout reference.")
         if not assignment.get("field") or not assignment.get("void"):
             raise ValueError("Mediator requires both Field and Void.")
         if assignment.get("field").strip().lower() == assignment.get("void").strip().lower():
             raise ValueError("Field and Void must be independent identities.")
         if not evidence.strip():
             raise ValueError("Mediator cannot ALLOW without test/check evidence.")
+        observed = checked_repo_reference(state)
+        original = assignment["reference"]["verified_checkout"]
+        if observed["root"] != original["root"] or observed["agents_sha256"] != original["agents_sha256"]:
+            raise ValueError("Reference HOLD: checkout or governing instructions changed.")
+        if observed["branch"] != assignment["branch"]:
+            raise ValueError("Reference HOLD: Field has not reached its assigned branch.")
+        if observed["head"] == original["head"] and observed["status"] == original["status"]:
+            raise ValueError("Reference HOLD: no observable change from the assigned baseline.")
     journal = {
         "time": now(),
         "step_id": step["id"],
@@ -278,6 +320,8 @@ def resolve_active(state, verdict, evidence, unresolved=""):
         "evidence": evidence.strip(),
         "unresolved": unresolved.strip(),
         "starting_checkpoint": state["project"].get("checkpoint"),
+        "original_reference": assignment.get("reference") if assignment else None,
+        "observed_checkout": observed,
         "layer": assignment.get("layer") if assignment else step.get("layer"),
         "branch_scope": assignment.get("branch") if assignment else step.get("branch_scope", ""),
         "allowed_files": assignment.get("allowed_files", []) if assignment else step.get("allowed_files", []),
