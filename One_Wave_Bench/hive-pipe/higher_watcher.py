@@ -10,7 +10,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-WATCHER_DIRNAME=".watcher"
+WATCHER_DIRNAME=".owatch"
 HOLD_NAME="HOLD.json"
 INDEX_NAME="index.json"
 
