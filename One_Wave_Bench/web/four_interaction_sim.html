@@ -150,7 +150,7 @@ function buildWaveMap(d){
   const kn=d.Z_K_three_vortex_knot; if(env(kn))m["knot"]=env(kn);
   return m;
 }
-fetch('data/waves_bundle.json').then(r=>r.json()).then(d=>{WAVES=d; WAVEMAP=buildWaveMap(d);
+fetch('../data/waves_bundle.json').then(r=>r.json()).then(d=>{WAVES=d; WAVEMAP=buildWaveMap(d);
   const nM=Object.keys(WAVEMAP).filter(k=>k.indexOf('mirror:')==0).length;
   const nE=Object.keys(WAVEMAP).filter(k=>k.indexOf('electric:')==0).length;
   const nT=Object.keys(WAVEMAP).filter(k=>k.indexOf('weave:')==0).length;

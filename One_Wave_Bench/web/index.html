@@ -60,15 +60,15 @@ a.link{color:var(--cyan);text-decoration:none}
   <!-- LEFT: live sim + run ledger -->
   <div class="col">
     <section class="panel lab">
-      <div class="phead"><h2>Live simulation · D-413</h2><a class="link" href="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html" target="_blank">Open full screen ↗</a></div>
-      <iframe title="D-413" src="../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html"></iframe>
+      <div class="phead"><h2>Live simulation · D-413</h2><a class="link" href="../../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html" target="_blank">Open full screen ↗</a></div>
+      <iframe title="D-413" src="../../Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/index.html"></iframe>
       <div class="pbody"><p class="copy">Native 2D triangular Ground · imposed curvature well · bounded displacement shell. This is the same engine the experiment runner drives headlessly, so the picture you watch and the numbers the AI computes come from one update law.</p></div>
     </section>
 
     <section class="panel lab">
       <div class="phead"><h2>Live simulation · D-414 · four interactions</h2><a class="link" href="four_interaction_sim.html" target="_blank">Open full screen ↗</a></div>
       <iframe title="D-414" src="four_interaction_sim.html" style="height:700px"></iframe>
-      <div class="pbody"><p class="copy">The four interactions of one wave — knot Z_K (proton three-vortex braids), electrical shell Z_E, Mirror Gate Z_M, Boundary-Tension Weave Z_T (toroidal flow) — each driven by real experimental data used as wave data: LIGO GW150914 strain, EEG cortical voltage, reactor neutron kinetics (Keepin U-235), and proton CODATA anchors.</p><p class="note">Yellow reduced model (D-414). Candidate geometry and couplings; does not derive gravity, charge, the proton, or Mass Effect. See <a class="link" href="../Wiki_Pages/D-414_Wiki_Page.html" target="_blank">the D-414 wiki page</a>.</p></div>
+      <div class="pbody"><p class="copy">The four interactions of one wave — knot Z_K (proton three-vortex braids), electrical shell Z_E, Mirror Gate Z_M, Boundary-Tension Weave Z_T (toroidal flow) — each driven by real experimental data used as wave data: LIGO GW150914 strain, EEG cortical voltage, reactor neutron kinetics (Keepin U-235), and proton CODATA anchors.</p><p class="note">Yellow reduced model (D-414). Candidate geometry and couplings; does not derive gravity, charge, the proton, or Mass Effect. See <a class="link" href="../../Wiki_Pages/D-414_Wiki_Page.html" target="_blank">the D-414 wiki page</a>.</p></div>
     </section>
 
     <section class="panel">
@@ -135,7 +135,7 @@ function spark(canvas, xs, ys, color){
   c.strokeStyle=color;c.lineWidth=2.5;c.beginPath();xs.forEach((x,i)=>{const X=px(x),Y=py(ys[i]);i?c.lineTo(X,Y):c.moveTo(X,Y)});c.stroke();
 }
 
-fetch('runs/manifest.json').then(r=>r.json()).then(m=>{
+fetch('../runs/manifest.json').then(r=>r.json()).then(m=>{
   $('#runcount').textContent=`${m.run_count} runs`;
   const L=$('#ledger');L.innerHTML='';
   m.runs.forEach(run=>{
