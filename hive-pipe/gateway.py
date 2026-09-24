@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
 import hmac
 import json
 import os
@@ -233,6 +235,25 @@ def handle_terminal_tool(request_id: object, name: str, arguments: object) -> di
         }, failed=True)
 
 
+def _stamped_tool_response(envelope: dict, action_card: dict) -> dict:
+    """Bind each MCP tool response to its verified action reference."""
+    after = terminal_parser._project_reference()
+    response_card = {
+        "stamped_at": datetime.now(timezone.utc).isoformat(),
+        "goblin": "checker",
+        "action_sha256": action_card["action_sha256"],
+        "repository": after,
+    }
+    result = envelope.get("result")
+    if not isinstance(result, dict) or not isinstance(result.get("structuredContent"), dict):
+        raise ValueError("MCP tool response lacks structured content for reference stamp")
+    content = result["structuredContent"]
+    content["reference_card"] = action_card
+    content["response_card"] = response_card
+    result["content"] = [{"type": "text", "text": json.dumps(content, sort_keys=True)}]
+    return envelope
+
+
 def handle_mcp(payload: object) -> dict | None:
     if not isinstance(payload, dict) or payload.get("jsonrpc") != "2.0":
         return mcp_error(None, -32600, "Invalid Request")
@@ -256,17 +277,27 @@ def handle_mcp(payload: object) -> dict | None:
             return mcp_error(request_id, -32602, "Invalid params")
         name = params.get("name")
         arguments = params.get("arguments", {})
+        try:
+            before = terminal_parser._project_reference()
+        except (OSError, ValueError, subprocess.SubprocessError) as error:
+            return mcp_error(request_id, -32603, f"Reference Goblin HOLD: {error}")
+        action_card = {
+            "stamped_at": datetime.now(timezone.utc).isoformat(),
+            "goblin": "reference",
+            "action_sha256": hashlib.sha256(json.dumps({"name": name, "arguments": arguments}, sort_keys=True).encode()).hexdigest(),
+            "repository": before,
+        }
         if name in {"terminal_reference", "terminal_pwd", "terminal_which", "terminal_run", "python_run", "cpp_compile_run"}:
-            return handle_terminal_tool(request_id, name, arguments)
+            return _stamped_tool_response(handle_terminal_tool(request_id, name, arguments), action_card)
         if name not in MCP_TOOLS or arguments != {}:
             return mcp_error(request_id, -32602, "Unknown tool or non-empty arguments")
         try:
             queued = mudl.enqueue(name)
             job_id = json.loads(queued.read_text(encoding="utf-8"))["id"]
             result = wait_for_result(job_id)
-            return tool_result(request_id, result, failed=result.get("exit_code") != 0)
+            return _stamped_tool_response(tool_result(request_id, result, failed=result.get("exit_code") != 0), action_card)
         except (OSError, ValueError, TimeoutError, json.JSONDecodeError) as error:
-            return tool_result(request_id, {"ok": False, "error": str(error)}, failed=True)
+            return _stamped_tool_response(tool_result(request_id, {"ok": False, "error": str(error)}, failed=True), action_card)
     return mcp_error(request_id, -32601, "Method not found")
 
 
