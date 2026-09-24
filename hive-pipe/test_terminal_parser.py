@@ -49,6 +49,10 @@ class TerminalParserTests(unittest.TestCase):
         self.assertEqual(result["reference_before"]["head"], result["reference_after"]["head"])
         self.assertEqual(result["reference_before"]["root"], str(terminal_parser.REPO_ROOT))
         self.assertFalse(result["reference_changed"])
+        self.assertEqual(result["reference_card"]["goblin"], "reference")
+        self.assertEqual(result["response_card"]["goblin"], "checker")
+        self.assertEqual(result["reference_card"]["action_sha256"], result["response_card"]["action_sha256"])
+        self.assertIn("+00:00", result["response_card"]["stamped_at"])
 
     def test_missing_project_reference_blocks_command_before_execution(self):
         with tempfile.TemporaryDirectory() as directory:
