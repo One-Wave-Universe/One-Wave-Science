@@ -9,6 +9,7 @@ them for routine terminal work.
 
 from __future__ import annotations
 
+import hashlib
 import os
 from pathlib import Path
 import shlex
@@ -274,6 +275,32 @@ def which(name: str) -> dict[str, Any]:
     return {"ok": found is not None, "name": name, "path": found}
 
 
+
+def _project_reference() -> dict[str, str]:
+    """Fail closed unless the configured project checkout and instructions are readable."""
+    root = Path(os.environ.get("ONE_WAVE_PROJECT_ROOT", str(REPO_ROOT))).expanduser().resolve()
+    if not (root / "AGENTS.md").is_file():
+        raise ValueError(f"reference unavailable: AGENTS.md missing in {root}")
+    def git(*args: str) -> str:
+        result = subprocess.run(["git", "-C", str(root), *args], text=True,
+                                capture_output=True, timeout=10, check=False)
+        if result.returncode:
+            raise ValueError(f"reference unavailable: git {' '.join(args)} failed in {root}")
+        return result.stdout.strip()
+    actual = Path(git("rev-parse", "--show-toplevel")).resolve()
+    if actual != root:
+        raise ValueError(f"reference root mismatch: expected {root}, found {actual}")
+    instructions = (root / "AGENTS.md").read_bytes()
+    return {
+        "root": str(root),
+        "remote": git("remote", "get-url", "origin"),
+        "branch": git("branch", "--show-current"),
+        "head": git("rev-parse", "HEAD"),
+        "status": git("status", "--porcelain"),
+        "agents_sha256": hashlib.sha256(instructions).hexdigest(),
+    }
+
+
 def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[str, Any]:
     command = _validate_argv(argv)
     target = _validate_cwd(cwd)
@@ -282,6 +309,7 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
     except (TypeError, ValueError):
         raise ValueError("timeout must be an integer number of seconds")
 
+    before = _project_reference()
     started = time.monotonic()
     env = os.environ.copy()
     env.setdefault("LANG", "C.UTF-8")
@@ -299,7 +327,11 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
         )
         stdout, stdout_clipped = _clip(completed.stdout)
         stderr, stderr_clipped = _clip(completed.stderr)
+        after = _project_reference()
         return _with_guidance({
+            "reference_before": before,
+            "reference_after": after,
+            "reference_changed": before != after,
             "ok": completed.returncode == 0,
             "argv": command,
             "cwd": str(target),
@@ -318,7 +350,11 @@ def run(argv: Any, cwd: str | None = None, timeout: int | float = 60) -> dict[st
             err = err.decode("utf-8", errors="replace")
         stdout, stdout_clipped = _clip(out)
         stderr, stderr_clipped = _clip(err)
+        after = _project_reference()
         return _with_guidance({
+            "reference_before": before,
+            "reference_after": after,
+            "reference_changed": before != after,
             "ok": False,
             "argv": command,
             "cwd": str(target),
