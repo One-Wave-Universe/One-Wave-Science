@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Safe bootstrap for a Jetson checkout whose current branch may be diverged.
-# It fetches bridge code from origin/main without merging/resetting the active checkout.
+# Safe bootstrap for any authorized One-Wave host, including the Jetson.
+# It fetches bridge code without merging/resetting/switching the active checkout.
+# The installed worker uses this real checkout and Git's normal branches directly.
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 if [[ -z "$PROJECT_ROOT" ]]; then
   echo "Run this from inside the One-Wave-Science checkout." >&2
