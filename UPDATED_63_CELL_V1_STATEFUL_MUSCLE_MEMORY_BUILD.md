@@ -348,9 +348,65 @@ Build one center + six identical surrounding cells. Test local training, competi
 
 Test whether a paired normal/mirrored flower produces a useful new nerve-level function such as faster local correction, reciprocal checking, or stable reinjection. Reject the pair if it adds only duplicate hardware.
 
-### Rev L — 2+2 M4 candidate
+### Rev L — paired sensor-flower / motor-flower candidate
 
-Test four coupled flower/volume layers as a candidate fast routing layer. The specific target is whether upward Views and downward Actions can coexist with lower latency or better isolation than the two-flower build.
+Test two coupled seven-cell flowers with distinct current roles while preserving identical CELL_V1 primitives:
+
+```text
+SENSOR FLOWER
+  Views UP
+  Field / Void sensory relation
+  three opposed A/B/C differential pairs
+        ⇅
+SHARED BUS-LATTICE COUPLING
+        ⇅
+MOTOR FLOWER
+  Actions DOWN
+  Field / Void action relation
+  ternary DOWN / HOLD / UP
+```
+
+The pair must be rejected if it only duplicates hardware or if the shared coupling destroys per-axis observability, retained path state, or reference stability.
+
+The shared bus-lattice is a candidate coupling layer, not V0 and not automatically the reinjection reservoir.
+
+Pass conditions:
+
+1. a known sensor-side differential produces the expected signed View relation;
+2. the relation reaches the motor-side flower without erasing A/B/C direction;
+3. the motor-side flower produces the commanded ternary response;
+4. the resulting body/actuator change is re-sensed and closes the loop;
+5. Field and Void remain relational roles on both sides rather than separate hardware species;
+6. the same cell primitive can exchange role in a control experiment.
+
+### Rev M — short-term versus long-term physical memory
+
+Test two retention bands in the active processing path family:
+
+```text
+SHORT-TERM:
+  transient phase / charge / current / magnetic / impedance state
+  measurable decay toward baseline
+
+LONG-TERM:
+  hysteretic / remanent / repetition-trained path bias
+  measurable retention after drive removal
+```
+
+Required measurements:
+
+- fast-state decay constant or decay curve;
+- long-retention curve;
+- train / rest / probe / reverse sequence;
+- whether transient state can change without destroying the trained path bias;
+- whether trained path bias alters later threshold, energy, latency, or route preference;
+- control condition with training absent.
+
+Do not promote "short-term" or "long-term" memory from naming alone. Each must have a declared observable and retention interval.
+
+### Rev N — 2+2 M4 candidate
+
+Test four coupled flower/volume layers as a candidate fast routing layer. The specific target is whether upward Views and downward Actions can coexist with lower latency or better isolation than the paired sensor/motor build.
 
 ### Rev M — 3/3/3 higher-brain candidate
 
