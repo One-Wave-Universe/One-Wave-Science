@@ -2,8 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-REPO_ROOT="$(dirname -- "$SCRIPT_DIR")"
-PROJECT_ROOT="${ONE_WAVE_PROJECT_ROOT:-$HOME/One-Wave-Science}"
+REPO_ROOT="$(dirname -- "$(dirname -- "$SCRIPT_DIR")")"
+PROJECT_ROOT="${ONE_WAVE_PROJECT_ROOT:-$REPO_ROOT}"
 EXTERNAL_WORK_ROOT="${ONE_WAVE_EXTERNAL_WORK:-$HOME/One-Wave-External-Work}"
 ALLOWED_ROOTS_INPUT="${HIVE_PIPE_ALLOWED_ROOTS:-$PROJECT_ROOT:$EXTERNAL_WORK_ROOT}"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/hive-pipe"

@@ -127,7 +127,7 @@ Route errors and the required repair/path-creation action are recorded in:
 Status is available without executing a command:
 
 ```bash
-python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/hive-pipe/chatgpt_terminal_pull.py --status
+python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --status
 journalctl --user -u one-wave-chatgpt-terminal-pull.service -n 100 --no-pager
 ```
 
