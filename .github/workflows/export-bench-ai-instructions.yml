@@ -1,0 +1,15 @@
+name: Export Bench AI Instructions
+on:
+  push:
+    branches:
+      - export/bench-ai-instructions-20260924
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BENCH_AI_INSTRUCTIONS_COMPLETE
+          path: One_Wave_Bench/BENCH_AI_INSTRUCTIONS_COMPLETE.md
+          if-no-files-found: error
