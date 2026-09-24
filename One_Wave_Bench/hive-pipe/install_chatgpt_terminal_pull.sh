@@ -42,7 +42,7 @@ StartLimitIntervalSec=0
 [Service]
 Type=simple
 WorkingDirectory=$RUNTIME_ROOT
-ExecStart=/usr/bin/python3 $RUNTIME_ROOT/hive-pipe/chatgpt_terminal_pull.py --watch
+ExecStart=/usr/bin/python3 $RUNTIME_ROOT/One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --watch
 Restart=always
 RestartSec=5
 NoNewPrivileges=true
@@ -69,7 +69,7 @@ printf 'routes=origin:chatgpt-terminal,origin:chatgpt-terminal-backup\n'
 systemctl --user is-active one-wave-chatgpt-terminal-pull.service
 
 for attempt in 1 2 3 4 5; do
-  if python3 "$RUNTIME_ROOT/hive-pipe/bridge_doctor.py" --profile pull; then
+  if python3 "$RUNTIME_ROOT/One_Wave_Bench/hive-pipe/bridge_doctor.py" --profile pull; then
     printf 'CHATGPT_TERMINAL_PULL_HEALTHY\n'
     exit 0
   fi
