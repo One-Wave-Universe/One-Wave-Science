@@ -59,8 +59,17 @@ EOF
 systemctl --user daemon-reload
 systemctl --user enable --now one-wave-chatgpt-terminal-pull.service
 
-# Old runtime clone is no longer used. Leave it untouched for rollback; it may be
-# removed manually after the new route has returned a matching live receipt.
+# The old permanent runtime clone created a second Git/auth state. Once the
+# service is confirmed active from the real checkout, remove only that exact
+# deprecated directory. Bridge state remains under XDG_STATE_HOME.
+OLD_RUNTIME="${XDG_DATA_HOME:-$HOME/.local/share}/one-wave-chatgpt-terminal-runtime"
+if systemctl --user is-active --quiet one-wave-chatgpt-terminal-pull.service; then
+  if [[ "$OLD_RUNTIME" == "$HOME/.local/share/one-wave-chatgpt-terminal-runtime" && -d "$OLD_RUNTIME" ]]; then
+    rm -rf -- "$OLD_RUNTIME"
+    printf 'REMOVED_DEPRECATED_RUNTIME_CLONE=%s\n' "$OLD_RUNTIME"
+  fi
+fi
+
 printf 'CHATGPT_TERMINAL_PULL_INSTALLED\n'
 printf 'project=%s\n' "$SOURCE_REPO"
 printf 'transport_repo=%s\n' "$SOURCE_REPO"
