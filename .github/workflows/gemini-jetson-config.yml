@@ -10,6 +10,8 @@ on:
       - '.geminiignore'
       - 'scripts/install_gemini_jetson.sh'
       - 'scripts/gemini_min.sh'
+      - 'scripts/gemini_hive.sh'
+      - 'scripts/hive_pipe_client_smoke.py'
       - '.github/workflows/gemini-jetson-config.yml'
   pull_request:
     paths:
@@ -20,6 +22,8 @@ on:
       - '.geminiignore'
       - 'scripts/install_gemini_jetson.sh'
       - 'scripts/gemini_min.sh'
+      - 'scripts/gemini_hive.sh'
+      - 'scripts/hive_pipe_client_smoke.py'
       - '.github/workflows/gemini-jetson-config.yml'
   workflow_dispatch:
 
@@ -34,6 +38,8 @@ jobs:
         run: |
           bash -n scripts/install_gemini_jetson.sh
           bash -n scripts/gemini_min.sh
+          bash -n scripts/gemini_hive.sh
+          python3 -m py_compile scripts/hive_pipe_client_smoke.py
 
       - name: Validate low-token settings
         run: |
@@ -49,6 +55,12 @@ jobs:
           assert data['experimental']['autoMemory'] is False
           assert data['privacy']['usageStatisticsEnabled'] is False
           assert data['security']['disableYoloMode'] is True
+          hive = data['mcpServers']['hive-pipe']
+          assert hive['httpUrl'].endswith('/mcp}') or hive['httpUrl'].endswith('/mcp')
+          assert hive['headers']['Authorization'] == 'Bearer ${HIVE_PIPE_GEMINI_TOKEN}'
+          assert hive['trust'] is False
+          assert 'terminal_reference' in hive['includeTools']
+          assert 'terminal_run' in hive['includeTools']
           assert data['contextManagement']['historyWindow']['maxTokens'] <= 12000
           assert data['contextManagement']['messageLimits']['normalMaxTokens'] <= 1200
           print('settings: PASS')

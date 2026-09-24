@@ -39,7 +39,13 @@ class BridgeDoctorTests(unittest.TestCase):
         installer = (bridge_doctor.REPO_ROOT / "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh").read_text()
         self.assertIn("chatgpt-terminal-backup", installer)
         self.assertIn("EXTERNAL_WORK_ROOT", installer)
-        self.assertIn("bridge_doctor.py\" --profile pull", installer)
+        self.assertIn("One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py", installer)
+        self.assertIn("One_Wave_Bench/hive-pipe/bridge_doctor.py", installer)
+
+    def test_gateway_installer_resolves_repo_above_bench(self):
+        installer = (bridge_doctor.REPO_ROOT / "One_Wave_Bench/hive-pipe/install_gateway.sh").read_text()
+        self.assertIn('REPO_ROOT="$(dirname -- "$(dirname -- "$SCRIPT_DIR")")"', installer)
+        self.assertIn('PROJECT_ROOT="${ONE_WAVE_PROJECT_ROOT:-$REPO_ROOT}"', installer)
 
 
 if __name__ == "__main__":

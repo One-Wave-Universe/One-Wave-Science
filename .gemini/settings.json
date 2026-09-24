@@ -60,5 +60,23 @@
     "disableYoloMode": true,
     "disableAlwaysAllow": true,
     "enablePermanentToolApproval": false
+  },
+  "mcpServers": {
+    "hive-pipe": {
+      "httpUrl": "${HIVE_PIPE_MCP_URL:-http://127.0.0.1:8765/mcp}",
+      "headers": {
+        "Authorization": "Bearer ${HIVE_PIPE_GEMINI_TOKEN}"
+      },
+      "timeout": 30000,
+      "trust": false,
+      "includeTools": [
+        "terminal_reference",
+        "terminal_pwd",
+        "terminal_which",
+        "terminal_run",
+        "python_run",
+        "cpp_compile_run"
+      ]
+    }
   }
 }
