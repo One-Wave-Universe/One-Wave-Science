@@ -88,4 +88,4 @@ No vacuum-mode integral. No \(c^4\mathcal{R}/(8\pi G)\). No G-745 conversion pro
 
 ## Executable
 
-`One_Wave_Bench/logic_core/damping_matrix_dispersion.py`
+`https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/damping_matrix_dispersion.py`

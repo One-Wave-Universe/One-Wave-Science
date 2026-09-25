@@ -21,3 +21,5 @@
 | 15 | ACTIVE | `Book1_Ch15_The_Higgs_Field_Is_The_Lattice.md` |
 | 16 | ACTIVE | `Book1_Ch16_Memory_As_Compressed_State.md` |
 | 17 | ACTIVE | `Book1_Ch17_AI_And_Human_Same_Architecture.md` |
+
+Supplement: Book1_Supplement_No_Entanglement.md preserves the No Entanglement treatment outside the locked 1–17 chapter numbering.

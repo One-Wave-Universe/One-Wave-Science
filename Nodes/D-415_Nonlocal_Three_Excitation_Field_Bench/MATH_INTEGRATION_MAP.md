@@ -14,7 +14,7 @@ Generated `Wiki_Pages/` are presentation outputs, not the source authority.
 
 1. `AI_CANONICAL_START_HERE.md`
 2. `00_MASTER_INDEX.md`
-3. `ONE_WAVE_TERMINOLOGY_LEGEND.md`
+3. `docs/reference/ONE_WAVE_TERMINOLOGY_LEGEND.md`
 4. I-06 YAML metadata in each canonical node
 5. latest `UPDATED_*` handoff affecting the mechanism
 6. matching audit and internal-proof files
@@ -29,18 +29,18 @@ silently merged.
 
 ### Existing architecture that must control D-415
 
-- `UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md`
+- `docs/updates/UPDATED_38_FINITE_WAKE_THREE_BODY_PERTURBATION_ARCHITECTURE.md`
   - local-minus-reference slope;
   - relational three-body graph;
   - finite-wake boundary;
   - Jupiter perturbation and Mercury stress-test ladders.
-- `UPDATED_39_MOVING_FINITE_SLOPE_AND_EM_SHELL_ORBITAL_MODEL.md`
+- `docs/updates/UPDATED_39_MOVING_FINITE_SLOPE_AND_EM_SHELL_ORBITAL_MODEL.md`
   - instantaneous moving finite slope;
   - active region from distinguishability against the current reference;
   - EM shell as integrity/stiffness/response modifier;
   - Mars and Venus no-global-dipole controls;
   - full Solar-System falsification requirement.
-- `UPDATED_40_RECURSIVE_PLANETARY_POINT_PATH_FIELD_ROTATION_MODEL.md`
+- `docs/updates/UPDATED_40_RECURSIVE_PLANETARY_POINT_PATH_FIELD_ROTATION_MODEL.md`
   - nine recursive Point–Path–Field components;
   - compressed 2D bound-lattice state;
   - internal differential rotation and shear;
@@ -48,7 +48,7 @@ silently merged.
   - path and Field rotation;
   - active range derived from the full state;
   - planet-specific ablations.
-- `UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`
+- `docs/updates/UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`
   - complete planetary displacement state;
   - internal material/fluid/current/EM rotation;
   - instantaneous neighboring/reference interactions;

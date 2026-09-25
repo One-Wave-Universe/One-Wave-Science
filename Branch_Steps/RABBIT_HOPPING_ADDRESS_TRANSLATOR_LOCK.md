@@ -15,18 +15,18 @@ and couple alphabet inversion to vertical inversion.
 
 ## Allowed files
 
-- `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+- `docs/reference/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
 - `AI_CANONICAL_START_HERE.md`
 - `AI_Readable_Packs/G-721_Mirrored_Alphabet_Rabbit_Hop.json`
-- `ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md`
+- `docs/architecture/ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md`
 - `Nodes/G-721_Mirrored_Alphabet_Rabbit_Hop_Coordinate_Algorithm.md`
-- `ONE_WAVE_TERMINOLOGY_LEGEND.md`
-- `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`
-- `One_Wave_Bench/brain/README.md`
-- `One_Wave_Bench/brain/rabbit_hop_alphabet.py`
-- `One_Wave_Bench/brain/test_rabbit_hop_alphabet.py`
-- `One_Wave_Bench/brain/constellation_memory.py`
-- `One_Wave_Bench/brain/test_constellation_memory.py`
+- `docs/reference/ONE_WAVE_TERMINOLOGY_LEGEND.md`
+- `docs/updates/UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/README.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_alphabet.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_alphabet.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/constellation_memory.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_constellation_memory.py`
 - this branch-step receipt
 
 ## Locked acceptance criteria

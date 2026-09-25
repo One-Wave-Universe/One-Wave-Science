@@ -14,7 +14,7 @@ metadata_standard: "I-06"
 **Status:** Active execution queue  
 **Gate:** Tasks inherit the gate of their evidence  
 **Dependencies:** Updated 43, G-727, A-114, B-216, C-313, C-318, D-408–D-410, E-523, G-713, G-724–G-727  
-**Authority:** `MATH_ATTACK_MAP_UPDATED_43.md`
+**Authority:** `docs/maps/MATH_ATTACK_MAP_UPDATED_43.md`
 
 ## How to use this list
 
@@ -33,7 +33,7 @@ visual pattern alone is not a derivation.
 ## A. Primitive logic and commitment
 
 - [x] **A1 — Six-route finite set:** implement `2 choices x 3 moves = 6`.
-  Artifact: `One_Wave_Bench/logic_core/six_route_logic.py` and six tests.
+  Artifact: `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/six_route_logic.py` and six tests.
 - [x] **A2 — Six-route transition graph:** candidate laws, reachability,
   reversibility, absorbing states, and topology are executable. Current result:
   product graph = 7 edges/diameter 3; center-gated flip = 5 edges/diameter 3;

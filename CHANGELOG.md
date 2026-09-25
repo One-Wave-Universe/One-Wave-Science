@@ -84,7 +84,7 @@
 - Removed pre-audit mass snapshots from the distributed master so AI readers cannot silently promote obsolete text.
 - Locked the Mass Effect to all four interactions together and retained approximately 125 GeV as the distinct Mirror-Gate boundary-response measurement.
 
-- Added `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md` as the concise canonical handoff for the repaired derivation.
+- Added `docs/updates/UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md` as the concise canonical handoff for the repaired derivation.
 
 - Updated 24 mass/Mirror-Gate correction: removed the scalar-potential and harmonic-oscillator imports from canonical One-Wave mass math.
 - Rebuilt C-318 around the four-interaction carried-pattern response: internal knot, electrical shell, Mirror Gate, Boundary-Tension Weave, and cross-couplings.
@@ -122,7 +122,7 @@ This is a concise change record, not a store of full pre-edit copies.
 - Preserved the Android manga-style build manual and Engineer the Future steampunk manuals.
 - Added Appendix A AI-readable and wiki views.
 - Restored C-318 as a canonical source node from its surviving wiki record.
-- Added `PRESENTATION_ARCHITECTURE.md`, a corrected book-system plan, and two One-Wave Times issues.
+- Added `docs/architecture/PRESENTATION_ARCHITECTURE.md`, a corrected book-system plan, and two One-Wave Times issues.
 - Kept Musical Universe format explicitly unresolved.
 - Added no pre-edit snapshot trail.
 
@@ -135,7 +135,7 @@ This is a concise change record, not a store of full pre-edit copies.
 - Resolved dead physics aliases I-08 -> E-528 and I-10 -> C-311.
 - Added A-116 Three-Dimensional Spherical Default with the minimum-surface derivation.
 - Recast C-317 as Boundary-Tension Weave: gluon -> Tension-Link excitation, quark -> Vortex Phase, confinement -> Knot Lock, proton -> Three-Vortex Knot.
-- Added `ONE_WAVE_TERMINOLOGY_LEGEND.md`; Standard names remain in Gray reference sections and One-Wave names control the interpretation layer.
+- Added `docs/reference/ONE_WAVE_TERMINOLOGY_LEGEND.md`; Standard names remain in Gray reference sections and One-Wave names control the interpretation layer.
 - Added no pre-edit snapshot trail.
 
 - Dimensional correction: C-317 now derives neck energy from lateral surface area, `E_neck = 2*pi*a*sigma_T*L = tau_T*L`, rather than the dimensionally invalid `sigma_T*A_perp*L`.

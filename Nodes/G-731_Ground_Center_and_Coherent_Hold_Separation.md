@@ -68,7 +68,7 @@ motion, phase slip, and Break/Loop events.
 
 ## Executable authority
 
-- `One_Wave_Bench/logic_core/ground_hold_classifier.py`
-- `One_Wave_Bench/logic_core/test_ground_hold_classifier.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/ground_hold_classifier.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/test_ground_hold_classifier.py`
 
 The combined logic suite contains thirty-eight passing tests.

@@ -325,7 +325,7 @@ Any active equation that requires expansion variables is framework contamination
 
 RULE 17 — One-Wave Naming and Geometry Discipline
 
-`ONE_WAVE_TERMINOLOGY_LEGEND.md` is the canonical naming map. Standard terms remain in Gray comparison material and at first-mention mappings. One-Wave interpretation, mathematics, diagrams, and simulation labels use One-Wave terms.
+`docs/reference/ONE_WAVE_TERMINOLOGY_LEGEND.md` is the canonical naming map. Standard terms remain in Gray comparison material and at first-mention mappings. One-Wave interpretation, mathematics, diagrams, and simulation labels use One-Wave terms.
 
 A rename is not a proof. Every One-Wave term must point to a mechanism, geometry, equation, or falsification test.
 

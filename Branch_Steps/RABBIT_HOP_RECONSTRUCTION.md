@@ -17,17 +17,17 @@ Add one executable, receipt-producing rabbit-hop reconstruction slice.
 - Worktree was clean.
 
 ## REFERENCE FILES
-- `AGENTS.md`
-- `JETSON_OPENCLAW_RUNTIME.md`
-- `ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`
-- `ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md`
-- `One_Wave_Bench/brain/rabbit_hop_alphabet.py`
-- `One_Wave_Bench/brain/command_memory.py`
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/AGENTS.md`
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/JETSON_OPENCLAW_RUNTIME.md`
+- `docs/architecture/ARCHITECTURE_MEMORY_REBUILD_CONSTELLATION.md`
+- `docs/architecture/ARCHITECTURE_RABBIT_HOPPING_SCALE_TRANSLATOR.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_alphabet.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/command_memory.py`
 
 ## ALLOWED FILES
-- `One_Wave_Bench/brain/constellation_memory.py`
-- `One_Wave_Bench/brain/test_constellation_memory.py`
-- `One_Wave_Bench/brain/README.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/constellation_memory.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_constellation_memory.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/README.md`
 - This branch-step receipt
 
 ## PROTECTED WORKING FEATURES

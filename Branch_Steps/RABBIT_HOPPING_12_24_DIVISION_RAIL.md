@@ -26,17 +26,17 @@ with odd outer addresses retained as shared wrappers.
 - Next permitted step: merge only after all repository tests pass
 
 ## REFERENCE FILES
-- `AGENTS.md`
-- `JETSON_OPENCLAW_RUNTIME.md`
-- `BRANCH_STEP_PROJECT_TEMPLATE.md`
-- `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/AGENTS.md`
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/JETSON_OPENCLAW_RUNTIME.md`
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/BRANCH_STEP_PROJECT_TEMPLATE.md`
+- `docs/reference/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
 - `AI_Readable_Packs/G-721_Mirrored_Alphabet_Rabbit_Hop.json`
 
 ## ALLOWED FILES
-- `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
-- `One_Wave_Bench/brain/README.md`
-- `One_Wave_Bench/brain/rabbit_hop_scale_rail.py`
-- `One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py`
+- `docs/reference/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/README.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_scale_rail.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_scale_rail.py`
 - this branch-step packet
 
 ## PROTECTED WORKING FEATURES

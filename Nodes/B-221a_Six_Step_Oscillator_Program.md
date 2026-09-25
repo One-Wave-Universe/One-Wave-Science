@@ -69,7 +69,7 @@ Mirror 1 / BEGIN
 
 The six-gate oscillator is not the route address space.
 
-Current executable authority in `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` defines a separate combinatorial address space:
+Current executable authority in `docs/updates/UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` defines a separate combinatorial address space:
 
 ```text
 2 binary choices x 3 ternary moves = 6 route addresses

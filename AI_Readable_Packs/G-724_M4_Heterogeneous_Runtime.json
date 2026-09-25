@@ -17,5 +17,5 @@
     "binary": "permission, block, stop, isolate"
   },
   "gate7": "CPU-committed coupling of two complete six-gate systems",
-  "authority": "UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md"
+  "authority": "docs/updates/UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md"
 }

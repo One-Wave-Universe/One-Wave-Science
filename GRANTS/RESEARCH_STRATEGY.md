@@ -27,7 +27,7 @@ The innovation claim is methodological first: a unified, traceable workflow from
 Inputs:
 - `chapters/05_Simulation_Engine.md`
 - Virtual Breadboard validated solver stack
-- `V1_VERIFICATION_MATRIX.md`
+- `docs/verification/V1_VERIFICATION_MATRIX.md`
 
 Outputs:
 - command-line or application entry points;
@@ -40,7 +40,7 @@ Outputs:
 ### Work Package 2 — Instrument qualification
 
 Inputs:
-- `hardware/wave_reader_v1.md`
+- `https://github.com/One-Wave-Universe/Builds/blob/main/hardware/wave_reader_v1.md`
 
 Outputs:
 - qualified acquisition chain;

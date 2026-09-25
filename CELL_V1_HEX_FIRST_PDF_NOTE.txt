@@ -1,1 +1,0 @@
-See CELL_V1_Hex_First_Real_Hardware_Pamphlet.pdf generated in the conversation artifact. The repository architecture source is CELL_V1_REAL_HARDWARE_PAMPHLET.md and UPDATED_62_CELL_V1_HEX_FIRST_INTERNALS_AND_SCALING.md.

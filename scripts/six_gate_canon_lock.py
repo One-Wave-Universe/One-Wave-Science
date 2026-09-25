@@ -72,7 +72,7 @@ CANON_FILES = (
     ROOT / "Nodes" / "G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md",
     ROOT / "Nodes" / "G-739_Six_Gate_Trajectory_Extraction.md",
     ROOT / "Nodes" / "G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md",
-    ROOT / "UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md",
+    ROOT / "docs/updates/UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md",
 )
 
 

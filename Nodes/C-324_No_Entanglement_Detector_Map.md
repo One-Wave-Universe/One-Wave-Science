@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 Dependencies:
 Upstream: A-110 Oscillation, A-103 Differential, B-205 Mirror, B-223 Three Moves, B-224 Two Choices, C-315 Wave Reader V1
-Downstream: RABBIT-HOPPING build/CELL0, NO_ENTANGLEMENT.md, Book1 chapter No Entanglement
+Downstream: RABBIT-HOPPING build/CELL0, docs/reference/NO_ENTANGLEMENT.md, Book1 chapter No Entanglement
 
 Definition:
 There is no entanglement in this science.

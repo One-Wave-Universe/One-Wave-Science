@@ -29,7 +29,7 @@ as a generic coarse strength relation around a local reference. That notation ma
 
 ## Current five-state authorities
 
-`UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` owns the downstream five commitment/readout states:
+`docs/updates/UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md` owns the downstream five commitment/readout states:
 
 ```text
 -3(0)3+ = full disagree
@@ -86,4 +86,4 @@ The four-view contract still includes `Strength`, but its concrete encoding must
 - G-742 is authoritative for the five-state self lifecycle.
 - G-739 is authoritative for measured six-gate oscillator classification.
 - Scale remains a separate declared axis.
-- `UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md` governs conflicts among older state terminology.
+- `docs/updates/UPDATED_44_STATE_AXIS_AUTHORITY_AND_EVOLUTION_RULE.md` governs conflicts among older state terminology.

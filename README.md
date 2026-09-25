@@ -90,9 +90,9 @@ what choices are available
 what the next action should be and why
 ```
 
-The first prototype starts with **one sandboxed room**, one agent/avatar, bounded perceptions and virtual switches, persistent loop memory, and save/reload continuity. See `MEGA_CITY_LOOPER_OBJECTIVE.md`.
+The first prototype starts with **one sandboxed room**, one agent/avatar, bounded perceptions and virtual switches, persistent loop memory, and save/reload continuity. See `https://github.com/One-Wave-Universe/Builds/blob/main/android/MEGA_CITY_LOOPER_OBJECTIVE.md`.
 
-Preferred first local hardware target is the Jetson with safe reversible storage on a verified external drive/container. Access instructions are in `JETSON_ACCESS_AND_TERMINAL.md`. Do not guess IPs, usernames, mount points, or destructively reformat storage.
+Preferred first local hardware target is the Jetson with safe reversible storage on a verified external drive/container. Access instructions are in `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/JETSON_ACCESS_AND_TERMINAL.md`. Do not guess IPs, usernames, mount points, or destructively reformat storage.
 
 ---
 
@@ -149,12 +149,12 @@ The goal is **choice with accountability**, not a control hierarchy.
 
 The active construction map is:
 
-- `AI_FOREMAN_WORK_REGISTER.md` — repo-wide work needed, authoritative sources, safe parallel branches, and dependencies.
-- `MEGA_CITY_LOOPER_OBJECTIVE.md` — First Looper reference-loop, one-room sandbox, Field/Void relay/parser proposals, Mayor challenge, and Bullshit Alarm governance.
-- `JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
-- `Virtual_Breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
-- `Virtual_Breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
-- `ART_VISUAL_GOVERNANCE.md` — visual/art contribution, voting, and current human veto rules.
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/AI_FOREMAN_WORK_REGISTER.md` — repo-wide work needed, authoritative sources, safe parallel branches, and dependencies.
+- `https://github.com/One-Wave-Universe/Builds/blob/main/android/MEGA_CITY_LOOPER_OBJECTIVE.md` — First Looper reference-loop, one-room sandbox, Field/Void relay/parser proposals, Mayor challenge, and Bullshit Alarm governance.
+- `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/JETSON_ACCESS_AND_TERMINAL.md` — safe Jetson/SSH/repo/external-drive discovery and terminal-bridge entrypoint.
+- `https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/AI_COLLABORATION.md` — Virtual Breadboard / virtual-world collaboration contract.
+- `https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/AI_CONSTRUCTION_LOG.md` — signed AI construction ledger.
+- `docs/governance/ART_VISUAL_GOVERNANCE.md` — visual/art contribution, voting, and current human veto rules.
 - `AI_CANONICAL_START_HERE.md` — canonical ingestion order and anti-drift authority.
 
 The foreman role is organizational, not ownership of everybody else's thinking: keep the baseline clear, stop accidental overlap, protect tests and evidence boundaries, and make sure separate work can be compared cleanly before merge.
@@ -187,7 +187,7 @@ Repository placement:
 
 - `chapters/` — unverified theoretical and cross-domain claims plus verification criteria.
 - `Nodes/` — modular logic, state mapping, and declarative memory/configuration nodes.
-- `One_Wave_Bench/brain/` — executable associative-memory and brain-loop code.
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/` — executable associative-memory and brain-loop code.
 - `hardware/` — Wave Reader and physical measurement/prototyping specifications.
 
 A claim should move from **UNVERIFIED** only when a defined test, dataset, measurement, or reproducible simulation supports it. Failed claims should be marked **DISMISSED/FAILED** rather than silently removed.
@@ -205,9 +205,9 @@ A compact cross-domain set now lives under `chapters/`. These files separate est
 Supporting experimental modules/specifications:
 
 - `Nodes/boltzmann_administrator.json` — bounded multimodal associative-memory allocation configuration.
-- `One_Wave_Bench/brain/hopfield_melody_cells.py` — small inspectable Hopfield associative-memory helper.
-- `Nodes/vtc_zero_logic.md` — VTC reference/Field/Void UI-state mapping that defers to CELL_V1 physical canon.
-- `hardware/wave_reader_v1.md` — measurement-first acquisition specification.
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/hopfield_melody_cells.py` — small inspectable Hopfield associative-memory helper.
+- `https://github.com/One-Wave-Universe/Builds/blob/main/runtime/vtc/vtc_zero_logic.md` — VTC reference/Field/Void UI-state mapping that defers to CELL_V1 physical canon.
+- `https://github.com/One-Wave-Universe/Builds/blob/main/hardware/wave_reader_v1.md` — measurement-first acquisition specification.
 
 These additions are subordinate to `AI_CANONICAL_START_HERE.md` and do not replace existing validated simulators, CELL_V1 geometry, or evidence classifications.
 
@@ -227,9 +227,9 @@ Before making a substantial change:
 
 1. Read this README.
 2. Read `AI_CANONICAL_START_HERE.md`.
-3. Read `AI_FOREMAN_WORK_REGISTER.md`.
-4. If working on the Miniverse/Mega City loop, read `MEGA_CITY_LOOPER_OBJECTIVE.md`.
-5. If working on the Jetson/local runtime, read `JETSON_ACCESS_AND_TERMINAL.md`.
+3. Read `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/AI_FOREMAN_WORK_REGISTER.md`.
+4. If working on the https://github.com/One-Wave-Universe/Builds/tree/main/miniverse/Mega City loop, read `https://github.com/One-Wave-Universe/Builds/blob/main/android/MEGA_CITY_LOOPER_OBJECTIVE.md`.
+5. If working on the Jetson/local runtime, read `https://github.com/One-Wave-Universe/Bridge-Comand/blob/main/docs/JETSON_ACCESS_AND_TERMINAL.md`.
 6. Find the authoritative file for your work area.
 7. Check whether another contributor already owns overlapping work.
 8. Create or use an isolated branch.

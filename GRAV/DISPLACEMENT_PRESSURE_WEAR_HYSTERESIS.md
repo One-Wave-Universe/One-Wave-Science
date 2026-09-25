@@ -1,7 +1,7 @@
 # Displacement pressure and wear hysteresis
 
 Status: YELLOW / candidate architecture.
-Sources: `UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`, `GRAV/QCD_BAG_PRESSURE.md`, `GRAV/GLUONIC_SURFACE_TENSION.md`, `GRAV/FIELD_TAP_SLIP_125.md`, CELL_V1 remanence rule.
+Sources: `docs/updates/UPDATED_41_PLANETARY_SCALE_DISPLACEMENT_MODEL.md`, `GRAV/QCD_BAG_PRESSURE.md`, `GRAV/GLUONIC_SURFACE_TENSION.md`, `GRAV/FIELD_TAP_SLIP_125.md`, CELL_V1 remanence rule.
 
 Date: 2026-09-18
 

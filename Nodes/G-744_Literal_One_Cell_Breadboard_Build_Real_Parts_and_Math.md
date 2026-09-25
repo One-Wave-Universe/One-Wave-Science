@@ -19,7 +19,7 @@ This node is intentionally staged. It does **not** attempt the entire quadratic 
 
 ## Software pre-verification (simulated, not a bench substitute)
 
-`Virtual_Breadboard/` (repo root, merged to `main`) is a real modified-nodal-analysis
+`https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/` (repo root, merged to `main`) is a real modified-nodal-analysis
 circuit simulator — it solves the actual electrical equations rather than
 scripting an animation. It does **not** provide this node's window-comparator
 decision as a pre-built part: an earlier revision did (a "Ternary Cell"
@@ -36,7 +36,7 @@ and proven from those parts, the same as it would on a bench.
 
 Available launch paths:
 
-- Interactive, in-browser: open `Virtual_Breadboard/index.html` (or
+- Interactive, in-browser: open `https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/index.html` (or
   `docs/index.html` for the hosted copy) and use the **Calibration boards**
   sidebar section — Cal C/D prove the discrete-MOSFET switching and
   bidirectional-blocking this node's design depends on, and the **Memory
@@ -45,14 +45,14 @@ Available launch paths:
   memory this node's Hold state would be built from — probe `mem` vs `V0`
   in millivolts, same as a bench multimeter would.
 - Headless, for an automated loop (e.g. a Python driver on other hardware):
-  `node Virtual_Breadboard/simulate.js` reads a circuit spec as JSON on
+  `node https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/simulate.js` reads a circuit spec as JSON on
   stdin and returns solved voltages/currents/warnings/MOSFET channel and
   body-diode states as JSON — no browser, no npm install, no dependencies
   beyond Node itself.
-- Regression tests: `node Virtual_Breadboard/test/circuit.test.js` — see
+- Regression tests: `node https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/test/circuit.test.js` — see
   T-NFET-ON/OFF, T-NFET-DIODE, T-BB-PAIR, and T-MEM for the switching,
   body-diode-direction, bidirectional-blocking, and sample/hold proofs.
-- Full usage docs: `Virtual_Breadboard/README.md`.
+- Full usage docs: `https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/README.md`.
 
 This does not advance this node's gate. `claim_gate_detail` stays
 "YELLOW until measured on bench" — a correct circuit-equation solve of the

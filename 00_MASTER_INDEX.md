@@ -2,11 +2,11 @@
 ### Micro Subatomic Structure → Galactic Macro Scale
 Compiled from the current consolidated node repository; updated July 23, 2026.
 Gate values are read from each node's I-06 YAML metadata. Lifecycle and claim-specific detail remain in the source node and are not collapsed into this table.
-Updated 24 mass/Mirror-Gate handoff: `UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
-Updated 27 dimensional-coordination handoff: `UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
-Updated 28 alphabet/Fibonacci-word handoff: `UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
-Updated 32 repository-integrity and Book 1 renumbering handoff: `UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
-Updated 32 audit: `AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 24 mass/Mirror-Gate handoff: `docs/updates/UPDATED_24_MASS_MIRROR_GATE_RESOLUTION.md`.
+Updated 27 dimensional-coordination handoff: `docs/updates/UPDATED_27_DIMENSIONAL_COORDINATION_ARCHITECTURE.md`.
+Updated 28 alphabet/Fibonacci-word handoff: `docs/updates/UPDATED_28_ALPHABET_FIBONACCI_WORD_VALIDATION.md`.
+Updated 32 repository-integrity and Book 1 renumbering handoff: `docs/updates/UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
+Updated 32 audit: `docs/audits/AUDIT_UPDATED_32_REPOSITORY_INTEGRITY_REPAIR.md`.
 Metadata authority: `Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md`.
 Legacy ID resolution: `LEGACY_ID_ALIAS_REGISTRY.md`.
 
@@ -35,7 +35,7 @@ Every node file under `Nodes/` or `Root_Axioms/` must expose this in machine-rea
 
 ## TERMINOLOGY LEGEND
 
-Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in Gray reference sections; One-Wave names control the interpretation layer.
+Canonical naming map: `docs/reference/ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in Gray reference sections; One-Wave names control the interpretation layer.
 
 ## TIER 0 — FOUNDATION PRIMITIVES (A-Series)
 *The core recursive chain. Every other node and every book chapter is downstream of this sequence.*
@@ -279,6 +279,7 @@ The old missing physics address I-09 is dissolved. Its intended content now has 
 | I-03 | Cross-Platform Packet Intake | Requires duplicate, lineage, and delta checks before evaluating incoming packet quality. |
 | I-04 | Scale Recurrence vs. Duplication | Prevents cross-scale instances from being flattened into same-scale duplicates. |
 | I-05 | Active Hypothesis vs. Quarantine | Keeps unproven but open One-Wave research active while separating it from verified claims and superseded source history. |
+| I-07 | Gate Colors and Metals | Defines the repository gate-color and metal lifecycle vocabulary used to communicate claim maturity without changing the underlying I-02/I-06 evidence rules. |
 
 **Gate/color lifecycle (applies to every node at every tier):**
 Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internally proven math, not experimentally validated) → Bronze → Silver → Gold. Red is reserved exclusively for post-experiment outcomes.
@@ -321,11 +322,11 @@ into the main Book1_Chapters set. Now included.
 
 **Internal_Proofs/ directory (Updated 32 repaired):** Active proof drafts now have a canonical index, clean filenames, and explicit subordinate authority. Raw conversational sources are preserved under `History/Raw_AI_Proof_Discussions/`; current node gate metadata always controls.
 
-**Android_Body/ folder (NEW):** Functional Architecture + Book Ch1 (Bio-
+**https://github.com/One-Wave-Universe/Builds/tree/main/android/Android_Body/ folder (NEW):** Functional Architecture + Book Ch1 (Bio-
 Inspired Design) — real content, hardware-adjacent, was present in archives
 but not previously categorized anywhere in this repo.
 
-**Virtual_Breadboard/ folder (NEW, merged into main from a feature branch
+**https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/ folder (NEW, merged into main from a feature branch
 via PR #13):** A runnable Electron/browser circuit simulator with a real
 modified-nodal-analysis solver (not a scripted animation) — resistors,
 diodes/LEDs, capacitors, inductors, AC sources, an MTJ quadrature sensor, a
@@ -338,10 +339,10 @@ the hold/positive/negative behavior has to be discovered and proven by
 wiring the discrete MOSFETs, same as on a real bench (see the Memory-cell
 and Cal C/D calibration boards). Includes a live oscilloscope, an
 AI-assisted circuit-build panel, a headless `simulate.js` CLI (`node
-Virtual_Breadboard/simulate.js`, no deps beyond Node) for external
+https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/simulate.js`, no deps beyond Node) for external
 automation, and a physics regression suite (`node
-Virtual_Breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
-Full docs: `Virtual_Breadboard/README.md`. See G-744's own file for the
+https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/test/circuit.test.js`). Hosted copy at `docs/index.html`.
+Full docs: `https://github.com/One-Wave-Universe/Builds/tree/main/virtual-breadboard/README.md`. See G-744's own file for the
 node-to-software cross-reference and its claim-gate boundary.
 
 **History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md (historical unintegrated draft):** A differently-structured
@@ -389,9 +390,9 @@ Simulation is the next BRONZE step under I-02.
 - `Books/Android`: anime/manga Proposed Build manual.
 - `Books/Engineer_The_Future`: steampunk field manuals.
 - `One_Wave_Times/`: Modern-Day Epicycle and Fake-Mustache investigative papers.
-- `Musical_Universe/`: active content; final presentation format remains undecided.
+- `https://github.com/One-Wave-Universe/Mythos-and-Stories/tree/main/books/Musical_Universe/`: active content; final presentation format remains undecided.
 
-See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
+See `docs/architecture/PRESENTATION_ARCHITECTURE.md` and `docs/architecture/BOOK_SYSTEM_MASTER_PLAN.md`.
 
 ## HARD ARCHITECTURE LOCKS
 
@@ -405,11 +406,17 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 
 | Node | Name | Definition / source | Gate |
 |---|---|---|---|
+| A-110a | Wave Equation Derivation | Foundation Extension. Source: `Nodes/A-110a_Wave_Equation_Derivation.md`. | YELLOW |
+| A-114a | Exact Dispersion Roots | Foundation Extension. Source: `Nodes/A-114a_Exact_Dispersion_Roots.md`. | YELLOW |
+| A-114b | Dispersion Trail — Next Ten Questions | Trail / Compare-to-Repo. Source: `Nodes/A-114b_Dispersion_Trail.md`. | YELLOW |
 | B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
 | B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
 | B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
 | B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
+| B-228 | Compression Energy Chains | Analogy / Scale Bridge — not established biochemistry identity. Source: `Nodes/B-228_Compression_Energy_Chains.md`. | YELLOW |
+| B-229 | One Wave Biology | Reinterpretation / Simplification — not a replacement textbook. Source: `Nodes/B-229_One_Wave_Biology.md`. | YELLOW |
 | C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
+| C-324 | No Entanglement — Detector Map | Principle / Measurement Mathematics. Source: `Nodes/C-324_No_Entanglement_Detector_Map.md`. | YELLOW |
 | D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
