@@ -1,12 +1,12 @@
 {
-  "id": "terminal-live-check-20260924-01",
+  "id": "bench-dissolve-reference-20260924-01",
   "argv": [
     "bash",
     "-lc",
-    "printf 'TERMINAL_LIVE\\n'; hostname; whoami; pwd"
+    "printf '=== HOME CANDIDATE REPOS ===\\n'; find /home/Scales -maxdepth 2 -type d -name .git -printf '%h\\n' 2>/dev/null | sort; printf '\\n=== GH AUTH ===\\n'; command -v gh >/dev/null && gh auth status 2>&1 || true"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Verify that ChatGPT can execute a fresh read-only terminal command on the Jetson through the repaired pull bridge.",
-  "consequence": "Print host, user, and working directory only; no files, services, branches, credentials, or datasets are changed."
+  "intention": "Identify the actual local repository set and whether the Jetson can create or push a Bridge Command repository before dissolving One_Wave_Bench.",
+  "consequence": "Read-only inventory and authentication status only; no repositories, files, branches, remotes, or credentials are changed."
 }
