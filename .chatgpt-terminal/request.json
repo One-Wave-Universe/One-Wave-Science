@@ -1,12 +1,12 @@
 {
-  "id": "meta-ingest-cern-ligo-exec-002",
+  "id": "install-desktop-commander-service-20260925-01",
   "argv": [
     "bash",
     "-lc",
-    "set -euo pipefail\nROOT=/home/Scales/One-Wave-Science\nOUT=\"$ROOT/.one-wave-metadata\"\nmkdir -p \"$OUT/cern\" \"$OUT/gwosc\"\n\npython3 - <<'PY'\nimport json, pathlib, urllib.parse, urllib.request, datetime\n\nroot = pathlib.Path(\"/home/Scales/One-Wave-Science/.one-wave-metadata\")\n(root/\"cern\").mkdir(parents=True, exist_ok=True)\n(root/\"gwosc\").mkdir(parents=True, exist_ok=True)\n\ndef get_json(url):\n    req = urllib.request.Request(url, headers={\"User-Agent\":\"One-Wave-Metadata/1.0\"})\n    with urllib.request.urlopen(req, timeout=30) as r:\n        return json.load(r)\n\ncern_url = \"https://opendata.cern.ch/api/records/?q=\" + urllib.parse.quote(\"type:Dataset\") + \"&size=1\"\ngwosc_url = \"https://gwosc.org/api/v2/runs\"\n\ncern = get_json(cern_url)\ngwosc = get_json(gwosc_url)\n\n(root/\"cern\"/\"dataset_sample.json\").write_text(json.dumps(cern, indent=2, sort_keys=True))\n(root/\"gwosc\"/\"runs.json\").write_text(json.dumps(gwosc, indent=2, sort_keys=True))\n\nindex = {\n    \"retrieved_at_utc\": datetime.datetime.now(datetime.timezone.utc).isoformat(),\n    \"sources\": {\n        \"cern\": {\n            \"url\": cern_url,\n            \"file\": \"cern/dataset_sample.json\",\n            \"top_level_keys\": sorted(cern.keys()) if isinstance(cern, dict) else []\n        },\n        \"gwosc\": {\n            \"url\": gwosc_url,\n            \"file\": \"gwosc/runs.json\",\n            \"top_level_keys\": sorted(gwosc.keys()) if isinstance(gwosc, dict) else []\n        }\n    }\n}\n(root/\"index.json\").write_text(json.dumps(index, indent=2, sort_keys=True))\n\nprint(\"METADATA_INGEST_OK\")\nprint(json.dumps(index, indent=2, sort_keys=True))\nPY\n\nprintf '\\nFILES\\n'\nfind \"$OUT\" -maxdepth 2 -type f -printf '%P %s bytes\\n' | sort\n"
+    "set -e\nmkdir -p \"$HOME/.config/systemd/user\"\ncat >\"$HOME/.config/systemd/user/desktop-commander-remote.service\" <<'EOF'\n[Unit]\nDescription=Remote Desktop Commander\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/npx @wonderwhy-er/desktop-commander@latest remote\nRestart=always\nRestartSec=5\nNoNewPrivileges=true\nPrivateTmp=true\n\n[Install]\nWantedBy=default.target\nEOF\nexport XDG_RUNTIME_DIR=/run/user/$(id -u)\nexport DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus\nsystemctl --user daemon-reload\nsystemctl --user enable desktop-commander-remote.service\nprintf 'DESKTOP_COMMANDER_SERVICE_INSTALLED\\n'"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 90,
-  "intention": "Query official CERN Open Data and GWOSC public metadata endpoints, persist a bounded local metadata cache, and build a source index proving the metadata path works.",
-  "consequence": "Create only a small local .one-wave-metadata cache under the authorized repository checkout; do not download strain datasets, CERN bulk files, modify tracked science files, or change credentials."
+  "timeout": 30,
+  "intention": "Install a persistent user-level Desktop Commander remote service on the Jetson using the official remote command so the remote terminal route can recover automatically after terminal closure or process failure.",
+  "consequence": "Creates and enables one user systemd service; does not start or stop the current Desktop Commander process, modify repositories, or expose credentials."
 }
