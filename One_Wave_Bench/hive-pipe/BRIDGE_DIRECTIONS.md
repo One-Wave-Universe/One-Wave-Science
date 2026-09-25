@@ -2,6 +2,13 @@
 
 This file keeps the complete operational directions inside `One_Wave_Bench/` so bridge work does not depend on scattered root documentation.
 
+### Shared reference rule
+
+Every AI route references the repository first, works through an isolated Git
+branch when mutating, and returns branch/test/receipt evidence. Jetson remains a
+first-class gateway for clients that require it. Do not replace working routes
+with inferred architecture.
+
 ## 1. Find the actual checkout
 
 Never assume `~/One-Wave-Science`.
@@ -237,11 +244,16 @@ git show FETCH_HEAD:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh \
   | ONE_WAVE_PROJECT_ROOT="$PWD" bash
 ```
 
-Runtime:
+Transport repository:
 
 ```text
-~/.local/share/one-wave-chatgpt-terminal-runtime
+the verified real One-Wave-Science checkout
 ```
+
+The bridge uses Git's normal transport branches directly. It does not maintain a
+permanent duplicate repository. Durable controller/outbox state remains under
+`~/.local/state/one-wave-chatgpt-terminal/`; temporary detached worktrees may
+be created and removed for receipt publication.
 
 Service:
 
@@ -252,7 +264,7 @@ one-wave-chatgpt-terminal-pull.service
 Status:
 
 ```bash
-python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --status
+python3 One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --status
 ```
 
 A request without a matching `result.json` is pending/unacknowledged. It is not proof of execution.

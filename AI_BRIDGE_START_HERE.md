@@ -33,6 +33,34 @@ Exit meanings:
 `--json` returns the same result in machine-readable form. The doctor is
 read-only. It never changes services, branches, credentials, or files.
 
+## Git is the shared reference plane
+
+All authorized AI routes converge on the repository before work:
+
+```text
+AI/client
+  -> authorized bridge route
+  -> repository reference read
+  -> current branch/status/authority check
+  -> isolated Git branch for mutation
+  -> bounded work
+  -> tests/measurement receipts
+  -> push branch/receipt
+  -> reference return
+```
+
+Jetson is a first-class gateway for AIs that need it. It is not the only route.
+Direct GitHub connectors, Hive Pipe, the ChatGPT pull branches, GitHub Actions,
+SSH, Gemini, Claude, Codex, Perplexity, DeepSeek, and future authorized clients
+must all reference the same repository authority before mutation.
+
+Do not create a permanent duplicate repository merely to operate a bridge.
+Temporary detached worktrees are allowed for isolated receipt publication and
+must be removed after use.
+
+Unknown state is inspected, not assumed. An existing route is preserved unless
+direct evidence identifies that route itself as the fault.
+
 ## Intention and consequence gate
 
 The gateway checks the canonical checkout before every MCP action and stamps
@@ -139,15 +167,15 @@ Read `.chatgpt-terminal/result.json` on both branches until one contains the
 matching ID. A missing result on both branches means the target worker has not
 acknowledged the request; it does **not** prove the command ran.
 
-One-time installation on the machine ChatGPT must operate:
+One-time installation on the authorized host ChatGPT must operate, including the Jetson when that is the required AI entry route:
 
 ```bash
 git fetch origin main
 git show origin/main:One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh | ONE_WAVE_PROJECT_ROOT="$PWD" bash
-python3 ~/.local/share/one-wave-chatgpt-terminal-runtime/One_Wave_Bench/hive-pipe/bridge_doctor.py --profile pull
+python3 One_Wave_Bench/hive-pipe/bridge_doctor.py --profile pull
 ```
 
-The pull worker runs as the normal user and reuses `terminal_parser.py`. It does
+The pull worker runs from the real repository checkout as the normal user and reuses `terminal_parser.py`. It does
 not bypass blocked programs, credential paths, authorized roots, or the systemd
 sandbox.
 

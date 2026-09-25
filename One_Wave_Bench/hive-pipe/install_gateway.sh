@@ -12,6 +12,8 @@ TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 GATEWAY_SERVICE="$SYSTEMD_DIR/hive-pipe-gateway.service"
 AGENT_SERVICE="$SYSTEMD_DIR/hive-pipe-agent.service"
+WATCHER_SERVICE="$SYSTEMD_DIR/one-wave-folder-watcher.service"
+PARSER_GOBLIN_SERVICE="$SYSTEMD_DIR/parser-goblin.service"
 
 mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
 mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
@@ -107,6 +109,50 @@ fi
 
 {
   echo '[Unit]'
+  echo 'Description=One-Wave Parser Goblin Relay'
+  echo 'After=network.target hive-pipe-gateway.service'
+  echo
+  echo '[Service]'
+  echo 'Type=simple'
+  echo "WorkingDirectory=$escaped_root"
+  echo "Environment=ONE_WAVE_PROJECT_ROOT=$(escape_systemd_path "$PROJECT_ROOT")"
+  echo "Environment=REFERENCE_GATE_LEDGER=$(escape_systemd_path "$REFERENCE_STATE_ROOT/reference-receipts.jsonl")"
+  echo "ExecStart=/usr/bin/python3 $escaped_root/parser_goblin.py --watch"
+  echo 'Restart=always'
+  echo 'RestartSec=2'
+  echo 'NoNewPrivileges=true'
+  echo 'PrivateTmp=true'
+  echo 'ProtectSystem=strict'
+  echo "ReadWritePaths=$write_paths $(escape_systemd_path "$REFERENCE_STATE_ROOT") $(escape_systemd_path "$HOME/.local/state/one-wave-parser-goblin")"
+  echo
+  echo '[Install]'
+  echo 'WantedBy=default.target'
+} > "$PARSER_GOBLIN_SERVICE"
+
+{
+  echo '[Unit]'
+  echo 'Description=One-Wave Folder Reference Watcher'
+  echo 'After=network.target'
+  echo
+  echo '[Service]'
+  echo 'Type=simple'
+  echo "WorkingDirectory=$escaped_project"
+  echo "Environment=ONE_WAVE_PROJECT_ROOT=$(escape_systemd_path "$PROJECT_ROOT")"
+  echo "Environment=REFERENCE_GATE_LEDGER=$(escape_systemd_path "$REFERENCE_STATE_ROOT/reference-receipts.jsonl")"
+  echo "ExecStart=/usr/bin/python3 $escaped_root/folder_watcher.py --root $(escape_systemd_path "$PROJECT_ROOT") --watch --interval 3"
+  echo 'Restart=always'
+  echo 'RestartSec=2'
+  echo 'NoNewPrivileges=true'
+  echo 'PrivateTmp=true'
+  echo 'ProtectSystem=strict'
+  echo "ReadWritePaths=$write_paths $(escape_systemd_path "$REFERENCE_STATE_ROOT")"
+  echo
+  echo '[Install]'
+  echo 'WantedBy=default.target'
+} > "$WATCHER_SERVICE"
+
+{
+  echo '[Unit]'
   echo 'Description=One-Wave Hive Pipe Queue Worker'
   echo 'After=network.target'
   echo
@@ -127,9 +173,11 @@ fi
 
 systemctl --user daemon-reload
 systemctl --user disable --now hive-pipe.service 2>/dev/null || true
-systemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service
-systemctl --user restart hive-pipe-agent.service hive-pipe-gateway.service
+systemctl --user enable --now one-wave-folder-watcher.service parser-goblin.service hive-pipe-agent.service hive-pipe-gateway.service
+systemctl --user restart one-wave-folder-watcher.service parser-goblin.service hive-pipe-agent.service hive-pipe-gateway.service
 echo "HIVE_PIPE_GATEWAY_INSTALLED"
+echo "Folder watcher: one-wave-folder-watcher.service"
+echo "Parser Goblin: parser-goblin.service"
 echo "Local endpoint: http://127.0.0.1:8765"
 echo "AI terminal: terminal_pwd / terminal_which / terminal_run via MCP"
 echo "Writable live checkout: $REPO_ROOT"

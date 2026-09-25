@@ -66,6 +66,7 @@ def static_checks() -> list[Check]:
         "One_Wave_Bench/hive-pipe/terminal_parser.py",
         "One_Wave_Bench/hive-pipe/install_gateway.sh",
         "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
+        "One_Wave_Bench/hive-pipe/parser_goblin.py",
         "One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh",
         "One_Wave_Bench/hive-pipe/bootstrap_chatgpt_terminal_pull.sh",
         "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
@@ -91,6 +92,7 @@ def static_checks() -> list[Check]:
         "One_Wave_Bench/hive-pipe/terminal_parser.py",
         "One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py",
         "One_Wave_Bench/hive-pipe/bridge_doctor.py",
+        "One_Wave_Bench/hive-pipe/parser_goblin.py",
         "One_Wave_Bench/hive-pipe/deepseek_bridge.py",
         "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py",
         "scripts/external_work_bridge.py",
@@ -203,6 +205,7 @@ def gateway_live_checks(*, required: bool, timeout: int) -> list[Check]:
     checks = [
         service_check("hive-pipe-agent.service", required=required),
         service_check("hive-pipe-gateway.service", required=required),
+        service_check("parser-goblin.service", required=required),
     ]
     token = load_token()
     if not token:
@@ -237,15 +240,15 @@ def gateway_live_checks(*, required: bool, timeout: int) -> list[Check]:
 
 def pull_live_checks(*, required: bool) -> list[Check]:
     checks = [service_check("one-wave-chatgpt-terminal-pull.service", required=required)]
-    runtime = Path(os.environ.get(
-        "CHATGPT_TERMINAL_RUNTIME",
-        str(Path.home() / ".local/share/one-wave-chatgpt-terminal-runtime"),
-    )).expanduser()
-    if not (runtime / ".git").is_dir():
+    transport_repo = Path(os.environ.get(
+        "CHATGPT_TERMINAL_REPO",
+        os.environ.get("ONE_WAVE_PROJECT_ROOT", str(REPO_ROOT)),
+    )).expanduser().resolve()
+    if not (transport_repo / ".git").exists():
         checks.append(Check(
-            "pull bridge runtime",
+            "pull bridge transport repo",
             FAIL if required else NOT_CONFIGURED,
-            f"not installed at {runtime}",
+            f"not a git checkout: {transport_repo}",
             "Run One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh from the checkout of the machine to control.",
         ))
         return checks
@@ -253,7 +256,7 @@ def pull_live_checks(*, required: bool) -> list[Check]:
     remote = run([
         "git", "ls-remote", "--heads", "origin",
         "refs/heads/chatgpt-terminal", "refs/heads/chatgpt-terminal-backup",
-    ], cwd=runtime, timeout=30)
+    ], cwd=transport_repo, timeout=30)
     found = remote.stdout.count("refs/heads/chatgpt-terminal")
     if remote.returncode == 0 and found >= 2:
         checks.append(Check("pull bridge routes", PASS, "primary and backup transport branches reachable"))

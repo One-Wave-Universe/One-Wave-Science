@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This installer intentionally does not merge, reset, or modify the user's active
-# One-Wave-Science checkout. It creates a private runtime clone for bridge code.
+# Install the resilient ChatGPT pull bridge against the user's ONE real
+# One-Wave-Science checkout. The bridge may fetch transport refs and create
+# temporary detached worktrees, but it never switches, merges, rebases, resets,
+# or duplicates the active checkout.
 SOURCE_REPO="${ONE_WAVE_PROJECT_ROOT:-}"
 if [[ -z "$SOURCE_REPO" ]]; then
   SOURCE_REPO="$(git rev-parse --show-toplevel 2>/dev/null || true)"
@@ -13,24 +15,24 @@ if [[ -z "$SOURCE_REPO" || ! -d "$SOURCE_REPO/.git" ]]; then
 fi
 SOURCE_REPO="$(cd "$SOURCE_REPO" && pwd)"
 
-REMOTE_URL="$(git -C "$SOURCE_REPO" remote get-url origin)"
-RUNTIME_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/one-wave-chatgpt-terminal-runtime"
 STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/one-wave-chatgpt-terminal"
 EXTERNAL_WORK_ROOT="${ONE_WAVE_EXTERNAL_WORK:-$HOME/One-Wave-External-Work}"
 SERVICE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 SERVICE_PATH="$SERVICE_DIR/one-wave-chatgpt-terminal-pull.service"
+BRIDGE_WORKTREE="${XDG_STATE_HOME:-$HOME/.local/state}/one-wave-chatgpt-terminal/bridge-worktree"
 
-mkdir -p "$(dirname "$RUNTIME_ROOT")" "$STATE_ROOT" "$SERVICE_DIR"
+mkdir -p "$STATE_ROOT" "$SERVICE_DIR"
 mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
 
-if [[ ! -d "$RUNTIME_ROOT/.git" ]]; then
-  git clone --no-checkout "$REMOTE_URL" "$RUNTIME_ROOT"
-fi
+# One repository, one Git object/auth state. Fetch bridge refs into the real repo.
+git -C "$SOURCE_REPO" fetch --prune origin main fix/no-runtime-clone chatgpt-terminal chatgpt-terminal-backup
 
-git -C "$RUNTIME_ROOT" remote set-url origin "$REMOTE_URL"
-git -C "$RUNTIME_ROOT" fetch --prune origin main chatgpt-terminal chatgpt-terminal-backup
-git -C "$RUNTIME_ROOT" checkout --detach origin/main
-git -C "$RUNTIME_ROOT" reset --hard origin/main
+# Use a linked Git worktree, not a clone. This shares the same .git object store,
+# remotes, credentials, refs, and branch history as SOURCE_REPO.
+if [[ -e "$BRIDGE_WORKTREE" ]]; then
+  git -C "$SOURCE_REPO" worktree remove --force "$BRIDGE_WORKTREE" 2>/dev/null || rm -rf -- "$BRIDGE_WORKTREE"
+fi
+git -C "$SOURCE_REPO" worktree add --detach "$BRIDGE_WORKTREE" origin/fix/no-runtime-clone
 
 cat >"$SERVICE_PATH" <<EOF
 [Unit]
@@ -41,20 +43,21 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-WorkingDirectory=$RUNTIME_ROOT
-ExecStart=/usr/bin/python3 $RUNTIME_ROOT/One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --watch
+WorkingDirectory=$BRIDGE_WORKTREE
+ExecStart=/usr/bin/python3 $BRIDGE_WORKTREE/One_Wave_Bench/hive-pipe/chatgpt_terminal_pull.py --watch
 Restart=always
 RestartSec=5
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=$RUNTIME_ROOT $STATE_ROOT $SOURCE_REPO $EXTERNAL_WORK_ROOT
+ReadWritePaths=$SOURCE_REPO $BRIDGE_WORKTREE $STATE_ROOT $EXTERNAL_WORK_ROOT
 Environment=PYTHONUNBUFFERED=1
 Environment=CHATGPT_TERMINAL_DEFAULT_CWD=$SOURCE_REPO
 Environment=CHATGPT_TERMINAL_ROUTES=primary=origin:chatgpt-terminal,backup=origin:chatgpt-terminal-backup
 Environment=HIVE_PIPE_ALLOWED_ROOTS=$SOURCE_REPO:$EXTERNAL_WORK_ROOT
 Environment=ONE_WAVE_PROJECT_ROOT=$SOURCE_REPO
+Environment=CHATGPT_TERMINAL_REPO=$SOURCE_REPO
 Environment=REFERENCE_GATE_LEDGER=$STATE_ROOT/reference-receipts.jsonl
 
 [Install]
@@ -64,14 +67,32 @@ EOF
 systemctl --user daemon-reload
 systemctl --user enable --now one-wave-chatgpt-terminal-pull.service
 
+# The old permanent runtime clone created a second Git/auth state. Once the
+# service is confirmed active from the real checkout, remove only that exact
+# deprecated directory. Bridge state remains under XDG_STATE_HOME.
+OLD_RUNTIME="${XDG_DATA_HOME:-$HOME/.local/share}/one-wave-chatgpt-terminal-runtime"
+if systemctl --user is-active --quiet one-wave-chatgpt-terminal-pull.service; then
+  if [[ "$OLD_RUNTIME" == "$HOME/.local/share/one-wave-chatgpt-terminal-runtime" && -d "$OLD_RUNTIME" ]]; then
+    rm -rf -- "$OLD_RUNTIME"
+    printf 'REMOVED_DEPRECATED_RUNTIME_CLONE=%s\n' "$OLD_RUNTIME"
+  fi
+fi
+
 printf 'CHATGPT_TERMINAL_PULL_INSTALLED\n'
 printf 'project=%s\n' "$SOURCE_REPO"
-printf 'runtime=%s\n' "$RUNTIME_ROOT"
+printf 'transport_repo=%s\n' "$SOURCE_REPO"
+printf 'bridge_worktree=%s\n' "$BRIDGE_WORKTREE"
+printf 'runtime_clone=NOT_USED\n'
 printf 'routes=origin:chatgpt-terminal,origin:chatgpt-terminal-backup\n'
 systemctl --user is-active one-wave-chatgpt-terminal-pull.service
 
+# Reconcile only stale local journal entries that are no longer present on
+# either transport route and have no durable result waiting for delivery.
+python3 "$BRIDGE_WORKTREE/One_Wave_Bench/hive-pipe/reconcile_bridge_state.py"
+
 for attempt in 1 2 3 4 5; do
-  if python3 "$RUNTIME_ROOT/One_Wave_Bench/hive-pipe/bridge_doctor.py" --profile pull; then
+  if ONE_WAVE_PROJECT_ROOT="$SOURCE_REPO" CHATGPT_TERMINAL_REPO="$SOURCE_REPO" \
+     python3 "$BRIDGE_WORKTREE/One_Wave_Bench/hive-pipe/bridge_doctor.py" --profile pull; then
     printf 'CHATGPT_TERMINAL_PULL_HEALTHY\n'
     exit 0
   fi
