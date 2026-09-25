@@ -12,6 +12,8 @@ TOKEN_DIR="$CONFIG_DIR/tokens"
 SYSTEMD_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
 GATEWAY_SERVICE="$SYSTEMD_DIR/hive-pipe-gateway.service"
 AGENT_SERVICE="$SYSTEMD_DIR/hive-pipe-agent.service"
+WATCHER_SERVICE="$SYSTEMD_DIR/one-wave-folder-watcher.service"
+PARSER_GOBLIN_SERVICE="$SYSTEMD_DIR/parser-goblin.service"
 
 mkdir -p "$TOKEN_DIR" "$SYSTEMD_DIR"
 mkdir -p "$EXTERNAL_WORK_ROOT/inbox" "$EXTERNAL_WORK_ROOT/work" "$EXTERNAL_WORK_ROOT/outbox"
