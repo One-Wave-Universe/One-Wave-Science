@@ -50,7 +50,7 @@ only when coupled to a declared chapter mechanism and Gray control.
 
 ## Executable authority
 
-- `One_Wave_Bench/dynamics/asymmetric_oscillator.py`
-- `One_Wave_Bench/dynamics/test_asymmetric_oscillator.py`
+- `sims/bench/dynamics/asymmetric_oscillator.py`
+- `sims/bench/dynamics/test_asymmetric_oscillator.py`
 
 Fourteen oscillator tests pass.

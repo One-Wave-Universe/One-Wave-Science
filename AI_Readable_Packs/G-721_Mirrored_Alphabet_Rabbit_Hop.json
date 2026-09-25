@@ -1,7 +1,7 @@
 {
   "node_id": "G-721",
   "name": "Rabbit Hopping Address and System-Communication Translator",
-  "canonical_lock": "RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md",
+  "canonical_lock": "docs/reference/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md",
   "purpose": ["addressing system", "system-communication translator"],
   "status": {
     "locked": "packet grammar, three currently declared routes, wrappers, connectivity, alphabet orientation, coupled vertical inversion",
@@ -71,10 +71,10 @@
     },
     "not_locked": "division's broader role outside the bounded 12-24 rail"
   },
-  "implementation": "One_Wave_Bench/brain/rabbit_hop_alphabet.py",
-  "scale_rail_implementation": "One_Wave_Bench/brain/rabbit_hop_scale_rail.py",
-  "tests": "One_Wave_Bench/brain/test_rabbit_hop_alphabet.py",
-  "scale_rail_tests": "One_Wave_Bench/brain/test_rabbit_hop_scale_rail.py",
+  "implementation": "https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_alphabet.py",
+  "scale_rail_implementation": "https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_scale_rail.py",
+  "tests": "https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_alphabet.py",
+  "scale_rail_tests": "https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_scale_rail.py",
   "gate": "YELLOW",
   "lifecycle": "ACTIVE"
 }

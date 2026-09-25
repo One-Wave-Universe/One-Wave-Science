@@ -83,7 +83,7 @@ continuous oscillator and measured systems.
 
 ## Executable authority
 
-- `One_Wave_Bench/logic_core/commitment_map.py`
-- `One_Wave_Bench/logic_core/test_commitment_map.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/commitment_map.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/test_commitment_map.py`
 
 The combined logic suite contains twenty-nine passing tests.

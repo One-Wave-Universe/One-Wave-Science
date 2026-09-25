@@ -11,7 +11,7 @@ R ≡ κ
 dt = R |ds| = κ |ds|
 ```
 
-`MATH.md` already writes `dt = κ |ds|` and `ν/ν0 = κ0/κ`. Circuit resistance is the same job at the electrical octave: drop per current. Path resistance is drop per displacement. Resistance is the time to cross the patch, not a separate bill that later causes time.
+`docs/reference/MATH.md` already writes `dt = κ |ds|` and `ν/ν0 = κ0/κ`. Circuit resistance is the same job at the electrical octave: drop per current. Path resistance is drop per displacement. Resistance is the time to cross the patch, not a separate bill that later causes time.
 
 ## Consequences that stay attached
 

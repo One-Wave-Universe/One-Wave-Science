@@ -70,8 +70,8 @@ false-close probability, and correlated-noise sensitivity.
 
 ## Executable authority
 
-- `One_Wave_Bench/logic_core/noise_hysteresis_audit.py`
-- `One_Wave_Bench/logic_core/test_noise_hysteresis_audit.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/noise_hysteresis_audit.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/test_noise_hysteresis_audit.py`
 - public deterministic readout in `commitment_map.py`
 
 The logic suite contains forty-five passing tests. B5 remains open for delay,

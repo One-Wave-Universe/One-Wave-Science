@@ -86,4 +86,4 @@ Condensate-break, phase inversion, and "soliton drop-out into alpha floors" rema
 
 ## Executable receipt
 
-`One_Wave_Bench/logic_core/zone_edge_a0.py` and `test_zone_edge_a0.py` compute the conversion and refuse to label it derived.
+`https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/zone_edge_a0.py` and `test_zone_edge_a0.py` compute the conversion and refuse to label it derived.

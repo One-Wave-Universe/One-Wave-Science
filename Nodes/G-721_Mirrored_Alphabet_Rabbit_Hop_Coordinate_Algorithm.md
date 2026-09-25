@@ -11,8 +11,8 @@ metadata_standard: "I-06"
 
 # Node G-721: Mirrored Alphabet Rabbit-Hop Coordinate Algorithm
 
-> **Authoritative lock:** `RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
-> **Executable arithmetic:** `One_Wave_Bench/brain/rabbit_hop_core.py`.
+> **Authoritative lock:** `docs/reference/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md`.
+> **Executable arithmetic:** `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_core.py`.
 >
 > This node describes the alphabet adapter and its interpretation. If shorthand
 > here conflicts with the lock/core, the lock/core wins.
@@ -273,22 +273,22 @@ the live-choice/sensory layer selects Hold.
 ## Executable adapter
 
 ```text
-One_Wave_Bench/brain/rabbit_hop_alphabet.py
-One_Wave_Bench/brain/test_rabbit_hop_alphabet.py
+https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_alphabet.py
+https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_alphabet.py
 ```
 
 The alphabet adapter imports the shared enums and route arithmetic from:
 
 ```text
-One_Wave_Bench/brain/rabbit_hop_core.py
-One_Wave_Bench/brain/test_rabbit_hop_core.py
+https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_core.py
+https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/test_rabbit_hop_core.py
 ```
 
 Music and Circle-of-Fifths use the same core through:
 
 ```text
-One_Wave_Bench/brain/rabbit_hop_music.py
-RABBIT_HOPPING_MUSIC_ADAPTER.md
+https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/brain/rabbit_hop_music.py
+docs/reference/RABBIT_HOPPING_MUSIC_ADAPTER.md
 ```
 
 ## Validation requirements

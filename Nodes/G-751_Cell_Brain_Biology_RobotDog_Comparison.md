@@ -26,7 +26,7 @@ Still unbuilt on the bench. Intended loop:
 
 This is a **nerve segment**. It must not speak.
 
-## 2. Brain cell (existing `One_Wave_Bench/brain`)
+## 2. Brain cell (existing `Builds/runtime/bench/brain`)
 
 Already executable as command/memory only:
 

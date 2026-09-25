@@ -51,4 +51,4 @@ measured proton observables under perturbation.
 
 ## Visual authority
 
-- `One_Wave_Bench/micro/proton_sphere_overlay.html`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/micro/proton_sphere_overlay.html`

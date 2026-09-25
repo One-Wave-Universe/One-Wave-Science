@@ -17,7 +17,7 @@ Upstream: A-101, A-110, A-111, B-203, B-204, B-206, B-208, B-221,
 B-222, B-223, B-224, C-312, D-411, G-711, G-718, G-719, G-720, G-722.
 
 Authority and full engineering contract:
-`UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`.
+`docs/updates/UPDATED_42_CENTER_ORIGIN_M4_HETEROGENEOUS_RUNTIME.md`.
 
 ## Definition
 

@@ -59,8 +59,8 @@ tests without degrading conserved quantities or established orbital results.
 
 ## Executable reference
 
-- `One_Wave_Bench/logic_core/six_route_logic.py`
-- `One_Wave_Bench/logic_core/test_six_route_logic.py`
-- `UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
-- `MATH_ATTACK_MAP_UPDATED_43.md`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/six_route_logic.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/test_six_route_logic.py`
+- `docs/updates/UPDATED_43_TWO_CHOICE_THREE_MOVE_SIX_ROUTE_LOGIC.md`
+- `docs/maps/MATH_ATTACK_MAP_UPDATED_43.md`
 

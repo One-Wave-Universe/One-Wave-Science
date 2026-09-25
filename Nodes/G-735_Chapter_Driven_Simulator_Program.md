@@ -24,7 +24,7 @@ simulation route:
 
 ## Coverage authority
 
-`One_Wave_Bench/simulators/chapter_registry.py` registers all twenty-three
+`https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/simulators/chapter_registry.py` registers all twenty-three
 current science chapters across Book 1, Book 2, and Book 5. Book 3 and Book 4
 currently contain scope/status documents rather than science chapters; their
 future chapters must be registered when written.

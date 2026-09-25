@@ -38,5 +38,5 @@ must be declared, derived, and tested before the B-226 recursion floor passes.
 
 ## Executable authority
 
-- `One_Wave_Bench/micro/vortex_diagnostics.py`
-- `One_Wave_Bench/micro/test_vortex_diagnostics.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/micro/vortex_diagnostics.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/micro/test_vortex_diagnostics.py`

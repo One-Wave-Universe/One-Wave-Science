@@ -105,7 +105,7 @@ Orientation or phase is state carried through a gate, not another gate count.
 
 ## Executable authority
 
-- `One_Wave_Bench/logic_core/mirror_operator.py`
-- `One_Wave_Bench/logic_core/test_mirror_operator.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/mirror_operator.py`
+- `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/test_mirror_operator.py`
 
 Existing tests validate the reference operator only; they must not be cited as proof of the physical carrier.

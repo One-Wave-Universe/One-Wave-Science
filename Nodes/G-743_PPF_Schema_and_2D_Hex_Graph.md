@@ -15,8 +15,8 @@ metadata_standard: "I-06"
 
 ## What was added
 
-1. `One_Wave_Bench/logic_core/ppf_schema.py` implements `X_s={P_s, gamma_s, F_s; children}` with units and frames `{ground, local, path}`.
-2. `One_Wave_Bench/logic_core/hex_lattice_graph.py` builds D-408 disk, seven-cell, 6 directed neighbors, 3 axis pairs, incidence, Laplacian for `3 > 1(0)1 < 6`.
+1. `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/ppf_schema.py` implements `X_s={P_s, gamma_s, F_s; children}` with units and frames `{ground, local, path}`.
+2. `https://github.com/One-Wave-Universe/Builds/tree/main/runtime/bench/logic_core/hex_lattice_graph.py` builds D-408 disk, seven-cell, 6 directed neighbors, 3 axis pairs, incidence, Laplacian for `3 > 1(0)1 < 6`.
 3. Tests: `test_ppf_schema.py` (5), `test_hex_lattice_graph.py` (7).
 
 ## Math receipts
