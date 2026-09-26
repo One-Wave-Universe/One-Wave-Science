@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One-Wave Universal State Container</title>
+<style>
+body{margin:0;background:#0a0d12;color:#eef2ff;font:15px system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:18px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.card{background:#111722;border:1px solid #283348;border-radius:14px;padding:14px}
+canvas{width:100%;height:360px;background:#070a0f;border-radius:10px}input,button,select{font:inherit}label{display:block;margin:8px 0}
+pre{white-space:pre-wrap;word-break:break-word;font-size:12px}.pill{display:inline-block;padding:3px 8px;border:1px solid #3a4762;border-radius:999px;margin:2px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+</style></head><body><main>
+<h1>Stage 00 — Universal State Container</h1>
+<p>This is the container beneath the physics. It can hold a synthetic oscillator now and later accept measured channels from CERN, GWOSC, or other datasets without changing the basic state format.</p>
+<div class="grid">
+<section class="card">
+<h2>Live state</h2>
+<label>Amplitude <input id="a" type="range" min=".05" max="1" value=".7" step=".01"></label>
+<label>Frequency <input id="f" type="range" min=".1" max="2" value=".5" step=".01"></label>
+<label>Phase <input id="p" type="range" min="-3.14" max="3.14" value="0" step=".01"></label>
+<button id="pause">Pause</button><button id="reset">Reset</button>
+<canvas id="c" width="650" height="360"></canvas>
+</section>
+<section class="card">
+<h2>Container layers</h2>
+<div><span class="pill">STATE</span><span class="pill">MEASUREMENT</span><span class="pill">PROVENANCE</span></div>
+<p>Switch the source example to see how one container can represent synthetic state or imported scientific metadata.</p>
+<select id="source">
+<option value="synthetic">Synthetic oscillator</option>
+<option value="gwosc">GWOSC-shaped example</option>
+<option value="cern">CERN-shaped example</option>
+</select>
+<pre id="json"></pre>
+</section>
+</div>
+<script>
+const $=x=>document.getElementById(x),cv=$('c'),g=cv.getContext('2d');let t=0,last=performance.now(),run=true,h=[];
+function container(){
+ let A=+$('a').value,f=+$('f').value,p=+$('p').value,w=2*Math.PI*f,th=w*t+p,x=A*Math.cos(th),v=-A*w*Math.sin(th);
+ let base={id:"state-00",state:{time:+t.toFixed(4),reference:0,value:+x.toFixed(6),amplitude:A,phase:+th.toFixed(6),frequency:f,direction:Math.sign(v),position:[+x.toFixed(6)],velocity:+v.toFixed(6),acceleration:+(-w*w*x).toFixed(6),energy:+(.5*(v*v+w*w*x*x)).toFixed(6),history:[],neighbors:[]},measurements:[],provenance:{source:"synthetic",dataset:null,event:null,version:null,detectors:[],doi:null,record_id:null,file:null,license:null}};
+ if($('source').value==="gwosc"){base.measurements=[{name:"strain_channel",value:null,unit:"strain",uncertainty:null,channel:"H1",detector:"H1",sample_rate:16384,timestamp:null}];base.provenance={source:"GWOSC",dataset:"event-version",event:"example",version:null,detectors:["H1","L1"],doi:null,record_id:null,file:null,license:"CC BY 4.0"}}
+ if($('source').value==="cern"){base.measurements=[{name:"event_quantities",value:[],unit:null,uncertainty:null,channel:null,detector:"example detector",sample_rate:null,timestamp:null}];base.provenance={source:"CERN Open Data",dataset:"open-data-record",event:null,version:null,detectors:[],doi:null,record_id:null,file:null,license:"record-specific / metadata CC0"}}
+ return base;
+}
+function draw(s){
+ const w=cv.width,H=cv.height;g.clearRect(0,0,w,H);g.strokeStyle="#34415b";g.beginPath();g.moveTo(0,H/2);g.lineTo(w,H/2);g.stroke();
+ h.push({t:s.state.time,x:s.state.value});if(h.length>600)h.shift();if(h.length>1){let t1=h[h.length-1].t,t0=h[0].t,span=Math.max(5,t1-t0);g.strokeStyle="#dce5ff";g.lineWidth=2;g.beginPath();h.forEach((q,i)=>{let X=w-(t1-q.t)/span*w,Y=H/2-q.x*H*.4;i?g.lineTo(X,Y):g.moveTo(X,Y)});g.stroke();}
+ let x=w/2+s.state.value*w*.35;g.fillStyle="#fff";g.beginPath();g.arc(x,H/2,8,0,Math.PI*2);g.fill();
+}
+function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;if(run)t+=dt;let s=container();draw(s);$('json').textContent=JSON.stringify(s,null,2);requestAnimationFrame(frame)}
+$('pause').onclick=()=>{run=!run;$('pause').textContent=run?"Pause":"Resume"};$('reset').onclick=()=>{t=0;h=[]};requestAnimationFrame(frame);
+</script></body></html>
