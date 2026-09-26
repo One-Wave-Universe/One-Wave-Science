@@ -1,38 +1,57 @@
-# CELL_V1 — actual first board
+# CELL_V1 — actual F0 board
 
-830 breadboard. 50 mA. Do A and law first. B and C copy A.
+## Locked build identity
 
-## Rails
+This file names the **one realistic CELL_V1 build**. It does not define a
+second shortcut circuit.
 
-Top power rail: RED +12  
-Bottom power rail: BLACK −12  
-BLUE = a jumpered row down the trench, column 1 to 63. That is G.
+```text
+Supply:       regulated 5 V, current limit 10–20 mA
+NET_P:        +5.0 V absolute
+NET_G:        TLE2426 OUT, approximately +2.5 V absolute (CENTER)
+NET_N:        supply 0 V
+Cell:         3 logical Mirror stations: G+, G0, G-
+Traversals:   6 bilateral electrical legs
+Switches:     12 N-MOSFETs total, two source-to-source per leg
+Load:         resistor/RC qualification only; motor disconnected
+```
 
-Col 1: banana wires from the supply. 100 nF RED–BLUE, 100 nF BLACK–BLUE.
-Col 3: 10 k RED–BLUE, 10 k BLACK–BLUE.
-Col 5–6: I_0. Either DMM in series in BLUE or 1 Ω between col 5 and 6 on the blue jumper line.
+The exact parts, nodes, and order are authoritative in:
 
-## Station A (cols 10–18)
+1. `../01_PARTS/CELL_V1_PARTS_BOM.md`
+2. `../02_CONNECTIONS/CELL_V1_NETLIST.md`
+3. `../CELL_V1_FULL_BUILD.md`
+4. `CELL_V1_SAFE_BRINGUP.md`
+5. `../10_RECEIPTS/CELL_V1_RECEIPT_SCHEMA.json`
 
-- AO3401 breakout: source to RED, drain to a node called PA (col 14).
-- 2N7000 flat toward you, left-to-right S G D (confirm bag). S to BLACK, D to PA.
-- 220 Ω in each gate lead.
-- 10 k from P-gate node to RED (OFF).
-- 10 k from N-gate node to BLACK (OFF).
-- 1 k from PA to BLUE (STAR for now is just BLUE).
+## Physical organization
 
-STAY = both pulldowns only.  
-+1 = short P-gate toward BLUE with a jumper.  
-−1 = short N-gate toward BLUE.
+Use one full-size solderless breadboard for F0. Put the TLE2426 and rail
+decoupling at the controller/home end. Run NET_P and NET_N as supply buses.
+Run NET_G as a star/reference spine from the midpoint host; each station tap
+connects independently to NET_G through its own 10-ohm receipt shunt.
 
-Never both jumpers.
+Build one complete G0 station first only as an assembly step. After G0 passes
+P3–P7, copy that exact proven station to G+ and G-. The locked result is the
+complete three-station cell, not the G0 construction checkpoint.
 
-## Then
+## Gate fixture
 
-Copy station A at cols 25–33 (B) and 40–48 (C).  
-STAR = three 1 k (or later coils) tied together and to BLUE.  
-Speaker if you want hearing: between PA and PB, 47 Ω in series, **not** to BLUE.
+Each bilateral pair uses a floating, source-referenced manual gate fixture:
 
-## First DMM
+- two N-MOSFETs source-to-source, with their gates tied;
+- 100 k from tied gates to the common-source node for defined OFF;
+- floating approximately 3 V source, negative to common source;
+- positive through one SPST switch and 220 ohm to the tied gates.
 
-Black on BLUE. RED ~+12, BLACK ~−12, I_0 ~0. Pull one law 10 k. I_0 ~1.2 mA. Plug back.
+There are six independent fixtures—one for each upper/lower bilateral leg.
+Never substitute a common ground-referenced GPIO during F0.
+
+## Lock condition
+
+CELL_V1 electrical F0 is not physically locked until every P0–P9 step in
+`CELL_V1_SAFE_BRINGUP.md` has a completed receipt. Software/model passes are
+not physical passes. The complete cell additionally requires P10 whole-state
+quadratic memory, P11 manual differential reinjection, and P12 automatic analog
+hysteretic reinjection. Those are required layers, not optional station-local
+attachments.

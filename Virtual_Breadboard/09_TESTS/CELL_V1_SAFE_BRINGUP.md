@@ -112,9 +112,34 @@ supply current
 
 If G oscillates or drifts, stop. That is reference failure, not a useful state.
 
-## P10 — magnetic sense only
+## P10 — whole-cell quadratic memory, sense only
 
-Place the sense coil/Hall setup around G0 only. No active magnetic reinjection yet. Run positive/negative/control/drive-off receipts per `../07_MAGNETICS/ROTATIONAL_HOLD_TEST.md`.
+Route the resolved A/B/C differential state into the one whole-cell memory
+plane. Measure its Hall/sense and memristive state outputs relative to NET_G.
+No active reinjection yet. Run positive/negative/control/drive-off receipts per
+`../07_MAGNETICS/ROTATIONAL_HOLD_TEST.md` and prove that different ternary
+histories yield distinguishable, repeatable whole-state readings.
+
+## P11 — manual bounded reinjection
+
+Use the measured whole-state differential to identify LOW and HIGH belts.
+Manually connect the current-limited reinjection path at LOW and disconnect it
+at HIGH. Verify polarity, source current, NET_G stiffness, state restoration,
+and coast decay before adding automatic feedback.
+
+## P12 — analog reinjection loop
+
+Enable the analog hysteretic controller. It must:
+
+```text
+LOW crossing  -> bounded source connection
+HIGH crossing -> source disconnect
+between belts -> retain the previous switch state without chatter
+```
+
+Compare integrated source energy against continuous excitation at the same
+state/output tolerance. Stop if NET_G leaves its belt, either reinjection side
+conducts illegally, the controller chatters, or any device heats.
 
 ## Mandatory receipt per step
 
@@ -132,6 +157,9 @@ RC values and measured tau
 frequency / polarity / phase where applicable
 temperature or heating observation
 magnetic sense values only when present
+whole-state memory value and preceding A/B/C history
+LOW/HIGH threshold crossings and reinjection switch state
+integrated reinjection energy and matched continuous-drive control energy
 PASS / FAIL and exact reason
 ```
 
