@@ -121,8 +121,10 @@ Before any AI connects magnetism, lattice reorganization, gravity/compression, o
 4. `Nodes/C-319_Magnetic_Lattice_Reorganization.md` — magnetic rotation reorganizes directional lattice path accessibility.
 5. `Nodes/A-115_Unified_Compression_Field.md` — gravity remains the compression-gradient/restoring field source.
 6. `Nodes/C-320_Magnetic_Compression_Path_Coupling.md` — candidate coupling `g_OW = -alpha_g K_L grad(chi)` with mandatory `K_L -> I` recovery.
-7. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.
-8. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.
+7. `Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md` — six-neighbor numerical dispersion, octave-emergence controls, scale-transform separation, and held-out metadata gates.
+8. `Nodes/G-765_EM_Lattice_Potential_and_Proton_Displacement_Proof.md` — exploratory EM/lattice proof packet; standard EM control, energy ledger, metadata calibration, and proton-like displacement gates remain mandatory.
+9. `Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation.md` — reduced lab; source-derived A-115 baseline must pass before magnetic coupling is enabled.
+10. `Nodes/D-416_Planetary_Rotation_Magnetic_Coupling_Test_Matrix.md` — Moon/Mercury/Venus/Uranus/Neptune joint falsification matrix.
 
 Locked interpretation:
 
