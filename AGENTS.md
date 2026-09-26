@@ -16,6 +16,7 @@ Before dispatching work, read:
 
 - `JETSON_OPENCLAW_RUNTIME.md`
 - `BRANCH_STEP_PROJECT_TEMPLATE.md`
+- `FIVE_WORKER_RECURSIVE_CODING_LOOP.md`
 - the active Field/Void branch control files
 - current progress/diary/failed-approach/working-feature records
 
@@ -121,6 +122,18 @@ Each project must explicitly contain:
 - HANDOFF / NEXT PERMITTED STEP
 
 Do not execute unbounded coding instructions when they can be represented as a branch-step project.
+
+## Five-worker recursive scale
+
+All coding/app/program work must route through the five increasing scopes defined in `FIVE_WORKER_RECURSIVE_CODING_LOOP.md`:
+
+`Parser -> Builder -> Connector -> Explorer -> Administrator`
+
+Each worker uses the same six process gates:
+
+`Begin -> Build -> Hold -> Build -> Break -> Loop`
+
+This scale law does not replace Field/Void. Field and Void operate across every worker scale; M4/OpenClaw owns routing between scales and preserves the handoff packet. Use the smallest worker that can resolve the problem. Ascend only when bounded local evidence is insufficient; descend as soon as the problem becomes local again.
 
 ## Execution Loop
 
