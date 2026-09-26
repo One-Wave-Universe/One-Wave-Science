@@ -25,6 +25,8 @@ The primitive is not a cell and not a particle. It is one local degree of freedo
 - D-417 hexagonal lattice interaction dynamics
 - E-531 dual-harmonic propagation boundary
 - G-728 C1/D1/E1/E3 work queue
+- G-765 EM lattice potential and proton-displacement proof
+- G-766 discrete lattice dispersion and octave-emergence proof
 - `sims/00_CANONICAL_INGEST_RULE.md`
 
 ## Minimal site state
@@ -168,8 +170,9 @@ LATTICE SITE
 → COMBINED STATE
 → REAL WAVE INGEST (GWOSC)
 → COLLISION EXCITATION INGEST (CERN)
+→ DISCRETE DISPERSION / OCTAVE-EMERGENCE CONTROLS (G-766)
+→ EM LATTICE CONTROL / MAGNETIC REORGANIZATION (G-765)
 → STABLE LOOP/VORTEX SEARCH
 → PROTON-LIKE / QUARK-LIKE HYPOTHESIS TESTS
 → ATP / BIOENERGETIC TRANSFER
 → larger physics.
-
