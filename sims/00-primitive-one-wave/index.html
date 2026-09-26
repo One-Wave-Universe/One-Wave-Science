@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Primitive One-Wave Differential</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;background:#080b10;color:#edf2ff;font:15px system-ui,sans-serif}
+main{max-width:1100px;margin:auto;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:#111722;border:1px solid #2b3548;border-radius:14px;padding:14px}
+canvas{width:100%;height:430px;background:#05070b;border-radius:10px}
+label{display:block;margin:9px 0}
+input,button,select{font:inherit}
+button{padding:8px 12px}
+pre{white-space:pre-wrap;font-size:12px}
+.band{font-weight:700}
+@media(max-width:850px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>Primitive One-Wave Simulation — Differential Around Center</h1>
+<p>One primitive only: a live signed state around a center reference. Positive lean expresses, negative lean compresses, zero is the active middle. The locked seven bands and transition gaps are preserved.</p>
+
+<div class="grid">
+<section class="card">
+<h2>Primitive controls</h2>
+<label>Drive <input id="drive" type="range" min="-1" max="1" value="0.55" step="0.001"></label>
+<label>Restoring strength <input id="restore" type="range" min="0" max="2" value="0.55" step="0.01"></label>
+<label>Hysteresis memory <input id="memory" type="range" min="0" max="1" value="0.35" step="0.01"></label>
+<label>Damping <input id="damping" type="range" min="0" max="1" value="0.12" step="0.01"></label>
+<label>Octave n <input id="octave" type="range" min="-4" max="4" value="0" step="1"></label>
+<p><button id="toggle">Pause</button> <button id="reset">Reset</button></p>
+<pre id="readout"></pre>
+</section>
+
+<section class="card">
+<h2>Scientific state</h2>
+<canvas id="science" width="520" height="430"></canvas>
+</section>
+
+<section class="card">
+<h2>One-Wave visual</h2>
+<canvas id="art" width="520" height="430"></canvas>
+</section>
+
+<section class="card">
+<h2>Locked bands</h2>
+<p>90–100: Extreme Expression / Danger</p>
+<p>75–85: Strong Expression</p>
+<p>60–70: Moderate Expression</p>
+<p>45–55: Active Middle</p>
+<p>30–40: Moderate Compression</p>
+<p>15–25: Strong Compression</p>
+<p>0–10: Extreme Compression / Danger</p>
+<p>All six 5-point gaps are transition / hysteresis regions.</p>
+</section>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const s=$('science'),a=$('art'),sg=s.getContext('2d'),ag=a.getContext('2d');
+
+let q=0,v=0,held=0,t=0,last=performance.now(),running=true,trace=[];
+
+function band(w){
+  if(w>=90)return["EXTREME EXPRESSION / DANGER",3];
+  if(w>=85)return["TRANSITION",null];
+  if(w>=75)return["STRONG EXPRESSION",2];
+  if(w>=70)return["TRANSITION",null];
+  if(w>=60)return["MODERATE EXPRESSION",1];
+  if(w>=55)return["TRANSITION",null];
+  if(w>=45)return["ACTIVE MIDDLE",0];
+  if(w>=40)return["TRANSITION",null];
+  if(w>=30)return["MODERATE COMPRESSION",-1];
+  if(w>=25)return["TRANSITION",null];
+  if(w>=15)return["STRONG COMPRESSION",-2];
+  if(w>=10)return["TRANSITION",null];
+  return["EXTREME COMPRESSION / DANGER",-3];
+}
+
+function update(dt){
+  const drive=+$('drive').value;
+  const restore=+$('restore').value;
+  const mem=+$('memory').value;
+  const damp=+$('damping').value;
+
+  // Minimal One-Wave primitive:
+  // drive biases the state, restoring pulls toward live center,
+  // retained settled direction adds hysteretic memory.
+  const acc = drive - restore*q - damp*v + mem*held*0.28;
+  v += acc*dt;
+  q += v*dt;
+
+  // Soft physical bound for this primitive simulation.
+  if(q>1){q=1;v*=-0.35}
+  if(q<-1){q=-1;v*=-0.35}
+
+  const w=50+50*q;
+  const [name,level]=band(w);
+
+  // Retain only when in named non-transition bands away from center.
+  if(level!==null && level!==0) held=Math.sign(level);
+
+  return {drive,restore,mem,damp,w,name,level};
+}
+
+function axes(g,c){
+  g.clearRect(0,0,c.width,c.height);
+  g.strokeStyle='#38445d';
+  g.lineWidth=1;
+  g.beginPath();
+  g.moveTo(0,c.height/2); g.lineTo(c.width,c.height/2);
+  g.stroke();
+}
+
+function drawScience(st){
+  axes(sg,s);
+  trace.push({t,q});
+  if(trace.length>600)trace.shift();
+  const t1=trace.length?trace[trace.length-1].t:0;
+  const t0=trace.length?trace[0].t:0;
+  const span=Math.max(6,t1-t0);
+
+  sg.strokeStyle='#dce5ff'; sg.lineWidth=2; sg.beginPath();
+  trace.forEach((p,i)=>{
+    const x=s.width-(t1-p.t)/span*s.width;
+    const y=s.height/2-p.q*s.height*.42;
+    i?sg.lineTo(x,y):sg.moveTo(x,y);
+  });
+  sg.stroke();
+
+  const y=s.height/2-q*s.height*.42;
+  sg.fillStyle='#fff'; sg.beginPath(); sg.arc(s.width-10,y,6,0,Math.PI*2); sg.fill();
+
+  sg.fillStyle='#9fb0d8'; sg.font='13px system-ui';
+  sg.fillText('EXPRESSION +',12,20);
+  sg.fillText('CENTER 0',12,s.height/2-8);
+  sg.fillText('COMPRESSION -',12,s.height-14);
+}
+
+function drawArt(st){
+  ag.clearRect(0,0,a.width,a.height);
+  const cx=a.width/2, cy=a.height/2;
+  const n=+$('octave').value, scale=Math.pow(2,n);
+  const lean=q;
+  const base=42;
+  const r=Math.min(175,base+Math.abs(lean)*55*Math.sqrt(scale));
+
+  // center reference
+  ag.strokeStyle='rgba(255,255,255,.3)';
+  ag.lineWidth=2;
+  ag.beginPath(); ag.arc(cx,cy,base,0,Math.PI*2); ag.stroke();
+
+  // opposed field loops
+  const shift=lean*110;
+  ag.strokeStyle='rgba(220,230,255,.65)';
+  ag.lineWidth=3;
+  ag.beginPath(); ag.arc(cx+shift,cy,r,0,Math.PI*2); ag.stroke();
+  ag.beginPath(); ag.arc(cx-shift,cy,r,0,Math.PI*2); ag.stroke();
+
+  // signed state
+  ag.strokeStyle='#fff'; ag.lineWidth=4;
+  ag.beginPath(); ag.moveTo(cx,cy); ag.lineTo(cx+lean*170,cy); ag.stroke();
+
+  ag.fillStyle='#fff'; ag.beginPath(); ag.arc(cx+lean*170,cy,8,0,Math.PI*2); ag.fill();
+
+  ag.font='14px system-ui'; ag.fillStyle='#cbd7f4';
+  ag.fillText('VOID / COMPRESSION',22,cy+25);
+  ag.fillText('FIELD / EXPRESSION',a.width-165,cy+25);
+  ag.fillText('CENTER',cx-26,cy-55);
+}
+
+function frame(now){
+  const dt=Math.min(.03,(now-last)/1000); last=now;
+  let st={};
+  if(running){t+=dt;st=update(dt)} else {
+    const w=50+50*q,[name,level]=band(w);
+    st={drive:+$('drive').value,restore:+$('restore').value,mem:+$('memory').value,damp:+$('damping').value,w,name,level};
+  }
+  drawScience(st); drawArt(st);
+  const n=+$('octave').value;
+  $('readout').textContent=
+`q = ${q.toFixed(4)}
+velocity = ${v.toFixed(4)}
+One-Wave scale = ${st.w.toFixed(2)}
+band = ${st.name}
+discrete level = ${st.level===null?'transition':st.level}
+retained direction = ${held}
+octave = 2^${n} = ${Math.pow(2,n)}×`;
+  requestAnimationFrame(frame);
+}
+
+$('toggle').onclick=()=>{running=!running;$('toggle').textContent=running?'Pause':'Resume'};
+$('reset').onclick=()=>{q=0;v=0;held=0;t=0;trace=[]};
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
