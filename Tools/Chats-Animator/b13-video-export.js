@@ -13,8 +13,9 @@
     <strong>Video export</strong><br>
     Render the reel, frame holds, per-frame camera, soundtrack, and timed Voice Lab dialogue into a downloadable WebM video.
     <div class="control"><label><span>Width</span><span id="export-width-value">1280</span></label><input id="export-width" type="range" min="320" max="1920" step="160" value="1280"></div>
+    <button id="export-youtube-preset" type="button">YouTube 1080p (1920×1080)</button>
     <button id="export-webm" type="button">Export WebM Video</button>
-    <div id="export-meta" style="margin-top:8px">Ready</div>
+    <div id="export-meta" style="margin-top:8px">Ready — WebM uploads directly to YouTube</div>
   `;
   aside.insertBefore(panel, aside.firstChild);
 
@@ -26,6 +27,14 @@
 
   $('export-width')?.addEventListener('input', (event) => {
     if ($('export-width-value')) $('export-width-value').textContent = event.target.value;
+  });
+  $('export-youtube-preset')?.addEventListener('click', () => {
+    const width = $('export-width');
+    if (width) {
+      width.value = '1920';
+      width.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    A.status('YouTube preset ready: 1920×1080 WebM');
   });
 
   function loadImage(src) {
@@ -107,6 +116,8 @@
     canvas.width = width;
     canvas.height = Math.round(width * 9 / 16);
     const fps = Math.max(1, A.playback?.fps || Number($('fps-control')?.value || 24));
+    const ticks = R.frames.reduce((sum, frame) => sum + Math.max(1, Number(frame.hold) || 1), 0);
+    const duration = ticks / fps;
     const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm';
     const stream = canvas.captureStream(fps);
     let exportAudio = null;
@@ -115,7 +126,7 @@
         ? await A.voiceLab.makeCombinedAudioTrack(stream)
         : await makeFallbackAudioTrack(stream);
       const chunks = [];
-      const recorder = new MediaRecorder(stream, { mimeType });
+      const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: width >= 1920 ? 12000000 : 8000000, audioBitsPerSecond: 192000 });
       recorder.ondataavailable = (event) => { if (event.data?.size) chunks.push(event.data); };
       const stopped = new Promise((resolve) => { recorder.onstop = resolve; });
       $('export-meta').textContent = `Rendering ${R.frames.length} frames…`;
@@ -141,13 +152,13 @@
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `one-wave-video-${new Date().toISOString().replace(/[:.]/g, '-')}.webm`;
+      link.download = `one-wave-youtube-${width}x${canvas.height}-${fps}fps-${new Date().toISOString().replace(/[:.]/g, '-')}.webm`;
       document.body.appendChild(link);
       link.click();
       link.remove();
       setTimeout(() => URL.revokeObjectURL(url), 0);
-      $('export-meta').textContent = `Exported ${(blob.size / 1024).toFixed(1)} KB`;
-      A.status('WebM video exported with final audio mix');
+      $('export-meta').textContent = `Exported ${width}×${canvas.height} • ${fps} fps • ${ticks} ticks • ${duration.toFixed(2)} sec • ${(blob.size / 1024 / 1024).toFixed(2)} MB`;
+      A.status('YouTube-ready WebM exported with final audio mix');
     } catch (error) {
       console.error(error);
       exportAudio?.stop?.();
