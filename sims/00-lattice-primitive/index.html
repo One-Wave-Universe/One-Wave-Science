@@ -1,37 +1,48 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One-Wave Coupled Lattice Foundation</title>
 <style>
-body{margin:0;background:#070a0e;color:#edf2ff;font:14px system-ui}main{max-width:1180px;margin:auto;padding:16px}
+body{margin:0;background:#070a0e;color:#edf2ff;font:14px system-ui}main{max-width:1220px;margin:auto;padding:16px}
 .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.card{background:#101620;border:1px solid #29354a;border-radius:12px;padding:12px}
 canvas{width:100%;height:620px;background:#04070a;border-radius:8px}input,button,select{font:inherit}.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-label{display:flex;gap:6px;align-items:center}pre{white-space:pre-wrap;font-size:12px;max-height:420px;overflow:auto}
+label{display:flex;gap:6px;align-items:center}pre{white-space:pre-wrap;font-size:12px;max-height:500px;overflow:auto}.ok{font-weight:700}
 @media(max-width:850px){.grid{grid-template-columns:1fr}}
 </style></head><body><main>
-<h1>Stage 00 — Coupled Lattice → Combined State</h1>
-<p>37 six-neighbor numerical sites. No particles. No physical lattice spacing assumed. Click the lattice to inject a local excitation and watch the local states resolve into one combined-state receipt.</p>
+<h1>Stage 00 — Coupled Lattice → Combined State → Real GWOSC Replay</h1>
+<p>37 six-neighbor numerical sites. No particles and no physical lattice spacing assumed. The real-data mode replays an exact two-second 4096 Hz GW170817 strain window from H1, L1 and V1 into three logical lattice ports.</p>
 <div class="row">
 <label>coupling <input id="coupling" type="range" min="0" max="25000" step="100" value="10000"></label>
 <label>f₀ Hz <input id="freq" type="range" min="10" max="600" step="1" value="100"></label>
 <label>damping ζ <input id="damp" type="range" min="0" max=".2" step=".001" value=".01"></label>
 <label>nonlinear λ <input id="nonlin" type="range" min="0" max="2e6" step="10000" value="0"></label>
 <label>octave n <input id="oct" type="range" min="-4" max="4" step="1" value="0"></label>
-<select id="rate"><option value="4096">GWOSC 4096 Hz cadence</option><option value="16384">GWOSC 16384 Hz cadence</option></select>
-<button id="pulse">Center pulse</button><button id="toggle">Pause</button><button id="reset">Reset</button>
+<label>numerical GW drive <input id="gwgain" type="range" min="0" max="5" step=".05" value="1"></label>
+<select id="mode"><option value="all">GWOSC H1 + L1 + V1</option><option value="H1">H1 only</option><option value="L1">L1 only</option><option value="V1">V1 only</option><option value="synthetic">synthetic/manual</option></select>
+<button id="replay">Replay real GW170817</button><button id="pulse">Center pulse</button><button id="toggle">Pause</button><button id="reset">Reset</button>
 </div>
+<p id="dataStatus">Loading real GWOSC data…</p>
 <div class="grid"><section class="card"><canvas id="c" width="760" height="620"></canvas></section>
-<section class="card"><h2>Combined state</h2><pre id="out"></pre><h3>Anchor</h3><p>GW170817 cadence is used only as the external sampling clock. The lattice spacing remains numerical and dimensionless.</p></section></div>
+<section class="card"><h2>Combined state + raw input</h2><pre id="out"></pre><h3>Interpretation boundary</h3><p>GWOSC strain is the measured input. Mapping detector streams to lattice ports and scaling strain into numerical drive are explicit simulator transforms, not claims about detector geography or a physical lattice constant.</p></section></div>
 <script>
 const $=x=>document.getElementById(x),cv=$('c'),g=cv.getContext('2d');
 const R=3,sites=[],index=new Map(),dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
 for(let q=-R;q<=R;q++)for(let r=Math.max(-R,-q-R);r<=Math.min(R,-q+R);r++){let i=sites.length;sites.push({q,r,x:0,v:0,phase:0});index.set(q+','+r,i)}
 sites.forEach((s,i)=>{s.n=dirs.map(d=>index.get((s.q+d[0])+','+(s.r+d[1]))).filter(j=>j!==undefined)});
-let running=true,last=performance.now(),energy0=null,steps=0;
+const ports={H1:index.get("3,0"),L1:index.get("-3,3"),V1:index.get("0,-3")};
+let running=true,last=performance.now(),energy0=null,steps=0,gw=null,gwPeak=1,replaying=false,sample=0,replayCarry=0;
 function pix(s){const scale=73,cx=cv.width/2,cy=cv.height/2;return[cx+scale*(s.q+s.r/2),cy+scale*.866*s.r]}
 function pulse(i,amp=1){sites[i].v+=amp}
-function reset(){sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;steps=0}
-function step(dt){
+function reset(){sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;steps=0;sample=0;replayCarry=0;replaying=false;$('replay').textContent='Replay real GW170817'}
+function drivesFor(k){
+ const d={H1:0,L1:0,V1:0}; if(!gw||k>=gw.window.samples_per_detector)return d;
+ const mode=$('mode').value,gain=+$('gwgain').value;
+ for(const det of ['H1','L1','V1']) if(mode==='all'||mode===det) d[det]=(gw.detectors[det].values[k]/gwPeak)*gain;
+ return d;
+}
+function step(dt,drive={H1:0,L1:0,V1:0}){
  const f=+$('freq').value*(2**(+$('oct').value)),w=2*Math.PI*f,z=+$('damp').value,J=+$('coupling').value,lam=+$('nonlin').value;
  let acc=new Array(sites.length);
  for(let i=0;i<sites.length;i++){let s=sites[i],lap=s.n.reduce((a,j)=>a+sites[j].x-s.x,0);acc[i]=J*lap-w*w*s.x-2*z*w*s.v-lam*s.x*s.x*s.x}
+ const driveScale=250000;
+ for(const det of ['H1','L1','V1'])acc[ports[det]]+=drive[det]*driveScale;
  for(let i=0;i<sites.length;i++){sites[i].v+=acc[i]*dt;sites[i].x+=sites[i].v*dt;sites[i].phase=Math.atan2(sites[i].v/w,sites[i].x)}
  steps++;
 }
@@ -42,20 +53,49 @@ function metrics(){
  q/=sites.length;let arms=dirs.map(d=>index.get(d[0]+','+d[1])).filter(i=>i!==undefined);for(let k=0;k<arms.length;k++){let a=sites[arms[k]],b=sites[arms[(k+1)%arms.length]];circ+=a.x*b.v-b.x*a.v}
  return{Q:q,A_rms:Math.sqrt(a2/sites.length),V_rms:Math.sqrt(v2/sites.length),phase_coherence:Math.hypot(re,im)/sites.length,energy:E,circulation:circ}
 }
-function draw(m){
+function draw(){
  g.clearRect(0,0,cv.width,cv.height);
  sites.forEach((s,i)=>s.n.forEach(j=>{if(j>i){let[a,b]=[pix(s),pix(sites[j])];g.strokeStyle='#243149';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}}));
- let mx=Math.max(...sites.map(s=>Math.abs(s.x)),1e-9);
- sites.forEach(s=>{let[x,y]=pix(s),u=s.x/mx,r=10+18*Math.sqrt(Math.abs(u));g.fillStyle=u>=0?`rgba(230,240,255,${.25+.75*Math.abs(u)})`:`rgba(130,160,210,${.25+.75*Math.abs(u)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill();g.strokeStyle='#7c8baa';g.stroke()});
- g.fillStyle='#fff';g.font='13px system-ui';g.fillText('expression + / compression − shown by signed displacement',14,20);
+ let mx=Math.max(...sites.map(s=>Math.abs(s.x)),1e-12);
+ sites.forEach((s,i)=>{let[x,y]=pix(s),u=s.x/mx,r=10+18*Math.sqrt(Math.abs(u));g.fillStyle=u>=0?`rgba(230,240,255,${.25+.75*Math.abs(u)})`:`rgba(130,160,210,${.25+.75*Math.abs(u)})`;g.beginPath();g.arc(x,y,r,0,Math.PI*2);g.fill();g.strokeStyle=Object.values(ports).includes(i)?'#fff':'#7c8baa';g.lineWidth=Object.values(ports).includes(i)?3:1;g.stroke()});
+ g.fillStyle='#fff';g.font='13px system-ui';g.fillText('H1/L1/V1 = three logical input ports; not geographic positions',14,20);
 }
 function frame(now){
- const rate=+$('rate').value,externalDt=1/rate;
- if(running){let elapsed=Math.min(.02,(now-last)/1000);let sub=Math.max(1,Math.ceil(elapsed/externalDt));let dt=elapsed/sub;for(let k=0;k<sub;k++)step(dt)}
- last=now;let m=metrics();if(energy0===null&&m.energy>0)energy0=m.energy;draw(m);
- $('out').textContent=JSON.stringify({sites:sites.length,numerical_geometry:"triangular / six-neighbor",physical_lattice_spacing:"UNDEFINED",external_sample_rate_hz:rate,external_sample_interval_s:1/rate,base_frequency_hz:+$('freq').value,octave:+$('oct').value,effective_frequency_hz:+$('freq').value*(2**(+$('oct').value)),nonlinear_lambda:+$('nonlin').value,combined_state:m,relative_energy_change:energy0?((m.energy-energy0)/energy0):0,steps},null,2);
+ const elapsed=Math.min(.05,(now-last)/1000);last=now;
+ if(running){
+   if(replaying&&gw){
+     replayCarry+=elapsed*gw.window.sample_rate_hz;
+     let count=Math.floor(replayCarry);replayCarry-=count;
+     const dt=1/gw.window.sample_rate_hz;
+     for(let n=0;n<count&&sample<gw.window.samples_per_detector;n++,sample++)step(dt,drivesFor(sample));
+     if(sample>=gw.window.samples_per_detector){replaying=false;$('replay').textContent='Replay real GW170817'}
+   }else{
+     const rate=4096,sub=Math.max(1,Math.ceil(elapsed*rate)),dt=elapsed/sub;
+     for(let k=0;k<sub;k++)step(dt);
+   }
+ }
+ let m=metrics();if(energy0===null&&m.energy>0)energy0=m.energy;draw();
+ const raw=gw&&sample<gw.window.samples_per_detector?{H1:gw.detectors.H1.values[sample],L1:gw.detectors.L1.values[sample],V1:gw.detectors.V1.values[sample]}:null;
+ $('out').textContent=JSON.stringify({
+   sites:sites.length,numerical_geometry:"triangular / six-neighbor",physical_lattice_spacing:"UNDEFINED",
+   source:gw?{event:gw.event,event_gps:gw.event_gps,window:gw.window,catalog:gw.source.catalog,version:gw.source.version,doi:gw.source.doi}:null,
+   replay:{active:replaying,sample_index:sample,gps:gw?(gw.window.start_gps+sample/gw.window.sample_rate_hz):null,mode:$('mode').value,shared_raw_peak_abs:gwPeak,numerical_gain:+$('gwgain').value,current_raw_strain:raw},
+   base_frequency_hz:+$('freq').value,octave:+$('oct').value,effective_frequency_hz:+$('freq').value*(2**(+$('oct').value)),nonlinear_lambda:+$('nonlin').value,
+   combined_state:m,relative_energy_change:energy0?((m.energy-energy0)/energy0):0,steps
+ },null,2);
  requestAnimationFrame(frame)
 }
-cv.onclick=e=>{let b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*cv.width/b.width,y=(e.clientY-b.top)*cv.height/b.height,bi=0,bd=1e9;sites.forEach((s,i)=>{let p=pix(s),d=(p[0]-x)**2+(p[1]-y)**2;if(d<bd){bd=d;bi=i}});pulse(bi,1)}
-$('pulse').onclick=()=>pulse(index.get('0,0'),1);$('toggle').onclick=()=>{running=!running;$('toggle').textContent=running?'Pause':'Resume'};$('reset').onclick=reset;requestAnimationFrame(frame);
+async function loadGW(){
+ try{
+   const r=await fetch('./data/gw170817_v2_4khz_last2s.json'); if(!r.ok)throw new Error('HTTP '+r.status);
+   gw=await r.json(); gwPeak=0;
+   for(const det of ['H1','L1','V1'])for(const x of gw.detectors[det].values)gwPeak=Math.max(gwPeak,Math.abs(x));
+   $('dataStatus').innerHTML='<span class="ok">REAL DATA LOADED</span> — '+gw.window.samples_per_detector+' samples/detector at '+gw.window.sample_rate_hz+' Hz; shared peak |strain| = '+gwPeak.toExponential(5);
+ }catch(e){$('dataStatus').textContent='Real-data file not loaded in this context: '+e.message}
+}
+cv.onclick=e=>{let b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*cv.width/b.width,y=(e.clientY-b.top)*cv.height/b.height,bi=0,bd=1e99;sites.forEach((s,i)=>{let p=pix(s),d=(p[0]-x)**2+(p[1]-y)**2;if(d<bd){bd=d;bi=i}});pulse(bi,1)}
+$('pulse').onclick=()=>pulse(index.get('0,0'),1);
+$('replay').onclick=()=>{if(!gw)return;sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;sample=0;replayCarry=0;replaying=true;running=true;$('toggle').textContent='Pause';$('replay').textContent='Replaying…'};
+$('toggle').onclick=()=>{running=!running;$('toggle').textContent=running?'Pause':'Resume'};$('reset').onclick=reset;
+loadGW();requestAnimationFrame(frame);
 </script></body></html>
