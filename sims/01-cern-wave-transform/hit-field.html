@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CERN Excitation → One-Wave</title>
+<style>body{margin:0;background:#080b10;color:#edf2ff;font:14px system-ui}main{max-width:1100px;margin:auto;padding:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:#111722;border:1px solid #2b3548;border-radius:12px;padding:12px}canvas{width:100%;height:460px;background:#05070b;border-radius:8px}textarea{width:100%;height:160px;background:#080b10;color:#dce5ff}button{padding:8px 12px}pre{white-space:pre-wrap;font-size:12px}@media(max-width:800px){.grid{grid-template-columns:1fr}}</style></head>
+<body><main><h1>Stage 01 — CERN detector excitation → One-Wave</h1>
+<p>Input is detector-space excitation data. No particle label is required. Paste an array of hits with x,y,z and energy/signal, or use the demo.</p>
+<div class="grid"><section class="card"><h2>Measured excitation field</h2><canvas id="c" width="520" height="460"></canvas></section>
+<section class="card"><h2>Input / transform</h2><textarea id="src">[
+ {"x":38,"y":12,"z":4,"energy":8.2,"detector":"ECAL"},
+ {"x":22,"y":31,"z":7,"energy":5.4,"detector":"ECAL"},
+ {"x":-35,"y":-9,"z":11,"energy":7.1,"detector":"HCAL"},
+ {"x":-18,"y":-27,"z":-5,"energy":4.6,"detector":"HCAL"},
+ {"x":8,"y":-41,"z":3,"energy":6.3,"detector":"Tracker"}
+]</textarea><p><button id="run">Transform</button></p><pre id="out"></pre></section></div>
+<script>
+const c=document.getElementById('c'),g=c.getContext('2d'),out=document.getElementById('out'),src=document.getElementById('src');
+function band(W){if(W>=90)return"EXTREME EXPRESSION / DANGER";if(W>=85)return"transition";if(W>=75)return"STRONG EXPRESSION";if(W>=70)return"transition";if(W>=60)return"MODERATE EXPRESSION";if(W>=55)return"transition";if(W>=45)return"ACTIVE MIDDLE";if(W>=40)return"transition";if(W>=30)return"MODERATE COMPRESSION";if(W>=25)return"transition";if(W>=15)return"STRONG COMPRESSION";if(W>=10)return"transition";return"EXTREME COMPRESSION / DANGER"}
+function run(){let hits;try{hits=JSON.parse(src.value)}catch(e){out.textContent=e;return}g.clearRect(0,0,c.width,c.height);const cx=c.width/2,cy=c.height/2;g.strokeStyle="#39445d";g.beginPath();g.moveTo(0,cy);g.lineTo(c.width,cy);g.moveTo(cx,0);g.lineTo(cx,c.height);g.stroke();
+let X=0,Y=0,S=0,plus=0,minus=0;let maxR=Math.max(...hits.map(h=>Math.hypot(h.x,h.y)),1);
+hits.forEach(h=>{let w=Number(h.energy??h.signal??1),phi=Math.atan2(h.y,h.x),r=Math.hypot(h.x,h.y,h.z||0);X+=w*Math.cos(phi);Y+=w*Math.sin(phi);S+=Math.abs(w);if(h.x>=0)plus+=Math.abs(w);else minus+=Math.abs(w);
+let px=cx+h.x/maxR*c.width*.4,py=cy-h.y/maxR*c.height*.4,rad=3+Math.sqrt(Math.abs(w))*2;g.fillStyle="#dce5ff";g.globalAlpha=.35+Math.min(.65,Math.abs(w)/(S||1));g.beginPath();g.arc(px,py,rad,0,Math.PI*2);g.fill();g.globalAlpha=1});
+let R=Math.hypot(X,Y),Phi=Math.atan2(Y,X),C=S?R/S:0,D=(plus+minus)?(plus-minus)/(plus+minus):0,W=50+50*D;
+g.strokeStyle="#fff";g.lineWidth=3;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(Phi)*R/(S||1)*180,cy-Math.sin(Phi)*R/(S||1)*180);g.stroke();
+out.textContent=JSON.stringify({points:hits.length,scalar_strength:S,net_x:X,net_y:Y,net_amplitude:R,net_phase:Phi,directional_coherence:C,x_partition:{plus,minus,D,W,band:band(W)}},null,2)}
+document.getElementById('run').onclick=run;run();
+</script></body></html>
