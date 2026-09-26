@@ -81,3 +81,19 @@ scale(n) = 2^n
 Frequency, amplitude, and geometry scaling are separate controls.
 
 Raw or measured reference data are never overwritten by scaled views.
+
+## First executable G-766 control
+
+Run the bounded dispersion and octave fixtures with:
+
+```bash
+cd sims/00-lattice-primitive
+python3 -m unittest -v test_dispersion_octave_fixture.py
+python3 dispersion_octave_fixture.py
+```
+
+The fixture derives the six-neighbor triangular-lattice symbol, compares the
+continuous-time analytic frequency with the finite-timestep leapfrog
+frequency, and checks exact-octave and non-octave detector controls. Its JSON
+receipt keeps `a_num` numerical, refuses a physical lattice-spacing claim,
+and does not treat sampling rate as measured signal frequency.
