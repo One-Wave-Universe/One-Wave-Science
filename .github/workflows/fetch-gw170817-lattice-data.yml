@@ -1,0 +1,32 @@
+name: Fetch GW170817 lattice data
+
+on:
+  push:
+    paths:
+      - ".github/workflows/fetch-gw170817-lattice-data.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install h5py
+      - run: python sims/00-lattice-primitive/tools/fetch_gw170817.py
+      - name: Commit exact 2-second 4096 Hz window
+        run: |
+          git config user.name "one-wave-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add sims/00-lattice-primitive/data/gw170817_v2_4khz_last2s.json
+          if git diff --cached --quiet; then
+            echo "No data change"
+          else
+            git commit -m "Add exact GW170817 4 kHz lattice replay window"
+            git push
+          fi
