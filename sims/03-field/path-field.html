@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One-Wave Path + Field</title>
+<style>
+body{margin:0;background:#080b10;color:#edf2ff;font:14px system-ui}main{max-width:1180px;margin:auto;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:#111722;border:1px solid #2a3548;border-radius:12px;padding:12px}
+canvas{width:100%;height:430px;background:#05070b;border-radius:8px}textarea{width:100%;height:150px;background:#080b10;color:#dfe7ff}
+button,input,select{font:inherit}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}pre{white-space:pre-wrap;font-size:12px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}}
+</style></head><body><main>
+<h1>Stages 02–03 — Path → Field</h1>
+<p>Same event, same points. Stage 02 orders candidate paths; Stage 03 aggregates the whole event into a field. Octave scaling is reversible and never overwrites raw CERN values.</p>
+<div class="row">
+<label>Octave n <input id="oct" type="range" min="-4" max="4" step="1" value="0"></label><span id="lab"></span>
+<label><input id="amp" type="checkbox" checked> scale amplitude</label>
+<label><input id="geo" type="checkbox"> scale geometry</label>
+<select id="order"><option value="radial">radial order</option><option value="nearest">nearest-neighbor</option></select>
+</div>
+<div class="grid">
+<section class="card"><h2>Path view</h2><canvas id="path" width="560" height="430"></canvas></section>
+<section class="card"><h2>Field view</h2><canvas id="field" width="560" height="430"></canvas></section>
+</div>
+<section class="card"><h2>Input points</h2>
+<textarea id="src">[
+ {"x":38,"y":12,"z":4,"energy":8.2,"detector":"ECAL","source":"DEMO"},
+ {"x":22,"y":31,"z":7,"energy":5.4,"detector":"ECAL","source":"DEMO"},
+ {"x":-35,"y":-9,"z":11,"energy":7.1,"detector":"HCAL","source":"DEMO"},
+ {"x":-18,"y":-27,"z":-5,"energy":4.6,"detector":"HCAL","source":"DEMO"},
+ {"x":8,"y":-41,"z":3,"energy":6.3,"detector":"Tracker","source":"DEMO"}
+]</textarea>
+<p><button id="run">Recompute</button></p><pre id="out"></pre></section>
+<script>
+const $=x=>document.getElementById(x),pc=$('path'),fc=$('field'),pg=pc.getContext('2d'),fg=fc.getContext('2d');
+function parse(){return JSON.parse($('src').value)}
+function orderPts(a,mode){
+ const pts=a.map((p,i)=>({...p,i}));
+ if(mode==='radial') return pts.sort((a,b)=>Math.hypot(a.x,a.y,a.z||0)-Math.hypot(b.x,b.y,b.z||0));
+ if(!pts.length)return pts;
+ const out=[pts.shift()];
+ while(pts.length){const q=out[out.length-1];let bi=0,bd=Infinity;pts.forEach((p,i)=>{let d=Math.hypot(p.x-q.x,p.y-q.y,(p.z||0)-(q.z||0));if(d<bd){bd=d;bi=i}});out.push(pts.splice(bi,1)[0]);}
+ return out;
+}
+function draw(){
+ let raw;try{raw=parse()}catch(e){$('out').textContent=e;return}
+ const n=+$('oct').value,k=2**n,as=$('amp').checked,gs=$('geo').checked;$('lab').textContent='2^'+n+' = '+k+'×';
+ const pts=raw.map(p=>({...p,X:p.x*(gs?k:1),Y:p.y*(gs?k:1),Z:(p.z||0)*(gs?k:1),W:Number(p.energy??p.signal??1)*(as?k:1)}));
+ const ord=orderPts(pts,$('order').value);let maxR=Math.max(...pts.map(p=>Math.hypot(p.X,p.Y)),1);
+ function axes(g,c){g.clearRect(0,0,c.width,c.height);g.strokeStyle='#33405a';g.beginPath();g.moveTo(0,c.height/2);g.lineTo(c.width,c.height/2);g.moveTo(c.width/2,0);g.lineTo(c.width/2,c.height);g.stroke()}
+ axes(pg,pc);axes(fg,fc);
+ const map=(p,c)=>[c.width/2+p.X/maxR*c.width*.4,c.height/2-p.Y/maxR*c.height*.4];
+ pg.strokeStyle='#cbd8ff';pg.lineWidth=2;pg.beginPath();ord.forEach((p,i)=>{let [x,y]=map(p,pc);i?pg.lineTo(x,y):pg.moveTo(x,y)});pg.stroke();
+ ord.forEach(p=>{let [x,y]=map(p,pc);pg.fillStyle='#fff';pg.beginPath();pg.arc(x,y,3+Math.sqrt(Math.abs(p.W)),0,Math.PI*2);pg.fill()});
+ let bins=48,grid=Array.from({length:bins},()=>Array(bins).fill(0)),tot=0;
+ pts.forEach(p=>{let gx=Math.max(0,Math.min(bins-1,Math.floor((p.X/maxR*.45+.5)*bins))),gy=Math.max(0,Math.min(bins-1,Math.floor((-p.Y/maxR*.45+.5)*bins)));grid[gy][gx]+=Math.abs(p.W);tot+=Math.abs(p.W)});
+ let mx=Math.max(1,...grid.flat());
+ for(let y=0;y<bins;y++)for(let x=0;x<bins;x++){let q=grid[y][x]/mx;if(q){fg.fillStyle='rgba(235,242,255,'+(0.12+.88*q)+')';fg.fillRect(x*fc.width/bins,y*fc.height/bins,fc.width/bins+1,fc.height/bins+1)}}
+ let plen=0,turns=[];for(let i=1;i<ord.length;i++){plen+=Math.hypot(ord[i].X-ord[i-1].X,ord[i].Y-ord[i-1].Y,ord[i].Z-ord[i-1].Z)}
+ let VX=0,VY=0,S=0;pts.forEach(p=>{let ph=Math.atan2(p.Y,p.X);VX+=p.W*Math.cos(ph);VY+=p.W*Math.sin(ph);S+=Math.abs(p.W)});let R=Math.hypot(VX,VY),C=S?R/S:0;
+ $('out').textContent=JSON.stringify({octave:n,scale:k,amplitude_scaled:as,geometry_scaled:gs,path_order:$('order').value,path_length:plen,field:{scalar_strength:S,net_x:VX,net_y:VY,directional_coherence:C},source_status:"DEMO points until CERN .ig payload parser is attached"},null,2)
+}
+['oct','amp','geo','order'].forEach(id=>$(id).oninput=draw);$('run').onclick=draw;draw();
+</script></body></html>
