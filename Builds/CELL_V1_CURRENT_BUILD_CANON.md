@@ -204,6 +204,28 @@ Current architectural direction:
 - likely rounded/circular lobes for even A/B/C coupling,
 - six signed winding contributions distributed across the mirrored structure.
 
+### Locked brain / M4 role mapping
+
+The magnetic structures do not share one interchangeable role:
+
+- the centered **square, flat-wound figure-8 toroidal nucleus is the local brain**;
+- the two surrounding **round figure-8 magnetic structures are the mirrored Field/Void halves of M4**;
+- the shared vagus-like bus carries the combined body-state reference between the body lattice, M4, and the brain nucleus.
+
+The two round M4 halves are the fast differential interface between brain and
+body. They receive the shared body reference, carry the three mirrored A/B/C
+comparisons, confirm HOLD near the shared center, and express the selected
+movement bias toward the motor/body lattice. Their hysteretic response is the
+candidate short- or medium-term body/motor reference. The centered square
+nucleus receives the organized body/M4 state and retains the deeper local brain
+reference against which later events can be interpreted.
+
+The shared bus may carry the functional zero/reference for body-state
+comparison, but the magnetic medium does not thereby become electrical ground.
+The exact electrical virtual-ground implementation, asymmetric `- / 0 / +`
+thresholds, round-winding polarity, nucleus-to-M4 coupling, and hysteresis
+retention remain to be measured.
+
 Exact geometry and winding placement remain engineering-open.
 
 The ternary element should retain useful information about:
@@ -505,7 +527,11 @@ The two mirrored halves operate concurrently.
 
 ## 17. M4 STRUCTURE
 
-M4 retains the mirrored four-up / four-down structure.
+Physically, M4 is the pair of round figure-8 magnetic structures surrounding
+the centered square figure-8 brain nucleus. The two round structures are
+mirrored Field/Void halves; they are not the brain nucleus itself.
+
+Logically, M4 retains the mirrored four-up / four-down relationship.
 
 ### Views / up
 - 2 Field
@@ -532,6 +558,8 @@ Existing conceptual labels may be used:
 - Actions: PULL, PUSH, FLIP, PASS
 
 The hardware mapping of these labels must remain tied to measurable physical states.
+The exact mapping from those logical routes onto the two round structures and
+their three A/B/C differential windings remains experimental.
 
 ---
 
@@ -929,6 +957,9 @@ Treat these as authoritative unless explicitly patched:
 - autonomous/commanded/assisted control use the same state interface,
 - Field and Void both send, receive, and act,
 - M4 = 2F + 2V views up and 2F + 2V actions down,
+- square figure-8 toroidal nucleus = centered local brain,
+- two surrounding round figure-8 structures = mirrored Field/Void M4 halves,
+- shared vagus-like bus carries the combined body-state reference among body, M4, and brain,
 - square figure-8 is the deeper local brain/reference memory geometry,
 - ternary side requires local hysteretic movement/power memory,
 - connected lattice uses hysteresis path scoring,
