@@ -1,39 +1,18 @@
 # Primitive One-Wave Differential Simulator
 
-This is the smallest runnable One-Wave simulator in the science repo.
+This simulator is retained as a **single-site / differential visualization**, not as the canonical physical primitive.
 
-It contains only:
+The canonical bottom of the science stack is now:
 
-- a live center reference
+`sims/00-lattice-primitive/`
+
+A cell is a higher-order organized structure built from coupled lattice sites.
+
+This file remains useful as a UI test for:
+- live center reference
 - signed expression/compression state
-- restoring motion around center
-- retained directional hysteresis
-- the locked seven named bands
-- the six unnamed transition gaps
-- octave scaling as an explicit derived view
+- hysteresis
+- locked bands
+- octave scaling
 
-It does **not** assume particles, gravity, or a pre-existing field ontology.
-
-## State
-
-q in [-1,+1]
-
-Mapped to the locked 0–100 One-Wave scale:
-
-W = 50 + 50q
-
-## Dynamics
-
-The current primitive update is:
-
-a = drive - k*q - damping*v + memory*held
-
-This is a minimal test equation, not a claim of fundamental physics.
-
-## Purpose
-
-This simulator is the bottom testbed for:
-
-reference -> differential -> point -> path -> field
-
-Later stages may replace the primitive update rule, but they should preserve the same transparent state and measurement conventions.
+It should not be treated as the bottom ontology of One-Wave physics.
