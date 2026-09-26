@@ -144,3 +144,66 @@ If the One-Wave statistic survives only because of detector geometry or selectio
    - useful for larger statistical tests
 
 Start with one event. Preserve every raw coordinate. Reproduce it visually. Then apply the One-Wave transform. Only after that scale to many events.
+
+
+## Octave doubling and scaling
+
+One-Wave scaling is explicit and reversible.
+
+For octave index n:
+
+```
+scale(n) = 2^n
+```
+
+Examples:
+- n = -3 -> 1/8 scale
+- n = -2 -> 1/4 scale
+- n = -1 -> 1/2 scale
+- n = 0 -> raw/base scale
+- n = +1 -> 2x
+- n = +2 -> 4x
+- n = +3 -> 8x
+
+The raw CERN measurement is never replaced. A scaled view stores both the base value and the transformed value.
+
+For an amplitude-like observable A:
+
+```
+A_n = A_0 * 2^n
+```
+
+For a spatial coordinate r when testing geometric scaling:
+
+```
+r_n = r_0 * 2^n
+```
+
+Amplitude scaling and geometric scaling are independent controls. They must not be silently coupled.
+
+### Scale-invariant tests
+
+At every octave, calculate:
+- direction / phase geometry
+- coherence C
+- opposed lean W
+- normalized radial profile
+- angular autocorrelation
+- detector-subsystem balance
+
+A candidate One-Wave relation becomes interesting only if its normalized structure persists across meaningful scale transforms and survives the randomized/reflected controls.
+
+## Fixed first CERN event
+
+Use the public CMS DoublePhoton event-display sample as the first fixed real event:
+
+- Run: 194115
+- Event: 651938592
+- Luminosity section: 702
+- Recorded: 2012-05-14 05:37:31.650834 GMT
+- Parent: /DoublePhoton/Run2012B-22Jan2013-v1/AOD
+- Collision energy: 8 TeV pp dataset
+
+The event file is `DoublePhoton_Run2012B_0.ig`.
+
+Until the actual .ig payload is parsed into the local simulator, any placeholder points shown by the viewer must remain labeled DEMO and must not be presented as measurements from this event.
