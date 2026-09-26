@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "One-Wave Universal State Container v0",
+  "type": "object",
+  "required": ["id", "state", "measurements", "provenance"],
+  "properties": {
+    "id": {"type": "string"},
+    "state": {
+      "type": "object",
+      "properties": {
+        "time": {"type": ["number","null"]},
+        "reference": {"type": ["number","null"]},
+        "value": {"type": ["number","null"]},
+        "amplitude": {"type": ["number","null"]},
+        "phase": {"type": ["number","null"]},
+        "frequency": {"type": ["number","null"]},
+        "direction": {"type": ["number","array","null"]},
+        "position": {"type": ["array","null"], "items":{"type":"number"}},
+        "velocity": {"type": ["array","number","null"]},
+        "acceleration": {"type": ["array","number","null"]},
+        "energy": {"type": ["number","null"]},
+        "history": {"type": "array"},
+        "neighbors": {"type": "array", "items":{"type":"string"}}
+      },
+      "additionalProperties": true
+    },
+    "measurements": {
+      "type": "array",
+      "items": {
+        "type":"object",
+        "required":["name","value"],
+        "properties":{
+          "name":{"type":"string"},
+          "value":{},
+          "unit":{"type":["string","null"]},
+          "uncertainty":{"type":["number","object","null"]},
+          "channel":{"type":["string","null"]},
+          "detector":{"type":["string","null"]},
+          "sample_rate":{"type":["number","null"]},
+          "timestamp":{"type":["number","string","null"]}
+        },
+        "additionalProperties":true
+      }
+    },
+    "provenance": {
+      "type":"object",
+      "properties":{
+        "source":{"type":["string","null"]},
+        "dataset":{"type":["string","null"]},
+        "event":{"type":["string","null"]},
+        "version":{"type":["string","number","null"]},
+        "detectors":{"type":"array","items":{"type":"string"}},
+        "doi":{"type":["string","null"]},
+        "record_id":{"type":["string","number","null"]},
+        "file":{"type":["string","null"]},
+        "license":{"type":["string","null"]}
+      },
+      "additionalProperties":true
+    }
+  },
+  "additionalProperties": true
+}
