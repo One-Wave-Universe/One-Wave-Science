@@ -141,3 +141,29 @@ Every run declares:
 - `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`
 - `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`
 - `chapters/05_Simulation_Engine.md`
+
+## Measured spectral field map
+
+The lattice program now has a direct measurement-side counterpart in G-767. Instead of beginning from particle identity, each positive measured excitation scale (x) is mapped into
+
+[
+u=\log_2(x/x_0)=n+\phi,
+]
+
+where (n) is octave depth and (\phi\in[0,1)) is fractional scale phase. The raw measurement, unit, uncertainty, instrument selection and conventional source label remain attached.
+
+For a continuous spectrum define
+
+[
+\rho(u)=\frac{dN}{d\log_2 x}.
+]
+
+The question is whether independently measured octave slices (\rho_n(\phi)) contain a recurring component beyond matched smooth-density, acceptance, event-mixed and shuffled controls. This is the observational complement to G-766: G-766 asks what scale structure the numerical lattice can generate; G-767 asks what scale structure measured spectra actually contain.
+
+A proposed superfluid/crystal interpretation does not advance from recurrence alone. It must connect any surviving spectral mode to quantitative dispersion, symmetry/anisotropy, coherence/transport or defect behavior and outperform non-lattice controls.
+
+### Canon links
+
+- `Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md`
+- `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`
+- `sims/06-spectral-lattice-phase/README.md`
