@@ -1,0 +1,11 @@
+{
+  "brick": "YELLOW",
+  "all_pass": true,
+  "busts": [
+    {"bust": 1, "name": "hop_receipt_required", "packet": "12|27|26", "pass": true},
+    {"bust": 2, "name": "source_chi_not_paint", "removing_MACRO_changes_chi": true, "pass": true},
+    {"bust": 3, "name": "three_excitation_lock_curve", "rows": 60, "locked": 28, "failed": 32, "pass": true},
+    {"bust": 4, "name": "knot_body_after_lock", "packaged_when_locked": true, "refused_when_unlocked": true, "pass": true},
+    {"bust": 5, "name": "mass_effect_last", "blocked_without_prior_busts": "MASS_EFFECT_BLOCKED", "still_no_number_when_ready": true, "pass": true}
+  ]
+}
