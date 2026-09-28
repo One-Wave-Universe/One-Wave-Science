@@ -1,12 +1,12 @@
 {
-  "id": "install-desktop-commander-service-20260925-01",
+  "id": "bridge-recovery-20260928-01",
   "argv": [
     "bash",
     "-lc",
-    "set -e\nmkdir -p \"$HOME/.config/systemd/user\"\ncat >\"$HOME/.config/systemd/user/desktop-commander-remote.service\" <<'EOF'\n[Unit]\nDescription=Remote Desktop Commander\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/npx @wonderwhy-er/desktop-commander@latest remote\nRestart=always\nRestartSec=5\nNoNewPrivileges=true\nPrivateTmp=true\n\n[Install]\nWantedBy=default.target\nEOF\nexport XDG_RUNTIME_DIR=/run/user/$(id -u)\nexport DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus\nsystemctl --user daemon-reload\nsystemctl --user enable desktop-commander-remote.service\nprintf 'DESKTOP_COMMANDER_SERVICE_INSTALLED\\n'"
+    "printf 'BRIDGE_RECOVERY_OK\\n'; hostname; whoami; systemctl --user is-active one-wave-chatgpt-terminal-pull.service 2>/dev/null || true; systemctl --user is-active desktop-commander-remote.service 2>/dev/null || true"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 30,
-  "intention": "Install a persistent user-level Desktop Commander remote service on the Jetson using the official remote command so the remote terminal route can recover automatically after terminal closure or process failure.",
-  "consequence": "Creates and enables one user systemd service; does not start or stop the current Desktop Commander process, modify repositories, or expose credentials."
+  "timeout": 20,
+  "intention": "Verify the GitHub pull execution route independently of Desktop Commander and report the pull worker and Desktop Commander service states.",
+  "consequence": "Read-only health probe except for normal service status queries; does not modify repositories, services, credentials, or files."
 }
