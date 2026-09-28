@@ -180,3 +180,22 @@ Training data may select a reference (x_0) or statistic parameters. Evaluation d
 The engine must emit both positive and negative results. A visually repeated octave pattern that vanishes under density/acceptance matching is a FAIL for that spectral-lattice candidate, not an inconclusive result.
 
 Canonical implementation: `sims/06-spectral-lattice-phase/`.
+
+## 24→1 modular sandbox architecture
+
+The canonical simulator target is now the `sims/24-1-sandbox/` wrapper. It provides 24 experiment/module slots behind one scientific state, validation, telemetry and renderer contract.
+
+This is an engineering wrapper, not a claim that nature contains exactly 24 layers. Modules can be replaced as the science improves.
+
+Every simulation is expected to provide two synchronized products:
+
+1. **scientific simulation** — headless equations, controls, uncertainty/error receipts, convergence, nulls/ablations, provenance and falsification;
+2. **visual simulation** — 2D and, when physically meaningful, 3D views generated from renderer-neutral geometry emitted by the same state.
+
+The renderer is downstream. Camera, color, artistic overlays, extrusion and cinematic presentation may never modify the solver state.
+
+The Universal State Container remains the exchange format between modules and scales. A resolved whole can become input to a higher module only through an explicit projection/adapter with reconstruction/error receipts.
+
+Gold-standard promotion is defined in `sims/24-1-sandbox/GOLD_STANDARD.md`. GOLD is implementation quality, not scientific confirmation.
+
+Initial migration is adapter-first: preserve existing solvers and receipts, wrap them, regression-test equivalence, then improve them. The first registered adapters are the lattice primitive (slot 01) and G-767 spectral lattice phase map (slot 06).
