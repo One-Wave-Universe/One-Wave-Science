@@ -1,7 +1,5 @@
 # Where the two machines and the loop are
 
-Programmed version (software only):
-
 `software-zer0/coupled_loop.py`
 
 ```text
@@ -18,15 +16,10 @@ Programmed version (software only):
          action
              |
              v
-      bus = 0.7 bus + 0.3 action     ← reinjection loop
-             |
-             +--> next flip (same tick grammar)
+      bus = 0.7 bus + 0.3 action
 ```
 
-One call is `CoupledLoop.flip(u)`.
-Both machines update in that call. Ground only moves if brain says Y.
+One call: `CoupledLoop.flip(u)`.
 
-`engine.py` is the four-branch grammar walker. It is **not** the two-machine loop.
-`bench_assist.py` scores bench voltages. It is **not** the loop.
-
-QC–RC (opposed rotating fields) is not in this file yet.
+The old one-walker `engine.py` is gone.
+QC–RC is not in this file yet.
