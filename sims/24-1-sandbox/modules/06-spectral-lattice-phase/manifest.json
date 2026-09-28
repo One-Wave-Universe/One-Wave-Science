@@ -1,0 +1,64 @@
+{
+  "schema": "one-wave-sandbox-module/v1",
+  "id": "spectral-lattice-phase",
+  "name": "Measured spectral lattice phase map",
+  "version": "0.1.0",
+  "slot": 6,
+  "claim_gate": "YELLOW",
+  "dimensions": [
+    "2d"
+  ],
+  "solver": {
+    "kind": "statistical spectrum transform",
+    "equations": [
+      "u=log2(x/x0)",
+      "phi=frac(u)"
+    ],
+    "units": {
+      "scale": "source-defined"
+    }
+  },
+  "render": {
+    "views": [
+      "2d-spectrum",
+      "3d-octave-phase-surface"
+    ],
+    "solver_independent": true
+  },
+  "controls": [
+    "frozen-x0",
+    "source-labels-metadata-only"
+  ],
+  "data_sources": [
+    "CERN Open Data record 700",
+    "PDG machine-readable planned",
+    "GWOSC held-out planned"
+  ],
+  "fixtures": {
+    "positive": [
+      "exact-octave"
+    ],
+    "negative": [
+      "quarter-offset cancellation"
+    ],
+    "nulls": [
+      "log-uniform-development",
+      "smooth-density-required"
+    ]
+  },
+  "validation": {
+    "convergence": [
+      "bin/window sweep"
+    ],
+    "invariants": [
+      "raw provenance unchanged"
+    ],
+    "falsification": [
+      "recurrence fails matched density/acceptance null"
+    ]
+  },
+  "state_schema": "../../../00-state-container/state-schema.json",
+  "adapter": {
+    "existing": "../../06-spectral-lattice-phase"
+  }
+}
