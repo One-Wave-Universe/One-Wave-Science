@@ -1,24 +1,15 @@
 # software-zer0 — SOFTWARE ONLY
 
-Not the cell. Helpers that *serve* the analog build.
+Not the cell. Two files that serve the analog build.
 
 | File | Job |
 |---|---|
-| `engine.py` | grammar flip on numbers |
-| `bench_assist.py` | score measured voltages for the breadboard tests |
-| `SEPARATE.md` | do not merge with iron |
+| `coupled_loop.py` | BC–DC brain + TC–AC body + reinjection |
+| `bench_assist.py` | score measured voltages |
 
-## Bench helper (use this at the table)
+`engine.py` (one walker) was deleted. It did not couple the machines and led nowhere.
 
 ```bash
-# one axis: tips + CENTER
-python3 software-zer0/bench_assist.py score --vp 2.1 --vm 1.7 --center 1.9 --vbus 3.3
-
-# retained-state: same probe after + write vs after - write
-python3 software-zer0/bench_assist.py history --probe-a 0.82 --probe-b 0.61 --noise 0.05
-
-# three measured D values
-python3 software-zer0/bench_assist.py triad --da 0.3 --db 0.25 --dc -0.05
+python3 software-zer0/coupled_loop.py
+python3 software-zer0/bench_assist.py score --vp 2.1 --vm 1.7 --center 1.9
 ```
-
-It will yell if CENTER equals V_BUS. History fail means stop and revise the nucleus — software does not get a vote.
