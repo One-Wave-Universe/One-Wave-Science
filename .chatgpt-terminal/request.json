@@ -1,12 +1,12 @@
 {
-  "id": "bridge-recovery-20260928-01",
+  "id": "bridge-lattice-bootstrap-20260928-02",
   "argv": [
     "bash",
     "-lc",
-    "printf 'BRIDGE_RECOVERY_OK\\n'; hostname; whoami; systemctl --user is-active one-wave-chatgpt-terminal-pull.service 2>/dev/null || true; systemctl --user is-active desktop-commander-remote.service 2>/dev/null || true"
+    "set -euo pipefail\nROOT=\"$HOME/.local/share/bridge-comand-bootstrap\"\nif [ ! -d \"$ROOT/.git\" ]; then git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$ROOT\"; fi\ngit -C \"$ROOT\" fetch --prune origin main\ngit -C \"$ROOT\" checkout --detach origin/main\nSCIENCE=\"/home/Scales/One-Wave-Science\"\nONE_WAVE_PROJECT_ROOT=\"$SCIENCE\" bash \"$ROOT/hive-pipe/install_chatgpt_terminal_pull.sh\"\nbash \"$ROOT/hive-pipe/install_bridge_lattice_watchdog.sh\"\nsystemctl --user daemon-reload\nsystemctl --user enable --now one-wave-chatgpt-terminal-pull.service\nsystemctl --user enable --now one-wave-bridge-lattice-watchdog.timer\nprintf 'BRIDGE_LATTICE_BOOTSTRAP_OK\\n'\ngit -C \"$ROOT\" rev-parse HEAD\nsystemctl --user is-active one-wave-chatgpt-terminal-pull.service\nsystemctl --user is-active one-wave-bridge-lattice-watchdog.timer\npython3 \"$ROOT/hive-pipe/bridge_lattice_watchdog.py\" || true"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 20,
-  "intention": "Verify the GitHub pull execution route independently of Desktop Commander and report the pull worker and Desktop Commander service states.",
-  "consequence": "Read-only health probe except for normal service status queries; does not modify repositories, services, credentials, or files."
+  "timeout": 120,
+  "intention": "Bootstrap the current Bridge-Comand main runtime and enable the persistent pull and hysteresis watchdog services so any surviving pull listener can repair the bridge lattice automatically.",
+  "consequence": "Updates only the private bridge runtime and user-level bridge services; leaves the active Science working tree unchanged and prints commit/service/health receipts."
 }
