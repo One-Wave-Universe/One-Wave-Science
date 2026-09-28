@@ -1,23 +1,24 @@
 # software-zer0 — SOFTWARE ONLY
 
-This folder is a **software state machine** for Algorythm-Zer0 grammar.
+Not the cell. Helpers that *serve* the analog build.
 
-It is not:
-- CELL_V1
-- the transfluxor
-- muscle memory
-- V_BUS
-- the android
+| File | Job |
+|---|---|
+| `engine.py` | grammar flip on numbers |
+| `bench_assist.py` | score measured voltages for the breadboard tests |
+| `SEPARATE.md` | do not merge with iron |
 
-Physical lean lives in `One-Wave-Universe/Builds/cell-v1`.
-Pipes live in `Bridge-Comand`.
-Math claims live in `proofs/`.
-
-Do not copy this engine into the cell packet and call it memory.
-Do not copy MAGNETICS.md into this folder and call it code.
-
-Run:
+## Bench helper (use this at the table)
 
 ```bash
-python3 software-zer0/engine.py
+# one axis: tips + CENTER
+python3 software-zer0/bench_assist.py score --vp 2.1 --vm 1.7 --center 1.9 --vbus 3.3
+
+# retained-state: same probe after + write vs after - write
+python3 software-zer0/bench_assist.py history --probe-a 0.82 --probe-b 0.61 --noise 0.05
+
+# three measured D values
+python3 software-zer0/bench_assist.py triad --da 0.3 --db 0.25 --dc -0.05
 ```
+
+It will yell if CENTER equals V_BUS. History fail means stop and revise the nucleus — software does not get a vote.
