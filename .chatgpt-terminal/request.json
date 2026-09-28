@@ -1,12 +1,12 @@
 {
-  "id": "jetson-independent-bridge-recovery-20260928-04",
+  "id": "jetson-full-control-plane-20260928-05",
   "argv": [
     "bash",
     "-lc",
-    "set -euo pipefail\nROOT=\"$HOME/.local/share/bridge-comand-bootstrap\"\nif [ ! -d \"$ROOT/.git\" ]; then git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$ROOT\"; fi\ngit -C \"$ROOT\" fetch --prune origin main\ngit -C \"$ROOT\" checkout --detach origin/main\nexport ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science\nbash \"$ROOT/hive-pipe/bootstrap_chatgpt_terminal_pull.sh\"\nsystemctl --user enable one-wave-chatgpt-terminal-pull.service one-wave-bridge-lattice-watchdog.timer one-wave-route-goblin.timer\nsystemctl --user restart one-wave-chatgpt-terminal-pull.service\nprintf 'JETSON_INDEPENDENT_BRIDGE_RECOVERY_OK\\n'\nsystemctl --user is-active one-wave-chatgpt-terminal-pull.service\nsystemctl --user is-active one-wave-bridge-lattice-watchdog.timer\nsystemctl --user is-active one-wave-route-goblin.timer\ngit -C \"$ROOT\" rev-parse HEAD"
+    "set -euo pipefail\nROOT=\"$HOME/.local/share/bridge-comand-bootstrap\"\ntest -d \"$ROOT/.git\" || git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$ROOT\"\ngit -C \"$ROOT\" fetch --prune origin main\ngit -C \"$ROOT\" checkout --detach origin/main\nexport ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science\nbash \"$ROOT/hive-pipe/bootstrap_chatgpt_terminal_pull.sh\"\nsystemctl --user daemon-reload\nsystemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service one-wave-chatgpt-terminal-pull.service one-wave-bridge-lattice-watchdog.timer one-wave-route-goblin.timer\npython3 \"$ROOT/hive-pipe/route_goblin.py\"\npython3 \"$ROOT/hive-pipe/bridge_lattice_watchdog.py\" || true\nprintf 'CONTROL_PLANE_RECEIPT\\n'\nfor s in hive-pipe-agent.service hive-pipe-gateway.service one-wave-chatgpt-terminal-pull.service one-wave-bridge-lattice-watchdog.timer one-wave-route-goblin.timer; do printf '%s=' \"$s\"; systemctl --user is-active \"$s\"; done\nprintf 'BRIDGE_COMMIT='; git -C \"$ROOT\" rev-parse HEAD"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 180,
-  "intention": "Restore the Jetson GitHub pull, Hive Pipe, watchdog, and Route Goblin control plane with no Desktop Commander dependency.",
-  "consequence": "Updates Bridge-Comand runtime from main, installs/enables boot-persistent bridge services, and emits explicit service receipts."
+  "timeout": 240,
+  "intention": "Bring the complete Jetson-native control plane operational without Desktop Commander and verify every required service.",
+  "consequence": "Updates Bridge-Comand runtime, enables/starts Hive Pipe agent and gateway, GitHub pull listener, watchdog and Route Goblin, then emits explicit receipts."
 }
