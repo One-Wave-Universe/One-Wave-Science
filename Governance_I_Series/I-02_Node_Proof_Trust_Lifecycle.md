@@ -121,7 +121,8 @@ Upstream: None. This is a governance node, not a physical claim — it
 does not derive from psi, the lattice, or the update rule.
 Downstream: Every node's Status field and local Special Rules section
 across A through G. Every book chapter's Gray comparison section. Any
-future audit tooling reading or assigning sigma(x).
+future audit tooling reading or assigning sigma(x). Color reading:
+I-02a Gate Color Reading.
 
 Assumptions (stated explicitly, not hidden):
 1. Every node/chapter can be assigned exactly one sigma(x) at a time —
@@ -192,3 +193,19 @@ vocabulary. The two systems (chapter structure, proof stage) stay
 visually and terminologically distinct on purpose.
 
 ---
+
+Addendum: Color Reading (I-02a)
+
+The living-language reading of these colors lives in
+`Governance_I_Series/I-02a_Gate_Color_Reading.md`.
+
+Brown = bare dirt / thought experiment.
+Green = green earth ready for growth.
+Yellow = yellow brick road of exploratory math. Do not get too excited.
+Bronze = bust. First likeness.
+Silver = statue. Stands twice.
+Gold = golden road of greater proof.
+Gray = Standard Model view pasted on concrete. Looks done. Prevents SM drift and prevents fake growth through SM plaster.
+Red = red brick through the glass house of Standard Model assumptions. Only from Gray, only if E(x,r) was actually run.
+
+I-02a does not change sigma(x). It stops people treating Yellow like Gold and Gray like finished physics.
