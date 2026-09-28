@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220" role="img">
+  <rect width="1200" height="220" fill="#16120E"/>
+  <g font-family="Georgia,serif" font-size="13" fill="#F4F1EB" text-anchor="middle">
+    <rect x="20" y="36" width="120" height="72" rx="4" fill="#5A3A28"/>
+    <text x="80" y="140">BROWN</text><text x="80" y="158" fill="#C3BDB1" font-size="11">bare dirt</text>
+    <rect x="160" y="36" width="120" height="72" rx="4" fill="#2F5A38"/>
+    <text x="220" y="140">GREEN</text><text x="220" y="158" fill="#C3BDB1" font-size="11">living earth</text>
+    <rect x="300" y="36" width="120" height="72" rx="4" fill="#E0B24A"/>
+    <text x="360" y="140">YELLOW</text><text x="360" y="158" fill="#C3BDB1" font-size="11">brick road</text>
+    <rect x="440" y="36" width="120" height="72" rx="4" fill="#8C5A32"/>
+    <text x="500" y="140">BRONZE</text><text x="500" y="158" fill="#C3BDB1" font-size="11">bust</text>
+    <rect x="580" y="36" width="120" height="72" rx="4" fill="#B8B8C0"/>
+    <text x="640" y="140">SILVER</text><text x="640" y="158" fill="#C3BDB1" font-size="11">statue</text>
+    <rect x="720" y="36" width="120" height="72" rx="4" fill="#D4A017"/>
+    <text x="780" y="140">GOLD</text><text x="780" y="158" fill="#C3BDB1" font-size="11">greater road</text>
+    <rect x="860" y="36" width="120" height="72" rx="4" fill="#8A8A88"/>
+    <text x="920" y="140">GRAY</text><text x="920" y="158" fill="#C3BDB1" font-size="11">SM concrete</text>
+    <rect x="1000" y="36" width="120" height="72" rx="4" fill="#A33A32"/>
+    <text x="1060" y="140">RED</text><text x="1060" y="158" fill="#C3BDB1" font-size="11">through glass</text>
+  </g>
+</svg>
