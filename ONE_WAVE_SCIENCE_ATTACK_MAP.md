@@ -197,7 +197,29 @@ Attack next:
 - quantify retention, overwrite, reconstruction error, and entropy/energy cost;
 - separate physical memory claims from software analogy.
 
-## O. What would count as major progress
+## O. Spectral field / lattice-discovery program
+
+Current measurable program:
+
+- ingest collider, resonance, strain and spectroscopy data as measurements first;
+- retain particle/object names only as source interpretation metadata;
+- map positive measured scales into log2 octave depth and fractional scale phase;
+- test whole spectral density rather than selecting attractive ratios;
+- compare recurrence against smooth-density, acceptance, shuffled, event-mixed and synthetic controls;
+- keep numerical lattice prediction (G-766) separate from observational spectrum mapping (G-767).
+
+Attack next:
+
+- run the official CMS record-700 continuous spectrum through G-767;
+- replace the development log-uniform null with a density/selection-matched null;
+- add the documented PDG 2026 machine-readable adapter with uncertainty propagation;
+- freeze the statistic before GWOSC cross-domain validation;
+- if recurrence survives, ask whether G-766 predicts its phase/dispersion structure with one shared parameterization;
+- only then test stronger superfluid/crystal signatures such as dispersion, collective modes, symmetry/anisotropy, transport/coherence or defect response.
+
+Failure to beat matched nulls removes the candidate spectral relation; it is not evidence hidden by the conventional interpretation.
+
+## P. What would count as major progress
 
 A science section moves forward when at least one of these happens:
 
