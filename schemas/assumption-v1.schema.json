@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "One-Wave Assumption v1",
+  "type": "object",
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "statement",
+    "scope",
+    "status",
+    "falsification",
+    "provenance"
+  ],
+  "properties": {
+    "schema": {
+      "const": "one-wave-assumption/v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string"
+    },
+    "motivation": {
+      "type": "string"
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parameters": {
+      "type": "object"
+    },
+    "falsification": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "nulls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "depends_on": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "enum": [
+        "PROPOSED",
+        "CALIBRATED",
+        "TESTING",
+        "SUPPORTED",
+        "UNSUPPORTED",
+        "UNRESOLVED",
+        "SUPERSEDED"
+      ]
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "supersedes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
