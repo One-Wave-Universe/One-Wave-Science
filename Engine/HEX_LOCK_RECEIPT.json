@@ -1,0 +1,11 @@
+{
+  "brick": "YELLOW",
+  "lattice": "hex",
+  "locked": 0,
+  "failed": 5,
+  "omega_s2_rel_err_mean": 0.999977,
+  "H_kill_dissolved": true,
+  "drives": ["Z_K CODATA proton fold", "Z_M GW150914", "Z_T U235"],
+  "anchors_not_derived": {"proton_MeV": 938.27208816, "higgs_GeV": 125.11},
+  "honest": "Field blobs ran to the rim. Shear law not recovered. H-kill dissolved. CERN/LIGO remain source experiments used as wave drives."
+}
