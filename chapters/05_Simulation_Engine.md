@@ -153,3 +153,30 @@ Every run records:
 ## Promotion boundary
 
 Do not advance the active simulator target to proton-knot/quark-vortex searches until the coupled lattice and combined-state receipts pass the Stage-00 tests in G-764.
+
+## Stage-06 spectral validation
+
+G-767 adds a measurement-first branch to BASIS.
+
+Runtime:
+
+```
+immutable measurement
+-> provenance/checksum
+-> positive scale extraction
+-> log2 scale coordinate
+-> octave-depth / fractional-phase map
+-> continuous spectral density
+-> matched null ensemble
+-> frozen statistic
+-> held-out dataset
+-> compare surviving mode with G-766 dispersion
+```
+
+Required controls now include a smooth density-matched null preserving the observed marginal spectrum and selection range. A log-uniform null is a development diagnostic only and cannot promote a lattice claim.
+
+Training data may select a reference (x_0) or statistic parameters. Evaluation data may not retune them. Cross-domain data such as GWOSC count as validation only after the statistic is frozen.
+
+The engine must emit both positive and negative results. A visually repeated octave pattern that vanishes under density/acceptance matching is a FAIL for that spectral-lattice candidate, not an inconclusive result.
+
+Canonical implementation: `sims/06-spectral-lattice-phase/`.
