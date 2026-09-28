@@ -197,3 +197,15 @@ The six-neighbor dispersion and octave-emergence tests are specified but have
 not yet been run. G-745 remains quarantined: no physical lattice spacing is
 derived here. No proton, quark, mass, or new electromagnetic law follows from
 this packet alone.
+
+## 8. G-767 observational handshake
+
+G-766 and G-767 form a two-sided test and must not be collapsed.
+
+- G-766: generate candidate spectral/dispersion structure from the declared numerical lattice without fitting measured peaks.
+- G-767: measure scale-phase structure in real spectra without assuming the lattice.
+- Handshake: compare a frozen lattice prediction with a held-out measured spectrum.
+
+A match is meaningful only when the lattice-side mode and measurement-side statistic were specified independently enough to prevent the measured spectrum from being encoded into the simulator. Any surviving relation must report parameter count, uncertainty and competing null/control likelihood.
+
+See `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`.
