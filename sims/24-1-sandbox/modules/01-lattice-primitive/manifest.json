@@ -1,0 +1,66 @@
+{
+  "schema": "one-wave-sandbox-module/v1",
+  "id": "lattice-primitive",
+  "name": "Six-neighbor lattice primitive",
+  "version": "0.1.0",
+  "slot": 1,
+  "claim_gate": "YELLOW",
+  "dimensions": [
+    "2d"
+  ],
+  "solver": {
+    "kind": "finite-difference lattice",
+    "equations": [
+      "G-764/G-766 six-neighbor control"
+    ],
+    "units": {
+      "spacing": "numerical",
+      "time": "declared per run"
+    }
+  },
+  "render": {
+    "views": [
+      "2d",
+      "3d-height-field"
+    ],
+    "solver_independent": true
+  },
+  "controls": [
+    "linear-undamped",
+    "linear-damped",
+    "exact-mode"
+  ],
+  "data_sources": [
+    "GWOSC metadata anchor"
+  ],
+  "fixtures": {
+    "positive": [
+      "exact single mode",
+      "exact octave"
+    ],
+    "negative": [
+      "non-octave"
+    ],
+    "nulls": [
+      "phase-randomized",
+      "frequency-shuffled"
+    ]
+  },
+  "validation": {
+    "convergence": [
+      "timestep",
+      "domain",
+      "orientation"
+    ],
+    "invariants": [
+      "energy/error ledger"
+    ],
+    "falsification": [
+      "octave disappears under controls/refinement"
+    ]
+  },
+  "state_schema": "../../../00-state-container/state-schema.json",
+  "adapter": {
+    "existing": "../../00-lattice-primitive"
+  }
+}
