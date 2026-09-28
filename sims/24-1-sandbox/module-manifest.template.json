@@ -1,0 +1,16 @@
+{
+  "schema": "one-wave-sandbox-module/v1",
+  "id": "template",
+  "name": "Module Template",
+  "version": "0.1.0",
+  "slot": 0,
+  "claim_gate": "UNVERIFIED",
+  "dimensions": ["2d"],
+  "solver": {"kind": "unspecified", "equations": [], "units": {}},
+  "render": {"views": ["2d"], "solver_independent": true},
+  "controls": [],
+  "data_sources": [],
+  "fixtures": {"positive": [], "negative": [], "nulls": []},
+  "validation": {"convergence": [], "invariants": [], "falsification": []},
+  "state_schema": "../00-state-container/state-schema.json"
+}
