@@ -98,7 +98,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(status); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(raw))); self.end_headers(); self.wfile.write(raw)
     def do_GET(self):
         if not self.allowed(): return self.sendj(403,{"error":"client not allowed"})
-        if self.path=="/health": return self.sendj(200,{"ok":True,"transport":"deepseek-free-web-firefox","bind":self.server.server_address[0],"allowed_clients":sorted(ALLOWEDI)})
+        if self.path=="/health": return self.sendj(200,{"ok":True,"transport":"deepseek-free-web-firefox","bind":self.server.server_address[0],"allowed_clients":sorted(ALLOWED)})
         return self.sendj(404,{"error":"not found"})
     def do_POST(self):
         if not self.allowed(): return self.sendj(403,{"error":"client not allowed"})
@@ -120,7 +120,7 @@ class Server(ThreadingHTTPServer):
     def __init__(self,addr,browser): super().__init__(addr,Handler); self.browser=browser
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--bind",default=DEFAUL_BIND); ap.add_argument("--port",type=int,default=DEFAULT_PORT); ap.add_argument("--profile",type=Path,default=DEFAULT_PROFILE); a=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("--bind",default=DEFAULT_BIND); ap.add_argument("--port",type=int,default=DEFAULT_PORT); ap.add_argument("--profile",type=Path,default=DEFAULT_PROFILE); a=ap.parse_args()
     b=Browser(a.profile.expanduser()); s=Server((a.bind,a.port),b)
     print(json.dumps({"status":"DEEPSEEK_FREE_WEB_RELAY_READY","bind":a.bind,"port":a.port,"allowed_clients":sorted(ALLOWED)}),flush=True)
     try:s.serve_forever()
