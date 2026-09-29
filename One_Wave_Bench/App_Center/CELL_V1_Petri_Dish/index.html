@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><title>CELL_V1 Petri Dish</title>
+<style>
+body{font:15px system-ui;background:#111;color:#eee;margin:0;padding:24px}
+main{max-width:1100px;margin:auto}.grid{display:grid;grid-template-columns:460px 1fr;gap:20px}
+.card{border:1px solid #555;border-radius:12px;padding:16px;background:#181818}
+canvas{width:100%;background:#f4f4f4;border-radius:10px}
+label{display:block;margin:12px 0}input[type=range]{width:100%}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{padding:10px;background:#222;border-radius:8px}button{margin:6px;padding:9px 14px}
+</style></head><body><main>
+<h1>CELL_V1 Petri Dish</h1>
+<p>One visible software cell. Threshold-driven state; animation is display only.</p>
+<div class="grid">
+<div class="card"><canvas id="dish" width="440" height="380"></canvas><canvas id="history" width="440" height="150"></canvas></div>
+<div class="card">
+<h3>Three differential inputs</h3>
+<label>A differential <input id="a" type="range" min="-1" max="1" step=".01" value="0"></label>
+<label>B differential <input id="b" type="range" min="-1" max="1" step=".01" value="0"></label>
+<label>C differential <input id="c" type="range" min="-1" max="1" step=".01" value="0"></label>
+<div class="stats">
+<div class="stat">State <b id="state">STAY</b></div>
+<div class="stat">Lean <b id="lean">0</b></div>
+<div class="stat">Field <b id="field">0</b></div>
+<div class="stat">Void <b id="void">0</b></div>
+<div class="stat">Memory <b id="memory">0</b></div>
+<div class="stat">Reinjection <b id="reinj">0</b></div>
+</div>
+<p>Hysteresis: enter ±0.55, leave ±0.25. State is UP / STAY / DOWN.</p>
+<button id="toggle">Pause</button><button id="pulse">Single step</button><button id="reset">Reset</button>
+</div></div>
+</main><script type="module" src="app.js"></script></body></html>

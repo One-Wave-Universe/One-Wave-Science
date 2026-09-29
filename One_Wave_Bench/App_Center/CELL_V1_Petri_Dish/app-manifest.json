@@ -1,0 +1,8 @@
+{
+  "id": "one-wave.cell-petri-dish",
+  "name": "CELL_V1 Petri Dish",
+  "version": "0.1.0",
+  "entrypoint": "index.html",
+  "category": "Simulation / Cells",
+  "description": "Visible sandbox for one threshold-driven software CELL_V1 with Field/Void, hysteresis, ternary lean, memory and reinjection."
+}
