@@ -1,11 +1,16 @@
 {
-  "id": "machine-executor-smoke-20260928-02",
+  "id": "machine-executor-stage-update-20260928-03",
   "argv": [
-    "uname",
-    "-a"
+    "git",
+    "-C",
+    "/home/Scales/.local/share/bridge-comand-bootstrap",
+    "pull",
+    "--ff-only",
+    "origin",
+    "main"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 30,
-  "intention": "Prove the independent GitHub-backed Jetson terminal path.",
-  "consequence": "Read-only kernel and host identity output returned as a matching machine receipt."
+  "timeout": 60,
+  "intention": "Update the executor source used by the running Jetson service.",
+  "consequence": "Fast-forwards only the local Bridge-Comand bootstrap checkout."
 }
