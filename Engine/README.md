@@ -1,7 +1,5 @@
 # Engine
 
-One field. One module per node. LIGO and CERN enter only as D-414 wave drives.
+Yellow runners and receipts. Start at `WORK_2026-09-29.md`.
 
-See [MODULAR_PHYSICS_ENGINE.md](MODULAR_PHYSICS_ENGINE.md).
-Desktop rack (local pack): `OneWaveEngine/modular_engine.py`.
-Official live four-channel lab: `Nodes/D-414_Four_Interaction_Shell_Simulation/`.
+Still denied: T6 REBASE, Mass Effect, semitone naming, derived solar system.
