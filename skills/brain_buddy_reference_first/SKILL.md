@@ -1,83 +1,124 @@
 # How To Use Brain Buddy
 
-## Trigger
-Use for any Brain Buddy, Council Chamber, multi-agent, simulator, build bench, or project collaboration request.
+## Purpose
 
-## Procedure
+Brain Buddy is the working system. It is not a summary, suggestion list, or future design.
+Use it as the operating procedure for multi-agent project work.
 
-REFERENCE FIRST.
+Explain and execute the workflow like teaching a new operator:
 
-1. Locate current project state.
-2. Locate architecture documents.
-3. Locate existing bridges/connectors.
-4. Locate relevant skills.
+1. Find the current project state.
+2. Load references.
+3. Load metadata.
+4. Load available tools and bridges.
+5. Build the shared packet.
+6. Route the packet.
+7. Collect responses.
+8. Compare responses.
+9. Create a receipt.
+10. Update only the approved project layer.
+
+## Reference First
+
+Before answering any Brain Buddy request:
+
+1. Locate current repo state.
+2. Locate Brain Buddy documents.
+3. Locate related skills.
+4. Locate existing bridges/connectors.
 5. Load Baseline Zero.
-6. Only then answer or modify.
+6. Load relevant metadata/reference sources.
+7. Only then act.
 
-## Brain Buddy Operation
+Never replace a check with an assumption.
+Never replace a working system with an explanation of the system.
 
-Brain Buddy is a shared workbench around an unowned project core.
+## Brain Buddy Model
 
-The system has:
+The project core is unowned.
+
+ChatGPT, Gemini, DeepSeek, and the human are workers around the core.
+
+They do not become the project.
+
+The system contains:
 
 - private experimental workspaces
-- public show-and-tell proposals
-- shared core project state
-- receipt-based updates
+- show-and-tell proposal spaces
+- shared project core
+- receipt history
 
-When configured bridges are available:
+## AI Workspace Operation
 
-- use the bridge workflow instead of pretending to be the other agent
-- provide the same reference packet to reviewers
-- preserve separate responses
-- collect comparison and receipts
+Each AI workspace may:
 
-Reviewers may reference:
+- test ideas
+- run experiments
+- create simulations
+- inspect references
+- challenge assumptions
 
-- repository state
-- project references
-- approved metadata sources
-- connected build/science environments when available
+Each AI must receive the same reference packet for comparison.
 
-## Routing
+Do not merge private work directly into core.
 
-Questions about proposals:
+## Reviewer Routing
 
-- create a reference packet
-- send the same packet to reviewers
-- preserve separate viewpoints
-- produce a comparison
-- create a receipt
+When Gemini or DeepSeek bridges are available:
 
-Questions about implementation:
+1. Send the project packet.
+2. Include repo references.
+3. Include approved metadata sources.
+4. Include goals and constraints.
+5. Request independent review.
+6. Preserve each response separately.
+7. Compare results.
+8. Create a receipt.
 
-- check existing code first
-- extend existing architecture
-- avoid duplicate systems
+Connected environments such as Jetson may be used for approved science/build data workflows when available.
+Do not claim a bridge response without receiving it.
 
-## Walls
+## Project Layers
 
-CANON is not overwritten by proposals.
+CANON:
+source truth, documents, references.
 
-LOGIC stores derived work.
+LOGIC:
+derived relationships, proposals, review results.
 
-BENCH tests models.
+BENCH:
+simulations and digital tests.
 
-BUILD requires physical evidence.
+BUILD:
+physical implementations and measurements.
 
-Simulation is not reality.
+Walls:
 
-Idea is not build.
+simulation is not reality.
+idea is not build.
+build is not verification.
 
-Build is not verification.
+## Receipt Gate
 
-## Failure prevention
+A change needs:
 
-If a search does not find something:
+- reference
+- intention
+- consequence
+- test
+- result
+- verification
+
+No receipt means proposal only.
+
+## Failure Prevention
+
+If something is not found:
 
 1. check known paths
-2. check branch
+2. check branches
 3. check related references
-4. report what was checked
+4. check bridge configuration
+5. report exactly what was checked
 
-Do not infer absence from one failed lookup.
+Never infer absence from a failed lookup.
