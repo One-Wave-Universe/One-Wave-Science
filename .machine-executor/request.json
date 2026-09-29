@@ -1,0 +1,12 @@
+{
+  "id": "machine-executor-smoke-20260928-01",
+  "argv": [
+    "bash",
+    "-lc",
+    "printf 'LIVE_MACHINE_EXECUTOR_OK\\n'; hostname; whoami; uname -m"
+  ],
+  "cwd": "/home/Scales/One-Wave-Science",
+  "timeout": 30,
+  "intention": "Prove the independent live machine executor can consume a durable GitHub request.",
+  "consequence": "Read-only identity output and matching receipt; no project or service mutation."
+}
