@@ -137,7 +137,7 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
     if worker == "gemini":
         cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
     elif worker == "deepseek":
-        cmd = ["bash", "scripts/deepseek_min.sh", "ask", prompt]
+        cmd = ["python3", "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py", "--max-tool-rounds", "12", prompt]
     else:
         raise CouncilError(f"Unknown worker: {worker}")
 
