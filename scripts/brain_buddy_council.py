@@ -151,7 +151,7 @@ def gemini_text(raw: str) -> str:
 
 def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
     if worker == "gemini":
-        cmd = ["bash", "scripts/gemini_min.sh", "ask", prompt]
+        cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
     elif worker == "deepseek":
         cmd = ["bash", "scripts/deepseek_min.sh", "ask", prompt]
     else:
@@ -170,7 +170,7 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
     elapsed = round(time.monotonic() - started, 3)
     stdout = p.stdout.strip()
     stderr = p.stderr.strip()
-    answer = gemini_text(stdout) if worker == "gemini" else stdout
+    answer = stdout
 
     return {
         "worker": worker,
