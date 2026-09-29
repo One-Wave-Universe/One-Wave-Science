@@ -104,9 +104,11 @@ class TerminalBridgeV2Tests(unittest.TestCase):
             bridge.validate_request(json.dumps(raw))
         raw.update(intention="Verify pull command", consequence="Expect PULL_OK and exit zero")
         with tempfile.TemporaryDirectory() as td:
+            test_root = Path(__file__).resolve().parents[2]
             with mock.patch.dict(os.environ, {"REFERENCE_GATE_LEDGER": str(Path(td) / "receipts.jsonl"),
-                                             "ONE_WAVE_PROJECT_ROOT": str(Path(__file__).resolve().parents[2]),
-                                             "HIVE_PIPE_ALLOWED_ROOTS": str(Path(__file__).resolve().parents[2])}):
+                                             "ONE_WAVE_PROJECT_ROOT": str(test_root),
+                                             "HIVE_PIPE_ALLOWED_ROOTS": str(test_root)}), \
+                 mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (test_root,)):
                 request = bridge.validate_request(json.dumps(raw))
                 route = bridge.parse_routes("primary=origin:one")[0]
                 result = bridge.execute_request(request, "test-commit", route)

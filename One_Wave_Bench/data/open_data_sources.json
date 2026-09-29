@@ -1,36 +1,82 @@
 {
-  "schema": "one-wave-open-data-source-registry-v1",
+  "schema": "one-wave-open-data-source-registry-v2",
+  "rule": "Fetch source records unchanged first. Measurement arrays remain source measurements. Metadata remains metadata and may only be transformed as derived_metadata_wave.",
   "sources": [
     {
       "id": "cern-open-data",
       "domain": "collider",
-      "coverage": ["ALICE", "ATLAS", "CMS", "LHCb", "CERN public records"],
-      "metadata_url": "https://opendata.cern.ch/",
-      "access": "cernopendata-client / HTTPS / XRootD"
+      "coverage": [
+        "ALICE",
+        "ATLAS",
+        "CMS",
+        "LHCb",
+        "CERN public records"
+      ],
+      "landing_url": "https://opendata.cern.ch/",
+      "access": "cernopendata-client / HTTPS / XRootD",
+      "source_kind": [
+        "metadata",
+        "measurement-products"
+      ],
+      "fetch_mode": "client_or_record_url",
+      "verified_note": "Use stable CERN record/file identifiers and preserve experiment, dataset, software/release and file provenance."
     },
     {
       "id": "hepdata",
       "domain": "collider-scattering",
       "coverage": [
-        "published particle-physics scattering tables and distributions",
+        "published particle-physics tables and distributions",
         "LHC and non-LHC publications"
       ],
-      "metadata_url": "https://www.hepdata.net/",
-      "access": "HEPData records / downloads"
+      "landing_url": "https://www.hepdata.net/",
+      "access": "HEPData records / downloads",
+      "source_kind": [
+        "metadata",
+        "published-measurement-tables"
+      ],
+      "fetch_mode": "record_or_download_url",
+      "verified_note": "Preserve publication/record identifiers, table identity, units and qualifiers."
     },
     {
       "id": "gwosc",
       "domain": "gravitational-wave",
-      "coverage": ["LIGO", "Virgo", "KAGRA"],
-      "metadata_url": "https://gwosc.org/api/v2/",
-      "access": "HTTPS API / gwosc client"
+      "coverage": [
+        "LIGO",
+        "Virgo",
+        "KAGRA"
+      ],
+      "api_root": "https://gwosc.org/api/v2/",
+      "example_endpoint": "https://gwosc.org/api/v2/runs",
+      "access": "read-only HTTPS REST API / gwosc client",
+      "source_kind": [
+        "metadata",
+        "strain-measurement-series"
+      ],
+      "fetch_mode": "json_get",
+      "verified_note": "API v2 is current; preserve run/event/detector/sample-rate/GPS provenance and strain units."
     },
     {
       "id": "mast",
       "domain": "space-telescope",
-      "coverage": ["JWST", "Hubble", "Kepler/K2", "TESS", "GALEX", "MAST HLSP missions"],
-      "metadata_url": "https://mast.stsci.edu/api/v0/",
-      "access": "MAST API / astroquery"
+      "coverage": [
+        "JWST",
+        "Hubble",
+        "Kepler/K2",
+        "TESS",
+        "GALEX",
+        "MAST HLSP missions"
+      ],
+      "landing_url": "https://mast.stsci.edu/",
+      "api_docs": "https://outerspace.stsci.edu/display/MASTDOCS/MAST+API",
+      "access": "MAST API / astroquery.mast",
+      "source_kind": [
+        "metadata",
+        "light-curves",
+        "spectra",
+        "images"
+      ],
+      "fetch_mode": "astroquery_or_api",
+      "verified_note": "Preserve mission, instrument, observation/product IDs, calibration level, units and product URLs."
     },
     {
       "id": "heasarc",
@@ -46,15 +92,36 @@
         "XMM-Newton",
         "HEASARC missions"
       ],
-      "metadata_url": "https://heasarc.gsfc.nasa.gov/docs/archive/apis.html",
-      "access": "TAP / VO / astroquery / XAMIN"
+      "api_docs": "https://heasarc.gsfc.nasa.gov/docs/archive/apis.html",
+      "tap_root": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/",
+      "access": "TAP / VO / astroquery.heasarc / XAMIN",
+      "source_kind": [
+        "metadata",
+        "catalogs",
+        "light-curves",
+        "spectra",
+        "images",
+        "event-products"
+      ],
+      "fetch_mode": "tap_or_archive_product",
+      "verified_note": "Preserve mission/table/observation/product identity, units, coordinate/time systems and archive URLs."
     },
     {
       "id": "gaia-archive",
       "domain": "space-catalog",
-      "coverage": ["Gaia astrometry/photometry/spectroscopy"],
-      "metadata_url": "https://gea.esac.esa.int/archive/",
-      "access": "TAP / ADQL"
+      "coverage": [
+        "Gaia astrometry",
+        "photometry",
+        "spectroscopy"
+      ],
+      "landing_url": "https://gea.esac.esa.int/archive/",
+      "access": "TAP / ADQL",
+      "source_kind": [
+        "metadata",
+        "catalog-measurements"
+      ],
+      "fetch_mode": "tap",
+      "verified_note": "Preserve Gaia source_id, data release/table, units, quality fields and query text."
     }
   ]
 }

@@ -28,7 +28,7 @@ import time
 from typing import Any, Iterable
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent.parent
+REPO_ROOT = Path(os.environ.get("CHATGPT_TERMINAL_REPO", os.environ.get("ONE_WAVE_PROJECT_ROOT", str(SCRIPT_DIR.parent.parent)))).expanduser().resolve()
 sys.path.insert(0, str(SCRIPT_DIR))
 import terminal_parser  # noqa: E402
 import reference_receipt  # noqa: E402
@@ -307,6 +307,7 @@ def load_result(request_id: str) -> dict[str, Any] | None:
 
 def execute_request(request: dict[str, Any], commit: str, source: Route) -> dict[str, Any]:
     try:
+        reference_receipt.require_no_watcher_hold(REPO_ROOT)
         reference_receipt.record({"phase": "issued", "request_id": request["id"],
                                   "intention": request["intention"], "consequence": request["consequence"],
                                   "request_digest": request["digest"], "reference": terminal_parser._project_reference(),

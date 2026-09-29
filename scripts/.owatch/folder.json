@@ -1,0 +1,18 @@
+{
+  "schema": "one-wave-watched-folder-v1",
+  "mode": "fail_closed",
+  "editing_granularity": [
+    "word",
+    "sentence",
+    "line",
+    "section",
+    "file"
+  ],
+  "reference_required": true,
+  "intention_required": true,
+  "consequence_required": true,
+  "source_files_authoritative": true,
+  "intervention": "HOLD",
+  "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
+  "folder": "scripts"
+}
