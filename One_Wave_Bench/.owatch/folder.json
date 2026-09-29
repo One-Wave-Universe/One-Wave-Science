@@ -1,10 +1,48 @@
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-watched-folder-v2",
+  "type": "owatch",
+  "node_id": "owatch-bench",
+  "role": "build_bridge_runtime",
+  "state": "cold",
+  "concept_tags": [
+    "build",
+    "bridge",
+    "runtime",
+    "watcher",
+    "cell",
+    "tools"
+  ],
+  "authority_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_BRIDGE_START_HERE.md",
+    "AI_JETSON_TOOL_GUIDE.md"
+  ],
+  "edges": [
+    {
+      "type": "IMPLEMENTS",
+      "target": "owatch-nodes",
+      "weight": 0.6,
+      "note": "Bench/runtime can implement hypotheses but does not promote them to proof"
+    },
+    {
+      "type": "DEPENDS_ON",
+      "target": "owatch-root",
+      "weight": 1,
+      "note": "Runtime and bridge behavior inherit canonical governance"
+    },
+    {
+      "type": "RELATED_TO",
+      "target": "owatch-scripts",
+      "weight": 0.8,
+      "note": "Scripts operate bridge/runtime components"
+    }
+  ],
   "mode": "fail_closed",
   "editing_granularity": [
     "word",
     "sentence",
-    "line",
+    "paragraph",
+    "page",
     "section",
     "file"
   ],
@@ -12,6 +50,7 @@
   "intention_required": true,
   "consequence_required": true,
   "source_files_authoritative": true,
+  "route_memory_is_authority": false,
   "intervention": "HOLD",
   "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
   "folder": "One_Wave_Bench"
