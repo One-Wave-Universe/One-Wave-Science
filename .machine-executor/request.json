@@ -1,16 +1,11 @@
 {
-  "id": "machine-executor-stage-update-20260928-03",
+  "id": "machine-executor-reload-20260928-05",
   "argv": [
-    "git",
-    "-C",
-    "/home/Scales/.local/share/bridge-comand-bootstrap",
-    "pull",
-    "--ff-only",
-    "origin",
-    "main"
+    "bash",
+    "/home/Scales/.local/share/bridge-comand-bootstrap/hive-pipe/install_live_machine_executor.sh"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 60,
-  "intention": "Update the executor source used by the running Jetson service.",
-  "consequence": "Fast-forwards only the local Bridge-Comand bootstrap checkout."
+  "intention": "Reload the live executor service from the corrected Bridge-Comand checkout.",
+  "consequence": "Reinstalls and restarts only the unprivileged live executor service."
 }
