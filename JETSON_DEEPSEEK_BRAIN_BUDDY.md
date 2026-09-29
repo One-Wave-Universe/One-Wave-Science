@@ -42,6 +42,34 @@ The bridge gives DeepSeek bounded Jetson tools through Hive Pipe. It does not gr
 
 ## Authentication boundary
 
+## GitHub secret
+
+For GitHub Actions / GitHub-run DeepSeek jobs, configure the repository Actions secret:
+
+```text
+DEEPSEEK_API_KEY
+```
+
+Workflows consume it only as:
+
+```yaml
+env:
+  DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+```
+
+Never write the value into a workflow file, task packet, repository file, issue, PR, or log.
+
+GitHub Actions secrets are write-only from normal workflow use: the Jetson cannot retrieve the plaintext secret back from GitHub. Therefore the direct Jetson Brain Buddy lane must have its own private local credential source as well.
+
+Recommended Jetson local source:
+
+```text
+~/.config/one-wave/secrets/deepseek.env
+```
+
+with mode `0600`, containing the environment assignment locally only. The file must never be added to Git.
+
+
 DeepSeek model calls require:
 
 ```text
