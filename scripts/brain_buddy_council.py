@@ -142,15 +142,27 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
         raise CouncilError(f"Unknown worker: {worker}")
 
     started = time.monotonic()
-    p = subprocess.run(
-        cmd,
-        cwd=root,
-        text=True,
-        capture_output=True,
-        check=False,
-        timeout=timeout,
-        env=os.environ.copy(),
-    )
+    try:
+        p = subprocess.run(
+            cmd,
+            cwd=root,
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=timeout,
+            env=os.environ.copy(),
+        )
+    except subprocess.TimeoutExpired as exc:
+        elapsed = round(time.monotonic() - started, 3)
+        return {
+            "worker": worker,
+            "ok": False,
+            "exit_code": 124,
+            "elapsed_s": elapsed,
+            "answer": "",
+            "stderr": f"Timed out after {timeout}s while preserving the other Council participant.",
+        }
+
     elapsed = round(time.monotonic() - started, 3)
     stdout = p.stdout.strip()
     stderr = p.stderr.strip()
