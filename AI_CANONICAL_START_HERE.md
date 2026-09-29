@@ -111,6 +111,26 @@ Exact memory may not be overwritten by generative recall
 D-413 well is imposed; V_eff is the conservative skeleton only
 ```
 
+## Cosmology / time-transport mandatory chain
+
+Before interpreting One-Wave cosmological redshift, time dilation, propagation ceiling, or the "wave-edge" limit, read this chain in order:
+
+1. `Books/Book1_Micro/Book1_Ch16a_Wave_Equation.md`
+2. `Nodes/A-114_Dispersion_Relation.md`
+3. `Nodes/C-309_Friction_Limit.md`
+4. `Nodes/E-509_Propagation_Limit.md`
+5. `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`
+6. `Nodes/E-528_Static_Redshift_Transport.md`
+7. `Books/Book5_Macro/Book5_Ch6_Time_as_Transport_Through_the_Medium.md`
+
+Locked distinction:
+
+`propagation ceiling -> candidate timing mechanism` is allowed for E-533 testing.
+
+`propagation ceiling -> Mass Effect` remains prohibited by C-309.
+
+The E-533 square-root timing law is a target recovery condition until derived from the core update/dispersion mechanics.
+
 ## Magnetism / Gravity canonical bridge
 
 Before any AI connects magnetism, lattice reorganization, gravity/compression, orbital response, tidal/spin locking, or planetary magnetic anomalies, read this chain in order:
