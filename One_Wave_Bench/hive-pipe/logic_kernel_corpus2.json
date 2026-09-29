@@ -1,0 +1,103 @@
+{
+  "schema": "owatch-logic-kernel-corpus-v2",
+  "mode": "lifecycle",
+  "authoring": "hand-authored independent corpus; no generator shared with corpus1",
+  "repo_node_chain": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md",
+    "One_Wave_Bench/hive-pipe/LOGIC_KERNEL.md",
+    "One_Wave_Bench/hive-pipe/OWATCH_FULL_VISION.md"
+  ],
+  "poison_probe_edge_id": "src-control-delta",
+  "initial_route_memory": {
+    "src-false-cedar": 0.55,
+    "src-false-amber": 0.51,
+    "src-extension-violet": 0.33,
+    "src-control-delta": 0.47
+  },
+  "seed_edges": {
+    "cedar_supports_amber": {
+      "edge_id": "src-false-cedar",
+      "source": "span:cedar-observation",
+      "target": "span:amber-claim",
+      "kind": "SUPPORTS",
+      "source_class": "canon",
+      "reference": "corpus2:cedar-note",
+      "intention": "deliberately seed a false support path for retraction testing",
+      "consequence": "may produce runtime-derived proposal only"
+    },
+    "amber_supports_violet": {
+      "edge_id": "src-false-amber",
+      "source": "span:amber-claim",
+      "target": "span:violet-conclusion",
+      "kind": "SUPPORTS",
+      "source_class": "canon",
+      "reference": "corpus2:amber-note",
+      "intention": "deliberately extend false support path for retraction testing",
+      "consequence": "may produce runtime-derived proposal only"
+    },
+    "violet_supports_silver": {
+      "edge_id": "src-extension-violet",
+      "source": "span:violet-conclusion",
+      "target": "span:silver-grandchild",
+      "kind": "SUPPORTS",
+      "source_class": "canon",
+      "reference": "corpus2:violet-note",
+      "intention": "create a grandchild dependency on the false derived parent",
+      "consequence": "grandchild must become stale if parent is retracted"
+    },
+    "referee_cedar_contradicts_violet": {
+      "edge_id": "src-referee-canon",
+      "source": "span:cedar-observation",
+      "target": "span:violet-conclusion",
+      "kind": "CONTRADICTS",
+      "source_class": "canon",
+      "reference": "corpus2:independent-referee",
+      "intention": "canon referee invalidates the false derived support",
+      "consequence": "HOLD parent and recursively prune stale derived children"
+    },
+    "unrelated_control": {
+      "edge_id": "src-control-delta",
+      "source": "span:delta-control",
+      "target": "span:opal-control",
+      "kind": "SUPPORTS",
+      "source_class": "canon",
+      "reference": "corpus2:control-note",
+      "intention": "prove unrelated route memory is not poisoned",
+      "consequence": "must remain unchanged"
+    }
+  },
+  "steps": [
+    {
+      "action": "derive",
+      "name": "derive_false_parent",
+      "left": "cedar_supports_amber",
+      "right": "amber_supports_violet",
+      "save_as": "false_parent"
+    },
+    {
+      "action": "derive",
+      "name": "derive_grandchild",
+      "left": "false_parent",
+      "right": "violet_supports_silver",
+      "save_as": "false_grandchild"
+    },
+    {
+      "action": "referee",
+      "name": "canon_referee_retracts_parent",
+      "referee": "referee_cedar_contradicts_violet",
+      "target": "false_parent"
+    }
+  ],
+  "expect": {
+    "pruned_aliases": [
+      "false_parent",
+      "false_grandchild"
+    ],
+    "wrong_derivations_min": 1,
+    "stale_children_pruned_min": 1,
+    "hysteresis_boost_on_bad_path": 0,
+    "nodes_written": false
+  }
+}
