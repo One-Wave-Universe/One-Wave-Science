@@ -142,6 +142,13 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
         raise CouncilError(f"Unknown worker: {worker}")
 
     started = time.monotonic()
+    worker_env = os.environ.copy()
+    if worker == "deepseek":
+        worker_env.setdefault("DEEPSEEK_WEB_BASE_URL", "http://192.168.55.100:3000")
+        worker_env.setdefault("DEEPSEEK_WEB_API_KEY", "usb-local")
+    elif worker == "gemini":
+        worker_env.setdefault("GEMINI_WEB_BASE_URL", "http://192.168.55.100:3001")
+
     try:
         p = subprocess.run(
             cmd,
@@ -150,7 +157,7 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
             capture_output=True,
             check=False,
             timeout=timeout,
-            env=os.environ.copy(),
+            env=worker_env,
         )
     except subprocess.TimeoutExpired as exc:
         elapsed = round(time.monotonic() - started, 3)
