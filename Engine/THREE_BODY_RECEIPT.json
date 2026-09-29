@@ -1,0 +1,11 @@
+{
+  "job": "three_body_relay",
+  "brick": "YELLOW",
+  "kernel_at_zero": 0.8333333333333334,
+  "kernel_finite_at_point": true,
+  "spread_tail_relay_with_parent": 2.9986788773927127,
+  "spread_tail_newton_pairwise": 1.459609845730441,
+  "spread_tail_relay_no_parent": 2.124897587837918,
+  "parent_tightens": false,
+  "pass": false
+}
