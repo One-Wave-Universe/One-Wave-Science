@@ -1,12 +1,12 @@
 {
-  "id": "jetson-bridge-recover-gemini-20260928-06",
+  "id": "jetson-route-probe-20260928-07",
   "argv": [
     "bash",
     "-lc",
-    "set -euo pipefail\nROOT=\"$HOME/.local/share/bridge-comand-bootstrap\"\ntest -d \"$ROOT/.git\" || git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$ROOT\"\ngit -C \"$ROOT\" fetch --prune origin main\ngit -C \"$ROOT\" checkout --detach origin/main\nexport ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science\nbash \"$ROOT/hive-pipe/bootstrap_chatgpt_terminal_pull.sh\"\nsystemctl --user daemon-reload\nsystemctl --user enable --now hive-pipe-agent.service hive-pipe-gateway.service one-wave-chatgpt-terminal-pull.service one-wave-bridge-lattice-watchdog.timer one-wave-route-goblin.timer\nsystemctl --user restart hive-pipe-agent.service hive-pipe-gateway.service one-wave-chatgpt-terminal-pull.service || true\nsystemctl --user restart hive-pipe-relay.service || true\npython3 \"$ROOT/hive-pipe/route_goblin.py\" || true\npython3 \"$ROOT/hive-pipe/bridge_lattice_watchdog.py\" || true\nprintf 'BRIDGE_RECOVERY_RECEIPT\\n'\nfor s in hive-pipe-agent.service hive-pipe-gateway.service hive-pipe-relay.service one-wave-chatgpt-terminal-pull.service one-wave-bridge-lattice-watchdog.timer one-wave-route-goblin.timer; do printf '%s=' \"$s\"; systemctl --user is-active \"$s\" || true; done\nprintf 'GEMINI='; command -v gemini || test -x \"$HOME/.local/bin/gemini\" && printf '%s\\n' \"$HOME/.local/bin/gemini\"\nprintf 'GEMINI_TOKEN='; test -s \"$HOME/.config/hive-pipe/tokens/gemini.token\" && echo PRESENT || echo MISSING\nprintf 'RELAY_ENV='; test -s \"$HOME/.config/hive-pipe/relay.env\" && echo PRESENT || echo MISSING\nprintf 'BRIDGE_COMMIT='; git -C \"$ROOT\" rev-parse HEAD\nprintf 'SCIENCE_HEAD='; git -C /home/Scales/One-Wave-Science rev-parse HEAD"
+    "printf 'JETSON_ROUTE_07_OK\\n'; hostname; whoami; uname -m; pwd"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 300,
-  "intention": "Recover the Jetson-native pull/gateway/relay control plane without Desktop Commander, verify protected credential presence without exposing values, and prepare the existing Gemini CLI worker.",
-  "consequence": "Restarts all locally recoverable bridge services and returns only service/credential-presence receipts; no secret values are printed and no science files are edited."
+  "timeout": 30,
+  "intention": "Determine whether the durable Git pull listener is currently executing bounded requests on the Jetson.",
+  "consequence": "Read-only identity output only; no repository, service, credential, mount, or device changes."
 }
