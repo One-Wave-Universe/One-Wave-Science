@@ -1,10 +1,39 @@
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-watched-folder-v2",
+  "type": "owatch",
+  "node_id": "owatch-grants",
+  "role": "grant_evidence",
+  "state": "cold",
+  "concept_tags": [
+    "grants",
+    "evidence-index",
+    "review",
+    "outreach"
+  ],
+  "authority_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md"
+  ],
+  "edges": [
+    {
+      "type": "REFERENCES",
+      "target": "owatch-nodes",
+      "weight": 1,
+      "note": "Grant claims must trace to current science nodes"
+    },
+    {
+      "type": "DEPENDS_ON",
+      "target": "owatch-root",
+      "weight": 1,
+      "note": "Grant material inherits canonical governance"
+    }
+  ],
   "mode": "fail_closed",
   "editing_granularity": [
     "word",
     "sentence",
-    "line",
+    "paragraph",
+    "page",
     "section",
     "file"
   ],
@@ -12,6 +41,7 @@
   "intention_required": true,
   "consequence_required": true,
   "source_files_authoritative": true,
+  "route_memory_is_authority": false,
   "intervention": "HOLD",
   "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
   "folder": "GRANTS"
