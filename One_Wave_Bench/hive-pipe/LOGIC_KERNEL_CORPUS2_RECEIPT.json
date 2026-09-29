@@ -1,0 +1,68 @@
+{
+  "schema": "owatch-logic-kernel-corpus2-acceptance-v1",
+  "branch": "owatch-logic-kernel",
+  "status": "BRONZE_PASS",
+  "reviews": {
+    "gemini": {
+      "accepted_shape": true,
+      "required": [
+        "hard canon CONTRADICTS precedence over derived SUPPORTS",
+        "cycle/depth-safe recursive prune"
+      ],
+      "main_risk": "recursive prune loops or multi-parent lock if lineage is not guarded"
+    },
+    "deepseek": {
+      "accepted_shape": true,
+      "required": [
+        "stable edge IDs rather than semantic tuple keys",
+        "only non-derived canon-class CONTRADICTS may referee",
+        "idempotent mark-before-recurse prune"
+      ],
+      "main_risk": "over-pruning or double-counting from identity collisions"
+    }
+  },
+  "tests": {
+    "corpus1_unit_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "corpus2_unit_tests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "corpus1_passed": true,
+    "corpus2_passed": true,
+    "wrong_derivations": 1,
+    "pruned_derived": 2,
+    "stale_children_pruned": 1,
+    "referee_invalidations": 1,
+    "hysteresis_boost_on_bad_path": 0,
+    "poison_probe": {
+      "edge_id": "src-control-delta",
+      "before": 0.47,
+      "after": 0.47
+    },
+    "nodes_unchanged": true
+  },
+  "repo_node_chain": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md",
+    "One_Wave_Bench/hive-pipe/LOGIC_KERNEL.md",
+    "One_Wave_Bench/hive-pipe/OWATCH_FULL_VISION.md"
+  ],
+  "authority": {
+    "route_memory_is_authority": false,
+    "derived_is_canon": false,
+    "canon_referee_required": true,
+    "nodes_written": false,
+    "merged_to_main": false
+  },
+  "implementation": [
+    "One_Wave_Bench/hive-pipe/logic_kernel.py",
+    "One_Wave_Bench/hive-pipe/logic_kernel_corpus.json",
+    "One_Wave_Bench/hive-pipe/logic_kernel_corpus2.json",
+    "One_Wave_Bench/hive-pipe/test_logic_kernel.py",
+    "One_Wave_Bench/hive-pipe/test_logic_kernel_corpus2.py"
+  ]
+}
