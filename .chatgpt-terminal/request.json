@@ -1,11 +1,16 @@
 {
-  "id": "jetson-direct-probe-20260928-10",
+  "id": "desktop-commander-discover-20260929-01",
   "argv": [
-    "uname",
-    "-a"
+    "systemctl",
+    "--user",
+    "--no-pager",
+    "--plain",
+    "list-units",
+    "--type=service",
+    "--all"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Probe the existing Jetson GitHub pull terminal with the smallest parser-safe command.",
-  "consequence": "Read-only host/kernel response; no mutation."
+  "intention": "Recover Desktop Commander recursively through the existing Jetson GitHub pull lane by discovering user services, including the machine-side Remote MCP agent.",
+  "consequence": "Read-only service inventory; no service or repository mutation."
 }
