@@ -1,10 +1,58 @@
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-watched-folder-v2",
+  "type": "owatch",
+  "node_id": "owatch-root",
+  "role": "governance_reference",
+  "state": "cold",
+  "concept_tags": [
+    "canonical",
+    "governance",
+    "reference",
+    "repo-root"
+  ],
+  "authority_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md"
+  ],
+  "edges": [
+    {
+      "type": "AUTHORITY_OF",
+      "target": "owatch-nodes",
+      "weight": 1,
+      "note": "Canonical governance applies to science nodes"
+    },
+    {
+      "type": "AUTHORITY_OF",
+      "target": "owatch-bench",
+      "weight": 1,
+      "note": "Canonical governance applies to build/tooling"
+    },
+    {
+      "type": "AUTHORITY_OF",
+      "target": "owatch-scripts",
+      "weight": 1,
+      "note": "Canonical governance applies to executable helpers"
+    },
+    {
+      "type": "AUTHORITY_OF",
+      "target": "owatch-sims",
+      "weight": 1,
+      "note": "Canonical governance applies to simulations"
+    },
+    {
+      "type": "AUTHORITY_OF",
+      "target": "owatch-grants",
+      "weight": 1,
+      "note": "Canonical governance applies to grant material"
+    }
+  ],
   "mode": "fail_closed",
   "editing_granularity": [
     "word",
     "sentence",
-    "line",
+    "paragraph",
+    "page",
     "section",
     "file"
   ],
@@ -12,6 +60,7 @@
   "intention_required": true,
   "consequence_required": true,
   "source_files_authoritative": true,
+  "route_memory_is_authority": false,
   "intervention": "HOLD",
   "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
   "folder": "."
