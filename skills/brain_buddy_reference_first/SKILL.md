@@ -1,4 +1,4 @@
-# Brain Buddy Reference First Skill
+# How To Use Brain Buddy
 
 ## Trigger
 Use for any Brain Buddy, Council Chamber, multi-agent, simulator, build bench, or project collaboration request.
