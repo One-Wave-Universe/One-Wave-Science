@@ -1,0 +1,16 @@
+{
+  "brick": "GRAY observed + YELLOW mapping",
+  "note": "Numbers are catalog / Voyager-class facts. Not derived from hop or chi.",
+  "bodies": [
+    {"name": "Mercury", "obliquity_deg": 0.0, "B_tilt_to_spin_deg": 10, "B_surface_Earth": 0.011, "spin": "prograde", "weird": "weak dynamo"},
+    {"name": "Venus", "obliquity_deg": 177.4, "B_tilt_to_spin_deg": null, "B_surface_Earth": 0.0, "spin": "retrograde slow", "day_earth_days": 243, "year_earth_days": 225, "weird": "day longer than year; no global dynamo"},
+    {"name": "Earth", "obliquity_deg": 23.4, "B_tilt_to_spin_deg": 11.5, "B_surface_Earth": 1.0, "spin": "prograde", "weird": "dipole almost on spin"},
+    {"name": "Moon", "obliquity_deg": 6.7, "B_tilt_to_spin_deg": null, "B_surface_Earth": 0.0, "spin": "tidally locked to Earth", "weird": "lock is observed; magnetic lock is hypothesis here"},
+    {"name": "Mars", "obliquity_deg": 25.2, "B_tilt_to_spin_deg": null, "B_surface_Earth": 0.001, "spin": "prograde", "weird": "crustal remnant only"},
+    {"name": "Jupiter", "obliquity_deg": 3.1, "B_tilt_to_spin_deg": 9.6, "B_surface_Earth": 13.9, "spin": "prograde", "weird": "strong aligned dynamo"},
+    {"name": "Saturn", "obliquity_deg": 26.7, "B_tilt_to_spin_deg": 0.8, "B_surface_Earth": 0.67, "spin": "prograde", "weird": "B almost on spin"},
+    {"name": "Uranus", "obliquity_deg": 97.8, "B_tilt_to_spin_deg": 59, "B_offset_R": 0.33, "B_surface_Earth": 0.74, "spin": "retrograde-on-side", "weird": "rolls on side; B offset and tilted; magnetosphere tumbles"},
+    {"name": "Neptune", "obliquity_deg": 28.3, "B_tilt_to_spin_deg": 47, "B_offset_R": 0.55, "B_surface_Earth": 0.43, "spin": "prograde", "weird": "B offset toward cloud tops; polarity opposite Earth-now"},
+    {"name": "Triton", "obliquity_deg": null, "spin": "orbit retrograde about Neptune", "weird": "captured moon, not in-disk"}
+  ]
+}
