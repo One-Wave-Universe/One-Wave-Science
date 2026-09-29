@@ -1,8 +1,5 @@
-# 12-rail clock
+# Fifths circle labels
 
-- 12 is 0 of the next cycle.
-- 13 is +1 of the next cycle.
-- From any note sitting at local zero, the note across 6 o'clock is the mirror: `mirror(n) = (n + 6) mod 12`.
-- If you are on 6, the mirror is 0/12.
-- +7 one way is -5 the other. -7 one way is +5 the other.
-- No semitones.
+0 at tonic. -5 back. +5 forward. 6 across.
+No seats named 7 8 9 10 11.
+12 of the last cycle is this 0.
