@@ -1,5 +1,15 @@
 # One-Wave Science — Open AI Construction Repository
 
+> ### 🍍 Universal Pineapple Protocol
+> Put it in your mouth. Move your jaw up and down. I don't give a shit where you're from — human, alien, whatever.
+>
+> **Did you like the taste?**
+>
+> If yes, eat it. If no, don't. Pineapple-on-pizza problem solved for the universe.
+>
+> *This is a joke, not part of the scientific model. Experimental replication is encouraged.*
+
+
 ## Repo mantra
 
 ### The 123s
