@@ -1,10 +1,40 @@
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-watched-folder-v2",
+  "type": "owatch",
+  "node_id": "owatch-scripts",
+  "role": "automation_tools",
+  "state": "cold",
+  "concept_tags": [
+    "scripts",
+    "automation",
+    "watchers",
+    "bridges",
+    "tools"
+  ],
+  "authority_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_BRIDGE_START_HERE.md"
+  ],
+  "edges": [
+    {
+      "type": "IMPLEMENTS",
+      "target": "owatch-bench",
+      "weight": 0.8,
+      "note": "Scripts implement/manage bridge and watcher behavior"
+    },
+    {
+      "type": "DEPENDS_ON",
+      "target": "owatch-root",
+      "weight": 1,
+      "note": "Automation is governed by canonical reference rules"
+    }
+  ],
   "mode": "fail_closed",
   "editing_granularity": [
     "word",
     "sentence",
-    "line",
+    "paragraph",
+    "page",
     "section",
     "file"
   ],
@@ -12,6 +42,7 @@
   "intention_required": true,
   "consequence_required": true,
   "source_files_authoritative": true,
+  "route_memory_is_authority": false,
   "intervention": "HOLD",
   "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
   "folder": "scripts"
