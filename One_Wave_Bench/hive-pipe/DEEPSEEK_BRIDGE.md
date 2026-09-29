@@ -1,3 +1,46 @@
+# DeepSeek -> One-Wave Brain Buddy routes
+
+## Default: free web relay
+
+Normal DeepSeek Brain Buddy use does **not** require a paid API key.
+
+Use:
+
+```bash
+bash scripts/deepseek_min.sh ask "question"
+bash scripts/deepseek_min.sh science DEEPSEEK_TASK_TEMPLATE.md
+```
+
+Default route:
+
+```text
+Jetson deepseek_min.sh
+ -> deepseek_web_bridge.py
+ -> Dell USB relay 192.168.55.100:3000
+ -> logged-in DeepSeek free web session
+ -> tool request
+ -> Hive Pipe MCP
+ -> bounded Jetson terminal + receipts
+```
+
+Dell bootstrap:
+
+```bash
+bash scripts/bootstrap_deepseek_web_relay.sh
+```
+
+Canonical details: `JETSON_DEEPSEEK_BRAIN_BUDDY.md`.
+
+## Optional: paid API route
+
+The API adapter below remains an optional fallback. Enable it explicitly with:
+
+```bash
+DEEPSEEK_USE_API=1 DEEPSEEK_API_KEY='...' bash scripts/deepseek_min.sh ask "question"
+```
+
+---
+
 # DeepSeek -> Hive Pipe -> Jetson
 
 This is the no-clipboard route for DeepSeek when using the DeepSeek API.

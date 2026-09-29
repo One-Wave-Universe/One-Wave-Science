@@ -1,159 +1,104 @@
 #!/usr/bin/env bash
 set -euo pipefail
-umask 077
 
-SOURCE_URL="https://github.com/maresin/deepseek-automation-api.git"
-SOURCE_REF="cd952329bf5525d4e8a5591d951a9bb5610aebe0"
-TOOLS_ROOT="${ONE_WAVE_TOOLS_ROOT:-$HOME/One-Wave-Tools}"
-RELAY_HOME="${DEEPSEEK_WEB_RELAY_HOME:-$TOOLS_ROOT/deepseek-web-relay}"
-STATE_ROOT="${XDG_STATE_HOME:-$HOME/.local/state}/one-wave-deepseek-web-relay"
-PORT="${DEEPSEEK_WEB_PORT:-3000}"
-PID_FILE="$STATE_ROOT/relay.pid"
-LOG_FILE="$STATE_ROOT/relay.log"
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
 
-for cmd in git node npm python3; do
-  if ! command -v "$cmd" >/dev/null 2>&1; then
-    echo "DEEPSEEK_WEB_RELAY_MISSING: $cmd" >&2
-    exit 2
-  fi
-done
+STATE="${XDG_STATE_HOME:-$HOME/.local/state}/one-wave-deepseek-web"
+VENV="$STATE/venv"
+PROFILE="$STATE/firefox-profile"
+RELAY="$STATE/deepseek_web_relay.py"
+SERVICE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+SERVICE="$SERVICE_DIR/one-wave-deepseek-web-relay.service"
+RAW_URL="${DEEPSEEK_RELAY_SOURCE_URL:-https://raw.githubusercontent.com/One-Wave-Universe/One-Wave-Science/main/One_Wave_Bench/hive-pipe/deepseek_web_relay.py}"
 
-mkdir -p "$TOOLS_ROOT" "$STATE_ROOT"
-chmod 700 "$TOOLS_ROOT" "$STATE_ROOT"
+mkdir -p "$STATE" "$SERVICE_DIR"
+chmod 700 "$STATE"
 
-if [[ ! -d "$RELAY_HOME/.git" ]]; then
-  git clone --filter=blob:none --no-checkout "$SOURCE_URL" "$RELAY_HOME"
+command -v firefox >/dev/null 2>&1 || { echo "Firefox is required"; exit 2; }
+GECKO="/snap/firefox/current/usr/lib/firefox/geckodriver"
+FIREFOX_BIN="/snap/firefox/current/usr/lib/firefox/firefox"
+[[ -x "$GECKO" && -x "$FIREFOX_BIN" ]] || { echo "Firefox/geckodriver not found in expected snap path"; exit 2; }
+
+if [[ ! -x "$VENV/bin/python" ]]; then
+  python3 -m venv "$VENV"
+  "$VENV/bin/python" -m pip install --upgrade pip
+  "$VENV/bin/python" -m pip install selenium
 fi
 
-git -C "$RELAY_HOME" fetch --depth 1 origin "$SOURCE_REF"
-git -C "$RELAY_HOME" checkout --detach "$SOURCE_REF"
+if [[ ! -d "$PROFILE" ]]; then
+  SOURCE_PROFILE="$(python3 - <<'PY'
+from pathlib import Path
+roots=[Path.home()/"snap/firefox/common/.mozilla/firefox", Path.home()/".mozilla/firefox"]
+candidates=[]
+for root in roots:
+    if not root.exists(): continue
+    for p in root.iterdir():
+        if not p.is_dir(): continue
+        score=0
+        for session in p.glob("sessionstore-backups/*.jsonlz4"):
+            try:
+                data=session.read_bytes()
+            except OSError:
+                continue
+            if b"deepseek" in data.lower(): score+=1000000
+            score+=int(session.stat().st_mtime)
+        if score: candidates.append((score,p))
+if candidates:
+    print(max(candidates)[1])
+PY
+)"
+  [[ -n "$SOURCE_PROFILE" && -d "$SOURCE_PROFILE" ]] || { echo "No Firefox profile found"; exit 2; }
+  rsync -a --exclude='lock' --exclude='.parentlock' --exclude='parent.lock' "$SOURCE_PROFILE/" "$PROFILE/"
+  chmod -R go-rwx "$PROFILE"
+fi
 
-# The pinned upstream currently declares a postinstall script that is absent
-# from the repository. Install dependencies without lifecycle scripts, then
-# install Chromium explicitly through playwright-core.
-(
-  cd "$RELAY_HOME"
-  npm install --ignore-scripts
-)
-
-# Keep the third-party relay private to the Jetson. Do not expose its local API
-# on the LAN or through the existing Hive Pipe tunnel.
-python3 - "$RELAY_HOME/server.js" <<'PY'
+python3 - "$RAW_URL" "$RELAY" <<'PY'
 from pathlib import Path
 import sys
-
-path = Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
-old = "app.listen(PORT, () => {"
-new = "app.listen(PORT, '127.0.0.1', () => {"
-if new not in text:
-    if old not in text:
-        raise SystemExit("DEEPSEEK_WEB_RELAY_PATCH_FAILED: server listen shape changed")
-    text = text.replace(old, new, 1)
-    path.write_text(text, encoding="utf-8")
-PY
-
-(
-  cd "$RELAY_HOME"
-  npm run build
-  mkdir -p browsers
-  PLAYWRIGHT_BROWSERS_PATH="$RELAY_HOME/browsers" npx playwright-core install chromium
-)
-
-relay_health() {
-  python3 - "$PORT" <<'PY' >/dev/null 2>&1
-import json
-import sys
 from urllib.request import urlopen
-
-port = int(sys.argv[1])
-with urlopen(f"http://127.0.0.1:{port}/health", timeout=2) as response:
-    body = json.load(response)
-if body.get("status") != "ok":
-    raise SystemExit(1)
+url,dest=sys.argv[1],Path(sys.argv[2])
+dest.write_bytes(urlopen(url,timeout=30).read())
 PY
-}
+chmod 600 "$RELAY"
 
-if ! relay_health; then
-  if [[ -f "$PID_FILE" ]]; then
-    old_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
-    if [[ "$old_pid" =~ ^[0-9]+$ ]] && kill -0 "$old_pid" 2>/dev/null; then
-      kill "$old_pid" || true
-    fi
-  fi
-  (
-    cd "$RELAY_HOME"
-    export PORT
-    export PLAYWRIGHT_BROWSERS_PATH="$RELAY_HOME/browsers"
-    export DEEPSEEK_HEADLESS="${DEEPSEEK_WEB_HEADLESS:-true}"
-    export DEEPSEEK_SHOW_BROWSER="${DEEPSEEK_WEB_SHOW_BROWSER:-false}"
-    export DEEPSEEK_RESTORE_SESSION=true
-    export RESTORE_SESSION=true
-    nohup npm start >"$LOG_FILE" 2>&1 &
-    echo $! >"$PID_FILE"
-  )
+cat >"$SERVICE" <<EOF
+[Unit]
+Description=One-Wave DeepSeek free web Brain Buddy relay
+After=network-online.target
+Wants=network-online.target
 
-  for _ in $(seq 1 30); do
-    if relay_health; then
-      break
-    fi
-    sleep 1
-  done
-fi
+[Service]
+Type=simple
+ExecStart=$VENV/bin/python $RELAY --bind 192.168.55.100 --port 3000 --profile $PROFILE
+Restart=always
+RestartSec=5
+Environment=DEEPSEEK_WEB_RELAY_ALLOWED_CLIENTS=127.0.0.1,192.168.55.1
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=$STATE
 
-if ! relay_health; then
-  echo "DEEPSEEK_WEB_RELAY_START_FAILED" >&2
-  echo "log: $LOG_FILE" >&2
-  exit 3
-fi
+[Install]
+WantedBy=default.target
+EOF
 
-if [[ ! -s "$RELAY_HOME/.api-key" || ! -s "$RELAY_HOME/state.json" ]]; then
-  if [[ ! -t 0 ]]; then
-    echo "DEEPSEEK_WEB_RELAY_LOGIN_REQUIRED: run this script from an interactive Jetson shell" >&2
-    exit 4
-  fi
+systemctl --user daemon-reload
+systemctl --user enable --now one-wave-deepseek-web-relay.service
 
-  printf 'DeepSeek account email: '
-  IFS= read -r DEEPSEEK_BOOT_EMAIL
-  printf 'DeepSeek account password (not saved): '
-  IFS= read -r -s DEEPSEEK_BOOT_PASSWORD
-  printf '\n'
-  export DEEPSEEK_BOOT_EMAIL DEEPSEEK_BOOT_PASSWORD
-
-  python3 - "$PORT" <<'PY'
-import json
-import os
-import sys
-from urllib.request import Request, urlopen
-
-port = int(sys.argv[1])
-payload = {
-    "email": os.environ["DEEPSEEK_BOOT_EMAIL"],
-    "password": os.environ["DEEPSEEK_BOOT_PASSWORD"],
-}
-request = Request(
-    f"http://127.0.0.1:{port}/v1/register",
-    data=json.dumps(payload).encode("utf-8"),
-    headers={"Content-Type": "application/json"},
-    method="POST",
-)
-with urlopen(request, timeout=180) as response:
-    result = json.load(response)
-if not result.get("api_key"):
-    raise SystemExit("DEEPSEEK_WEB_RELAY_REGISTER_FAILED: no local relay key returned")
-print("DEEPSEEK_WEB_RELAY_LOGIN_OK")
+for _ in 1 2 3 4 5 6; do
+  if python3 - <<'PY' >/dev/null 2>&1
+from urllib.request import urlopen
+with urlopen("http://192.168.55.100:3000/health", timeout=2) as r:
+    raise SystemExit(0 if r.status == 200 else 1)
 PY
+  then
+    echo "DEEPSEEK_FREE_WEB_RELAY_HEALTHY"
+    exit 0
+  fi
+  sleep 2
+done
 
-  unset DEEPSEEK_BOOT_PASSWORD DEEPSEEK_BOOT_EMAIL
-fi
-
-chmod 600 "$RELAY_HOME/.api-key" "$RELAY_HOME/state.json" 2>/dev/null || true
-
-export DEEPSEEK_WEB_BASE_URL="http://127.0.0.1:$PORT"
-export DEEPSEEK_WEB_API_KEY_FILE="$RELAY_HOME/.api-key"
-python3 "$REPO_ROOT/One_Wave_Bench/hive-pipe/deepseek_web_bridge.py" --relay-health --mcp-smoke
-
-echo "DEEPSEEK_WEB_RELAY_READY"
-echo "worker: bash scripts/deepseek_web_worker.sh 'your task'"
+systemctl --user --no-pager --plain status one-wave-deepseek-web-relay.service || true
+exit 1
