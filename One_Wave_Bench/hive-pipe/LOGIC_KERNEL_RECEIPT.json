@@ -1,0 +1,40 @@
+{
+  "schema": "owatch-logic-kernel-acceptance-receipt-v1",
+  "branch": "owatch-logic-kernel",
+  "status": "PASS",
+  "implementation_commit": "c186793ecc9aa36dbbb99e8740dc35f20fc714a2",
+  "tests": {
+    "unit_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "all_expected_derivations_match": true,
+    "all_statuses_match": true,
+    "planted_loop_terminated": true,
+    "hold_fired": true,
+    "bad_paths_decayed": true,
+    "unrelated_route_not_poisoned": true,
+    "wrong_derivations": 0,
+    "correct_derivations": 2,
+    "holds": 3,
+    "terminated_loops": 2,
+    "unresolved": 1,
+    "hysteresis_boost_on_bad_path": 0
+  },
+  "poison_probe": {
+    "key": "SUPPORTS:X->Y",
+    "before": 0.42,
+    "after": 0.42
+  },
+  "authority": {
+    "route_memory_is_authority": false,
+    "derived_is_canon": false,
+    "nodes_written": false
+  },
+  "scope": [
+    "One_Wave_Bench/hive-pipe/logic_kernel.py",
+    "One_Wave_Bench/hive-pipe/logic_kernel_corpus.json",
+    "One_Wave_Bench/hive-pipe/test_logic_kernel.py"
+  ],
+  "note": "Branch receipt only. No merge to main. No coupling to Neuron_Registry or cell/flower simulation."
+}
