@@ -50,7 +50,13 @@ PY
   chmod -R go-rwx "$PROFILE"
 fi
 
-curl -fsSL "$RAW_URL" -o "$RELAY"
+python3 - "$RAW_URL" "$RELAY" <<'PY'
+from pathlib import Path
+import sys
+from urllib.request import urlopen
+url,dest=sys.argv[1],Path(sys.argv[2])
+dest.write_bytes(urlopen(url,timeout=30).read())
+PY
 chmod 600 "$RELAY"
 
 cat >"$SERVICE" <<EOF
@@ -79,7 +85,12 @@ systemctl --user daemon-reload
 systemctl --user enable --now one-wave-deepseek-web-relay.service
 
 for _ in 1 2 3 4 5 6; do
-  if curl -fsS --connect-timeout 2 http://192.168.55.100:3000/health >/dev/null; then
+  if python3 - <<'PY' >/dev/null 2>&1
+from urllib.request import urlopen
+with urlopen("http://192.168.55.100:3000/health", timeout=2) as r:
+    raise SystemExit(0 if r.status == 200 else 1)
+PY
+  then
     echo "DEEPSEEK_FREE_WEB_RELAY_HEALTHY"
     exit 0
   fi
