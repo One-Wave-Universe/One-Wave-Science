@@ -1,5 +1,7 @@
 # OWATCH Folder Type
 
+> Project target: `OWATCH_NODE_LENS_PROJECT.md` defines the next-stage layered node/lens architecture, proposal workflow, graph routing, and path hysteresis. This file remains the current operational contract until those phases are implemented and tested.
+
 An **OWATCH folder** is an ordinary repository directory that becomes a protected,
 layered editing domain when it contains:
 
