@@ -1,12 +1,12 @@
 {
-  "id": "install-independent-bootstrap-20260928-08",
+  "id": "close-loop-selfheal-20260928-09",
   "argv": [
     "bash",
     "-lc",
-    "set -e; R=$HOME/.local/share/bridge-comand-bootstrap; if [ ! -d \"$R/.git\" ]; then git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$R\"; fi; git -C \"$R\" fetch origin main; git -C \"$R\" checkout --detach origin/main; ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science bash \"$R/hive-pipe/install_independent_bootstrap.sh\"; systemctl --user start one-wave-bootstrap.service || true; cat \"$HOME/.local/state/one-wave-bootstrap/last-run.json\""
+    "set -e; R=$HOME/.local/share/bridge-comand-bootstrap; git -C \"$R\" fetch origin main; git -C \"$R\" checkout --detach origin/main; ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science bash \"$R/hive-pipe/bootstrap_chatgpt_terminal_pull.sh\"; systemctl --user is-active one-wave-live-machine-executor.service; systemctl --user is-enabled one-wave-live-machine-executor.service; systemctl --user is-active one-wave-bootstrap.timer; printf 'SELF_HEAL_LOOP_OK\\n'"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 180,
-  "intention": "Install the independent Jetson boot recovery anchor so bridge listeners can recover without Desktop Commander or an already-running Hive Pipe route.",
-  "consequence": "Creates/enables only user-level One-Wave bootstrap service/timer, repairs bridge services through existing bounded installers, and returns its FIELD/VOID receipt."
+  "timeout": 240,
+  "intention": "Self-update Bridge-Comand and install/start the durable live machine executor and bootstrap recovery services using the already-active GitHub pull terminal.",
+  "consequence": "Updates only One-Wave user-level bridge runtime/services and reports service state; no sudo or system-wide mutation."
 }
