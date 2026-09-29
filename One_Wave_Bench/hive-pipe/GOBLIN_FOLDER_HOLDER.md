@@ -1,5 +1,7 @@
 # Goblin Folder Holder
 
+> Project target: `OWATCH_NODE_LENS_PROJECT.md` defines the next-stage layered node/lens architecture, proposal workflow, graph routing, and path hysteresis. This file remains the current operational contract until those phases are implemented and tested.
+
 A **Goblin Folder Holder** is a supervisory folder that watches a group of child
 folders. It is the foreman for that group.
 
