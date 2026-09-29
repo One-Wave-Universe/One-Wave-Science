@@ -1,10 +1,48 @@
 {
-  "schema": "one-wave-watched-folder-v1",
+  "schema": "one-wave-watched-folder-v2",
+  "type": "owatch",
+  "node_id": "owatch-nodes",
+  "role": "science_theory",
+  "state": "cold",
+  "concept_tags": [
+    "science",
+    "theory",
+    "proofs",
+    "nodes",
+    "cosmology"
+  ],
+  "authority_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md",
+    "Internal_Proofs/00_PROOF_INDEX.md"
+  ],
+  "edges": [
+    {
+      "type": "DEPENDS_ON",
+      "target": "owatch-root",
+      "weight": 1,
+      "note": "Science node status and reference law depend on repo governance"
+    },
+    {
+      "type": "RELATED_TO",
+      "target": "owatch-sims",
+      "weight": 0.8,
+      "note": "Simulations can exercise node claims without becoming proof"
+    },
+    {
+      "type": "RELATED_TO",
+      "target": "owatch-grants",
+      "weight": 0.5,
+      "note": "Grant evidence packages reference science claims"
+    }
+  ],
   "mode": "fail_closed",
   "editing_granularity": [
     "word",
     "sentence",
-    "line",
+    "paragraph",
+    "page",
     "section",
     "file"
   ],
@@ -12,6 +50,7 @@
   "intention_required": true,
   "consequence_required": true,
   "source_files_authoritative": true,
+  "route_memory_is_authority": false,
   "intervention": "HOLD",
   "rule": "Unknown state is inspected, never assumed. Change only the smallest authorized span.",
   "folder": "Nodes"
