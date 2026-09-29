@@ -2,6 +2,10 @@
 
 **Status:** Mandatory ingestion order
 
+## General reference law
+
+Before any other One-Wave work, read `GENERAL_REFERENCE_RULES.md`. Its single-source rule applies to every AI, bridge, program, machine, document, and operator: write durable information once in the canonical repo and reference it everywhere else. Do not create or maintain convenience copies as competing sources of truth.
+
 An AI reading this repository must begin here before summarizing, editing, or extending the Mass Effect, lattice, alphabet-route, Android movement, Truth Computer, Wave Computer, VTC architecture, local miniverse, or Dreamworld.
 
 ## Grant proposal work
