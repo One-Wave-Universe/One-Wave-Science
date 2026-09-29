@@ -1,0 +1,13 @@
+{
+  "job": "neuron_registry",
+  "brick": "YELLOW",
+  "write": "Engine/Neuron_Registry/cells only",
+  "nodes_ref": ["G-719", "G-722", "E-510", "E-514"],
+  "cells": [
+    {"id": "N0", "role": "pivot_balance", "seat": 0},
+    {"id": "N6", "role": "half_cycle_turnover", "seat": 6},
+    {"id": "Nf", "role": "forward_+5", "step": 5},
+    {"id": "Nb", "role": "back_-5", "step": -5}
+  ],
+  "honest": "Functional analogy folders. Not biological neurons. Not T6."
+}
