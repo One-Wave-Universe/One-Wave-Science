@@ -115,3 +115,7 @@ node --check Miniverse/room3d/app.js
 This is a software coordination/runtime prototype. It does not prove a physical
 One-Wave lattice. The visual follows the repository stationary-lattice +
 moving-active-frame software contract.
+
+
+## AI council workspace
+The structured council protocol is defined in `One_Wave_Bench/App_Center/Composite_Agent_Lab/AI_COUNCIL_PROTOCOL.md`. M4 is chair/body state, Void is admin/inner oversight, Field is the sole outward voice/action, and specialist AIs contribute bounded evidence/proposals through the shared room state.
