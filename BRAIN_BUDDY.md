@@ -1,5 +1,27 @@
 # Brain Buddy
 
+## Canonical default route
+
+For external AI peer review, the preferred durable control plane is GitHub-hosted and repo-first.
+
+Gemini default:
+
+`ORIGIN AI -> Builds request -> checkout One-Wave-Science -> bounded repo evidence pack -> metadata -> external evidence/research as needed -> Gemini -> matching receipt -> ORIGIN AI`
+
+DeepSeek default:
+
+`ORIGIN AI -> Builds request -> checkout One-Wave-Science -> bounded repo evidence pack -> metadata -> external evidence/research as needed -> DeepSeek -> matching receipt -> ORIGIN AI`
+
+Neither default route depends on Desktop Commander, Jetson availability, browser extensions, or manual human relay.
+
+Mandatory order for science work:
+
+`ONE-WAVE REPO LENS -> DEFINE CLAIM/TEST -> METADATA -> EXTERNAL DATA/RESEARCH -> PEER ANSWER -> VALIDATE BACK AGAINST REPO`
+
+Use the local Jetson scripts only as optional fallbacks or development tools.
+
+# Brain Buddy
+
 Local Qwen / human / OpenClaw writes a short question. Brain Buddy writes a bounded packet and runs the official Gemini CLI wrapper. Nobody pastes the repo.
 
 Gemini credentials stay in the official CLI cache. Buddy never sees them. Do not put keys in this folder.
