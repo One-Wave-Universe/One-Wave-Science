@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=One-Wave Manipulator
+Comment=Two opposing +5/-5 walks. 0 pivot, 6 half-cycle.
+Exec=python3 %k/wave_app.py
+Path=REPLACE_ME
+Icon=REPLACE_ME/icon.png
+Terminal=false
+Categories=Science;Education;
