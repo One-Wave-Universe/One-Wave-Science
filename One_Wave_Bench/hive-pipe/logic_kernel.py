@@ -609,6 +609,140 @@ def run_corpus(corpus: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def run_lifecycle_corpus(corpus: dict[str, Any]) -> dict[str, Any]:
+    """Second independent corpus: derive -> referee -> retract -> prune descendants."""
+    memory = RouteMemory(corpus.get("initial_route_memory", {}))
+    receipt = Receipt()
+    ledger = DerivedLedger()
+
+    seed_edges = {
+        str(name): edge_from_dict(raw)
+        for name, raw in corpus.get("seed_edges", {}).items()
+    }
+
+    steps: list[dict[str, Any]] = []
+    derived_names: dict[str, str] = {}
+
+    for step in corpus.get("steps", []):
+        action = str(step.get("action", "")).strip()
+
+        if action == "derive":
+            left_name = str(step["left"])
+            right_name = str(step["right"])
+
+            def resolve(name: str) -> Edge:
+                if name in seed_edges:
+                    return seed_edges[name]
+                edge_id = derived_names.get(name)
+                if edge_id:
+                    rec = ledger.get(edge_id)
+                    if rec is None:
+                        raise RuntimeError(f"derived alias missing from ledger: {name}")
+                    return rec.edge
+                raise RuntimeError(f"unknown edge alias: {name}")
+
+            left = resolve(left_name)
+            right = resolve(right_name)
+            decision = derive_pair(left, right)
+            if decision.status != DERIVED or decision.proposal is None:
+                steps.append({
+                    "action": action,
+                    "name": step.get("name"),
+                    "status": decision.status,
+                    "reason": decision.reason,
+                })
+                continue
+
+            ledger.add(decision.proposal)
+            alias = str(step.get("save_as", decision.proposal.edge_id))
+            derived_names[alias] = decision.proposal.edge_id
+            steps.append({
+                "action": action,
+                "name": step.get("name"),
+                "status": DERIVED,
+                "saved_as": alias,
+                "edge_id": decision.proposal.edge_id,
+                "edge": asdict(decision.proposal),
+            })
+
+        elif action == "referee":
+            referee = seed_edges[str(step["referee"])]
+            target_alias = str(step["target"])
+            target_id = derived_names.get(target_alias, target_alias)
+            outcome = invalidate_with_referee(
+                referee,
+                target_id,
+                ledger,
+                memory,
+                receipt,
+            )
+            steps.append({
+                "action": action,
+                "name": step.get("name"),
+                **outcome,
+            })
+
+        else:
+            steps.append({
+                "action": action,
+                "name": step.get("name"),
+                "status": HOLD,
+                "reason": f"unknown lifecycle action: {action}",
+            })
+            receipt.holds += 1
+
+    expected = corpus.get("expect", {})
+    required_pruned_aliases = [
+        str(x) for x in expected.get("pruned_aliases", [])
+    ]
+    required_pruned_ids = [
+        derived_names.get(alias, alias)
+        for alias in required_pruned_aliases
+    ]
+
+    poison_edge_id = str(corpus.get("poison_probe_edge_id", "")).strip()
+    poison_before = (
+        float(corpus.get("initial_route_memory", {}).get(poison_edge_id, 0.0))
+        if poison_edge_id else None
+    )
+    poison_after = memory.score(poison_edge_id) if poison_edge_id else None
+
+    checks = {
+        "wrong_derivations_gt_zero": receipt.wrong_derivations > 0,
+        "pruned_derived_gt_zero": receipt.pruned_derived > 0,
+        "stale_children_pruned_gt_zero": receipt.stale_children_pruned > 0,
+        "hysteresis_boost_on_bad_path_is_zero": receipt.hysteresis_boost_on_bad_path == 0,
+        "unrelated_route_not_poisoned": poison_before == poison_after,
+        "required_derived_edges_pruned": all(
+            (ledger.get(edge_id) is not None and ledger.get(edge_id).status == "PRUNED")
+            for edge_id in required_pruned_ids
+        ),
+        "canon_referee_used": receipt.referee_invalidations > 0,
+    }
+
+    return {
+        "schema": "owatch-logic-kernel-lifecycle-receipt-v1",
+        "passed": all(checks.values()),
+        "checks": checks,
+        "receipt": receipt.json(),
+        "steps": steps,
+        "ledger": ledger.json(),
+        "route_memory_after": memory.scores,
+        "poison_probe": {
+            "edge_id": poison_edge_id,
+            "before": poison_before,
+            "after": poison_after,
+        },
+        "repo_node_chain": list(REPO_NODE_CHAIN),
+        "authority": {
+            "route_memory_is_authority": False,
+            "derived_is_canon": False,
+            "canon_referee_required": True,
+            "nodes_written": False,
+        },
+    }
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("corpus", type=Path)
@@ -616,7 +750,10 @@ def main() -> int:
     args = ap.parse_args()
 
     corpus = json.loads(args.corpus.read_text(encoding="utf-8"))
-    result = run_corpus(corpus)
+    if str(corpus.get("mode", "")).lower() == "lifecycle":
+        result = run_lifecycle_corpus(corpus)
+    else:
+        result = run_corpus(corpus)
 
     raw = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.receipt:
