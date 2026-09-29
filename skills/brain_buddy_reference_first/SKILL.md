@@ -14,6 +14,31 @@ REFERENCE FIRST.
 5. Load Baseline Zero.
 6. Only then answer or modify.
 
+## Brain Buddy Operation
+
+Brain Buddy is a shared workbench around an unowned project core.
+
+The system has:
+
+- private experimental workspaces
+- public show-and-tell proposals
+- shared core project state
+- receipt-based updates
+
+When configured bridges are available:
+
+- use the bridge workflow instead of pretending to be the other agent
+- provide the same reference packet to reviewers
+- preserve separate responses
+- collect comparison and receipts
+
+Reviewers may reference:
+
+- repository state
+- project references
+- approved metadata sources
+- connected build/science environments when available
+
 ## Routing
 
 Questions about proposals:
