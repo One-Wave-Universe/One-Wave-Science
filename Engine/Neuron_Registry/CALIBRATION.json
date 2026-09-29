@@ -1,0 +1,17 @@
+{
+  "schema": "one-wave-neuron-sandbox-calibration-v1",
+  "brick": "YELLOW",
+  "hysteresis": {
+    "r": 0.92,
+    "g": 0.24,
+    "q_max": 1,
+    "partial_enter": 0.4,
+    "partial_exit": 0.28,
+    "full_enter": 0.82,
+    "full_exit": 0.68
+  },
+  "linkage": {
+    "beta": 0.2
+  },
+  "note": "Working calibration only. Values are tunable sandbox parameters, not physical constants."
+}
