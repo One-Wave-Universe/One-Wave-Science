@@ -66,6 +66,31 @@ Hive Pipe, ChatGPT pull bridge, GitHub Actions, Desktop Commander, SSH, Gemini, 
 
 A bridge may carry commands, receipts, or bounded context. It must not invent or maintain its own competing project canon.
 
+## 8A. Tool-selection rule
+
+Do **not** default to Desktop Commander.
+
+Choose the narrowest authorized route that naturally owns the task:
+
+- repository file/branch/PR work -> GitHub/repo-native tools first;
+- live Jetson terminal or bounded execution -> Hive Pipe / Jetson bridge first;
+- local machine filesystem, GUI, browser session, desktop icon, or installed application state -> Desktop Commander;
+- independent recovery -> SSH or another verified route;
+- external public research -> web/research tools;
+- generated artifacts -> the appropriate artifact tool.
+
+Desktop Commander is a machine-access route, not the universal control plane.
+
+Before using it, ask:
+
+1. Does this task require the state of a specific physical machine, local file, GUI, or process?
+2. Is there already a repo-native, connector-native, or bounded bridge route that is more direct?
+3. Would using Desktop Commander create unnecessary machine dependence or bypass a cleaner canonical workflow?
+
+If the answer to (1) is no and a cleaner route exists, use the cleaner route.
+
+A failed route also does not imply "switch to Desktop Commander." Record the failure and choose the next independent route that best fits the task.
+
 ## 9. Program rule
 
 Programs/apps may store:
