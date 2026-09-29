@@ -3,6 +3,14 @@
 ## General Reference Law
 Before any worker dispatch or repository action, read `GENERAL_REFERENCE_RULES.md`. The canonical repository is the only durable source of truth. Write durable information once in the repo; reference it everywhere else. Bridges, programs, local files, exports, chats, and model memory are transport/context only and may not become competing canon.
 
+## Reference Point Zero — verify the actual route before action
+
+Every AI and tool route begins by resolving the repository on **the machine or connector it is actually using**. Record the repository URL, resolved root, branch/worktree, HEAD, working-tree status, relevant instructions/current project files, and the last matching execution receipt. Compare the intended action with that snapshot before proposing, running, or claiming it. After a change, compare the resulting diff/evidence with the same starting snapshot, then establish a fresh reference for the next step.
+
+The Jetson canonical checkout is Jetson-specific; a laptop, browser connector, isolated runner, or other host must verify its own root and must not reuse a path or live-status claim from another machine. A GitHub branch HEAD proves repository state; it does not prove a remote worker ran. Pull-bridge work requires a matching result ID, and direct terminal work requires its own execution receipt. If the needed path, checkout, current instructions, or matching receipt is unavailable, report the exact gap and HOLD that dependent action.
+
+The reference is refreshed whenever HEAD, branch, worktree, instructions, or relevant project state changes. Browser/UI gates may present this reference, but every worker and bridge must enforce the same check at its own action boundary.
+
 ## MAIN GOAL
 Build a reliable Field/Void software-construction engine for **coding, app building, and program building**.
 
