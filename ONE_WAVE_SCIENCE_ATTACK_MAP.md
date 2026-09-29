@@ -162,8 +162,23 @@ Attack next:
 
 Current repository contains alternative transport/redshift and nonstandard expansion ideas.
 
+The explicit timing mechanism is now `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`.
+
+Current hypothesis chain:
+
+`Book1 Ch16a -> A-114 -> C-309 -> E-509 -> E-533 -> E-528 -> held-out cosmology tests`
+
+The proposed mechanism is that increasing transport commitment/difficulty through the superfluid-like medium reduces local update capacity, with the velocity-only recovery target
+
+[
+d	au/dt stackrel{?}{=} sqrt{1-v^2/c^2}.
+]
+
+This is an unverified recovery target, not a completed derivation.
+
 Attack next:
 
+- derive the E-533 timing law from the accepted update/dispersion equations before fitting cosmology;
 - identify a single explicit redshift law;
 - compare against supernova, BAO, CMB, time-dilation, and surface-brightness observations;
 - keep observational fit separate from mechanism preference;
