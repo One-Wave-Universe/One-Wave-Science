@@ -338,7 +338,7 @@ def run_case(case: dict[str, Any], memory: RouteMemory, receipt: Receipt) -> dic
     elif expected_proposal is not None:
         derivation_ok = False
 
-    if decision.status == HOLD and "loop" in decision.reason.lower():
+    if decision.status == HOLD and "terminate" in decision.reason.lower():
         receipt.terminated_loops += 1
 
     return {
