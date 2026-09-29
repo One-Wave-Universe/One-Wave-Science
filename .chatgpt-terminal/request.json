@@ -1,12 +1,12 @@
 {
-  "id": "jetson-route-probe-20260928-07",
+  "id": "install-independent-bootstrap-20260928-08",
   "argv": [
     "bash",
     "-lc",
-    "printf 'JETSON_ROUTE_07_OK\\n'; hostname; whoami; uname -m; pwd"
+    "set -e; R=$HOME/.local/share/bridge-comand-bootstrap; if [ ! -d \"$R/.git\" ]; then git clone https://github.com/One-Wave-Universe/Bridge-Comand.git \"$R\"; fi; git -C \"$R\" fetch origin main; git -C \"$R\" checkout --detach origin/main; ONE_WAVE_PROJECT_ROOT=/home/Scales/One-Wave-Science bash \"$R/hive-pipe/install_independent_bootstrap.sh\"; systemctl --user start one-wave-bootstrap.service || true; cat \"$HOME/.local/state/one-wave-bootstrap/last-run.json\""
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 30,
-  "intention": "Determine whether the durable Git pull listener is currently executing bounded requests on the Jetson.",
-  "consequence": "Read-only identity output only; no repository, service, credential, mount, or device changes."
+  "timeout": 180,
+  "intention": "Install the independent Jetson boot recovery anchor so bridge listeners can recover without Desktop Commander or an already-running Hive Pipe route.",
+  "consequence": "Creates/enables only user-level One-Wave bootstrap service/timer, repairs bridge services through existing bounded installers, and returns its FIELD/VOID receipt."
 }
