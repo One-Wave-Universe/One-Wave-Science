@@ -33,6 +33,24 @@ Exit meanings:
 `--json` returns the same result in machine-readable form. The doctor is
 read-only. It never changes services, branches, credentials, or files.
 
+## Route-selection law
+
+Do not treat Desktop Commander as the default route.
+
+Use the route that owns the task:
+
+```text
+repo mutation / PR / branch          -> GitHub or repo-native connector
+live bounded Jetson execution        -> Hive Pipe / Jetson bridge
+machine-local GUI/files/processes    -> Desktop Commander
+independent shell recovery           -> SSH
+public research / current evidence   -> web/research tools
+```
+
+Desktop Commander is correct when the task is specifically about a machine's local state, GUI, browser session, installed program, desktop launcher, or filesystem. It should not replace GitHub for ordinary repository operations or Hive Pipe for normal bounded Jetson execution.
+
+If a route fails, record why and choose the next **task-appropriate independent route**. Do not automatically fall back to Desktop Commander.
+
 ## Git is the shared reference plane
 
 All authorized AI routes converge on the repository before work:
