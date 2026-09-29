@@ -13,6 +13,7 @@ from unittest import mock
 import gateway
 import mudl
 import reference_receipt
+import terminal_parser
 
 
 class GatewayTests(unittest.TestCase):
@@ -20,11 +21,15 @@ class GatewayTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         self.ledger = root / "reference-receipts.jsonl"
+        self.project_root = Path(__file__).resolve().parents[2]
         self.ledger_env = mock.patch.dict(os.environ, {
             "REFERENCE_GATE_LEDGER": str(self.ledger),
-            "ONE_WAVE_PROJECT_ROOT": str(Path(__file__).resolve().parents[2]),
+            "ONE_WAVE_PROJECT_ROOT": str(self.project_root),
+            "HIVE_PIPE_ALLOWED_ROOTS": str(self.project_root),
         })
         self.ledger_env.start()
+        self.allowed_roots = mock.patch.object(terminal_parser, "ALLOWED_ROOTS", (self.project_root,))
+        self.allowed_roots.start()
         self.paths = mock.patch.multiple(
             mudl,
             QUEUE=root,
@@ -45,6 +50,7 @@ class GatewayTests(unittest.TestCase):
         self.server.server_close()
         self.thread.join()
         self.paths.stop()
+        self.allowed_roots.stop()
         self.ledger_env.stop()
         self.temp.cleanup()
 

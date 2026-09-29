@@ -100,3 +100,33 @@ Do not replace archive identifiers with One-Wave labels.
 The transform is a numerical representation layer. It does not reinterpret the
 source experiment, establish a One-Wave physical claim, or convert metadata
 labels into measured physics by declaration.
+
+## Live acquisition layer
+
+AI and Jetson work must acquire real public source records before numerical
+transformation. Do not invent substitute values when a source is unavailable.
+
+Example:
+
+    python3 scripts/open_data_fetch.py gwosc --url https://gwosc.org/api/v2/runs -o data/raw/gwosc-runs.json
+
+The fetch envelope preserves source ID, requested/final URL, UTC retrieval time,
+SHA-256 of the exact HTTP body, HTTP metadata, and the unchanged source record.
+
+For CERN Open Data, HEPData, MAST, HEASARC, and Gaia records that require native
+clients, TAP/ADQL, product URLs, FITS, ROOT, HDF5, CSV, VOTable, or other archive
+formats, use the registry-declared native method and preserve equivalent provenance.
+
+Required sequence:
+
+    reference repository
+      -> select registered archive
+      -> fetch/query a real source record
+      -> preserve raw record + provenance + hash
+      -> classify measurement data versus metadata
+      -> only then transform/analyze
+      -> retain original values and units
+      -> report archive record IDs with results
+
+If live retrieval fails, report the failure. Never substitute generated numbers.
+Metadata-derived coordinates remain derived_metadata_wave and are not detector measurements.

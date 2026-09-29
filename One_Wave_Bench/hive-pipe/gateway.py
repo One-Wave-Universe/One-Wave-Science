@@ -297,6 +297,9 @@ def handle_mcp(payload: object) -> dict | None:
                     raise ValueError("arguments must be an object")
                 intention = reference_receipt.required_text(arguments.get("intention"), "intention")
                 consequence = reference_receipt.required_text(arguments.get("consequence"), "consequence")
+                reference_receipt.require_no_watcher_hold(
+                    os.environ.get("ONE_WAVE_PROJECT_ROOT", str(terminal_parser.REPO_ROOT))
+                )
             except ValueError as error:
                 return mcp_error(request_id, -32603, str(error))
         try:
