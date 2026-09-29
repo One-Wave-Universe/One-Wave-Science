@@ -1,16 +1,13 @@
 {
-  "id": "desktop-commander-discover-20260929-01",
+  "id": "desktop-commander-service-restart-20260929-02",
   "argv": [
     "systemctl",
     "--user",
-    "--no-pager",
-    "--plain",
-    "list-units",
-    "--type=service",
-    "--all"
+    "restart",
+    "desktop-commander-remote.service"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Recover Desktop Commander recursively through the existing Jetson GitHub pull lane by discovering user services, including the machine-side Remote MCP agent.",
-  "consequence": "Read-only service inventory; no service or repository mutation."
+  "intention": "Restart the already-installed persistent Desktop Commander service after the manual-to-systemd handover left the registered device offline.",
+  "consequence": "Restart only desktop-commander-remote.service; do not modify repositories, registrations, credentials, or other bridge services."
 }
