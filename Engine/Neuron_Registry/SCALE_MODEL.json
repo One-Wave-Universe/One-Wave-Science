@@ -1,0 +1,103 @@
+{
+  "schema": "one-wave-cell-flower-scaling-sandbox-v1",
+  "status": "YELLOW",
+  "purpose": "Software twin / simulation scaffold for CELL_V1, seven-cell flower, and recursive scaling.",
+  "canonical_refs": [
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Nodes/G-719_Neural_System_Functional_Analogy_Map.md",
+    "Nodes/G-722_Android_Subconscious_Motor_Memory_Architecture.md"
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "id": "CELL",
+      "label": "Single simulated cell",
+      "composition": {
+        "center": "local reference / nucleus",
+        "halves": [
+          "Field",
+          "Void"
+        ],
+        "local_choices": [
+          "-1",
+          "0",
+          "+1"
+        ]
+      },
+      "simulated_state": [
+        "choice",
+        "q",
+        "band",
+        "link_pressure",
+        "bus_state",
+        "hold"
+      ],
+      "target": "Test local ternary choice, hysteresis, mirrored Field/Void state, and bounded reinjection/bus abstractions."
+    },
+    {
+      "level": 2,
+      "id": "FLOWER7",
+      "label": "Seven-cell flower",
+      "composition": {
+        "center_cell": "motor/control cell",
+        "outer_cells": 6
+      },
+      "simulated_state": [
+        "shared_bus",
+        "six_neighbor_links",
+        "local_q",
+        "neighbor_pressure",
+        "danger_or_strain_signal",
+        "path_score"
+      ],
+      "target": "Test center-plus-six coordination, local autonomy, shared reference/bus behavior, and distributed hysteresis."
+    },
+    {
+      "level": 3,
+      "id": "FLOWER_LATTICE",
+      "label": "Connected flower lattice",
+      "composition": {
+        "unit": "FLOWER7",
+        "connection": "edge-to-edge / typed linkage"
+      },
+      "simulated_state": [
+        "flower_state",
+        "inter_flower_path_memory",
+        "bus_flow",
+        "route_hysteresis",
+        "hold_boundaries"
+      ],
+      "target": "Test whether useful routes emerge across linked flowers without path popularity becoming authority."
+    },
+    {
+      "level": 4,
+      "id": "BODY_GRAPH",
+      "label": "Recursive body-scale graph",
+      "composition": {
+        "unit": "FLOWER_LATTICE",
+        "higher_layers": [
+          "nerve compression",
+          "regional control",
+          "higher brain reference"
+        ]
+      },
+      "simulated_state": [
+        "regional_state",
+        "compressed_upstream_signal",
+        "local_action",
+        "global_hold",
+        "memory_layers"
+      ],
+      "target": "Test scaling, local-vs-global control, compression upward, action downward, and failure isolation."
+    }
+  ],
+  "rules": [
+    "Simulation is not proof of hardware or physics.",
+    "Nodes/ remains OWATCH canon and read-only from this sandbox.",
+    "Each scale must preserve the lower-scale contracts instead of replacing them.",
+    "Path hysteresis is routing memory, not truth.",
+    "A larger scale may compress lower-scale state but must retain a traceable reference path.",
+    "Hardware-specific quantities are placeholders until tied to measured build data."
+  ]
+}
