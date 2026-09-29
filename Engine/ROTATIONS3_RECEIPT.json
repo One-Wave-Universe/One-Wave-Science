@@ -1,0 +1,11 @@
+{
+  "job": "slope_potential_rotations3",
+  "brick": "YELLOW",
+  "potential_tail": 0.4189604148844594,
+  "slope_tail": 0.16376188383087226,
+  "point_rotation_tail": 0.28322710634630427,
+  "path_rotation_tail": 0.007175423928687974,
+  "field_rotation_tail": 0.07,
+  "field_rotation_imposed": true,
+  "pass": true
+}
