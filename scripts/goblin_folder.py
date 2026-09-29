@@ -9,7 +9,7 @@ Type identity is stored in Linux extended attributes when supported and mirrored
 to hidden marker files for portability through Git and filesystems without xattr.
 """
 from __future__ import annotations
-import argparse, json, os, shutil, subprocess, sys
+import argparse, hashlib, json, os, shutil, subprocess, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -23,6 +23,10 @@ REGISTRY_PATH = Path(os.environ.get(
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+def _stable_node_id(path: Path) -> str:
+    value=str(path.resolve())
+    return "owatch-"+hashlib.sha256(value.encode("utf-8")).hexdigest()[:16]
 
 def _load_registry() -> dict:
     try:
@@ -116,14 +120,21 @@ def make_owatch(path: Path):
     path.mkdir(parents=True, exist_ok=True)
     xattr = _set_xattr(path, OWATCH_TYPE)
     _write_json(path/".owatch"/"folder.json", {
-        "schema":"one-wave-watched-folder-v1",
+        "schema":"one-wave-watched-folder-v2",
         "type":OWATCH_TYPE,
+        "node_id":_stable_node_id(path),
+        "role":"mixed",
+        "state":"cold",
+        "concept_tags":[],
+        "authority_refs":[],
+        "edges":[],
         "mode":"fail_closed",
-        "editing_granularity":["word","sentence","line","section","file"],
+        "editing_granularity":["word","sentence","paragraph","page","section","file"],
         "reference_required":True,
         "intention_required":True,
         "consequence_required":True,
         "source_files_authoritative":True,
+        "route_memory_is_authority":False,
         "filesystem_xattr": XATTR_KEY if xattr else None,
     })
     (path/".owatch"/".gitignore").write_text("state.json\nevents.jsonl\nHOLD.json\nindex.json\n", encoding="utf-8")
