@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**
 Upstream: A-104 Gradient, A-115 Unified Compression Field, E-509 Propagation Limit, C-311 Electric-Magnetic Duality
-Downstream: Book 1 Ch7 Photon, Book 1 Ch9 No Observer Effect, Book 5 cosmic transport, E-529, E-530
+Downstream: Book 1 Ch7 Photon, Book 1 Ch9 No Observer Effect, Book 5 cosmic transport, E-529, E-530, E-533 Superfluid Transport Time Dilation
 
 ## Hard Constraint
 
@@ -95,6 +95,29 @@ The field receives exactly what the light loses:
 \[
 \partial_tu_\chi+\nabla\cdot\mathbf J_\chi=+Q_{\gamma\to\chi}+\cdots.
 \]
+
+## Time-Transport Coupling
+
+E-528 does not get to treat time dilation as an unrelated afterthought.
+
+The dedicated timing mechanism is:
+
+- `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`
+
+The strong cosmology hypothesis is that one shared medium state must determine both the redshift transport coefficient (kappa_gamma) and the timing factor (mathcal T).
+
+Required structure:
+
+[
+{chi,
+ablachi,gamma,eta,ldots}
+ightarrow
+{kappa_gamma,mathcal T}
+ightarrow
+{z,Delta t_{m obs}}.
+]
+
+This shared-law requirement must be frozen before fitting held-out supernova data.
 
 ## Failure Tests
 
