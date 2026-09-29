@@ -1,11 +1,11 @@
 {
-  "id": "jetson-direct-probe-20260928-10",
+  "id": "jetson-reconnect-probe-20260928-01",
   "argv": [
     "uname",
     "-a"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Probe the existing Jetson GitHub pull terminal with the smallest parser-safe command.",
-  "consequence": "Read-only host/kernel response; no mutation."
+  "intention": "Verify the Jetson GitHub pull terminal is live so remote services can be recovered.",
+  "consequence": "Read-only kernel response; no mutation."
 }
