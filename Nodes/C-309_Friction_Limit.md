@@ -13,7 +13,7 @@ metadata_standard: "I-06"
 
 **Dependencies**  
 Upstream: A-109 Inertial Memory, A-114 Dispersion Relation, C-303 Kinetic Energy  
-Downstream: C-310 Resistance Field, C-318 Four-Interaction Mass-Effect Response, Book 1 Ch7 Photon, E-509 Propagation Limit / Local-Transport Partition
+Downstream: C-310 Resistance Field, C-318 Four-Interaction Mass-Effect Response, Book 1 Ch7 Photon, E-509 Propagation Limit / Local-Transport Partition, E-533 Superfluid Transport Time Dilation
 
 ## Purpose
 
@@ -56,6 +56,30 @@ For the current candidate,
 \]
 
 so the propagation branch remains smooth at \(k=0\). Any nonzero Mass Effect must instead be calculated from the work required to carry and rebuild the complete four-interaction recurrence.
+
+## Time-Transport Candidate Link
+
+C-309 now explicitly feeds the E-533 timing hypothesis.
+
+The propagation ceiling may be used as an input constraint on a timing derivation, but not as a Mass-Effect mechanism.
+
+Candidate target:
+
+[
+rac{d	au}{dt}
+=
+mathcal T(v,Xi),
+]
+
+with the velocity-only recovery condition
+
+[
+mathcal T(v,0)
+stackrel{?}{=}
+sqrt{1-rac{v^2}{c^2}}.
+]
+
+The square-root law must be derived from the update/dispersion mechanics rather than inserted by analogy.
 
 ## Operational Separation
 
