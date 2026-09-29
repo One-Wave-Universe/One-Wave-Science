@@ -1,0 +1,53 @@
+{
+  "schema": "one-wave-neuron-sandbox-linkage-v1",
+  "job": "Y5_node_to_linkage_sandbox",
+  "brick": "YELLOW",
+  "canonical_refs": [
+    "Nodes/G-719_Neural_System_Functional_Analogy_Map.md",
+    "Nodes/A-111_Recursion.md",
+    "Nodes/G-722_Android_Subconscious_Motor_Memory_Architecture.md"
+  ],
+  "rule": "REGISTRY.json says who exists; LINKAGE.json says how registered cells are connected.",
+  "links": [
+    {
+      "a": "N0",
+      "b": "Nf",
+      "type": "REFERENCE_LINK",
+      "weight": 1
+    },
+    {
+      "a": "N0",
+      "b": "Nb",
+      "type": "REFERENCE_LINK",
+      "weight": 1
+    },
+    {
+      "a": "N6",
+      "b": "Nf",
+      "type": "CLOSURE_LINK",
+      "weight": 1
+    },
+    {
+      "a": "N6",
+      "b": "Nb",
+      "type": "CLOSURE_LINK",
+      "weight": 1
+    },
+    {
+      "a": "Nf",
+      "b": "Nb",
+      "type": "MIRROR_LINK",
+      "weight": 0.5
+    }
+  ],
+  "coupling": {
+    "beta": 0.2,
+    "note": "Working calibration only. A-111 neighbor-average structure; not a fixed physical constant."
+  },
+  "walls": [
+    "Runtime writes are limited to Engine/Neuron_Registry/cells/*/STATE.json",
+    "Nodes/ remains OWATCH canon and is read-only from this sandbox",
+    "Path/linkage pressure is not truth",
+    "Four registered cells are a linked graph, not yet a flower network"
+  ]
+}
