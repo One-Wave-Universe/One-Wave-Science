@@ -1,68 +1,89 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import copy
 import json
+from pathlib import Path
 import unittest
 
 import logic_kernel as lk
 
+HERE = Path(__file__).resolve().parent
+CORPUS = HERE / "logic_kernel_corpus.json"
 
-def e(source, target, kind, reference="r", intention="i", consequence="c"):
-    return lk.Edge(source, target, kind, reference, intention, consequence)
+
+def e(source, target, kind, reference="r", intention="i", consequence="c", edge_id=None):
+    return lk.edge_from_dict({
+        "edge_id": edge_id or f"test-{kind}-{source}-{target}",
+        "source": source,
+        "target": target,
+        "kind": kind,
+        "source_class": "canon",
+        "reference": reference,
+        "intention": intention,
+        "consequence": consequence,
+    })
 
 
 class LogicKernelTests(unittest.TestCase):
     def test_supports_transitivity(self):
-        d=lk.evaluate([e("A","B","SUPPORTS"),e("B","C","SUPPORTS")])
+        d=lk.evaluate([e("A","B","SUPPORTS","r1",edge_id="s1"),e("B","C","SUPPORTS","r2",edge_id="s2")])
         self.assertEqual(d.status, lk.DERIVED)
         self.assertEqual((d.proposal.source,d.proposal.target,d.proposal.kind),("A","C","SUPPORTS"))
         self.assertTrue(d.proposal.derived)
+        self.assertEqual(set(d.proposal.parent_ids),{"s1","s2"})
 
     def test_contradiction_propagation(self):
-        d=lk.evaluate([e("A","B","CONTRADICTS"),e("C","A","SUPPORTS")])
+        d=lk.evaluate([e("A","B","CONTRADICTS","r1",edge_id="c1"),e("C","A","SUPPORTS","r2",edge_id="s1")])
         self.assertEqual(d.status, lk.DERIVED)
         self.assertEqual((d.proposal.source,d.proposal.target,d.proposal.kind),("C","B","CONTRADICTS"))
 
     def test_missing_metadata_holds(self):
-        d=lk.evaluate([e("A","B","SUPPORTS",reference="")])
+        d=lk.evaluate([e("A","B","SUPPORTS",reference="",edge_id="m1")])
         self.assertEqual(d.status, lk.HOLD)
+        self.assertIn("m1", d.bad_path_ids)
 
     def test_self_contradiction_holds(self):
-        d=lk.evaluate([e("A","A","CONTRADICTS")])
+        d=lk.evaluate([e("A","A","CONTRADICTS",edge_id="self1")])
         self.assertEqual(d.status, lk.HOLD)
         self.assertIn("terminate", d.reason)
 
     def test_two_node_contradiction_cycle_holds(self):
-        d=lk.evaluate([e("A","B","CONTRADICTS"),e("B","A","CONTRADICTS")])
+        d=lk.evaluate([
+            e("A","B","CONTRADICTS",edge_id="l1"),
+            e("B","A","CONTRADICTS",edge_id="l2")
+        ])
         self.assertEqual(d.status, lk.HOLD)
-        self.assertEqual(len(d.bad_path_keys),2)
+        self.assertEqual(set(d.bad_path_ids),{"l1","l2"})
 
     def test_hold_decays_and_never_boosts(self):
-        memory=lk.RouteMemory({"CONTRADICTS:A->B":0.7,"CONTRADICTS:B->A":0.7})
+        a=e("A","B","CONTRADICTS",edge_id="l1")
+        b=e("B","A","CONTRADICTS",edge_id="l2")
+        memory=lk.RouteMemory({"l1":0.7,"l2":0.7})
         receipt=lk.Receipt()
-        d=lk.evaluate([e("A","B","CONTRADICTS"),e("B","A","CONTRADICTS")])
+        d=lk.evaluate([a,b])
         lk.apply_memory(d,memory,receipt)
-        self.assertLess(memory.score("CONTRADICTS:A->B"),0.7)
-        self.assertLess(memory.score("CONTRADICTS:B->A"),0.7)
+        self.assertLess(memory.score("l1"),0.7)
+        self.assertLess(memory.score("l2"),0.7)
         self.assertEqual(receipt.hysteresis_boost_on_bad_path,0)
 
     def test_unresolved_does_not_change_unrelated_memory(self):
-        memory=lk.RouteMemory({"SUPPORTS:X->Y":0.42})
+        edge=e("X","Y","SUPPORTS",edge_id="control")
+        memory=lk.RouteMemory({"control":0.42})
         receipt=lk.Receipt()
-        d=lk.evaluate([e("X","Y","SUPPORTS")])
+        d=lk.evaluate([edge])
         lk.apply_memory(d,memory,receipt)
         self.assertEqual(d.status, lk.UNRESOLVED)
-        self.assertEqual(memory.score("SUPPORTS:X->Y"),0.42)
+        self.assertEqual(memory.score("control"),0.42)
 
     def test_corpus_passes(self):
-        corpus=json.loads(json.dumps({"schema":"owatch-logic-kernel-corpus-v1","poison_probe_key":"SUPPORTS:X->Y","initial_route_memory":{"CONTRADICTS:A->B":0.6,"CONTRADICTS:B->A":0.6,"SUPPORTS:A->B":0.1,"SUPPORTS:B->C":0.1,"SUPPORTS:C->A":0.1,"SUPPORTS:X->Y":0.42},"cases":[{"name":"supports_transitivity","edges":[{"source":"A","target":"B","kind":"SUPPORTS","reference":"ref-A-B","intention":"test transitivity","consequence":"derived proposal only"},{"source":"B","target":"C","kind":"SUPPORTS","reference":"ref-B-C","intention":"test transitivity","consequence":"derived proposal only"}],"expect_status":"DERIVED","expect_proposal":{"source":"A","target":"C","kind":"SUPPORTS"}},{"name":"contradiction_propagation","edges":[{"source":"A","target":"B","kind":"CONTRADICTS","reference":"ref-A-B","intention":"test propagation","consequence":"derived proposal only"},{"source":"C","target":"A","kind":"SUPPORTS","reference":"ref-C-A","intention":"test propagation","consequence":"derived proposal only"}],"expect_status":"DERIVED","expect_proposal":{"source":"C","target":"B","kind":"CONTRADICTS"}},{"name":"missing_metadata_holds","edges":[{"source":"M","target":"N","kind":"SUPPORTS","reference":"","intention":"test hold","consequence":"no proposal"}],"expect_status":"HOLD"},{"name":"self_contradiction_holds","edges":[{"source":"Q","target":"Q","kind":"CONTRADICTS","reference":"ref-Q-Q","intention":"test self loop","consequence":"terminate"}],"expect_status":"HOLD"},{"name":"planted_two_node_contradiction_loop","edges":[{"source":"A","target":"B","kind":"CONTRADICTS","reference":"ref-A-B","intention":"plant bad loop","consequence":"terminate"},{"source":"B","target":"A","kind":"CONTRADICTS","reference":"ref-B-A","intention":"plant bad loop","consequence":"terminate"}],"expect_status":"HOLD"},{"name":"unrelated_query_remains_unresolved_not_poisoned","edges":[{"source":"X","target":"Y","kind":"SUPPORTS","reference":"ref-X-Y","intention":"unrelated probe","consequence":"no derivation"}],"expect_status":"UNRESOLVED"}]}))
+        corpus=json.loads(CORPUS.read_text(encoding="utf-8"))
         result=lk.run_corpus(corpus)
         self.assertTrue(result["passed"])
         self.assertEqual(result["receipt"]["wrong_derivations"],0)
         self.assertEqual(result["receipt"]["hysteresis_boost_on_bad_path"],0)
         self.assertTrue(result["checks"]["unrelated_route_not_poisoned"])
         self.assertTrue(result["checks"]["at_least_one_terminated_loop"])
+
 
 if __name__=="__main__":
     unittest.main()
