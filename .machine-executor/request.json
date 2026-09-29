@@ -1,11 +1,11 @@
 {
-  "id": "machine-executor-reload-20260928-05",
+  "id": "two-state-relay-install-20260928-06",
   "argv": [
     "bash",
     "/home/Scales/.local/share/bridge-comand-bootstrap/hive-pipe/install_live_machine_executor.sh"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 60,
-  "intention": "Reload the live executor service from the corrected Bridge-Comand checkout.",
-  "consequence": "Reinstalls and restarts only the unprivileged live executor service."
+  "intention": "Install the two-state FIELD/VOID terminal relay as the persistent Jetson command service.",
+  "consequence": "Replaces the prior user-level executor process with the bounded two-state terminal relay."
 }
