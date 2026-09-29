@@ -1,0 +1,15 @@
+{
+  "job": "omega_s_from_field",
+  "brick": "YELLOW",
+  "host": "grok-sandbox-replay-of-Engine/omega_s_field.py",
+  "packet": {"N": 6, "TOP": 12, "plus": 13, "minus": 11},
+  "tau": 0.08333333333333333,
+  "theory_omega_s2": 0.125,
+  "mean_omega_tail": -0.0025300532151563138,
+  "mean_omega2_tail": 6.4011692715228e-06,
+  "rel_err": 0.9999487906458279,
+  "pass": false,
+  "honest": "Triad almost does not rotate. omega^2 is 6e-6 vs theory 0.125. Same class of fail as HEX_LOCK_RECEIPT (0.999977). Smoke hex_hold 3/3 does not imply shear law.",
+  "jetson_also": "run python3 Engine/omega_s_field.py and keep this file if numbers match",
+  "not_this_job": ["Mass Effect", "T6", "official D-413 well"]
+}
