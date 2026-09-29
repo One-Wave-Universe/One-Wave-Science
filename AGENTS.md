@@ -1,5 +1,8 @@
 # AGENTS.md - The Kitty Hawk Loop
 
+## General Reference Law
+Before any worker dispatch or repository action, read `GENERAL_REFERENCE_RULES.md`. The canonical repository is the only durable source of truth. Write durable information once in the repo; reference it everywhere else. Bridges, programs, local files, exports, chats, and model memory are transport/context only and may not become competing canon.
+
 ## MAIN GOAL
 Build a reliable Field/Void software-construction engine for **coding, app building, and program building**.
 
