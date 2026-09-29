@@ -40,23 +40,7 @@ MODES = (
     "discussion",
 )
 
-REFERENCE_PREAMBLE = """BRAIN BUDDY COUNCIL — ONE-WAVE REFERENCE CONTRACT
-
-Before answering:
-1. Reference GENERAL_REFERENCE_RULES.md.
-2. Reference AI_CANONICAL_START_HERE.md.
-3. Reference Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md.
-4. Reference only the exact task-specific files needed after those authorities.
-5. Treat YAML/front-matter gate/lifecycle as current status where present.
-6. Distinguish established external evidence from One-Wave hypotheses.
-7. Do not claim any command or experiment ran without a matching receipt.
-8. Do not edit, commit, merge, push, or expose secrets.
-9. Cite exact repository paths actually used.
-10. Return HOLD with the exact missing reference if grounding cannot be completed.
-
-Reference loop:
-REFERENCE GIT -> ASK/PIVOT -> REFERENCE METADATA/FLIP -> VALIDATE/PIVOT -> RETURN TO REFERENCE
-"""
+REFERENCE_PREAMBLE = """BRAIN BUDDY COUNCIL — ONE-WAVE REFERENCE + RESEARCH CONTRACT\n\nBefore answering:\n1. Reference GENERAL_REFERENCE_RULES.md.\n2. Reference AI_CANONICAL_START_HERE.md.\n3. Reference Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md.\n4. Read YAML/front-matter metadata for every governed node actually used.\n5. Reference only the exact task-specific repo files needed after those authorities.\n6. Define the exact claim/test before external research.\n7. If current literature, measurements, CERN/LIGO/public data, or outside claims are needed, research them only after the repo claim/test is defined.\n8. Keep external source metadata/provenance distinct from One-Wave node metadata.\n9. Distinguish established external evidence from One-Wave hypotheses.\n10. Bring external findings back to the exact repo claim and classify them as support, contradiction, or inconclusive.\n11. Do not claim any command, experiment, or external lookup ran without a receipt/source.\n12. Do not edit, commit, merge, push, or expose secrets.\n13. Cite exact repo paths and external sources actually used.\n14. Return HOLD with the exact missing reference/evidence if grounding cannot be completed.\n\nReference/research loop:\nREFERENCE GIT -> DEFINE CLAIM/TEST -> I-06 METADATA -> EXTERNAL RESEARCH/DATA AS NEEDED -> VALIDATE -> RETURN TO REFERENCE\n"""
 
 
 class CouncilError(RuntimeError):
