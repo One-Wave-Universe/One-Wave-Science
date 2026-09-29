@@ -1,3 +1,17 @@
+# Brain Buddy — unified entry point
+
+Use the Brain Buddy Council for new work:
+
+```bash
+bash scripts/brain_buddy_council.sh
+```
+
+It can run Gemini, DeepSeek, both independently, either sequential handoff, or a user + Gemini + DeepSeek open discussion. All modes must follow the canonical repo → I-06 metadata → exact task files → external research/data if needed → validate back to repo loop defined in `BRAIN_BUDDY_COUNCIL.md`.
+
+Gemini and DeepSeek outputs are peer review, not canon.
+
+---
+
 # Brain Buddy
 
 ## Canonical default route
