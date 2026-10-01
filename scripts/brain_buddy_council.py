@@ -25,7 +25,7 @@ import textwrap
 import time
 from typing import Any
 
-from brain_buddy_oversight import baseline_zero, local_turn_prompt, parse_oversight
+from brain_buddy_oversight import baseline_zero, field_path, local_turn_prompt, parse_oversight
 
 ROOT_FILES = (
     "GENERAL_REFERENCE_RULES.md",
@@ -191,6 +191,20 @@ def run_worker_raw(root: Path, worker: str, prompt: str, timeout: int) -> dict[s
 def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
     """Run one worker turn with a local M4 transcript loop; outer Council routing is unchanged."""
     zero = baseline_zero(root)
+    path = field_path(prompt)
+
+    # Direct Field is a legitimate fast path: speak/act without a preceding
+    # local-dialogue turn. It still returns through the unchanged outer Council.
+    if path == "DIRECT":
+        field = run_worker_raw(root, worker, prompt, timeout)
+        field["local_state"] = {"state": "DIRECT", "reason": "explicit direct Field request"}
+        field["local_transcript"] = [
+            {"speaker": "field-task", "text": prompt},
+            {"speaker": "field-result", "text": field["answer"] if field["ok"] else field["stderr"]},
+        ]
+        field["baseline_zero"] = zero
+        return field
+
     local_turns: list[dict[str, str]] = [
         {"speaker": "field-task", "text": prompt},
     ]
