@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from brain_buddy_oversight import baseline_zero, parse_oversight
+from brain_buddy_oversight import baseline_zero, local_turn_prompt, parse_oversight
 
 def sh(root: Path, *args: str) -> None:
     subprocess.run(["git", *args], cwd=root, check=True, capture_output=True, text=True)
@@ -16,6 +16,19 @@ def main() -> int:
     assert parse_oversight("STATE: ACT\nREASON: grounded\nWATCH: none\nNEXT: run")["state"] == "ACT"
     assert parse_oversight("STATE: HOLD\nREASON: stale\nWATCH: stale reference\nNEXT: refresh")["state"] == "HOLD"
     assert parse_oversight("free form model chatter")["state"] == "HOLD"
+    lp = local_turn_prompt(
+        "gemini",
+        {"commit": "abc123", "branch": "test"},
+        "do the task",
+        [
+            {"speaker": "field-task", "text": "do the task"},
+            {"speaker": "void", "text": "STATE: HOLD"},
+        ],
+    )
+    assert "LOCAL TRANSCRIPT" in lp
+    assert "FIELD-TASK:" in lp and "VOID:" in lp
+    assert "abc123" in lp
+    assert "outer Council routing is unchanged" in lp
 
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
@@ -37,6 +50,7 @@ def main() -> int:
     print("PASS: ACT parse")
     print("PASS: HOLD parse")
     print("PASS: fail-closed malformed oversight")
+    print("PASS: local M4 prompt accumulates self transcript without replacing shared reference")
     print("PASS: Baseline Zero refreshes after repository state change")
     return 0
 
