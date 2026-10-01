@@ -117,3 +117,10 @@ NEXT: <single next outward action>
 
 Use STATE: HOLD only when outward Field action should not happen on this Council turn.
 """
+
+
+def field_path(field_task: str) -> str:
+    """Select direct Field speech or local-dialogue preparation without exposing private reasoning."""
+    task = field_task.lower()
+    direct_markers = ("speak direct:", "direct field:", "immediate:")
+    return "DIRECT" if any(marker in task for marker in direct_markers) else "M4"
