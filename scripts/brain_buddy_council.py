@@ -26,6 +26,7 @@ import time
 from typing import Any
 
 from brain_buddy_oversight import baseline_zero, field_path, local_turn_prompt, parse_oversight
+from brain_buddy_transports import TransportError, run as run_transport
 
 ROOT_FILES = (
     "GENERAL_REFERENCE_RULES.md",
@@ -136,55 +137,20 @@ def gemini_text(raw: str) -> str:
 
 
 def run_worker_raw(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
-    if worker == "gemini":
-        cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
-    elif worker == "deepseek":
-        cmd = ["python3", "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py", "--max-tool-rounds", "12", prompt]
-    else:
-        raise CouncilError(f"Unknown worker: {worker}")
-
     started = time.monotonic()
-    worker_env = os.environ.copy()
-    if worker == "deepseek":
-        worker_env.setdefault("DEEPSEEK_WEB_BASE_URL", "http://192.168.55.100:3000")
-        worker_env.setdefault("DEEPSEEK_WEB_API_KEY", "usb-local")
-    elif worker == "gemini":
-        worker_env.setdefault("GEMINI_WEB_BASE_URL", "http://192.168.55.100:3001")
-
     try:
-        p = subprocess.run(
-            cmd,
-            cwd=root,
-            text=True,
-            capture_output=True,
-            check=False,
-            timeout=timeout,
-            env=worker_env,
-        )
-    except subprocess.TimeoutExpired as exc:
-        elapsed = round(time.monotonic() - started, 3)
+        answer = run_transport(root, worker, prompt, timeout)
         return {
-            "worker": worker,
-            "ok": False,
-            "exit_code": 124,
-            "elapsed_s": elapsed,
-            "answer": "",
-            "stderr": f"Timed out after {timeout}s while preserving the other Council participant.",
+            "worker": worker, "ok": True, "exit_code": 0,
+            "elapsed_s": round(time.monotonic() - started, 3),
+            "answer": answer, "stderr": "",
         }
-
-    elapsed = round(time.monotonic() - started, 3)
-    stdout = p.stdout.strip()
-    stderr = p.stderr.strip()
-    answer = stdout
-
-    return {
-        "worker": worker,
-        "ok": p.returncode == 0,
-        "exit_code": p.returncode,
-        "elapsed_s": elapsed,
-        "answer": answer,
-        "stderr": stderr,
-    }
+    except TransportError as exc:
+        return {
+            "worker": worker, "ok": False, "exit_code": 1,
+            "elapsed_s": round(time.monotonic() - started, 3),
+            "answer": "", "stderr": str(exc),
+        }
 
 
 
