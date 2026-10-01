@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from brain_buddy_oversight import baseline_zero, local_turn_prompt, parse_oversight
+from brain_buddy_oversight import baseline_zero, field_path, local_turn_prompt, parse_oversight
 
 def sh(root: Path, *args: str) -> None:
     subprocess.run(["git", *args], cwd=root, check=True, capture_output=True, text=True)
@@ -16,6 +16,9 @@ def main() -> int:
     assert parse_oversight("STATE: ACT\nREASON: grounded\nWATCH: none\nNEXT: run")["state"] == "ACT"
     assert parse_oversight("STATE: HOLD\nREASON: stale\nWATCH: stale reference\nNEXT: refresh")["state"] == "HOLD"
     assert parse_oversight("free form model chatter")["state"] == "HOLD"
+    assert field_path("Speak direct: hello now") == "DIRECT"
+    assert field_path("Direct Field: answer immediately") == "DIRECT"
+    assert field_path("Work this problem through the local loop") == "M4"
     lp = local_turn_prompt(
         "gemini",
         {"commit": "abc123", "branch": "test"},
@@ -50,6 +53,8 @@ def main() -> int:
     print("PASS: ACT parse")
     print("PASS: HOLD parse")
     print("PASS: fail-closed malformed oversight")
+    print("PASS: direct Field path can speak without local dialogue")
+    print("PASS: normal path uses local M4 dialogue before Field")
     print("PASS: local M4 prompt accumulates self transcript without replacing shared reference")
     print("PASS: Baseline Zero refreshes after repository state change")
     return 0
