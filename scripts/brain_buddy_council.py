@@ -25,7 +25,7 @@ import textwrap
 import time
 from typing import Any
 
-from brain_buddy_oversight import baseline_zero, oversight_prompt, parse_oversight
+from brain_buddy_oversight import baseline_zero, local_turn_prompt, parse_oversight
 
 ROOT_FILES = (
     "GENERAL_REFERENCE_RULES.md",
@@ -189,36 +189,57 @@ def run_worker_raw(root: Path, worker: str, prompt: str, timeout: int) -> dict[s
 
 
 def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
-    """Run one explicit Void oversight pass, then the existing Field worker."""
+    """Run one worker turn with a local M4 transcript loop; outer Council routing is unchanged."""
     zero = baseline_zero(root)
-    void = run_worker_raw(root, worker, oversight_prompt(worker, zero, prompt), timeout)
-    if not void["ok"]:
-        return void
-    decision = parse_oversight(void["answer"])
+    local_turns: list[dict[str, str]] = [
+        {"speaker": "field-task", "text": prompt},
+    ]
+
+    # The local loop mirrors Council's transcript pattern at the worker scale.
+    # It is intentionally bounded to one explicit Void/self-reference turn per
+    # outward Council turn until live testing justifies more autonomous cycling.
+    local = run_worker_raw(
+        root,
+        worker,
+        local_turn_prompt(worker, zero, prompt, local_turns),
+        timeout,
+    )
+    if not local["ok"]:
+        return local
+
+    local_turns.append({"speaker": "void", "text": local["answer"]})
+    decision = parse_oversight(local["answer"])
     if decision["state"] == "HOLD":
         return {
             "worker": worker,
             "ok": True,
             "exit_code": 0,
-            "elapsed_s": void["elapsed_s"],
-            "answer": "HOLD — oversight loop: " + decision["reason"],
+            "elapsed_s": local["elapsed_s"],
+            "answer": "HOLD — local M4 loop: " + decision["reason"],
             "stderr": "",
-            "oversight": decision,
+            "local_state": decision,
+            "local_transcript": local_turns,
             "baseline_zero": zero,
         }
 
     field_prompt = (
         prompt
-        + "\n\nBASELINE ZERO (auto-refreshed immediately before Field action):\n"
+        + "\n\nLOCAL M4 SELF-REFERENCE (explicit operational state):\n"
+        + transcript_text(local_turns)
+        + "\n\nSHARED BASELINE ZERO (external project reference):\n"
         + json.dumps(zero, indent=2, sort_keys=True)
-        + "\n\nVOID OVERSIGHT HANDOFF:\n"
-        + json.dumps(decision, indent=2, sort_keys=True)
-        + "\n\nAct on the task now. Re-reference the exact repo files needed before making claims."
+        + "\n\nPerform the NEXT action from your local state now. "
+          "Re-reference exact repo files when the task requires shared project truth."
     )
     field = run_worker_raw(root, worker, field_prompt, timeout)
-    field["oversight"] = decision
+    local_turns.append({
+        "speaker": "field-result",
+        "text": field["answer"] if field["ok"] else field["stderr"],
+    })
+    field["local_state"] = decision
+    field["local_transcript"] = local_turns
     field["baseline_zero"] = zero
-    field["elapsed_s"] = round(void["elapsed_s"] + field["elapsed_s"], 3)
+    field["elapsed_s"] = round(local["elapsed_s"] + field["elapsed_s"], 3)
     return field
 
 def bounded_prompt(question: str, extra: str = "") -> str:
