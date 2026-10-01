@@ -1,0 +1,58 @@
+name: Brain Buddy Gemini Bridge
+
+on:
+  workflow_dispatch:
+    inputs:
+      packet:
+        description: Brain Buddy packet
+        required: true
+        type: string
+      model:
+        description: Gemini model
+        required: false
+        default: gemini-2.5-flash
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  gemini:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PACKET: ${{ inputs.packet }}
+          MODEL: ${{ inputs.model }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          key=os.environ.get("GEMINI_API_KEY")
+          if not key:
+              raise SystemExit("HOLD: GEMINI_API_KEY secret is unavailable")
+          model=os.environ["MODEL"]
+          url=f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+          payload={"contents":[{"role":"user","parts":[{"text":os.environ["PACKET"]}]}]}
+          req=urllib.request.Request(
+              url,
+              data=json.dumps(payload).encode(),
+              headers={"Content-Type":"application/json","x-goog-api-key":key},
+              method="POST",
+          )
+          with urllib.request.urlopen(req,timeout=90) as r:
+              obj=json.load(r)
+          text=obj["candidates"][0]["content"]["parts"][0]["text"]
+          os.makedirs("brain-buddy-receipt",exist_ok=True)
+          with open("brain-buddy-receipt/gemini-response.txt","w",encoding="utf-8") as f:
+              f.write(text)
+          with open("brain-buddy-receipt/receipt.json","w",encoding="utf-8") as f:
+              json.dump({"provider":"gemini","model":model,"response_received":bool(text)},f,indent=2)
+          print("GEMINI_RESPONSE_RECEIVED", bool(text))
+          PY
+      - name: Upload receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: brain-buddy-gemini-receipt
+          path: brain-buddy-receipt/
+          if-no-files-found: error
