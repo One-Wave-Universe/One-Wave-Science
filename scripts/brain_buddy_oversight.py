@@ -79,3 +79,41 @@ def parse_oversight(text: str) -> dict[str, str]:
         elif k == "NEXT":
             out["next"] = v
     return out
+
+
+def local_turn_prompt(
+    worker: str,
+    zero: dict[str, Any],
+    field_task: str,
+    local_turns: list[dict[str, str]],
+) -> str:
+    """Build one explicit self/Void turn using the same accumulated-transcript pattern as Council."""
+    transcript = "\n\n".join(
+        f"{turn['speaker'].upper()}:\n{turn['text']}" for turn in local_turns
+    ) or "(no prior local turns)"
+    return f"""BRAIN BUDDY LOCAL M4 LOOP
+You are {worker}. This is your explicit local self-reference / Void turn.
+This loop is inside your existing Brain Buddy Council turn. The outer Council routing is unchanged.
+Use your accumulated LOCAL TRANSCRIPT as your immediate self-reference.
+Consult shared Baseline Zero as external project reference; do not confuse it with self-state.
+Do not expose private chain-of-thought. Record only compact operational state.
+
+SHARED BASELINE ZERO:
+{json.dumps(zero, indent=2, sort_keys=True)}
+
+FIELD TASK:
+{field_task}
+
+LOCAL TRANSCRIPT:
+---
+{transcript}
+---
+
+Return exactly:
+STATE: ACT
+REASON: <one concise operational reason>
+WATCH: <current local concern or none>
+NEXT: <single next outward action>
+
+Use STATE: HOLD only when outward Field action should not happen on this Council turn.
+"""
