@@ -25,6 +25,8 @@ import textwrap
 import time
 from typing import Any
 
+from brain_buddy_oversight import baseline_zero, oversight_prompt, parse_oversight
+
 ROOT_FILES = (
     "GENERAL_REFERENCE_RULES.md",
     "AI_CANONICAL_START_HERE.md",
@@ -133,7 +135,7 @@ def gemini_text(raw: str) -> str:
     return value
 
 
-def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
+def run_worker_raw(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
     if worker == "gemini":
         cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
     elif worker == "deepseek":
@@ -184,6 +186,40 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
         "stderr": stderr,
     }
 
+
+
+def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
+    """Run one explicit Void oversight pass, then the existing Field worker."""
+    zero = baseline_zero(root)
+    void = run_worker_raw(root, worker, oversight_prompt(worker, zero, prompt), timeout)
+    if not void["ok"]:
+        return void
+    decision = parse_oversight(void["answer"])
+    if decision["state"] == "HOLD":
+        return {
+            "worker": worker,
+            "ok": True,
+            "exit_code": 0,
+            "elapsed_s": void["elapsed_s"],
+            "answer": "HOLD — oversight loop: " + decision["reason"],
+            "stderr": "",
+            "oversight": decision,
+            "baseline_zero": zero,
+        }
+
+    field_prompt = (
+        prompt
+        + "\n\nBASELINE ZERO (auto-refreshed immediately before Field action):\n"
+        + json.dumps(zero, indent=2, sort_keys=True)
+        + "\n\nVOID OVERSIGHT HANDOFF:\n"
+        + json.dumps(decision, indent=2, sort_keys=True)
+        + "\n\nAct on the task now. Re-reference the exact repo files needed before making claims."
+    )
+    field = run_worker_raw(root, worker, field_prompt, timeout)
+    field["oversight"] = decision
+    field["baseline_zero"] = zero
+    field["elapsed_s"] = round(void["elapsed_s"] + field["elapsed_s"], 3)
+    return field
 
 def bounded_prompt(question: str, extra: str = "") -> str:
     blocks = [REFERENCE_PREAMBLE, "USER QUESTION:\n" + question]
