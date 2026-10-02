@@ -1,13 +1,14 @@
 {
-  "id": "desktop-commander-service-restart-20260929-02",
+  "id": "brain-buddy-original-one-question-20261002-01",
   "argv": [
-    "systemctl",
-    "--user",
-    "restart",
-    "desktop-commander-remote.service"
+    "bash",
+    "scripts/brain_buddy_council.sh",
+    "both",
+    "What is the smallest concrete improvement we can make to Brain Buddy while preserving its existing working back-and-forth behavior?",
+    "--save"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 30,
-  "intention": "Restart the already-installed persistent Desktop Commander service after the manual-to-systemd handover left the registered device offline.",
-  "consequence": "Restart only desktop-commander-remote.service; do not modify repositories, registrations, credentials, or other bridge services."
+  "timeout": 300,
+  "intention": "Use the existing Brain Buddy implementation to ask Gemini and DeepSeek one bounded question and return their actual responses.",
+  "consequence": "Do not modify Brain Buddy, provider bridges, repository architecture, or credentials. Execute one question only and save/return the receipt; failure must be returned as failure."
 }
