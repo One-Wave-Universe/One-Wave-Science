@@ -44,6 +44,28 @@ This produces a larger cycle:
 
 This may be another expression of the broader **pivot → flip → pivot** pattern: a system pivots within its current mode, flips emphasis across the reasoning–reference axis when the state demands it, then pivots again from the newly grounded state.
 
+## Six-axis mind, seven-state relation, and twelve-state boundary
+
+Within the One-Wave hypothesis, six represents the proposed local axis limit of a single mind/node. Each axis is a differential around a reference rather than two unrelated dimensions:
+
+**− ← 0 → +**
+
+Complexity beyond the local six-axis state does not simply require adding unlimited axes to the same node. It can instead move through nesting, mirroring, relationship, and scale.
+
+When two choosing minds interact, **7** is proposed as a phase transition rather than merely the next axis. It represents the combined relational state: the shared choice/balance that exists between the two participants and is not reducible to either participant alone.
+
+The proposed progression is:
+
+**1–6: individual/local state space → 7: combined choice/balance → 8–12: increasing relational constraint/control structure → 12: proposed universal boundary for the current 3D/2D reality model**
+
+As the relational structure grows beyond the seven-state balance point, additional constraints and known states can narrow the available outcomes. In the hypothesis, this is where structure increasingly behaves as control and outcomes become more constrained or predictable.
+
+This connects the mind model to the dimensional sequence:
+
+**1(0)1 → 1(0)1-6 → 1(0)1-12 → 1(0)1-24**
+
+The six-axis limit is therefore proposed as a **local representational boundary**, while twelve is the proposed **3D/2D universal boundary** at the current scale. Crossing a boundary implies a scale transition rather than unlimited widening of a single state space.
+
 ## Scale and State interpretation
 
 Scale reasoning only as far as the current state can remain referenced.
@@ -70,3 +92,5 @@ This suggests a possible design principle for human and machine reasoning system
 - Can a system dynamically shift between reasoning-heavy exploration and reference-heavy convergence?
 - What measurable condition should trigger the phase shift?
 - Does nested reasoning remain stable when each loop has its own reference-refresh rate?
+- Can the proposed 6 → 7 → 12 transition be derived from the existing One-Wave dimensional rules rather than assumed?
+- What measurable signature would distinguish the seven-state relational transition from an ordinary increase in state count?
