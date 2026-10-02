@@ -1,0 +1,43 @@
+name: Brain Buddy Live Smoke
+
+on:
+  push:
+    paths:
+      - '.github/workflows/brain-buddy-live-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      URL: ${{ secrets.JETSON_GATEWAY_URL }}
+      TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+    steps:
+      - name: Run canonical Brain Buddy on Jetson
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$URL" || { echo "::error::JETSON_GATEWAY_URL missing"; exit 1; }
+          test -n "$TOKEN" || { echo "::error::JETSON_GATEWAY_TOKEN missing"; exit 1; }
+          python3 - <<'PY'
+          import json, os, urllib.request, urllib.error, sys
+          argv=["bash","scripts/brain_buddy_council.sh","discussion","Reply with a concise Brain Buddy smoke result. Gemini and DeepSeek must each answer and directly address the other participant. End with BRAIN_BUDDY_SMOKE_OK only if both real workers returned.","--rounds","1","--timeout","240","--save"]
+          payload={"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":{"argv":argv,"cwd":"/home/Scales/One-Wave-Science","timeout":300,"intention":"Live-test the canonical Brain Buddy Gemini/DeepSeek back-and-forth.","consequence":"Require real worker outputs and a saved transcript; do not edit or merge repository files."}}}
+          req=urllib.request.Request(os.environ["URL"].rstrip("/")+"/mcp",data=json.dumps(payload).encode(),headers={"Authorization":"Bearer "+os.environ["TOKEN"],"Content-Type":"application/json"},method="POST")
+          try:
+              with urllib.request.urlopen(req,timeout=330) as response: envelope=json.load(response)
+          except urllib.error.HTTPError as exc:
+              sys.stderr.write(exc.read().decode(errors="replace")); raise
+          if "error" in envelope:
+              print(json.dumps(envelope["error"],indent=2),file=sys.stderr); raise SystemExit(1)
+          result=envelope.get("result",{}).get("structuredContent",{})
+          out=result.get("stdout",""); err=result.get("stderr","")
+          print(out); sys.stderr.write(err)
+          if not result.get("ok") or int(result.get("exit_code",1)) != 0: raise SystemExit(1)
+          if "===== GEMINI =====" not in out or "===== DEEPSEEK =====" not in out: raise SystemExit("missing worker output")
+          if "BRAIN_BUDDY_SMOKE_OK" not in out: raise SystemExit("workers did not confirm smoke")
+          PY
