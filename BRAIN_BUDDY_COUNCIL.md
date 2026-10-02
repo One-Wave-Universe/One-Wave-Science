@@ -1,10 +1,21 @@
 # Brain Buddy Council
 
-## Purpose
+## Identity — do not reinterpret
 
-Brain Buddy Council is one interface for Gemini and DeepSeek.
+Brain Buddy is the three-AI loop:
 
-It does not replace either worker. It orchestrates the existing bounded Brain Buddy wrappers so both AIs use the same One-Wave reference rules and the same canonical repository.
+```text
+Mark = human operator
+ChatGPT = origin / return AI
+Gemini = peer AI
+DeepSeek = peer AI
+
+ChatGPT -> Council -> Gemini <-> DeepSeek -> ChatGPT
+```
+
+The Council script orchestrates Gemini and DeepSeek because ChatGPT is the originating/returning AI outside the local worker process. Do not miscount Mark as an AI and do not misdescribe the Python process as the whole three-AI system.
+
+Canonical implementation is `scripts/brain_buddy_council.py`. The Gemini and DeepSeek wrappers are transports/workers, not competing Brain Buddy versions.
 
 ## Modes
 
