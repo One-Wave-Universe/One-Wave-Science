@@ -1,88 +1,36 @@
-# Brain Buddy — unified entry point
+# Brain Buddy — CANONICAL ENTRY
 
-Use the Brain Buddy Council for new work:
-
-```bash
-bash scripts/brain_buddy_council.sh
-```
-
-It can run Gemini, DeepSeek, both independently, either sequential handoff, or a user + Gemini + DeepSeek open discussion. All modes must follow the canonical repo → I-06 metadata → exact task files → external research/data if needed → validate back to repo loop defined in `BRAIN_BUDDY_COUNCIL.md`.
-
-Gemini and DeepSeek outputs are peer review, not canon.
-
----
-
-# Brain Buddy
-
-## Canonical default route
-
-For external AI peer review, the preferred durable control plane is GitHub-hosted and repo-first.
-
-Gemini default:
-
-`ORIGIN AI -> Builds request -> checkout One-Wave-Science -> bounded repo evidence pack -> metadata -> external evidence/research as needed -> Gemini -> matching receipt -> ORIGIN AI`
-
-DeepSeek default:
-
-`ORIGIN AI -> Builds request -> checkout One-Wave-Science -> bounded repo evidence pack -> metadata -> external evidence/research as needed -> DeepSeek -> matching receipt -> ORIGIN AI`
-
-Neither default route depends on Desktop Commander, Jetson availability, browser extensions, or manual human relay.
-
-Mandatory order for science work:
-
-`ONE-WAVE REPO LENS -> DEFINE CLAIM/TEST -> METADATA -> EXTERNAL DATA/RESEARCH -> PEER ANSWER -> VALIDATE BACK AGAINST REPO`
-
-Use the local Jetson scripts only as optional fallbacks or development tools.
-
-# Brain Buddy
-
-Local Qwen / human / OpenClaw writes a short question. Brain Buddy writes a bounded packet and runs the official Gemini CLI wrapper. Nobody pastes the repo.
-
-Gemini credentials stay in the official CLI cache. Buddy never sees them. Do not put keys in this folder.
-
-## Layout
+There is one Brain Buddy architecture.
 
 ```text
-External_Work/brain_buddy/inbox/     drop query files here
-External_Work/brain_buddy/outbox/    receipts + Gemini JSON
-External_Work/brain_buddy/work/      last packet.md (gitignored contents ok)
-scripts/brain_buddy.sh               entry
+Mark = human operator
+ChatGPT = origin / return AI
+Gemini = peer AI
+DeepSeek = peer AI
+
+ChatGPT -> Brain Buddy Council -> Gemini <-> DeepSeek -> ChatGPT
 ```
 
-Inbox files are not required in git. The directories are kept by `.gitkeep`.
+Canonical implementation:
 
-## Use on the Jetson
+- `scripts/brain_buddy_council.py`
+- launcher: `scripts/brain_buddy_council.sh`
+- behavior contract: `BRAIN_BUDDY_COUNCIL.md`
+
+Historical recovery anchor:
+
+- original unified Council commit: `a2d0a09bc77dd8f3bdb742b6a4c4eba20f6c9654`
+
+Run:
 
 ```bash
-cd /home/Scales/One-Wave-Science
-bash scripts/install_gemini_jetson.sh   # once
-NO_BROWSER=true ~/.local/bin/gemini     # once, Google login
-
-bash scripts/brain_buddy.sh ask "Does 2N+2m equal 2(N+m)? Answer only yes/no plus one line."
+bash scripts/brain_buddy_council.sh discussion "question" --rounds 3 --save
 ```
 
-From a file (Qwen / OpenClaw writes this):
+The Python council owns orchestration and cumulative handoff. `scripts/gemini_min.sh` and `scripts/deepseek_min.sh` are transports/workers only; they are not alternate Brain Buddy implementations.
 
-```bash
-printf '%s\n' 'Review Engine/PROOFS_ALGEBRA.md Theorem 1 only.' \
-  > External_Work/brain_buddy/inbox/q1.md
-bash scripts/brain_buddy.sh review External_Work/brain_buddy/inbox/q1.md
-```
+Do not create a second Brain Buddy, replacement Brain Buddy, Gemini-only Brain Buddy, or branch-specific Brain Buddy. Changes must copy/branch from the canonical council, preserve the last working version, test the new branch, and promote it only after verified return-path receipts.
 
-Modes match `scripts/gemini_min.sh`: `ask` `review` `code` `deep`.
-`deep` still needs `GEMINI_ALLOW_PRO=1`.
-`code` still refuses `main` and a dirty tree.
+For science work, each peer follows the repository reference contract before external research and returns findings to the exact repo claim/test.
 
-## What Buddy does
-
-1. Read the question (argv or inbox file).
-2. Wrap it in `GEMINI_TASK_TEMPLATE.md` fields: goal, named files only, hard stop.
-3. Write `External_Work/brain_buddy/work/packet.md`.
-4. Exec `scripts/gemini_min.sh <mode> packet.md`.
-5. Copy stdout to `outbox/<stamp>.json` (or `.txt` if CLI missing).
-
-If `gemini` is not installed, Buddy still writes the packet and a HOLD receipt. That is session attachment, not a fake Gemini answer.
-
-## Ban
-
-No sudo. No secrets. No whole-repo dump. No merge. No T6. No calling Buddy output a bench result.
+If anything conflicts with this file about which Brain Buddy is canonical, this file wins.
