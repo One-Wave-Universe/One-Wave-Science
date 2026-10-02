@@ -69,7 +69,8 @@ PHYSICAL MIRRORS: 3 bidirectional A/B/C axes
 DIRECTED HEX EDGES: 6 = A+ B+ C+ A- B- C-
 ROUTE ADDRESS SPACE: 6 = 2 binary relations x 3 ternary moves
 LOGICAL/RECEIPT POSITIONS: may use six labels but are not six physical gates
-WINDING COUNT: experimental
+OUTER TOROID WINDINGS: 6 per outer toroid = one winding per triangular sector
+WINDING TURNS / GAUGE / POLARITY DETAIL: experimental
 MOSFET COUNT: implementation dependent
 BRAIN / VOLUME LAYER COUNT: experimental
 ```
@@ -141,7 +142,9 @@ QUADRATIC ACTIONS DOWN = conditioning / corrective action / Override through the
 
 `V0` is the electrical reference. It is **not** the recovery reservoir and must not be used as a power dump.
 
-Returned inductive/magnetic energy belongs in a measured DC-link/reinjection reservoir and is deliberately reused in a later permitted event.
+Returned inductive/magnetic energy belongs in the **gated hysteretic lattice beneath the cell/flower**, which is the distributed reinjection/body-memory layer. Recoverable energy is deliberately routed back into the local/body loop for later permitted use rather than intentionally dumped. The lattice path must be gated and instrumented.
+
+"Nothing is wasted" is a design objective, not a thermodynamic claim: unavoidable resistive, magnetic, switching, radiative, and heat losses must be measured and minimized.
 
 ## 8. Local automatic nerve recurrence
 
@@ -184,14 +187,33 @@ Back-to-back MOSFETs or another true bidirectional switch are candidates. SiC MO
 
 The bidirectional switch is connection hardware unless experiment proves it also carries the retained processing state.
 
-## 11. Seven-cell flower
+## 11. Six-sector hex, toroid stack, and paired flowers
 
-- one center hex + six surrounding identical hexes;
-- all seven use the same orientation;
+The planar hex is divided by lines from all six corners to the common center. This creates six triangular sectors whose **bases are the six flat hex edges**. The sector labels remain:
+
+```text
+A+ -> B+ -> C+ -> A- -> B- -> C-
+opposites: A+<->A-, B+<->B-, C+<->C-
+```
+
+The geometry and symbolism are locked; the exact physical implementation of the triangular differential sectors remains an open build problem.
+
+Each outer round toroid has **six windings, one winding mapped to each triangular sector**. Do not describe the six windings as unrelated decoration or collapse them into a generic three-winding motor.
+
+The magnetic stack target uses **two round six-winding toroids in opposed/inverted orientation** as a Helmholtz-like candidate field pair. Their combined field is intended to interact with the inner figure-eight nucleus toroid(s). "Helmholtz-like" is a build hypothesis until field uniformity/coupling is measured; do not claim an ideal Helmholtz field without measurement.
+
+Nucleus roles:
+- center/control cell: **square figure-eight toroidal nucleus**;
+- surrounding sensor cells: **round figure-eight toroidal nuclei**.
+
+Seven-cell flower:
+- one center hex + six surrounding hexes;
 - flat-edge to flat-edge connections only;
-- shared edges mate the intended matching axis/opposed polarity;
+- neighboring shared boundaries mate + to - by the defined geometry;
 - no adapter cell;
-- every cell retains the same CELL_V1 internal architecture.
+- every cell preserves the six-sector / six-edge mapping.
+
+The larger nerve/body unit uses **two flower halves opposite one another with the second half inverted in +/- orientation**. This paired-flower inversion is architectural canon; its exact electrical/magnetic implementation and measurable advantage remain experimental.
 
 ## 12. Scale recurrence
 
@@ -217,8 +239,10 @@ The preferred bench target contains:
 - active stateful processing-memory path;
 - repeated-path training capability;
 - voltage/current/state sensing;
-- DC recovery/reinjection reservoir with energy accounting;
-- optional magnetic/memristive/spintronic structures chosen only by measurement;
+- gated lower hysteretic lattice for DC recovery/reinjection and distributed body/path memory, with energy accounting;
+- two opposed/inverted outer round toroids, each with six windings mapped one-per-triangular-sector;
+- inner figure-eight nucleus coupling: square figure-eight in the center/control cell, round figure-eight in sensor cells;
+- optional magnetic/memristive/spintronic material implementations chosen by measurement;
 - test points adequate to distinguish state, path training, energy recovery, phase, and reference motion.
 
 Electrical reference, retained state, learned path bias, and recoverable energy are different measured quantities even if the architecture couples them.
@@ -228,8 +252,9 @@ Electrical reference, retained state, learned path bias, and recoverable energy 
 Keep these as explicit experiments:
 
 ```text
-NERVE candidate:
-2 flowers = normal + mirrored/inverted
+NERVE / BODY architecture:
+2 opposite flower halves = one orientation + one +/- inverted orientation
+(lower-level performance and exact coupling remain experimental)
 
 M4 candidate:
 2 + 2 flower/volume layers
@@ -281,15 +306,16 @@ If older wording conflicts with the three-bidirectional-mirror, processing-is-me
 - exact processing-memory device;
 - exact reinforcement/decay law;
 - useful retention/training margin;
-- magnetic material/core geometry;
-- winding count/ratios/polarity;
+- exact magnetic material and dimensions;
+- exact winding turns/gauge/polarity while the six-windings-per-outer-toroid mapping is locked;
+- measured field quality/coupling of the opposed outer toroids to the inner nucleus;
 - final MOSFET topology;
 - reinjection efficiency;
 - stable path propagation;
 - stable AC/rotation/RMF behaviour;
 - exact motor implementation;
 - vertical/depth coupling;
-- two-flower nerve role;
+- measured performance/advantage of the locked two-opposite-flower nerve/body arrangement;
 - `2+2` M4 depth;
 - `3/3/3` or `3 x 3 x 3` higher-brain grain;
 - hemisphere mirror implementation.
@@ -307,7 +333,9 @@ Reject and correct any design that:
 - reinforces failed/strained paths without a correction mechanism;
 - treats V0 as an energy reservoir;
 - claims recovery without an energy budget;
-- treats six edge interfaces as six windings;
+- separates the six triangular sectors from their one-to-one six-winding outer-toroid mapping;
+- omits the opposed/inverted outer-toroid pair or silently treats it as an ideal Helmholtz pair without measurement;
+- omits the lower gated reinjection lattice from the body architecture;
 - assumes an ordinary ferrite, memristor, MTJ, MOSFET, or SiC device automatically provides every required function;
 - promotes `2 flowers`, `2+2`, `3/3/3`, or `3x3x3` to proven hardware without a measured function.
 
@@ -325,7 +353,26 @@ A CELL_V1 build diagram is complete only if a reader can identify:
 7. DC recovery/reinjection separate from V0;
 8. strain/escalation path;
 9. identical-cell edge connection;
-10. scale path into flower / field / volume.
+10. scale path into flower / field / volume;
+11. six triangular sectors formed corner-to-center, with each base on a flat edge;
+12. one outer-toroid winding mapped to each triangular sector;
+13. opposed/inverted pair of six-winding round toroids and its coupling to the inner figure-eight nucleus;
+14. square figure-eight nucleus in the center/control cell and round figure-eight nuclei in sensor cells;
+15. two opposite flower halves with the second +/- inverted;
+16. gated hysteretic lattice beneath the cell/flower carrying measured reinjection/body-memory flow.
 ```
 
-If any of the first seven disappear, the design has drifted away from the current CELL_V1 build.
+If any of the first seven or any locked geometry/stack item 11-16 disappears, the design has drifted away from the current CELL_V1 build.
+
+## 19. View/action flip and retained history
+
+The current directional rule is:
+
+```text
+new Views / state information -> UP
+new Actions / conditioning     -> DOWN
+prior state/history            -> retained in the active hysteretic path/lattice
+flip / recombination           -> occurs through the shared center/reference relation
+```
+
+Do not invent separate hardware species for "old" and "new" information. The physical requirement is that the incoming/new event encounters retained prior state, and the resulting state becomes the history seen by the next event.
