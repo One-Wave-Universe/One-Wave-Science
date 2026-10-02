@@ -14,6 +14,36 @@ The proposed frontier is therefore not simply maximum reasoning speed or maximum
 
 Beyond that frontier, additional reasoning capacity may primarily create branches that must later be rejected or repaired. Below it, useful reasoning capacity may remain unused.
 
+## Reasoning–Reference Axis
+
+Reasoning and reference can be treated as opposing directions on a working axis:
+
+**EXPLORE ← reasoning / branching — BALANCE — reference / pruning → CONVERGE**
+
+The balance is dynamic rather than fixed.
+
+When a system is stuck, increasing reasoning can be useful because it opens new branches, hypotheses, interpretations, and possible routes. The purpose of the extra reasoning is exploration, not endlessly extending the same uncertain path.
+
+As candidate branches multiply, the system should phase-shift toward reference. Evidence, measurements, canonical state, prior results, and external reality prune unsupported branches and drive convergence.
+
+A compact rule is:
+
+> **When stuck, increase reasoning to branch and explore. When possibilities multiply, increase reference to prune and converge. Restore balance, then act.**
+
+Reasoning therefore opens the state space; reference constrains or collapses it. The phase shift controls when the system changes emphasis between these modes.
+
+Possible triggers:
+
+- **Stuck / no viable path:** phase-shift toward reasoning and exploration.
+- **Excessive branching / uncertainty / contradiction:** phase-shift toward reference and pruning.
+- **Adequately grounded candidate:** return toward balance, act, test, and reference again.
+
+This produces a larger cycle:
+
+**Reference → Reason → Stuck → Expand/Branch → Phase Shift → Reference/Prune → Converge → Act → Test → Reference**
+
+This may be another expression of the broader **pivot → flip → pivot** pattern: a system pivots within its current mode, flips emphasis across the reasoning–reference axis when the state demands it, then pivots again from the newly grounded state.
+
 ## Scale and State interpretation
 
 Scale reasoning only as far as the current state can remain referenced.
@@ -37,5 +67,6 @@ This suggests a possible design principle for human and machine reasoning system
 - Can the reference–speed frontier be expressed quantitatively?
 - What variables best represent inference rate, grounding bandwidth, validation latency, and accumulated divergence?
 - Does the optimum shift with task uncertainty, consequence, or environmental change rate?
-- Can a system dynamically reduce inference depth or speed when reference quality falls?
+- Can a system dynamically shift between reasoning-heavy exploration and reference-heavy convergence?
+- What measurable condition should trigger the phase shift?
 - Does nested reasoning remain stable when each loop has its own reference-refresh rate?
