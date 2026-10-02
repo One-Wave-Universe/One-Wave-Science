@@ -53,7 +53,7 @@ class GeminiWebAgent:
             raise RuntimeError("Gemini relay response missing message")
         return message
 
-    def run(self, prompt: str, max_tool_rounds: int = MAX_TOOL_ROUNDS) -> str:
+    def run(self, prompt: str, max_tool_rounds: int | None = None) -> str:
         messages: list[dict[str, Any]] = [
             {
                 "role": "system",
@@ -65,7 +65,7 @@ class GeminiWebAgent:
             },
             {"role": "user", "content": prompt},
         ]
-        for _ in range(max_tool_rounds):
+        while True:
             message = self.chat(messages)
             assistant = {
                 "role": "assistant",
@@ -99,12 +99,11 @@ class GeminiWebAgent:
                     "tool_call_id": call_id,
                     "content": json.dumps(result, sort_keys=True),
                 })
-        raise RuntimeError(f"Gemini web relay exceeded {max_tool_rounds} tool rounds")
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("prompt", nargs="*")
-    ap.add_argument("--max-tool-rounds", type=int, default=MAX_TOOL_ROUNDS)
+    ap.add_argument("--max-tool-rounds", type=int, default=None, help="Max tool rounds (None = unlimited)")
     ap.add_argument("--relay-health", action="store_true")
     ap.add_argument("--mcp-smoke", action="store_true")
     args = ap.parse_args(argv)
@@ -130,7 +129,7 @@ def main(argv: list[str] | None = None) -> int:
     if not prompt:
         ap.error("prompt is empty")
 
-    print(GeminiWebAgent(mcp, base).run(prompt, max(1, args.max_tool_rounds)))
+    print(GeminiWebAgent(mcp, base).run(prompt, args.max_tool_rounds))
     return 0
 
 if __name__ == "__main__":

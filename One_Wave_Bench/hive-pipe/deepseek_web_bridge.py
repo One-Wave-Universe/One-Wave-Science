@@ -149,7 +149,7 @@ class DeepSeekWebAgent:
             raise RuntimeError("DeepSeek web relay response is missing assistant message")
         return message
 
-    def run(self, prompt: str, *, max_tool_rounds: int = MAX_TOOL_ROUNDS) -> str:
+    def run(self, prompt: str, *, max_tool_rounds: int | None = None) -> str:
         messages: list[dict[str, Any]] = [
             {
                 "role": "system",
@@ -164,7 +164,9 @@ class DeepSeekWebAgent:
             {"role": "user", "content": prompt},
         ]
 
-        for _ in range(max_tool_rounds):
+        round_count = 0
+        while True:
+            round_count += 1
             message = self._chat(messages)
             assistant_message: dict[str, Any] = {
                 "role": "assistant",
@@ -208,10 +210,6 @@ class DeepSeekWebAgent:
                     }
                 )
 
-        raise RuntimeError(
-            f"DeepSeek web relay exceeded {max_tool_rounds} tool-call rounds"
-        )
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
@@ -224,7 +222,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--no-deepthink", action="store_true")
     parser.add_argument("--web-search", action="store_true")
     parser.add_argument("--expert-mode", action="store_true")
-    parser.add_argument("--max-tool-rounds", type=int, default=MAX_TOOL_ROUNDS)
+    parser.add_argument("--max-tool-rounds", type=int, default=None, help="Max tool rounds (None = unlimited)")
     parser.add_argument(
         "--relay-health",
         action="store_true",
@@ -263,7 +261,7 @@ def main(argv: list[str] | None = None) -> int:
         web_search=args.web_search,
         expert_mode=args.expert_mode,
     )
-    print(agent.run(prompt, max_tool_rounds=max(1, args.max_tool_rounds)))
+    print(agent.run(prompt, max_tool_rounds=args.max_tool_rounds))
     return 0
 
 

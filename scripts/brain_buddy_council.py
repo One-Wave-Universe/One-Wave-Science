@@ -133,11 +133,11 @@ def gemini_text(raw: str) -> str:
     return value
 
 
-def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
+def run_worker(root: Path, worker: str, prompt: str, timeout: int | None) -> dict[str, Any]:
     if worker == "gemini":
-        cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
+        cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", prompt]
     elif worker == "deepseek":
-        cmd = ["python3", "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py", "--max-tool-rounds", "12", prompt]
+        cmd = ["python3", "One_Wave_Bench/hive-pipe/deepseek_web_bridge.py", prompt]
     else:
         raise CouncilError(f"Unknown worker: {worker}")
 
@@ -327,8 +327,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Unified Gemini + DeepSeek Brain Buddy Council")
     ap.add_argument("mode", nargs="?", choices=MODES)
     ap.add_argument("question", nargs="?")
-    ap.add_argument("--rounds", type=int, default=2, help="Discussion rounds; default 2")
-    ap.add_argument("--timeout", type=int, default=240, help="Per-worker timeout in seconds")
+    ap.add_argument("--timeout", type=int, default=None, help="Per-worker timeout in seconds (None = no limit)")
     ap.add_argument("--save", action="store_true", help="Save a transcript receipt under External_Work")
     args = ap.parse_args()
 
@@ -388,8 +387,10 @@ def main() -> int:
             print(f"\nHOLD — sequential handoff stopped because {first} failed.")
 
     elif mode == "discussion":
-        rounds = max(1, min(args.rounds, 12))
-        for round_no in range(1, rounds + 1):
+        # Continuous dialogue until user issues /stop or EOF
+        round_no = 0
+        while True:
+            round_no += 1
             for worker in ("gemini", "deepseek"):
                 prompt = discussion_turn_prompt(question, turns, worker, round_no)
                 r = run_worker(root, worker, prompt, args.timeout)
