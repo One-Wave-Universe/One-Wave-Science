@@ -1,12 +1,11 @@
 {
-  "id": "gemini-full-repo-lens-20261002-01",
+  "id": "brain-buddy-gemini-onewave-20261003-001",
   "argv": [
     "bash",
     "-lc",
-    "set -euo pipefail\ncd /home/Scales/One-Wave-Science\ntest \"$(git remote get-url origin | grep -c 'One-Wave-Universe/One-Wave-Science')\" -gt 0\ngit fetch origin main --quiet\ngit reset --hard origin/main >/dev/null\nPROMPT='You are Gemini working as Brain Buddy with ChatGPT on One-Wave-Science. The FULL canonical repository at /home/Scales/One-Wave-Science is your primary project reference, not a pasted summary. First read GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md. Then follow their authority chain and inspect any repo files needed to answer. You have permission to search/read the whole repository, but do not edit anything. Distinguish repo claims from established science and from your own inference. Question: Pick one current One-Wave cosmology claim that is both important and falsifiable. State the exact canonical repo files you used, the strongest conventional-science objection, and the smallest decisive test or derivation to attack next. Keep it concise.'\ngemini --skip-trust --extensions none --model flash --approval-mode default --output-format json --prompt \"$PROMPT\""
+    "TASK=$(mktemp); cat >\"$TASK\" <<'EOF'\nUse the One-Wave-Science repository as your primary reference. Begin with GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md, then inspect the repository paths needed to understand the project as a whole before answering. Do not substitute conventional assumptions for repo-specific claims. Question: What is the single most important unresolved scientific claim in One-Wave that should be tested next, and what is the smallest falsifiable test? Cite the exact repo paths you used and distinguish repo hypothesis, established science, and your inference.\nEOF\nscripts/gemini_min.sh deep \"$TASK\""
   ],
-  "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 300,
-  "intention": "Ask Gemini one real science question with the full canonical One-Wave repository available as its primary reference, reached through the GitHub-secret Jetson relay.",
-  "consequence": "Read-only. Gemini may search/read the full canonical repo. Do not edit files, branches, credentials, bridges, or Brain Buddy."
+  "intention": "Ask Gemini one bounded scientific question while forcing One-Wave repository authority and exact repo-path citations",
+  "consequence": "Read the canonical One-Wave repository and return Gemini's answer; do not edit repository files"
 }
