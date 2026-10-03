@@ -1,155 +1,140 @@
 #!/usr/bin/env python3
-"""One-Wave Lens Gateway.
-
-A provider-neutral gate that forces every AI turn through the canonical
-One-Wave repository reference before and after model reasoning.
-
-This program is transport/orchestration, never project authority.
-Authority remains in the canonical repository.
-"""
+"""Persistent One-Wave Lens app: canonical repo -> Field/Void -> validation -> receipt."""
 from __future__ import annotations
-
-import argparse
-import json
-import subprocess
-from dataclasses import dataclass
+import argparse, json, os, re, subprocess, time, urllib.request, uuid
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Callable
 
-ROOT = Path(__file__).resolve().parents[1]
-MANDATORY = (
-    "GENERAL_REFERENCE_RULES.md",
-    "AI_CANONICAL_START_HERE.md",
-)
+ROOT=Path(__file__).resolve().parents[1]
+MANDATORY=("GENERAL_REFERENCE_RULES.md","AI_CANONICAL_START_HERE.md")
+TEXT_EXT={".md",".txt",".json",".yaml",".yml",".py"}
+STOP={"this","that","with","from","have","what","when","where","which","your","about","into","through","using","does","will","would","could","should"}
 
-@dataclass(frozen=True)
-class Evidence:
-    path: str
-    text: str
+def git_sha():
+    return subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip()
 
-def read_repo(path: str) -> Evidence:
-    p = (ROOT / path).resolve()
-    if ROOT not in p.parents and p != ROOT:
-        raise ValueError("reference escaped canonical repository")
-    if not p.is_file():
-        raise FileNotFoundError(path)
-    return Evidence(path, p.read_text(encoding="utf-8", errors="replace"))
+def safe_file(rel):
+    p=(ROOT/rel).resolve()
+    if p!=ROOT and ROOT not in p.parents: raise ValueError("path escaped repo")
+    if not p.is_file(): raise FileNotFoundError(rel)
+    return p
 
-def git_sha() -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True
-    ).strip()
+def terms(q):
+    return [x for x in re.findall(r"[A-Za-z0-9_+-]{3,}",q.lower()) if x not in STOP][:30]
 
-def search_repo(question: str, limit: int = 8) -> list[str]:
-    """Deterministic local retrieval; returns canonical paths, not copied canon."""
-    words = [w.lower() for w in question.split() if len(w) >= 4][:20]
-    if not words:
-        return []
-    scored = []
+def retrieve(q, explicit=(), limit=8):
+    """Select canonical files; content is read fresh every turn, never cached as canon."""
+    chosen=list(MANDATORY)
+    for x in explicit:
+        if x not in chosen: chosen.append(x)
+    scored=[]
+    ts=terms(q)
     for p in ROOT.rglob("*"):
-        if not p.is_file() or ".git" in p.parts:
-            continue
-        if p.suffix.lower() not in {".md", ".txt", ".json", ".yaml", ".yml", ".py"}:
-            continue
-        rel = str(p.relative_to(ROOT))
+        if not p.is_file() or ".git" in p.parts or p.suffix.lower() not in TEXT_EXT: continue
+        rel=str(p.relative_to(ROOT))
+        if rel in chosen: continue
+        try: body=p.read_text(encoding="utf-8",errors="ignore")[:100000].lower()
+        except OSError: continue
+        name=rel.lower()
+        score=sum((8 if t in name else 0)+(1 if t in body else 0) for t in ts)
+        if score: scored.append((score,rel))
+    for _,rel in sorted(scored,key=lambda x:(-x[0],x[1]))[:limit]:
+        chosen.append(rel)
+    refs=[]
+    for rel in chosen:
         try:
-            text = p.read_text(encoding="utf-8", errors="ignore")[:120000].lower()
-        except OSError:
-            continue
-        score = sum(4 * (w in rel.lower()) + (w in text) for w in words)
-        if score:
-            scored.append((score, rel))
-    return [p for _, p in sorted(scored, reverse=True)[:limit]]
+            txt=safe_file(rel).read_text(encoding="utf-8",errors="replace")
+            refs.append({"path":rel,"text":txt[:18000]})
+        except (OSError,ValueError): pass
+    return refs
 
-def packet(question: str, extra_paths: list[str]) -> dict:
-    paths = list(MANDATORY)
-    for path in extra_paths + search_repo(question):
-        if path not in paths:
-            paths.append(path)
-    refs = []
-    for path in paths:
-        try:
-            e = read_repo(path)
-            refs.append({"path": e.path, "text": e.text[:16000]})
-        except (OSError, ValueError):
-            pass
-    return {
-        "repo_sha": git_sha(),
-        "question": question,
-        "references": refs,
-        "law": (
-            "Canonical repo is authority. External data/tools are optional evidence. "
-            "Do not replace missing evidence with assumptions. Distinguish established, "
-            "repo-hypothesis, external evidence, and model inference."
-        ),
-    }
+def lens(question, explicit=()):
+    return {"repo_sha":git_sha(),"question":question,"references":retrieve(question,explicit),
+      "law":"Repository authority first. Memory and model priors are context only. External tools/data are optional evidence. Never silently replace missing repo evidence with a standard assumption."}
 
-def render(role: str, pkt: dict, peer: str | None = None) -> str:
-    refs = "\n\n".join(
-        f"=== REFERENCE: {r['path']} ===\n{r['text']}" for r in pkt["references"]
-    )
-    peer_block = f"\n\nPEER OUTPUT TO AUDIT:\n{peer}" if peer else ""
-    return f"""ONE-WAVE LENS GATE
+def prompt(role,pkt,peer=""):
+    refs="\n\n".join(f"=== {r['path']} ===\n{r['text']}" for r in pkt["references"])
+    return f"""ONE-WAVE LENS — FORCED REFERENCE
 ROLE: {role}
-REPO SHA: {pkt['repo_sha']}
+CANONICAL REPO SHA: {pkt['repo_sha']}
 QUESTION: {pkt['question']}
 LAW: {pkt['law']}
 
-You MUST reason from the canonical references below as primary authority.
-Tools/external data may be used only when useful; they are evidence, not canon.
-Name the repo paths supporting project-specific claims.
-If the references do not support a claim, mark it as inference or unresolved.
-Do not silently import a standard assumption over a conflicting repo authority.
+Read the references before reasoning. For One-Wave-specific claims, the references outrank your pretrained assumptions. If repo authority and conventional knowledge differ, report the difference; do not silently normalize One-Wave into a standard architecture. External data/tools are optional and remain external evidence.
 
-{refs}{peer_block}
+{refs}
+{("\n=== PEER STATE ===\n"+peer) if peer else ""}
 
-Return:
-1. answer
-2. repo references actually used
-3. external evidence/tools used, if any
-4. unresolved/conflicting points
+Output plain text with: ANSWER; REPO REFERENCES USED; EXTERNAL EVIDENCE/TOOLS (or none); UNRESOLVED/CONFLICTS (or none).
 """
 
-def field_void(
-    question: str,
-    field_ai: Callable[[str], str],
-    void_ai: Callable[[str], str],
-    final_ai: Callable[[str], str],
-    extra_paths: list[str] | None = None,
-) -> dict:
-    """Field proposes through lens; Void attacks through same lens; final revalidates."""
-    pkt = packet(question, extra_paths or [])
-    field = field_ai(render("FIELD: construct the strongest repo-grounded answer", pkt))
-    void = void_ai(render(
-        "VOID: challenge unsupported assumptions, contradictions, and missing controls",
-        pkt, field,
-    ))
-    final_prompt = render(
-        "RECOMBINE: resolve Field/Void against the SAME canonical reference",
-        pkt,
-        "FIELD:\n" + field + "\n\nVOID:\n" + void,
-    )
-    final = final_ai(final_prompt)
+class Provider:
+    def __init__(self,name,url,token=""):
+        self.name,self.url,self.token=name,url.rstrip("/"),token
+    def ask(self,text):
+        body=json.dumps({"messages":[{"role":"user","content":text}],"tools":[]}).encode()
+        headers={"Content-Type":"application/json"}
+        if self.token: headers["Authorization"]="Bearer "+self.token
+        req=urllib.request.Request(self.url+"/v1/chat/completions",data=body,headers=headers)
+        with urllib.request.urlopen(req,timeout=240) as r: obj=json.loads(r.read())
+        msg=obj["choices"][0]["message"]
+        out=msg.get("content")
+        if not out or msg.get("tool_calls"): raise RuntimeError(f"{self.name}: non-text/tool response")
+        return out.strip()
+
+def providers():
     return {
-        "repo_sha": pkt["repo_sha"],
-        "question": question,
-        "field": field,
-        "void": void,
-        "final": final,
-        "reference_paths": [r["path"] for r in pkt["references"]],
+      "gemini":Provider("gemini",os.getenv("OWL_GEMINI_URL","http://192.168.55.100:3001"),os.getenv("OWL_GEMINI_TOKEN","")),
+      "deepseek":Provider("deepseek",os.getenv("OWL_DEEPSEEK_URL","http://192.168.55.100:3000"),os.getenv("OWL_DEEPSEEK_TOKEN","")),
     }
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("question", nargs="+")
-    ap.add_argument("--reference", action="append", default=[])
-    ap.add_argument("--packet-only", action="store_true")
-    args = ap.parse_args()
-    pkt = packet(" ".join(args.question), args.reference)
-    # Packet-only is intentionally the first runnable boundary. Existing Gemini,
-    # DeepSeek, ChatGPT, Hive Pipe, or future adapters consume this same gate.
-    print(json.dumps(pkt, indent=2))
-    return 0
+def validate(text,pkt):
+    """Mechanical receipt validation: answer must identify at least one supplied repo path."""
+    used=[r["path"] for r in pkt["references"] if r["path"] in text]
+    return {"ok":bool(used),"used":used,"reason":"" if used else "answer named no supplied canonical reference"}
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+def run(question,field="gemini",void="deepseek",center="gemini",explicit=()):
+    ps=providers(); pkt=lens(question,explicit)
+    f=ps[field].ask(prompt("FIELD — construct from reference",pkt))
+    fv=validate(f,pkt)
+    v=ps[void].ask(prompt("VOID — attack Field for drift, unsupported assumptions, contradictions and missing controls",pkt,f))
+    vv=validate(v,pkt)
+    c=ps[center].ask(prompt("CENTER — recombine Field/Void and revalidate against the SAME reference",pkt,"FIELD:\n"+f+"\n\nVOID:\n"+v))
+    cv=validate(c,pkt)
+    receipt={"id":uuid.uuid4().hex,"time":time.time(),"repo_sha":pkt["repo_sha"],"question":question,
+      "roles":{"field":field,"void":void,"center":center},"reference_paths":[r["path"] for r in pkt["references"]],
+      "validation":{"field":fv,"void":vv,"center":cv},"field":f,"void":v,"answer":c}
+    if not all(x["ok"] for x in (fv,vv,cv)):
+        receipt["status"]="REJECTED_REFERENCE_BYPASS"
+    else: receipt["status"]="PASS"
+    return receipt
+
+class API(BaseHTTPRequestHandler):
+    def sendj(self,n,obj):
+        b=json.dumps(obj,ensure_ascii=False).encode(); self.send_response(n); self.send_header("Content-Type","application/json"); self.send_header("Content-Length",str(len(b))); self.end_headers(); self.wfile.write(b)
+    def log_message(self,*a): pass
+    def do_GET(self):
+        if self.path=="/health": return self.sendj(200,{"ok":True,"repo_sha":git_sha(),"app":"one-wave-lens"})
+        return self.sendj(404,{"error":"not found"})
+    def do_POST(self):
+        if self.path!="/ask": return self.sendj(404,{"error":"not found"})
+        try:
+            n=int(self.headers.get("Content-Length","0")); p=json.loads(self.rfile.read(n))
+            q=str(p["question"]).strip()
+            if not q: raise ValueError("empty question")
+            out=run(q,p.get("field","gemini"),p.get("void","deepseek"),p.get("center","gemini"),p.get("references",[]))
+            self.sendj(200,out)
+        except Exception as e: self.sendj(500,{"error":str(e)})
+
+def main():
+    ap=argparse.ArgumentParser(description="One-Wave Lens app")
+    sub=ap.add_subparsers(dest="cmd",required=True)
+    a=sub.add_parser("ask"); a.add_argument("question",nargs="+"); a.add_argument("--field",default="gemini"); a.add_argument("--void",default="deepseek"); a.add_argument("--center",default="gemini"); a.add_argument("--reference",action="append",default=[])
+    s=sub.add_parser("serve"); s.add_argument("--bind",default="127.0.0.1"); s.add_argument("--port",type=int,default=3030)
+    p=sub.add_parser("packet"); p.add_argument("question",nargs="+"); p.add_argument("--reference",action="append",default=[])
+    x=ap.parse_args()
+    if x.cmd=="serve": ThreadingHTTPServer((x.bind,x.port),API).serve_forever(); return
+    q=" ".join(x.question)
+    if x.cmd=="packet": print(json.dumps(lens(q,x.reference),indent=2)); return
+    print(json.dumps(run(q,x.field,x.void,x.center,x.reference),indent=2,ensure_ascii=False))
+if __name__=="__main__": main()
