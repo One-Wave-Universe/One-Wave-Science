@@ -373,10 +373,21 @@ def baseline_identity(root: Path) -> str:
 def tag_prompt(prompt: str, request_id: str, baseline: str, return_id: str) -> str:
     return (
         f"REQUEST_ID: {request_id}\n"
-        f"BASELINE: {baseline}\n\n"
+        f"BASELINE: {baseline}\n"
+        "RETURN PATH REQUIREMENT: this reply is not accepted unless it ends with the exact RETURN_ID line supplied below.\n\n"
         f"{prompt}\n\n"
         "RETURN PATH CHECK\n"
         "End your reply with this exact line on its own, unchanged:\n"
+        f"RETURN_ID: {return_id}"
+    )
+
+
+def return_repair_prompt(answer: str, return_id: str) -> str:
+    return (
+        "RETURN PATH REPAIR ONLY. Your previous response reached Brain Buddy, but it omitted the required return marker.\n"
+        "Do not redo the task, use tools, add commentary, or change the substance. Re-emit the response below, then end with the exact marker line.\n\n"
+        "PREVIOUS RESPONSE:\n---\n" + answer.strip() + "\n---\n\n"
+        "End with exactly:\n"
         f"RETURN_ID: {return_id}"
     )
 
@@ -534,10 +545,26 @@ def run_lead(
         else:
             verified, text = check_return(result["answer"], return_id)
             record["return_verified"] = verified
+            record["return_repair_attempted"] = False
+            if not verified:
+                # A real provider answer arrived, so make one bounded repair call that only
+                # asks that provider to re-emit its answer with the same return marker.
+                # The first unverified answer still does not count as participation.
+                record["return_repair_attempted"] = True
+                repair = call(seat, return_repair_prompt(result["answer"], return_id))
+                record["return_repair_exit_code"] = repair.get("exit_code")
+                record["return_repair_elapsed_s"] = repair.get("elapsed_s")
+                if repair.get("ok") and (repair.get("answer") or "").strip():
+                    verified, text = check_return(repair["answer"], return_id)
+                    record["return_verified"] = verified
+                elif not repair.get("ok"):
+                    repair_state, repair_reason = classify_failure(repair, transport_timeout)
+                    record["return_repair_state"] = repair_state
+                    record["return_repair_reason"] = repair_reason
             if verified:
                 state, reason = ACTIVE, kind
             else:
-                state, reason = INVALID_RETURN, "reply did not carry this turn's RETURN_ID"
+                state, reason = INVALID_RETURN, "reply did not carry this turn's RETURN_ID after one repair attempt"
         record["state"] = state
         record["reason"] = reason
         if state == ACTIVE:
