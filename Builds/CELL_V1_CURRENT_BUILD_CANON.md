@@ -1,3 +1,5 @@
+> **2026-10-03 CURRENT TARGET AUTHORITY:** Read [CELL_V1_COMPLETE_UNIFIED_ARCHITECTURE.md](CELL_V1_COMPLETE_UNIFIED_ARCHITECTURE.md) first. It locks the unified CELL_V1 target: one Helmholtz/reinjection structure, shared virtual-ground/vagus reference, transfluxor binary memory, a/b/c ternary differential state, one bidirectional quadratic flip, and the 6-sensor + 1-center actuator flower. Where this older build canon conflicts with that target architecture, the unified architecture controls. Bench measurements still control claims of demonstrated behavior.
+
 # CELL_V1 — CURRENT BUILD CANON
 
 **Status:** active build specification  

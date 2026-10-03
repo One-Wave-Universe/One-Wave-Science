@@ -161,6 +161,18 @@ magnetic rotational state
 
 Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present global lunar dipole as an explanation for lunar synchronous rotation; the Moon has no present global magnetic field.  Do **not** call Mercury 1:1 tidally locked; its control state is 3:2 spin-orbit resonance.  Venus, Uranus, and Neptune remain mandatory awkward-body controls rather than exceptions.
 
+## CELL_V1 current target architecture — 2026-10-03
+
+Before interpreting or modifying CELL_V1, read:
+
+1. `Builds/CELL_V1_COMPLETE_UNIFIED_ARCHITECTURE.md` — **current target authority**
+2. `Builds/CELL_V1_CURRENT_BUILD_CANON.md` — supporting build canon, subordinate where conflicting
+3. `CELL_V1_ANTI_DRIFT.md` — historical anti-drift constraints, reconcile to current target
+
+Locked current target summary: one Helmholtz/reinjection structure; one shared virtual-ground/vagus reference; transfluxor binary old/new memory; a/b/c ternary differential state; one bidirectional quadratic flip; six surrounding sensor cells plus one center actuator cell; Field as transient departure/excitation; Void as persistent balanced baseline/infrastructure; Field/Void differential drives motor control; no clocked read/write sequencing and no separate reinjection controller.
+
+Micro-black-hole compression and controlled-quasar release remain open/speculative threads and must not be promoted to demonstrated mechanisms without evidence. Reinjection means recovery/reuse of recoverable energy, not net energy creation; maintain a complete energy ledger.
+
 ## Current update handoff
 
 0. `UPDATED_60_CELL_V1_HEX_EDGE_FLOWER_VOLUMETRIC_MEMORY_ARCHITECTURE.md`
