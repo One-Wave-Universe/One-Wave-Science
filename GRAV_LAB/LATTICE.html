@@ -1,6 +1,115 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><title>Lattice grown</title>
-<style>html,body{margin:0;height:100%;background:#140e0a;color:#f3e2c4;font:15px/1.4 Georgia,serif}main{display:grid;grid-template-columns:1fr 260px;height:100%}canvas{width:100%;height:100%;background:#100c09}aside{padding:16px;border-left:1px solid #5a4636}a{color:#ffb15e}button{margin-top:12px;background:#e39b4a;color:#1a120c;border:0;padding:8px 12px;font:inherit}input{width:100%}</style></head>
-<body><main><canvas id="c"></canvas><aside><h1>Lattice</h1><p>Grown close pack. Each layer sits in the dimples of the one below. ABA stack.</p><p><a href="VORTICES.html">Vortices</a> · <a href="KNOT.html">Knot</a> · <a href="COMBINED.html">Combined</a></p><label>Amplitude <span id="ampv">1.0</span></label><input id="amp" type="range" min="0" max="2" step="0.05" value="1"/><button id="drop" type="button">Drop parent</button><p>Sites <span id="n">0</span></p><p>Energy <span id="en">0</span></p></aside></main>
-<script src="modules/wake.js"></script><script src="modules/lattice.js"></script><script src="modules/energy.js"></script><script src="modules/motion.js"></script><script src="modules/view.js"></script>
-<script>const cv=document.getElementById("c"),ctx=cv.getContext("2d");let on=1;document.getElementById("drop").onclick=()=>{on=on?0:1};const field={parent:{amp:1,sigma:1.6},sites:OW.lattice(2),kids:OW.kids(),energy:0,spin:0};n.textContent=field.sites.length;function resize(){cv.width=cv.clientWidth*devicePixelRatio;cv.height=cv.clientHeight*devicePixelRatio}addEventListener("resize",resize);resize();function frame(){field.parent.amp=on*parseFloat(amp.value);ampv.textContent=field.parent.amp.toFixed(2);OW.energy(field);OW.motion(field);OW.view(ctx,field,cv.width,cv.height,devicePixelRatio);en.textContent=field.energy.toFixed(2);requestAnimationFrame(frame)}frame();</script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Lattice</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #120e0b; color: #f3e2c4; font: 16px/1.4 Georgia, serif; }
+  main { display: grid; grid-template-columns: 1fr 280px; height: 100%; }
+  canvas { width: 100%; height: 100%; background: #0e0b09; display: block; }
+  aside { padding: 18px; border-left: 1px solid #5a4636; }
+  button, input { font: inherit; }
+  button { margin-top: 14px; background: #e39b4a; color: #1a120c; border: 0; padding: 8px 12px; }
+  input { width: 100%; }
+  .num { color: #ffb15e; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <canvas id="c"></canvas>
+  <aside>
+    <h1>Close pack</h1>
+    <p>ABA stack. Each layer in the dimples of the one below. Center has 12 neighbors.</p>
+    <label>Amplitude <span id="ampv" class="num">1.00</span></label>
+    <input id="amp" type="range" min="0" max="2" step="0.01" value="1"/>
+    <button id="drop" type="button">Drop parent</button>
+    <p>Sites <span id="ns" class="num">0</span></p>
+    <p>Center neighbors <span id="nn" class="num">0</span></p>
+    <p>Energy <span id="en" class="num">0</span></p>
+  </aside>
+</main>
+<script>
+const s3 = Math.sqrt(3), dz = Math.sqrt(6) / 3;
+function grow(n) {
+  const sites = [];
+  for (let L = -n; L <= n; L++) {
+    const shift = Math.abs(L) % 2;
+    for (let i = -n; i <= n; i++) {
+      for (let j = -n; j <= n; j++) {
+        const x = i + j / 2 + shift * 0.5;
+        const y = j * s3 / 2 + shift * s3 / 6;
+        const z = L * dz;
+        if (x * x + y * y + z * z > (n + 0.15) * (n + 0.15)) continue;
+        sites.push({ x, y, z });
+      }
+    }
+  }
+  return sites;
+}
+function wake(r, sigma) {
+  const s = Math.max(sigma, 1e-6);
+  return Math.exp(-r / s) / Math.sqrt(r * r + 0.04 * s * s);
+}
+const sites = grow(2);
+let centerN = 0;
+for (let i = 0; i < sites.length; i++) {
+  for (let j = i + 1; j < sites.length; j++) {
+    const dx = sites[i].x - sites[j].x, dy = sites[i].y - sites[j].y, dzv = sites[i].z - sites[j].z;
+    if (dx * dx + dy * dy + dzv * dzv < 1.05) {
+      if (sites[i].x === 0 && sites[i].y === 0 && sites[i].z === 0) centerN++;
+      if (sites[j].x === 0 && sites[j].y === 0 && sites[j].z === 0) centerN++;
+    }
+  }
+}
+ns.textContent = sites.length;
+nn.textContent = centerN;
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+let on = 1, spin = 0.4;
+drop.onclick = () => { on = on ? 0 : 1; drop.textContent = on ? "Drop parent" : "Restore parent"; };
+function resize() { cv.width = cv.clientWidth * devicePixelRatio; cv.height = cv.clientHeight * devicePixelRatio; }
+addEventListener("resize", resize); resize();
+function frame() {
+  const amp = on * parseFloat(amp.value);
+  ampv.textContent = amp.toFixed(2);
+  let energy = 0;
+  for (const s of sites) {
+    s.chi = amp * wake(Math.hypot(s.x, s.y, s.z), 1.6);
+    energy += s.chi;
+  }
+  en.textContent = energy.toFixed(2);
+  const w = cv.width, h = cv.height, dpr = devicePixelRatio;
+  const cx = w * 0.5, cy = h * 0.52, scale = Math.min(w, h) * 0.16;
+  spin += 0.006;
+  const proj = s => {
+    const x = s.x * Math.cos(spin) - s.z * Math.sin(spin);
+    const z = s.x * Math.sin(spin) + s.z * Math.cos(spin);
+    return { x: cx + x * scale, y: cy - s.y * scale - z * 0.55 * scale };
+  };
+  const pts = sites.map(proj);
+  ctx.fillStyle = "#0e0b09";
+  ctx.fillRect(0, 0, w, h);
+  ctx.strokeStyle = "rgba(243,190,110,0.45)";
+  ctx.lineWidth = Math.max(1, dpr);
+  for (let i = 0; i < sites.length; i++) {
+    for (let j = i + 1; j < sites.length; j++) {
+      const dx = sites[i].x - sites[j].x, dy = sites[i].y - sites[j].y, dzv = sites[i].z - sites[j].z;
+      if (dx * dx + dy * dy + dzv * dzv < 1.05) {
+        ctx.beginPath();
+        ctx.moveTo(pts[i].x, pts[i].y);
+        ctx.lineTo(pts[j].x, pts[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  for (let i = 0; i < pts.length; i++) {
+    ctx.beginPath();
+    ctx.arc(pts[i].x, pts[i].y, 6 * dpr, 0, 7);
+    ctx.fillStyle = `rgba(255,176,90,${0.3 + 0.7 * Math.min(sites[i].chi, 1)})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
