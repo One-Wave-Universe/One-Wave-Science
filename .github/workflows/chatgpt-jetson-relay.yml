@@ -1,8 +1,6 @@
 name: ChatGPT Jetson Relay
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 permissions:
