@@ -74,6 +74,7 @@ def static_checks() -> list[Check]:
         "scripts/jetson_remote.sh",
         "scripts/external_work_bridge.py",
         ".github/workflows/jetson-command.yml",
+        ".github/workflows/chatgpt-jetson-relay.yml",
         ".github/workflows/hive-pipe-terminal.yml",
         ".github/workflows/jetson-ai-access-validate.yml",
         "AI_BRIDGE_START_HERE.md",
@@ -127,6 +128,7 @@ def static_checks() -> list[Check]:
 
     contracts: list[tuple[str, list[str]]] = [
         (".github/workflows/jetson-command.yml", ['"name": "terminal_run"', ' + "/mcp"']),
+        (".github/workflows/chatgpt-jetson-relay.yml", ['workflow_dispatch:', '"name":"terminal_run"', 'GATEWAY_URL', 'GATEWAY_TOKEN']),
         ("One_Wave_Bench/hive-pipe/install_chatgpt_terminal_pull.sh", ["chatgpt-terminal", "chatgpt-terminal-backup"]),
         ("One_Wave_Bench/hive-pipe/gateway.py", ["terminal_reference", "terminal_run", "python_run", "cpp_compile_run"]),
         ("One_Wave_Bench/hive-pipe/deepseek_bridge.py", ["terminal_pwd", "terminal_which", "terminal_run"]),
@@ -325,6 +327,15 @@ def optional_live_checks(timeout: int) -> list[Check]:
         PASS if ssh.returncode == 0 and ssh.stdout.strip() == "active" else NOT_CONFIGURED,
         ssh.stdout.strip() or ssh.stderr.strip() or "inactive",
         "Enable SSH only on the intended trusted network if this independent recovery route is required." if ssh.returncode else "",
+    ))
+    relay_path = REPO_ROOT / ".github/workflows/chatgpt-jetson-relay.yml"
+    relay_text = relay_path.read_text(encoding="utf-8") if relay_path.is_file() else ""
+    timer_markers = ("schedule:", "cron:")
+    checks.append(Check(
+        "ChatGPT direct relay contract",
+        PASS if relay_text and not any(marker in relay_text for marker in timer_markers) else FAIL,
+        "event/dispatch driven; no schedule/cron timer" if relay_text and not any(marker in relay_text for marker in timer_markers) else "relay missing or timer marker present",
+        "Keep replacement relay event-driven and remove schedule/cron polling." if not relay_text or any(marker in relay_text for marker in timer_markers) else "",
     ))
     checks.append(Check(
         "GitHub Actions command lane live secrets/tunnel",
