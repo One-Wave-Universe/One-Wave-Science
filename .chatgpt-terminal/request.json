@@ -1,14 +1,11 @@
 {
-  "id": "brain-buddy-original-one-question-20261002-03",
+  "id": "brain-buddy-gemini-onewave-20261003-001",
   "argv": [
     "bash",
-    "scripts/brain_buddy_council.sh",
-    "both",
-    "What is the smallest concrete improvement we can make to Brain Buddy while preserving its existing working back-and-forth behavior?",
-    "--save"
+    "-lc",
+    "TASK=$(mktemp); cat >\"$TASK\" <<'EOF'\nUse the One-Wave-Science repository as your primary reference. Begin with GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md, then inspect the repository paths needed to understand the project as a whole before answering. Do not substitute conventional assumptions for repo-specific claims. Question: What is the single most important unresolved scientific claim in One-Wave that should be tested next, and what is the smallest falsifiable test? Cite the exact repo paths you used and distinguish repo hypothesis, established science, and your inference.\nEOF\nscripts/gemini_min.sh deep \"$TASK\""
   ],
-  "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 300,
-  "intention": "Use the existing Brain Buddy implementation to ask Gemini and DeepSeek one bounded question and return their actual responses.",
-  "consequence": "Do not modify Brain Buddy, provider bridges, repository architecture, or credentials. Execute one question only and save/return the receipt; failure must be returned as failure."
+  "intention": "Ask Gemini one bounded scientific question while forcing One-Wave repository authority and exact repo-path citations",
+  "consequence": "Read the canonical One-Wave repository and return Gemini's answer; do not edit repository files"
 }
