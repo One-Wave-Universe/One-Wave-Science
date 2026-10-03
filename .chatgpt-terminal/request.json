@@ -1,11 +1,11 @@
 {
-  "id": "brain-buddy-gemini-onewave-20261003-001",
+  "id": "brain-buddy-gemini-onewave-20261003-002",
   "argv": [
     "bash",
     "-lc",
-    "TASK=$(mktemp); cat >\"$TASK\" <<'EOF'\nUse the One-Wave-Science repository as your primary reference. Begin with GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md, then inspect the repository paths needed to understand the project as a whole before answering. Do not substitute conventional assumptions for repo-specific claims. Question: What is the single most important unresolved scientific claim in One-Wave that should be tested next, and what is the smallest falsifiable test? Cite the exact repo paths you used and distinguish repo hypothesis, established science, and your inference.\nEOF\nscripts/gemini_min.sh deep \"$TASK\""
+    "TASK=$(mktemp); cat >\"$TASK\" <<'EOF'\nUse the One-Wave-Science repository as your primary reference. Begin with GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md, then inspect whatever repository paths are necessary to answer from the project as a whole. Do not substitute conventional assumptions for repo-specific claims. Question: What is the single most important unresolved scientific claim in One-Wave that should be tested next, and what is the smallest falsifiable test? Cite exact repo paths and distinguish repo hypothesis, established science, and your inference.\nEOF\nGEMINI_ALLOW_PRO=1 scripts/gemini_min.sh deep \"$TASK\""
   ],
   "timeout": 300,
-  "intention": "Ask Gemini one bounded scientific question while forcing One-Wave repository authority and exact repo-path citations",
-  "consequence": "Read the canonical One-Wave repository and return Gemini's answer; do not edit repository files"
+  "intention": "Ask Gemini a One-Wave science question through the canonical Git pull bridge with repository-first reference",
+  "consequence": "Gemini reads repository authority and returns a cited answer without editing files"
 }
