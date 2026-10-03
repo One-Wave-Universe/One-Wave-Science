@@ -131,10 +131,27 @@ class LeadModeTests(unittest.TestCase):
         self.assertEqual(r["seats"]["gemini"]["state"], bb.OUT_TO_LUNCH)
         self.assertEqual(r["final_answer"], "")
 
-    def test_missing_return_id_is_invalid_return(self):
+    def test_missing_return_id_repairs_once(self):
         s = Script(
             gemini=[lambda p: ok(p, "v1")],
-            deepseek=[lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION", echo=False)],
+            deepseek=[
+                lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION", echo=False),
+                lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION"),
+            ],
+        )
+        r = run(s)
+        self.assertEqual(r["seats"]["deepseek"]["state"], bb.ACTIVE)
+        self.assertEqual(r["outcome"], "NO_ACTIVE_OBJECTION")
+        self.assertTrue(r["turns"][-1]["return_repair_attempted"])
+        self.assertTrue(r["turns"][-1]["return_verified"])
+
+    def test_missing_return_id_is_invalid_after_repair(self):
+        s = Script(
+            gemini=[lambda p: ok(p, "v1")],
+            deepseek=[
+                lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION", echo=False),
+                lambda p: ok(p, "still missing", echo=False),
+            ],
         )
         r = run(s)
         self.assertEqual(r["seats"]["deepseek"]["state"], bb.INVALID_RETURN)
@@ -144,7 +161,10 @@ class LeadModeTests(unittest.TestCase):
     def test_stale_return_id_is_invalid_return(self):
         s = Script(
             gemini=[lambda p: ok(p, "v1")],
-            deepseek=[lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION\nRETURN_ID: bb-test-01-gemini-000000", echo=False)],
+            deepseek=[
+                lambda p: ok(p, "VERDICT: NO MATERIAL OBJECTION\nRETURN_ID: bb-test-01-gemini-000000", echo=False),
+                lambda p: ok(p, "still stale\nRETURN_ID: bb-test-01-gemini-000000", echo=False),
+            ],
         )
         r = run(s)
         self.assertEqual(r["seats"]["deepseek"]["state"], bb.INVALID_RETURN)
