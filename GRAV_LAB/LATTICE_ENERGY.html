@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>One Wave — lattice energy</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #140e0a; color: #f3e2c4; font: 15px/1.4 Georgia, serif; }
+  main { display: grid; grid-template-columns: 1fr 280px; height: 100%; }
+  canvas { width: 100%; height: 100%; display: block; background: #100c09; }
+  aside { padding: 16px; border-left: 1px solid #5a4636; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  label { display: block; margin: 12px 0 4px; }
+  input { width: 100%; }
+  button { margin-top: 12px; background: #e39b4a; color: #1a120c; border: 0; padding: 8px 12px; font: inherit; }
+  .num { font-variant-numeric: tabular-nums; color: #ffb15e; }
+</style>
+</head>
+<body>
+<main>
+  <canvas id="c"></canvas>
+  <aside>
+    <h1>Lattice energy</h1>
+    <p>First sim. Hex sites. Parent wake. Energy is chi. Motion is down the gradient.</p>
+    <label>Parent amplitude <span id="ampv" class="num">1.0</span></label>
+    <input id="amp" type="range" min="0" max="2" step="0.05" value="1"/>
+    <label>Organization scale <span id="sigv" class="num">1.6</span></label>
+    <input id="sig" type="range" min="0.4" max="4" step="0.1" value="1.6"/>
+    <button id="drop" type="button">Drop parent</button>
+    <p>chi at center <span id="chi" class="num">0</span></p>
+    <p>Field energy <span id="en" class="num">0</span></p>
+    <p>Child radius <span id="rad" class="num">0</span></p>
+  </aside>
+</main>
+<script>
+const cv = document.getElementById("c");
+const ctx = cv.getContext("2d");
+const ampEl = document.getElementById("amp");
+const sigEl = document.getElementById("sig");
+let parentOn = 1;
+document.getElementById("drop").onclick = () => { parentOn = parentOn ? 0 : 1; document.getElementById("drop").textContent = parentOn ? "Drop parent" : "Restore parent"; };
+
+function wake(r, sigma) {
+  const s = Math.max(sigma, 1e-6);
+  return Math.exp(-r / s) / Math.sqrt(r * r + 0.04 * s * s);
+}
+function resize() {
+  cv.width = cv.clientWidth * devicePixelRatio;
+  cv.height = cv.clientHeight * devicePixelRatio;
+}
+window.addEventListener("resize", resize);
+resize();
+
+const kids = [];
+for (let k = 0; k < 3; k++) {
+  const a = 2 * Math.PI * k / 3;
+  kids.push({ x: 1.6 * Math.cos(a), y: 1.6 * Math.sin(a), vx: -0.3 * Math.sin(a), vy: 0.3 * Math.cos(a) });
+}
+
+function frame() {
+  const amp = parentOn * parseFloat(ampEl.value);
+  const sigma = parseFloat(sigEl.value);
+  document.getElementById("ampv").textContent = amp.toFixed(2);
+  document.getElementById("sigv").textContent = sigma.toFixed(2);
+  const w = cv.width, h = cv.height;
+  const cx = w * 0.5, cy = h * 0.5, scale = Math.min(w, h) * 0.12;
+  ctx.fillStyle = "#100c09";
+  ctx.fillRect(0, 0, w, h);
+  let energy = 0;
+  const reach = 5;
+  for (let q = -reach; q <= reach; q++) {
+    for (let r = -reach; r <= reach; r++) {
+      const x = (q + r / 2) * 0.55;
+      const y = r * 0.476;
+      const rr = Math.hypot(x, y);
+      const chi = amp * wake(rr, sigma);
+      energy += chi;
+      ctx.beginPath();
+      ctx.arc(cx + x * scale, cy + y * scale, 4 * devicePixelRatio, 0, 7);
+      ctx.fillStyle = `rgba(243, 190, 110, ${0.15 + 0.85 * Math.min(chi, 1)})`;
+      ctx.fill();
+    }
+  }
+  for (const b of kids) {
+    const hstep = 0.02;
+    const c = (x, y) => amp * wake(Math.hypot(x, y), sigma);
+    const gx = (c(b.x + hstep, b.y) - c(b.x - hstep, b.y)) / (2 * hstep);
+    const gy = (c(b.x, b.y + hstep) - c(b.x, b.y - hstep)) / (2 * hstep);
+    b.vx = (b.vx - 1.4 * gx * 0.03) * 0.995;
+    b.vy = (b.vy - 1.4 * gy * 0.03) * 0.995;
+    b.x += b.vx * 0.03;
+    b.y += b.vy * 0.03;
+    ctx.beginPath();
+    ctx.arc(cx + b.x * scale, cy + b.y * scale, 8 * devicePixelRatio, 0, 7);
+    ctx.fillStyle = "#ff8a3d";
+    ctx.fill();
+  }
+  document.getElementById("chi").textContent = (amp * wake(0, sigma)).toFixed(3);
+  document.getElementById("en").textContent = energy.toFixed(2);
+  document.getElementById("rad").textContent = (Math.hypot(kids[0].x, kids[0].y)).toFixed(2);
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
