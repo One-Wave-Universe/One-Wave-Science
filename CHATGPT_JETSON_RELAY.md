@@ -21,7 +21,7 @@ Jetson terminal_run
 chatgpt-terminal result
 ```
 
-The relay runs every five minutes and may also be manually dispatched. It uses
+The relay is event/dispatch driven only. There is no polling timer or scheduled wake-up. It uses
 the existing `JETSON_GATEWAY_URL` and `JETSON_GATEWAY_TOKEN` repository
 secrets and preserves the terminal parser's intention/consequence gate.
 
