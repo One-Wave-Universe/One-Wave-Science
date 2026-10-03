@@ -1,12 +1,12 @@
 {
-  "id": "lockup-probe-20261003-1936",
+  "id": "lockup-probe-20261003-1940",
   "argv": [
     "bash",
     "-lc",
-    "echo HOST; hostname; echo USER; id -un; echo UP; uptime; echo MEM; free -h; echo CPU; ps -eo pid,pcpu,pmem,rss,comm --sort=-pcpu | head -n 18; echo DMESG; dmesg -T 2>/dev/null | tail -n 20 || true"
+    "echo HOST; hostname; echo UP; uptime; echo MEM; free -h; echo CPU; ps -eo pid,pcpu,pmem,rss,comm --sort=-pcpu | head -n 18; echo PREV; journalctl -b -1 -p err --no-pager -n 30 || true"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 60,
-  "intention": "Identify what is locking the Jetson desktop",
-  "consequence": "Read-only receipt of hostname, memory, top processes, and recent kernel lines"
+  "intention": "Identify what locked the machine, including the previous boot if it was power-cycled",
+  "consequence": "Read-only receipt of top processes now and error lines from the previous boot"
 }
