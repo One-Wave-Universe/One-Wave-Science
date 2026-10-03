@@ -5,6 +5,9 @@
 #   ~/.local/share/applications/fvpair.desktop          app-menu entry
 #   ~/.config/fvpair/env                                repo path + API keys (chmod 600)
 #
+# Never clones the repo. The lens reads an existing checkout if there is one,
+# otherwise the compressed snapshot shipped with the installer (lens_bundle.tar.xz).
+#
 #   ./install_linux.sh [--repo /path/to/One-Wave-Science]
 #   ./install_linux.sh --uninstall
 set -euo pipefail
@@ -16,7 +19,6 @@ ICON="$DATA/icons/hicolor/scalable/apps/fvpair.svg"
 CONF="${XDG_CONFIG_HOME:-$HOME/.config}/fvpair"
 DESKTOP_DIR="$(xdg-user-dir DESKTOP 2>/dev/null || true)"
 [[ -n "$DESKTOP_DIR" && "$DESKTOP_DIR" != "$HOME" ]] || DESKTOP_DIR="$HOME/Desktop"
-REPO_URL="https://github.com/one-wave-universe/one-wave-science.git"
 
 is_repo() { [[ -f "$1/AGENTS.md" && -f "$1/simulations/zer0_first_cycle.py" ]]; }
 
@@ -34,18 +36,25 @@ esac
 
 command -v python3 >/dev/null || { echo "python3 is required (sudo apt install python3)" >&2; exit 1; }
 
-# 1. Find the One-Wave repo the lens will read.
+# 1. Lens source: an existing checkout, else the bundled snapshot. No cloning.
 if [[ -z "$REPO" ]]; then
   if is_repo "$HERE/../.."; then REPO="$(readlink -f "$HERE/../..")"
   elif [[ -f "$CONF/env" ]] && old="$(sed -n 's/^FVPAIR_REPO=//p' "$CONF/env" | tail -1)" && [[ -n "$old" ]] && is_repo "$old"; then REPO="$old"
   elif is_repo "$HOME/One-Wave-Science"; then REPO="$HOME/One-Wave-Science"
-  elif command -v git >/dev/null; then
-    echo "cloning the One-Wave repo into $HOME/One-Wave-Science ..."
-    git clone --depth 1 "$REPO_URL" "$HOME/One-Wave-Science" && REPO="$HOME/One-Wave-Science"
   fi
 fi
-if [[ -z "$REPO" ]] || ! is_repo "$REPO"; then
-  echo "One-Wave-Science repo not found. Clone it, then run: $0 --repo /path/to/One-Wave-Science" >&2
+if [[ -n "$REPO" ]] && ! is_repo "$REPO"; then
+  echo "not a One-Wave-Science checkout: $REPO" >&2; exit 1
+fi
+BUNDLE="$HERE/lens_bundle.tar.xz"
+if [[ -n "$REPO" ]]; then
+  LENS="$REPO"
+  # A checkout is present, so the installed snapshot copy is not needed.
+  [[ "$HERE" == "${XDG_DATA_HOME:-$HOME/.local/share}/fvpair/app" ]] && rm -f "$BUNDLE"
+elif [[ -f "$BUNDLE" ]]; then
+  LENS="bundled snapshot ($BUNDLE)"
+else
+  echo "No One-Wave repo found and no lens snapshot shipped. Run: $0 --repo /path/to/One-Wave-Science" >&2
   exit 1
 fi
 
@@ -62,7 +71,7 @@ if ! grep -q "API_KEY" "$CONF/env"; then
 ENV
 fi
 grep -v '^FVPAIR_REPO=' "$CONF/env" >"$CONF/env.tmp" || true
-echo "FVPAIR_REPO=$REPO" >>"$CONF/env.tmp"
+[[ -n "$REPO" ]] && echo "FVPAIR_REPO=$REPO" >>"$CONF/env.tmp"
 mv "$CONF/env.tmp" "$CONF/env"; chmod 600 "$CONF/env"
 
 # 3. Commands.
@@ -103,7 +112,7 @@ echo "Installed Field/Void Pair"
 echo "  desktop icon : $DESKTOP_DIR/fvpair.desktop"
 echo "  app menu     : Field/Void Pair"
 echo "  terminal     : fvpair run \"goal\" --field anthropic --void deepseek"
-echo "  repo lens    : $REPO"
+echo "  repo lens    : $LENS"
 echo "  API keys     : edit $CONF/env"
 case ":$PATH:" in *":$BIN:"*) ;; *) echo "  note         : add $BIN to PATH for the 'fvpair' command";; esac
 echo "If double-clicking the icon does nothing, right-click it and choose 'Allow Launching'."

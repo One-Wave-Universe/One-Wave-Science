@@ -14,10 +14,13 @@ from UPDATED_34 section 3: two roles, one relational state.
 
 from __future__ import annotations
 
+import io
+import json
 import math
 import os
 import re
 import subprocess
+import tarfile
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -44,6 +47,9 @@ TEXT_EXT = {
     ".cpp", ".ino", ".rs", ".go", ".java", ".kt",
 }
 MAX_FILE_BYTES = 400_000
+# Compressed text snapshot of the repo. Lets the program run with no checkout
+# on disk; it is read in memory and never unpacked.
+BUNDLE_NAME = "lens_bundle.tar.xz"
 WORD = re.compile(r"[A-Za-z][A-Za-z0-9_\-]{3,}")
 STOP = {
     "this", "that", "with", "from", "have", "into", "only", "must", "does",
@@ -70,6 +76,20 @@ def find_repo_root(start: Path | None = None) -> Path:
     raise FileNotFoundError(
         "One-Wave-Science repo not found. Set FVPAIR_REPO=/path/to/One-Wave-Science "
         "(the installer writes it to ~/.config/fvpair/env).")
+
+
+def find_source(start: Path | None = None) -> Path:
+    """A checkout if there is one, else the bundled snapshot. Never clones."""
+    try:
+        return find_repo_root(start)
+    except FileNotFoundError:
+        pass
+    for cand in (os.environ.get("FVPAIR_BUNDLE"), str(Path(__file__).with_name(BUNDLE_NAME))):
+        if cand and Path(cand).expanduser().is_file():
+            return Path(cand).expanduser().resolve()
+    raise FileNotFoundError(
+        "No One-Wave repo and no lens bundle found. Set FVPAIR_REPO=/path/to/One-Wave-Science "
+        f"or FVPAIR_BUNDLE=/path/to/{BUNDLE_NAME}.")
 
 
 def list_tracked(root: Path) -> list[str]:
@@ -112,6 +132,24 @@ def reference_snapshot(root: Path) -> dict:
     }
 
 
+def write_bundle(root: Path, out: Path) -> Path:
+    """Pack every tracked text file the lens reads, plus a manifest, into tar.xz."""
+    root = Path(root)
+    files = list_tracked(root)
+    manifest = {"files": files, "snapshot": reference_snapshot(root) | {"root": "bundle"}}
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with tarfile.open(out, "w:xz") as tar:
+        data = json.dumps(manifest).encode()
+        info = tarfile.TarInfo("manifest.json")
+        info.size = len(data)
+        tar.addfile(info, io.BytesIO(data))
+        for rel in files:
+            p = root / rel
+            if p.suffix.lower() in TEXT_EXT and p.is_file() and p.stat().st_size <= MAX_FILE_BYTES:
+                tar.add(p, arcname="repo/" + rel, recursive=False)
+    return out
+
+
 @dataclass
 class RepoLens:
     root: Path
@@ -122,10 +160,16 @@ class RepoLens:
     _text: dict[str, str] = field(default_factory=dict, repr=False)
     _terms: dict[str, Counter] = field(default_factory=dict, repr=False)
     _df: Counter = field(default_factory=Counter, repr=False)
+    bundle: bool = False
+    _snapshot: dict = field(default_factory=dict, repr=False)
 
     @classmethod
     def build(cls, root: Path | None = None, **kw) -> "RepoLens":
-        lens = cls(root=Path(root) if root else find_repo_root(), **kw)
+        src = Path(root) if root else find_source()
+        lens = cls(root=src, **kw)
+        if src.is_file():
+            lens._load_bundle()
+            return lens
         lens.files = list_tracked(lens.root)
         for rel in lens.files:
             p = lens.root / rel
@@ -137,12 +181,39 @@ class RepoLens:
                 txt = p.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 continue
-            lens._text[rel] = txt
-            lens._terms[rel] = Counter(
-                w.lower() for w in WORD.findall(txt) if w.lower() not in STOP
-            )
-            lens._df.update(lens._terms[rel].keys())
+            lens._index(rel, txt)
         return lens
+
+    def _index(self, rel: str, txt: str) -> None:
+        self._text[rel] = txt
+        self._terms[rel] = Counter(
+            w.lower() for w in WORD.findall(txt) if w.lower() not in STOP
+        )
+        self._df.update(self._terms[rel].keys())
+
+    def _load_bundle(self) -> None:
+        self.bundle = True
+        with tarfile.open(self.root, "r:xz") as tar:
+            for m in tar:
+                if not m.isfile():
+                    continue
+                data = tar.extractfile(m).read()
+                if m.name == "manifest.json":
+                    manifest = json.loads(data)
+                    self.files = manifest["files"]
+                    self._snapshot = manifest.get("snapshot", {})
+                elif m.name.startswith("repo/"):
+                    self._index(m.name[5:], data.decode("utf-8", errors="replace"))
+        self._snapshot = {**self._snapshot, "root": f"bundle:{self.root}"}
+
+    def snapshot(self) -> dict:
+        """Reference Point Zero for whatever the lens actually reads."""
+        return dict(self._snapshot) if self.bundle else reference_snapshot(self.root)
+
+    def source(self, rel: str) -> str:
+        if rel not in self._text:
+            raise FileNotFoundError(rel)
+        return self._text[rel]
 
     # -- layer 1 -------------------------------------------------------
     def canon(self) -> str:

@@ -161,6 +161,51 @@ class LoopTests(unittest.TestCase):
         self.assertEqual(len(rows), p.turn + 1)
 
 
+class BundleTests(unittest.TestCase):
+    """No checkout on disk: the lens and Zer0 come from the compressed snapshot."""
+
+    @classmethod
+    def setUpClass(cls):
+        from repo_lens import write_bundle
+        cls.tmp = tempfile.TemporaryDirectory()
+        cls.path = write_bundle(LENS.root, Path(cls.tmp.name) / "lens_bundle.tar.xz")
+        cls.lens = RepoLens.build(cls.path)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def test_bundle_is_small_and_matches_checkout(self):
+        self.assertLess(self.path.stat().st_size, 15_000_000)
+        self.assertTrue(self.lens.bundle)
+        self.assertEqual(self.lens.files, LENS.files)
+        self.assertEqual(self.lens.render("field void zer0"), LENS.render("field void zer0"))
+        self.assertTrue(self.lens.snapshot()["root"].startswith("bundle:"))
+
+    def test_loop_runs_from_bundle_with_real_zer0_source(self):
+        p = FieldVoidPair(goal="bundle run", field_ai=Scripted([GOOD_FIELD]),
+                          void_ai=Scripted([ALLOW]), lens=self.lens, max_turns=2)
+        self.assertIn("repo/simulations/zer0_first_cycle.py", p.zer0.__file__)
+        p.run()
+        self.assertEqual(p.stop, "HARD_STOP")
+        self.assertGreater(p.ref, 0.0)
+
+    def test_find_source_falls_back_to_bundle(self):
+        from repo_lens import find_source
+        os.environ["FVPAIR_BUNDLE"] = str(self.path)
+        try:
+            # Searching from / finds no checkout, so the bundle is used.
+            import repo_lens
+            orig = repo_lens.find_repo_root
+            repo_lens.find_repo_root = lambda start=None: orig(Path("/"))
+            try:
+                self.assertEqual(find_source(), self.path.resolve())
+            finally:
+                repo_lens.find_repo_root = orig
+        finally:
+            del os.environ["FVPAIR_BUNDLE"]
+
+
 class KeyHygieneTests(unittest.TestCase):
     def test_keys_never_leave_the_process(self):
         os.environ["DEEPSEEK_API_KEY"] = "sk-secret-test-value"

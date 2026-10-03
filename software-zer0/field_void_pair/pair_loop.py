@@ -40,24 +40,35 @@ import json
 import re
 import sys
 import time
+import types
 from dataclasses import dataclass, field
 from pathlib import Path
 
 try:
     from .providers import Provider, ProviderError
-    from .repo_lens import RepoLens, reference_snapshot
+    from .repo_lens import RepoLens
 except ImportError:  # run as a plain script
     from providers import Provider, ProviderError
-    from repo_lens import RepoLens, reference_snapshot
+    from repo_lens import RepoLens
 
 
-def _load_zer0(root: Path):
-    sim = str(root / "simulations")
-    if sim not in sys.path:
-        sys.path.insert(0, sim)
-    import zer0_first_cycle  # noqa: E402
+def _load_zer0(lens: RepoLens):
+    """Import the Algorythm-Zer0 harness from the repo the lens reads. Never a copy."""
+    if not lens.bundle:
+        sim = str(lens.root / "simulations")
+        if sim not in sys.path:
+            sys.path.insert(0, sim)
+        import zer0_first_cycle  # noqa: E402
 
-    return zer0_first_cycle
+        return zer0_first_cycle
+    # Bundle: run the same file's source from the snapshot.
+    # Own module name, so it never shadows a checkout's zer0_first_cycle.
+    name = "zer0_first_cycle__bundle"
+    mod = types.ModuleType(name)
+    mod.__file__ = f"{lens.root}!repo/simulations/zer0_first_cycle.py"
+    sys.modules[name] = mod  # dataclasses look the module up by name
+    exec(compile(lens.source("simulations/zer0_first_cycle.py"), mod.__file__, "exec"), mod.__dict__)
+    return mod
 
 
 VERDICT_VALUE = {"ALLOW": 1.0, "CORRECT": 0.4, "HOLD": 0.0, "OVERRIDE": -0.6, "ESCALATE": -1.0}
@@ -140,9 +151,9 @@ class FieldVoidPair:
     def __post_init__(self) -> None:
         self.field_ai.role = "field"
         self.void_ai.role = "void"
-        self.zer0 = _load_zer0(self.lens.root)
+        self.zer0 = _load_zer0(self.lens)
         if not self.snapshot:
-            self.snapshot = reference_snapshot(self.lens.root)
+            self.snapshot = self.lens.snapshot()
 
     def _state_block(self) -> str:
         last = self.last_void

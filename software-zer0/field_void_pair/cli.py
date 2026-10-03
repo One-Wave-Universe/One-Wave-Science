@@ -23,12 +23,12 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(HERE))
     from pair_loop import FieldVoidPair
     from providers import PRESETS, Provider, available
-    from repo_lens import RepoLens, reference_snapshot
+    from repo_lens import RepoLens
     import server as server_mod
 else:
     from .pair_loop import FieldVoidPair
     from .providers import PRESETS, Provider, available
-    from .repo_lens import RepoLens, reference_snapshot
+    from .repo_lens import RepoLens
     from . import server as server_mod
 
 TRIT_GLYPH = {"+": "+", "-": "-", "0": "0"}
@@ -60,7 +60,7 @@ def _print_turn(rec: dict, verbose: bool) -> None:
 
 def cmd_run(a) -> int:
     lens = RepoLens.build(canon_chars=a.canon_chars)
-    snap = reference_snapshot(lens.root)
+    snap = lens.snapshot()
     print(f"REFERENCE POINT ZERO  root={snap['root']} branch={snap['branch']} "
           f"head={snap['head']} dirty={snap['dirty']}  files={len(lens.files)}")
     pair = FieldVoidPair(goal=a.goal, field_ai=_provider(a.field), void_ai=_provider(a.void),

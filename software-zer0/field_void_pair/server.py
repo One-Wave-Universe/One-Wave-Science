@@ -23,11 +23,11 @@ from urllib.parse import parse_qs, urlparse
 try:
     from .pair_loop import FieldVoidPair
     from .providers import PRESETS, Provider, ProviderError, available
-    from .repo_lens import RepoLens, reference_snapshot
+    from .repo_lens import RepoLens
 except ImportError:
     from pair_loop import FieldVoidPair
     from providers import PRESETS, Provider, ProviderError, available
-    from repo_lens import RepoLens, reference_snapshot
+    from repo_lens import RepoLens
 
 APP_HTML = Path(__file__).with_name("app.html")
 MAX_SESSIONS = 32
@@ -117,7 +117,7 @@ def handler_for(app: App):
                 if u.path == "/api/providers":
                     return self._send(200, {"providers": available()})
                 if u.path == "/api/reference":
-                    return self._send(200, reference_snapshot(app.lens.root) |
+                    return self._send(200, app.lens.snapshot() |
                                       {"files": len(app.lens.files)})
                 if u.path == "/api/ledger":
                     sid = parse_qs(u.query).get("id", [""])[0]

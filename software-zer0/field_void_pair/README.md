@@ -19,6 +19,8 @@ Both AIs get the same **repo lens**, which is the shared reference (0):
 2. **MAP**: every tracked file in the repo, grouped by directory.
 3. **FOCUS**: tf-idf retrieval over every tracked text file, run again each turn from the goal and Void's last note.
 
+The lens reads a checkout when there is one. Otherwise it reads the bundled snapshot, which holds the same files.
+
 **Algorythm-Zer0 decides each turn.** The loop imports `simulations/zer0_first_cycle.py` directly; it does not copy it.
 
 ```text
@@ -47,19 +49,29 @@ If Void's reply can't be parsed, it reads as HOLD with scores of 0, never as a p
 
 ## Download with a desktop icon
 
-There's one file to download: `fvpair-installer.sh`. Build it with
+There's one file to download: `fvpair-installer.sh` (about 7 MB). Build it with
 `./software-zer0/field_void_pair/build_installer.sh`, which writes `dist/fvpair-installer.sh`.
 
 ```bash
-bash fvpair-installer.sh                       # finds or clones ~/One-Wave-Science
-bash fvpair-installer.sh --repo ~/code/One-Wave-Science
+bash fvpair-installer.sh                       # uses the snapshot inside the installer
+bash fvpair-installer.sh --repo ~/code/One-Wave-Science   # or read a checkout you already have
 ```
 
-The installer needs `python3` and works without sudo. It does the following:
-- puts a **Field/Void Pair** icon on the desktop and adds an app-menu entry
-- adds the `fvpair` and `fvpair-launch` commands to `~/.local/bin`
-- writes `~/.config/fvpair/env` (chmod 600), which holds the repo path and your API keys.
+**It never clones the repo.** The installer carries a compressed text snapshot of the whole repo,
+`lens_bundle.tar.xz`: every tracked text file plus the full file list, about 5 MB. The program reads
+that snapshot in memory and never unpacks it. If a checkout is already on the machine, the
+installer uses it instead and deletes the snapshot.
+
+- Space needed: about 5.2 MB after install. The installer checks for 8 MB free first and stops,
+  writing nothing, if there isn't enough. Delete `fvpair-installer.sh` after installing to get its 7 MB back.
+- It needs `python3`, and no sudo or git.
+- It puts a **Field/Void Pair** icon on the desktop and adds an app-menu entry.
+- It adds the `fvpair` and `fvpair-launch` commands to `~/.local/bin`.
+- It writes `~/.config/fvpair/env` (chmod 600) for your API keys, and the repo path if you used `--repo`.
   Desktop launches don't see your shell's environment, so put your keys in this file.
+
+The snapshot is fixed at build time. Its commit is shown in the app's reference line,
+labeled `bundle:`. Rebuild the installer to pick up newer repo content.
 
 Double-click the icon to start the app in the background and open your browser.
 To stop it, right-click the icon and choose **Stop Field/Void Pair**.
