@@ -12,7 +12,7 @@ A-101 ground
   -> DRAFT-R resistance = mass / organization
   -> DRAFT-P point rotation
   -> DRAFT-B parent-child bind
-  -> C-320 light magnetic weight K_L
+  -> C-320 magnetic path weight K_L
   -> D-413 orbital bench
   -> D-416 lock output
   -> E-528 path redshift
@@ -38,9 +38,13 @@ No scale factor anywhere in this chain.
 
 DRAFT-R. Resistance. mass / organization. Mass is not a second clock.
 
-DRAFT-P. Point rotation. The shared organization tries to make this the same for bodies on one lattice.
+DRAFT-P. Point rotation. The shared organization tries to make point rotation the same for bodies on one lattice.
 
 DRAFT-B. Parent-child bind. Parent wake scale must reach the child. A wake at 12 with bodies at 1.6 is not a bind.
+
+## Open, not written in
+
+kappa_R is not set. A guess that Earth's field couples lightly is a guess. It is not a node. Strength is whatever the on/off switch measures.
 
 ## Solver contract
 
@@ -48,4 +52,4 @@ Pass bit is point rotation, not spread. Step divides by resistance. Parent off l
 
 ## Not in this system
 
-Expansion. A Hubble term. Sigma from an inserted mass gap. A lunar dipole required for the lock.
+Expansion. A Hubble term. Sigma from an inserted mass gap. A lunar dipole required for the lock. A guessed coupling strength.
