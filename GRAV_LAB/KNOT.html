@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>Proton knot</title>
+<style>html,body{margin:0;height:100%;background:#140e0a;color:#f3e2c4;font:15px/1.4 Georgia,serif}main{display:grid;grid-template-columns:1fr 260px;height:100%}canvas{width:100%;height:100%;background:#100c09}aside{padding:16px;border-left:1px solid #5a4636}a{color:#ffb15e}</style></head>
+<body><main><canvas id="c"></canvas><aside><h1>Knot</h1><p>This sim is only the closed braid. The phases drive it. They are not drawn.</p><p><a href="LATTICE.html">Lattice</a> · <a href="VORTICES.html">Vortices</a> · <a href="COMBINED.html">Combined</a></p></aside></main>
+<script src="modules/vortices.js"></script><script src="modules/knot.js"></script><script src="modules/knot_view.js"></script>
+<script>const cv=document.getElementById("c"),ctx=cv.getContext("2d");const vortices=OW.vortices();function resize(){cv.width=cv.clientWidth*devicePixelRatio;cv.height=cv.clientHeight*devicePixelRatio}addEventListener("resize",resize);resize();function frame(){OW.stepVortices(vortices);const pts=OW.knot(vortices);const w=cv.width,h=cv.height,scale=Math.min(w,h)*0.18;ctx.fillStyle="#100c09";ctx.fillRect(0,0,w,h);OW.drawKnot(ctx,pts,w/2,h/2,scale,devicePixelRatio);requestAnimationFrame(frame)}frame();</script></body></html>
