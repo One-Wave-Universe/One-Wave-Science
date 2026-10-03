@@ -112,6 +112,7 @@ class DeepSeekWebAgent:
         web_search: bool = False,
         expert_mode: bool = False,
         post_json: Callable[[str, dict[str, Any], dict[str, str], int], dict[str, Any]] = _json_post,
+        allow_tools: bool = True,
     ) -> None:
         self.mcp = mcp
         self.web_api_key = (web_api_key or _load_web_key()).strip()
@@ -124,17 +125,19 @@ class DeepSeekWebAgent:
         self.web_search = web_search
         self.expert_mode = expert_mode
         self._post_json = post_json
+        self.allow_tools = allow_tools
 
     def _chat(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "messages": messages,
-            "tools": DEEPSEEK_TOOLS,
             "extra_body": {
                 "deepthink": self.deepthink,
                 "web_search": self.web_search,
                 "expert_mode": self.expert_mode,
             },
         }
+        if self.allow_tools:
+            payload["tools"] = DEEPSEEK_TOOLS
         response = self._post_json(
             f"{self.base_url}/v1/chat/completions",
             payload,
@@ -225,6 +228,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--web-search", action="store_true")
     parser.add_argument("--expert-mode", action="store_true")
     parser.add_argument("--max-tool-rounds", type=int, default=MAX_TOOL_ROUNDS)
+    parser.add_argument("--no-tools", action="store_true", help="Do not expose Hive Pipe tools to the provider")
     parser.add_argument(
         "--relay-health",
         action="store_true",
@@ -262,6 +266,7 @@ def main(argv: list[str] | None = None) -> int:
         deepthink=not args.no_deepthink,
         web_search=args.web_search,
         expert_mode=args.expert_mode,
+        allow_tools=not args.no_tools,
     )
     print(agent.run(prompt, max_tool_rounds=max(1, args.max_tool_rounds)))
     return 0

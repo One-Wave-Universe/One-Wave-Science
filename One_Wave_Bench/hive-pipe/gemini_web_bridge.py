@@ -38,12 +38,15 @@ def get_json(url: str, timeout: int = 15) -> dict[str, Any]:
     return data
 
 class GeminiWebAgent:
-    def __init__(self, mcp: HivePipeClient, base_url: str | None = None) -> None:
+    def __init__(self, mcp: HivePipeClient, base_url: str | None = None, *, allow_tools: bool = True) -> None:
         self.mcp = mcp
         self.base_url = (base_url or os.environ.get("GEMINI_WEB_BASE_URL", DEFAULT_BASE)).rstrip("/")
+        self.allow_tools = allow_tools
 
     def chat(self, messages: list[dict[str, Any]]) -> dict[str, Any]:
-        payload = {"messages": messages, "tools": DEEPSEEK_TOOLS}
+        payload = {"messages": messages}
+        if self.allow_tools:
+            payload["tools"] = DEEPSEEK_TOOLS
         response = post_json(f"{self.base_url}/v1/chat/completions", payload)
         choices = response.get("choices")
         if not isinstance(choices, list) or not choices:
@@ -107,6 +110,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-tool-rounds", type=int, default=MAX_TOOL_ROUNDS)
     ap.add_argument("--relay-health", action="store_true")
     ap.add_argument("--mcp-smoke", action="store_true")
+    ap.add_argument("--no-tools", action="store_true", help="Do not expose Hive Pipe tools to the provider")
     args = ap.parse_args(argv)
 
     base = os.environ.get("GEMINI_WEB_BASE_URL", DEFAULT_BASE).rstrip("/")
@@ -130,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
     if not prompt:
         ap.error("prompt is empty")
 
-    print(GeminiWebAgent(mcp, base).run(prompt, max(1, args.max_tool_rounds)))
+    print(GeminiWebAgent(mcp, base, allow_tools=not args.no_tools).run(prompt, max(1, args.max_tool_rounds)))
     return 0
 
 if __name__ == "__main__":
