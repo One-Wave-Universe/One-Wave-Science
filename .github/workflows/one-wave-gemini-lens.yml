@@ -1,0 +1,51 @@
+name: One-Wave Gemini Lens
+on:
+  workflow_dispatch:
+    inputs:
+      question:
+        description: Question for Gemini through the full One-Wave repository lens
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  ask-gemini:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build full-repo lens manifest
+        run: |
+          git rev-parse HEAD > /tmp/repo_sha
+          git ls-files -z | xargs -0 sha256sum > /tmp/repo_manifest.sha256
+          python3 - <<'PY'
+          from pathlib import Path
+          allowed={".md",".txt",".json",".yaml",".yml",".py"}
+          root=Path(".")
+          with open("/tmp/one_wave_full_repo.txt","w",encoding="utf-8") as out:
+              for p in sorted(root.rglob("*")):
+                  if not p.is_file() or ".git" in p.parts or p.suffix.lower() not in allowed: continue
+                  try: text=p.read_text(encoding="utf-8",errors="replace")
+                  except OSError: continue
+                  out.write(f"\n\n===== REPO FILE: {p} =====\n{text}")
+          PY
+      - name: Ask Gemini with canonical repo as primary reference
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          QUESTION: ${{ inputs.question }}
+        run: |
+          test -n "$GEMINI_API_KEY" || { echo "GEMINI_API_KEY secret missing"; exit 2; }
+          python3 scripts/github_gemini_lens.py \
+            --repo-context /tmp/one_wave_full_repo.txt \
+            --manifest /tmp/repo_manifest.sha256 \
+            --question "$QUESTION" \
+            --out /tmp/gemini_answer.md
+          cat /tmp/gemini_answer.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: one-wave-gemini-answer
+          path: |
+            /tmp/gemini_answer.md
+            /tmp/repo_manifest.sha256
+            /tmp/repo_sha
