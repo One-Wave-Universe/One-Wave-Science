@@ -48,6 +48,8 @@ Candidate interpretation:
 
 This language is a mechanism proposal, not yet a derivation.
 
+To render this hypothesis testable, documentation must explicitly specify a measurable upper bound on local update frequency or information throughput as a function of velocity relative to the propagation ceiling.
+
 ## Existing Propagation Spine
 
 Continuum wave equation:
