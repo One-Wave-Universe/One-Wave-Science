@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Desktop-icon launcher: start the Field/Void Pair app if needed, then open the browser.
+#   fvpair-launch          start (or reuse) the app and open it
+#   fvpair-launch --stop   stop the background app
+set -uo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+CONF="${XDG_CONFIG_HOME:-$HOME/.config}/fvpair"
+STATE="${XDG_STATE_HOME:-$HOME/.local/state}/fvpair"
+PORT="${FVPAIR_PORT:-8742}"
+URL="http://127.0.0.1:$PORT/"
+mkdir -p "$STATE"
+
+# Desktop launches do not inherit your shell, so repo path and API keys live here.
+if [[ -f "$CONF/env" ]]; then set -a; . "$CONF/env"; set +a; fi
+
+up() { python3 - "$URL" <<'PY'
+import sys, urllib.request
+try:
+    urllib.request.urlopen(sys.argv[1] + "api/reference", timeout=1); sys.exit(0)
+except Exception:
+    sys.exit(1)
+PY
+}
+
+say() {
+  if command -v notify-send >/dev/null; then notify-send "Field/Void Pair" "$1"; fi
+  echo "$1"
+}
+
+if [[ "${1:-}" == "--stop" ]]; then
+  if [[ -f "$STATE/server.pid" ]] && kill "$(cat "$STATE/server.pid")" 2>/dev/null; then
+    rm -f "$STATE/server.pid"; say "stopped"
+  else
+    say "not running"
+  fi
+  exit 0
+fi
+
+if ! up; then
+  nohup python3 "$HERE/cli.py" serve --port "$PORT" --no-browser >"$STATE/server.log" 2>&1 &
+  echo $! >"$STATE/server.pid"
+  for _ in $(seq 1 60); do up && break; sleep 0.5; done
+  if ! up; then
+    say "could not start — see $STATE/server.log"
+    exit 1
+  fi
+fi
+xdg-open "$URL" >/dev/null 2>&1 || python3 -m webbrowser "$URL" >/dev/null 2>&1 || echo "open $URL"

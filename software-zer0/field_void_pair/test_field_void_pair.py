@@ -64,6 +64,16 @@ class LensTests(unittest.TestCase):
         self.assertIn("nope/missing.py", bad)
         self.assertIn("Ghost.md", bad)
 
+    def test_fvpair_repo_env_points_lens_at_repo(self):
+        from repo_lens import find_repo_root
+        os.environ["FVPAIR_REPO"] = str(LENS.root)
+        try:
+            self.assertEqual(find_repo_root(Path("/")), LENS.root.resolve())
+        finally:
+            del os.environ["FVPAIR_REPO"]
+        with self.assertRaises(FileNotFoundError):
+            find_repo_root(Path("/"))
+
     def test_grounding_score(self):
         self.assertEqual(grounding_score([], []), -1.0)
         self.assertEqual(grounding_score(["a"], []), 1.0)

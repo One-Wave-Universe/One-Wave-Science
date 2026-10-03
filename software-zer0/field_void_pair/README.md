@@ -45,11 +45,33 @@ The loop stops on any of these (`AGENTS.md`):
 
 If Void's reply can't be parsed, it reads as HOLD with scores of 0, never as a pass.
 
+## Download with a desktop icon
+
+There's one file to download: `fvpair-installer.sh`. Build it with
+`./software-zer0/field_void_pair/build_installer.sh`, which writes `dist/fvpair-installer.sh`.
+
+```bash
+bash fvpair-installer.sh                       # finds or clones ~/One-Wave-Science
+bash fvpair-installer.sh --repo ~/code/One-Wave-Science
+```
+
+The installer needs `python3` and works without sudo. It does the following:
+- puts a **Field/Void Pair** icon on the desktop and adds an app-menu entry
+- adds the `fvpair` and `fvpair-launch` commands to `~/.local/bin`
+- writes `~/.config/fvpair/env` (chmod 600), which holds the repo path and your API keys.
+  Desktop launches don't see your shell's environment, so put your keys in this file.
+
+Double-click the icon to start the app in the background and open your browser.
+To stop it, right-click the icon and choose **Stop Field/Void Pair**.
+On GNOME, if the icon does nothing, right-click it and choose **Allow Launching**.
+To remove everything except your key file, run `~/.local/share/fvpair/app/install_linux.sh --uninstall`.
+
+If you already have the repo checked out, `./software-zer0/field_void_pair/install_linux.sh`
+installs the same way straight from the checkout.
+
 ## Linux program
 
 ```bash
-./software-zer0/field_void_pair/install_linux.sh     # ~/.local/bin/fvpair + app-menu entry
-
 fvpair providers                                     # which keys are set
 fvpair run "your goal" --field anthropic --void deepseek --turns 8
 fvpair run "your goal" --field anthropic:claude-opus-5-5 --void gemini:gemini-2.5-flash
@@ -68,7 +90,6 @@ Reference Point Zero snapshot (root, branch, HEAD, dirty). The default location 
 fvpair serve            # opens http://127.0.0.1:8742/
 ```
 
-You can also open **Field/Void Pair** from the desktop app menu after running `install_linux.sh`.
 The app shows Field and Void side by side, the X/Y/Z trits for each turn, the resolved
 move, and a chart of the moving reference `r`. You can halt a run and download its ledger.
 The app runs on the same core as the CLI; the browser only displays it.

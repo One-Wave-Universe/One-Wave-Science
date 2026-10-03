@@ -54,12 +54,22 @@ STOP = {
 }
 
 
+def _is_root(p: Path) -> bool:
+    return (p / "AGENTS.md").is_file() and (p / "simulations" / "zer0_first_cycle.py").is_file()
+
+
 def find_repo_root(start: Path | None = None) -> Path:
+    """FVPAIR_REPO wins (set by the desktop installer), else search upward."""
+    env = os.environ.get("FVPAIR_REPO")
+    if env and _is_root(Path(env).expanduser()):
+        return Path(env).expanduser().resolve()
     here = (start or Path(__file__)).resolve()
     for p in [here, *here.parents]:
-        if (p / "AGENTS.md").is_file() and (p / "simulations" / "zer0_first_cycle.py").is_file():
+        if _is_root(p):
             return p
-    raise FileNotFoundError("One-Wave-Science root not found above " + str(here))
+    raise FileNotFoundError(
+        "One-Wave-Science repo not found. Set FVPAIR_REPO=/path/to/One-Wave-Science "
+        "(the installer writes it to ~/.config/fvpair/env).")
 
 
 def list_tracked(root: Path) -> list[str]:
