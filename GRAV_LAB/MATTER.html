@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><title>Matter</title>
+<style>html,body{margin:0;height:100%;background:#0c0a08;color:#f3e2c4;font:16px/1.4 Georgia,serif;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{position:absolute;top:16px;right:16px;width:240px;padding:14px;background:rgba(12,10,8,.8);border:1px solid #5a4636}button{margin:6px 6px 0 0;background:#e39b4a;color:#1a120c;border:0;padding:8px 10px;font:inherit}</style></head>
+<body><canvas id="c"></canvas><aside><strong>Matter</strong><p>Drag to turn. Close pack, knot, three vortices, radial E, rotational B.</p><button id="e" type="button">E on</button><button id="b" type="button">B on</button><button id="k" type="button">Knot on</button></aside>
+<script>
+const cv=document.getElementById("c"), ctx=cv.getContext("2d");
+const s3=Math.sqrt(3), dz=Math.sqrt(6)/3, sites=[];
+for(let L=-2;L<=2;L++){const shift=Math.abs(L)%2; for(let i=-3;i<=3;i++) for(let j=-3;j<=3;j++){const x=i+j/2+shift*0.5, y=j*s3/2+shift*s3/6, z=L*dz; if(x*x+y*y+z*z>8) continue; sites.push([x,y,z]);}}
+const bonds=[];
+for(let a=0;a<sites.length;a++) for(let b=a+1;b<sites.length;b++){const dx=sites[a][0]-sites[b][0], dy=sites[a][1]-sites[b][1], dzv=sites[a][2]-sites[b][2]; if(dx*dx+dy*dy+dzv*dzv<1.05) bonds.push([a,b]);}
+let yaw=0.6, pitch=0.4, drag=null, showE=true, showB=true, showK=true;
+cv.addEventListener("pointerdown", e=>{drag=[e.clientX,e.clientY,yaw,pitch];});
+addEventListener("pointerup", ()=>drag=null);
+addEventListener("pointermove", e=>{ if(!drag) return; yaw=drag[2]+(e.clientX-drag[0])*0.01; pitch=Math.max(-1.2, Math.min(1.2, drag[3]+(e.clientY-drag[1])*0.01)); });
+document.getElementById("e").onclick=()=>showE=!showE;
+document.getElementById("b").onclick=()=>showB=!showB;
+document.getElementById("k").onclick=()=>showK=!showK;
+function resize(){ cv.width=innerWidth*devicePixelRatio; cv.height=innerHeight*devicePixelRatio; }
+addEventListener("resize", resize); resize();
+function project(x,y,z){ const xr=x*Math.cos(yaw)-z*Math.sin(yaw); let zr=x*Math.sin(yaw)+z*Math.cos(yaw); const yr=y*Math.cos(pitch)-zr*Math.sin(pitch); zr=y*Math.sin(pitch)+zr*Math.cos(pitch); const depth=9+zr; const s=Math.min(cv.width, cv.height)*0.11/depth; return [cv.width/2+xr*s*8, cv.height/2-yr*s*8, depth]; }
+function frame(t){ ctx.fillStyle="#0c0a08"; ctx.fillRect(0,0,cv.width,cv.height); const pts=sites.map(p=>project(p[0],p[1],p[2])); ctx.strokeStyle="rgba(180,140,80,0.45)"; ctx.lineWidth=1.5*devicePixelRatio; for(const [i,j] of bonds){ ctx.beginPath(); ctx.moveTo(pts[i][0], pts[i][1]); ctx.lineTo(pts[j][0], pts[j][1]); ctx.stroke(); } const order=pts.map((p,i)=>i).sort((a,b)=>pts[b][2]-pts[a][2]); for(const i of order){ const r=Math.hypot(...sites[i]); const chi=Math.exp(-r/1.6); const rad=Math.max(4, 18*devicePixelRatio/pts[i][2]); ctx.beginPath(); ctx.arc(pts[i][0], pts[i][1], rad, 0, 7); ctx.fillStyle=`rgb(${40+180*chi},${24+100*chi},${12+24*chi})`; ctx.fill(); } if(showK){ ctx.beginPath(); for(let i=0;i<=120;i++){ const a=i/120*Math.PI*2; const braid=0.25*Math.sin(3*a+t*0.002); const p=project((1.1+braid)*Math.cos(a),(1.1+braid)*Math.sin(a),0.15*Math.sin(2*a)); i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); } ctx.strokeStyle="#f3e2c4"; ctx.lineWidth=3*devicePixelRatio; ctx.stroke(); for(let k=0;k<3;k++){ const a=2*Math.PI*k/3; const p=project(1.1*Math.cos(a),1.1*Math.sin(a),0); ctx.beginPath(); ctx.arc(p[0],p[1],16*devicePixelRatio,a+t*0.002,a+t*0.002+4); ctx.strokeStyle="#ffb15e"; ctx.stroke(); } } if(showE){ ctx.strokeStyle="#5ab4ff"; ctx.lineWidth=2*devicePixelRatio; for(let k=0;k<8;k++){ const a=2*Math.PI*k/8; const p0=project(1.4*Math.cos(a),1.4*Math.sin(a),0); const p1=project(2*Math.cos(a),2*Math.sin(a),0); ctx.beginPath(); ctx.moveTo(p0[0],p0[1]); ctx.lineTo(p1[0],p1[1]); ctx.stroke(); } } if(showB){ ctx.beginPath(); for(let i=0;i<=80;i++){ const a=i/80*Math.PI*2+t*0.001; const p=project(2.3*Math.cos(a),2.3*Math.sin(a),0.3); i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); } ctx.strokeStyle="#c48cff"; ctx.lineWidth=3*devicePixelRatio; ctx.stroke(); } requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+</script></body></html>
