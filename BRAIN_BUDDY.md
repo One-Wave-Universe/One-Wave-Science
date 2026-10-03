@@ -16,6 +16,7 @@ Canonical implementation:
 - `scripts/brain_buddy_council.py`
 - launcher: `scripts/brain_buddy_council.sh`
 - behavior contract: `BRAIN_BUDDY_COUNCIL.md`
+- canonical rulebook (purpose, Council rules, worker contract): `BRAIN_BUDDY_CANONICAL_RULES.md`
 
 Historical recovery anchor:
 
