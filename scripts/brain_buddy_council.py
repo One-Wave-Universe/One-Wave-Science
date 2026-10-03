@@ -9,8 +9,8 @@ Modes:
   deepseek-gemini
   discussion
 
-The council is orchestration only. Each worker still enters through its existing
-bounded wrapper and the canonical One-Wave reference rules.
+The council is orchestration only. Each worker is forced to start from the
+canonical One-Wave reference files. Memory and peer text do not outrank them.
 """
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ MODES = (
     "discussion",
 )
 
-REFERENCE_PREAMBLE = """BRAIN BUDDY COUNCIL — ONE-WAVE REFERENCE + RESEARCH CONTRACT\n\nBefore answering:\n1. Reference GENERAL_REFERENCE_RULES.md.\n2. Reference AI_CANONICAL_START_HERE.md.\n3. Reference Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md.\n4. Read YAML/front-matter metadata for every governed node actually used.\n5. Reference only the exact task-specific repo files needed after those authorities.\n6. Define the exact claim/test before external research.\n7. If current literature, measurements, CERN/LIGO/public data, or outside claims are needed, research them only after the repo claim/test is defined.\n8. Keep external source metadata/provenance distinct from One-Wave node metadata.\n9. Distinguish established external evidence from One-Wave hypotheses.\n10. Bring external findings back to the exact repo claim and classify them as support, contradiction, or inconclusive.\n11. Do not claim any command, experiment, or external lookup ran without a receipt/source.\n12. Do not edit, commit, merge, push, or expose secrets.\n13. Cite exact repo paths and external sources actually used.\n14. Return HOLD with the exact missing reference/evidence if grounding cannot be completed.\n\nReference/research loop:\nREFERENCE GIT -> DEFINE CLAIM/TEST -> I-06 METADATA -> EXTERNAL RESEARCH/DATA AS NEEDED -> VALIDATE -> RETURN TO REFERENCE\n"""
+REFERENCE_PREAMBLE = """BRAIN BUDDY COUNCIL — REFERENCE IS FIRST\n\nThe files above were loaded before this question. They outrank chat memory, peer answers, and this preamble.\nDo not answer until you have used them.\nIf a governed node is involved, use its YAML/front matter, not a prose recollection.\nDefine the repo claim before any external research.\nIf the reference is missing or conflicts, return HOLD and name the missing path.\nDo not edit, commit, merge, push, or expose secrets from this prompt.\nCite the exact repo paths actually used.\n"""
 
 
 class CouncilError(RuntimeError):
@@ -70,6 +70,22 @@ def repo_root() -> Path:
         if not (root / name).exists():
             raise CouncilError(f"Required canonical reference missing: {name}")
     return root
+
+
+def forced_reference(root: Path) -> str:
+    """Read the authority files and put them in front of every question."""
+    chunks = [
+        "FORCED REFERENCE — this block is first. Chat memory does not outrank it.",
+    ]
+    for name in ROOT_FILES:
+        path = root / name
+        text = path.read_text(encoding="utf-8").strip()
+        if not text:
+            raise CouncilError(f"Required canonical reference is empty: {name}")
+        if len(text) > 12000:
+            text = text[:12000] + f"\n\n[truncated in prompt; full authority remains {name}]"
+        chunks.append(f"===== {name} =====\n{text}")
+    return "\n\n".join(chunks)
 
 
 def read_prompt(value: str) -> str:
@@ -102,7 +118,6 @@ def gemini_text(raw: str) -> str:
         if isinstance(v, str) and v.strip():
             return v.strip()
 
-    # Gemini CLI commonly returns a nested result/candidates structure.
     result = obj.get("result")
     if isinstance(result, str) and result.strip():
         return result.strip()
@@ -134,6 +149,8 @@ def gemini_text(raw: str) -> str:
 
 
 def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, Any]:
+    if "FORCED REFERENCE" not in prompt or "GENERAL_REFERENCE_RULES.md" not in prompt:
+        raise CouncilError("Refusing to call a worker without the forced reference block.")
     if worker == "gemini":
         cmd = ["python3", "One_Wave_Bench/hive-pipe/gemini_web_bridge.py", "--max-tool-rounds", "12", prompt]
     elif worker == "deepseek":
@@ -185,8 +202,8 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
     }
 
 
-def bounded_prompt(question: str, extra: str = "") -> str:
-    blocks = [REFERENCE_PREAMBLE, "USER QUESTION:\n" + question]
+def bounded_prompt(root: Path, question: str, extra: str = "") -> str:
+    blocks = [forced_reference(root), REFERENCE_PREAMBLE, "USER QUESTION:\n" + question]
     if extra.strip():
         blocks.append(extra.strip())
     return "\n\n".join(blocks)
@@ -220,8 +237,9 @@ def run_parallel(root: Path, prompt: str, timeout: int) -> list[dict[str, Any]]:
     return [by_name["gemini"], by_name["deepseek"]]
 
 
-def handoff_prompt(question: str, first_name: str, first_answer: str) -> str:
+def handoff_prompt(root: Path, question: str, first_name: str, first_answer: str) -> str:
     return bounded_prompt(
+        root,
         question,
         f"""PEER HANDOFF
 
@@ -230,13 +248,14 @@ def handoff_prompt(question: str, first_name: str, first_answer: str) -> str:
 {first_answer}
 ---
 
-Review that answer against the canonical repo references. Identify agreements,
+Review that answer against the forced reference above. Identify agreements,
 disagreements, unsupported claims, and the strongest correction or extension.
 Do not merely summarize the peer. Finish with your own current answer.""",
     )
 
 
 def discussion_turn_prompt(
+    root: Path,
     question: str,
     turns: list[dict[str, str]],
     worker: str,
@@ -244,12 +263,14 @@ def discussion_turn_prompt(
 ) -> str:
     peer = "DeepSeek" if worker == "gemini" else "Gemini"
     return bounded_prompt(
+        root,
         question,
         f"""OPEN COUNCIL DISCUSSION — ROUND {round_no}
 
 Participants are the user, Gemini, and DeepSeek.
 You are {worker.title()}. {peer} is a peer reviewer, not an authority.
 The user controls the question and may redirect the discussion.
+The forced reference above outranks the discussion so far.
 
 DISCUSSION SO FAR:
 ---
@@ -290,6 +311,7 @@ def save_transcript(root: Path, mode: str, question: str, turns: list[dict[str, 
         "",
         f"- mode: {mode}",
         f"- repository: One-Wave-Universe/One-Wave-Science",
+        "- reference first: GENERAL_REFERENCE_RULES.md, AI_CANONICAL_START_HERE.md, Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md",
         "",
         "## User question",
         "",
@@ -349,7 +371,7 @@ def main() -> int:
         raise CouncilError("Question is empty.")
 
     turns: list[dict[str, str]] = [{"speaker": "user", "text": question}]
-    base = bounded_prompt(question)
+    base = bounded_prompt(root, question)
 
     if mode == "gemini":
         r = run_worker(root, "gemini", base, args.timeout)
@@ -379,7 +401,7 @@ def main() -> int:
             r2 = run_worker(
                 root,
                 second,
-                handoff_prompt(question, first, r1["answer"]),
+                handoff_prompt(root, question, first, r1["answer"]),
                 args.timeout,
             )
             print_result(r2)
@@ -391,7 +413,7 @@ def main() -> int:
         rounds = max(1, min(args.rounds, 12))
         for round_no in range(1, rounds + 1):
             for worker in ("gemini", "deepseek"):
-                prompt = discussion_turn_prompt(question, turns, worker, round_no)
+                prompt = discussion_turn_prompt(root, question, turns, worker, round_no)
                 r = run_worker(root, worker, prompt, args.timeout)
                 print_result(r)
                 turns.append({"speaker": worker, "text": r["answer"] or r["stderr"]})
