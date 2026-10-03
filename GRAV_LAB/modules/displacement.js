@@ -1,0 +1,24 @@
+window.OW = window.OW || {};
+OW.displacement = function (field) {
+  const b = field.kids[0];
+  const h = 0.02;
+  const amp = field.parent.amp;
+  const sigma = field.parent.sigma;
+  const c = (x, y) => amp * OW.wake(Math.hypot(x, y), sigma);
+  const gx = (c(b.x + h, b.y) - c(b.x - h, b.y)) / (2 * h);
+  const gy = (c(b.x, b.y + h) - c(b.x, b.y - h)) / (2 * h);
+  const V = c(b.x, b.y);
+  const slope = Math.hypot(gx, gy);
+  const th = Math.atan2(b.y, b.x);
+  if (field._th == null) field._th = th;
+  let dth = th - field._th;
+  if (dth > Math.PI) dth -= 2 * Math.PI;
+  if (dth < -Math.PI) dth += 2 * Math.PI;
+  field._th = th;
+  field.point = (field.point || 0) + 0.02;
+  field.path = dth / 0.03;
+  field.fieldRate = field.parent.rate || 0.07;
+  field.V = V;
+  field.slope = slope;
+  return { V, slope, point: field.point, path: field.path, field: field.fieldRate };
+};
