@@ -37,6 +37,35 @@ def get_json(url: str, timeout: int = 15) -> dict[str, Any]:
         raise RuntimeError("Gemini relay returned non-object JSON")
     return data
 
+def textual_tool_calls(message: dict[str, Any]) -> list[dict[str, Any]]:
+    """Normalize Gemini web replies that emit a tool call as JSON text."""
+    content = message.get("content")
+    if not isinstance(content, str) or not content.strip():
+        return []
+    try:
+        obj = json.loads(content)
+    except json.JSONDecodeError:
+        return []
+    if not isinstance(obj, dict):
+        return []
+    call = obj.get("tool_call")
+    if not isinstance(call, dict):
+        return []
+    name = call.get("name")
+    arguments = call.get("arguments", {})
+    if not isinstance(name, str) or not name:
+        return []
+    if not isinstance(arguments, (dict, str)):
+        return []
+    return [{
+        "id": "gemini-text-tool-1",
+        "function": {
+            "name": name,
+            "arguments": arguments if isinstance(arguments, str) else json.dumps(arguments),
+        },
+    }]
+
+
 class GeminiWebAgent:
     def __init__(self, mcp: HivePipeClient, base_url: str | None = None) -> None:
         self.mcp = mcp
@@ -74,7 +103,10 @@ class GeminiWebAgent:
             if message.get("tool_calls") is not None:
                 assistant["tool_calls"] = message["tool_calls"]
             messages.append(assistant)
-            calls = message.get("tool_calls") or []
+            calls = message.get("tool_calls") or textual_tool_calls(message)
+            if calls and message.get("tool_calls") is None:
+                assistant["tool_calls"] = calls
+                messages[-1] = assistant
             if not calls:
                 return assistant["content"]
             for call in calls:
