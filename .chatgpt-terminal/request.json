@@ -1,14 +1,12 @@
 {
-  "id": "brain-buddy-original-one-question-20261002-03",
+  "id": "gemini-full-repo-lens-20261002-01",
   "argv": [
     "bash",
-    "scripts/brain_buddy_council.sh",
-    "both",
-    "What is the smallest concrete improvement we can make to Brain Buddy while preserving its existing working back-and-forth behavior?",
-    "--save"
+    "-lc",
+    "set -euo pipefail\ncd /home/Scales/One-Wave-Science\ntest \"$(git remote get-url origin | grep -c 'One-Wave-Universe/One-Wave-Science')\" -gt 0\ngit fetch origin main --quiet\ngit reset --hard origin/main >/dev/null\nPROMPT='You are Gemini working as Brain Buddy with ChatGPT on One-Wave-Science. The FULL canonical repository at /home/Scales/One-Wave-Science is your primary project reference, not a pasted summary. First read GENERAL_REFERENCE_RULES.md and AI_CANONICAL_START_HERE.md. Then follow their authority chain and inspect any repo files needed to answer. You have permission to search/read the whole repository, but do not edit anything. Distinguish repo claims from established science and from your own inference. Question: Pick one current One-Wave cosmology claim that is both important and falsifiable. State the exact canonical repo files you used, the strongest conventional-science objection, and the smallest decisive test or derivation to attack next. Keep it concise.'\ngemini --skip-trust --extensions none --model flash --approval-mode default --output-format json --prompt \"$PROMPT\""
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 300,
-  "intention": "Use the existing Brain Buddy implementation to ask Gemini and DeepSeek one bounded question and return their actual responses.",
-  "consequence": "Do not modify Brain Buddy, provider bridges, repository architecture, or credentials. Execute one question only and save/return the receipt; failure must be returned as failure."
+  "intention": "Ask Gemini one real science question with the full canonical One-Wave repository available as its primary reference, reached through the GitHub-secret Jetson relay.",
+  "consequence": "Read-only. Gemini may search/read the full canonical repo. Do not edit files, branches, credentials, bridges, or Brain Buddy."
 }
