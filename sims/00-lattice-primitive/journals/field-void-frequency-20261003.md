@@ -45,3 +45,8 @@ Stop this bounded problem once both accept the same tested solution. Do not clai
 
 ## Next evidence
 Boundary probe: sqrt(nextafter(4,+infinity)) rounds to 2 at dt=1. A guard relying only on that rounded square root can incorrectly accept an unstable value. Include this observation in the next peer pass.
+
+## Paused after laptop jam report
+The isolated Field candidate passed 10 original tests and 8 targeted checks on Jetson. Candidate and evidence checkpoint: field-void-g766-candidate-evidence-20261003.json under Jetson repo-lens runtime state.
+DeepSeek returned no accepted review: the first request failed upstream and the smaller review request ended without a response. No two-AI agreement exists and no simulator patch was committed.
+User reported laptop jamming. Model test paused; no further model requests. Dell remote terminal and process-list routes failed to return results; SSH from Jetson to Dell was refused. Targeted systemctl stop for one-wave-deepseek-web-relay.service was attempted but completion was not confirmed. Resource cause remains unverified. Preserve existing working-tree changes and the proven candidate; resume only after laptop responsiveness is restored.
