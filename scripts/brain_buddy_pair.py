@@ -10,11 +10,14 @@ the live seat has recorded that absence. Absence is not a vote.
 """
 from __future__ import annotations
 
+import sys
 import threading
 import time
 from pathlib import Path
 
-from brain_buddy_council import (
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from brain_buddy_council import (  # noqa: E402
     CouncilError,
     bounded_prompt,
     repo_root,
