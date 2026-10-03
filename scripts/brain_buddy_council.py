@@ -8,6 +8,7 @@ Modes:
   gemini-deepseek
   deepseek-gemini
   discussion
+  lead
 
 The council is orchestration only. Each worker still enters through its existing
 bounded wrapper and the canonical One-Wave reference rules.
@@ -16,14 +17,17 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import hashlib
 import json
 import os
 from pathlib import Path
+import re
+import secrets
 import subprocess
 import sys
 import textwrap
 import time
-from typing import Any
+from typing import Any, Callable
 
 ROOT_FILES = (
     "GENERAL_REFERENCE_RULES.md",
@@ -38,7 +42,19 @@ MODES = (
     "gemini-deepseek",
     "deepseek-gemini",
     "discussion",
+    "lead",
 )
+
+# Seats this script can call directly today. ChatGPT/Claude adapters come later.
+SEATS = ("gemini", "deepseek")
+
+# Provider states (BRAIN_BUDDY_CANONICAL_RULES.md rules 15, 16, 45).
+PENDING = "PENDING"
+ACTIVE = "ACTIVE"
+OFFLINE = "OFFLINE"
+AUTH_FAILURE = "AUTH FAILURE"
+INVALID_RETURN = "INVALID RETURN"
+OUT_TO_LUNCH = "OUT TO LUNCH"
 
 REFERENCE_PREAMBLE = """BRAIN BUDDY COUNCIL — ONE-WAVE REFERENCE + RESEARCH CONTRACT\n\nBefore answering:\n1. Reference GENERAL_REFERENCE_RULES.md.\n2. Reference AI_CANONICAL_START_HERE.md.\n3. Reference Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md.\n4. Read YAML/front-matter metadata for every governed node actually used.\n5. Reference only the exact task-specific repo files needed after those authorities.\n6. Define the exact claim/test before external research.\n7. If current literature, measurements, CERN/LIGO/public data, or outside claims are needed, research them only after the repo claim/test is defined.\n8. Keep external source metadata/provenance distinct from One-Wave node metadata.\n9. Distinguish established external evidence from One-Wave hypotheses.\n10. Bring external findings back to the exact repo claim and classify them as support, contradiction, or inconclusive.\n11. Do not claim any command, experiment, or external lookup ran without a receipt/source.\n12. Do not edit, commit, merge, push, or expose secrets.\n13. Cite exact repo paths and external sources actually used.\n14. Return HOLD with the exact missing reference/evidence if grounding cannot be completed.\n\nReference/research loop:\nREFERENCE GIT -> DEFINE CLAIM/TEST -> I-06 METADATA -> EXTERNAL RESEARCH/DATA AS NEEDED -> VALIDATE -> RETURN TO REFERENCE\n"""
 
@@ -168,6 +184,7 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
             "elapsed_s": elapsed,
             "answer": "",
             "stderr": f"Timed out after {timeout}s while preserving the other Council participant.",
+            "timed_out": True,
         }
 
     elapsed = round(time.monotonic() - started, 3)
@@ -182,6 +199,7 @@ def run_worker(root: Path, worker: str, prompt: str, timeout: int) -> dict[str, 
         "elapsed_s": elapsed,
         "answer": answer,
         "stderr": stderr,
+        "timed_out": False,
     }
 
 
@@ -304,6 +322,335 @@ def save_transcript(root: Path, mode: str, question: str, turns: list[dict[str, 
     return path
 
 
+# ---------------------------------------------------------------------------
+# Lead mode: the Rule 50 core.
+#
+# Whichever seat received the question leads. The lead answers from the repo,
+# the other seats review, and the lead refines while a material objection is
+# still active. There is no fixed round count: the loop returns when no active
+# objection remains, when it stops making progress, when the lead or every
+# reviewer is unavailable, or when the user stops it. A transport timeout only
+# marks a provider state; it never completes the deliberation.
+# ---------------------------------------------------------------------------
+
+RETURN_ID_RE = re.compile(r"^[ \t`*_]*RETURN_ID:[ \t]*`?([A-Za-z0-9-]+)`?[ \t`*_]*$", re.MULTILINE)
+VERDICT_RE = re.compile(
+    r"^[ \t>*_-]*VERDICT:[ \t*_]*(NO MATERIAL OBJECTION|OBJECTION)\b",
+    re.MULTILINE | re.IGNORECASE,
+)
+
+FAILURE_PATTERNS = (
+    (AUTH_FAILURE, re.compile(r"HTTP(?: Error)? (?:401|403)\b|unauthori[sz]ed|forbidden|not allowed|invalid api key|key is empty|key file|token not found|missing token", re.IGNORECASE)),
+    (OUT_TO_LUNCH, re.compile(r"HTTP(?: Error)? 429\b|quota|rate.?limit|usage limit|subscription", re.IGNORECASE)),
+    (OFFLINE, re.compile(r"Unable to reach|Connection refused|No route to host|Name or service not known|Temporary failure in name resolution|urlopen error|Network is unreachable", re.IGNORECASE)),
+    (INVALID_RETURN, re.compile(r"missing choices|missing message|missing assistant message|non-object JSON|Non-JSON|malformed", re.IGNORECASE)),
+)
+
+
+def classify_failure(result: dict[str, Any], transport_timeout: int) -> tuple[str, str]:
+    """Map a failed worker call to an explicit provider state and reason."""
+    if result.get("timed_out"):
+        return OUT_TO_LUNCH, f"no transport response within {transport_timeout}s"
+    stderr = result.get("stderr", "") or ""
+    tail = stderr.strip().splitlines()[-1] if stderr.strip() else ""
+    for state, pattern in FAILURE_PATTERNS:
+        if pattern.search(stderr):
+            return state, tail or state.lower()
+    return OUT_TO_LUNCH, f"bridge failure (exit {result.get('exit_code')}): {tail}".rstrip(": ")
+
+
+def new_request_id() -> str:
+    return time.strftime("bb-%Y%m%d-%H%M%S-") + secrets.token_hex(3)
+
+
+def baseline_identity(root: Path) -> str:
+    p = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, check=False
+    )
+    return p.stdout.strip() or "unknown"
+
+
+def tag_prompt(prompt: str, request_id: str, baseline: str, return_id: str) -> str:
+    return (
+        f"REQUEST_ID: {request_id}\n"
+        f"BASELINE: {baseline}\n\n"
+        f"{prompt}\n\n"
+        "RETURN PATH CHECK\n"
+        "End your reply with this exact line on its own, unchanged:\n"
+        f"RETURN_ID: {return_id}"
+    )
+
+
+def check_return(answer: str, return_id: str) -> tuple[bool, str]:
+    """Verify the reply carries this turn's RETURN_ID; strip the tag line."""
+    ids = RETURN_ID_RE.findall(answer)
+    body = RETURN_ID_RE.sub("", answer).strip()
+    return return_id in ids, body
+
+
+def parse_verdict(review: str) -> str:
+    """Return OBJECTION, NO MATERIAL OBJECTION, or UNCLEAR.
+
+    UNCLEAR counts as unresolved: agreement is never assumed.
+    """
+    found = VERDICT_RE.findall(review)
+    if not found:
+        return "UNCLEAR"
+    return found[-1].upper()
+
+
+def normalized(text: str) -> str:
+    return " ".join(text.split()).lower()
+
+
+def lead_answer_prompt(question: str, lead: str) -> str:
+    return bounded_prompt(
+        question,
+        f"""LEAD SEAT
+
+You are {lead.title()}, the lead seat for this request because the user asked
+you. Reference the repository first, then give your own complete answer.
+Your answer will be reviewed by the other available Council seats.""",
+    )
+
+
+def review_prompt(question: str, lead: str, reviewer: str, answer: str, prior: str) -> str:
+    history = ""
+    if prior.strip():
+        history = f"""
+YOUR PREVIOUS REVIEW OF AN EARLIER VERSION:
+---
+{prior}
+---
+Check whether the lead's new answer resolves it. Do not repeat an objection the
+answer now handles.
+"""
+    return bounded_prompt(
+        question,
+        f"""COUNCIL REVIEW
+
+You are {reviewer.title()}. {lead.title()} is the lead seat for this request.
+Independently reference the repository; do not rely on the lead's summary of it.
+
+LEAD ANSWER:
+---
+{answer}
+---
+{history}
+Determine what is supported, unsupported, in conflict with the references,
+unclear, improvable, or in need of a test. A material objection must name the
+repo path, evidence, or test that the answer gets wrong or omits. Style and
+wording preferences are not material.
+
+End with exactly one verdict line:
+VERDICT: OBJECTION
+or
+VERDICT: NO MATERIAL OBJECTION
+If OBJECTION, list each one above the verdict as `OBJECTION: <specific point>`.""",
+    )
+
+
+def refine_prompt(question: str, lead: str, answer: str, reviews: dict[str, str], user_note: str) -> str:
+    blocks = "\n\n".join(f"{seat.upper()} REVIEW:\n---\n{text}\n---" for seat, text in reviews.items())
+    note = f"\nUSER REDIRECTION:\n{user_note}\n" if user_note else ""
+    return bounded_prompt(
+        question,
+        f"""LEAD REFINEMENT
+
+You are {lead.title()}, the lead seat. Your previous answer:
+---
+{answer}
+---
+
+Council reviews with active objections:
+
+{blocks}
+{note}
+Re-reference the repository on every disputed point. For each objection, either
+accept it and correct the answer, or reject it with the specific repo path or
+evidence. Agreement is not truth: do not concede a point only because a peer
+raised it. Then give your full refined answer.""",
+    )
+
+
+def emit_state(seat: str, state: str, reason: str = "") -> None:
+    line = f"[STATE] {seat}: {state}"
+    if reason:
+        line += f" — {reason}"
+    print(line, flush=True)
+
+
+def run_lead(
+    question: str,
+    lead: str,
+    call: Callable[[str, str], dict[str, Any]],
+    *,
+    request_id: str,
+    baseline: str,
+    transport_timeout: int,
+    max_loops: int | None = None,
+    user_turn: Callable[[int], str] = lambda _n: "",
+) -> dict[str, Any]:
+    """Run the lead-seat Council loop and return a receipt dict.
+
+    `call(seat, prompt)` must perform a real provider call and return a
+    run_worker-shaped result. No answer is ever synthesized here.
+    """
+    if lead not in SEATS:
+        raise CouncilError(f"Lead seat must be one of {', '.join(SEATS)}; got {lead!r}.")
+
+    seats: dict[str, dict[str, Any]] = {
+        s: {"role": "lead" if s == lead else "reviewer", "state": "WAITING", "history": []}
+        for s in SEATS
+    }
+    turns: list[dict[str, Any]] = []
+    counter = {"n": 0}
+
+    def set_state(seat: str, state: str, turn_id: str, reason: str = "") -> None:
+        seats[seat]["state"] = state
+        seats[seat]["history"].append({"state": state, "turn": turn_id, "reason": reason})
+        emit_state(seat, state, reason)
+
+    def ask(seat: str, kind: str, prompt: str) -> tuple[bool, str]:
+        counter["n"] += 1
+        turn_id = f"{request_id}-{counter['n']:02d}-{seat}"
+        return_id = f"{turn_id}-{secrets.token_hex(3)}"
+        set_state(seat, PENDING, turn_id, kind)
+        result = call(seat, tag_prompt(prompt, request_id, baseline, return_id))
+        record: dict[str, Any] = {
+            "turn": turn_id,
+            "seat": seat,
+            "kind": kind,
+            "exit_code": result.get("exit_code"),
+            "elapsed_s": result.get("elapsed_s"),
+            "return_id": return_id,
+            "return_verified": False,
+        }
+        text = ""
+        if not result.get("ok"):
+            state, reason = classify_failure(result, transport_timeout)
+        elif not (result.get("answer") or "").strip():
+            state, reason = INVALID_RETURN, "empty response"
+        else:
+            verified, text = check_return(result["answer"], return_id)
+            record["return_verified"] = verified
+            if verified:
+                state, reason = ACTIVE, kind
+            else:
+                state, reason = INVALID_RETURN, "reply did not carry this turn's RETURN_ID"
+        record["state"] = state
+        record["reason"] = reason
+        if state == ACTIVE:
+            record["sha256"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+            record["text"] = text
+        else:
+            # Kept for diagnosis only; never treated as participation.
+            record["raw_excerpt"] = ((result.get("answer") or "") + "\n" + (result.get("stderr") or "")).strip()[-800:]
+        turns.append(record)
+        set_state(seat, state, turn_id, reason)
+        return state == ACTIVE, text
+
+    receipt: dict[str, Any] = {
+        "request_id": request_id,
+        "baseline": baseline,
+        "question": question,
+        "lead": lead,
+        "started_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "transport_timeout_s": transport_timeout,
+        "max_loops": max_loops,
+        "seats": seats,
+        "turns": turns,
+    }
+
+    def finish(outcome: str, answer: str, open_objections: dict[str, str]) -> dict[str, Any]:
+        receipt["outcome"] = outcome
+        receipt["final_answer"] = answer
+        receipt["open_objections"] = open_objections
+        receipt["loops"] = loop
+        receipt["refinements"] = sum(1 for t in turns if t["kind"] == "refinement" and t["state"] == ACTIVE)
+        receipt["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%S%z")
+        return receipt
+
+    loop = 0
+    for s in SEATS:
+        if s != lead:
+            set_state(s, "LISTENING", f"{request_id}-00-{s}")
+
+    ok, answer = ask(lead, "lead_answer", lead_answer_prompt(question, lead))
+    if not ok:
+        return finish("LEAD_UNAVAILABLE", "", {})
+
+    available = [s for s in SEATS if s != lead]
+    prior_review: dict[str, str] = {}
+    prior_objection: dict[str, str] = {}
+    previous_answer = answer
+
+    while True:
+        loop += 1
+        reviews: dict[str, str] = {}
+        for reviewer in list(available):
+            ok, review = ask(
+                reviewer,
+                "review",
+                review_prompt(question, lead, reviewer, answer, prior_review.get(reviewer, "")),
+            )
+            if ok:
+                reviews[reviewer] = review
+                prior_review[reviewer] = review
+            else:
+                available.remove(reviewer)
+
+        if not reviews:
+            return finish("NO_REVIEWERS_AVAILABLE", answer, {})
+
+        objections = {s: r for s, r in reviews.items() if parse_verdict(r) != "NO MATERIAL OBJECTION"}
+        if not objections:
+            return finish("NO_ACTIVE_OBJECTION", answer, {})
+
+        if prior_objection and all(
+            normalized(objections[s]) == normalized(prior_objection.get(s, "")) for s in objections
+        ):
+            return finish("STALLED_UNRESOLVED", answer, objections)
+        prior_objection = dict(objections)
+
+        if max_loops is not None and loop >= max_loops:
+            return finish("OPERATOR_LIMIT_UNRESOLVED", answer, objections)
+
+        note = user_turn(loop)
+        if note == "/stop":
+            return finish("USER_STOPPED", answer, objections)
+
+        ok, refined = ask(lead, "refinement", refine_prompt(question, lead, answer, objections, note))
+        if not ok:
+            return finish("LEAD_UNAVAILABLE", answer, objections)
+        if normalized(refined) == normalized(previous_answer):
+            return finish("STALLED_UNRESOLVED", refined, objections)
+        previous_answer = answer = refined
+
+
+def save_receipt(root: Path, receipt: dict[str, Any]) -> Path:
+    out = root / "External_Work" / "brain_buddy" / "outbox"
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / f"{receipt['request_id']}.json"
+    path.write_text(json.dumps(receipt, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return path
+
+
+def print_lead_summary(receipt: dict[str, Any]) -> None:
+    print(f"\n===== BRAIN BUDDY — {receipt['request_id']} =====")
+    print(f"Lead seat: {receipt['lead']}")
+    for seat, info in receipt["seats"].items():
+        last = info["history"][-1]["reason"] if info["history"] else ""
+        print(f"  {seat:<9} {info['role']:<9} {info['state']}" + (f" — {last}" if last else ""))
+    print(f"Outcome: {receipt['outcome']}  (loops: {receipt['loops']}, refinements: {receipt['refinements']})")
+    if receipt["final_answer"]:
+        print(f"\n===== {receipt['lead'].upper()} (LEAD) =====")
+        print(receipt["final_answer"])
+    for seat, text in receipt["open_objections"].items():
+        print(f"\n===== OPEN OBJECTION — {seat.upper()} =====")
+        print(text)
+
+
 def choose_mode() -> str:
     print("Brain Buddy Council")
     options = [
@@ -313,10 +660,11 @@ def choose_mode() -> str:
         ("4", "gemini-deepseek", "Gemini first, then DeepSeek reviews"),
         ("5", "deepseek-gemini", "DeepSeek first, then Gemini reviews"),
         ("6", "discussion", "Open Gemini + DeepSeek + user discussion"),
+        ("7", "lead", "Lead seat answers, Council reviews until no active objection"),
     ]
     for n, _, label in options:
         print(f"  {n}. {label}")
-    selected = input("Choose 1-6: ").strip()
+    selected = input("Choose 1-7: ").strip()
     for n, mode, _ in options:
         if selected == n:
             return mode
@@ -328,9 +676,21 @@ def main() -> int:
     ap.add_argument("mode", nargs="?", choices=MODES)
     ap.add_argument("question", nargs="?")
     ap.add_argument("--rounds", type=int, default=2, help="Discussion rounds; default 2")
-    ap.add_argument("--timeout", type=int, default=240, help="Per-worker timeout in seconds")
+    ap.add_argument(
+        "--timeout",
+        type=int,
+        default=240,
+        help="Per-call transport timeout in seconds. In lead mode it only marks the provider OUT TO LUNCH.",
+    )
     ap.add_argument("--save", action="store_true", help="Save a transcript receipt under External_Work")
-    args = ap.parse_args()
+    ap.add_argument("--seat", choices=SEATS, help="Lead mode: the seat the user asked (it leads this request)")
+    ap.add_argument(
+        "--max-loops",
+        type=int,
+        default=None,
+        help="Lead mode: optional operator budget. Reaching it records OPERATOR_LIMIT_UNRESOLVED, never agreement.",
+    )
+    args = ap.parse_intermixed_args()
 
     root = repo_root()
     mode = args.mode
@@ -347,6 +707,29 @@ def main() -> int:
     question = read_prompt(question)
     if not question:
         raise CouncilError("Question is empty.")
+
+    if mode == "lead":
+        seat = args.seat
+        if seat is None:
+            if not sys.stdin.isatty():
+                raise CouncilError("Lead mode requires --seat in non-interactive use.")
+            seat = input(f"Which seat are you asking ({'/'.join(SEATS)})? ").strip().lower()
+        if args.max_loops is not None and args.max_loops < 1:
+            raise CouncilError("--max-loops must be at least 1.")
+        receipt = run_lead(
+            question,
+            seat,
+            lambda s, prompt: run_worker(root, s, prompt, args.timeout),
+            request_id=new_request_id(),
+            baseline=baseline_identity(root),
+            transport_timeout=args.timeout,
+            max_loops=args.max_loops,
+            user_turn=interactive_user_turn,
+        )
+        print_lead_summary(receipt)
+        path = save_receipt(root, receipt)
+        print(f"\nReceipt: {path.relative_to(root)}")
+        return 0 if receipt["outcome"] != "LEAD_UNAVAILABLE" else 1
 
     turns: list[dict[str, str]] = [{"speaker": "user", "text": question}]
     base = bounded_prompt(question)
