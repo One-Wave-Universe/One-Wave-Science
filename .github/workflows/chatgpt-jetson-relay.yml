@@ -1,0 +1,66 @@
+name: ChatGPT Jetson Relay
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: chatgpt-jetson-relay
+  cancel-in-progress: false
+
+jobs:
+  relay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GATEWAY_URL: ${{ secrets.JETSON_GATEWAY_URL }}
+      GATEWAY_TOKEN: ${{ secrets.JETSON_GATEWAY_TOKEN }}
+    steps:
+      - name: Checkout transport request
+        uses: actions/checkout@v4
+        with:
+          ref: chatgpt-terminal
+          fetch-depth: 1
+
+      - name: Relay request directly to Jetson
+        id: relay
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$GATEWAY_URL" || { echo "::error::JETSON_GATEWAY_URL missing"; exit 1; }
+          test -n "$GATEWAY_TOKEN" || { echo "::error::JETSON_GATEWAY_TOKEN missing"; exit 1; }
+          python3 - <<'PY'
+          import json, os, pathlib, urllib.request, urllib.error
+          request=json.loads(pathlib.Path(".chatgpt-terminal/request.json").read_text())
+          args={k:request[k] for k in ("argv","cwd","timeout","intention","consequence") if k in request}
+          payload={"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"terminal_run","arguments":args}}
+          req=urllib.request.Request(os.environ["GATEWAY_URL"].rstrip("/")+"/mcp",data=json.dumps(payload).encode(),headers={"Authorization":"Bearer "+os.environ["GATEWAY_TOKEN"],"Content-Type":"application/json"},method="POST")
+          result={"id":request["id"],"source_route":"github-actions-direct-relay"}
+          try:
+            with urllib.request.urlopen(req,timeout=int(request.get("timeout",120))+20) as response:
+              env=json.load(response)
+            if "error" in env:
+              result.update(ok=False,exit_code=None,error=env["error"],stdout="",stderr="")
+            else:
+              body=env.get("result",{}).get("structuredContent",{})
+              result.update(body)
+          except Exception as exc:
+            result.update(ok=False,exit_code=None,error=f"{type(exc).__name__}: {exc}",stdout="",stderr="")
+          pathlib.Path(".chatgpt-terminal/result.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps(result,indent=2))
+          PY
+
+      - name: Return receipt through GitHub
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "one-wave-relay"
+          git config user.email "actions@users.noreply.github.com"
+          git add .chatgpt-terminal/result.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Return ChatGPT Jetson relay receipt"
+          git push origin HEAD:chatgpt-terminal
