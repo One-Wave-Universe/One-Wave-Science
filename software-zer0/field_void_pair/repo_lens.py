@@ -1,0 +1,220 @@
+"""Repo lens — the whole One-Wave repo as the shared reference both AIs see.
+
+SOFTWARE ONLY. This builds text context. It is not memory and not the cell.
+
+The lens has three layers, all deterministic:
+
+1. CANON   fixed canonical files, read in order, truncated to a budget
+2. MAP     every tracked file in the repo, grouped by directory
+3. FOCUS   per-turn keyword retrieval over every tracked text file
+
+Field and Void receive the same lens. That is the shared reference (0)
+from UPDATED_34 section 3: two roles, one relational state.
+"""
+
+from __future__ import annotations
+
+import math
+import os
+import re
+import subprocess
+from collections import Counter
+from dataclasses import dataclass, field
+from pathlib import Path
+
+
+# Read order follows CLAUDE.md -> AGENTS.md -> AI_CANONICAL_START_HERE.md,
+# then the Field/Void and Algorythm-Zer0 references this tool runs on.
+CANON_FILES = (
+    "CLAUDE.md",
+    "AGENTS.md",
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "UPDATED_34_PROCESSING_IS_MEMORY_AND_DUAL_PROCESSOR_FIELD_VOID.md",
+    "Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md",
+    "proofs/ZER0_FIRST_CYCLE.md",
+    "simulations/zer0_first_cycle.py",
+    "software-zer0/SEPARATE.md",
+    "ONE_WAVE_TERMINOLOGY_LEGEND.md",
+)
+
+TEXT_EXT = {
+    ".md", ".txt", ".py", ".js", ".ts", ".html", ".css", ".json", ".csv",
+    ".sh", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".tex", ".c", ".h",
+    ".cpp", ".ino", ".rs", ".go", ".java", ".kt",
+}
+MAX_FILE_BYTES = 400_000
+WORD = re.compile(r"[A-Za-z][A-Za-z0-9_\-]{3,}")
+STOP = {
+    "this", "that", "with", "from", "have", "into", "only", "must", "does",
+    "then", "than", "when", "what", "will", "each", "same", "they", "them",
+    "their", "there", "these", "those", "were", "been", "being", "which",
+    "while", "about", "should", "would", "could", "make", "made", "true",
+    "false", "none", "self", "return", "import", "class", "def",
+}
+
+
+def find_repo_root(start: Path | None = None) -> Path:
+    here = (start or Path(__file__)).resolve()
+    for p in [here, *here.parents]:
+        if (p / "AGENTS.md").is_file() and (p / "simulations" / "zer0_first_cycle.py").is_file():
+            return p
+    raise FileNotFoundError("One-Wave-Science root not found above " + str(here))
+
+
+def list_tracked(root: Path) -> list[str]:
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(root), "ls-files"],
+            capture_output=True, text=True, check=True,
+        ).stdout
+        files = [line for line in out.splitlines() if line]
+        if files:
+            return files
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    files = []
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".") and d != "node_modules"]
+        for name in filenames:
+            files.append(str((Path(dirpath) / name).relative_to(root)))
+    return sorted(files)
+
+
+def reference_snapshot(root: Path) -> dict:
+    """Reference Point Zero from AGENTS.md: record the route before acting."""
+
+    def git(*args: str) -> str:
+        try:
+            return subprocess.run(
+                ["git", "-C", str(root), *args],
+                capture_output=True, text=True, check=True,
+            ).stdout.strip()
+        except (OSError, subprocess.CalledProcessError):
+            return "unknown"
+
+    status = git("status", "--porcelain")
+    return {
+        "root": str(root),
+        "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
+        "head": git("rev-parse", "--short", "HEAD"),
+        "dirty": bool(status) and status != "unknown",
+    }
+
+
+@dataclass
+class RepoLens:
+    root: Path
+    canon_chars: int = 36_000
+    focus_k: int = 6
+    focus_chars: int = 1_400
+    files: list[str] = field(default_factory=list)
+    _text: dict[str, str] = field(default_factory=dict, repr=False)
+    _terms: dict[str, Counter] = field(default_factory=dict, repr=False)
+    _df: Counter = field(default_factory=Counter, repr=False)
+
+    @classmethod
+    def build(cls, root: Path | None = None, **kw) -> "RepoLens":
+        lens = cls(root=Path(root) if root else find_repo_root(), **kw)
+        lens.files = list_tracked(lens.root)
+        for rel in lens.files:
+            p = lens.root / rel
+            if p.suffix.lower() not in TEXT_EXT:
+                continue
+            try:
+                if p.stat().st_size > MAX_FILE_BYTES:
+                    continue
+                txt = p.read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            lens._text[rel] = txt
+            lens._terms[rel] = Counter(
+                w.lower() for w in WORD.findall(txt) if w.lower() not in STOP
+            )
+            lens._df.update(lens._terms[rel].keys())
+        return lens
+
+    # -- layer 1 -------------------------------------------------------
+    def canon(self) -> str:
+        per = max(1_000, self.canon_chars // len(CANON_FILES))
+        parts = []
+        for rel in CANON_FILES:
+            txt = self._text.get(rel)
+            if txt is None:
+                parts.append(f"### {rel}\n(MISSING in this checkout — HOLD on claims that need it)\n")
+                continue
+            body = txt if len(txt) <= per else txt[:per] + f"\n...[truncated at {per} chars; full file in repo]"
+            parts.append(f"### {rel}\n{body}\n")
+        return "\n".join(parts)
+
+    # -- layer 2 -------------------------------------------------------
+    def repo_map(self, per_dir: int = 12) -> str:
+        groups: dict[str, list[str]] = {}
+        for rel in self.files:
+            top = rel.split("/", 1)[0] if "/" in rel else "."
+            groups.setdefault(top, []).append(rel)
+        lines = [f"{len(self.files)} tracked files."]
+        for top in sorted(groups):
+            items = groups[top]
+            if top == ".":
+                lines.append(f"/ (root, {len(items)} files): " + ", ".join(items))
+                continue
+            shown = ", ".join(i.split("/", 1)[1] for i in items[:per_dir])
+            more = f", ... +{len(items) - per_dir} more" if len(items) > per_dir else ""
+            lines.append(f"{top}/ ({len(items)} files): {shown}{more}")
+        return "\n".join(lines)
+
+    # -- layer 3 -------------------------------------------------------
+    def focus(self, query: str) -> list[tuple[str, str]]:
+        q = [w.lower() for w in WORD.findall(query) if w.lower() not in STOP]
+        if not q:
+            return []
+        qset = set(q)
+        n = max(1, len(self._terms))
+        idf = {w: math.log(1 + n / (1 + self._df.get(w, 0))) for w in qset}
+        scored = []
+        for rel, terms in self._terms.items():
+            if rel in CANON_FILES:
+                continue
+            # tf-idf, damped by document length so huge files do not win by size
+            length = math.log(10 + sum(terms.values()))
+            score = sum(math.sqrt(terms.get(w, 0)) * idf[w] for w in qset) / length
+            score += 1.5 * sum(idf[w] for w in qset if w in rel.lower())
+            if score > 0:
+                scored.append((score, rel))
+        scored.sort(key=lambda t: (-t[0], t[1]))
+        out = []
+        for _, rel in scored[: self.focus_k]:
+            txt = self._text[rel]
+            low = txt.lower()
+            hits = [low.find(w) for w in qset if low.find(w) >= 0]
+            start = max(0, min(hits) - 200) if hits else 0
+            out.append((rel, txt[start : start + self.focus_chars]))
+        return out
+
+    def render(self, query: str) -> str:
+        focus = self.focus(query)
+        focus_txt = "\n".join(f"### {rel}\n{snip}\n" for rel, snip in focus) or "(no keyword hits)"
+        return (
+            "=== ONE-WAVE REPO LENS (shared reference for Field and Void) ===\n\n"
+            "--- CANON (read in order) ---\n" + self.canon() +
+            "\n--- REPO MAP (whole repository) ---\n" + self.repo_map() +
+            "\n\n--- FOCUS (retrieved for this turn) ---\n" + focus_txt
+        )
+
+    # -- grounding check (deterministic, used as branch X) -------------
+    def cited_paths(self, text: str) -> tuple[list[str], list[str]]:
+        """Return (paths that exist in the repo, path-like tokens that do not)."""
+        known = set(self.files)
+        tokens = set(re.findall(r"[A-Za-z0-9_\-./]+\.[A-Za-z0-9]{1,5}", text))
+        tokens |= set(re.findall(r"`([^`\s]+)`", text))
+        good, bad = [], []
+        for t in sorted(tokens):
+            t = t.strip("./`'\",;:()[]")
+            if "/" not in t and not t.endswith((".md", ".py", ".html", ".js", ".json")):
+                continue
+            if t in known:
+                good.append(t)
+            elif "/" in t or t.endswith(".md"):
+                bad.append(t)
+        return sorted(set(good)), sorted(set(bad))

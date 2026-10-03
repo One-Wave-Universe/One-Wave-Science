@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field/Void Pair</title>
+<style>
+:root {
+  --bg: #f6f5f1; --panel: #ffffff; --ink: #1d1f23; --muted: #6a6f78; --line: #dcdad3;
+  --field: #b4531f; --field-soft: #fbeee5; --void: #2d5b9a; --void-soft: #e8eef8;
+  --plus: #2f7d4f; --minus: #b0352f; --hold: #8a7a2c; --band: rgba(138,122,44,.14);
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --panel: #1e2125; --ink: #e8e6e1; --muted: #9aa0a8; --line: #33373d;
+    --field: #e98a55; --field-soft: #2e221b; --void: #7aa6e6; --void-soft: #1b2433;
+    --plus: #5fbf86; --minus: #e2716a; --hold: #cbb765; --band: rgba(203,183,101,.13);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --panel: #1e2125; --ink: #e8e6e1; --muted: #9aa0a8; --line: #33373d;
+  --field: #e98a55; --field-soft: #2e221b; --void: #7aa6e6; --void-soft: #1b2433;
+  --plus: #5fbf86; --minus: #e2716a; --hold: #cbb765; --band: rgba(203,183,101,.13);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 18px 16px 10px; max-width: 1180px; margin: 0 auto; }
+h1 { margin: 0; font-size: 20px; letter-spacing: .02em; }
+h1 .f { color: var(--field); } h1 .v { color: var(--void); }
+.sub { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.ref { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 6px; word-break: break-all; }
+main { max-width: 1180px; margin: 0 auto; padding: 0 16px 40px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-top: 12px; }
+label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .06em; }
+textarea, input, select { width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; }
+textarea { min-height: 70px; resize: vertical; }
+.grid { display: grid; grid-template-columns: 1fr 1fr 120px; gap: 12px; margin-top: 12px; }
+.side { border-left: 4px solid var(--line); padding-left: 10px; }
+.side.f { border-color: var(--field); } .side.v { border-color: var(--void); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+button { font: inherit; border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; cursor: pointer; }
+button.go { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+button:disabled { opacity: .45; cursor: default; }
+.status { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+svg { width: 100%; height: 150px; display: block; }
+.turn { display: grid; grid-template-columns: minmax(0,1fr) 210px minmax(0,1fr); gap: 10px; margin-top: 12px; }
+.card { border-radius: 9px; padding: 10px 12px; border: 1px solid var(--line); min-width: 0; }
+.card.f { background: var(--field-soft); } .card.v { background: var(--void-soft); }
+.card h3 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .07em; }
+.card.f h3 { color: var(--field); } .card.v h3 { color: var(--void); }
+.card pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 13px/1.45 var(--mono); max-height: 320px; overflow: auto; }
+.zer0 { text-align: center; font-family: var(--mono); font-size: 13px; padding: 10px 6px;
+  border: 1px dashed var(--line); border-radius: 9px; align-self: start; }
+.trits { display: flex; justify-content: center; gap: 6px; margin: 6px 0; }
+.t { width: 34px; padding: 3px 0; border-radius: 6px; border: 1px solid var(--line); }
+.t small { display: block; color: var(--muted); font-size: 10px; }
+.p { color: var(--plus); } .m { color: var(--minus); } .h { color: var(--hold); }
+.res { font-size: 22px; font-weight: 700; }
+.verdict { font-family: var(--mono); font-weight: 700; }
+.cites { font-size: 11px; color: var(--muted); margin-top: 6px; font-family: var(--mono); word-break: break-all; }
+.err { color: var(--minus); font-family: var(--mono); }
+.stop pre { word-break: break-word; }
+.stop { overflow-wrap: anywhere; margin-top: 14px; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line); font-family: var(--mono); }
+.theme { float: right; font-size: 12px; padding: 4px 10px; }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .turn { grid-template-columns: minmax(0,1fr); }
+  .zer0 { order: 3; }
+}
+</style>
+</head>
+<body>
+<header>
+  <button class="theme" id="theme" type="button">theme</button>
+  <h1><span class="f">Field</span> / <span class="v">Void</span> Pair</h1>
+  <div class="sub">Two AIs, one One-Wave repo lens, Algorythm-Zer0 as referee. SOFTWARE ONLY.</div>
+  <div class="ref" id="ref">reference point zero: loading…</div>
+</header>
+<main>
+  <section class="panel">
+    <label for="goal">Goal</label>
+    <textarea id="goal">Propose the next bounded step for the Field/Void software-construction engine described in AGENTS.md.</textarea>
+    <div class="grid">
+      <div class="side f">
+        <label>Field (expressive)</label>
+        <div class="row2"><select id="fprov"></select><input id="fmodel" placeholder="model"></div>
+      </div>
+      <div class="side v">
+        <label>Void (oversight)</label>
+        <div class="row2"><select id="vprov"></select><input id="vmodel" placeholder="model"></div>
+      </div>
+      <div>
+        <label for="turns">Max turns</label>
+        <input id="turns" type="number" min="1" max="50" value="8">
+      </div>
+    </div>
+    <div class="actions">
+      <button class="go" id="start" type="button">Start loop</button>
+      <button id="halt" type="button" disabled>Halt</button>
+      <button id="ledger" type="button" disabled>Download ledger</button>
+      <span class="status" id="status">idle</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <label>Zer0 moving reference r (bounded −1…+1, shaded = HOLD band)</label>
+    <svg id="chart" viewBox="0 0 600 150" preserveAspectRatio="none" aria-label="reference over turns"></svg>
+  </section>
+
+  <section id="turns-out"></section>
+</main>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const DEAD = 0.05;
+  let session = null, halted = false, refs = [0], providers = [];
+
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("fvpair-theme"); if (t) root.dataset.theme = t; } catch (e) {}
+  $("theme").onclick = () => {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark"
+      : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("fvpair-theme", root.dataset.theme); } catch (e) {}
+  };
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const cls = (t) => t === "+" ? "p" : t === "-" ? "m" : "h";
+
+  async function api(path, body) {
+    const res = await fetch(path, body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) } : {});
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    return data;
+  }
+
+  function fillProviders() {
+    for (const [sel, inp, pick] of [["fprov", "fmodel", "anthropic"], ["vprov", "vmodel", "deepseek"]]) {
+      const s = $(sel);
+      s.innerHTML = providers.map((p) =>
+        `<option value="${p.name}">${p.name}${p.ready ? "" : " (needs " + p.key_env + ")"}</option>`).join("");
+      const ready = providers.find((p) => p.name === pick && p.ready);
+      s.value = ready ? pick : "offline";
+      const sync = () => { $(inp).value = providers.find((p) => p.name === s.value).default_model; };
+      s.onchange = sync; sync();
+    }
+  }
+
+  function chart() {
+    const W = 600, H = 150, pad = 8;
+    const n = Math.max(refs.length - 1, 1);
+    const x = (i) => pad + (W - 2 * pad) * i / n;
+    const y = (v) => H / 2 - (H / 2 - pad) * v;
+    const last = refs[refs.length - 1];
+    const pts = refs.map((v, i) => `${x(i)},${y(v)}`).join(" ");
+    $("chart").innerHTML =
+      `<rect x="0" y="${y(last + DEAD)}" width="${W}" height="${y(last - DEAD) - y(last + DEAD)}" fill="var(--band)"/>` +
+      `<line x1="0" x2="${W}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line)" stroke-dasharray="4 4"/>` +
+      `<line x1="0" x2="${W}" y1="${y(1)}" y2="${y(1)}" stroke="var(--line)"/>` +
+      `<line x1="0" x2="${W}" y1="${y(-1)}" y2="${y(-1)}" stroke="var(--line)"/>` +
+      `<polyline points="${pts}" fill="none" stroke="var(--ink)" stroke-width="2" vector-effect="non-scaling-stroke"/>` +
+      refs.map((v, i) => `<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="var(--ink)"/>`).join("");
+  }
+
+  function renderTurn(rec) {
+    const box = document.createElement("div");
+    if (rec.error) {
+      box.className = "stop err";
+      box.textContent = `turn ${rec.turn}: provider error — ${rec.error}`;
+      $("turns-out").appendChild(box);
+      return;
+    }
+    const z = rec.zer0, v = rec.void, ch = z.choices;
+    const trit = (b) => `<div class="t ${cls(ch[b])}">${esc(ch[b])}<small>${b} ${z.inputs[b].toFixed(2)}</small></div>`;
+    box.className = "turn";
+    box.innerHTML = `
+      <div class="card f"><h3>Field · turn ${rec.turn} · ${esc(rec.field.provider)}</h3><pre>${esc(rec.field.text)}</pre>
+        <div class="cites">exist: ${esc(rec.citations.exist.join(", ") || "—")}<br>missing: ${esc(rec.citations.missing.join(", ") || "—")}</div></div>
+      <div class="zer0">Algorythm-Zer0
+        <div class="trits">${trit("X")}${trit("Y")}${trit("Z")}</div>
+        <div style="color:var(--muted);font-size:11px">T ${z.inputs.T.toFixed(2)} · timing, no vote</div>
+        <div class="res ${cls(z.resolved)}">${z.resolved === "0" ? "HOLD" : z.resolved}</div>
+        <div>r ${z.ref_in.toFixed(3)} → ${z.ref_out.toFixed(3)}</div>
+      </div>
+      <div class="card v"><h3>Void · ${esc(v.provider)}</h3>
+        <div class="verdict">${esc(v.verdict)} <span style="font-weight:400;color:var(--muted)">ref ${v.reference.toFixed(2)} · goal ${v.goal.toFixed(2)}</span></div>
+        <pre>${esc(v.text)}</pre></div>`;
+    $("turns-out").appendChild(box);
+    box.scrollIntoView({ behavior: "smooth", block: "end" });
+  }
+
+  function finish(summary) {
+    const d = document.createElement("div");
+    d.className = "stop";
+    d.innerHTML = `STOP: <b>${esc(summary.stop)}</b> · turns ${summary.turns} · final r ${summary.final_ref.toFixed(3)}` +
+      (summary.confirmed ? `<pre style="white-space:pre-wrap;margin-top:8px">CONFIRMED REFERENCE STATE\n${esc(summary.confirmed)}</pre>` : "");
+    $("turns-out").appendChild(d);
+    $("status").textContent = "stopped: " + summary.stop;
+    $("start").disabled = false; $("halt").disabled = true;
+  }
+
+  $("start").onclick = async () => {
+    halted = false; refs = [0]; chart(); $("turns-out").innerHTML = "";
+    $("start").disabled = true; $("halt").disabled = false; $("ledger").disabled = true;
+    try {
+      const s = await api("/api/start", {
+        goal: $("goal").value,
+        field: { provider: $("fprov").value, model: $("fmodel").value },
+        void: { provider: $("vprov").value, model: $("vmodel").value },
+        max_turns: Number($("turns").value),
+      });
+      session = s.id; $("ledger").disabled = false;
+      let summary = s.summary;
+      while (!halted) {
+        $("status").textContent = `turn ${summary.turns + 1}: Field proposing, Void checking…`;
+        const out = await api("/api/step", { id: session });
+        summary = out.summary;
+        if (out.record) { renderTurn(out.record); if (out.record.zer0) { refs.push(out.record.zer0.ref_out); chart(); } }
+        if (summary.stop) break;
+      }
+      if (halted) { $("status").textContent = "halted by user"; $("start").disabled = false; $("halt").disabled = true; }
+      else finish(summary);
+    } catch (e) {
+      $("status").textContent = "error: " + e.message;
+      $("start").disabled = false; $("halt").disabled = true;
+    }
+  };
+  $("halt").onclick = () => { halted = true; $("halt").disabled = true; };
+  $("ledger").onclick = () => { if (session) location.href = "/api/ledger?id=" + session; };
+
+  api("/api/reference").then((r) => {
+    $("ref").textContent = `reference point zero · ${r.root} · ${r.branch} @ ${r.head}${r.dirty ? " (dirty)" : ""} · ${r.files} files in lens`;
+  }).catch(() => { $("ref").textContent = "reference point zero: unavailable"; });
+  api("/api/providers").then((d) => { providers = d.providers; fillProviders(); });
+  chart();
+})();
+</script>
+</body>
+</html>

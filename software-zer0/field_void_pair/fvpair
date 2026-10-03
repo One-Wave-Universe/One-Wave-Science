@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# fvpair — Linux launcher. Two AIs in a Field/Void loop through the One-Wave repo lens.
+#   fvpair run "goal" --field anthropic --void deepseek
+#   fvpair serve          (app version in the browser)
+set -euo pipefail
+HERE="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+exec python3 "$HERE/cli.py" "$@"
