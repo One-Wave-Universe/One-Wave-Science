@@ -20,7 +20,7 @@
   <canvas id="c"></canvas>
   <aside>
     <h1>Lattice energy</h1>
-    <p>First sim. Hex sites. Parent wake. Energy is chi. Motion is down the gradient.</p>
+    <p>Modules: wake, lattice, energy, motion, view. One field.</p>
     <label>Parent amplitude <span id="ampv" class="num">1.0</span></label>
     <input id="amp" type="range" min="0" max="2" step="0.05" value="1"/>
     <label>Organization scale <span id="sigv" class="num">1.6</span></label>
@@ -31,72 +31,42 @@
     <p>Child radius <span id="rad" class="num">0</span></p>
   </aside>
 </main>
+<script src="modules/wake.js"></script>
+<script src="modules/lattice.js"></script>
+<script src="modules/energy.js"></script>
+<script src="modules/motion.js"></script>
+<script src="modules/view.js"></script>
 <script>
 const cv = document.getElementById("c");
 const ctx = cv.getContext("2d");
-const ampEl = document.getElementById("amp");
-const sigEl = document.getElementById("sig");
 let parentOn = 1;
-document.getElementById("drop").onclick = () => { parentOn = parentOn ? 0 : 1; document.getElementById("drop").textContent = parentOn ? "Drop parent" : "Restore parent"; };
-
-function wake(r, sigma) {
-  const s = Math.max(sigma, 1e-6);
-  return Math.exp(-r / s) / Math.sqrt(r * r + 0.04 * s * s);
-}
+document.getElementById("drop").onclick = () => {
+  parentOn = parentOn ? 0 : 1;
+  document.getElementById("drop").textContent = parentOn ? "Drop parent" : "Restore parent";
+};
+const field = {
+  parent: { amp: 1, sigma: 1.6 },
+  sites: OW.lattice(5),
+  kids: OW.kids(),
+  energy: 0
+};
 function resize() {
   cv.width = cv.clientWidth * devicePixelRatio;
   cv.height = cv.clientHeight * devicePixelRatio;
 }
 window.addEventListener("resize", resize);
 resize();
-
-const kids = [];
-for (let k = 0; k < 3; k++) {
-  const a = 2 * Math.PI * k / 3;
-  kids.push({ x: 1.6 * Math.cos(a), y: 1.6 * Math.sin(a), vx: -0.3 * Math.sin(a), vy: 0.3 * Math.cos(a) });
-}
-
 function frame() {
-  const amp = parentOn * parseFloat(ampEl.value);
-  const sigma = parseFloat(sigEl.value);
-  document.getElementById("ampv").textContent = amp.toFixed(2);
-  document.getElementById("sigv").textContent = sigma.toFixed(2);
-  const w = cv.width, h = cv.height;
-  const cx = w * 0.5, cy = h * 0.5, scale = Math.min(w, h) * 0.12;
-  ctx.fillStyle = "#100c09";
-  ctx.fillRect(0, 0, w, h);
-  let energy = 0;
-  const reach = 5;
-  for (let q = -reach; q <= reach; q++) {
-    for (let r = -reach; r <= reach; r++) {
-      const x = (q + r / 2) * 0.55;
-      const y = r * 0.476;
-      const rr = Math.hypot(x, y);
-      const chi = amp * wake(rr, sigma);
-      energy += chi;
-      ctx.beginPath();
-      ctx.arc(cx + x * scale, cy + y * scale, 4 * devicePixelRatio, 0, 7);
-      ctx.fillStyle = `rgba(243, 190, 110, ${0.15 + 0.85 * Math.min(chi, 1)})`;
-      ctx.fill();
-    }
-  }
-  for (const b of kids) {
-    const hstep = 0.02;
-    const c = (x, y) => amp * wake(Math.hypot(x, y), sigma);
-    const gx = (c(b.x + hstep, b.y) - c(b.x - hstep, b.y)) / (2 * hstep);
-    const gy = (c(b.x, b.y + hstep) - c(b.x, b.y - hstep)) / (2 * hstep);
-    b.vx = (b.vx - 1.4 * gx * 0.03) * 0.995;
-    b.vy = (b.vy - 1.4 * gy * 0.03) * 0.995;
-    b.x += b.vx * 0.03;
-    b.y += b.vy * 0.03;
-    ctx.beginPath();
-    ctx.arc(cx + b.x * scale, cy + b.y * scale, 8 * devicePixelRatio, 0, 7);
-    ctx.fillStyle = "#ff8a3d";
-    ctx.fill();
-  }
-  document.getElementById("chi").textContent = (amp * wake(0, sigma)).toFixed(3);
-  document.getElementById("en").textContent = energy.toFixed(2);
-  document.getElementById("rad").textContent = (Math.hypot(kids[0].x, kids[0].y)).toFixed(2);
+  field.parent.amp = parentOn * parseFloat(document.getElementById("amp").value);
+  field.parent.sigma = parseFloat(document.getElementById("sig").value);
+  document.getElementById("ampv").textContent = field.parent.amp.toFixed(2);
+  document.getElementById("sigv").textContent = field.parent.sigma.toFixed(2);
+  OW.energy(field);
+  OW.motion(field);
+  OW.view(ctx, field, cv.width, cv.height, devicePixelRatio);
+  document.getElementById("chi").textContent = (field.parent.amp * OW.wake(0, field.parent.sigma)).toFixed(3);
+  document.getElementById("en").textContent = field.energy.toFixed(2);
+  document.getElementById("rad").textContent = Math.hypot(field.kids[0].x, field.kids[0].y).toFixed(2);
   requestAnimationFrame(frame);
 }
 frame();
