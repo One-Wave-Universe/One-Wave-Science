@@ -2,7 +2,8 @@ window.OW = window.OW || {};
 OW.energy = function (field) {
   let total = 0;
   for (const s of field.sites) {
-    s.chi = field.parent.amp * OW.wake(Math.hypot(s.x, s.y), field.parent.sigma);
+    const r = Math.hypot(s.x, s.y, s.z || 0);
+    s.chi = field.parent.amp * OW.wake(r, field.parent.sigma);
     total += s.chi;
   }
   field.energy = total;

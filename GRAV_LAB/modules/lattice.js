@@ -1,10 +1,11 @@
 window.OW = window.OW || {};
-OW.lattice = function (reach) {
-  const sites = [];
-  for (let q = -reach; q <= reach; q++) {
-    for (let r = -reach; r <= reach; r++) {
-      sites.push({ x: (q + r / 2) * 0.55, y: r * 0.476 });
-    }
-  }
+OW.shell12 = [
+  [1, 1, 0], [1, -1, 0], [-1, 1, 0], [-1, -1, 0],
+  [1, 0, 1], [1, 0, -1], [-1, 0, 1], [-1, 0, -1],
+  [0, 1, 1], [0, 1, -1], [0, -1, 1], [0, -1, -1]
+];
+OW.lattice = function () {
+  const sites = [{ x: 0, y: 0, z: 0, role: "center" }];
+  for (const n of OW.shell12) sites.push({ x: n[0], y: n[1], z: n[2], role: "neighbor" });
   return sites;
 };
