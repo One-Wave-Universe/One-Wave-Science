@@ -8,9 +8,9 @@ Snowball: the opened file names the next file. Open that. It names the one after
 
 Scale ladder, from `Nodes/G-763_Scalar_to_Harmonic.md`. Six words. No seventh.
 
-scalar → differential → vector → tensor → stratum → harmonic
+scalar → differential → vector → tensor → stratum → harmonic → scalar
 
-Each step contains every step before it. Every earlier step points at the next. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
+Each step contains every step before it. Every earlier step points at the next. Two edges are required, not implied: stratum → harmonic, and harmonic → scalar. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
 
 | Step | Contains | Points to | In G-763 |
 |---|---|---|---|
@@ -18,8 +18,8 @@ Each step contains every step before it. Every earlier step points at the next. 
 | differential | scalar | vector | two rails, Field minus Void |
 | vector | scalar, differential | tensor | the move, a directed edge |
 | tensor | scalar through vector | stratum | the carry, quadratic views |
-| stratum | scalar through tensor | harmonic | the nest layer |
-| harmonic | all five | next scalar | closed loop, next-scale DC |
+| stratum | scalar through tensor | harmonic | the nest layer. Required edge: stratum → harmonic |
+| harmonic | all five | scalar | closed loop. Required edge: harmonic → scalar |
 
 ## Scope
 
@@ -44,7 +44,7 @@ Open the first path. Then only if it misses.
 Scalar differential vector tensor stratum harmonic
 - `One-Wave-Science/Nodes/G-763_Scalar_to_Harmonic.md`
 - `Nodes/A-103_Differential.md`
-- Six-step scale. Each step contains every step before it and points only at the next. No seventh word.
+- Six-step scale. Each step contains every step before it. Required edges: stratum → harmonic, harmonic → scalar. No seventh word.
 
 CERN particle to wave
 - `One-Wave-Science/DERIVATION_PHASE_2_CERN_BRIDGE/CERN_TO_WAVE_REFERENCE.md`
