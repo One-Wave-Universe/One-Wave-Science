@@ -202,8 +202,9 @@ Do **not** collapse this to `magnetism = gravity`.  Do **not** use a present glo
 
 ## Current Micro node handoff
 
-1. `Nodes/G-746_Damping_Matrix_Dispersion.md`
-2. `Nodes/G-728_E1_STAMP.md`
+1. `Nodes/G-769_Blind_Hoyle_State_Three_Alpha_Attack.md`
+2. `Nodes/G-746_Damping_Matrix_Dispersion.md`
+3. `Nodes/G-728_E1_STAMP.md`
 3. `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`
 4. `Nodes/G-744_Field_Void_Occupancy_and_Loop_Pickup.md`
 5. `Nodes/G-743_PPF_Schema_and_2D_Hex_Graph.md`
