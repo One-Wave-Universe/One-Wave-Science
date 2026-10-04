@@ -1,0 +1,164 @@
+{
+  "weave_parameters": {
+    "sigma_T": 0.01,
+    "kappa_T": 0.01,
+    "eta_T": 0.01,
+    "neck_radius": 0.1,
+    "break_threshold": 5.0
+  },
+  "hadrons_analyzed": 4,
+  "hadron_analyses": [
+    {
+      "hadron_name": "proton",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.8,
+      "boundary_area": 8.042477193189871,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "up",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "down",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 80.42477193189872,
+        "phase_locking_MeV": 16.700981604076592,
+        "twist_MeV": 67.02064327658225,
+        "total_MeV": 164.14639681255755
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 6.283185307179586,
+        "extraction_force_MeV_fm": 6.283185307179586,
+        "break_separation_fm": 795.7747154594766
+      }
+    },
+    {
+      "hadron_name": "neutron",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.85,
+      "boundary_area": 9.0792027688745,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "down",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 90.79202768874501,
+        "phase_locking_MeV": 20.03220767110065,
+        "twist_MeV": 71.20943348136863,
+        "total_MeV": 182.03366884121428
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 6.283185307179586,
+        "extraction_force_MeV_fm": 6.283185307179586,
+        "break_separation_fm": 795.7747154594766
+      }
+    },
+    {
+      "hadron_name": "Lambda",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.8,
+      "boundary_area": 8.042477193189871,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "strange",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 80.42477193189872,
+        "phase_locking_MeV": 16.700981604076592,
+        "twist_MeV": 67.02064327658225,
+        "total_MeV": 164.14639681255755
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 6.283185307179586,
+        "extraction_force_MeV_fm": 6.283185307179586,
+        "break_separation_fm": 795.7747154594766
+      }
+    },
+    {
+      "hadron_name": "\u03c0\u207a",
+      "num_vortices": 2,
+      "boundary_radius_fm": 0.4,
+      "boundary_area": 2.0106192982974678,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=0, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "red",
+          "angular_momentum": "\u2113=0, m=0"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 20.10619298297468,
+        "phase_locking_MeV": 0.8533333333333332,
+        "twist_MeV": 0.0,
+        "total_MeV": 20.959526316308015
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 6.283185307179586,
+        "extraction_force_MeV_fm": 6.283185307179586,
+        "break_separation_fm": 795.7747154594766
+      }
+    }
+  ],
+  "gate": "YELLOW (calibration pending)",
+  "open_items": [
+    "Calibrate weave density parameters from QCD data",
+    "Compute full eigenmode spectrum (gluon spectrum)",
+    "Match Tension-Link excitations to measured gluon observables",
+    "Derive Boundary Reweaving rates and hadronization products",
+    "Test stability under perturbations (Monte Carlo simulation)",
+    "Compare confinement force \u03c4_T to lattice QCD measurements",
+    "Extend to exotic hadrons (pentaquarks, tetraquarks)"
+  ]
+}
