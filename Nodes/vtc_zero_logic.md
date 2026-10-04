@@ -1,3 +1,12 @@
+---
+artifact_id: "VTC-0-HARDWARE-UI-MAPPING"
+parent_node_id: "G-740"
+title: "VTC-0 Breadboard Mapping Verification Notes"
+namespace: "NODE_ARTIFACT"
+lifecycle: "PROPOSED_BUILD"
+metadata_standard: "I-06"
+---
+
 # Volumetric Ternary Cell (VTC-0) Breadboard Specifications
 
 **Status:** UNVERIFIED HARDWARE/UI MAPPING — retain for testing or dismissal

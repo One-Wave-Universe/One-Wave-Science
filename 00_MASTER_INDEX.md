@@ -279,6 +279,7 @@ The old missing physics address I-09 is dissolved. Its intended content now has 
 | I-03 | Cross-Platform Packet Intake | Requires duplicate, lineage, and delta checks before evaluating incoming packet quality. |
 | I-04 | Scale Recurrence vs. Duplication | Prevents cross-scale instances from being flattened into same-scale duplicates. |
 | I-05 | Active Hypothesis vs. Quarantine | Keeps unproven but open One-Wave research active while separating it from verified claims and superseded source history. |
+| I-07 | Gate Colors and Metals | Canonical gate-language reference; see `Nodes/I-07_Gate_Colors.md` and `GATE_COLORS.md`. |
 
 **Gate/color lifecycle (applies to every node at every tier):**
 Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internally proven math, not experimentally validated) → Bronze → Silver → Gold. Red is reserved exclusively for post-experiment outcomes.

@@ -2,7 +2,7 @@
 node_id: "C-311"
 canonical_name: "Electric-Magnetic Duality"
 namespace: "NODE"
-gate: "YELLOW_VALIDATED"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Resolution / Formalization Node"
 claim_gate_detail: "Core projection structure (E~∇(∇·ψ), B~∇×(∇×ψ)) validated Phase 6B; frequency matching proven; Faraday constraint satisfied. Remaining: c-speed relation and other Maxwell equations."
