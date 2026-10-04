@@ -247,6 +247,13 @@ visual pattern alone is not a derivation.
   timing/threshold/hysteresis mappings without universalizing orgasms or other
   lifecycle examples into one literal equation.
 
+## L. External hard-physics benchmarks
+
+- [x] **L1 — Hoyle attack contract:** define a blind carbon-12 / three-alpha benchmark with held-out scoring values, Gray control, One-Wave dependency chain, ablations, convergence gates, and explicit failure conditions. Artifact: G-769. **Attack defined; not solved.**
+- [ ] **L2 — Hoyle geometry/resonance null test:** implement G-769 Attack 1 on native 3D geometry without carbon-specific tuning.
+- [ ] **L3 — Hoyle constituent ablation:** run G-769 Attack 2 after a reproducible localized constituent exists.
+- [ ] **L4 — Hoyle blind quantitative score:** freeze F5 calibration from non-carbon data, predict threshold-relative resonance and secondary observables, then unblind exactly once.
+
 ## Recommended attack order
 
 1. A: finite logic and commitment.
