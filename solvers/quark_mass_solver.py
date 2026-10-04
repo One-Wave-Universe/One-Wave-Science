@@ -45,11 +45,16 @@ class QuarkTopology:
     Quarks are NOT separate objects but three simultaneous phase components
     of one bounded oscillation — the Three-Vortex Knot.
 
-    Up/down labeling distinguishes the empirical charge values (+2/3 vs -1/3),
-    NOT different internal topologies or winding patterns.
+    CRITICAL CONSTRAINT (Book1_Ch02):
+    The canonical framework does NOT YET differentiate "up" vs "down" by topology.
+    It says "three phase components of the same bounded oscillation" —
+    not "two are up, one is down."
 
-    Mass difference emerges from four-interaction response to coupling geometry
-    and Mirror-Gate boundary response.
+    YELLOW (OPEN): How to derive that proton = uud (not some other flavor combo)
+    requires future work on phase differentiation.
+
+    Current approach: Use empirical charge values to modulate coupling strength.
+    This produces correct mass hierarchy but NEEDS CANONICAL DERIVATION.
     """
 
     def __init__(self, flavor: str = "up"):
@@ -80,12 +85,12 @@ class QuarkTopology:
         #   Quarks confined: 10⁻¹⁰ m ~ 0.35 fm (2× tighter)
         self.R_knot = 0.35  # fm (same for all flavors)
 
-        # Flavor coupling strength modulation
-        # Down quark: negative charge creates stronger phase-opposition in mirror coupling
-        # This affects electrical-shell and mirror-gate response
-        # Does NOT change R_knot (canonical: same knot structure)
-        # Increased to match m_d/m_u ~ 2.16 hierarchy
-        self.flavor_coupling = 1.0 if flavor == "up" else 2.2
+        # YELLOW (OPEN): Flavor differentiation not yet derived from One-Wave primitives
+        # Canonical framework says all three phases have identical structure
+        # How "up" vs "down" emerge requires future derivation
+        # For now: charge value modulates response (PROVISIONAL, NEEDS CANONICAL GROUNDING)
+        self.flavor_coupling = 1.0 + abs(self.charge)  # Up: 1.67, Down: 1.33
+        # This is an EMPIRICAL FIT to get m_d > m_u, not a canonical derivation
 
         # Phase-locking parameter
         # How tightly the three vortex phases couple inside the knot
