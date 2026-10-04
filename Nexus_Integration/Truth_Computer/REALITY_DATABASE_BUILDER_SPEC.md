@@ -684,6 +684,53 @@ not imply laptop access, Jetson access, GitHub write access or database access.
 An adapter may use an authorized subscription/web/client route; a developer API
 key is not a core requirement.
 
+### Every AI has its own app reference wrapper
+
+A shared protocol alone is not enough. **Every AI must have its own app wrapper**
+that enforces the reference and balance contract at that client's entry and exit
+boundaries. Claude is the first app; each additional authorized AI receives a
+separate app identity and provider adapter built on the same reusable core.
+
+| App boundary | Required behavior |
+|---|---|
+| Entry | Accept the user's goal; resolve current repo references, relevant nodes and permitted journal context |
+| Provider connection | Use that AI's actual authenticated web/client/tool route; report unavailable capabilities accurately |
+| Work loop | Persist that app's FIELD/VOID phase, candidate, audit, task ownership and operation IDs |
+| Reference refresh | Detect changed sources, assumption drift, confusion and undeclared model/lens changes |
+| Exit | Release only the exact audited answer/artifact hash against the current reference bundle |
+| Collaboration | Exchange typed, acknowledged tasks, information and code with the other app wrappers |
+| Restart | Recover that app's pending jobs, corrections and receipts without repeating committed effects |
+
+Each app needs its own stable ID, session state, private journal namespace,
+permissions, connection status, task inbox/outbox and configuration. The user
+must be able to see which AI app is speaking, what reference it used, whether
+its balance check passed, and what work is still pending.
+
+Share the existing Reality Database, canonical source bundle, protocol and core
+validators. Keep agent state and private context separated. Do not copy the
+entire database or manually fork the core for every provider.
+
+The wrapper must be an executable integration, not merely a prompt telling the
+AI to behave. It must enforce durable transitions, reference freshness, output
+hash checks, ownership and message validation in code outside generated prose.
+A provider adapter translates the actual client's interface into that contract.
+
+If a third-party chat app cannot enforce every response boundary, label the
+integration as partial: only outputs routed through the wrapper are verified.
+Do not claim an external AI's unchecked replies are wrapped. Ordinary status
+messages also need source-safe checks, without exposing private deliberation.
+
+Required app views: ask/work screen, current reference, personal journal,
+Field/Void decision summaries, shared tasks, code/artifact receipts and connection
+health. Keep these views consistent across apps while identifying the provider.
+The user asks for work; the wrapper handles the approved routine.
+
+**Per-app acceptance:** the app can ingest a goal, refresh references, run a
+persisted Field/Void cycle, block an unaudited or changed draft, retain a user
+correction after restart, and complete an acknowledged artifact handoff with a
+second app. A disconnected provider leaves its pending state intact. Tests must
+also demonstrate journal isolation and denied out-of-scope access.
+
 ### Shared packet contract
 
 Information and code move in a versioned envelope. A minimum logical schema is:
