@@ -1,6 +1,6 @@
 # Scale ladder
 
-Source: `Nodes/G-763_Scalar_to_Harmonic.md`. Yellow. Six words. No seventh.
+Source: [`Nodes/G-763_Scalar_to_Harmonic.md`](Nodes/G-763_Scalar_to_Harmonic.md). Yellow. Six words. No seventh.
 
 ```text
 scalar        differential      vector
