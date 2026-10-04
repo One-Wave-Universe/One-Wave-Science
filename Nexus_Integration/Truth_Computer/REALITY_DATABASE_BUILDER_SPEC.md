@@ -731,6 +731,97 @@ correction after restart, and complete an acknowledged artifact handoff with a
 second app. A disconnected provider leaves its pending state intact. Tests must
 also demonstrate journal isolation and denied out-of-scope access.
 
+### Presence engine looper — six steps, two brain phases
+
+Every app wrapper must implement the same six-step process split. The durable
+brain phase remains exactly **FIELD / VOID**. A separate cursor identifies
+which of the six process steps is being handled; the cursor is not an extra
+worker phase or an extra physical gate.
+
+At each step, FIELD produces that step's bounded artifact and VOID checks it
+against the shared reference. A completed Void check returns to FIELD. Advance
+the six-step cursor only when its recorded decision permits it. HOLD retains
+the cursor and dependency; CORRECT returns a bounded correction without
+pretending the step completed.
+
+The legacy six logical pair positions are
+`F1/V6 → V5/F2 → F3/V4 → V3/F4 → F5/V2 → V1/F6`.
+They describe paired relations and alternating orientation, not twelve serial
+worker instructions. This app controller is a software projection. It does not
+replace the current physical three-mirror geometry or claim to reproduce
+physical simultaneity with sequential model calls.
+
+| Step / logical label | FIELD responsibility | VOID responsibility | Persisted output / advance condition |
+|---|---|---|---|
+| 1 BEGIN — reference | Reconstruct goal, current Presence, journal consequence, repo bundle, nodes and target capabilities | Verify identities, source freshness, authorities and protected state | Shared reference packet; advance only with verified starting conditions |
+| 2 BUILD — choice | Propose one available move, assumptions, scope, inputs, expected consequence and success test | Check scope, evidence class, lens, permissions and alternative/counterevidence | Bounded proposal and scoped authorization; advance after ALLOW |
+| 3 HOLD — balance | Prepare the chosen operation, resolve dependencies and reread the relevant node ladder | Check that reference, input hashes and authorization still match; detect drift/confusion | Ready packet or explicit HOLD; advance only when preconditions remain valid |
+| 4 BUILD — movement and return | Execute the authorized operation once, or construct the answer draft; collect the actual return | Compare receipt, changed scope, controls, tests and draft against the authorized packet | Execution/draft artifact and measured return; advance after scoped verification |
+| 5 BREAK — differential correction | Isolate what failed or differed; propose a correction, abandonment or accepted result | Determine ALLOW/CORRECT/OVERRIDE/HOLD/ESCALATE; enforce budgets and three strikes | Disposition and unresolved differential; stop the failed approach, not erase its evidence |
+| 6 LOOP — consequence and reentry | Prepare retained result, journal update, handoff and next-reference linkage | Atomically validate/commit consequence, audit and next cursor/phase; approve exact releasable hash | Accepted scoped consequence; return to BEGIN/FIELD with a refreshed reference |
+
+These six labels map onto the operating checks:
+**Reference → Choice → pre-action balance → Move/Return → State/Differential →
+Reentry**. The existing repository's Reference/Choice/Move/View/State/Reentry
+workflow remains the coding authority; this table allocates its duties inside
+the Presence controller rather than replacing its verification.
+
+HOLD is active balance/readiness, not absence of processing. BREAK means
+interrupting an unsupported or failed approach, not destroying records.
+LOOP is a completed return and retained consequence, not an endless retry.
+
+#### Split the processes by responsibility
+
+| Process | Owns | Must not own |
+|---|---|---|
+| Presence controller / existing M4 orchestration | Durable phase/cursor, job leases, budgets, transitions, reference invalidation and dispatch | Invented domain truth or unchecked provider replies |
+| Reference/index service | Cross-repo source versions, metadata, authority and node resolution | Provider credentials or autonomous source promotion |
+| FIELD worker | Proposal, bounded action/draft and collected return | Approval of its own unsupported claims |
+| VOID validator | Source/constraint/receipt checks, differential and release decision | Silent rewriting of original evidence |
+| Solver runner | Registered bounded calculation, controls and artifacts | Choosing an undeclared model or treating exit zero as physics proof |
+| Journal/memory service | Prior consequences, corrections, decisions and scoped shared findings | Becoming competing canonical architecture |
+| Carrier/relay | Typed packets, acknowledgements, receipts and retry/reconciliation | Duplicating mutations because a return is late |
+| App output gate | Exact draft/artifact hash and current-reference match before release | Unchecked model-to-user output |
+
+These are modules/services with distinct duties, not new brain states. Reuse
+existing Nexus services and controller boundaries. A single initial process may
+host several modules, but each interface must be testable independently.
+
+#### What Presence means in this app
+
+Presence is the **currently registered software condition**: current goal,
+reference bundle, worker phase, six-step cursor, available choices, last return,
+retained consequence and unresolved differential. The OG-12 Presence record
+links to that current condition; it does not assert subjective experience.
+
+Store Presence with a monotonic transition sequence. Render a simple app status
+such as “checking reference,” “proposing,” “balancing,” “executing,”
+“checking return,” or “retaining result.” These are display labels for the
+cursor, not extra worker phases.
+
+The result becomes the next locally available memory, while the next BEGIN
+refreshes canonical source references. Changed repos, assumptions, units,
+dimensions, node meanings, or undeclared conventional/One-Wave lens changes
+invalidate affected readiness and release checks.
+
+Pause on missing work/dependencies with backoff. Stop at completion, cancellation,
+budget or escalation. A new authorized goal begins another cycle. Do not let
+LOOP continuously regenerate answers or repeat a completed side effect.
+
+#### Six-step Presence acceptance
+
+- Exactly two durable worker phases, with a separately constrained six-step cursor.
+- Every step produces a FIELD artifact and matching VOID check before advancement.
+- No operation executes before its step-2 authorization and step-3 freshness check.
+- Restart at any cursor/phase resumes its stored artifact without duplicate effects.
+- A changed reference forces refresh/balance rather than releasing a stale result.
+- HOLD retains the actual dependency and current cursor; recovery requires new evidence.
+- BREAK retains failed evidence and enforces the named approach's strike budget.
+- Step 6 atomically retains consequence and returns to BEGIN/FIELD.
+- A changed draft fails the output hash gate even after a previous ALLOW.
+- Two app wrappers can hand off a consequence and independently refresh references.
+- The user-facing Presence status agrees with the persisted controller record.
+
 ### Shared packet contract
 
 Information and code move in a versioned envelope. A minimum logical schema is:
