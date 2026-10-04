@@ -397,6 +397,11 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 
 - I-01 Rule 16: no expansion of space in canonical One-Wave math.
 - I-01 Rule 17: use the terminology legend and 3D sphere-like default in One-Wave interpretation layers.
+## October 4 science correction and acquisition
+
+The [Phase 5 reproduction audit](Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) withdraws target-dependent numerical prediction claims. C-318's architectural definition remains distinct from its unresolved numerical spectrum. C-322 and Chapters 14–15 now use the no-penetration boundary rule. Historical chapter PDFs and pinned versions predate this correction; current Markdown nodes/chapters are authoritative.
+
+Use the [science data runbook](One_Wave_Bench/data/SCIENCE_DATA_RUNBOOK.md) for CERN/GWOSC snapshots and MAST/HEASARC/Gaia clients. The registry defines routes; receipts state what actually returned.
 
 <!-- AUTO-NODE-REGISTRY:START -->
 ## Auto-synchronized canonical node registry supplement
@@ -466,9 +471,3 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-767 | Measured Spectrum Lattice Phase Map | Spectral Field Mapping / Open Data / Cross-Scale Lattice Test. Source: `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`. | YELLOW |
 | G-768 | Anisotropic Signed-Axis Spectrum and Rotating-Axis Scale Test | Analytic lattice result / mode selection / renormalization boundary. Source: `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`. | YELLOW |
 <!-- AUTO-NODE-REGISTRY:END -->
-
-## October 4 science correction and acquisition
-
-The [Phase 5 reproduction audit](Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) withdraws target-dependent numerical prediction claims. C-318's architectural definition remains distinct from its unresolved numerical spectrum. C-322 and Chapters 14–15 now use the no-penetration boundary rule. Historical chapter PDFs and pinned versions predate this correction; current Markdown nodes/chapters are authoritative.
-
-Use the [science data runbook](One_Wave_Bench/data/SCIENCE_DATA_RUNBOOK.md) for CERN/GWOSC snapshots and MAST/HEASARC/Gaia clients. The registry defines routes; receipts state what actually returned.
