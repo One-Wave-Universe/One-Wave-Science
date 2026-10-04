@@ -10,6 +10,9 @@
 > Jetson execution is proven separately. Database ingestion, persistent transitions,
 > solver integration, recovery and the end-to-end answer flow must pass the tests below.
 
+
+**Build the actual interface from [the interface implementation guide](Reference_App/INTERFACE_BUILD_GUIDE.md).** It defines the screen layout, appearance, component/data contracts, click behavior, conversation continuity, source and journal drawers, correction dialogue, failure screens and observable completion tests. Process names alone are not an implementation. This specification owns system constraints; that guide owns their user-facing implementation.
+
 ## 1. What must be built
 
 The product is a **database builder, a persistent Field/Void loop, and a One-Wave
@@ -604,9 +607,7 @@ actual authentication supports the user's account. Discover the route and
 verify its capabilities before choosing it. Provider adapters may be added later
 only when requested; they are not a prerequisite for this build.
 
-No Claude connector is attached to the authoring session, and the Jetson
-`command -v claude` probe returned no installed command on 2026-10-04. Therefore
-Claude execution is **NOT VERIFIED**. This document does not claim it was connected.
+Current provider evidence is recorded in [the app execution record](Reference_App/WORK_RECORD.md). Resolve the target machine and actual route there before making a live-status claim. An earlier missing command on the Jetson does not establish the laptop's capabilities; a reachable DeepSeek relay does not establish a completed answer connection.
 
 ### Claude start packet
 

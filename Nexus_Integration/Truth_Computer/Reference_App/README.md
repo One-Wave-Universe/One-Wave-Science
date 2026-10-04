@@ -1,6 +1,8 @@
 # One-Wave reference apps
 
-A private search-and-answer interface with Claude and DeepSeek adapters. Ask a question, see progress, read an answer, open pinned sources, retain a correction, and revisit saved conversations. The interface keeps reference and balance details expandable.
+**AI builders: start with [the interface implementation guide](INTERFACE_BUILD_GUIDE.md).** Build the specified screens, interactions and persisted behavior; a list of Field/Void steps is not the product.
+
+The target is a clean One-Wave search-and-answer workspace for one identified AI: readable checked answers, exact source inspection, connected follow-ups, a personal journal, bounded correction dialogue, truthful connection/coverage views and restart continuity. The guide specifies layout, visual tokens, components, data contracts and complete user journeys. This README owns launch instructions for the current preview, which implements only part of that target.
 
 ## Start
 
