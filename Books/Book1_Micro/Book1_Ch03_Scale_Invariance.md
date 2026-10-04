@@ -174,6 +174,32 @@ emerges specifically at the 1:24 scale transition.
 
 ---
 
+## 2026-10-03 Scale-Doubling Boundary Correction
+
+The earlier statement that each recursive level necessarily doubles is **not established** by binary state symmetry, Circle-of-Fifths grammar, period-doubling analogy, or dyadic wavelets.
+
+The current analytic result is in `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`.
+
+For the tested triangular-lattice signed-axis operator (J_a=J_b=+J, J_c=-J), the M-type candidate has
+
+\[
+\psi_{nm}=A(-1)^{n+m},
+\]
+
+which is a stripe state: period-two modulation occurs along two primitive directions while the third direction remains in phase. A single static signed axis therefore **does not** yield isotropic (2\times) geometric scaling.
+
+If the signed axis cycles symmetrically through the three lattice orientations, rotational averaging can restore isotropy at the rank-2 tensor level, but this proves only (D_{eff}=dI), not (d=2).
+
+The octave claim now has one decisive gate:
+
+\[
+\mathcal R_{cycle}=\mathcal R_3\mathcal R_2\mathcal R_1\stackrel{?}{=}2I.
+\]
+
+The three coarse-graining maps must be derived from an explicit blocking rule. If the composition gives (sI) with (s\neq2), the natural scale factor is (s). If it is not proportional to the identity, isotropic recursive scaling fails for that rule. The result must not be forced to 2.
+
+Accordingly, the historical 1:3 -> 1:6 -> 1:12 -> 1:24 ladder remains an architectural scale notation/hypothesis, not a physically derived octave law.
+
 ## Yellow Audit
 
 - Full mathematical proof of scale invariance deferred (E-06 Yellow)
