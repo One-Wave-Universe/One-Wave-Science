@@ -1,0 +1,39 @@
+{
+  "clients": {
+    "astropy": "8.0.1",
+    "astroquery": "0.4.11"
+  },
+  "column_units": {
+    "__row": null,
+    "dec": "deg",
+    "exposure_a": "s",
+    "issue_flag": null,
+    "name": null,
+    "obs_type": null,
+    "observation_mode": null,
+    "obsid": null,
+    "processing_date": "d",
+    "public_date": "d",
+    "ra": "deg",
+    "status": null,
+    "time": "d"
+  },
+  "file": "provider-table.ecsv",
+  "provider_url": "https://heasarc.gsfc.nasa.gov/",
+  "query": {
+    "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source ORDER BY source_id",
+    "catalog": "numaster",
+    "coordinates": "83.6331 22.0145",
+    "mission": "HST",
+    "radius_deg": 0.1,
+    "source": "heasarc"
+  },
+  "retrieved_at_utc": "2026-10-04T23:16:57.085210+00:00",
+  "row_count": 108,
+  "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes",
+  "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b",
+  "source_id": "heasarc",
+  "status": "acquired",
+  "archived_file": "native-heasarc-wide-table.ecsv.gz",
+  "archive_encoding": "gzip; sha256 refers to decompressed original ECSV bytes"
+}

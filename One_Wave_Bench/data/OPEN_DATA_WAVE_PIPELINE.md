@@ -130,3 +130,9 @@ Required sequence:
 
 If live retrieval fails, report the failure. Never substitute generated numbers.
 Metadata-derived coordinates remain derived_metadata_wave and are not detector measurements.
+
+## Reproducible science metadata bundle
+
+Use [SCIENCE_DATA_RUNBOOK.md](SCIENCE_DATA_RUNBOOK.md) for live CERN/GWOSC snapshots, exact raw-body hash verification, pagination/failure handling, and native MAST/HEASARC/Gaia query tools. The existing single-record fetcher now also saves its exact HTTP body as `<output>.raw` so its hash can be independently verified.
+
+The corrected Mirror boundary permits coupling and phase shift with reflection, deflection, roll-off and scattering, without forced geometric penetration. A measured comparison requires the derived four-interaction response and a frozen detector-observable transform; metadata acquisition alone does not supply that derivation.

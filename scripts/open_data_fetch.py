@@ -88,6 +88,9 @@ def main() -> int:
         "boundary": "Source record preserved as returned. No One-Wave physical interpretation has been applied.",
     }
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+    raw_path = Path(str(args.output) + ".raw")
+    raw_path.write_bytes(raw)
+    envelope["raw_body_file"] = raw_path.name
     Path(args.output).write_text(json.dumps(envelope, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
         "source_id": args.source_id,

@@ -1,0 +1,73 @@
+{
+  "bytes": 656,
+  "raw_body_file": "gwosc-eae783d9034917dbfdea57cbe9b7b6a1abee8ad0d7be57e11f0543f121a0d9aa.raw",
+  "requested_url": "https://gwosc.org/api/v2/events/GW150914",
+  "retrieved_at_utc": "2026-10-04T23:13:32.046666+00:00",
+  "sha256": "eae783d9034917dbfdea57cbe9b7b6a1abee8ad0d7be57e11f0543f121a0d9aa",
+  "source_id": "gwosc",
+  "source_record": {
+    "aliases": [
+      "GW150914"
+    ],
+    "gcn_circular": "https://gcn.nasa.gov/circulars?query=G184098",
+    "gcn_notice": "https://gcn.gsfc.nasa.gov/notices_l/G184098.lvc",
+    "grace_id": "G184098",
+    "name": "GW150914",
+    "run": "O1",
+    "versions": [
+      {
+        "catalog": "O1_O2-Preliminary",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v1",
+        "version": 1
+      },
+      {
+        "catalog": "O1_O2-Preliminary",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v2",
+        "version": 2
+      },
+      {
+        "catalog": "GWTC-1-confident",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v3",
+        "version": 3
+      },
+      {
+        "catalog": "GWTC-2.1-confident",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v4",
+        "version": 4
+      }
+    ]
+  },
+  "summary": {
+    "classification": "provider_event_metadata_not_measurements",
+    "record_id": "GW150914",
+    "run": "O1",
+    "units": null,
+    "versions": [
+      {
+        "catalog": "O1_O2-Preliminary",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v1",
+        "version": 1
+      },
+      {
+        "catalog": "O1_O2-Preliminary",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v2",
+        "version": 2
+      },
+      {
+        "catalog": "GWTC-1-confident",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v3",
+        "version": 3
+      },
+      {
+        "catalog": "GWTC-2.1-confident",
+        "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v4",
+        "version": 4
+      }
+    ]
+  },
+  "transport": {
+    "content_type": "application/json",
+    "final_url": "https://gwosc.org/api/v2/events/GW150914",
+    "http_status": 200
+  }
+}
