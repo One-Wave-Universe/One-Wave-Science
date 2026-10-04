@@ -2,24 +2,45 @@
 
 Before the tree: name the job, open the first file, stop if it answers.
 
-Miss path: next file, then search the noun, then ask. Never guess.
+If it misses: next file, then search the noun, then ask. Never guess.
 
-Snowball: the opened file names the next file. Open that. It names the one after. Follow the names until the question is answered or the names stop. A verified path joins the map for the next question. Do not jump sideways. Do not invent the next name.
+Snowball: the opened file names the next file. Follow those names. A file that actually opened joins the map. Do not invent the next name.
 
-Scale ladder, from `Nodes/G-763_Scalar_to_Harmonic.md`. Six words. No seventh.
+## Scale
+
+Source: `Nodes/G-763_Scalar_to_Harmonic.md`. Yellow. Six words. No seventh.
+
+```text
+scalar        differential      vector
+tensor        stratum           harmonic
+```
+
+Top row is Field. Bottom row is Void, the next copy. Same three moves, twice.
+
+| Pair | Move |
+|---|---|
+| scalar ↔ tensor | intersect. Same shape, cut. |
+| differential ↔ stratum | oppose. Pair against layer. |
+| vector ↔ harmonic | invert. The move becomes the standing cycle. |
+
+Chain, each step holding every step under it:
 
 scalar → differential → vector → tensor → stratum → harmonic → scalar
 
-Each step contains every step before it. Every earlier step points at the next. Two edges are required, not implied: stratum → harmonic, and harmonic → scalar. Tensor does not point at harmonic. The carry reaches the loop only as tensor → stratum → harmonic. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
-
-| Step | Contains | Points to | In G-763 |
+| Step | Holds | Points to | Node says |
 |---|---|---|---|
 | scalar | the point | differential | one number on Ground |
 | differential | scalar | vector | two rails, Field minus Void |
-| vector | scalar, differential | tensor | the move, a directed edge |
-| tensor | scalar through vector | stratum | the carry, quadratic views |
-| stratum | scalar through tensor | harmonic | the nest layer. Required edge: stratum → harmonic |
-| harmonic | all five | scalar | closed loop. Required edge: harmonic → scalar |
+| vector | scalar, differential | tensor | the move along a directed edge |
+| tensor | scalar through vector | stratum | the carry, M_ij, W_ij |
+| stratum | scalar through tensor | harmonic | the nest: cell, chip, cube, Rubik |
+| harmonic | all five | scalar | closed loop, next-scale DC |
+
+Required edges: stratum → harmonic, and harmonic → scalar.
+
+Tensor does not point at harmonic. The carry reaches the loop only through the nest: tensor → stratum → harmonic. Harmonic then returns to scalar. That return is the next scale, not a seventh word.
+
+Harmonic geometry and propagation stay in their own nodes. `Nodes/D-405_Harmonic_Shell.md` quantizes a closed path, not energy. `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md` steps frequency labels. It does not set mass. Both yellow.
 
 ## Scope
 
@@ -39,14 +60,14 @@ Science order: `AI_CANONICAL_START_HERE.md`. Gate values stay on the node.
 
 ## Map
 
-Open the first path. Then only if it misses.
+Open the first path. Open the next only if it misses.
 
 Scalar differential vector tensor stratum harmonic
 - `One-Wave-Science/Nodes/G-763_Scalar_to_Harmonic.md`
 - `Nodes/A-103_Differential.md`
 - `Nodes/D-405_Harmonic_Shell.md`
 - `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`
-- Six-step scale. Tensor → stratum → harmonic. Stratum → harmonic and harmonic → scalar are required. No direct tensor-to-harmonic edge. No seventh word.
+- Path: tensor → stratum → harmonic → scalar. No direct tensor-to-harmonic edge.
 
 CERN particle to wave
 - `One-Wave-Science/DERIVATION_PHASE_2_CERN_BRIDGE/CERN_TO_WAVE_REFERENCE.md`
