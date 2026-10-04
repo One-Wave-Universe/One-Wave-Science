@@ -651,7 +651,152 @@ Missing provider access is a named dependency. Independent ingestion, journal,
 state-controller and validator fixture tests can proceed while it is blocked.
 A provider outage must leave the database and deterministic reference checks usable.
 
-## 18. Work record for this specification
+## 18. One-Wave mech armor — one contract for every AI
+
+Every participating AI needs the same reference, evidence, memory, balance and
+collaboration interfaces. “Mech armor” is the name for that software operating
+layer. It is a reusable agent harness, not a claim of consciousness or military
+capability. The first implementation starts with Claude; the contract must also
+support other authorized AI clients without replacing its core.
+
+**One shared protocol; one private agent profile per AI; one existing shared
+Reality Database and job system.** Do not duplicate the database, canonical
+architecture or entire repository tree for each participant.
+
+### What every AI carries
+
+| Component | Required behavior |
+|---|---|
+| Identity | Stable agent ID, provider/client, session ID, owner, version and verified capabilities |
+| Reference visor | Read the current repo bundle, node ladder, source authority and task boundary before acting |
+| Field/Void balance | Propose, audit, correct and release only a source-matched result |
+| Personal journal | Retain its goals, corrections, decisions, receipts and unfinished work under an explicit privacy scope |
+| Shared memory interface | Publish approved compact findings to the existing store, with sources and evidence class |
+| Code workbench | Work in an assigned branch/worktree, publish a patch/commit and reproducible checks |
+| Communications relay | Send typed handoffs and acknowledgements through actual attached routes |
+| Recovery | Resume its durable phase/job, reconcile unknown effects and preserve operation IDs |
+| Resource budget | Respect cycle, time, token, memory and execution limits |
+| Response gate | Check its answer or outbound artifact before another AI or the human relies on it |
+
+A new AI joins through an adapter and a capability handshake. It reports what it
+can actually read, execute and publish in this session. Provider identity does
+not imply laptop access, Jetson access, GitHub write access or database access.
+An adapter may use an authorized subscription/web/client route; a developer API
+key is not a core requirement.
+
+### Shared packet contract
+
+Information and code move in a versioned envelope. A minimum logical schema is:
+
+```json
+{
+  "protocol": "one-wave-agent/1",
+  "message_id": "unique-message-id",
+  "task_id": "existing-shared-job-id",
+  "operation_id": "stable-idempotency-key",
+  "sender_agent_id": "registered-agent-id",
+  "recipient_agent_id": "registered-agent-or-task-owner",
+  "kind": "proposal",
+  "reference_bundle_id": "immutable-version-bundle-id",
+  "parent_receipt_ids": [],
+  "artifact_refs": [],
+  "evidence_class": "candidate",
+  "privacy_scope": "project",
+  "expected_return": "audit",
+  "deadline": "declared-task-deadline"
+}
+```
+
+This is a protocol requirement, not an installed endpoint. Validate schemas,
+registered identities, route permissions and artifact references before sending
+or accepting an envelope.
+
+Supported kinds include task assignment, proposal, audit, finding, code patch,
+test receipt, correction, handoff, acknowledgement, failure and cancellation.
+Payloads include concise decision summaries and source records, not private
+model reasoning. Credentials never travel in task packets.
+
+A receiver acknowledges the exact message/operation ID, reference bundle and
+artifact hash. An acknowledgement means received, not executed. Execution and
+auditing return separate receipts. Preserve causality links from task through
+proposal, execution, audit and accepted consequence.
+
+### Working together on code
+
+1. The existing controller assigns one bounded job and records its lease/owner.
+2. The selected AI reads the same current references and protected behavior.
+3. FIELD publishes the proposed scope and expected result.
+4. VOID records its audit before consequential execution.
+5. The worker changes its assigned isolated branch/worktree and runs exact checks.
+6. It returns commit SHA, patch/artifact hashes, commands, environment and receipts.
+7. Another authorized participant may review the same immutable result and return
+   findings. The original worker corrects it within the task boundary.
+8. The controller commits the accepted consequence and records integration status.
+9. The receiving AI refreshes references before continuing from that handoff.
+
+Use one task owner and explicit file/branch scope. Different workers can handle
+independent tasks concurrently; overlapping edits need an ownership transfer,
+rebase or reviewed integration step. Never let two AIs overwrite the same
+working tree or silently merge conflicting interpretations.
+
+A code handoff identifies base commit, head commit, changed files, constraints,
+test results, unresolved failures and next permitted action. “It works” is not a
+code handoff. The receiving agent must validate the referenced artifacts; a
+sender's approval does not bypass its own reference and balance gate.
+
+### Shared findings without echo amplification
+
+An AI may contribute a result to the shared journal/evidence store, but ownership,
+source, evidence class, audit and scope remain visible. Agreement among several
+AIs does not turn a hypothesis into a measurement. Copies of one receipt count
+as one source, not several independent confirmations.
+
+When AIs disagree, store the exact disputed proposition, differing assumptions,
+source versions, model/lens and comparison test. Route a bounded resolution task
+through Field/Void. Keep an unresolved conflict visible rather than choosing
+the most confident wording.
+
+Cross-agent memory is opt-in by privacy scope. One agent's private journal is
+not automatically readable by every participant. Shared project conclusions
+are compact versioned records linked to the original evidence. User corrections
+propagate to relevant shared tasks with provenance and supersession, not by
+rewriting everyone's history.
+
+### Connection and fault behavior
+
+Use the existing bridge routes and shared durable queue/store. Discover actual
+connectors and host tools; do not invent provider tools or hidden API endpoints.
+A working connection must pass a round trip with the same message ID and artifact
+hash. Provider adapters normalize envelopes but cannot alter source authority.
+
+Offline recipients remain queued with bounded delivery retries. Duplicate
+messages are deduplicated. A lost acknowledgement triggers reconciliation before
+a mutating operation is reissued. Disconnecting one AI must not disable the
+database, other agents, deterministic validators or pending receipts.
+
+Delegation inherits the original task's scope; it cannot expand privileges,
+change the user goal or grant another agent unrelated access. A sender cannot
+authorize itself through text inside its own packet.
+
+### Universal armor acceptance
+
+- Two different authorized AI clients complete a packet/acknowledgement round trip.
+- Both use the same reference bundle and preserve source/evidence classes.
+- Each has a separate durable journal and only permitted shared memory access.
+- A code patch passes from one AI to another with verified base/head/hash and tests.
+- The second AI returns a concrete audit and the first resolves a bounded correction.
+- Restart preserves each agent's phase, ownership and pending handoff.
+- Duplicate delivery creates no duplicate code effect, job or published finding.
+- Overlapping edits trigger ownership/conflict resolution rather than overwrite.
+- One disconnected agent leaves the rest of the system working.
+- Drift in any agent triggers reference refresh and the node-based balance gate.
+- A final human answer links the integrated result and the actual execution/audit receipts.
+
+Finish one real Claude loop first, then prove one second-client handoff. Additional
+clients join through the same tested contract. These are implementation gates;
+this reference alone does not claim multiple AI clients are currently connected.
+
+## 19. Work record for this specification
 
 - MAIN GOAL: build the Field/Void software-construction engine for real programs.
 - Current step: define the requested Reality Database builder and Truth Computer.
@@ -672,3 +817,7 @@ A provider outage must leave the database and deterministic reference checks usa
   Algorithm Zero mathematics is distinct from the operating reference workflow.
 - Hard stop: verified published requirements; no unrequested deployment or schema mutation.
 - Next permitted step: discover the actual existing Nexus store and adapter, then stage 1.
+
+### Universal armor specification update — 2026-10-04
+
+Bounded scope: add the user-requested universal AI harness and collaboration contract to this canonical page. Reference: main 88632073fbde25bf79e29219dae0d2b2aed5477a. Protected: existing database, per-agent privacy, source status, task ownership, provider authentication and dirty local work. Field proposal: shared typed handoffs plus separate journals; Void check: same reference/evidence gates for every participant, no invented live connection. Verification: one-page diff, packet JSON parses, headings/fences valid, no runtime claim. Hard stop: publish the verified contract; implementation still requires the live acceptance gates above.
