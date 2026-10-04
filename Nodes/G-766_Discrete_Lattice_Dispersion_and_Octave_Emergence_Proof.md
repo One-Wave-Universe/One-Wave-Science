@@ -191,6 +191,14 @@ held-out coverage is incomplete.
 from sampling/window artifacts, disappears under refinement, or requires
 event-by-event retuning.
 
+## 7a. Anisotropic signed-axis correction
+
+See `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`.
+
+The explicit signed-axis operator (J_a=J_b=+J, J_c=-J) does not produce isotropic (2\times) dilation under a static axis assignment. Its M-type candidate is a stripe mode with phase pattern (\psi_{nm}=A(-1)^{n+m}). Therefore octave-like spectral evidence in this node must not be promoted to geometric doubling.
+
+A rotating three-orientation signed-axis cycle is a viable isotropy candidate, but the scale factor remains unresolved until the composed coarse-graining map (\mathcal R_3\mathcal R_2\mathcal R_1) is calculated. Rotational averaging can establish isotropy of an effective rank-2 tensor; it does not by itself establish a factor of 2.
+
 ## Current status
 
 The six-neighbor dispersion and octave-emergence tests are specified but have
