@@ -202,6 +202,34 @@ Repository placement:
 
 A claim should move from **UNVERIFIED** only when a defined test, dataset, measurement, or reproducible simulation supports it. Failed claims should be marked **DISMISSED/FAILED** rather than silently removed.
 
+---
+
+## DERIVATION Phases — Experimental Validation of One-Wave
+
+One-Wave claims are tested through structured derivation phases, each building on prior validation and connecting theory to experimental data.
+
+**DERIVATION_PHASE_1_EIGENMODE_ANALYSIS** — Foundation (Complete, 2026-10-03)
+- Validates dispersion relation ω(k) exact on hexagonal lattice
+- Proves Maxwell equations emergent from vector field (ψ_x, ψ_y) structure  
+- Tests Helmholtz decomposition and Faraday law compliance
+- Confirms damping parameter γ and coupling parameter β are independent
+- Authority: `characteristic_equation_solver.py`, `discrete_maxwell_solver_v4.py`
+- Canonical Nodes: A-114 (Dispersion), C-311 (E-M Duality), C-309 (Friction), A-109 (Inertial Memory)
+
+**DERIVATION_PHASE_2_CERN_BRIDGE** — Particle Physics (In Progress, 2026-10-03)
+- Translates CERN collision observables (masses, momenta, cross-sections) to One-Wave field excitations
+- Canonical reference: `DERIVATION_PHASE_2_CERN_BRIDGE/CERN_TO_WAVE_REFERENCE.md`
+- Production mapper: `DERIVATION_PHASE_2_CERN_BRIDGE/cern_particle_mapper.py`
+- First falsifiable test: e⁺e⁻ → μ⁺μ⁻ at LEP (σ = 61.4 fb)
+- Status: Foundation + implementation ready; matrix element calculation OPEN
+
+**DERIVATION_PHASE_3+** — LIGO, LHC, precision tests (Planned)
+- Gravitational wave predictions from A-115 compression field
+- Full LHC data: Higgs, quarks, QCD coupling running
+- Falsifiable deviations from Standard Model (sub-percent precision)
+
+---
+
 ## Modular research chapters and prototype modules
 
 A compact cross-domain set now lives under `chapters/`. These files separate established baseline science from One-Wave hypotheses and define explicit test/falsification boundaries:
