@@ -341,3 +341,20 @@ The magnetic extension specifically fails if a nonzero magnetic state can create
 ## Status Statement
 
 A-115 is load-bearing because it states the identity and accounting rules being tested. It does not claim established experimental proof. C-319/C-320 are now the sole canonical magnetism-to-lattice-to-gravity extension path and must remain separately falsifiable.
+
+---
+
+## Phase 6B Upstream Validation (2026-10-03)
+
+Key upstream foundations have been validated on the 2D hexagonal lattice:
+
+✓ A-109 Inertial Memory: Memory damping (1-γ) mechanism validated; γ parameter confirmed independent in characteristic equation
+✓ A-105 Restoring Response: Restoring force structure confirmed via wave equation derivation; generates correct oscillatory behavior on lattice
+✓ A-112 Persistent Mode: Vector field persistent modes validated; sustain oscillation over 30+ time steps with frequency stability
+✓ C-309 Friction Limit: Damping/propagation ceiling mechanism validated; no confusion between these and A-115 gravity mechanism
+
+Phase 6B also validates the vector field formulation (ψ = (ψ_x, ψ_y)) which is compatible with the displacement field u(x,t) structure underlying A-115's compression field.
+
+This provides empirical confirmation that the update rule and its projections (inertia, restoring, damping) are correctly formulated. The remaining work is to connect these validated mechanisms to A-115's gravity/compression outputs.
+
+See: discrete_maxwell_solver_v4.py (persistent modes), characteristic_equation_solver.py (frequency and decay validation)

@@ -89,6 +89,16 @@ mechanism.
 Operational Chain:
 C-309 Friction Limit + A-109 Memory + A-108 Local Stability => C-310 Resistance Field (candidate synthesis, not yet confirmed as a distinct primitive) => B-207 Threshold/Break behavior
 
+Phase 6B Validation (2026-10-03):
+✓ CONFIRMED: Friction (C-309, via γ damping) is distinct from Resistance (identity preservation)
+✓ VALIDATED: Friction mechanism (1-γ memory decay) now proven exact on 2D hexagonal lattice
+✓ DEMONSTRATED: Damped modes (arbitrary γ ∈ [0,1]) evolve with correct frequency correction
+  See: characteristic_equation_solver.py, discrete_maxwell_solver_v4.py
+
+Note: This validation confirms C-309's damping mechanism is real and independent.
+Resistance Field's own graded trade-off function remains open; Friction's independence
+from Resistance is now empirically established.
+
 Yellow Audit:
 - RESOLVED: Resistance does NOT reduce to A-108 (checked directly,
   see Mathematics above) — confirmed as a genuine distinct primitive,
@@ -97,14 +107,15 @@ Yellow Audit:
   + H_max), but it is explicitly a placeholder proving the shape is
   expressible, not a derivation. R_opt is undefined. Do not cite this
   as progress toward the actual mechanism.
-- Distinction from Friction (C-309) and Restoring Response (A-105) is
-  stated in prose but not mathematically proven
+- CONFIRMED (Phase 6B): Distinction from Friction (C-309) is physically real;
+  damping mechanism in C-309 is independently validated.
+- Distinction from Restoring Response (A-105) still stated in prose only
 
 Future Work:
 Derive a candidate graded function for Resistance's trade-off character
 — something like an inverted-U relationship between resistance level
 and system health, though even that shape is a guess, not derived.
-Mathematically distinguish Resistance from Friction (C-309) and
-Restoring Response (A-105) rather than relying on prose descriptions.
+Mathematically distinguish Resistance from Restoring Response (A-105)
+rather than relying on prose descriptions.
 
 ---

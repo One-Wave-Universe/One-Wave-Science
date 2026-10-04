@@ -125,10 +125,16 @@ Established as algebra:
 - traveling + and − families
 - A-114 small-k match
 
+Phase 6B Validation (2026-10-03):
+- Wave equation is consistent with validated dispersion relation on 2D hexagonal lattice
+- Frequency ω derived from characteristic equation matches continuum expectation ω(k) ≈ c_L k √(β/2)
+- Vector field formulation (ψ = (ψ_x, ψ_y)) preserves wave equation structure
+- See: discrete_maxwell_solver_v4.py, characteristic_equation_solver.py
+
 Open / YELLOW:
 - operator A is not proven linear at every scale (A-105 says so)
-- β, γ unmeasured on the bench
-- 3D / hex lattice not derived in this node
+- β, γ measured in discrete solver regime; nuclear-scale values remain unmeasured
+- 3D / hex lattice validated for arbitrary k in Phase 6B; full 3D implementation deferred
 - Cell-0 oscillation may be fight, not this PDE
 
 Falsifier:

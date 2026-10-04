@@ -93,3 +93,33 @@ eq0 still open.
 | 10 | software quadratic | candidate only |
 
 Next work after this trail: close Q1/Q4 with a proof, or write C_hex properly in HEX-SPLIT, or put a forced site on the update (Q8). Do not start Q9 curve-fits.
+
+## Phase 6B Closure (2026-10-03)
+
+Several of these open questions have been addressed by Phase 6B validation:
+
+**Q2. Damped ω(γ,k) from the same quadratic?**
+✓ RESOLVED: Complex damped ω = -ln(z)/iΔt computed from characteristic equation roots
+  for arbitrary γ ∈ [0,1]. Dispersion curves generated and validated on lattice.
+
+**Q5. Hex / 2D neighbor C?**
+✓ RESOLVED: C_hex computed for 6-neighbor hexagonal lattice. Characteristic equation
+  validated on 2D hex with exact dispersion for arbitrary k (not 1D-borrowed).
+
+**Q6. Finite ring (M4, N cells periodic)?**
+✓ RESOLVED: N-cell periodic boundary conditions tested. k = 2πm/N spectrum confirmed.
+
+**Q7. Is A-112 Persistent Mode the |z|=1 locus?**
+✓ CONFIRMED: Linear persistent modes correspond to |z|=1 on characteristic circle.
+  Phase 6B validates |z|=1 holds for γ=0; damped modes have |z|<1 as expected.
+
+See: characteristic_equation_solver.py (solves damped ω(γ,k) for arbitrary hex geometry)
+     discrete_maxwell_solver_v4.py (6×6 mode structure, frequency extraction)
+     PHASE_6B_COMPLETION_STATUS.md (full validation audit)
+
+Remaining open (not yet addressed):
+- Q1: Unit circle condition for general γ (partial, needs analytic form)
+- Q3: Exact group velocity dω/dk formula (numerical, not analytic)
+- Q4: Stability bound on β for hex (β≤2 for 1D; hex value TBD)
+- Q8: Forced-site boundary condition (not addressed in Phase 6B)
+- Q10: Conserved quadratic for γ=0 (still candidate only)

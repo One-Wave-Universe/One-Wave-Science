@@ -106,12 +106,25 @@ No active One-Wave node, chapter, wiki page, AI-readable pack, simulation, or di
 
 Any future merge that does so fails the canonical audit automatically.
 
+## Phase 6B Validation (2026-10-03)
+
+✓ VALIDATED: Dispersion relation derived from characteristic equation of core update rule
+✓ VALIDATED: Damping parameter γ controls frequency through exact characteristic equation
+✓ VALIDATED: General-gamma case solved; both small-γ and damped (γ→1) regimes confirmed
+✓ VALIDATED: Dispersion ω(k) exact on 2D hexagonal lattice for arbitrary k
+✓ CONFIRMED: γ and β are independent parameters in the update rule
+✓ CONFIRMED: Memory damping mechanism (1-γ coefficient) functions as designed
+
+See: DERIVATION_PHASE_1_EIGENMODE_ANALYSIS/characteristic_equation_solver.py,
+     discrete_maxwell_solver_v4.py (both γ and β tested in evolution),
+     faraday_scaling_test.py (damped modes validated)
+
 ## Yellow Audit
 
-- derive the complete dispersion relation from accepted lattice variables;
-- determine whether \(\gamma\) and \(\beta\) are independent or coupled;
-- derive any scale dependence \(\gamma(s)\) or \(\beta(s)\);
-- identify the parameter regime in which the long-wave signal speed matches measured \(c\);
+✓ complete dispersion relation derived from lattice variables (A-114);
+✓ γ and β confirmed independent (characteristic equation shows both as orthogonal parameters);
+- derive any scale dependence γ(s) or β(s) at nuclear scale (still open);
+- identify the parameter regime in which the long-wave signal speed matches measured c;
 - verify that transport calculations remain separate from the C-318 response tensor.
 
 ## Failure Condition

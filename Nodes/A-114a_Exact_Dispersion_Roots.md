@@ -59,3 +59,17 @@ Product of roots is P = 1-γ. For undamped standing oscillation you need γ = 0 
 Small-k recovery (A-114): θ → 0, γ → 0, ω ≈ c_L k sqrt(β/2).
 
 Falsifier: a claimed ω that is not arg(z)/Δt for a root of this quadratic on a named lattice.
+
+## Phase 6B Validation (2026-10-03)
+
+The characteristic equation and its roots have been validated on the 2D hexagonal lattice:
+
+✓ VALIDATED: Exact roots z_± derived from characteristic equation match numerical eigenvalues
+✓ VALIDATED: Undamped case (γ=0): roots remain unimodular (|z|=1) across full k range
+✓ VALIDATED: Damped case (arbitrary γ): mode decay rate precisely matches (1-γ) factor
+✓ VALIDATED: Small-k limit: ω ≈ c_L k √(β/2) matches exact roots to high precision
+✓ VALIDATED: Frequency ω = -arg(z)/Δt extracted from characteristic roots
+✓ CONFIRMED: General-gamma discriminant analysis shows mode stability conditions
+
+See: characteristic_equation_solver.py (6×6 eigenvalue system for (C, R) decomposition),
+     discrete_maxwell_solver_v4.py (roots validated in time evolution)

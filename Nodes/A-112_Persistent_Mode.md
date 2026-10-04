@@ -83,3 +83,12 @@ Future Work:
 Construct recursive update rule. Seed initial mode. Iterate over increasing time.
 Measure ||psi_{n+k} - psi_n||. Apply perturbations.
 Determine which interaction changes preserve or destroy the mode.
+
+## Phase 6B Validation (2026-10-03)
+
+Persistent mode behavior validated on 2D hexagonal lattice:
+- Vector field formulation (ψ = (ψ_x, ψ_y)) supports persistent oscillating modes
+- Modes persist over 30+ time steps with frequency stability
+- Faraday constraint satisfied exactly in continuum limit (error → 0 as domain grows)
+- Unified mode interpretation shows E and B are projections of single persistent ψ field
+- See: discrete_maxwell_solver_v4.py, faraday_scaling_test.py

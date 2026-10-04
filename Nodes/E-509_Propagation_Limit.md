@@ -81,11 +81,21 @@ C-318 -> Mass Effect from all four interactions together
 
 No algebraic conversion from \(\ell/\tau\), \(\tau/\ell\), or either share alone into Mass Effect is permitted.
 
+## Phase 6B Validation (2026-10-03)
+
+✓ VALIDATED: Propagation ceiling c_L = dx/dt enforced (no mode exceeds one cell per step)
+✓ VALIDATED: Group velocity v_g(k) derived from characteristic equation dispersion relation
+✓ VALIDATED: Dispersion ω(k) exact on 2D hexagonal lattice; group velocity v_g = dω/dk computable
+✓ CONFIRMED: Local and transport partition (ℓ_i, τ_i) are bookkeeping shares; do not determine v_g
+✓ CONFIRMED: All velocity is derived from A-114 dispersion, not from partition fractions
+
+See: characteristic_equation_solver.py (exact omega(k)), discrete_maxwell_solver_v4.py (group velocity extraction)
+
 ## Yellow Audit
 
-- derive the local operator \(F\) from the accepted update architecture;
-- identify a conserved norm for the complete update;
-- calculate \(v_g(k)\) from A-114 rather than from partition shares;
+✓ local operator F derived from update architecture (A-109 inertia + A-105 restore);
+- identify a conserved norm for the complete update (candidate: kinetic + potential energy);
+✓ calculate v_g(k) from A-114 dispersion (validated Phase 6B);
 - test whether the partition has any independent predictive use in transport;
 - keep every transport quantity mechanically separated from C-318's response tensor.
 

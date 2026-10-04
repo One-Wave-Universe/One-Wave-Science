@@ -185,3 +185,11 @@ DEPENDENCIES:
 
 	STATUS:
 	YELLOW.
+
+## Phase 6B Validation (2026-10-03)
+
+Oscillatory behavior confirmed on 2D hexagonal lattice:
+- Frequency ω(k) derived from characteristic equation matches observed oscillation periods
+- Damped memory (γ parameter) controls amplitude decay as predicted
+- Inertial memory + restoring response sustain oscillation under bounded motion
+- See: discrete_maxwell_solver_v4.py, characteristic_equation_solver.py

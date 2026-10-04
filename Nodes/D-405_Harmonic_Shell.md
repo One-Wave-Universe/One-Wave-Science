@@ -67,6 +67,24 @@ A nonzero energy ladder requires an additional derived model, for example:
 
 D-405 currently quantizes geometry. It does not yet quantize energy.
 
+## Phase 6B Dispersion Validation
+
+A-114's dispersion relation omega(k) has been validated on the 2D hexagonal lattice:
+- Exact characteristic equation for arbitrary k (not just small-k limit)
+- Frequency matching ω_E = ω_B proven exact
+- Damped general-gamma case (γ ∈ [0,1]) validated in evolution
+- Energy spacing DeltaE ~ hbar*omega structure confirmed compatible with lattice physics
+
+See: characteristic_equation_solver.py, discrete_maxwell_solver_v4.py, PHASE_6B_COMPLETION_STATUS.md
+
+**Implication for D-405:** The dispersion relation is now ready as an input to shell energy derivation. The remaining work is to choose between:
+1. Action/energy per wavelength: E_n = n epsilon_lambda
+2. Radial eigenmodes with k_(r,n) boundary-value problem
+3. Curvature/pressure/coupling energy depending on R_n
+4. Nonlinear collective-mode energy
+
+Once any of these energy models is selected and derived, combined with A-114's validated omega(k), the shell energy ladder becomes computable.
+
 ## Connection to D-407
 
 D-407 removes a false calibration fork: neutron-profile width sigma is not

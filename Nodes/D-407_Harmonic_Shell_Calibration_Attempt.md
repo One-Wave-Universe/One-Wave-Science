@@ -158,9 +158,15 @@ D. nonlinear/coupled shell energy depending on curvature, overlap, pressure,
    or junction terms rather than omega(k) alone.
 
 A-114 has already narrowed omega(k) to existing lattice parameters in its
-small-k regime. The remaining energy blocker is not an arbitrary missing
-proportionality constant; it is the absent physical map from shell geometry
-to mode energy.
+small-k regime. Phase 6B validation (2026-10-03) confirms this dispersion
+relation is EXACT on the 2D hexagonal lattice for arbitrary k (not just small-k):
+
+✓ Characteristic equation roots match numerical eigenvalues
+✓ Frequency matching ω_E = ω_B proven exact (Helmholtz structure)
+✓ Faraday constraint satisfied exactly in continuum limit
+
+The remaining energy blocker is not an arbitrary missing proportionality constant;
+it is the absent physical map from shell geometry to mode energy.
 
 ## Carbon/Hoyle consequence
 
