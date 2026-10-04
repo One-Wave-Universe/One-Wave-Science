@@ -481,10 +481,11 @@ The framework is VALIDATED as a cross-flavor mechanism spanning 5 orders of magn
 
 ### References
 
-- solvers/quark_mass_solver.py (executable validation)
-- C-317 Boundary-Tension Weave (confinement mechanism)
-- C-322 Mirror-Gate Higgs Scale (absolute energy calibration anchor)
-- Book1_Ch02 Three-Vortex Knot (canonical quark topology)
+- solvers/quark_mass_solver.py (octave-scaling implementation, light/heavy quark predictions)
+- solvers/proton_mirror_gate_calibration.py (proton four-interaction model, 125 GeV calibration framework)
+- C-317 Boundary-Tension Weave (confinement mechanism, octave-scaled parameters)
+- C-322 Mirror-Gate Boundary-Response Threshold (absolute energy calibration anchor, 125 GeV)
+- Book1_Ch02 Three-Vortex Knot (canonical quark topology, Phase 5 octave-scaling discovery)
 
 ## Yellow Audit (Phase 5 Update)
 
@@ -505,8 +506,12 @@ Open:
 
 - derive the stable 3D profiles \(\mathbf Z_a\) for proton (uud configuration);
 - derive the work metric \(\mathsf W\) from the discrete update rule;
-- **implement 125-GeV calibration route:** construct proton four-interaction model, compute E_MG to Mirror-Gate threshold, use 125 GeV to fix global scaling λ;
-- compute charm/bottom/top masses after λ-calibration (no new per-flavor parameters);
+- **implement 125-GeV calibration route (Phase 5 In Progress):**
+  - ✓ Construct proton four-interaction model (solvers/proton_mirror_gate_calibration.py)
+  - ✓ Framework for E_MG calculation and λ calibration ready
+  - ⚠ Compute proper E_MG(ξ) from energy curve to Mirror-Gate threshold (requires full simulation)
+  - ⚠ Use 125 GeV to fix global scaling λ (awaits simulation data)
+  - ▶ Compute charm/bottom/top masses after λ-calibration (no new per-flavor parameters)
 - prove that a gapless traveling light mode remains available while bounded recurrent modes have nonzero carried-pattern response;
 - derive the damping tensor separately and satisfy the C-313 frame test.
 
