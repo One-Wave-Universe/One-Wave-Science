@@ -22,3 +22,20 @@
 - LOOK-BACK: the spec now has an executable interface and an actual provider loop. Subscription authentication and database integration are separate facts. The DeepSeek failure is retained rather than relabeled success. All user working trees remain protected.
 - HARD STOP: verified branch/PR plus host-preview evidence; do not silently migrate an undiscovered Nexus database or deploy a public service.
 - HANDOFF: retain phase/cursor checks, idempotency, privacy separation and source hashes. Next permitted step is the observed DeepSeek relay repair and verified Nexus adapter integration; each requires a fresh reference.
+
+
+## Interface explainer rebuild — 2026-10-04
+
+- MAIN GOAL: give an AI enough concrete design and behavior to build the requested One-Wave app, rather than treating process labels as implementation.
+- REFERENCE / HARD START: Science main `04c11d6d597a7c6b7cff3d3e40b68e452a8d219b`; current app.py, app.js, index.html, build specification, I-06 metadata authority and General Reference Rules inspected through GitHub. No host checkout change.
+- BRANCH: `feature/interface-build-guide-20261004`.
+- CHOICE / ALLOWED FILES: add INTERFACE_BUILD_GUIDE.md; replace README's vague opening with the build target and guide pointer; make the specification link the guide prominently and replace stale provider status with its receipt authority; append this record.
+- PROTECTED: all runtime code, user worktrees, source status, physical geometry, existing Nexus database/jobs and private credentials.
+- FIELD PROPOSAL: specify actual screen geometry, visual tokens, component ownership, request/retry/follow-up behavior, answer/source presentation, journal and dialogue, typed view records, release guards, failure states and complete interaction traces.
+- VOID PRE-CHECK: ALLOW documentation scope. Distinguish target behavior, current preview capabilities and unimplemented private adapter operations; never imply this guide deployed them.
+- ATTEMPT: 1/3. Self-review corrected vague process-only explanation into inspectable interface outcomes.
+- VERIFICATION: relative-link resolution against the pinned tree plus proposed files; fenced-block pairing; manual TypeScript contract review (automated compiler unavailable in this authoring runtime); exact four-file scope and no runtime mutation. Final PR diff and resulting merge receipt checked separately.
+- PROGRESS / REFLECTION: previous explanation listed components but left UI behavior implicit. The new guide says what users see and what clicks persist, including corrections, source inspection, mobile history and honest failure recovery. It explicitly names current-code gaps so builders cannot mistake the preview for completion.
+- VOID POST-CHECK: ALLOW interface documentation; runtime acceptance remains at its recorded scope. These checks prove build-guide consistency, not implementation of its requirements.
+- HARD STOP: publish the verified guide and entry pointers. No additional runtime work is claimed.
+- HANDOFF: implement one guide slice per bounded branch-step; protect existing database ownership and pass the observable user-flow tests before claiming the finished app.
