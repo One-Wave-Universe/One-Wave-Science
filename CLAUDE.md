@@ -1,5 +1,9 @@
 # Claude Start Here
 
+## Laptop and Jetson terminal access
+
+Read [AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) before choosing a terminal route. Discover the session's direct device terminal tools, select laptop or Jetson explicitly, and run the identity probe there. That file owns route selection and executable examples for every AI.
+
 This repository already contains architecture, runtime rules, tests, and project history. Do not replace them with a narrower local interpretation.
 
 ## Read first

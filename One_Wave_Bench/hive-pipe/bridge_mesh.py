@@ -93,7 +93,16 @@ def check(route: str, service: str, probe: Callable[[], tuple[bool, str]], repai
     )
 
 def one_pass(repair: bool) -> int:
-    receipts = [check(route, service, probe, repair) for route, service, probe in ROUTES]
+    receipts = []
+    for route, service, probe in ROUTES:
+        try:
+            receipt = check(route, service, probe, repair)
+        except Exception as exc:
+            # One broken relay must not suppress independent route probes/receipts.
+            receipt = Receipt(route, service, "unknown", False, False, "unknown",
+                              False, f"{type(exc).__name__}: {exc}",
+                              datetime.now(timezone.utc).isoformat())
+        receipts.append(receipt)
     for receipt in receipts:
         append_receipt(receipt)
         print(json.dumps(asdict(receipt), sort_keys=True))

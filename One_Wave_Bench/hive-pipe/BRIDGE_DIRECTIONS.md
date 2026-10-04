@@ -1,6 +1,6 @@
 # Bench Bridge Directions
 
-This file keeps the complete operational directions inside `One_Wave_Bench/` so bridge work does not depend on scattered root documentation.
+Terminal route selection is owned by [AI_BRIDGE_START_HERE.md](../../AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here). Discover and use the requested machine's direct device terminal first. This file supplies Hive Pipe and GitHub transport details after that route selection.
 
 ### Shared reference rule
 

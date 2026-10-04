@@ -1,5 +1,7 @@
 # One-Wave Modular Hysteretic Bridge Mesh
 
+For laptop/Jetson device selection, posted redundant routes and runnable recovery loops, read the single [terminal route authority](../../AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) first. It takes precedence over older route ordering.
+
 ## Purpose
 Every bridge action begins from a reference, chooses an authenticated route, and requires a matching receipt before that route is treated as healthy.
 
@@ -10,6 +12,8 @@ Successful routes gain weight. Failed routes lose weight. The active route is he
 Each route module must expose the same concepts: reference, probe, execute, receipt, repair, source, target, and direction.
 
 Route families:
+- direct device terminal (Remote Desktop Commander)
+- native target-host terminal
 - Hive Pipe MCP
 - ChatGPT GitHub pull bridge
 - GitHub Actions command lane
