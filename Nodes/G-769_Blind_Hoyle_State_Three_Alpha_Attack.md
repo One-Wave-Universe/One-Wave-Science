@@ -179,3 +179,77 @@ This node defines an attack, not a solution. The strongest present result is dia
 ## Evidence boundary
 
 Experimental nuclear values are scoring data, not One-Wave derivations. This node must remain BROWN until executable results exist. A successful numerical fit alone is not evidence of a new physical law.
+
+
+## Cross-instrument wave-data constraint
+
+The attack must use the repository's existing immutable metadata anchors rather than inventing a carbon-only calibration lane.
+
+### CERN lane
+
+Use `sims/01-cern-wave-transform/` and the canonical metadata anchor for CMS Open Data record 7105:
+- /DoublePhoton/Run2012B-22Jan2013-v1/AOD;
+- 8 TeV pp collisions;
+- Run 194115 / Event 651938592 / LS 702;
+- recorded UTC 2012-05-14T05:37:31.650834Z.
+
+Retain raw detector quantities, event/run identity, units, provenance and transformed quantities side-by-side. Reconstructed particle labels are metadata, not primitive One-Wave states. Record 12220 remains a simulated tracker-geometry control and must not be mislabeled as recorded collision data.
+
+### GWOSC lane
+
+Use `sims/04-gwosc-strain/` and the canonical GW170817 anchor:
+- GPS 1187008882.4;
+- H1/L1/V1;
+- 4096 Hz and 16384 Hz products;
+- cleaned and pre-cleaning products must remain separately identified;
+- source version/DOI, detector, sample rate, GPS start/duration, checksum where available, and processing state travel with every transform.
+
+The L1 glitch/cleaning distinction is a control, not nuisance metadata to discard.
+
+### Shared wave representation
+
+For each source create a source-preserving envelope
+
+```text
+source_id
+raw_measurement + units
+instrument/detector
+run/event/GPS/UTC
+sample cadence or event geometry
+uncertainty/quality flags
+processing state
+provenance/version/checksum
+ -> source-native transform
+ -> dimensionless One-Wave observables
+ -> frozen shared statistic
+```
+
+No CERN energy is to be relabeled as a LIGO frequency and no LIGO sample rate is to be relabeled as a physical mode. Cross-domain comparison occurs only after each source is transformed with its own units intact.
+
+### Shared-statistic gate
+
+G-767's scale-phase statistic may be used as one exploratory bridge, but it must be frozen on a declared training subset. CERN and GWOSC then act as independent validation lanes. A statistic that is retuned separately for CMS, LIGO H1, L1, V1, or carbon fails the common-law test.
+
+### Jetson pipeline requirement
+
+Jetson execution is a reproducibility/runtime lane, not evidence by itself. A Jetson run must emit a receipt containing:
+- repository commit and branch;
+- script/config hash;
+- input source IDs and immutable metadata;
+- input file checksums;
+- transformation parameters;
+- random seed if used;
+- hardware/runtime identity;
+- start/end UTC;
+- exit status;
+- output artifact hashes;
+- control/hypothesis label;
+- blinded/unblinded state.
+
+The same input bundle and commit must be replayable off-Jetson. Hardware-specific numerical differences must be measured rather than interpreted as physics.
+
+### Cross-scale attack objective
+
+Use CERN event/excitation data and GWOSC strain as independent wave/field measurements to constrain the transform/statistic before the Hoyle score is unblinded. They may constrain representation, dispersion, recurrence, resolution and calibration methodology. They may not supply a hidden fitted path to the Hoyle energy.
+
+A strong result would be one frozen One-Wave parameterization/statistic that survives CERN and GWOSC controls and then makes a genuinely held-out nuclear prediction. A failure in either external lane is evidence against universality and must remain visible.
