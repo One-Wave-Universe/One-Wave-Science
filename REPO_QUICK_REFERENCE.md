@@ -6,6 +6,21 @@ Miss path: next file, then search the noun, then ask. Never guess.
 
 Snowball: the opened file names the next file. Open that. It names the one after. Follow the names until the question is answered or the names stop. A verified path joins the map for the next question. Do not jump sideways. Do not invent the next name.
 
+Scale ladder, from `Nodes/G-763_Scalar_to_Harmonic.md`. Six words. No seventh.
+
+scalar → differential → vector → tensor → stratum → harmonic
+
+Each step contains every step before it. Every earlier step points at the next. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
+
+| Step | Contains | Points to | In G-763 |
+|---|---|---|---|
+| scalar | the point | differential | one number on Ground |
+| differential | scalar | vector | two rails, Field minus Void |
+| vector | scalar, differential | tensor | the move, a directed edge |
+| tensor | scalar through vector | stratum | the carry, quadratic views |
+| stratum | scalar through tensor | harmonic | the nest layer |
+| harmonic | all five | next scalar | closed loop, next-scale DC |
+
 ## Scope
 
 | Job | Repo | Says | Does not say |
@@ -25,6 +40,11 @@ Science order: `AI_CANONICAL_START_HERE.md`. Gate values stay on the node.
 ## Map
 
 Open the first path. Then only if it misses.
+
+Scalar differential vector tensor stratum harmonic
+- `One-Wave-Science/Nodes/G-763_Scalar_to_Harmonic.md`
+- `Nodes/A-103_Differential.md`
+- Six-step scale. Each step contains every step before it and points only at the next. No seventh word.
 
 CERN particle to wave
 - `One-Wave-Science/DERIVATION_PHASE_2_CERN_BRIDGE/CERN_TO_WAVE_REFERENCE.md`
