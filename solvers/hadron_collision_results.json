@@ -1,0 +1,203 @@
+{
+  "weave_parameters": {
+    "sigma_T": 0.012,
+    "kappa_T": 0.01,
+    "eta_T": 0.01
+  },
+  "collision_results": [
+    {
+      "hadron": "proton",
+      "binding_energy_measured_MeV": 201.64700859915624,
+      "collision_tests": [
+        {
+          "photon_energy_MeV": 50.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 100.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 200.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 500.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 1000.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        }
+      ]
+    },
+    {
+      "hadron": "neutron",
+      "binding_energy_measured_MeV": 210.02582052446206,
+      "collision_tests": [
+        {
+          "photon_energy_MeV": 50.0,
+          "initial_energy_MeV": 0.21002582052446206,
+          "energy_released_MeV": 0.18902323847201585,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 100.0,
+          "initial_energy_MeV": 0.21002582052446206,
+          "energy_released_MeV": 0.18902323847201585,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 200.0,
+          "initial_energy_MeV": 0.21002582052446206,
+          "energy_released_MeV": 0.18902323847201585,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 500.0,
+          "initial_energy_MeV": 0.21002582052446206,
+          "energy_released_MeV": 0.18902323847201585,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 1000.0,
+          "initial_energy_MeV": 0.21002582052446206,
+          "energy_released_MeV": 0.18902323847201585,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        }
+      ]
+    },
+    {
+      "hadron": "Lambda",
+      "binding_energy_measured_MeV": 201.64700859915624,
+      "collision_tests": [
+        {
+          "photon_energy_MeV": 50.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 100.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 200.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 500.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 1000.0,
+          "initial_energy_MeV": 0.20164700859915624,
+          "energy_released_MeV": 0.18148230773924062,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        }
+      ]
+    },
+    {
+      "hadron": "\u03c0\u207a",
+      "binding_energy_measured_MeV": 20.755345643721544,
+      "collision_tests": [
+        {
+          "photon_energy_MeV": 50.0,
+          "initial_energy_MeV": 0.020755345643721543,
+          "energy_released_MeV": 0.01867981107934939,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 100.0,
+          "initial_energy_MeV": 0.020755345643721543,
+          "energy_released_MeV": 0.01867981107934939,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 200.0,
+          "initial_energy_MeV": 0.020755345643721543,
+          "energy_released_MeV": 0.01867981107934939,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 500.0,
+          "initial_energy_MeV": 0.020755345643721543,
+          "energy_released_MeV": 0.01867981107934939,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        },
+        {
+          "photon_energy_MeV": 1000.0,
+          "initial_energy_MeV": 0.020755345643721543,
+          "energy_released_MeV": 0.01867981107934939,
+          "status": "breaking",
+          "extraction_distance_fm": 663.1455962162306
+        }
+      ]
+    }
+  ],
+  "experimental_comparison": [
+    {
+      "hadron": "proton",
+      "measured_MeV": 201.64700859915624,
+      "experimental_MeV": 7.289,
+      "error_percent": 2666.4564219941867,
+      "status": "CALIBRATION_NEEDED"
+    },
+    {
+      "hadron": "neutron",
+      "measured_MeV": 210.02582052446206,
+      "experimental_MeV": 8.665,
+      "error_percent": 2323.840975469845,
+      "status": "CALIBRATION_NEEDED"
+    },
+    {
+      "hadron": "Lambda",
+      "measured_MeV": 201.64700859915624,
+      "experimental_MeV": 1115.68,
+      "error_percent": 81.92608914750141,
+      "status": "CALIBRATION_NEEDED"
+    },
+    {
+      "hadron": "\u03c0\u207a",
+      "measured_MeV": 20.755345643721544,
+      "experimental_MeV": 139.57,
+      "error_percent": 85.129078137335,
+      "status": "CALIBRATION_NEEDED"
+    }
+  ]
+}
