@@ -1,5 +1,9 @@
 # Claude Start Here
 
+## Reality Database, journal and Truth Computer reference
+
+For database-builder, cross-repo lens, Field/Void loop, solver, journal or response-balance work, read [the required build and operation specification](Nexus_Integration/Truth_Computer/REALITY_DATABASE_BUILDER_SPEC.md) before proposing or acting. Use its node-based reference/differential checks and evidence gates. Start the model connection with Claude through an authenticated non-API route; do not require a developer API key or claim an unverified connection is live. Preserve the existing Nexus database and job system.
+
 ## Laptop and Jetson terminal access
 
 Read [AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) before choosing a terminal route. Discover the session's direct device terminal tools, select laptop or Jetson explicitly, and run the identity probe there. That file owns route selection and executable examples for every AI.
