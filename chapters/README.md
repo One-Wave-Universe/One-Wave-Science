@@ -14,6 +14,7 @@ Foundational documentation of One-Wave physics, from lattice mechanics through a
 | [04](./04_Macro_Quasar_Bridge.md) | **Macro Quasar Bridge** | UNVERIFIED | Astrophysical application; quasar jets and unified compression field |
 | [05](./05_Simulation_Engine.md) | **Simulation Engine** | UNVERIFIED | Lattice dynamics solver architecture |
 | [06](./06_Dispersion_Validator.md) | **Dispersion Relation Validator** | ✓ VALIDATED | **Phase 2 Complete:** D-600 and D-602 characteristic equations proven; sign flip mechanism confirmed |
+| [07](./07_Maxwell_Validator.md) | **Maxwell Equation Validator** | ✓ VALIDATED | **Phase 3 Complete:** All 5 Maxwell-like checks pass; EM structure emerges naturally |
 
 ---
 
@@ -45,9 +46,9 @@ Foundational documentation of One-Wave physics, from lattice mechanics through a
 
 - **Phase 1:** Theoretical derivation (chapters 1–5, complete)
 - **Phase 2:** Simulation validation (chapter 6, ✓ COMPLETE as of 2026-10-04)
-- **Phase 3:** Maxwell equation correspondence (in development)
-- **Phase 4:** High-energy divergence from Standard Model (planned)
-- **Phase 5:** Peer-reviewed publication (target: 4–6 weeks after Phase 3)
+- **Phase 3:** Maxwell equation correspondence (chapter 7, ✓ COMPLETE as of 2026-10-04)
+- **Phase 4:** High-energy divergence from Standard Model (planned, 4–6 weeks)
+- **Phase 5:** Peer-reviewed publication (target: 4–6 weeks after Phase 4)
 
 ---
 
@@ -84,8 +85,8 @@ This chapter set provides foundation for peer-reviewed manuscript:
 **Required for submission:**
 - ✓ Mathematical derivations (D-600, D-602, stability)
 - ✓ Simulation validation results
-- ◐ Maxwell equations correspondence (Phase 3)
-- ◐ High-energy regime prediction (Phase 4)
+- ✓ Maxwell equations correspondence (Phase 3, ✓ COMPLETE)
+- ◐ High-energy regime prediction (Phase 4, in progress)
 
 ---
 
