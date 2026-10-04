@@ -207,32 +207,13 @@ where \(\mathsf W_i\) is the still-unclosed work metric that converts A-109 memo
 
 This is the Mass Effect: the resistance produced when the entire coupled recurrence must be carried and rebuilt relative to Ground.
 
-### Finite Mirror-Gate response
+### Coupled Mirror phase response
 
-For an allowed boundary-deformation path from stable hold \(\mathbf q_0\) to the first Mirror threshold \(\mathbf q_G\), C-322 defines
+The boundary does not admit forced penetration. Its candidate response is reflection, deflection, tangential redistribution and scattering; the Mirror relation supplies coupling and phase shift.
 
-\[
-E_{\rm MG}
-=
-\overline E_4(\mathbf q_G)-\overline E_4(\mathbf q_0)
-=
-\int_{\Gamma_{0\to G}}
-\nabla_{\mathbf q}\overline E_4\cdot d\mathbf q.
-\]
+The executable joint-response model uses the same four-interaction Hessian H and work metric W as its inertia calculation. For radiation-port matrix B and passive damping Γ, D(ω)=H−ω²W−iω(BBᵀ+Γ) and S(ω)=I+2iωBᵀD(ω)⁻¹B. Its incoming/outgoing/loss ledger is tested directly. C-322's approximately 125 GeV comparison remains an empirical comparator, not an imposed crossing threshold or a predicted value.
 
-The empirical anchor is
-
-\[
-E_{\rm MG}\approx125\ {\rm GeV}.
-\]
-
-The Mass Effect and the Mirror-Gate energy are therefore related through the same four-interaction field architecture but are not interchangeable:
-
-\[
-m_{\rm eff}\neq E_{\rm MG}/c^2
-\]
-
-as a causal derivation.
+Carried-profile curvature and boundary phase response are distinct observables of the same candidate operator. Physical closure requires a self-held profile, derived coefficients and independent energy/time calibration.
 
 ## 5. Static Cosmic Energy Accounting
 
@@ -303,7 +284,7 @@ Mass Effect / displacement
 -> field transfer
 -> low-coupling neutrino return
 -> compact compression reservoir
--> Mirror-Gate threshold
+-> Mirror coupling / phase response
 -> White Energy ejection
 -> field reinjection
 -> new Mass Effect / structure
@@ -318,7 +299,7 @@ The C-319/C-320 magnetic path-accessibility hypothesis is a local extension of t
 - derive \(\chi(r)\) from sources,
 - recover or replace the inverse-square limit,
 - derive the extended wake profile without fitting it by hand,
-- derive the four-interaction work metric, the actual gate-crossing path, the scale-free gate-to-mass ratio, and one explicit energy calibration route,
+- derive the four-interaction work metric, the self-held profile and observable coupling response, and one independent energy calibration route,
 - derive the E-528 propagation coefficient from field variables,
 - derive the E-529 neutrino-transfer coefficients,
 - close the E-530 static energy budget,
@@ -327,7 +308,7 @@ The C-319/C-320 magnetic path-accessibility hypothesis is a local extension of t
 ### Bronze
 
 - one fixed field law reproduces chosen gravity/rotation/lensing datasets,
-- one four-interaction boundary model produces a pressure-work threshold near 125 GeV,
+- one fixed four-interaction boundary model predicts an observable resonance under independent calibration, then survives comparison with the approximately 125 GeV measurement,
 - a static transport simulation conserves total energy through photon loss, neutrino return, capture, and White Energy ejection,
 - any claimed planetary magnetic coupling survives the D-416 multi-body controls and ablations,
 - code, parameters, raw outputs, and failed regimes are published.
@@ -358,3 +339,11 @@ Phase 6B also validates the vector field formulation (ψ = (ψ_x, ψ_y)) which i
 This provides empirical confirmation that the update rule and its projections (inertia, restoring, damping) are correctly formulated. The remaining work is to connect these validated mechanisms to A-115's gravity/compression outputs.
 
 See: discrete_maxwell_solver_v4.py (persistent modes), characteristic_equation_solver.py (frequency and decay validation)
+
+## Executable joint-response replacement (2026-10-04)
+
+The four-interaction calculation now runs on D-409's native twelve-neighbor 3D FCC shell. See [the derivation](../solvers/JOINT_RESPONSE_DERIVATION.md), [solver](../solvers/joint_boundary_response.py) and [complete results](../solvers/joint_response_results.json).
+
+One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
+
+Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.

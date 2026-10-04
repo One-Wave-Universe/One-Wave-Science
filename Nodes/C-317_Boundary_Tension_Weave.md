@@ -143,20 +143,9 @@ C-317 does not derive Mass Effect by itself. The weave is one of four coupled in
 
 During translation, the weave must be carried and reclosed with the knot, electrical shell, and Mirror relation. Its diagonal and cross-coupled response contributes to the Mass-Effect tensor.
 
-During forced boundary deformation, the weave contributes signed generalized work to the C-322 gate barrier:
+The weave contributes diagonal and cross terms to the joint Hessian H. Boundary excitation couples and shifts phase through the passive resolvent H−ω²W−iω(BBᵀ+Γ). It does not force a path through a barrier. The carried-profile energy Hessian and the boundary response are computed together in the linked executable replacement.
 
-\[
-E_{\rm MG}
-=
-\int_0^{\xi_G}
-\left(
-P_K+P_E+P_M+P_T+P_\times
-\right)d\xi.
-\]
-
-Here \(P_T=dE_{\rm weave}/d\xi\) may be positive or negative along a chosen path. A surface-tension term can assist radial contraction while still controlling confinement, equilibrium geometry, and the cross-coupled route to the Mirror Gate. The weave is load-bearing without being declared a positive resisting pressure by definition.
-
-The weave contribution is therefore confinement/stabilization, not the complete mass mechanism and not the complete 125 GeV mechanism.
+The surface, phase and twist coefficients above still require derivation. The linear cavity control preserves the four-role coupling structure but does not claim to have derived the nonlinear weave or stable three-vortex profile.
 
 ## One-Wave Naming Chain
 
@@ -179,24 +168,20 @@ proton -> Three-Vortex Knot
 - Boundary Reweaving products and rates are not derived.
 - The relationship between the spherical intact-knot model and C-321's reduced junction geometry needs simulation.
 
-## Phase 5 Octave-Scaling Application to Quarks (October 2026)
+## Constructive replacement for the Phase 5 numerical claim
 
-The Boundary-Tension Weave parameters scale with confinement regime:
+The earlier assigned octave pressures and mixed scale labels do not constitute a derivation of quark masses or validated proton confinement. Their historical text is preserved in [the pinned pre-replacement version](https://github.com/One-Wave-Universe/One-Wave-Science/blob/0f005afb9afc8ac15a1ea061c2900cf3f6b0187c/Nodes/C-317_Boundary_Tension_Weave.md).
 
-**Lepton scale** (electron, \(\sim 10^{-15}\) m):
-- \(\sigma_T \approx 0.3\) GeV/fm²
-- \(\kappa_T \approx 0.2\) GeV/fm³
-- \(R_{\rm knot} \approx 0.7\) fm
-
-**Quark confined scale** (hadron interior, \(\sim 10^{-10}\) m):
-- \(\sigma_T \approx 1.5\) GeV/fm² (5× stronger)
-- \(\kappa_T \approx 1.0\) GeV/fm³ (5× stronger)
-- \(R_{\rm knot} \approx 0.35\) fm (2× tighter, shared radius for all light quarks)
-
-This octave-scaling of boundary parameters (5-10× in pressure terms) bridges the lepton-to-quark mass hierarchy without inventing new physics. The same surface-tension and phase-locking mechanisms operate at both scales.
-
-**Validated**: Proton's three-vortex knot confined by C-317 mechanism; quark masses derived from four-interaction framework (C-318) with octave-scaled Boundary-Tension Weave.
+The replacement below supplies a runnable native 3D joint operator, energy conservation, phase/power response, carried-profile curvature, coupling ablation and mesh refinement. It has no fitted particle labels. Nonlinear knot formation and the weave's actual constitutive coefficients remain the next physical derivation, with the Bronze tests below providing its acceptance conditions.
 
 ## Bronze Requirement
 
 Simulate three coupled vortex fields inside a closed 3D boundary and show stable knot formation, a non-weakening extraction cost, bounded Tension-Link modes, and reclosure after neck break using one fixed parameter set.
+
+## Executable joint-response replacement (2026-10-04)
+
+The four-interaction calculation now runs on D-409's native twelve-neighbor 3D FCC shell. See [the derivation](../solvers/JOINT_RESPONSE_DERIVATION.md), [solver](../solvers/joint_boundary_response.py) and [complete results](../solvers/joint_response_results.json).
+
+One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
+
+Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.

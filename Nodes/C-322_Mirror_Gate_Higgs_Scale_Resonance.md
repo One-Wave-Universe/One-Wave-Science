@@ -64,3 +64,11 @@ Never stop a scan when its energy reaches 125 GeV and call the result a predicti
 6. Compare held-out data through detector response and backgrounds.
 
 Absolute energy normalization, a microscopic coupling law, stable 3D profiles and a demonstrated collider discriminator remain open. Conservation of an illustrative operator alone does not establish a Higgs alternative, particle masses, or a LIGO signal.
+
+## Executable joint-response replacement (2026-10-04)
+
+The four-interaction calculation now runs on D-409's native twelve-neighbor 3D FCC shell. See [the derivation](../solvers/JOINT_RESPONSE_DERIVATION.md), [solver](../solvers/joint_boundary_response.py) and [complete results](../solvers/joint_response_results.json).
+
+One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
+
+Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.
