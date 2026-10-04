@@ -15,3 +15,4 @@
 | `45_PPF_HEX_TRAIL.md` | Yellow C1/D1 schema trail |
 | `46_ZONE_EDGE_A0_QUARANTINE.md` | Yellow 125 GeV a0 quarantine |
 | `47_DAMPING_MATRIX_DISPERSION.md` | Yellow E1 matrix stamp |
+| `Boundary_Coupling_and_Phase5_Audit.md` | Reproduced target-dependency audit and conservative boundary-coupling witness |

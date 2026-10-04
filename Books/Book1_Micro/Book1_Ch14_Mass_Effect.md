@@ -2,14 +2,14 @@
 ## Book 1 - Micro
 ## Chapter 14: Mass Effect as Four-Interaction Carried-Pattern Resistance
 
-Version: 4.0  
-Date: July 22, 2026  
+Version: 4.1  
+Date: October 4, 2026  
 Class: A - Core Physics Chapter  
 Status: YELLOW (mechanism form resolved; numerical derivation open)
 
 Dependencies: C-318 Four-Interaction Mass-Effect Response, A-109 Inertial Memory,
 A-112 Persistent Mode, A-115 Unified Compression Field, C-301 Mirror Gate,
-C-311 Electric-Magnetic Duality, C-317 Boundary-Tension Weave, C-322 Mirror-Gate 125 GeV Boundary Response
+C-311 Electric-Magnetic Duality, C-317 Boundary-Tension Weave, C-322 Mirror-Gate Boundary Coupling and Phase Response
 
 ---
 
@@ -256,61 +256,21 @@ Dimensional check:
 
 ---
 
-## Relation to the 125 GeV Mirror Gate
+## Relation to Mirror-Gate Coupling
 
-The Mass Effect is the local response to translation inside the stable basin.
+Mass Effect measures local translational response. C-322 measures boundary coupling and phase response: reflection, deflection, tangential roll-off and scattering. There is no forced-through boundary path. The two responses must come from the same four-interaction architecture, but neither determines the other by dividing an observed energy by a speed squared.
 
-The 125 GeV Mirror Gate is finite work required to drive the boundary to its first actual crossing into the mirrored orientation basin:
-
-\[
-E_{\rm MG}
-=
-\overline E_4(\mathbf q_G)-\overline E_4(\mathbf q_0).
-\]
-
-The two measurements come from the same \(\overline E_4\), but from different changes:
-
-\[
-\mathcal M_{ij}
-=
-\partial_{v_i}\partial_{v_j}\overline E_4\big|_0,
-\]
-
-\[
-E_{\rm MG}
-=
-\int_{\Gamma_{0\to G}}
-\nabla_{\mathbf q}\overline E_4\cdot d\mathbf q
-\approx125\ {\rm GeV}.
-\]
-
-Therefore the gate energy is not every object's Mass Effect and is not divided by \(c^2\) to manufacture the mechanism.
-
-The gate helps stabilize Mass Effect because ordinary displacement remains inside the hold basin. A much larger coupled deformation is required to force the orientation flip.
-
----
+The proposed connection to CERN's approximately 125 GeV reconstructed invariant-mass peak remains a hypothesis requiring a forward prediction.
 
 ## Numerical Program
 
-A valid simulation must use one fixed rule and perform two separate tests.
-
 ### Test A - Mass Effect
 
-1. Build a stable 3D recurrent state with all four interactions active.
-2. Translate it at several small velocities.
-3. Measure cycle-averaged energy change.
-4. Extract \(\mathcal M_{ij}\) from the quadratic response.
-5. Independently accelerate the mode and verify \(\mathbf F\approx\mathcal M\mathbf a\).
+Build a stable native 3D recurrent state with all four interactions and cross-couplings. Translate it at several small velocities, measure cycle-averaged energy, extract the second velocity response, then independently verify acceleration response with fixed coefficients.
 
 ### Test B - Mirror Gate
 
-1. Start from the same hold state.
-2. Follow the minimum allowed coupled deformation path.
-3. Locate the first actual update that crosses into the mirrored orientation basin.
-4. Integrate the signed external pressure-work required along that path.
-5. Compare the derived barrier with 125 GeV only after coefficients are fixed.
-
----
+Start from the same state. Derive its boundary coupling operator and phase response, sweep incident conditions without permitting geometric penetration, and close input/output/storage/loss accounting. Select response features independently of measured target values. Compare only after freezing coefficients and detector response.
 
 ## Energy-Scale Identifiability
 
@@ -324,7 +284,7 @@ E_{\rm physical}
 
 The normalized update is unchanged under a global rescaling \(\mathsf W\to\lambda\mathsf W\), while both \(m_{\rm eff}\) and \(E_{\rm MG}\) scale by \(\lambda\). The current update can therefore predict geometry and dimensionless ratios, but not an absolute value in kilograms or GeV.
 
-The first scale-free test is
+A conditional scale-free test, once a boundary-response energy is defined and computed, is
 
 \[
 \mathcal R_G
@@ -344,11 +304,15 @@ Then the model must choose one route: calibrate \(\varepsilon_{\rm lat}\) from a
 2. A traveling light mode must retain zero rest Mass Effect under the same update law.
 3. Removing any one of the four interactions must change or destroy the derived Mass Effect.
 4. One response law must generate more than one measured Mass Effect without per-object fitting.
-5. The 125 GeV gate barrier and local Mass Effect must emerge from the same four-interaction coefficients but remain different observables.
+5. A proposed boundary-response feature and local Mass Effect must emerge from the same four-interaction coefficients but remain different observables.
 
 The mechanism fails if every measured mass retunes the work metric, if each object needs an unrelated rule, or if the electrical shell, Mirror Gate, knot structure, or Boundary-Tension Weave can be omitted without consequence.
 
 ---
+
+## Reproduced Solver Limitation
+
+The existing Phase 5 solvers do not yet execute Tests A and B. They insert measured mass ratios and select the compression endpoint at 125 GeV. Their outputs cannot establish independent predictions. The [reproduction audit](../../Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) supplies commands and the corrections recorded in C-318.
 
 ## Yellow Audit
 
@@ -358,7 +322,7 @@ Resolved:
 - scalar-potential mass-gap scaffold removed from canonical derivation;
 - four interactions and cross-couplings identified;
 - Mass Effect defined as the second velocity response of the complete recurrent architecture;
-- 125 GeV separated as finite Mirror-Gate work;
+- measured collider energy separated from an unproved gate identification;
 - dimensions close;
 - inertial response is separated from velocity drag.
 
