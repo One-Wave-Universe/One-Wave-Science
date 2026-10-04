@@ -10,7 +10,7 @@ Scale ladder, from `Nodes/G-763_Scalar_to_Harmonic.md`. Six words. No seventh.
 
 scalar → differential → vector → tensor → stratum → harmonic → scalar
 
-Each step contains every step before it. Every earlier step points at the next. Two edges are required, not implied: stratum → harmonic, and harmonic → scalar. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
+Each step contains every step before it. Every earlier step points at the next. Two edges are required, not implied: stratum → harmonic, and harmonic → scalar. Tensor does not point at harmonic. The carry reaches the loop only as tensor → stratum → harmonic. Harmonic is the closed loop that becomes the next-scale scalar. It is not a new gate.
 
 | Step | Contains | Points to | In G-763 |
 |---|---|---|---|
@@ -44,7 +44,9 @@ Open the first path. Then only if it misses.
 Scalar differential vector tensor stratum harmonic
 - `One-Wave-Science/Nodes/G-763_Scalar_to_Harmonic.md`
 - `Nodes/A-103_Differential.md`
-- Six-step scale. Each step contains every step before it. Required edges: stratum → harmonic, harmonic → scalar. No seventh word.
+- `Nodes/D-405_Harmonic_Shell.md`
+- `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`
+- Six-step scale. Tensor → stratum → harmonic. Stratum → harmonic and harmonic → scalar are required. No direct tensor-to-harmonic edge. No seventh word.
 
 CERN particle to wave
 - `One-Wave-Science/DERIVATION_PHASE_2_CERN_BRIDGE/CERN_TO_WAVE_REFERENCE.md`
