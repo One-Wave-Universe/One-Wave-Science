@@ -339,19 +339,155 @@ sandbox.
 
 This is a Jetson-specific fallback after direct terminal discovery. It is not the laptop terminal route.
 
-Workflow: `.github/workflows/jetson-command.yml`
+**Verified 2026-10-04 21:40 UTC:** both repository Actions secrets were saved,
+and [run 37237072407](https://github.com/One-Wave-Universe/One-Wave-Science/actions/runs/37237072407)
+completed successfully with actual Jetson stdout `GITHUB_MCP_OK`.
+This is a dated execution receipt; re-probe for current health.
 
-Dispatch **Jetson Command Lane** with:
+### AI operating directions
 
-```text
-argv_json = ["printf","GITHUB_MCP_OK"]
-timeout = 30
+1. Discover direct device terminal tools first. Select laptop or Jetson explicitly.
+2. If a working target terminal exists, use it for the user's authorized work.
+3. If Actions is the selected fallback, dispatch `jetson-command.yml` on `main`
+   with all required inputs below. Leave `gateway_url` blank to use the secret.
+4. Read the returned run ID, completed conclusion, target stdout, and exit code.
+   A queued run or old receipt does not prove this request executed.
+5. Continue authorized work through the proven route. Repair only the failed
+   dependency; do not create a replacement bridge because credentials are missing.
+
+### GitHub authentication: use device login
+
+Run these on the selected host that will operate GitHub. `gh` must already be
+installed; verify with `command -v gh`. The Jetson has `gh`.
+
+```bash
+gh auth status --hostname github.com
 ```
 
-Blank `gateway_url` uses the configured secret. A successful workflow with
-`GITHUB_MCP_OK` and exit `0` proves the current tunnel and secret together. CI
-only proves the workflow contract; it cannot prove hidden secrets or a temporary
-tunnel is live.
+If it is already authenticated to the authorized repository account, continue.
+Otherwise start device login on that same host:
+
+```bash
+gh auth login --hostname github.com --git-protocol https --web
+```
+
+The process prints a short-lived code and `https://github.com/login/device`.
+The human opens that URL in their normal, already signed-in browser, enters the
+code, and authorizes GitHub CLI. Keep the terminal process running and read its
+completion. If the code expires, start a fresh login and use its new code.
+Then verify again with `gh auth status --hostname github.com`.
+
+A login in the human's normal browser does not sign in an AI's separate cloud or
+in-app browser. Do not repeat a broken cloud-browser login loop. Device login
+lets the human use their existing browser while the AI continues on the host
+terminal. Never request passwords, recovery codes, or tokens in chat. Account
+recovery and device verification remain with the account owner.
+
+### Configure the two repository Actions secrets
+
+Target repository: `One-Wave-Universe/One-Wave-Science`.
+Target scope: repository Actions secrets, not variables or environment secrets.
+
+| Secret name | Authorized source on this Jetson |
+|---|---|
+| `JETSON_GATEWAY_URL` | Current live HTTPS tunnel base URL, without `/mcp` |
+| `JETSON_GATEWAY_TOKEN` | Existing accepted Hive Pipe client token |
+
+The 2026-10-04 setup used these private files outside Git:
+
+```text
+/home/Scales/.local/state/one-wave-secrets-setup/gateway-url
+/home/Scales/.config/hive-pipe/tokens/codex.token
+```
+
+The URL file is a setup snapshot, not an automatically refreshed authority.
+Confirm the current tunnel before reusing it. Transfer values directly from
+private files to GitHub over the authenticated CLI; never print their contents,
+put them in command arguments, commit them, or paste them into chat:
+
+```bash
+gh secret set JETSON_GATEWAY_URL \
+  --repo One-Wave-Universe/One-Wave-Science \
+  < /home/Scales/.local/state/one-wave-secrets-setup/gateway-url
+gh secret set JETSON_GATEWAY_TOKEN \
+  --repo One-Wave-Universe/One-Wave-Science \
+  < /home/Scales/.config/hive-pipe/tokens/codex.token
+gh secret list --repo One-Wave-Universe/One-Wave-Science
+```
+
+`gh secret list` shows names and timestamps, not values. Both names must exist;
+that alone is not a live gateway proof. These paths are Jetson-specific; do not
+assume the laptop has the same files.
+
+### Dispatch and verify the proof
+
+From an authenticated CLI:
+
+```bash
+gh workflow run jetson-command.yml \
+  --repo One-Wave-Universe/One-Wave-Science --ref main \
+  -f 'argv_json=["printf","GITHUB_MCP_OK\n"]' \
+  -f timeout=30 \
+  -f intention='Verify configured Actions secrets reach the Jetson terminal parser' \
+  -f consequence='Read-only printf returns GITHUB_MCP_OK with exit code zero'
+```
+
+Record the run URL/ID returned by dispatch. Use that exact ID, not an unrelated
+latest or previous run:
+
+```bash
+gh run watch RUN_ID --repo One-Wave-Universe/One-Wave-Science --exit-status
+gh run view RUN_ID --repo One-Wave-Universe/One-Wave-Science --log
+```
+
+For a GitHub connector, use its available workflow-dispatch and run/job-log
+operations with the same inputs and exact returned run ID. Discover actual tool
+schemas; do not invent a dispatch tool. If the connector cannot dispatch, use an
+authenticated host CLI or the workflow's human **Run workflow** form.
+
+In the web form, open **Actions → Jetson Command Lane → Run workflow**, select
+`main`, and enter:
+
+| Input | Value |
+|---|---|
+| `argv_json` | `["printf","GITHUB_MCP_OK\n"]` |
+| `command` | Leave blank |
+| `cwd` | `/home/Scales/One-Wave-Science` |
+| `timeout` | `30` |
+| `intention` | Verify configured Actions secrets reach the Jetson terminal parser |
+| `consequence` | Read-only printf returns GITHUB_MCP_OK with exit code zero |
+| `gateway_url` | Leave blank to test the repository secret |
+
+Accept success only when this run completes with conclusion `success`, actual
+stdout `GITHUB_MCP_OK`, and target exit `0`. Read the structured-command step's
+output, not merely the echoed input/environment. CI validates the workflow
+contract; it cannot prove hidden secrets or a temporary tunnel is live.
+
+### Failure and recovery directions
+
+| Observed failure | Next action |
+|---|---|
+| `Provide gateway_url or configure JETSON_GATEWAY_URL` | Save the URL secret in this exact repository, or provide the verified current URL for one dispatch |
+| `Configure JETSON_GATEWAY_TOKEN` | Save the accepted existing client token as the token secret |
+| `gh` is not logged in | Complete device login on the same host; verify `gh auth status` |
+| Secret write/dispatch permission denied | Verify the authorized GitHub account and repository access; do not change accounts by guessing |
+| DNS/tunnel unavailable | Check the existing `hive-pipe-cloudflared.service` on the Jetson through an independent terminal; obtain its current tunnel URL |
+| HTTP authentication failure | Check the existing token is accepted by the selected Hive Pipe gateway |
+| Reference Goblin HOLD | Read the receipt and supply the missing reference, path, `intention`, or `consequence` |
+| Target command exits nonzero | Treat it as a returned command result; inspect stdout/stderr before retrying |
+
+Cloudflare quick-tunnel hostnames can change after restart. Obtain the hostname
+from the current cloudflared process's local metrics `/quicktunnel` endpoint or
+current service startup receipt. Do not reuse an old hostname merely because it
+is written in a secret. Probe the current HTTPS `/mcp` using the existing token
+and `terminal_reference`, then update `JETSON_GATEWAY_URL` and rerun the proof.
+Keep the token private throughout. Restart a service only when observed failure
+justifies it; do not restart a healthy tunnel just to obtain a URL.
+
+GitHub CLI authentication is not proof that the separate background pull service
+can push through its configured Git transport. Verify that route with its own
+matching request/result ID and digest. Actions success also does not prove the
+laptop, pull worker, or a future quick-tunnel hostname is healthy.
 
 ## Route 4 — command-line remote helper
 
