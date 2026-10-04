@@ -1,8 +1,11 @@
 {
-  "id": "grok-terminal-20261004-1143",
-  "argv": ["bash", "-lc", "whoami; hostname; pwd"],
+  "id": "pull-recovery-proof-20261004-1153",
+  "argv": [
+    "printf",
+    "PULL_WORKER_RECOVERY_OK\n"
+  ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Retry the pull-bridge terminal after the worker missed the last request",
-  "consequence": "Read whoami, hostname, and pwd. Do not change files."
+  "intention": "Verify repaired worker intake independently of GitHub push authentication",
+  "consequence": "Print a marker without changing project files"
 }
