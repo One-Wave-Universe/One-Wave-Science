@@ -4,6 +4,8 @@ Before the tree: name the job, open the first file, stop if it answers.
 
 Miss path: next file, then search the noun, then ask. Never guess.
 
+Snowball: the opened file names the next file. Open that. It names the one after. Follow the names until the question is answered or the names stop. A verified path joins the map for the next question. Do not jump sideways. Do not invent the next name.
+
 ## Scope
 
 | Job | Repo | Says | Does not say |
