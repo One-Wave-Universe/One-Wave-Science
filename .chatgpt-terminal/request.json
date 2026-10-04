@@ -1,12 +1,8 @@
 {
-  "id": "lockup-probe-20261003-1940",
-  "argv": [
-    "bash",
-    "-lc",
-    "echo HOST; hostname; echo UP; uptime; echo MEM; free -h; echo CPU; ps -eo pid,pcpu,pmem,rss,comm --sort=-pcpu | head -n 18; echo PREV; journalctl -b -1 -p err --no-pager -n 30 || true"
-  ],
+  "id": "grok-terminal-20261004-1139",
+  "argv": ["bash", "-lc", "whoami; hostname; pwd"],
   "cwd": "/home/Scales/One-Wave-Science",
-  "timeout": 60,
-  "intention": "Identify what locked the machine, including the previous boot if it was power-cycled",
-  "consequence": "Read-only receipt of top processes now and error lines from the previous boot"
+  "timeout": 30,
+  "intention": "Verify the pull-bridge terminal from this chat",
+  "consequence": "Read whoami, hostname, and pwd. Do not change files."
 }
