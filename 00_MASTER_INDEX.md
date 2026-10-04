@@ -405,14 +405,21 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 
 | Node | Name | Definition / source | Gate |
 |---|---|---|---|
+| A-110a | Wave Equation Derivation | Foundation Extension. Source: `Nodes/A-110a_Wave_Equation_Derivation.md`. | YELLOW |
+| A-114a | Exact Dispersion Roots | Foundation Extension. Source: `Nodes/A-114a_Exact_Dispersion_Roots.md`. | YELLOW |
+| A-114b | Dispersion Trail — Next Ten Questions | Trail / Compare-to-Repo. Source: `Nodes/A-114b_Dispersion_Trail.md`. | YELLOW |
 | B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
 | B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
 | B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
 | B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
+| B-228 | Compression Energy Chains | Analogy / Scale Bridge — not established biochemistry identity. Source: `Nodes/B-228_Compression_Energy_Chains.md`. | YELLOW |
+| B-229 | One Wave Biology | Reinterpretation / Simplification — not a replacement textbook. Source: `Nodes/B-229_One_Wave_Biology.md`. | YELLOW |
 | C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
+| C-324 | No Entanglement — Detector Map | Principle / Measurement Mathematics. Source: `Nodes/C-324_No_Entanglement_Detector_Map.md`. | YELLOW |
 | D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
+| E-533 | Superfluid Transport Time Dilation | Propagation / Time-Transport Hypothesis. Source: `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`. | YELLOW |
 | G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
 | G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
 | G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
@@ -453,4 +460,9 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-761 | Standard Model assumptions versus One-Wave node equations | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-761_SM_Assumption_Smash.md`. | YELLOW |
 | G-762 | Four balanced interactions | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-762_Four_Balanced_Interactions.md`. | YELLOW |
 | G-763 | Scalar differential vector tensor stratum harmonic | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-763_Scalar_to_Harmonic.md`. | YELLOW |
+| G-764 | Combined-State Lattice Simulator Foundation | Simulation Foundation / Continuous-Lattice Discretization / Data Alignment. Source: `Nodes/G-764_Combined_State_Lattice_Simulator_Foundation.md`. | YELLOW |
+| G-765 | EM Lattice Potential and Proton-Displacement Proof | Exploratory Proof Packet / EM-Lattice Coupling / Proton Calibration. Source: `Nodes/G-765_EM_Lattice_Potential_and_Proton_Displacement_Proof.md`. | YELLOW |
+| G-766 | Discrete Lattice Dispersion and Octave-Emergence Proof | Exploratory Proof Packet / Lattice Dispersion / Scale Testing. Source: `Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md`. | YELLOW |
+| G-767 | Measured Spectrum Lattice Phase Map | Spectral Field Mapping / Open Data / Cross-Scale Lattice Test. Source: `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`. | YELLOW |
+| G-768 | Anisotropic Signed-Axis Spectrum and Rotating-Axis Scale Test | Analytic lattice result / mode selection / renormalization boundary. Source: `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`. | YELLOW |
 <!-- AUTO-NODE-REGISTRY:END -->

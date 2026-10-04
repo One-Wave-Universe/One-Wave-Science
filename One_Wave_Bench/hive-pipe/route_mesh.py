@@ -16,6 +16,7 @@ class RouteState:
     score: float = 0.5
     successes: int = 0
     failures: int = 0
+    consecutive_failures: int = 0
     last_ok: float = 0.0
     last_fail: float = 0.0
 def load():
@@ -32,14 +33,22 @@ def update(name, family, ok):
     rs=RouteState(**{**asdict(RouteState(name,family)), **raw})
     now=time.time()
     if ok:
-        rs.successes += 1; rs.last_ok=now; rs.score=min(1.0, rs.score+PASS_GAIN)
+        rs.successes += 1; rs.consecutive_failures=0; rs.last_ok=now; rs.score=min(1.0, rs.score+PASS_GAIN)
     else:
-        rs.failures += 1; rs.last_fail=now; rs.score=max(0.0, rs.score-FAIL_PENALTY)
+        rs.failures += 1; rs.consecutive_failures += 1; rs.last_fail=now; rs.score=max(0.0, rs.score-FAIL_PENALTY)
     routes[name]=asdict(rs); save(data); return asdict(rs)
 def choose(candidates):
+    """Candidates belong to one verified target/direction; only proven routes enter."""
     data=load(); routes=data.setdefault("routes",{}); active=data.get("active")
-    if active and active in routes and routes[active].get("score",0) >= LEAVE: return active
-    ranked=sorted(candidates, key=lambda n: routes.get(n,{}).get("score",0.5), reverse=True)
-    selected=next((n for n in ranked if routes.get(n,{}).get("score",0.5) >= ENTER), ranked[0] if ranked else None)
+    candidates=list(dict.fromkeys(candidates))
+    def eligible(name, threshold):
+        r=routes.get(name,{})
+        return (name in candidates and r.get("successes",0)>0
+                and r.get("consecutive_failures",0)<3
+                and r.get("score",0.0)>=threshold)
+    if active and eligible(active,LEAVE):
+        return active
+    ranked=sorted(candidates, key=lambda n: routes.get(n,{}).get("score",0.0), reverse=True)
+    selected=next((n for n in ranked if eligible(n,ENTER)),None)
     data["active"]=selected; save(data); return selected
 def snapshot(): return load()

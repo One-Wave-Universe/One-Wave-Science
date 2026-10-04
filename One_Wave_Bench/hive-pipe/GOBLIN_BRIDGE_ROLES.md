@@ -1,5 +1,7 @@
 # Goblin Bridge Roles
 
+For laptop/Jetson device selection, posted redundant routes and runnable recovery loops, read the single [terminal route authority](../../AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) first. It takes precedence over older route ordering.
+
 These goblins are modular control roles for the bridge mesh. They are helpers around authenticated routes; none may bypass credentials, parser restrictions, reference gates, or receipt requirements.
 
 ## Doctor Goblin

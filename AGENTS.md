@@ -1,5 +1,9 @@
 # AGENTS.md - The Kitty Hawk Loop
 
+## Laptop and Jetson terminal access
+
+Read [AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) before choosing a terminal route. Discover the session's direct device terminal tools, select laptop or Jetson explicitly, and run the identity probe there. That file owns route selection and executable examples for every AI.
+
 ## General Reference Law
 Before any worker dispatch or repository action, read `GENERAL_REFERENCE_RULES.md`. The canonical repository is the only durable source of truth. Write durable information once in the repo; reference it everywhere else. Bridges, programs, local files, exports, chats, and model memory are transport/context only and may not become competing canon.
 

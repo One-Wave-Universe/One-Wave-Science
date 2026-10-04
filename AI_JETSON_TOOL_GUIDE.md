@@ -1,6 +1,6 @@
 # AI Jetson Tool Guide
 
-Executable MCP calls now require `intention` and `consequence` text in their
+Hive Pipe executable MCP calls require `intention` and `consequence` text in their
 arguments. Older JSON examples below illustrate command arguments only; add
 these two fields or the reference goblin holds execution. See
 `AI_BRIDGE_START_HERE.md` for the current contract.
@@ -9,7 +9,9 @@ This is the shortest correct guide for a fresh Perplexity/Claude/Codex/Gemini or
 
 ## Start here
 
-The canonical Jetson tool path is:
+Read [AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) first. It owns terminal route selection for both laptop and Jetson. Discover Remote Desktop Commander and select the requested device before choosing Hive Pipe, pull transport or Actions.
+
+For clients using Hive Pipe, its Jetson tool path is:
 
 ```text
 client -> HTTPS/MCP -> One_Wave_Bench/hive-pipe/gateway.py -> terminal_parser.py -> Jetson process
@@ -68,112 +70,17 @@ Api-Key: <token>
 
 Never commit or paste tokens into the public repository.
 
-## If an AI says "there is no terminal attached"
+## Terminal route discovery
 
-Treat that as a **session attachment problem** until proven otherwise. Do not ask
-the AI to invent terminal output, and do not assume the Jetson gateway is down.
+Follow [the canonical terminal instructions](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here).
+Call the available device inventory, select laptop or Jetson, and run a
+device-specific identity probe. Missing Hive Pipe MCP is not evidence that
+Remote Desktop Commander or another target terminal is unavailable.
 
-The repo cannot make an already-running chat suddenly acquire MCP tools. The AI
-client/orchestrator must start or reconnect the session with the Hive Pipe MCP
-connector attached.
-
-### 1. Verify the Jetson bridge itself
-
-On the Jetson, Hive Pipe should be listening only on loopback:
-
-```bash
-ss -ltnp | grep ':8765'
-```
-
-Expected service:
-
-```text
-127.0.0.1:8765
-one-wave-hive-pipe
-```
-
-Then initialize MCP with that client's token and call `tools/list`. A healthy
-v3.2 gateway exposes at least:
-
-```text
-health
-inventory_block_devices
-repo_status
-terminal_pwd
-terminal_which
-terminal_run
-python_run
-cpp_compile_run
-```
-
-If those tools list correctly, **do not restart or rebuild Hive Pipe just
-because one AI chat cannot see them**.
-
-### 2. Reconnect the AI client/session
-
-Configure the client with:
-
-```text
-MCP endpoint: https://CURRENT-AUTHORIZED-TUNNEL/mcp
-Transport: Streamable HTTP
-Authentication: API key / Bearer token
-Token source on Jetson: ~/.config/hive-pipe/tokens/<client>.token
-```
-
-For a client running locally on the Jetson, the endpoint may be:
-
-```text
-http://127.0.0.1:8765/mcp
-```
-
-A remote client needs the currently authorized HTTPS tunnel/connector path. Do
-not hard-code an expired temporary tunnel URL into the repository.
-
-Start a **new/reconnected AI session** after attaching the connector if the
-product caches its tool list.
-
-### 3. Prove attachment from inside the AI session
-
-The AI should first list/see the Hive Pipe tools. Then call:
-
-```text
-terminal_pwd
-```
-
-and:
-
-```json
-{
-  "name": "terminal_run",
-  "arguments": {
-    "argv": ["git", "status", "--short", "--branch"],
-    "cwd": "/home/Scales/One-Wave-Science",
-    "timeout": 30
-  }
-}
-```
-
-Only after a real tool result returns should the AI claim it inspected the repo.
-
-### 4. Interpret the failure correctly
-
-```text
-Gateway tools/list works, AI session has no MCP tools
-    -> client/session attachment failure
-
-AI session lists tools, terminal_pwd fails authentication
-    -> token/connector authentication failure
-
-AI session lists tools, terminal_run rejects cwd/command
-    -> Hive Pipe safety/authorized-root rejection
-
-Port 8765 not listening / initialize fails locally
-    -> actual Jetson Hive Pipe service failure
-```
-
-A chat that has no tool attachment may still write a proposed patch, but it must
-label it unverified. It must never fabricate HEAD hashes, command output, file
-contents, or test results.
+If the selected route is Hive Pipe and its tools fail, inspect that route's
+authentication, authorized roots and service state. Reconnect that client only
+when the failure actually concerns its Hive Pipe attachment. Keep using a working
+direct device terminal while repairing another transport.
 
 ## Perplexity remote MCP
 
@@ -307,7 +214,7 @@ GitHub credentials are available.
 
 ## GitHub -> Jetson
 
-Use `.github/workflows/jetson-command.yml` (`Jetson Command Lane`). Preferred
+For GitHub-only fallback sessions, after direct terminal discovery, use `.github/workflows/jetson-command.yml` (`Jetson Command Lane`) for the Jetson target. Use the device terminal for laptop work. Preferred
 input is `argv_json`, for example:
 
 ```json

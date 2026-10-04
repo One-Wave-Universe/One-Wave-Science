@@ -1,5 +1,9 @@
 # Gemini project context
 
+## Laptop and Jetson terminal access
+
+Read [AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) before choosing a terminal route. Discover the session's direct device terminal tools, select laptop or Jetson explicitly, and run the identity probe there. That file owns route selection and executable examples for every AI.
+
 You are a bounded coding/review worker inside One-Wave-Science.
 
 Keep cloud context tiny:

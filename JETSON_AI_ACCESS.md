@@ -1,15 +1,12 @@
 # Jetson AI Access — Canonical Bidirectional Paths
 
-Executable MCP calls require `intention` and `consequence` text; unstamped
+Hive Pipe executable MCP calls require `intention` and `consequence` text; unstamped
 historical JSON examples below are incomplete under the current reference
 gate. See `AI_BRIDGE_START_HERE.md` for the current contract.
 
 ## Priority
 
-AI terminal access must have more than one usable route. The canonical terminal
-engine is **Hive Pipe v3** on the Jetson. SSH remains an independent recovery
-path. GitHub reaches Hive Pipe through an authenticated HTTPS tunnel, and the
-Jetson reaches GitHub through normal git/gh authentication.
+[AI_BRIDGE_START_HERE.md](AI_BRIDGE_START_HERE.md#terminal-access--every-ai-starts-here) owns terminal route selection for laptop and Jetson. Discover direct device terminal tools and select the requested machine first. This document describes the Hive Pipe transport on the Jetson and its GitHub/SSH connections; it does not override that selection rule.
 
 ```text
                          GITHUB
