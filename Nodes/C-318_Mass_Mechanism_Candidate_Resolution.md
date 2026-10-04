@@ -370,3 +370,11 @@ The architectural definition is retained; numerical derivation and spectrum rema
 ## Direct Failure Conditions
 
 A quantitative claim fails if it retunes coefficients per target, silently drops an interaction, selects a stopping condition from the desired answer, or treats a fitted comparator as independent validation. Reject unbalanced energy ledgers and boundary penetration imposed instead of derived Mirror coupling.
+
+## Executable joint-response replacement (2026-10-04)
+
+The four-interaction calculation now runs on D-409's native twelve-neighbor 3D FCC shell. See [the derivation](../solvers/JOINT_RESPONSE_DERIVATION.md), [solver](../solvers/joint_boundary_response.py) and [complete results](../solvers/joint_response_results.json).
+
+One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
+
+Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.
