@@ -506,25 +506,43 @@ class QuarkMassSpectrum:
             "top": 172700.0,   # ±400 MeV (pole mass, ~172.7 GeV)
         }
 
-    def compute_spectrum(self) -> Dict:
-        """Compute quark mass spectrum for all flavors."""
+    def compute_spectrum(self, lambda_scale: float = 0.976) -> Dict:
+        """
+        Compute quark mass spectrum for all flavors.
+
+        CALIBRATION (Phase 5, October 4 2026):
+        Proton compression simulator produces E_MG ≈ 128 GeV.
+        125 GeV empirical anchor fixes λ = 125/128 ≈ 0.976
+        Global scaling: m_calibrated = m_uncalibrated × √λ
+
+        Default lambda_scale = 0.976 (from proton Mirror-Gate calibration)
+        Override with different value for sensitivity analysis.
+        """
         results = {}
+        sqrt_lambda = np.sqrt(lambda_scale)
 
         for flavor in ["up", "down", "strange", "charm", "bottom", "top"]:
             topology = QuarkTopology(flavor)
             calculator = FourInteractionCalculator(topology, self.g_SO)
 
-            mass_MeV = calculator.quark_mass_MeV()
+            mass_uncalibrated_MeV = calculator.quark_mass_MeV()
+
+            # Apply 125 GeV calibration factor
+            mass_MeV = mass_uncalibrated_MeV * sqrt_lambda
+
             PDG_mass = self.PDG_masses[flavor]
 
             # Accuracy relative to PDG
             error_percent = abs(mass_MeV - PDG_mass) / PDG_mass * 100.0
 
             results[flavor] = {
+                "mass_uncalibrated_MeV": mass_uncalibrated_MeV,
                 "mass_MeV": mass_MeV,
                 "PDG_mass": PDG_mass,
                 "error_percent": error_percent,
                 "mass_ratio": mass_MeV / PDG_mass,
+                "lambda_scale": lambda_scale,
+                "sqrt_lambda": sqrt_lambda,
             }
 
         return results
@@ -577,26 +595,35 @@ if __name__ == "__main__":
     g_SO_electron = 0.5
 
     spectrum = QuarkMassSpectrum(g_SO=g_SO_electron)
-    results = spectrum.compute_spectrum()
 
-    # TEST 1: Individual quark masses
-    print("TEST 1: FULL QUARK SPECTRUM (LIGHT + HEAVY)")
+    # Calibration factor from proton Mirror-Gate (Phase 5, October 4 2026)
+    # E_MG ≈ 128 GeV from compression simulator
+    # λ = 125 GeV / 128 GeV ≈ 0.976
+    lambda_calibration = 0.976
+
+    results_calibrated = spectrum.compute_spectrum(lambda_scale=lambda_calibration)
+    results_uncalibrated = spectrum.compute_spectrum(lambda_scale=1.0)
+
+    # TEST 1: Individual quark masses (CALIBRATED)
+    print("TEST 1: FULL QUARK SPECTRUM WITH 125 GeV CALIBRATION")
     print("-" * 70)
+    print(f"Calibration factor λ = {lambda_calibration:.6f} (from proton E_MG ≈ 128 GeV)")
+    print(f"Mass scaling: m_cal = m_uncal × √λ = m_uncal × {np.sqrt(lambda_calibration):.6f}")
+    print()
 
+    print(f"{'Flavor':<10} {'Uncalibrated':>14} {'Calibrated':>14} {'PDG':>14} {'Error %':>10}")
+    print("-" * 70)
     for flavor in ["up", "down", "strange", "charm", "bottom", "top"]:
-        res = results[flavor]
-        print(f"\n{flavor.upper():8s} Quark:")
-        print(f"  Four-Interaction prediction: {res['mass_MeV']:12.2f} MeV")
-        print(f"  PDG 2023 value:             {res['PDG_mass']:12.2f} MeV")
-        print(f"  Error:                      {res['error_percent']:8.1f}%")
-        print(f"  Mass ratio to PDG:          {res['mass_ratio']:8.3f}")
+        res_cal = results_calibrated[flavor]
+        res_uncal = results_uncalibrated[flavor]
+        print(f"{flavor.upper():<10} {res_uncal['mass_MeV']:>14.2f} {res_cal['mass_MeV']:>14.2f} {res_cal['PDG_mass']:>14.2f} {res_cal['error_percent']:>9.1f}%")
     print()
 
     # TEST 2: Mass hierarchy and ratios
-    print("TEST 2: MASS HIERARCHY AND RATIOS")
+    print("TEST 2: MASS HIERARCHY AND RATIOS (CALIBRATED)")
     print("-" * 70)
 
-    hierarchy = spectrum.mass_hierarchy(results)
+    hierarchy = spectrum.mass_hierarchy(results_calibrated)
 
     print(f"Hierarchy (m_d > m_u): {hierarchy['hierarchy_correct']}")
     print(f"Mass ratio (m_d/m_u):")
@@ -668,13 +695,21 @@ if __name__ == "__main__":
     print(f"  This produces E_K ~ ω² scaling without topology changes")
     print()
 
-    print("Full Spectrum Analysis:")
-    light_error = (results["up"]["error_percent"] + results["down"]["error_percent"] + results["strange"]["error_percent"]) / 3.0
-    heavy_error = (results["charm"]["error_percent"] + results["bottom"]["error_percent"] + results["top"]["error_percent"]) / 3.0
+    print("Full Spectrum Analysis (CALIBRATED, λ = 0.976):")
+    light_error_cal = (results_calibrated["up"]["error_percent"] + results_calibrated["down"]["error_percent"] + results_calibrated["strange"]["error_percent"]) / 3.0
+    heavy_error_cal = (results_calibrated["charm"]["error_percent"] + results_calibrated["bottom"]["error_percent"] + results_calibrated["top"]["error_percent"]) / 3.0
 
-    print(f"Light quarks (u/d/s):     avg error = {light_error:6.1f}%")
-    print(f"Heavy quarks (c/b/t):     avg error = {heavy_error:6.1f}%")
-    print(f"Overall average error:    {(light_error + heavy_error)/2:6.1f}%")
+    light_error_uncal = (results_uncalibrated["up"]["error_percent"] + results_uncalibrated["down"]["error_percent"] + results_uncalibrated["strange"]["error_percent"]) / 3.0
+    heavy_error_uncal = (results_uncalibrated["charm"]["error_percent"] + results_uncalibrated["bottom"]["error_percent"] + results_uncalibrated["top"]["error_percent"]) / 3.0
+
+    print("\nBefore calibration (λ = 1.0):")
+    print(f"  Light quarks (u/d/s):     avg error = {light_error_uncal:6.1f}%")
+    print(f"  Heavy quarks (c/b/t):     avg error = {heavy_error_uncal:6.1f}%")
+
+    print("\nAfter 125 GeV calibration (λ = 0.976):")
+    print(f"  Light quarks (u/d/s):     avg error = {light_error_cal:6.1f}%")
+    print(f"  Heavy quarks (c/b/t):     avg error = {heavy_error_cal:6.1f}%")
+    print(f"  Overall average error:    {(light_error_cal + heavy_error_cal)/2:6.1f}%")
     print()
 
     print("One-Wave Framework Status:")
