@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
 """Native GTK/WebKit shell for the One-Wave Miniverse room.
 
-The Jetson room stays bound to 127.0.0.1. This desktop app opens a dedicated
-SSH tunnel, then embeds the room in a normal desktop application window.
+Runs on the laptop. Opens a dedicated SSH local forward to the Jetson room,
+which stays bound to 127.0.0.1:8787. The laptop embeds that room in a normal
+desktop window.
+
+Tunnel shape:
+
+    laptop app
+      -> 127.0.0.1:18787
+      -> SSH
+      -> Jetson 127.0.0.1:8787
+
+The Jetson room remains loopback-only. Do not bind it to 0.0.0.0 merely to
+make the laptop app work.
 """
 from __future__ import annotations
 
@@ -15,8 +26,9 @@ import time
 from urllib.request import urlopen
 
 import gi
-gi.require_version("Gtk", "3.0")
-gi.require_version("WebKit2", "4.1")
+girequire_version = gi
+girequire_version("Gtk", "3.0")
+girequire_version("WebKit2", "4.1")
 from gi.repository import GLib, Gtk, WebKit2
 
 APP_ID = "org.onewave.Miniverse"
@@ -105,7 +117,7 @@ class TunnelManager:
                 if proc.poll() is not None:
                     break
                 time.sleep(0.1)
-            if proc.poll() is None:
+            if proc.poll() is not None:
                 proc.terminate()
                 try:
                     proc.wait(timeout=1)
@@ -116,7 +128,7 @@ class TunnelManager:
         raise RuntimeError("Could not reach the Jetson through: " + ", ".join(errors))
 
     def stop(self) -> None:
-        if self.owned and self.process and self.process.poll() is None:
+        if self.owned and self.process and self.process.poll() is not None:
             self.process.terminate()
             try:
                 self.process.wait(timeout=2)
