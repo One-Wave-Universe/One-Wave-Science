@@ -1,0 +1,145 @@
+{
+  "parameters": {
+    "beta_crit": 0.8913793103448275,
+    "gamma_crit": 0.09655172413793103
+  },
+  "leptons": {
+    "electron": {
+      "name": "electron",
+      "generation": 1,
+      "chirality": "L",
+      "predicted_mass_mev": 44.699153532330165,
+      "experimental_mass_mev": 0.511,
+      "relative_error": 86.47388166796509
+    },
+    "muon": {
+      "name": "muon",
+      "generation": 2,
+      "chirality": "L",
+      "predicted_mass_mev": 47.34433537005683,
+      "experimental_mass_mev": 105.7,
+      "relative_error": 0.5520876502359808
+    },
+    "tau": {
+      "name": "tau",
+      "generation": 3,
+      "chirality": "L",
+      "predicted_mass_mev": 48.260401716035524,
+      "experimental_mass_mev": 1777.0,
+      "relative_error": 0.9728416422532158
+    },
+    "nu_e": {
+      "name": "nu_e",
+      "generation": 1,
+      "chirality": "L",
+      "predicted_mass_mev": 4.855252883684142e-06,
+      "experimental_mass_mev": 0.0,
+      "relative_error": 0.0
+    },
+    "nu_mu": {
+      "name": "nu_mu",
+      "generation": 2,
+      "chirality": "L",
+      "predicted_mass_mev": 5.142574359161348e-06,
+      "experimental_mass_mev": 0.0,
+      "relative_error": 0.0
+    },
+    "nu_tau": {
+      "name": "nu_tau",
+      "generation": 3,
+      "chirality": "L",
+      "predicted_mass_mev": 5.2420781174314476e-06,
+      "experimental_mass_mev": 0.0,
+      "relative_error": 0.0
+    }
+  },
+  "quarks": {
+    "up": {
+      "name": "up",
+      "generation": 1,
+      "chirality": "L",
+      "predicted_mass_mev": 49.169068885563185,
+      "experimental_mass_mev": 2.16,
+      "relative_error": 21.76345781739036
+    },
+    "down": {
+      "name": "down",
+      "generation": 1,
+      "chirality": "L",
+      "predicted_mass_mev": 59.002882662675816,
+      "experimental_mass_mev": 4.67,
+      "relative_error": 11.634450248966983
+    },
+    "charm": {
+      "name": "charm",
+      "generation": 2,
+      "chirality": "L",
+      "predicted_mass_mev": 52.07876890706252,
+      "experimental_mass_mev": 1270.0,
+      "relative_error": 0.9589930953487696
+    },
+    "strange": {
+      "name": "strange",
+      "generation": 2,
+      "chirality": "L",
+      "predicted_mass_mev": 62.494522688475016,
+      "experimental_mass_mev": 93.5,
+      "relative_error": 0.3316093830109624
+    },
+    "top": {
+      "name": "top",
+      "generation": 3,
+      "chirality": "L",
+      "predicted_mass_mev": 53.08644188763908,
+      "experimental_mass_mev": 173210.0,
+      "relative_error": 0.9996935139894485
+    },
+    "bottom": {
+      "name": "bottom",
+      "generation": 3,
+      "chirality": "L",
+      "predicted_mass_mev": 63.7037302651669,
+      "experimental_mass_mev": 4180.0,
+      "relative_error": 0.9847598731423045
+    }
+  },
+  "yukawa_matrix": {
+    "Y_leptons": [
+      [
+        0.0020772357723577235,
+        0.0003333333333333333,
+        0.00025
+      ],
+      [
+        0.0003333333333333333,
+        0.4296747967479675,
+        0.0002
+      ],
+      [
+        0.00025,
+        0.0002,
+        7.223577235772358
+      ]
+    ],
+    "Y_quarks": [
+      [
+        0.00878048780487805,
+        7.476666666666666e-05,
+        9e-07
+      ],
+      [
+        7.493333333333333e-05,
+        5.162601626016261,
+        8.26e-06
+      ],
+      [
+        1.75e-06,
+        8.380000000000001e-06,
+        704.1056910569106
+      ]
+    ],
+    "higgs_vev_gev": 0.246
+  },
+  "free_parameters_in_sm": 12,
+  "free_parameters_in_one_wave": 0
+}
