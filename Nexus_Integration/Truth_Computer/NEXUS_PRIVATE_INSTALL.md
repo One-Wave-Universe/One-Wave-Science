@@ -6,6 +6,10 @@ Install the One-Wave Truth Computer as a real Nexus panel without adding public 
 
 The public `/join`, `/api/act`, job board, and station actions remain interaction channels only. Installation is a private filesystem operation inside the local Nexus repository, currently expected under `C:\Users\Scales\MirrorGate`, followed by human review and restart.
 
+## Database builder requirements
+
+Read [the complete Reality Database and Field/Void builder specification](REALITY_DATABASE_BUILDER_SPEC.md). It defines the shared lens across all authorized One-Wave repositories, persistent two-state loop, solver contracts, recovery and acceptance gates. Reuse the existing Nexus system; the name does not affect the build requirements.
+
 ## Canonical architecture
 
 - `OG-00` through `OG-21` are the fixed origin-to-beyond trace.
