@@ -664,7 +664,9 @@ A provider outage must leave the database and deterministic reference checks usa
 - Field proposal: one requirements page, with no invented executable commands or live claims.
 - Void pre-check: ALLOW documentation scope; actual database integration remains unverified.
 - Attempt: 1/3.
-- Verification: review exact two-file diff, source links, phase/decision distinction,
+- Void post-check: ALLOW documentation change. Four-file scope confirmed; source links resolve; OG ladder uses the 22 existing nodes; worker phases and decision/lifecycle values stay distinct.
+- Evidence: all relative specification source links checked against the pinned Git tree; balanced code fences and sequential sections checked; GitHub reported no check runs for this documentation head. No runtime/database test is claimed.
+- Verification: review exact four-file diff, source links, phase/decision distinction,
   metadata preservation, existing-store reuse and all acceptance criteria.
 - Reflection: terminal access is proven; database persistence is a separate acceptance gate.
   Algorithm Zero mathematics is distinct from the operating reference workflow.
