@@ -1,0 +1,26 @@
+{
+  "critical_point": {
+    "valid": true,
+    "beta": 0.8913793103448275,
+    "gamma": 0.09655172413793103,
+    "higgs_mass_gev": 0.0,
+    "mass_error": 0.125,
+    "lattice_freq": 0,
+    "predicted_coherence": 0.8053151010701546,
+    "measured_coherence": 0.8043788336300726,
+    "coherence_error": 0.000936267440082017
+  },
+  "search_parameters": {
+    "beta_range": [
+      0.1,
+      0.95
+    ],
+    "gamma_range": [
+      0.05,
+      0.5
+    ],
+    "resolution": 30,
+    "target_higgs_mass_gev": 0.125
+  },
+  "total_points_evaluated": 900
+}

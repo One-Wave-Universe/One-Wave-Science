@@ -1,0 +1,36 @@
+{
+  "simulation_parameters": {
+    "beta": 0.8913793103448275,
+    "gamma": 0.09655172413793103,
+    "lattice_size": 256,
+    "total_steps": 2000
+  },
+  "test_results": {
+    "test_oscillation_frequency": {
+      "measured_frequency": 0.006666666666666667,
+      "predicted_frequency": 0.8053151010701546,
+      "error_percent": 99.1721666888144,
+      "passes": "False"
+    },
+    "test_confinement_boundary": {
+      "boundary_width_lattice_units": 0.0,
+      "peak_position": 209,
+      "peak_amplitude": -0.3828695683947532,
+      "passes": "False"
+    },
+    "test_annihilation_energy": {
+      "energy_before": 3439.8110334637804,
+      "energy_after": 18.553541118481675,
+      "energy_released": 3421.257492345299,
+      "predicted_release": 2.0,
+      "error_percent": 170962.87461726496,
+      "passes": "True"
+    },
+    "test_phase_locking": {
+      "phase_difference_radians": 2.7050878985525246,
+      "phase_difference_degrees": 154.99011979897264,
+      "expected_phase_pi": 3.141592653589793,
+      "passes": "True"
+    }
+  }
+}

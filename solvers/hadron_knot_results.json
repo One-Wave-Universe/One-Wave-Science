@@ -1,0 +1,404 @@
+{
+  "calibration_phase": "Week 1 - Surface Tension & Confinement Refinement",
+  "calibration_targets": {
+    "proton": {
+      "target_fm": 0.85
+    },
+    "neutron": {
+      "target_fm": 0.87
+    },
+    "Lambda": {
+      "target_fm": 0.85
+    },
+    "pion": {
+      "target_fm": 0.4
+    }
+  },
+  "calibration_sweep": [
+    {
+      "sigma_T": 0.008,
+      "kappa_T": 0.008,
+      "proton_radius": 0.935,
+      "neutron_radius": 0.9570000000000001,
+      "proton_error_percent": 10.000000000000009,
+      "neutron_error_percent": 10.000000000000009,
+      "avg_error": 10.000000000000009
+    },
+    {
+      "sigma_T": 0.008,
+      "kappa_T": 0.009,
+      "proton_radius": 0.9917172606141329,
+      "neutron_radius": 1.015051784393289,
+      "proton_error_percent": 16.672618895780346,
+      "neutron_error_percent": 16.672618895780335,
+      "avg_error": 16.67261889578034
+    },
+    {
+      "sigma_T": 0.008,
+      "kappa_T": 0.01,
+      "proton_radius": 1.0453617794811518,
+      "neutron_radius": 1.0699585272336494,
+      "proton_error_percent": 22.983738762488453,
+      "neutron_error_percent": 22.983738762488436,
+      "avg_error": 22.983738762488443
+    },
+    {
+      "sigma_T": 0.008,
+      "kappa_T": 0.011,
+      "proton_radius": 1.0963846838587268,
+      "neutron_radius": 1.1221819705377556,
+      "proton_error_percent": 28.986433395144328,
+      "neutron_error_percent": 28.986433395144324,
+      "avg_error": 28.986433395144324
+    },
+    {
+      "sigma_T": 0.008,
+      "kappa_T": 0.012,
+      "proton_radius": 1.1451364547511358,
+      "neutron_radius": 1.1720808419217508,
+      "proton_error_percent": 34.721935853074804,
+      "neutron_error_percent": 34.721935853074804,
+      "avg_error": 34.721935853074804
+    },
+    {
+      "sigma_T": 0.009,
+      "kappa_T": 0.008,
+      "proton_radius": 0.8815264538792292,
+      "neutron_radius": 0.9022682527940347,
+      "proton_error_percent": 3.7089945740269714,
+      "neutron_error_percent": 3.708994574026973,
+      "avg_error": 3.7089945740269723
+    },
+    {
+      "sigma_T": 0.009,
+      "kappa_T": 0.009,
+      "proton_radius": 0.935,
+      "neutron_radius": 0.9570000000000001,
+      "proton_error_percent": 10.000000000000009,
+      "neutron_error_percent": 10.000000000000009,
+      "avg_error": 10.000000000000009
+    },
+    {
+      "sigma_T": 0.009,
+      "kappa_T": 0.01,
+      "proton_radius": 0.985576537419145,
+      "neutron_radius": 1.0087665735937132,
+      "proton_error_percent": 15.950180872840589,
+      "neutron_error_percent": 15.950180872840603,
+      "avg_error": 15.950180872840596
+    },
+    {
+      "sigma_T": 0.009,
+      "kappa_T": 0.011,
+      "proton_radius": 1.0336813929940998,
+      "neutron_radius": 1.0580033081233726,
+      "proton_error_percent": 21.609575646364686,
+      "neutron_error_percent": 21.60957564636467,
+      "avg_error": 21.60957564636468
+    },
+    {
+      "sigma_T": 0.009,
+      "kappa_T": 0.012,
+      "proton_radius": 1.0796450033846003,
+      "neutron_radius": 1.105048415228944,
+      "proton_error_percent": 27.017059221717695,
+      "neutron_error_percent": 27.017059221717695,
+      "avg_error": 27.017059221717695
+    },
+    {
+      "sigma_T": 0.01,
+      "kappa_T": 0.008,
+      "proton_radius": 0.8362894235849214,
+      "neutron_radius": 0.8559668217869195,
+      "proton_error_percent": 1.6130089900092421,
+      "neutron_error_percent": 1.6130089900092504,
+      "avg_error": 1.6130089900092464
+    },
+    {
+      "sigma_T": 0.01,
+      "kappa_T": 0.009,
+      "proton_radius": 0.8870188836772305,
+      "neutron_radius": 0.9078899162343417,
+      "proton_error_percent": 4.355162785556529,
+      "neutron_error_percent": 4.355162785556515,
+      "avg_error": 4.355162785556522
+    },
+    {
+      "sigma_T": 0.01,
+      "kappa_T": 0.01,
+      "proton_radius": 0.935,
+      "neutron_radius": 0.9570000000000001,
+      "proton_error_percent": 10.000000000000009,
+      "neutron_error_percent": 10.000000000000009,
+      "avg_error": 10.000000000000009
+    },
+    {
+      "sigma_T": 0.01,
+      "kappa_T": 0.011,
+      "proton_radius": 0.9806362730390916,
+      "neutron_radius": 1.003710067698835,
+      "proton_error_percent": 15.368973298716664,
+      "neutron_error_percent": 15.368973298716677,
+      "avg_error": 15.368973298716671
+    },
+    {
+      "sigma_T": 0.01,
+      "kappa_T": 0.012,
+      "proton_radius": 1.0242411825346607,
+      "neutron_radius": 1.048340975064888,
+      "proton_error_percent": 20.498962651136555,
+      "neutron_error_percent": 20.49896265113655,
+      "avg_error": 20.49896265113655
+    },
+    {
+      "sigma_T": 0.011,
+      "kappa_T": 0.008,
+      "proton_radius": 0.7973706791699832,
+      "neutron_radius": 0.8161323422092769,
+      "proton_error_percent": 6.19168480353139,
+      "neutron_error_percent": 6.191684803531392,
+      "avg_error": 6.191684803531391
+    },
+    {
+      "sigma_T": 0.011,
+      "kappa_T": 0.009,
+      "proton_radius": 0.845739321540627,
+      "neutron_radius": 0.8656390702827594,
+      "proton_error_percent": 0.5012562893379937,
+      "neutron_error_percent": 0.5012562893379952,
+      "avg_error": 0.5012562893379944
+    },
+    {
+      "sigma_T": 0.011,
+      "kappa_T": 0.01,
+      "proton_radius": 0.8914875209446288,
+      "neutron_radius": 0.912463697908032,
+      "proton_error_percent": 4.880884817015155,
+      "neutron_error_percent": 4.880884817015167,
+      "avg_error": 4.880884817015161
+    },
+    {
+      "sigma_T": 0.011,
+      "kappa_T": 0.011,
+      "proton_radius": 0.935,
+      "neutron_radius": 0.9570000000000001,
+      "proton_error_percent": 10.000000000000009,
+      "neutron_error_percent": 10.000000000000009,
+      "avg_error": 10.000000000000009
+    },
+    {
+      "sigma_T": 0.011,
+      "kappa_T": 0.012,
+      "proton_radius": 0.9765756499114648,
+      "neutron_radius": 0.999553900497617,
+      "proton_error_percent": 14.891252930760574,
+      "neutron_error_percent": 14.891252930760581,
+      "avg_error": 14.891252930760578
+    },
+    {
+      "sigma_T": 0.012,
+      "kappa_T": 0.008,
+      "proton_radius": 0.7634243031674239,
+      "neutron_radius": 0.7813872279478339,
+      "proton_error_percent": 10.185376097950122,
+      "neutron_error_percent": 10.185376097950128,
+      "avg_error": 10.185376097950126
+    },
+    {
+      "sigma_T": 0.012,
+      "kappa_T": 0.009,
+      "proton_radius": 0.8097337525384501,
+      "neutron_radius": 0.8287863114217078,
+      "proton_error_percent": 4.737205583711745,
+      "neutron_error_percent": 4.737205583711749,
+      "avg_error": 4.737205583711747
+    },
+    {
+      "sigma_T": 0.012,
+      "kappa_T": 0.01,
+      "proton_radius": 0.853534318778884,
+      "neutron_radius": 0.8736174792207401,
+      "proton_error_percent": 0.41580220928046985,
+      "neutron_error_percent": 0.41580220928046807,
+      "avg_error": 0.41580220928046896
+    },
+    {
+      "sigma_T": 0.012,
+      "kappa_T": 0.011,
+      "proton_radius": 0.8951943457521762,
+      "neutron_radius": 0.9162577421228156,
+      "proton_error_percent": 5.3169818531971975,
+      "neutron_error_percent": 5.316981853197199,
+      "avg_error": 5.316981853197198
+    },
+    {
+      "sigma_T": 0.012,
+      "kappa_T": 0.012,
+      "proton_radius": 0.935,
+      "neutron_radius": 0.9570000000000001,
+      "proton_error_percent": 10.000000000000009,
+      "neutron_error_percent": 10.000000000000009,
+      "avg_error": 10.000000000000009
+    }
+  ],
+  "optimized_parameters": {
+    "sigma_T": 0.012,
+    "kappa_T": 0.01,
+    "eta_T": 0.01,
+    "neck_radius": 0.1,
+    "break_threshold": 5.0,
+    "best_average_error_percent": 0.41580220928046896
+  },
+  "hadrons_analyzed": 4,
+  "hadron_analyses": [
+    {
+      "hadron_name": "proton",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.853534318778884,
+      "boundary_area": 9.154862791948458,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "up",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "down",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 109.85835350338151,
+        "phase_locking_MeV": 20.28313121677445,
+        "twist_MeV": 71.50552387900026,
+        "total_MeV": 201.64700859915624
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 7.5398223686155035,
+        "extraction_force_MeV_fm": 7.5398223686155035,
+        "break_separation_fm": 663.1455962162306
+      }
+    },
+    {
+      "hadron_name": "neutron",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.8736174792207401,
+      "boundary_area": 9.59074830065853,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "down",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 115.08897960790237,
+        "phase_locking_MeV": 21.748834122759416,
+        "twist_MeV": 73.18800679380028,
+        "total_MeV": 210.02582052446206
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 7.5398223686155035,
+        "extraction_force_MeV_fm": 7.5398223686155035,
+        "break_separation_fm": 663.1455962162306
+      }
+    },
+    {
+      "hadron_name": "Lambda",
+      "num_vortices": 3,
+      "boundary_radius_fm": 0.853534318778884,
+      "boundary_area": 9.154862791948458,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=1, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "green",
+          "angular_momentum": "\u2113=1, m=1"
+        },
+        {
+          "label": "q3",
+          "flavor": "strange",
+          "color": "blue",
+          "angular_momentum": "\u2113=1, m=-1"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 109.85835350338151,
+        "phase_locking_MeV": 20.28313121677445,
+        "twist_MeV": 71.50552387900026,
+        "total_MeV": 201.64700859915624
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 7.5398223686155035,
+        "extraction_force_MeV_fm": 7.5398223686155035,
+        "break_separation_fm": 663.1455962162306
+      }
+    },
+    {
+      "hadron_name": "\u03c0\u207a",
+      "num_vortices": 2,
+      "boundary_radius_fm": 0.36514837167011077,
+      "boundary_area": 1.6755160819145567,
+      "vortex_phases": [
+        {
+          "label": "q1",
+          "flavor": "up",
+          "color": "red",
+          "angular_momentum": "\u2113=0, m=0"
+        },
+        {
+          "label": "q2",
+          "flavor": "down",
+          "color": "red",
+          "angular_momentum": "\u2113=0, m=0"
+        }
+      ],
+      "weave_energy": {
+        "surface_MeV": 20.10619298297468,
+        "phase_locking_MeV": 0.6491526607468633,
+        "twist_MeV": 0.0,
+        "total_MeV": 20.755345643721544
+      },
+      "confinement": {
+        "line_tension_MeV_fm": 7.5398223686155035,
+        "extraction_force_MeV_fm": 7.5398223686155035,
+        "break_separation_fm": 663.1455962162306
+      }
+    }
+  ],
+  "gate": "GREEN (calibration complete)",
+  "notes": [
+    "Surface tension (\u03c3_T) calibrated to 0.01200",
+    "Phase-locking coupling (\u03ba_T) calibrated to 0.01000",
+    "Average radius error reduced to 0.4%",
+    "Ready for 3D extension and QCD spectrum measurement"
+  ]
+}
