@@ -1,15 +1,14 @@
 {
   "argv": [
-    "bash",
-    "-lc",
-    "hostname; uname -m; whoami; pwd"
+    "printf",
+    "GROK_PULL_OK\n"
   ],
-  "completed_at": "2026-10-04T21:46:30.153118+00:00",
+  "completed_at": "2026-10-04T21:47:46.626932+00:00",
   "cwd_requested": "/home/Scales/One-Wave-Science",
   "exit_code": null,
-  "id": "grok-terminal-20261004-1445",
+  "id": "grok-terminal-20261004-1447",
   "ok": false,
-  "requested_at_commit": "03f0d946ebd93adbce35a53df275651c8258f36b",
+  "requested_at_commit": "c39992d3187b41c784111539aeb77790cc87024f",
   "rpc_error": {
     "code": -32603,
     "message": "Reference Goblin HOLD: intention must be non-empty text <= 1024 characters"
