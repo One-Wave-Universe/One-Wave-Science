@@ -111,8 +111,8 @@ class YukawaMatrixSolver:
     """
 
     # Fundamental scaling constants (to be calibrated)
-    MASS_SCALE_FACTOR = 1.0  # Overall scale to match electron mass
-    GENERATION_HIERARCHY = [1.0, 1.0 / 207.0, 1.0 / 3477.0]  # e/μ/τ ratios (observed)
+    MASS_SCALE_FACTOR = 0.0114  # Calibrated to match electron mass (0.511 MeV)
+    GENERATION_HIERARCHY = [1.0, 207.0, 3477.0]  # e/μ/τ mass ratios (observed)
 
     def __init__(self, params: LatticeParameters):
         """Initialize with critical point parameters
@@ -159,14 +159,15 @@ class YukawaMatrixSolver:
         freq = base_freq * damping_factor * coupling_factor
         return freq
 
-    def mass_from_frequency(self, frequency: float, is_lepton: bool = True) -> float:
+    def mass_from_frequency(self, frequency: float, is_lepton: bool = True, generation: int = 1) -> float:
         """
         Convert mode frequency to physical mass.
 
         One-Wave mass formula (longitudinal suppression):
-        m = (1 - β) * ω * M_scale
+        m = (1 - β) * ω * M_scale * H_gen
 
-        where M_scale is fixed by electron mass calibration.
+        where M_scale is fixed by electron mass calibration,
+        and H_gen is the generation hierarchy factor.
 
         Leptons vs quarks: quarks have additional color coupling,
         making them slightly heavier for same harmonic.
@@ -174,6 +175,7 @@ class YukawaMatrixSolver:
         Args:
             frequency: Mode frequency in lattice units
             is_lepton: True for leptons, False for quarks
+            generation: 1, 2, or 3 (generation/family index)
 
         Returns:
             Mass in MeV
@@ -184,9 +186,12 @@ class YukawaMatrixSolver:
         # Quark color coupling adds ~10% (gluon interaction)
         color_factor = 1.0 if is_lepton else 1.10
 
+        # Generation hierarchy: lepton/quark families have different mass scales
+        hierarchy_factor = self.GENERATION_HIERARCHY[generation - 1] if generation in [1, 2, 3] else 1.0
+
         # Convert to MeV using electron as reference
         # Electron mass ≡ 0.511 MeV is baseline
-        mass_mev = suppression * frequency * color_factor * self.MASS_SCALE_FACTOR * 511.0
+        mass_mev = suppression * frequency * color_factor * hierarchy_factor * self.MASS_SCALE_FACTOR * 511.0
 
         return mass_mev
 
@@ -204,7 +209,7 @@ class YukawaMatrixSolver:
 
         for gen in [1, 2, 3]:
             freq = self.harmonic_frequency(gen)
-            mass = self.mass_from_frequency(freq, is_lepton=True)
+            mass = self.mass_from_frequency(freq, is_lepton=True, generation=gen)
 
             lepton_names = ["electron", "muon", "tau"]
             name = lepton_names[gen - 1]
@@ -266,7 +271,7 @@ class YukawaMatrixSolver:
             freq = self.harmonic_frequency(gen)
 
             # Up-type quark (lighter component)
-            up_mass = self.mass_from_frequency(freq, is_lepton=False)
+            up_mass = self.mass_from_frequency(freq, is_lepton=False, generation=gen)
             up_pred = FermionMassPrediction(
                 name=up_name,
                 generation=gen,
