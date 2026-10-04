@@ -1,335 +1,66 @@
 ---
 node_id: "C-322"
-canonical_name: "Mirror-Gate 125 GeV Boundary-Response Threshold"
+canonical_name: "Mirror-Gate Boundary Coupling and Phase Response"
 namespace: "NODE"
-gate: "GREEN"
-lifecycle: "ACTIVE"
-classification: "Applied Mirror-Boundary Threshold / Empirical Anchor"
-claim_gate_detail: "GREEN (One-Wave interpretation and pressure-work form) / YELLOW (first-principles numerical derivation and collider distributions)"
+gate: "YELLOW"
+lifecycle: "ACTIVE_HYPOTHESIS"
+classification: "Boundary Coupling / Collider Comparison"
+claim_gate_detail: "YELLOW: conservative operator witness tested; microscopic and experimental derivation open"
 metadata_standard: "I-06"
 ---
 
-# Node C-322: Mirror-Gate 125 GeV Boundary-Response Threshold
+# Node C-322: Mirror-Gate Boundary Coupling and Phase Response
 
-**Former title:** Mirror-Gate Higgs-Scale Resonance Target
+Upstream: A-115, B-205, B-206a, C-301, C-317, C-318.
+Downstream: Book 1 Chapter 15 and the measurement pipeline.
 
+## Boundary rule
 
+An incident disturbance cannot be forced through the boundary. It may bounce or reflect, deflect, roll off tangentially, or scatter. At the Mirror Gate it may couple to accessible modes and acquire a phase shift. An internal phase/orientation update does not imply geometric penetration or interchange of Field and Void.
 
-**Dependencies**  
-Upstream: A-115 Unified Compression Field, B-205 Mirror, B-206a Shared Boundary, C-301 Mirror Gate, C-317 Boundary-Tension Weave, C-318 Four-Interaction Mass-Effect Response  
-Downstream: Book 1 Ch15, future minimum-work gate solver, future collider-boundary simulation
+This correction supersedes the former forced-crossing threshold interpretation, preserved in [the pinned node history](https://github.com/One-Wave-Universe/One-Wave-Science/blob/b3e0df9f0edff500d3e8bb6b7655e14bc6120179/Nodes/C-322_Mirror_Gate_Higgs_Scale_Resonance.md). The existing filename is retained for links. No physical mirror geometry is changed.
 
-## Locked Interpretation
+## Complete mechanism
 
-The approximately \(125\,\mathrm{GeV}\) collider measurement is accepted as a valid empirical measurement.
+The native 3D profile must include knot K, electrical shell E, Mirror relation M, Boundary-Tension Weave T, and cross-couplings. A boundary operator extracted from that profile must respond to incident frequency, direction and state. A generic matrix is only a consistency witness, not the derivation of those interactions.
 
-One-Wave changes its physical interpretation:
+## Conservative coupling witness
 
-```text
-Standard interpretation:
-125 GeV reconstructed collider response -> Higgs-boson excitation
-
-One-Wave interpretation:
-125 GeV reconstructed collider response -> Mirror-Gate boundary-response energy
-```
-
-The measurement stays. The separate-particle interpretation is challenged.
-
-Within One-Wave, the collider drove a bounded field interaction hard enough for Mirror-Gate resistance to apply the pressure associated with a boundary-orientation threshold. That pressure participates in stabilizing the Mass Effect.
-
-## The Gate Is a Finite Work Threshold
-
-The former canonical equation
+Use flux-normalized amplitudes so squared magnitude denotes port power. Every port is an accessible boundary-response channel; none is a geometric penetration port. Define
 
 \[
-\hbar\omega_M=125\,\mathrm{GeV}
+a_{out}=S a_{in},\qquad S=\exp(-iH\tau),\quad H=H^\dagger.
 \]
 
-is retired as the mechanism. It converted the measured energy into an oscillator frequency and then asked an unspecified spring constant and inertia to reproduce it. That was a unit conversion wrapped around an unbuilt mechanism.
+Hermiticity makes this closed fixture unitary. Diagonal entries can shift phase; off-diagonal entries couple channel amplitudes. The generator's coefficients and interaction time are dimensionless in this fixture and are not calibrated physical constants.
 
-Let \(\mathbf q\) describe the allowed coupled deformation of the full bounded state and let
+The executable four-port fixture labels reflection, deflection, roll-off, and scattering, but the labels do not implement spatial geometry. Native 3D geometry must supply the actual mode shapes and flux normalization. A real derived generator must include all four interactions and their cross-couplings; independently chosen matrix entries cannot promote the physical hypothesis.
+
+Run `python3 solvers/test_mirror_gate_coupling.py`. Its conservation, reverse-evolution, null-coupling and invalid-generator checks establish the algebra only.
+
+## Energy ledger
+
+For an actual driven boundary,
 
 \[
-\overline E_4(\mathbf q)
-=
-\left\langle
-E_K+E_E+E_M+E_T+E_\times
-\right\rangle_{\rm cycle}
+P_{in}-P_{out}=dE_{stored}/dt+P_{diss}.
 \]
 
-be the four-interaction energy defined in C-318.
+The closed witness has zero storage change and loss. A passive reduced operator may obey \(S^\dagger S\preceq I\), but its missing output must be assigned to modeled storage/loss channels. Negative unexplained dissipation, clipped gain, or uncounted outlets fail the test. Phase changes alone do not create energy.
 
-- \(\mathbf q_0\) is the stable hold state.
-- \(\mathbf q_G\) is the first reachable boundary state at which the stable orientation branch loses hold and the Mirror operation can complete.
+## Collider comparison
 
-The Mirror-Gate energy is the finite work needed to reach that state:
+CERN measures reconstructed final-state observables. A peak near 125 GeV is not a direct measurement of forcing a proton boundary through a gate. Identifying that peak with a One-Wave coupling response is a hypothesis requiring a detector-level forward prediction of line shape, angular response, channel rates and backgrounds.
 
-\[
-\boxed{
-E_{\rm MG}
-=
-\overline E_4(\mathbf q_G)
--
-\overline E_4(\mathbf q_0)
-=
-\int_{\Gamma_{0\rightarrow G}}
-\nabla_{\mathbf q}\overline E_4\cdot d\mathbf q
-}
-\]
+Never stop a scan when its energy reaches 125 GeV and call the result a prediction. Freeze model coefficients and the response-selection rule before examining the comparison region. An energy normalization fitted to that peak must be declared calibration; validation must use other withheld observables.
 
-where \(\Gamma_{0\rightarrow G}\) is the minimum allowed coupled deformation path. The path must move the knot, electrical shell, Mirror relation, and Boundary-Tension Weave together.
+## Derivation and failure test
 
-The empirical anchor is
+1. Construct a stable native 3D recurrent K/E/M/T profile.
+2. Derive its work metric and boundary generator from the fixed update, including cross-couplings.
+3. Sweep incident direction, frequency and amplitude; keep the no-penetration geometry.
+4. Close the energy ledger and locate features from model dynamics, without target-defined endpoints.
+5. Predict one measurable phase/channel relation with fixed uncertainty and a null control.
+6. Compare held-out data through detector response and backgrounds.
 
-\[
-\boxed{
-E_{\rm MG}\approx125\,\mathrm{GeV}
-}
-\]
-
-or
-
-\[
-E_{\rm MG}
-\approx2.0027207925\times10^{-8}\,\mathrm J.
-\]
-
-The joule value is only a unit conversion of the measured anchor.
-
-## Pressure-Work Reduction
-
-For a predominantly compressive spherical path, define positive compressed volume
-
-\[
-\xi=V_0-V.
-\]
-
-Each interaction contributes a **signed** generalized pressure along that path:
-
-\[
-P_a(\xi)=\frac{dE_a}{d\xi},
-\qquad
- a\in\{K,E,M,T,\times\}.
-\]
-
-Positive \(P_a\) resists motion toward the gate. Negative \(P_a\) assists that part of the deformation. The required quasistatic external pressure is the total
-
-\[
-P_{\rm ext}(\xi)
-=
-P_K+P_E+P_M+P_T+P_\times
-=
-\frac{d\overline E_4}{d\xi}.
-\]
-
-At unloaded stable hold,
-
-\[
-P_{\rm ext}(0)=0,
-\]
-
-which is the radial form of the four-interaction balance. Along the driven path,
-
-\[
-\boxed{
-E_{\rm MG}
-=
-\int_0^{\xi_G}P_{\rm ext}(\xi)\,d\xi
-}.
-\]
-
-The signs matter. Boundary tension may assist one radial deformation while still being essential to confinement, geometry, and the cross-coupled path. No interaction is declared positive by vocabulary alone; its contribution must be computed from the actual deformation.
-
-For a general deformed boundary \(\partial\Omega(q)\),
-
-\[
-E_{\rm MG}
-=
-\int_0^{q_G}
-\oint_{\partial\Omega(q)}
-P_{\rm ext}(q,\mathbf s)
-\left(
-\mathbf n\cdot\frac{\partial\mathbf r}{\partial q}
-\right)
-\,dA\,dq.
-\]
-
-The dimensions close:
-
-\[
-[P\,dV]={\rm Pa\,m^3}={\rm J}.
-\]
-
-## Stored Gate Energy Versus Dissipative Work
-
-The line integral above describes the recoverable change in the cycle-averaged four-interaction energy. If the update includes damping or irreversible release, the total external drive work is
-
-\[
-W_{\rm drive}
-=
-E_{\rm MG}
-+
-E_{\rm diss},
-\qquad
-E_{\rm diss}\ge0.
-\]
-
-The current One-Wave interpretation identifies the approximately 125 GeV reconstructed response with the stored-and-released gate component \(E_{\rm MG}\), not automatically with all beam work and all losses. The damping/loss term must instead be used to predict width, timing, and unrecovered energy. If a later collider mapping identifies 125 GeV with total drive work, the canonical equation must be changed openly rather than hiding \(E_{\rm diss}\) inside pressure.
-
-## Gate Condition
-
-The stable hold state satisfies
-
-\[
-\nabla_{\mathbf q}\overline E_4(\mathbf q_0)=0,
-\qquad
-\nabla^2_{\mathbf q}\overline E_4(\mathbf q_0)\succ0
-\]
-
-on destructive deformation directions.
-
-The Mirror Gate must be located operationally from the update rule:
-
-> \(\mathbf q_G\) is the first state on the minimum-work allowed path whose forward evolution leaves the original orientation basin and enters the mirrored basin.
-
-There are two distinct static signatures, and the repository must not pretend they are automatically the same:
-
-1. **Barrier / separatrix crossing:** a transition state \(\mathbf q^\ddagger\) on the minimum-energy path, normally with one unstable Hessian direction.
-2. **Driven loss of hold:** a spinodal or fold at which the stable branch ends and
-   \[
-   \lambda_{\min}[\nabla^2_{\mathbf q}\overline E_4]=0.
-   \]
-
-A collider-driven Mirror event may follow either description depending on the actual discrete dynamics. The simulation must determine which one occurs. The energy equation remains the work accumulated to the first genuine basin crossing; the endpoint may not be chosen merely because it makes 125 GeV.
-
-Across that boundary, the Mirror operation completes:
-
-\[
-M(\psi_C,\psi_E)
-=
-(\psi_E,-\psi_C).
-\]
-
-## How the Gate Stabilizes Mass Effect
-
-C-318 defines Mass Effect as the local resistance to translating and rebuilding the complete four-interaction recurrence.
-
-C-322 defines the much larger finite work required to change the boundary orientation itself.
-
-```text
-small permitted displacement within the stable basin
--> Mass-Effect response
-
-large coupled deformation across the first mirrored-basin boundary
--> Mirror-Gate threshold
-```
-
-The Mirror-Gate barrier helps stabilize the Mass Effect because ordinary disturbances can deform the recurrence without forcing it across the boundary-flip path.
-
-Therefore:
-
-\[
-\boxed{
-E_{\rm MG}\text{ is a stabilization barrier, not the generic Mass Effect}
-}
-\]
-
-and
-
-\[
-\boxed{
-m_{\rm eff}\neq E_{\rm MG}/c^2
-}
-\]
-
-as a causal claim.
-
-## Collider Reading
-
-The collider event is modeled as external work on a shared boundary:
-
-```text
-Inward   opposing inputs compress the interaction region
-Across   the inputs meet at one shared boundary
-Over     the coupled boundary is forced across its first Mirror-basin threshold
-Outward  stored boundary energy is redistributed into measurable outgoing modes
-```
-
-The measured approximately 125 GeV response is the energy associated with reaching and releasing that Mirror-Gate boundary condition.
-
-One-Wave may still use the word **resonance** in Gray comparison or when describing the measured peak shape. The canonical mechanism is a finite boundary-response threshold, not an assumed harmonic oscillator.
-
-## Scale-Free Test Before GeV Calibration
-
-The current lattice has a global energy-scale freedom. Multiplying the four-interaction work metric by \(\lambda\) multiplies both the Mass Effect and the gate energy by \(\lambda\) without changing the dimensionless trajectory.
-
-Therefore the first non-circular target is
-
-\[
-\boxed{
-\mathcal R_G
-=
-\frac{E_{\rm MG}}{m_{\rm eff}v_{\rm lat}^2}
-=
-\frac{\Delta\mathcal E_G}{\widetilde m}
-}
-\]
-
-for the same fixed recurrent state and coefficient set. This ratio can be predicted before the absolute energy unit is known. Using \(c\) as the velocity unit later is a comparison normalization, not a claim that \(E=mc^2\) creates mass.
-
-The model then has two legitimate choices:
-
-- calibrate the energy unit from another microscopic observable and predict 125 GeV; or
-- calibrate on 125 GeV and predict every other Mass Effect, threshold, and release relation without retuning.
-
-It may not do both and call the same number a prediction.
-
-## What Must Be Derived
-
-A completed Yellow calculation must:
-
-1. obtain one stable 3D four-interaction hold state \(\mathbf q_0\);
-2. derive the allowed coupled deformation path from the lattice update rule;
-3. locate \(\mathbf q_G\) by the first true basin crossing, not by choosing the 125 GeV point;
-4. compute the dimensionless barrier \(\Delta\mathcal E_G\);
-5. state the calibration route: independent microscopic anchor, or 125 GeV used explicitly as calibration;
-6. compute
-
-\[
-E_{\rm MG}
-=
-\varepsilon_{\rm lat}\Delta\mathcal E_G;
-\]
-
-if the scale was independently calibrated, compare this as a prediction with \(125\,\mathrm{GeV}\); if 125 GeV set the scale, test the fixed model elsewhere;
-7. derive the dissipative loss term and reproduce the observed production and outgoing-channel structure from the same boundary release rule.
-
-## Fake-Mustache Failure Conditions
-
-This node fails if it does any of the following:
-
-- sets a spring constant or inertia to force \(\hbar\omega=125\,\mathrm{GeV}\);
-- calls a Higgs potential a Mirror potential without deriving it;
-- uses 125 GeV as calibration and still presents 125 GeV as a prediction;
-- leaves out the electrical shell, knot geometry, Boundary-Tension Weave, or cross-couplings;
-- treats 125 GeV as every object's Mass Effect;
-- or reproduces only the peak label while borrowing all other collider behavior unchanged.
-
-## Yellow Audit
-
-Resolved:
-
-- the 125 GeV measurement remains a valid empirical anchor;
-- One-Wave interpretation is Mirror-Gate boundary-response energy;
-- the canonical equation is finite pressure work, not \(\hbar\omega\);
-- the gate is linked to the first actual crossing into the mirrored basin;
-- all four interactions and cross-couplings participate;
-- the gate barrier is separated from the local Mass-Effect response.
-
-Open:
-
-- derive the four-interaction state and deformation path;
-- select an explicit independent-calibration or 125-GeV-calibration route;
-- either predict 125 GeV from an independent calibration or, after calibrating on 125 GeV, predict other observables without refitting;
-- derive the stored-versus-dissipated split and reproduce the measured width, timing, spin/parity response, couplings, and outgoing-channel distributions;
-- identify at least one nontrivial boundary-response relation that differs from the separate-particle interpretation.
+Absolute energy normalization, a microscopic coupling law, stable 3D profiles and a demonstrated collider discriminator remain open. Conservation of an illustrative operator alone does not establish a Higgs alternative, particle masses, or a LIGO signal.

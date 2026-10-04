@@ -1,0 +1,15 @@
+{
+  "error": "gaierror: [Errno -3] Temporary failure in name resolution",
+  "query": {
+    "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source ORDER BY source_id",
+    "catalog": "numaster",
+    "coordinates": "83.6331 22.0145",
+    "mission": "HST",
+    "radius_deg": 0.01,
+    "source": "gaia-archive"
+  },
+  "retrieved_at_utc": "2026-10-04T23:15:49.235514+00:00",
+  "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes",
+  "source_id": "gaia-archive",
+  "status": "failed"
+}

@@ -1,0 +1,5 @@
+astroquery==0.4.11
+astropy==8.0.1
+gwosc==0.8.3
+uproot==5.7.6
+h5py==3.16.0

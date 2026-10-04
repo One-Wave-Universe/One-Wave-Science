@@ -17,7 +17,7 @@
   "mass_effect_tensor": "M_ij = d^2 E4 / (dv_i dv_j) at v=0",
   "isotropic_mass_effect": "m_eff = Tr(M)/3",
   "force_test": "F_i approximately M_ij a_j",
-  "separation": "Mass Effect is local velocity response; 125 GeV is finite work to the Mirror threshold.",
+  "separation": "Local second velocity response is distinct from Mirror boundary coupling and phase response. No forced geometric penetration. The 125 GeV collider identification is unproved.",
   "blocker": "derive W_i and one independent microscopic energy calibration",
   "failure_conditions": [
     "omit any interaction without consequence",
@@ -29,9 +29,11 @@
   "work_metric": "W_i is a four-interaction, positive-semidefinite work metric with diagonal and cross-interaction blocks; it must be derived from the update rules.",
   "force_separation": "F_i = M_ij*a_j + C_ij*v_j + ...; C*v is drag/attenuation, not Mass Effect.",
   "frame_constraint": "Any constant-velocity drag relative to Ground must pass C-313 preferred-frame audit.",
-  "scale_free_test": "R_G = E_MG/(m_eff*v_lat^2) = DeltaE_G_dimensionless/m_tilde",
+  "scale_free_test": "Conditional only: a model-defined boundary-response energy and mass must first be computed from the same fixed four-interaction model.",
   "canonical_guard": "Never derive Mass Effect from propagation speed, damping, localization share, or any local/transport ratio. Use the complete four-interaction response tensor only.",
   "gate": "GREEN",
   "lifecycle": "ACTIVE",
-  "claim_gate_detail": "GREEN (One-Wave mechanism identity) / YELLOW (profiles, response coefficients, and numerical spectrum)"
+  "claim_gate_detail": "GREEN (One-Wave mechanism identity) / YELLOW (profiles, response coefficients, and numerical spectrum)",
+  "phase5_audit": "Measured mass ratios enter mass_scale; compression endpoint is selected at E >= 125; no independent spectrum or 125 GeV prediction established.",
+  "audit_source": "Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md"
 }

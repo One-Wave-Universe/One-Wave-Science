@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Lock the canonical six-step/six-gate Mirror/Action architecture.
+"""Lock current CELL_V1 physical architecture and legacy logical-role separation.
 
 Primitive cycle:
     M1 -> A1 -> M2 -> A2 -> M3 -> A3
 Process labels:
     BEGIN -> BUILD -> HOLD -> BUILD -> BREAK -> LOOP
 
-Permanent CI is read-only. ``--write`` is only an explicit migration aid for
-AI_CANONICAL_START_HERE.md; the permanent workflow never writes repository
-content.
+M/A positions are logical/receipt vocabulary, not six physical gate devices.
+Updated 33 and the current AI start supersede the previous physical reading.
+This checker is read-only. The old --write migration is retired.
 """
 
 from __future__ import annotations
@@ -20,31 +20,35 @@ ROOT = Path(__file__).resolve().parents[1]
 AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
 MASTER = ROOT / "00_MASTER_INDEX.md"
 
-REPLACEMENTS = {
-    "6 measured oscillator gates": "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
-    "- The current VTC physical interpretation uses three physical Mirror Gates traversed in two orientations to realize the six logical positions.": "- The six logical positions are the six process gates: three Mirror gates and three Action gates, alternating `M1 -> A1 -> M2 -> A2 -> M3 -> A3`.",
-    "- The six process steps are **Begin -> Build -> Hold -> Build -> Break -> Loop**; G-739 constrains them as measured stability regions around a bidirectional oscillator.": "- The six process steps are the six gates: **BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3**; G-739 measures behavior at those same positions rather than defining another gate set.",
-    "BEGIN is the active shared center/reference region. The six recursive labels are stability gates observed around a bidirectional oscillator, not a universal one-way conveyor.": "BEGIN/M1 is the first Mirror-gate relation at the active shared center/reference region. The six recursive labels are the same six gate positions: three Mirror gates alternating with three Action gates, not a separate measured-gate layer or a universal one-way conveyor.",
-    "- `-` is the Mirror Gate return/crossover through the shared `(0)` reference.": "- `-` is the handoff from one canonical gate position to the next; Mirror behavior occurs only at M1, M2, and M3.",
-    "- Four Actions are **Inward, Outward, Across, Over**.": "- Four Action **modes** are **Inward, Outward, Across, Over**; they describe what an Action gate may do and are not four primitive Action gates.",
-    "If removing a domain vocabulary changes the six-pair oscillator, that domain representation has leaked into the kernel.": "If removing a domain vocabulary changes the six-step/six-gate Mirror-Action oscillator, that domain representation has leaked into the kernel.",
+AI_REQUIRED = (
+    "three physical bidirectional mirrors",
+    "six hex interfaces are directed ends of those three mirrors",
+    "logical/receipt notation",
+    "not another hardware gate count",
+    "no internal Gate 7",
+)
+AI_FORBIDDEN = (
+    "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
+    "Mirror behavior occurs only at M1, M2, and M3",
+)
+CURRENT_PHYSICAL_REQUIRED = {
+    "G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md": (
+        "exactly three physical bidirectional Mirror axes",
+        "six directed edge interfaces, not six separate physical gates",
+        "logical/receipt sequence only",
+        "no separate Action-gate hardware layer",
+        "no Field/Void identity swap",
+    ),
+    "UPDATED_33_INVARIANT_ENGINE_VTC_BUILD_AND_VIEW_ACTION_CORRECTION.md": (
+        "three bidirectional Mirror axes",
+        "logical/receipt positions, not six physical gates",
+        "Views travel UP and Actions travel DOWN",
+        "A Mirror operation does not swap their ontology",
+    ),
 }
 
-AI_REQUIRED = (
-    "6 process steps = 6 gates = 3 Mirror gates + 3 Action gates",
-    "M1 -> A1 -> M2 -> A2 -> M3 -> A3",
-    "BEGIN/M1 -> BUILD/A1 -> HOLD/M2 -> BUILD/A2 -> BREAK/M3 -> LOOP/A3",
-    "Mirror behavior occurs only at M1, M2, and M3",
-    "not four primitive Action gates",
-)
-
-AI_FORBIDDEN = (
-    "6 measured oscillator gates",
-    "three physical Mirror Gates traversed in two orientations to realize the six logical positions",
-    "`-` is the Mirror Gate return/crossover",
-    "- Four Actions are **Inward, Outward, Across, Over**.",
-    "changes the six-pair oscillator",
-)
+def normalized(text: str) -> str:
+    return text.replace("**", "").casefold()
 
 MASTER_REQUIRED = (
     "| G-711 | Namika — Inter-System Relation (No Internal Gate 7) |",
@@ -76,26 +80,15 @@ CANON_FILES = (
 )
 
 
-def patch_ai_start(write: bool) -> bool:
-    text = AI_START.read_text(encoding="utf-8")
-    updated = text
-    for old, new in REPLACEMENTS.items():
-        updated = updated.replace(old, new)
-    changed = updated != text
-    if changed and write:
-        AI_START.write_text(updated, encoding="utf-8")
-    return changed
-
-
 def check() -> list[str]:
     errors: list[str] = []
 
-    ai = AI_START.read_text(encoding="utf-8")
+    ai = normalized(AI_START.read_text(encoding="utf-8"))
     for phrase in AI_REQUIRED:
-        if phrase not in ai:
+        if normalized(phrase) not in ai:
             errors.append(f"AI_CANONICAL_START_HERE.md missing canonical phrase: {phrase}")
     for phrase in AI_FORBIDDEN:
-        if phrase in ai:
+        if normalized(phrase) in ai:
             errors.append(f"AI_CANONICAL_START_HERE.md contains superseded phrase: {phrase}")
 
     master = MASTER.read_text(encoding="utf-8")
@@ -111,6 +104,11 @@ def check() -> list[str]:
             errors.append(f"missing canonical architecture file: {path.relative_to(ROOT)}")
             continue
         text = path.read_text(encoding="utf-8")
+        if path.name in CURRENT_PHYSICAL_REQUIRED:
+            for phrase in CURRENT_PHYSICAL_REQUIRED[path.name]:
+                if normalized(phrase) not in normalized(text):
+                    errors.append(f"{path.relative_to(ROOT)} missing current physical rule: {phrase}")
+            continue
         if path.name == "G-711_Gate_7.md":
             if "No Internal Gate 7" not in text or "six" not in text.lower():
                 errors.append("G-711 must remain Namika/no-internal-Gate-7")
@@ -136,10 +134,8 @@ def main() -> int:
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
 
-    changed = patch_ai_start(args.write)
-    if changed and not args.write:
-        print("AI canonical start requires six-gate synchronization")
-        return 1
+    if args.write:
+        parser.error("--write is retired: this checker is read-only and must not restore superseded physical gates")
 
     errors = check()
     if errors:
@@ -148,7 +144,7 @@ def main() -> int:
             print(f"- {error}")
         return 1
 
-    print("PASS: 6 steps = 6 gates = 3 Mirror + 3 Action; views/action modes remain descriptors; no internal Gate 7")
+    print("PASS: three physical bidirectional mirrors; six directed interfaces; logical roles and physical gates separate; no internal Gate 7")
     return 0
 
 

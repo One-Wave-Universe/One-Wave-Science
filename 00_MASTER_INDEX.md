@@ -122,7 +122,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 | C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |
 | C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |
 | C-321 | Reduced Multi-Center Tension Network | Conditional slender-neck reduction of C-317; N=3 junction geometry survives, direct nuclear application is not yet derived. | GREEN |
-| C-322 | Mirror-Gate 125 GeV Boundary Response | Keeps the 125 GeV measurement as the empirical Mirror-Gate pressure-work barrier; harmonic-oscillator substitution is retired. | GREEN |
+| C-322 | Mirror-Gate Boundary Coupling and Phase Response | Reflection, deflection, roll-off and scattering; coupling and phase shift without forced penetration. Conservative witness tested; microscopic derivation and collider identification open. | YELLOW |
 ### Appendix D — Resonance, Modal & Dimensional Structure (16 nodes)
 | Node | Name | Definition | Gate |
 |---|---|---|---|
@@ -265,7 +265,7 @@ Canonical naming map: `ONE_WAVE_TERMINOLOGY_LEGEND.md`. Standard names remain in
 - **Higgs field** = local boundary stiffness/resistance of that same field
 - **White Energy** = population-scale outward return through quasar/white-hole ejection and reinjection; it redistributes stored energy and never means expansion of space
 
-The old missing physics address I-09 is dissolved. Its intended content now has the proper A-series home A-115. C-322 holds the 125 GeV Mirror-Gate boundary-response anchor.
+The old missing physics address I-09 is dissolved. Its intended content now has the proper A-series home A-115. C-322 defines the corrected Mirror coupling boundary rule; its proposed relation to the 125 GeV collider response remains a hypothesis.
 
 ---
 
@@ -279,6 +279,7 @@ The old missing physics address I-09 is dissolved. Its intended content now has 
 | I-03 | Cross-Platform Packet Intake | Requires duplicate, lineage, and delta checks before evaluating incoming packet quality. |
 | I-04 | Scale Recurrence vs. Duplication | Prevents cross-scale instances from being flattened into same-scale duplicates. |
 | I-05 | Active Hypothesis vs. Quarantine | Keeps unproven but open One-Wave research active while separating it from verified claims and superseded source history. |
+| I-07 | Gate Colors and Metals | Canonical gate-language reference; see `Nodes/I-07_Gate_Colors.md` and `GATE_COLORS.md`. |
 
 **Gate/color lifecycle (applies to every node at every tier):**
 Brown (Standard Model reference) → Gray/Green (seed/grow) → Yellow (internally proven math, not experimentally validated) → Bronze → Silver → Gold. Red is reserved exclusively for post-experiment outcomes.
@@ -298,7 +299,7 @@ A-106, A-107 (both now closer after the FIXED versions), Higgs (Ch15), Gravity (
 - Mass-definition reconciliation in Book 5 Ch1
 - Lorentz invariance conflict (C-313) — real, checked, unresolved
 - Charge mapping after C-316 — textual conflict resolved; measured sign/gradient mapping remains underived
-- A-115/C-318/C-322/E-528/E-529/E-530 program - four-interaction response coefficients, absolute-energy calibration, 125 GeV pressure-work derivation, galaxy fits, static redshift transport, neutrino return, and White Energy balance remain open
+- A-115/C-318/C-322/E-528/E-529/E-530 program - four-interaction response coefficients, absolute-energy calibration, boundary-coupling/phase-response derivation and an independently selected collider observable, galaxy fits, static redshift transport, neutrino return, and White Energy balance remain open
 - Book 1 numbering is continuous from Ch1 through Ch17 after the Updated 32 renumber
 
 ---
@@ -397,6 +398,11 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 
 - I-01 Rule 16: no expansion of space in canonical One-Wave math.
 - I-01 Rule 17: use the terminology legend and 3D sphere-like default in One-Wave interpretation layers.
+## October 4 science correction and acquisition
+
+The [Phase 5 reproduction audit](Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) withdraws target-dependent numerical prediction claims. C-318's architectural definition remains distinct from its unresolved numerical spectrum. C-322 and Chapters 14–15 now use the no-penetration boundary rule. Historical chapter PDFs and pinned versions predate this correction; current Markdown nodes/chapters are authoritative.
+
+Use the [science data runbook](One_Wave_Bench/data/SCIENCE_DATA_RUNBOOK.md) for CERN/GWOSC snapshots and MAST/HEASARC/Gaia clients. The registry defines routes; receipts state what actually returned.
 
 <!-- AUTO-NODE-REGISTRY:START -->
 ## Auto-synchronized canonical node registry supplement

@@ -359,7 +359,7 @@ Mass Effect is the response produced when the complete stable recurrence must be
 
 The cross-couplings among those four interactions are part of the complete response and may not be omitted.
 
-The approximately 125 GeV collider measurement is a separate observable: the Mirror-Gate boundary-response work required to drive the stable architecture to its first mirrored-basin crossing.
+The approximately 125 GeV collider invariant-mass measurement is an external comparator. Its identification with a One-Wave Mirror response remains unproved. Disturbances reflect, deflect, roll off tangentially or scatter; the Mirror Gate permits coupling and phase shift without forced geometric penetration. See `Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md` for the reproduced target dependencies and `One_Wave_Bench/data/SCIENCE_DATA_RUNBOOK.md` for verified source acquisition.
 
 G-745 forbids treating 125 GeV as a first-principles lattice constant or as a hidden input to a blind Hoyle test.
 

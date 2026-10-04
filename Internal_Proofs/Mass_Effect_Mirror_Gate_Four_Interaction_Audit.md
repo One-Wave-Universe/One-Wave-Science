@@ -4,6 +4,8 @@
 **Repository update:** Updated 24 candidate  
 **Result:** Imported scaffold removed; canonical derivation path rebuilt
 
+> October 4, 2026 correction: the historical forced-crossing/125 GeV threshold portions below are superseded by [the boundary-coupling and Phase 5 audit](Boundary_Coupling_and_Phase5_Audit.md), current C-322 and Chapters 14–15. The four-interaction translational-response audit remains relevant. Do not reuse the old threshold identification as current proof.
+
 ## What Failed
 
 An earlier draft incorrectly promoted a propagation constraint into a Mass-Effect mechanism. That was a misunderstanding of C-309 and has been permanently erased. A later draft then replaced it with a scalar-field potential, curvature-defined mass gap, localized-lump equation, and harmonic Mirror-boundary oscillator.

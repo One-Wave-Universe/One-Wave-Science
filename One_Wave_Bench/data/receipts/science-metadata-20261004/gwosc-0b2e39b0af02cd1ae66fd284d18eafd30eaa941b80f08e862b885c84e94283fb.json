@@ -1,0 +1,103 @@
+{
+  "bytes": 1555,
+  "raw_body_file": "gwosc-0b2e39b0af02cd1ae66fd284d18eafd30eaa941b80f08e862b885c84e94283fb.raw",
+  "requested_url": "https://gwosc.org/api/v2/events/GW150914/strain-files",
+  "retrieved_at_utc": "2026-10-04T23:13:40.578338+00:00",
+  "sha256": "0b2e39b0af02cd1ae66fd284d18eafd30eaa941b80f08e862b885c84e94283fb",
+  "source_id": "gwosc",
+  "source_record": {
+    "next": null,
+    "num_pages": 1,
+    "page_number": 1,
+    "previous": null,
+    "results": [
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-16kHz",
+        "detector": "L1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 16,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-4kHz",
+        "detector": "H1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 4,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-16kHz",
+        "detector": "H1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 16,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-4kHz",
+        "detector": "L1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 4,
+        "utc_start": "2015-09-14T09:03:43"
+      }
+    ],
+    "results_count": 4,
+    "results_per_page": 20
+  },
+  "summary": {
+    "classification": "provider_metadata_not_strain_samples",
+    "files": [
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-16kHz",
+        "detector": "L1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 16,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-4kHz",
+        "detector": "H1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 4,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-16kHz",
+        "detector": "H1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 16,
+        "utc_start": "2015-09-14T09:03:43"
+      },
+      {
+        "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-4kHz",
+        "detector": "L1",
+        "gps_start": 1126256640,
+        "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.gwf",
+        "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.hdf5",
+        "sample_rate_kHz": 4,
+        "utc_start": "2015-09-14T09:03:43"
+      }
+    ],
+    "record_id": null,
+    "results_count": 4,
+    "strain_units": "dimensionless strain (not downloaded)"
+  },
+  "transport": {
+    "content_type": "application/json",
+    "final_url": "https://gwosc.org/api/v2/events/GW150914/strain-files",
+    "http_status": 200
+  }
+}
