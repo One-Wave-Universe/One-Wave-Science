@@ -590,14 +590,75 @@ with a real control and returns its measured comparison and artifacts. Missing
 physics remains missing physics. This product earns “working” through these
 receipts, not through the name Truth Computer.
 
-## 17. Work record for this specification
+## 17. Mandatory AI reference and Claude-first non-API entry
+
+This document is the required build/operation reference for AI work on this
+database, journal, solver or balance loop. Read it through the repository, then
+read the exact domain authority and current reference bundle before acting.
+The journal is context; it never replaces those sources.
+
+**Start with Claude using an authenticated non-API route.** Do not require a paid
+Anthropic developer API key for the first working version. Use the user's
+existing authorized Claude web session, or an installed Claude client whose
+actual authentication supports the user's account. Discover the route and
+verify its capabilities before choosing it. Provider adapters may be added later
+only when requested; they are not a prerequisite for this build.
+
+No Claude connector is attached to the authoring session, and the Jetson
+`command -v claude` probe returned no installed command on 2026-10-04. Therefore
+Claude execution is **NOT VERIFIED**. This document does not claim it was connected.
+
+### Claude start packet
+
+Give Claude one bounded packet containing:
+
+- This document's repository path and commit.
+- Current goal and success test.
+- Reference bundle across the relevant repos.
+- Required domain node IDs and the OG ladder mapping.
+- Relevant journal summaries, prior corrections and consequence.
+- Allowed operation class and protected state.
+- FIELD proposal schema and VOID audit schema.
+- Request/operation ID, cycle limit and hard stop.
+- The selected working terminal route and how to read its receipt.
+
+Claude must read the references before it proposes work. It returns a structured
+candidate; the deterministic controller persists it and runs the separate Void
+audit. Final output is released only after its draft hash and reference bundle
+match the audited decision.
+
+Use verified terminal tools when available. If Claude only has the web interface,
+an authorized client/controller carries the packet and returned candidate through
+the existing bridge and job store. Do not claim a text reply executed a tool.
+Do not ask the human to repeatedly shuttle ordinary commands after a working
+authorized controller route exists.
+
+A subscription/web UI may require human login or device approval. Keep credentials
+in its secure authentication flow. Do not scrape session cookies, invent a private
+provider endpoint, bypass access controls, or quietly switch to a paid API route.
+
+### Non-API route acceptance
+
+1. Identify and authenticate the actual Claude route without a developer API key.
+2. Send a bounded request with the source reference and operation ID.
+3. Receive a candidate tied to that ID and preserve its source/evidence class.
+4. Persist FIELD → VOID; run source checks and the node ladder.
+5. Commit the audited result/journal consequence and return to FIELD.
+6. Release only the verified draft and show the user its sources/decision.
+7. Restart and recover the same job without duplicate output or execution.
+
+Missing provider access is a named dependency. Independent ingestion, journal,
+state-controller and validator fixture tests can proceed while it is blocked.
+A provider outage must leave the database and deterministic reference checks usable.
+
+## 18. Work record for this specification
 
 - MAIN GOAL: build the Field/Void software-construction engine for real programs.
 - Current step: define the requested Reality Database builder and Truth Computer.
 - Why: the user requested a prominent, complete repository page before implementation.
 - Reference: Science main `961cf916be7ba339072f7ac0dab3df316069c057` and linked authorities.
 - Execution surface: GitHub connector task branch; no local checkout mutation.
-- Allowed files: this specification and a pointer in the Nexus private install guide.
+- Allowed files: this specification and pointers in the Nexus private install guide, AGENTS.md and CLAUDE.md.
 - Protected: existing database/job ownership, physical geometry, solver evidence classes,
   private credentials and all dirty user checkout work.
 - Field proposal: one requirements page, with no invented executable commands or live claims.
