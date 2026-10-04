@@ -1,75 +1,20 @@
 {
   "argv": [
-    "printf",
-    "PULL_WORKER_RECOVERY_OK\n"
+    "bash",
+    "-lc",
+    "hostname; uname -m; whoami; pwd"
   ],
-  "completed_at": "2026-10-04T18:53:24.535960+00:00",
-  "cwd": "/home/Scales/One-Wave-Science",
-  "duration_ms": 42,
-  "exit_code": 0,
-  "guidance": {
-    "code": "VERIFIED_COMMAND_COMPLETE",
-    "explanation": "The command completed inside the bounded parser.",
-    "higher_level_required": false,
-    "level": "none",
-    "next_action": "Use the receipt as evidence and verify state before the next mutation."
+  "completed_at": "2026-10-04T21:46:30.153118+00:00",
+  "cwd_requested": "/home/Scales/One-Wave-Science",
+  "exit_code": null,
+  "id": "grok-terminal-20261004-1445",
+  "ok": false,
+  "requested_at_commit": "03f0d946ebd93adbce35a53df275651c8258f36b",
+  "rpc_error": {
+    "code": -32603,
+    "message": "Reference Goblin HOLD: intention must be non-empty text <= 1024 characters"
   },
-  "id": "pull-recovery-proof-20261004-1153",
-  "ok": true,
-  "output_clipped": false,
-  "parser_contract": "one-wave-terminal-parser-v2",
-  "reference": {
-    "contract": "one-wave-terminal-parser-v2",
-    "instruction": "Call terminal_reference for workflow, limits, authorized roots, and intervention levels.",
-    "tool": "terminal_reference"
-  },
-  "reference_after": {
-    "agents_sha256": "aea59024dc9caf1cf3ce06e2301c33cb30e1bd5ee0845f31bfd37b6d21761ba3",
-    "branch": "recovery/brain-buddy-return-20260929",
-    "head": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
-    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
-    "root": "/home/Scales/One-Wave-Science",
-    "status": "M One_Wave_Bench/hive-pipe/deepseek_web_relay.py\n?? .one-wave-metadata/\n?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/emergence_issue01_review.txt\n?? External_Work/brain_buddy/inbox/relay.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140115.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140303.md\n?? External_Work/brain_buddy/outbox/council-both-20260930-181918.md\n?? External_Work/brain_buddy/outbox/council-both-20261002-004027.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140514.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140727.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141137.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141404.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141615.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261002-004434.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261004-010733.md\n?? scripts/__pycache__/"
-  },
-  "reference_before": {
-    "agents_sha256": "aea59024dc9caf1cf3ce06e2301c33cb30e1bd5ee0845f31bfd37b6d21761ba3",
-    "branch": "recovery/brain-buddy-return-20260929",
-    "head": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
-    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
-    "root": "/home/Scales/One-Wave-Science",
-    "status": "M One_Wave_Bench/hive-pipe/deepseek_web_relay.py\n?? .one-wave-metadata/\n?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/emergence_issue01_review.txt\n?? External_Work/brain_buddy/inbox/relay.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140115.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140303.md\n?? External_Work/brain_buddy/outbox/council-both-20260930-181918.md\n?? External_Work/brain_buddy/outbox/council-both-20261002-004027.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140514.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140727.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141137.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141404.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141615.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261002-004434.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261004-010733.md\n?? scripts/__pycache__/"
-  },
-  "reference_card": {
-    "action_sha256": "6899114a2ec6892d360aea5f773806c156ce9994c03f1ae4f360e2a6e8010e11",
-    "goblin": "reference",
-    "repository": {
-      "agents_sha256": "aea59024dc9caf1cf3ce06e2301c33cb30e1bd5ee0845f31bfd37b6d21761ba3",
-      "branch": "recovery/brain-buddy-return-20260929",
-      "head": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
-      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
-      "root": "/home/Scales/One-Wave-Science",
-      "status": "M One_Wave_Bench/hive-pipe/deepseek_web_relay.py\n?? .one-wave-metadata/\n?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/emergence_issue01_review.txt\n?? External_Work/brain_buddy/inbox/relay.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140115.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140303.md\n?? External_Work/brain_buddy/outbox/council-both-20260930-181918.md\n?? External_Work/brain_buddy/outbox/council-both-20261002-004027.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140514.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140727.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141137.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141404.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141615.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261002-004434.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261004-010733.md\n?? scripts/__pycache__/"
-    },
-    "stamped_at": "2026-10-04T18:53:24.492940+00:00"
-  },
-  "reference_changed": false,
-  "request_commit": "302d2017aa23ee981b8be5dbfc91ce2b560c57df",
-  "request_digest": "cd0332b1084720e6486cd01166e8c31f7b2159d3dbbdf13d79bca0eb5599f097",
-  "response_card": {
-    "action_sha256": "6899114a2ec6892d360aea5f773806c156ce9994c03f1ae4f360e2a6e8010e11",
-    "goblin": "checker",
-    "repository": {
-      "agents_sha256": "aea59024dc9caf1cf3ce06e2301c33cb30e1bd5ee0845f31bfd37b6d21761ba3",
-      "branch": "recovery/brain-buddy-return-20260929",
-      "head": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
-      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
-      "root": "/home/Scales/One-Wave-Science",
-      "status": "M One_Wave_Bench/hive-pipe/deepseek_web_relay.py\n?? .one-wave-metadata/\n?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/emergence_issue01_review.txt\n?? External_Work/brain_buddy/inbox/relay.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140115.md\n?? External_Work/brain_buddy/outbox/council-both-20260929-140303.md\n?? External_Work/brain_buddy/outbox/council-both-20260930-181918.md\n?? External_Work/brain_buddy/outbox/council-both-20261002-004027.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140514.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-140727.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141137.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141404.md\n?? External_Work/brain_buddy/outbox/council-deepseek-20260929-141615.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261002-004434.md\n?? External_Work/brain_buddy/outbox/council-discussion-20261004-010733.md\n?? scripts/__pycache__/"
-    },
-    "stamped_at": "2026-10-04T18:53:24.535824+00:00"
-  },
-  "source_route": "transport:chatgpt-terminal",
   "stderr": "",
-  "stdout": "PULL_WORKER_RECOVERY_OK\n",
-  "delivery_route": "authenticated GitHub connector; automatic worker git push remains authentication-blocked"
+  "stdout": "",
+  "timeout_requested": 30
 }
