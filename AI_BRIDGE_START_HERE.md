@@ -4,6 +4,27 @@ This is the canonical operating page for every AI, laptop, Jetson, and human
 using One-Wave terminal access. Read this page before declaring a bridge healthy
 or broken.
 
+## Algorithm Zero — start, act, return
+
+Use the repository's [Reference Point Zero](AGENTS.md#reference-point-zero--verify-the-actual-route-before-action)
+for every terminal task. The working loop is:
+
+**Goal → Reference → Choose route → Execute once → Read return → Verify → Continue**
+
+| Step | What the AI does | What proves it |
+|---|---|---|
+| Reference | Discover callable tools; select laptop or Jetson; inspect identity and repository state | Fresh target identity, branch, HEAD and status |
+| Choose | Use the working direct terminal, or the configured fallback for that target | Route available in this session |
+| Execute | Run one authorized bounded command with a concrete intention and consequence | Device/PID or request/run ID |
+| Return | Read the same execution's output and exit status | Matching receipt, not an older result |
+| Continue | Compare the result with the goal; proceed or repair the observed failure | Verified result and refreshed reference |
+
+**Start with the device terminal below.** If the selected Jetson fallback is
+Actions, jump to [Actions: login, secrets, dispatch and proof](#route-3--github-actions-command-lane).
+Authenticated hosts continue immediately; device login is needed only when
+`gh auth status` reports no working login. A human approves account access once;
+the AI handles the authorized terminal work, secret transfer, dispatch and checks.
+
 ## Terminal access — every AI starts here
 
 For laptop or Jetson terminal work, enumerate the tools available in the current
