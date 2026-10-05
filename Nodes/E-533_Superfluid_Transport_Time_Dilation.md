@@ -261,3 +261,9 @@ HYPOTHESIS:
 Derive \mathcal T(v,\Xi) from the exact A-114 characteristic roots plus the C-309/E-509 propagation constraints.
 
 Do not fit supernova data until that timing law is frozen.
+
+## Resistance and change interpretation — 2026-10-04
+
+Mark Adlard states the intended One-Wave interpretation: **time is resistance and change — how difficult it is for an excitation to move and reorganize through the proposed superfluid lattice.** This remains a physical hypothesis, not an established identity. Operationally, measure internal recurrence against an external reference while measuring translation and the field work required to carry and rebuild the same excitation. Resistance here may include reversible compression, strain and reorganization; it must not be reduced to the memory-damping coefficient gamma without a derivation.
+
+[The executed resistance/change probe](../solvers/TIME_RESISTANCE_PROBE.md) evolves the actual one-dimensional A-114 recurrence in nine packet cases and measures carrier frequency, group motion, decay and phase change along the moving packet. Five numerical controls pass. It does not yet implement a self-held clock or native 3D compression/weave dynamics. Increasing gamma can increase carrier frequency, and moving carrier phase does not reproduce the Lorentz factor. These results reject a simple damping/carrier-clock shortcut, while leaving the retained-field interpretation open. A bound periodic excitation, conserved work budget and derived field-difficulty Xi remain required before promoting a timing law.

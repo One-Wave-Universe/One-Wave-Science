@@ -180,3 +180,7 @@ Book1 Ch16a wave equation
 4. test whether the square-root timing law emerges;
 5. freeze \mathcal T;
 6. only then fit supernova timing/redshift data.
+
+## Resistance/change experiment
+
+[E-533 owns the resistance/change interpretation](../../Nodes/E-533_Superfluid_Transport_Time_Dilation.md#resistance-and-change-interpretation--2026-10-04). [The executed propagation control](../../solvers/TIME_RESISTANCE_PROBE.md) measures packet motion, carrier phase and decay from the actual recurrence. All five numerical controls pass across nine cases; the simple damping/carrier-clock identification does not derive universal clock slowing or Lorentz recovery. The next physical test needs a self-held periodic excitation and a measured reversible field-work response.
