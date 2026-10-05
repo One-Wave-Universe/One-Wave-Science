@@ -212,6 +212,20 @@
       ],
       "fetch_mode": "science_archive_search",
       "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "hepdata-doi",
+      "domain": "collider-scattering",
+      "coverage": [
+        "HEPData DOI metadata discovery"
+      ],
+      "api_root": "https://api.datacite.org/dois",
+      "api_docs": "https://support.datacite.org/docs/api",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Independent DOI metadata discovery only. No measurement tables; does not repair direct HEPData HTTP 403."
     }
   ]
 }

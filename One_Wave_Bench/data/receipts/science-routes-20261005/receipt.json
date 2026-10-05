@@ -243,5 +243,415 @@
     "record_id": "ds000224",
     "raw_sha256": "93498323b4f346ee4181e2298943ecb50bb5680f61fe0ecd0157f38edd9e8ac0",
     "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/mcp-openneuro-verification.json"
+  },
+  "hepdata_doi_followup": {
+    "tests_passed": 17,
+    "live": {
+      "schema": "one-wave-archive-search-v1",
+      "source": "hepdata-doi",
+      "query": "Higgs",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://api.datacite.org/dois?query=prefix%3A10.17182+AND+%28Higgs%29&page%5Bsize%5D=3",
+      "retrieved_at_utc": "2026-10-05T21:12:46.654994+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "http_status": 200,
+      "final_url": "https://api.datacite.org/dois?query=prefix%3A10.17182+AND+%28Higgs%29&page%5Bsize%5D=3",
+      "content_type": "application/json; charset=utf-8",
+      "raw_file": "provider.raw",
+      "sha256": "509d981d593cb1628d2fff71527a6cfa94395e1aa2b6e954374c95bbc77e240e",
+      "bytes": 11748,
+      "provider": "DataCite",
+      "discovery_for": "hepdata",
+      "measurement_tables_available": false,
+      "limitation": "DOI metadata only; direct HEPData access remains independently blocked",
+      "page_next": null,
+      "status": "acquired",
+      "returned_count": 3,
+      "sample": [
+        {
+          "id": "10.17182/hepdata.158373.v1/t307",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t307",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80b\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV endcap trigger efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and longitudinal decay position Lz for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160593",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:47Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        },
+        {
+          "id": "10.17182/hepdata.158373.v1/t309",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t309",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80d\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV endcap vertex efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and longitudinal decay position Lz for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160595",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:46Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        },
+        {
+          "id": "10.17182/hepdata.158373.v1/t306",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t306",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80a\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV barrel trigger efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and transverse decay position Lxy for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160592",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:46Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        }
+      ],
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    "direct_hepdata_status": "blocked_http_403",
+    "classification": "partial_recovery_metadata_discovery_only"
   }
 }

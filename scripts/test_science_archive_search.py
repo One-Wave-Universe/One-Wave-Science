@@ -19,6 +19,16 @@ class Tests(unittest.TestCase):
             self.assertEqual(x["status"],"acquired");self.assertEqual(x["sample"][0]["id"],"ds000224")
             self.assertEqual(x["sha256"],hashlib.sha256(raw).hexdigest());self.assertEqual((pathlib.Path(d)/"provider.raw").read_bytes(),raw)
             self.assertNotIn("mutation",json.loads(c.request.data)["query"])
+    def test_doi_metadata_scope_and_wrong_prefix(self):
+        for doi,status in [("10.17182/hepdata.123.v1","acquired"),("10.99999/unrelated","failed")]:
+            with tempfile.TemporaryDirectory() as d:
+                x=relay.acquire("hepdata-doi","Higgs","",3,d,opener=Client(json.dumps({"data":[{"id":doi}]}).encode()))
+                self.assertEqual(x["status"],status)
+                if status=="acquired":self.assertFalse(x["measurement_tables_available"]);self.assertEqual(x["provider"],"DataCite")
+    def test_unsupported_search_is_rejected(self):
+        for source in ("gwosc","gaia-archive","eso","alma","desi"):
+            with self.assertRaises(ValueError):relay.route(source,"brain","",3)
+        with self.assertRaises(ValueError):relay.route("dandi","","ds000224",3)
     def test_http_200_graphql_error_is_failure(self):
         with tempfile.TemporaryDirectory() as d:
             x=relay.acquire("openneuro","","ds000224",3,d,opener=Client(b'{"errors":[{"message":"bad"}]}'))

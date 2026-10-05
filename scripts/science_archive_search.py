@@ -14,8 +14,11 @@ class CheckedRedirect(HTTPRedirectHandler):
         return super().redirect_request(req,fp,code,msg,headers,newurl)
 
 def route(source,query,record,limit):
+    if record and source!="openneuro":raise ValueError("--record is supported only for OpenNeuro on this relay")
     if source=="cern-open-data":return "https://opendata.cern.ch/api/records/?"+urlencode({"q":query or "CMS","size":limit}),None,"json"
+    if source=="hepdata-doi":return "https://api.datacite.org/dois?"+urlencode({"query":"prefix:10.17182 AND ("+(query or "Higgs")+")","page[size]":limit}),None,"json"
     if source=="hepdata":return "https://www.hepdata.net/search/?"+urlencode({"q":query or "Higgs","format":"json"}),None,"json"
+    if query and source in ("gwosc","gaia-archive","eso","alma","desi"):raise ValueError("This route is a bounded inventory; text search is unsupported. Use the native query tool for sky/ADQL queries.")
     if source=="gwosc":return "https://gwosc.org/api/v2/runs",None,"json"
     if source=="dandi":return "https://api.dandiarchive.org/api/dandisets/?"+urlencode({"page_size":limit,"search":query}),None,"json"
     if source=="openneuro":
@@ -58,6 +61,10 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
             doc=json.loads(raw)
             if isinstance(doc,dict) and (doc.get("errors") or doc.get("status")=="ERROR"):raise ValueError("Provider returned application error: "+str(doc)[:1000])
             if source=="openneuro":rows=([doc["data"]["dataset"]] if record and doc["data"].get("dataset") else [x["node"] for x in doc["data"].get("datasets",{}).get("edges",[])])
+            elif source=="hepdata-doi":
+                rows=doc.get("data",[])
+                if any(not str(x.get("id","")).startswith("10.17182/") for x in rows):raise ValueError("DataCite returned a DOI outside the HEPData prefix")
+                receipt.update(provider="DataCite",discovery_for="hepdata",measurement_tables_available=False,limitation="DOI metadata only; direct HEPData access remains independently blocked")
             elif source=="cern-open-data":rows=doc.get("hits",{}).get("hits",[])
             elif source=="dandi":rows=doc.get("results",[])
             else:rows=doc.get("results",doc.get("runs",[])) if isinstance(doc,dict) else doc

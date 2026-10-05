@@ -74,3 +74,13 @@ Until the PR is merged, a temporary sparse task worktree on Jetson contains the 
 ```
 
 This is a Git worktree, not a maintained runtime clone or competing canon. Verify its current HEAD and status before use. An authenticated local Hive Pipe call executed science_archive_search.py from that worktree and returned OpenNeuro ds000224, exit 0 and matching request ID openneuro-relay-e32c96a2c193488b820e59b396d49acc. The provider-body hash matched the direct-device query. Exact activation evidence is in the canonical receipt. The user's dirty primary checkout remains untouched. After merge, refresh the canonical checkout safely and retire this temporary worktree; do not overwrite the existing recovery branch or dirty user edits.
+
+## HEPData discovery bridge
+
+When direct HEPData returns HTTP 403, use the separately identified DataCite DOI metadata route:
+
+```sh
+python3 scripts/science_archive_search.py hepdata-doi --query Higgs --limit 3 --output .one-wave-metadata/hepdata-doi
+```
+
+This preserves DataCite response bytes, DOI IDs, titles, related identifiers and provenance. It does not fetch HEPData measurement tables, and cannot be used to mark the blocked direct route healthy. Inventory-only routes reject unsupported text search rather than silently ignoring it. Sky or ADQL searches use the native query tool.

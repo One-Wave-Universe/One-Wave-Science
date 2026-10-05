@@ -20,3 +20,8 @@ PROGRESS REPORT: implementation, docs and tests complete for the selected routes
 LOOK-BACK REFLECTION: acquisition dependencies and missing registry lanes were the concrete gaps. Metadata query successes preserve provenance; no physical claim or waveform was manufactured. Previously verified CERN/GWOSC tests remain green. Remaining routes need fresh receipts rather than inferred status.
 HARD STOP: review-ready PR and matched route receipts; do not declare every telescope/collider worldwide healthy.
 HANDOFF/NEXT PERMITTED STEP: use canonical AI route document; after merge, refresh the verified checkout and run exact commands. For HEPData, establish a separately permitted provider route before retrying.
+
+FOLLOW-UP REFERENCE: Science branch e46f16818edb41f38a87f7f157b4c7207b5af8a8; protected recovery checkout unchanged.
+CHOICE/MOVE: add independent DataCite HEPData DOI discovery, explicit provider/scope receipts, and reject silently ignored inventory search/record parameters. Allowed files: relay, registry, relay tests, route directions, this report, receipt.
+FIELD/VOID: read-only public metadata; do not bypass HEPData controls or label DOI discovery as table acquisition. Stop equivalent HEPData endpoint retries. Verify wrong DOI prefix, unsupported queries, exact bytes and live Jetson/MCP exit.
+VIEW/ACTION: 17 offline tests pass; independent live DataCite query returns three HEPData DOI records, exact raw SHA retained in receipt. STATE/SCALE: metadata discovery recovered; direct table access remains blocked. REENTRY: publish bounded follow-up and verify committed route through the authenticated local bridge.
