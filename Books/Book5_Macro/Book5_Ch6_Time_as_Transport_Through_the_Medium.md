@@ -184,3 +184,5 @@ Book1 Ch16a wave equation
 ## Resistance/change experiment
 
 [E-533 owns the resistance/change interpretation](../../Nodes/E-533_Superfluid_Transport_Time_Dilation.md#resistance-and-change-interpretation--2026-10-04). [The executed propagation control](../../solvers/TIME_RESISTANCE_PROBE.md) measures packet motion, carrier phase and decay from the actual recurrence. All five numerical controls pass across nine cases; the simple damping/carrier-clock identification does not derive universal clock slowing or Lorentz recovery. The next physical test needs a self-held periodic excitation and a measured reversible field-work response.
+
+The [full factor inventory and operational clock-rate definition](../../Nodes/E-533_Superfluid_Transport_Time_Dilation.md#time-clock-rate-and-the-full-response-factors) specifies what the next experiment must retain and measure together. Resistance includes reversible field response; damping alone does not define it. The measured timing ratio compares calibrated internal and reference cycles, while field work and the resulting rate must follow from one shared dynamics.
