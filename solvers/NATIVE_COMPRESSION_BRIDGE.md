@@ -5,6 +5,26 @@ Reference: Science main `12b385d410564857cbc2b67d2af22cd2f5702cac`.
 Owners: A-115 compression, D-409 geometry, D-412 simulation discipline;
 C-317/C-318 remain owners of weave and the complete four-interaction mechanism.
 
+## One-Wave operational names
+
+Names follow [the repository terminology legend](../ONE_WAVE_TERMINOLOGY_LEGEND.md).
+
+| Name | Meaning in this calculation | Qualification |
+|---|---|---|
+| Ground / Zero Field State | psi=u=chi=0, the reference state used for the linear propagation bands | A field state, not empty space or a negative-space layer |
+| Excitation | A nonzero disturbance of psi with its retained displacement response u | A seed or measured disturbance; persistence is unproved |
+| Persistent Mode candidate | A proposed bounded recurrence of the complete retained state | Must pass localization, recurrence and numerical controls; none has passed |
+| Compression | chi=-div(u), with the unchanged native FCC discrete divergence | Not an independently assigned substance |
+| Ground propagation band | Frequencies carried by the linearized field around Ground | A transport constraint, not a measured physical light-speed calibration |
+| Mass Effect | Resistance to carrying and rebuilding a stable four-interaction recurrence relative to Ground | Not calculated here; the numerical kinetic normalization is not measured Mass Effect |
+
+Boundary-Tension Weave, Vortex Phase, Knot Lock and Mirror remain names for their
+defined One-Wave mechanisms. This reduced compression candidate has not implemented
+the complete four-interaction recurrence. An angular scalar seed therefore does
+not receive a Vortex Phase label, and localization alone would not establish Knot Lock.
+Mathematical terms such as eigenvalue, phase, gradient and periodic orbit retain
+their precise meanings. Code identifiers and stored measurement keys stay stable.
+
 ## What this step resolves
 
 The previous bulk candidate introduced a first-order complex-field cubic/quintic
@@ -56,7 +76,7 @@ Set rho=psi² and declare the potential
 
 Here `a_c` is called `a` in the Python parameter interface, separately from grid
 spacing. beta,shear,k are positive and a_c is nonnegative. eta is a coupling.
-These are dimensionless model inputs. No SI calibration or observed mass enters.
+These are dimensionless model inputs. No SI calibration or measured Mass Effect enters.
 The added rho-dependent stiffness and density/compression interaction are new
 constitutive hypotheses. A-115's displacement energy motivates the retained
 variables; it does not already supply or validate those added terms.
@@ -124,7 +144,7 @@ the declared second-order integrator. The metric is maximum absolute drift
 divided by max(1,abs(initial energy)); it is not always a relative error.
 Compression ranges from -0.02958 to +0.45628. The eliminated compression-sector
 energy is -1.15458 relative to unrelaxed zero displacement at that fixed density.
-This is work from the assumed coupling, not energy creation or a mass prediction.
+This is work from the assumed coupling, not energy creation or a Mass Effect prediction.
 
 ## A solved obstruction: no stable nontrivial static equilibrium
 
@@ -189,7 +209,7 @@ independently calibrated before this can bridge the complete canonical theory.
 Authorized goal: move toward a native nonlinear localization derivation.
 Bounded action: add the constrained FCC compression candidate, reproducible
 report and laboratory derivation pointer. Protect all existing solver laws,
-node gates, particle classifications, hardware and dirty Jetson recovery work.
+node gates, Persistent Mode classifications, hardware and dirty Jetson recovery work.
 Field proposal: retain displacement and derive both forces from one energy.
 Void counter-check: reject independent local compression because it violates
 the divergence constraint; require adjoint, gradient, ablation and timestep tests.
@@ -198,9 +218,21 @@ Attempt 1 initially failed JSON serialization of NumPy booleans; attempt 2
 converted check values to Python booleans and returned exit 0. No physics
 parameters were retuned to repair a control or match measurements.
 State: PARTIAL for the physical goal, accepted scoped mathematical experiment.
-Scale: do not promote or extend to mass claims from this result.
+Scale: do not promote or extend to Mass Effect claims from this result.
 Next bounded test: search for time-periodic localized recurrence with retained
 displacement, compression/release balance and no norm reset. Compare perturbation
 stability, timestep refinement and pinning with the uncoupled linear control.
 Do not repeat a search for a stable static minimum excluded by the scaling proof. A failure must remain
 visible and drive a new geometrically supported constitutive proposal.
+
+
+Terminology cycle receipt: reference PR #193 at
+`ad14e10758cf9b719657499ff4850f12d8de2b6e`; choice is explanatory naming only
+in these three reports. Field: use owner-defined One-Wave names with explicit
+variable meanings. Void: preserve equations, raw data, failed gates and missing
+mechanisms; naming does not supply evidence. Verification: report-only diff,
+unchanged executable and result hashes, and no remaining vacuum/particle/mass
+labels in One-Wave explanatory claims. Same assistant proposed and checked this
+change; no independent corroboration. State: naming update complete; physical
+recurrence remains partial. Next calculation remains bounded periodic-orbit
+shooting/continuation with a nonzero-state constraint and Ground propagation checks.

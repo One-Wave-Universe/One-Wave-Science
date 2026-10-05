@@ -12,7 +12,27 @@ Current main reference for authority checks:
 `f1d13c2d3b68995a7cb5c6148ddd0c855ea87244`; AGENTS, General Reference Rules,
 AI canonical start and Reality Database specification are unchanged from the
 previous timing reference. The existing law, coefficients and metadata gates
-are preserved. No physical mass or clock factor is assigned.
+are preserved. No physical Mass Effect or clock factor is assigned.
+
+## One-Wave operational names
+
+Names follow [the repository terminology legend](../ONE_WAVE_TERMINOLOGY_LEGEND.md).
+
+| Name | Meaning in this calculation | Qualification |
+|---|---|---|
+| Ground / Zero Field State | psi=u=chi=0, the reference state used for the linear propagation bands | A field state, not empty space or a negative-space layer |
+| Excitation | A nonzero disturbance of psi with its retained displacement response u | A seed or measured disturbance; persistence is unproved |
+| Persistent Mode candidate | A proposed bounded recurrence of the complete retained state | Must pass localization, recurrence and numerical controls; none has passed |
+| Compression | chi=-div(u), with the unchanged native FCC discrete divergence | Not an independently assigned substance |
+| Ground propagation band | Frequencies carried by the linearized field around Ground | A transport constraint, not a measured physical light-speed calibration |
+| Mass Effect | Resistance to carrying and rebuilding a stable four-interaction recurrence relative to Ground | Not calculated here; the numerical kinetic normalization is not measured Mass Effect |
+
+Boundary-Tension Weave, Vortex Phase, Knot Lock and Mirror remain names for their
+defined One-Wave mechanisms. This reduced compression candidate has not implemented
+the complete four-interaction recurrence. An angular scalar seed therefore does
+not receive a Vortex Phase label, and localization alone would not establish Knot Lock.
+Mathematical terms such as eigenvalue, phase, gradient and periodic orbit retain
+their precise meanings. Code identifiers and stored measurement keys stay stable.
 
 ## Run
 
@@ -37,7 +57,7 @@ The native periodic FCC graph has twelve neighbors at every active site. Initial
 psi is an origin-centered Gaussian; displacement and both velocities start at
 zero. Coefficients beta=shear=k=a_c=1 are fixed; eta=2 for coupled cases and eta=0
 for the uncoupled control. Widths and amplitudes are seed inputs, not fitted
-particle labels. No normalization reset, imposed well, trajectory constraint,
+Persistent Mode labels. No normalization reset, imposed well, trajectory constraint,
 dynamic recentering or clock-rate factor is used.
 
 The tested amplitudes are .2,.5,1,1.5 at width 1; an additional amplitude-1 seed
@@ -128,15 +148,27 @@ ALLOWED: additive search, raw report, plot and derivation plus one chapter point
 PROTECTED: existing candidate law, timing node, node gates, all prior solvers,
 hardware and dirty device checkouts.
 FIELD: finite fixed-law seed screen and measured state returns.
-VOID: distinguish periodic-box return from confinement; do not normalize/recenter;
+VOID: distinguish periodic-box return from persistent boundary holding; do not normalize/recenter;
 keep numerical energy failure separate from physical failure.
 ATTEMPT: base screen 1/3; follow-up onset refinement checks validity without
 changing the approach or retuning coefficients.
 STATE: report complete; no periodic candidate found in this scope.
-SCALE: do not promote to physical nonexistence, time dilation or particle claims.
+SCALE: do not promote to physical nonexistence, time dilation or Persistent Mode claims.
 LOOK-BACK: timestep refinement preserves completed-run failure; larger domain
 weakens localization. This law/seed family does not supply the required clock.
 NEXT: use phase/velocity-bearing initial states and a bounded periodic-orbit
 search under the unchanged law, or derive a supported constitutive correction
 from retained boundary/weave geometry. Do not keep searching static minima or
 insert an artificial norm conservation to hide the present failure.
+
+
+Terminology cycle receipt: reference PR #193 at
+`ad14e10758cf9b719657499ff4850f12d8de2b6e`; choice is explanatory naming only
+in these three reports. Field: use owner-defined One-Wave names with explicit
+variable meanings. Void: preserve equations, raw data, failed gates and missing
+mechanisms; naming does not supply evidence. Verification: report-only diff,
+unchanged executable and result hashes, and no remaining vacuum/particle/mass
+labels in One-Wave explanatory claims. Same assistant proposed and checked this
+change; no independent corroboration. State: naming update complete; physical
+recurrence remains partial. Next calculation remains bounded periodic-orbit
+shooting/continuation with a nonzero-state constraint and Ground propagation checks.

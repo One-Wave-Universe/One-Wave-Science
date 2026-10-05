@@ -1,4 +1,4 @@
-# Phase/velocity FCC recurrence search and vacuum radiation bands
+# Phase/velocity FCC recurrence search and Ground propagation bands
 
 **Result: none of seven base cases qualifies as a self-held periodic excitation.**
 Two refinement runs preserve that failure for the strongest completed coupled
@@ -11,6 +11,26 @@ specification are unchanged from the previous cycle. The exact law and all
 coefficients in [native_compression_bridge.py](native_compression_bridge.py)
 are unchanged. Scientific execution is in the isolated workspace, not a claim
 of a Jetson simulation run. No node gate is promoted.
+
+## One-Wave operational names
+
+Names follow [the repository terminology legend](../ONE_WAVE_TERMINOLOGY_LEGEND.md).
+
+| Name | Meaning in this calculation | Qualification |
+|---|---|---|
+| Ground / Zero Field State | psi=u=chi=0, the reference state used for the linear propagation bands | A field state, not empty space or a negative-space layer |
+| Excitation | A nonzero disturbance of psi with its retained displacement response u | A seed or measured disturbance; persistence is unproved |
+| Persistent Mode candidate | A proposed bounded recurrence of the complete retained state | Must pass localization, recurrence and numerical controls; none has passed |
+| Compression | chi=-div(u), with the unchanged native FCC discrete divergence | Not an independently assigned substance |
+| Ground propagation band | Frequencies carried by the linearized field around Ground | A transport constraint, not a measured physical light-speed calibration |
+| Mass Effect | Resistance to carrying and rebuilding a stable four-interaction recurrence relative to Ground | Not calculated here; the numerical kinetic normalization is not measured Mass Effect |
+
+Boundary-Tension Weave, Vortex Phase, Knot Lock and Mirror remain names for their
+defined One-Wave mechanisms. This reduced compression candidate has not implemented
+the complete four-interaction recurrence. An angular scalar seed therefore does
+not receive a Vortex Phase label, and localization alone would not establish Knot Lock.
+Mathematical terms such as eigenvalue, phase, gradient and periodic orbit retain
+their precise meanings. Code identifiers and stored measurement keys stay stable.
 
 ## Reproduce and inspect
 
@@ -90,7 +110,7 @@ control at fixed spacing, not a continuum limit. The standing seed reproduces
 the previous search's trajectory at all 81 shared samples and matches its
 maximum energy error; the seed expansion did not alter the underlying law.
 
-## A derived constraint for the next search: vacuum bands
+## A derived constraint for the next search: Ground propagation bands
 
 Far from an excitation, psi,u and chi vanish. The unchanged candidate linearizes
 to independent scalar transport and displacement transport/compression response.
@@ -105,26 +125,26 @@ with cyclic definitions of q_y,q_z. At the declared coefficients,
     omega_transverse²=L,
     omega_longitudinal²=L+|q|².
 
-The scalar and transverse vacuum bands are exactly [0,sqrt(8)] in these
+The scalar and transverse Ground propagation bands are exactly [0,sqrt(8)] in these
 dimensionless units. The longitudinal maximum sampled on a 64³ wavevector grid
 is sqrt(8); that numerical maximum is not an exact proof. A conservative rigorous
 bound is sqrt(14), since L<=8 and each q component's square is <=2. No nonzero
 low-frequency gap is present in this linearized candidate.
 
-A periodic candidate with harmonics inside a vacuum band has available outgoing
+A periodic candidate with harmonics inside a Ground propagation band has available outgoing
 propagation channels. Persistent localization then needs an actually demonstrated
-nonradiating cancellation or other confinement mechanism. A frequency outside
+nonradiating cancellation or other demonstrated boundary-holding mechanism. A frequency outside
 the bands is a useful search constraint, not proof that a nonlinear periodic
 state exists. Because rho=psi² drives displacement, a single carrier can generate
 DC and twice-frequency compression forcing; those channels must also be checked.
 The band analysis constrains radiation from this specific candidate, not all
-One-Wave mechanisms. It does not supply particle mass or physical light speed.
+One-Wave mechanisms. It does not supply Mass Effect or physical light speed.
 
 ## Consequence and next bounded action
 
 Authorized goal: continue toward a self-held periodic excitation and its timing
 response. Allowed scope: additive phase/velocity search, report, measured plot,
-vacuum-band analysis and laboratory chapter pointer. Protected: existing laws,
+Ground-band analysis and laboratory chapter pointer. Protected: existing laws,
 coefficients, timing node, physical hardware and unrelated device work.
 
 Field proposal: expand initial conditions and compare a post-transient reference.
@@ -141,8 +161,20 @@ preserved no-candidate results. No physics coefficient was changed.
 State: finite search complete; physical recurrence goal remains PARTIAL.
 Scale: do not promote to physical nonexistence, clock slowing or topology.
 Next: a bounded periodic-orbit shooting or continuation calculation, guided by
-the vacuum radiation bands, with full retained displacement and an explicit
+the Ground propagation bands, with full retained displacement and an explicit
 nonzero-state constraint to prevent convergence to trivial Ground. Any found
 orbit needs localization, energy, harmonic radiation, perturbation/Floquet,
 timestep and domain controls before translation/timing measurements. Blindly
 repeating low-frequency Gaussian seeds is no longer the next useful action.
+
+
+Terminology cycle receipt: reference PR #193 at
+`ad14e10758cf9b719657499ff4850f12d8de2b6e`; choice is explanatory naming only
+in these three reports. Field: use owner-defined One-Wave names with explicit
+variable meanings. Void: preserve equations, raw data, failed gates and missing
+mechanisms; naming does not supply evidence. Verification: report-only diff,
+unchanged executable and result hashes, and no remaining vacuum/particle/mass
+labels in One-Wave explanatory claims. Same assistant proposed and checked this
+change; no independent corroboration. State: naming update complete; physical
+recurrence remains partial. Next calculation remains bounded periodic-orbit
+shooting/continuation with a nonzero-state constraint and Ground propagation checks.
