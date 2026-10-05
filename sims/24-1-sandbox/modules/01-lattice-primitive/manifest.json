@@ -61,6 +61,11 @@
   },
   "state_schema": "../../../00-state-container/state-schema.json",
   "adapter": {
-    "existing": "../../00-lattice-primitive"
+    "existing": "../../../00-lattice-primitive",
+    "entry_point": "adapter.js",
+    "node_bindings": [
+      "G-764"
+    ],
+    "implementation_scope": "bounded numerical kernel adapter; full validation checklist remains unverified"
   }
 }
