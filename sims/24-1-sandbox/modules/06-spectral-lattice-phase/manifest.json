@@ -59,6 +59,6 @@
   },
   "state_schema": "../../../00-state-container/state-schema.json",
   "adapter": {
-    "existing": "../../06-spectral-lattice-phase"
+    "existing": "../../../06-spectral-lattice-phase"
   }
 }

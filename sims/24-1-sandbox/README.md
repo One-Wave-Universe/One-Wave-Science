@@ -51,3 +51,25 @@ a module or prove coverage. Spatial convergence, group-velocity calibration,
 nonlinear confinement, browser visual review and physical interpretation remain
 unverified. The geometry is a native 2D graph; displacement height is a labeled
 projection. No additional physical fields are inferred from its appearance.
+
+## Registry checks are not simulation evidence
+
+`sandbox.py` checks manifest structure, unique IDs/slots and referenced local
+paths. Paths are relative to each manifest and must resolve inside this
+repository (including symlink resolution). `state_schema` and optional adapter
+`entry_point` must be files; adapter `existing` must be a directory. An empty
+registry, malformed input or broken reference exits with status 2.
+
+The JSON result labels its scope `manifest-and-paths-only` and always reports
+`module_execution: not-run`. `entry_point_present` reports file presence only:
+it does not import or run code. It is `null` when malformed structure prevents
+path inspection, rather than falsely asserting that a file is absent. An adapter may remain unimplemented while its
+manifest and existing-engine reference pass. `ok` and `occupied_slots` describe
+valid registry entries, never validated node coverage, fixture execution,
+scientific claims, GOLD status or browser quality. Slot 6 is still manifest-only.
+
+Run registry positive/negative controls from the repository root:
+
+```sh
+python -m unittest discover -s sims/24-1-sandbox -p 'test*.py' -v
+```
