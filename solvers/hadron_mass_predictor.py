@@ -28,7 +28,7 @@ import sys
 sys.path.insert(0, "/home/claude/one-wave-science/solvers")
 
 import numpy as np
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 from hadron_knot_geometry import (
     VortexPhase, KnotGeometry, WeaveDensity, WeavingEnergyCalculator,
@@ -61,25 +61,77 @@ HADRON_MASSES_MEV = {
 
 @dataclass
 class HadronMassCalculator:
-    """Compute hadron mass using combined solution framework"""
+    """Compute hadron mass using combined solution framework with flavor-dependent radius scaling"""
 
-    alpha_radius: float = -0.05        # Phase 5: radius scaling exponent
+    alpha_radius: float = -0.05        # Deprecated: single alpha value (use alpha_dict instead)
     kappa_factor: float = 1.0          # Phase 5: κ_T scaling multiplier
     sigma_T: float = 0.01              # Surface tension (GeV/fm²)
     kappa_T_base: float = 0.297        # Base κ_T coupling (GeV) — calibrated value
     eta_T: float = 0.01                # Twist coefficient
     binding_correction_strength: float = 1.0  # Strength of symmetric pair mass correction
 
+    # Hypothesis A: Flavor-dependent radius scaling parameters (optimal from grid search)
+    # These override alpha_radius when provided
+    alpha_dict: Optional[Dict[str, float]] = None  # Map of flavor → alpha scaling exponent
+
+    def get_optimal_alpha_for_flavor(self, flavor: str) -> float:
+        """Get the optimal alpha value for a given quark flavor.
+
+        Uses Hypothesis A results if alpha_dict is provided, otherwise falls back to alpha_radius.
+
+        Hypothesis A optimal parameters (from grid search):
+        - Light (u, d): α = 0.0 (no scaling, preserve baseline)
+        - Strange/Charm/Bottom: α = +0.050 (expand radius, distribute energy)
+        - Top: α = -0.150 (compress radius, extreme case)
+        """
+        if self.alpha_dict is not None and flavor in self.alpha_dict:
+            return self.alpha_dict[flavor]
+        else:
+            # Fallback to single alpha value (deprecated)
+            return self.alpha_radius
+
+    def compute_effective_alpha(self, knot: KnotGeometry) -> float:
+        """Compute effective alpha for a hadron based on constituent flavors.
+
+        Strategy: Use weighted average of constituent quark alpha values,
+        where weighting is by quark mass (heavier quarks dominate radius scaling).
+
+        This accounts for cases like Lambda (uds) where different flavors
+        have different optimal alpha values.
+        """
+        if not knot.vortices:
+            return self.alpha_radius
+
+        # Get alpha for each constituent quark
+        alphas = []
+        masses = []
+        for vortex in knot.vortices:
+            flavor = vortex.flavor
+            alpha = self.get_optimal_alpha_for_flavor(flavor)
+            mass = QUARK_MASSES_MEV.get(flavor, 1.0)
+            alphas.append(alpha)
+            masses.append(mass)
+
+        # Weighted average: heavier quarks contribute more to radius scaling
+        if sum(masses) > 0:
+            effective_alpha = sum(a * m for a, m in zip(alphas, masses)) / sum(masses)
+        else:
+            effective_alpha = np.mean(alphas)
+
+        return effective_alpha
+
     def compute_boundary_radius(self, knot: KnotGeometry,
                                flavor_masses: Optional[Dict[str, float]] = None) -> float:
-        """Compute boundary radius with Phase 5 radius scaling.
+        """Compute boundary radius with Hypothesis A flavor-dependent radius scaling.
 
         For a hadron composed of quarks with flavors f1, f2, f3,
-        the effective m_scale is the average mass scale of constituents.
+        the effective m_scale is the average mass scale of constituents,
+        and the effective alpha is weighted by constituent quark masses.
 
-        R(m_scale) = base_radius × m_scale^α
+        R(m_scale) = base_radius × m_scale^α_eff
 
         where m_scale = sqrt(m_q1 × m_q2 × m_q3) / m_up
+        and α_eff = weighted average of per-flavor alpha values
         """
         if flavor_masses is None:
             flavor_masses = QUARK_MASSES_MEV
@@ -100,9 +152,12 @@ class HadronMassCalculator:
         # Base radius is empirically 0.85 fm for nucleons
         base_radius = 0.85
 
-        # Phase 5 radius scaling
-        if abs(self.alpha_radius) > 1e-6:
-            radius = base_radius * (m_scale ** self.alpha_radius)
+        # Get effective alpha (Hypothesis A flavor-dependent scaling)
+        alpha_eff = self.compute_effective_alpha(knot)
+
+        # Hypothesis A radius scaling
+        if abs(alpha_eff) > 1e-6:
+            radius = base_radius * (m_scale ** alpha_eff)
         else:
             radius = base_radius
 
@@ -333,27 +388,60 @@ class HadronMassCalculator:
         }
 
 
-def test_hadron_spectrum():
-    """Test hadron mass predictions with Phase 5 combined solution."""
+def test_hadron_spectrum(use_hypothesis_a: bool = True):
+    """Test hadron mass predictions with Phase 5 combined solution.
+
+    If use_hypothesis_a=True, applies Hypothesis A flavor-dependent alpha parameters.
+    Otherwise uses single alpha=-0.05 (baseline).
+    """
 
     print("=" * 90)
-    print("HADRON MASS PREDICTOR — Phase 5 Combined Solution Integration")
+    if use_hypothesis_a:
+        print("HADRON MASS PREDICTOR — Hypothesis A (Flavor-Dependent Radius Scaling)")
+    else:
+        print("HADRON MASS PREDICTOR — Phase 5 Combined Solution Integration (Baseline)")
     print("=" * 90)
     print()
 
-    # Initialize calculator with Coherence Inversion mechanism
-    # κ_T_base = 0.50 GeV is calibrated with Phase 5 radius scaling active
-    # Hyperons get κ_T_enhanced = κ_T_base / avg_coherence
-    calc = HadronMassCalculator(
-        alpha_radius=-0.05,         # Phase 5 radius scaling (R ∝ m_scale^α)
-        kappa_factor=1.0,           # (not used with coherence inversion)
-        sigma_T=0.01,               # Surface tension (GeV/fm²)
-        kappa_T_base=0.50,          # Base phase-locking coupling (GeV)
-        eta_T=0.01                  # Twist coefficient
-    )
+    # Hypothesis A optimal alpha parameters (from grid search, October 5 2026)
+    hypothesis_a_alphas = {
+        "up": 0.0,          # Light: no scaling, preserve baseline
+        "down": 0.0,        # Light: no scaling, preserve baseline
+        "strange": 0.050,   # Heavy: expand radius, distribute energy
+        "charm": 0.050,     # Heavy: expand radius, distribute energy
+        "bottom": 0.050,    # Heavy: expand radius, distribute energy
+        "top": -0.150,      # Top: compress radius, extreme case
+    }
 
-    print("Coherence Inversion Mechanism:")
-    print(f"  α (radius scaling exponent): {calc.alpha_radius}")
+    # Initialize calculator with Coherence Inversion mechanism
+    # κ_T_base = 0.50 GeV is calibrated with radius scaling active
+    # Hyperons get κ_T_enhanced = κ_T_base / avg_coherence
+    if use_hypothesis_a:
+        calc = HadronMassCalculator(
+            alpha_radius=-0.05,         # Fallback (not used if alpha_dict provided)
+            kappa_factor=1.0,           # (not used with coherence inversion)
+            sigma_T=0.01,               # Surface tension (GeV/fm²)
+            kappa_T_base=0.50,          # Base phase-locking coupling (GeV)
+            eta_T=0.01,                 # Twist coefficient
+            alpha_dict=hypothesis_a_alphas  # Use Hypothesis A flavor-dependent scaling
+        )
+    else:
+        calc = HadronMassCalculator(
+            alpha_radius=-0.05,         # Phase 5 radius scaling (R ∝ m_scale^α)
+            kappa_factor=1.0,           # (not used with coherence inversion)
+            sigma_T=0.01,               # Surface tension (GeV/fm²)
+            kappa_T_base=0.50,          # Base phase-locking coupling (GeV)
+            eta_T=0.01                  # Twist coefficient
+        )
+
+    if use_hypothesis_a:
+        print("Hypothesis A Parameters:")
+        print(f"  Light quarks (u, d): α = 0.000 (preserve baseline)")
+        print(f"  Strange/Charm/Bottom: α = +0.050 (expand radius)")
+        print(f"  Top: α = -0.150 (compress radius)")
+    else:
+        print("Baseline Parameters:")
+        print(f"  α (radius scaling exponent): {calc.alpha_radius} (uniform)")
     print(f"  σ_T (surface tension): {calc.sigma_T} GeV/fm²")
     print(f"  κ_T_base (nucleon coupling): {calc.kappa_T_base} GeV")
     print(f"  Hyperons use: κ_T_eff = κ_T_base / avg_coherence")
@@ -469,12 +557,52 @@ def test_parameter_sensitivity():
 
 if __name__ == "__main__":
     try:
-        results = test_hadron_spectrum()
+        # Run Hypothesis A (flavor-dependent radius scaling)
+        print()
+        results_hyp_a = test_hadron_spectrum(use_hypothesis_a=True)
+
+        # Run Baseline (uniform alpha = -0.05)
+        print()
+        print()
+        results_baseline = test_hadron_spectrum(use_hypothesis_a=False)
+
+        # Comparison summary
+        print()
+        print()
+        print("=" * 90)
+        print("COMPARISON: Hypothesis A vs. Baseline")
+        print("=" * 90)
+        print()
+
+        print(f"{'Hadron':<12} {'Baseline':<12} {'Hypothesis A':<14} {'Improvement':<12}")
+        print("-" * 90)
+
+        for r_base, r_hyp_a in zip(results_baseline, results_hyp_a):
+            name = r_base["hadron_name"]
+            err_base = r_base.get("error_percent", 0)
+            err_hyp_a = r_hyp_a.get("error_percent", 0)
+
+            if err_base > 0:
+                improvement = ((err_base - err_hyp_a) / err_base) * 100
+            else:
+                improvement = 0
+
+            print(f"{name:<12} {err_base:>10.1f}% {err_hyp_a:>12.1f}% {improvement:>+10.1f}%")
+
+        print()
+        avg_err_base = np.mean([r.get("error_percent", 0) for r in results_baseline if r.get("error_percent") is not None])
+        avg_err_hyp_a = np.mean([r.get("error_percent", 0) for r in results_hyp_a if r.get("error_percent") is not None])
+        total_improvement = ((avg_err_base - avg_err_hyp_a) / avg_err_base) * 100
+
+        print(f"{'AVERAGE':<12} {avg_err_base:>10.1f}% {avg_err_hyp_a:>12.1f}% {total_improvement:>+10.1f}%")
+        print()
+        print("=" * 90)
+
         print()
         test_parameter_sensitivity()
 
         print("=" * 90)
-        print("✓ Hadron mass predictor ready for calibration")
+        print("✓ Hadron mass predictor with Hypothesis A flavor-dependent scaling")
         print("=" * 90)
 
     except Exception as e:
