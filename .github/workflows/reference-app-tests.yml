@@ -26,7 +26,7 @@ jobs:
           python-version: '3.12'
       - name: Compile reference app and tests
         working-directory: Nexus_Integration/Truth_Computer/Reference_App
-        run: python3 -m py_compile app.py test_app.py
+        run: python3 -m py_compile app.py knowledge_loop.py test_app.py test_knowledge_loop.py
       - name: Run offline controller and recovery tests
         working-directory: Nexus_Integration/Truth_Computer/Reference_App
-        run: python3 -m unittest discover -s . -p 'test_app.py' -v
+        run: python3 -m unittest discover -s . -p 'test_*.py' -v

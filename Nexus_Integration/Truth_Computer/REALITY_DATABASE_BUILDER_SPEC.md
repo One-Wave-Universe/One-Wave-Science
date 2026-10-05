@@ -24,7 +24,7 @@ compare predictions with measurements, and return an auditable answer. Its state
 and consequence must survive restart. It must resume unfinished work without
 duplicating committed effects.
 
-The first release must answer a real subject through the existing Reality
+The first release must build its first qualified source records and answer a real subject through the shared Reality
 Database and show how the answer was obtained. A keyword search, a diagram, a
 terminal identity probe, or an AI paragraph alone is not this product.
 
@@ -60,16 +60,13 @@ Read these before implementation:
 - [Current CELL_V1 anti-drift rules](../../CELL_V1_ANTI_DRIFT.md), when discussing hardware.
 - [Field/Void fusion component](../../One_Wave_Bench/hive-pipe/field_void_fusion.py).
 
-**Reuse the existing Nexus Reality Database, definition view, durable jobs and
-saved runs.** Extend their schemas and private adapters through migrations.
-Do not create a second reality database or job board.
+**Premise correction — 2026-10-05:** the user confirmed that Nexus does not have a database. The reliable two-state Field/Void machine with the M4 loop must create the first shared store. Earlier requirements to discover an already-built Nexus database were mistaken and are superseded.
 
-The private Nexus installation document names an expected Windows checkout,
-but that is a deployment reference, not proof of a live installation. First
-discover the actual deployment, backing store, schema, adapters and service
-identity. Record the verified paths and versions. The name Nexus is acceptable; prioritize working behavior and reuse over renaming. If unavailable, mark that
-integration blocked and continue only independent specification or isolated
-tests. Never invent an adapter or claim an unavailable database is connected.
+Build one explicitly configured shared knowledge store through qualified durable transitions. Per-provider runtime journals stay separate; they must not become independent knowledge-store copies. Preserve any real store built after this point. Do not silently replace, migrate, or relabel an unrelated database. A table schema or empty database alone is not completion.
+
+The first executable CPU slice is [Reference_App/knowledge_loop.py](Reference_App/knowledge_loop.py). M4 reconstructs the active world from the current goal, source/authority versions, prior retained consequence and pending findings. FIELD proposes and VOID checks; exactly these two values are worker phases. The six process cursors are a separate software projection, not six states or a claim to simulate the physical oscillator. Qualified source records establish exact provenance and inherited status, not proposition truth or a mathematical AZ0 proof.
+
+Nexus panel/deployment wiring can follow the working core. The old expected Windows path is historical deployment context, not a dependency requiring a nonexistent store. No public command-execution endpoint or credentials are introduced.
 
 The repository is the durable architecture authority. The database stores
 derived indexes, source versions, observations, candidate work and execution
@@ -210,8 +207,7 @@ Any mapping to those layers needs an explicit cited adapter.
 
 ## 6. Database model
 
-Map the following logical entities onto the existing store. Table names are
-suggested contracts, not permission to replace the production database.
+Build the following logical entities in the single declared shared store. Begin with the bounded source/record/artifact/audit/transition slice, preserving existing runtime journals. Table names are logical contracts, not permission to replace any subsequently verified production data.
 
 | Entity | Required contents |
 |---|---|
@@ -319,7 +315,7 @@ numerical convergence from physical validity. An exit code of zero alone
 establishes program completion.
 
 When no applicable solver exists, return missing capability and create one
-bounded research/build job in the existing job board. Do not guess a number,
+bounded research/build job with a durable dependency in the shared controller. A future job-board adapter must preserve its identity. Do not guess a number,
 relabel a search result as calculation, or execute arbitrary commands requested
 by an imported source.
 
@@ -341,7 +337,7 @@ A completed answer includes:
 8. Contradictions, assumptions, missing evidence and next bounded action.
 9. Receipt/run ID and retained consequence.
 
-Reuse the existing Nexus answer layers: Origin/Feedback, Awareness/Presence,
+Use the specified Nexus answer layers: Origin/Feedback, Awareness/Presence,
 active logical gates, Emergence/Beyond, Scale Invariance, Contradictions and
 Sources. Keep the OG spine's 22-stage count separate from physical CELL_V1
 geometry and from the two worker phases.
@@ -426,7 +422,7 @@ deployment commands.
 | Repeat import | Same batch produces no duplicate active record or artificial version |
 | Changed/deleted source | New version/tombstone appears while old answer remains reconstructable |
 | Invalid metadata | Entry rejected with reason; previous working index still serves queries |
-| Real query | Existing Nexus search and definition adapters return source-bound records |
+| Real query | The built shared store returns qualified source records and traceable definitions |
 | Two phases | Persisted worker phase contains only FIELD or VOID and alternates across completed passes |
 | Restart after FIELD | Worker resumes the stored candidate in VOID without a second proposal effect |
 | Restart during VOID commit | Transaction rolls back or completes wholly; no orphan consequence |
@@ -571,12 +567,12 @@ contradictory evidence rather than suppress it.
 
 | Stage | Deliverable | Gate to advance |
 |---|---|---|
-| 0 — discover | Actual Nexus deployment/store/adapter inventory and current source authority | Verified identity and schema; blocked facts named |
-| 1 — import | Versioned canonical ingestion into existing store | Import/reimport/update/rejection tests pass |
+| 0 — reference | Current source authority, M4 contract and explicit first-store identity | No imaginary existing-store dependency; no conflicting store overwritten |
+| 1 — build | Two-phase M4 loop constructs first qualified source record and immutable versions | Proposal/challenge/correction, commit, restart/reuse, deduplication and rejection tests pass |
 | 2 — persist | Atomic FIELD/VOID transitions, jobs and consequence memory | Restart, concurrency and deduplication tests pass |
 | 3 — audit | Metadata-aware Void checks, node ladder, journal and response gate | Status, drift, stale-reference, journal-restart and draft-release tests pass |
 | 4 — calculate | One registered existing solver and controlled result | Input/units/control/convergence tests pass |
-| 5 — answer | Existing Nexus panel driven by durable loop results | One live question passes all answer requirements |
+| 5 — answer | Nexus panel driven by the built durable loop and shared-store results | One live question passes all answer requirements |
 | 6 — recover | Bounded automatic recovery and readable health view | Fault-injection tests and recovered real receipt pass |
 
 Implement one stage at a time on a bounded task branch. Each stage uses the
@@ -672,7 +668,7 @@ architecture or entire repository tree for each participant.
 | Reference visor | Read the current repo bundle, node ladder, source authority and task boundary before acting |
 | Field/Void balance | Propose, audit, correct and release only a source-matched result |
 | Personal journal | Retain its goals, corrections, decisions, receipts and unfinished work under an explicit privacy scope |
-| Shared memory interface | Publish approved compact findings to the existing store, with sources and evidence class |
+| Shared memory interface | Publish approved compact findings to the single constructed shared store, with sources and evidence class |
 | Code workbench | Work in an assigned branch/worktree, publish a patch/commit and reproducible checks |
 | Communications relay | Send typed handoffs and acknowledgements through actual attached routes |
 | Recovery | Resume its durable phase/job, reconcile unknown effects and preserve operation IDs |
@@ -707,7 +703,7 @@ permissions, connection status, task inbox/outbox and configuration. The user
 must be able to see which AI app is speaking, what reference it used, whether
 its balance check passed, and what work is still pending.
 
-Share the existing Reality Database, canonical source bundle, protocol and core
+Share the single constructed Reality Database, canonical source bundle, protocol and core
 validators. Keep agent state and private context separated. Do not copy the
 entire database or manually fork the core for every provider.
 
@@ -785,7 +781,7 @@ LOOP is a completed return and retained consequence, not an endless retry.
 | App output gate | Exact draft/artifact hash and current-reference match before release | Unchecked model-to-user output |
 
 These are modules/services with distinct duties, not new brain states. Reuse
-existing Nexus services and controller boundaries. A single initial process may
+verified services when present and the controller boundaries below. Do not assume an unbuilt Nexus store is already available. A single initial process may
 host several modules, but each interface must be testable independently.
 
 #### What Presence means in this app
@@ -935,7 +931,9 @@ Finish one real Claude loop first, then prove one second-client handoff. Additio
 clients join through the same tested contract. These are implementation gates;
 this reference alone does not claim multiple AI clients are currently connected.
 
-## 19. Work record for this specification
+## 19. Historical work record for this specification
+
+The existing-store assumptions in these historical entries are superseded by the 2026-10-05 premise correction in section 2. They are retained as history, not current instructions.
 
 - MAIN GOAL: build the Field/Void software-construction engine for real programs.
 - Current step: define the requested Reality Database builder and Truth Computer.
@@ -960,3 +958,4 @@ this reference alone does not claim multiple AI clients are currently connected.
 ### Universal armor specification update — 2026-10-04
 
 Bounded scope: add the user-requested universal AI harness and collaboration contract to this canonical page. Reference: main 88632073fbde25bf79e29219dae0d2b2aed5477a. Protected: existing database, per-agent privacy, source status, task ownership, provider authentication and dirty local work. Field proposal: shared typed handoffs plus separate journals; Void check: same reference/evidence gates for every participant, no invented live connection. Verification: one-page diff, packet JSON parses, headings/fences valid, no runtime claim. Hard stop: publish the verified contract; implementation still requires the live acceptance gates above.
+
