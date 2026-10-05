@@ -105,3 +105,17 @@ measure internal recurrence under translation and reversible field work, with
 energy and perturbation controls. Derive the field-difficulty Xi from those
 retained variables before interpreting its effect on timing. Preserve this
 carrier/damping failure as a control for that next test.
+
+## Retained findings and executable next calculation — 2026-10-04
+
+The interpretation and ten-factor inventory are owned by E-533. Its working claim is that the field response governs the rate of internal change while an excitation is carried and rebuilt. The measured quantity is a calibrated internal/reference recurrence ratio, not an assigned transport share. Reversible restoring work, retained history, phase, compression and weave coupling belong in the candidate mechanism alongside energy exchange.
+
+The nine propagation cases establish measurable motion, frequency, decay and moving phase under the exact reduced recurrence. They do not establish a self-held clock. The rerun returned exit zero, passed all five controls and reproduced the saved report exactly. A damping-only shortcut is insufficient: frequency can increase with gamma, and moving carrier phase can reverse sign or disagree with the Lorentz comparator. These observations are consequences to preserve, not grounds to remove the broader retained-field proposal.
+
+The native compression candidate in PR #193 enforces chi=-div(u), reciprocal work gradients and zero total compression on periodic FCC geometry. Its conditional scaling proof excludes stable nontrivial static equilibria for that exact real unconstrained law. That proof does not exclude time-periodic localization or the full four-interaction architecture. It rules out repeating a static-minimum search as if it could close the timing problem.
+
+The next bounded calculation is a time-periodic recurrence search with retained displacement. Freeze coefficients and native geometry; evolve an initially localized excitation without normalization resets, recentering dynamics, imposed wells or inserted clock factors. Record full-state recurrence, localized fraction, compression/release balance and the complete numerical energy ledger. Compare coupling-on with coupling-off, perturbation runs, and timestep/domain controls. If no persistent recurrence exists, retain that failure and revise the constitutive mechanism from geometry rather than assigning a desired particle or timing result.
+
+Only after a self-held branch passes those controls should a small physical intervention test translation. Measure trajectory, deformation, wake, reversible work and internal cycles together. Normalize against the same resting branch and calibrated reference. Separate signal delay and carrier phase from internal recurrence. No Lorentz law, physical mass, cosmological timing fit or universal resistance coefficient follows until that coupled calculation supports it.
+
+Operating direction from Mark Adlard: carry productive authorized science work through reference, calculation, review and repository updates without requesting approval at every routine step. Preserve intended architecture, failed controls and evidence classes; keep changes on task branches and avoid overriding unrelated work. This direction does not turn an unverified mechanism into a proven result.
