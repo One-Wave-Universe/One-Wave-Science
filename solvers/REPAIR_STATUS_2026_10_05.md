@@ -239,6 +239,37 @@ Milky Way (last point):
 | d3487370 | Integrate C-319 magnetic lattice reorganization into hadron mass calculator |
 | 6fe82d10 | Create observational data loader infrastructure for validators |
 | d5bd601e | Implement Phase 2 real data connector: NASA MAST galaxy rotation curves |
+| 8afbd2ce | Update repair status: Phase 2 MAST implementation complete, document real data calibration needs |
+| 42fc1d6b | Create Priority 2 pressure model calibrator for real data optimization |
+
+## Phase 2 Critical Finding: Pressure Model Limitations
+
+**Issue Identified** (October 5, 2026):
+
+The simple pressure profile model (exponential P(r)) **does not generalize** between galaxies:
+
+```
+Individual galaxy fits:
+  Milky Way: χ² = 97.54, P₀=10.0, a_s=9.2 kpc, r_core=0.6 kpc
+  Andromeda: χ² = 109.18, P₀=10.0, a_s=13.6 kpc, r_core=0.0 kpc
+
+Cross-validation (fit one, test other):
+  MW→M31: χ² = 1201.51 (parameter transfer fails)
+  M31→MW: χ² = 1268.60 (parameter transfer fails)
+```
+
+**Implications:**
+- Model captures individual galaxy structure but lacks universality
+- Parameters are galaxy-specific, not universal physics constants
+- Suggests deeper physics or more sophisticated parameterization needed
+- Pressure framework may be incomplete (needs additional fields/mechanisms)
+
+**Next Steps for Pressure Model:**
+1. Investigate why parameters diverge (bulge mass? disk thickness? stellar/gas ratio?)
+2. Introduce mass-dependent or radius-dependent scaling
+3. Add multi-component pressure (stellar + gas + dark matter dynamics)
+4. OR: Accept that dark matter IS real and pressure model insufficient
+5. OR: Reconsider whether One-Wave pressure formulation matches rotational dynamics
 
 ---
 
@@ -268,13 +299,13 @@ Milky Way (last point):
 
 If continuing this work:
 
-1. **High Priority:** Implement real data loader for one archive (start with MAST)
-2. **High Priority:** Calibrate κ_R parameter using experimental hadron data
-3. **Medium Priority:** Update validators to explicitly flag synthetic vs. real data
-4. **Medium Priority:** Add uncertainty propagation to predictions
-5. **Lower Priority:** Publish validation methodology in framework documentation
+1. **CRITICAL:** Diagnose pressure model divergence — is it fundamental or fixable?
+2. **High Priority:** Implement LIGO and CERN real data connectors (Phase 2.2-2.3)
+3. **High Priority:** Calibrate κ_R (hadron magnetic coupling) using experimental data
+4. **Medium Priority:** Evaluate whether pressure model architecture needs revision
+5. **Medium Priority:** Add uncertainty propagation to predictions
 
 ---
 
 **Branch:** integrate/algorythm-zero-rabbit-circle-unified
-**Status:** Ready for next phase of data integration
+**Status:** Phase 2 MAST complete; critical model limitation identified; Priority 2 calibrator ready for use
