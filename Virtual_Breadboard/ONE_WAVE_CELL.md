@@ -1,5 +1,13 @@
 # ONE-WAVE CELL — combined
 
+> **RETIRED PHYSICAL BUILD:** The `+12 V / 0 V / -12 V` AO3401A/2N7000
+> circuit below is historical and must not be built or mixed with CELL_V1 F0.
+> The sole current physical authority is the 5 V + TLE2426 build in
+> `CELL_V1_FULL_BUILD.md`, `01_PARTS/CELL_V1_PARTS_BOM.md`,
+> `02_CONNECTIONS/CELL_V1_NETLIST.md`, and
+> `09_TESTS/CELL_V1_SAFE_BRINGUP.md`. Conceptual architecture text below is
+> retained only for history.
+
 Brain is two states. Body is three windings. Mid is G. Process is memory. Motor is the ternary layer. Spintronics goes down and up. This file is the merge.
 
 Pointers if you still want the split sheets: `FULL_BODY_ARCHITECTURE.md`, `DETAILED_BUILD.md`, HEX-SPLIT `brain_2state.py` `nerve_cell.py` `BODY.md` `SIX.md` `GROUND.md`.

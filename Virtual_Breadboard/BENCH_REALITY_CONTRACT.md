@@ -12,33 +12,38 @@ A build may be called **BENCH-QUALIFIED** only when it also passes the bench-rea
 
 ## 1. Current CELL_V1 bench authority
 
-For the present dual-rail bench:
+CELL_V1 F0 uses one regulated, current-limited **5 V source** and one
+TLE2426-class source/sink midpoint host:
 
 ```text
-+12 V rail
-   |
-  10 k
-   |
-   +---------- local / gate experiment
-   |
-  solid 0 star ---------------- measure I_0 at controller end
-   |
-  10 k
-   |
--12 V rail
+NET_P = +5.0 V absolute  = +2.5 V relative to CENTER
+NET_G = +2.5 V absolute  =  0 / CENTER
+NET_N =  0.0 V absolute  = -2.5 V relative to CENTER
 ```
 
-Physical source architecture:
+Physical source architecture and authority:
 
 ```text
-+12 V  ---- positive supply
-  0 V  ---- REAL midpoint / star conductor
--12 V  ---- negative supply
+regulated +5 V ---- TLE2426 IN
+supply 0 V   ---- TLE2426 COMMON
+TLE2426 OUT  ---- NET_G home/star reference
 ```
 
-This is **not** a TLE2426 / rail-splitter topology.
+`NET_G` is the cell's buffered **virtual ground**. All `+ / 0 / -` cell
+measurements are made relative to that reference.
 
-Do not place `vgnd`, TLE2426, or another synthetic midpoint on top of the true dual-supply 0 V midpoint and call both of them CENTER.
+The TLE2426 OUT pin carries station **imbalance/receipt current only**. The
+balanced NET_P-to-NET_N station current must bypass OUT. Motor current is not
+permitted in this build.
+
+The retired `+12 V / 0 V / -12 V` AO3401A/2N7000 experiment is not CELL_V1 F0
+and must not be mixed with this build. The only build authority is:
+
+- `CELL_V1_FULL_BUILD.md`
+- `01_PARTS/CELL_V1_PARTS_BOM.md`
+- `02_CONNECTIONS/CELL_V1_NETLIST.md`
+- `09_TESTS/CELL_V1_SAFE_BRINGUP.md`
+- `10_RECEIPTS/CELL_V1_RECEIPT_SCHEMA.json`
 
 ---
 
@@ -51,7 +56,8 @@ I_0 ~= 0
 V(0_bus) ~= V(0_source)
 ```
 
-Then deliberately change one side, e.g. 10 k -> 6.8 k:
+Then deliberately change one station arm, e.g. 1 k -> approximately 688 ohm
+by placing 2.2 k in parallel:
 
 ```text
 I_0 must become measurably nonzero.
@@ -63,7 +69,9 @@ Move the mismatch to the opposite arm:
 sign(I_0) must reverse.
 ```
 
-The 0 rail itself must remain a low-impedance reference. A pretty midpoint voltage with no real DC 0 path is a failure.
+NET_G must remain inside the declared midpoint belt at both G-home and G-far.
+A pretty midpoint voltage with an overloaded or oscillating midpoint host is a
+failure.
 
 ---
 

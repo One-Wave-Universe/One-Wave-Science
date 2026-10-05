@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""CELL_V1 stamp 1 — virtual rails. Not Stage 1 comparator. Not Kitty Hawk."""
+"""CELL_V1 stamp 1 — 5 V supply with 2.5 V buffered virtual ground."""
 
-VP, VN = 12.0, -12.0
+VP, VG, VN = 5.0, 2.5, 0.0
 R_LAW = 10_000.0
 R_OPEN = 1e12
 
 
 def i0(r_plus, r_minus):
-    return VP / r_plus + VN / r_minus
+    return (VP - VG) / r_plus + (VN - VG) / r_minus
 
 
 def main() -> None:
@@ -21,11 +21,11 @@ def main() -> None:
     assert abs(both) < 1e-12
     assert pull_plus < 0
     assert pull_minus > 0
-    assert abs(abs(pull_plus) - abs(VN) / R_LAW) < 1e-9
-    assert abs(abs(pull_minus) - VP / R_LAW) < 1e-9
-    print("  VG held at 0 by definition in this model")
-    print("  PASS stamp 1 (ideal mid)")
-    print("  copper still owes the same numbers at 50 mA")
+    assert abs(abs(pull_plus) - (VG - VN) / R_LAW) < 1e-9
+    assert abs(abs(pull_minus) - (VP - VG) / R_LAW) < 1e-9
+    print("  NET_G = 2.5 V absolute / 0 V relative")
+    print("  PASS stamp 1 (ideal buffered virtual ground)")
+    print("  copper still owes the same numbers at a 10-20 mA supply limit")
 
 
 if __name__ == "__main__":

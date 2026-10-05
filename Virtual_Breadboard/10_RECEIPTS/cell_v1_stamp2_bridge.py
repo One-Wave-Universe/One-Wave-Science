@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""CELL_V1 stamp 2 — one dummy winding 1k to G. Ideal switches."""
+"""CELL_V1 stamp 2 — one 1 k dummy load relative to virtual ground."""
 
-VP, VN, VG = 12.0, -12.0, 0.0
+VP, VG, VN = 5.0, 2.5, 0.0
 R_LOAD = 1_000.0
 R_LAW = 10_000.0
 
 
 def i0_law():
-    return VP / R_LAW + VN / R_LAW  # 0
+    return (VP - VG) / R_LAW + (VN - VG) / R_LAW  # 0
 
 
 def phase(state):
@@ -35,11 +35,11 @@ def main() -> None:
     print(f"  I_0 +1      {plus:+.4e} A")
     print(f"  I_0 -1      {minus:+.4e} A")
     assert abs(stay) < 1e-12
-    assert abs(plus - 12e-3) < 1e-12
-    assert abs(minus + 12e-3) < 1e-12
-    print("  VG = 0 held")
-    print("  PASS stamp 2 (ideal half-bridge + 1k)")
-    print("  50 mA knob still covers 12 mA lean")
+    assert abs(plus - 2.5e-3) < 1e-12
+    assert abs(minus + 2.5e-3) < 1e-12
+    print("  NET_G = 2.5 V absolute / 0 V relative")
+    print("  PASS stamp 2 (ideal switch + 1k virtual-ground load)")
+    print("  10-20 mA supply limit covers the 2.5 mA lean")
 
 
 if __name__ == "__main__":
