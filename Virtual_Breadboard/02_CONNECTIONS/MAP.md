@@ -44,13 +44,18 @@ internal detail of `solve()`.
   already assigns it — the pure, component-free ground truth for "do 5 holes
   on one strip really become one node," "does the center trench connect top
   and bottom," and "do split rails stay split." Needs no circuit or solve.
+- **Board kinds differ only in the physical netlist.** Layout entries accept
+  `kind: 'breadboard'` (default) or `kind: 'perf'` / `'perfboard'`. Perfboard
+  uses the same hole geometry and the same `circuit.js` wire/parts path, but
+  every hole is its own `cellId` — no a–e / f–j strip merge and no continuous
+  rail merge. Jumpers still merge nets electrically via `circuit.js`.
 
 | Capability | Location | Status | Covering tests |
 |---|---|---|---|
 | Wire union | `circuit.js:106` | PASSING | `test/circuit.test.js` Test 10, `test/netlist.test.js` |
 | Closed-switch union | `circuit.js:111` | PASSING | `test/circuit.test.js` Test 7, `test/netlist.test.js` |
 | Electrical netlist export | `circuit.js:151` (`netlist()`) | PASSING | `test/netlist.test.js` (jumper merges exactly the intended nodes, a two-terminal part never merges its own terminals) |
-| Physical (board) netlist export | `js/board.js` (`netlist()`) | PASSING | `test/netlist.test.js` (every strip has exactly 5 holes, trench never connects banks, rails never cross boards) |
+| Physical (board) netlist export | `js/board.js` (`netlist()`) | PASSING | `test/netlist.test.js` (breadboard: 5-hole strips, trench gap, split rails; perf: isolated pads, jumper merge) |
 | Reference/ground node selection | `circuit.js:938-940` | PASSING, with a real documented gotcha | `qualification.test.js` floating-reference fixes |
 | Hole occupancy (one lead per hole) | `js/board.js` | PASSING | `test/circuit.test.js` T-HOLE-COLLIDE |
 | Multi-board addressing | `js/board.js` + `simulate.js:75` (`H()`) | PASSING | `test/circuit.test.js` T-BOARD2, `test/netlist.test.js` |
