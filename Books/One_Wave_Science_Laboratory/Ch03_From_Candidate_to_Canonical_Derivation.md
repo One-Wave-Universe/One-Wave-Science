@@ -129,3 +129,25 @@ Mode, Mass Effect or clock. The next bounded calculation is larger-domain and
 higher-harmonic continuation of the smallest branch, with zero-mean displacement
 and a nonzero-state anchor. Knot, shell, Mirror and Boundary-Tension Weave closure
 remain separate missing mechanisms; no node gate is promoted.
+
+
+### Domain check identifies what the recurrence still lacks
+
+The [domain and harmonic check](../../solvers/RECURRENCE_DOMAIN_CHECK.md) refines
+the smallest recurrence to full equation defect below 9e-12, then embeds and
+resolves it on 108 FCC sites. Central radius-1 activity falls from 64.55% to
+31.07%; even the radius-2 diagnostic falls from 98.55% to 75.05%. Near-periodic
+return remains numerically controlled, but localization weakens. A spectral
+projection identifies the upper-band eigenspace; its geometry and localization
+bounds explain the broad tails. The leading reciprocal compression correction
+lowers this branch into the Ground propagation band. No Persistent Mode or Mass
+Effect is assigned.
+
+A second exact closure check shows that the current compression law cannot
+create curl from zero displacement/velocity curl. C-319/C-320 supply the intended
+rotation/path-reorganization handoff, but its full reciprocal work law is absent
+from this reduced solver. Simply multiplying the present force by a positive
+accessibility tensor produces a nonsymmetric derivative in the current unit
+kinetic coordinates. The next physical step is a common energy/force closure
+for boundary, rotation and reorganization, preserving C-317 and D-412 rather
+than naming this near-linear branch as a complete knot.
