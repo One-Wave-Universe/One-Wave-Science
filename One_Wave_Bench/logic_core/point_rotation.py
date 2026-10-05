@@ -77,3 +77,23 @@ def receipt_planar_spin(theta: float, omega_z: float) -> dict:
         "brick_algebra": "GREEN",
         "brick_inertia_origin": "YELLOW",
     }
+
+
+def point_L_dot(L: Vec3, magnetic_open: bool, resistance: float, gravity: Vec3 = (0.0, 0.0, 0.0)) -> Vec3:
+    """Open gradient: the point keeps L. Closed: L is resisted. Gravity is ignored."""
+    del gravity
+    if resistance < 0.0:
+        raise ValueError("resistance is not negative")
+    if magnetic_open:
+        return (0.0, 0.0, 0.0)
+    return tuple(-resistance * c for c in L)  # type: ignore
+
+
+def step_L(L: Vec3, dt: float, magnetic_open: bool, resistance: float, gravity: Vec3 = (0.0, 0.0, 0.0)) -> Vec3:
+    dL = point_L_dot(L, magnetic_open, resistance, gravity)
+    return (L[0] + dt * dL[0], L[1] + dt * dL[1], L[2] + dt * dL[2])
+
+
+def inertia_axis_stability(inertia_diag: Vec3) -> dict:
+    order = sorted(range(3), key=lambda i: inertia_diag[i])
+    return {order[0]: "stable", order[1]: "fights", order[2]: "stable"}

@@ -558,6 +558,8 @@ Gravity is the wake and the relay. The parent creates the wake. The child rides 
 
 Gravity does not affect point rotation. It does not start the point's spin. Opening and closing the point belong to the magnetic gradient.
 
+Path rotation is the turning of the ride from center to center. A closed hexagon turns one full turn. That receipt has no \(L\). G-769.
+
 ---
 
 END OF BOOK 1 CHAPTER 12

@@ -60,4 +60,6 @@ Default planar Points sit on hexagon vertices plus center. Bipyramid apices are 
 
 ## Next
 
-C3 Path rotation: turning / circulation / curvature of the transported center along an edge of the hex or a pyramid lateral.
+C3 Path rotation is G-769. It does not carry \(L\).
+
+The point rate is in `point_rotation.point_L_dot`. Open magnetic gradient: \(\dot{\mathbf L}=0\). Closed: \(\dot{\mathbf L}=-\gamma\mathbf L\). Gravity is an ignored argument.

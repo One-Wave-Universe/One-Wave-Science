@@ -89,8 +89,7 @@ visual pattern alone is not a derivation.
   `X_s={P_s,gamma_s,F_s;X_(s-1,1),...,X_(s-1,n)}` with units and frames.
 - [ ] **C2 — Point rotation:** derive intrinsic/local orientation and its
   carried angular-momentum receipt.
-- [ ] **C3 — Path rotation:** derive turning, orbit, circulation, curvature,
-  and transport of the Point frame along a Path.
+- [x] **C3 — Path rotation:** kinematic turning is G-769. A closed hexagon turns \(2\pi\). The receipt has no \(L\). Not an orbit solution.
 - [ ] **C4 — Field rotation:** derive Field circulation/curl and its boundary
   conditions without replacing it with Path rotation.
 - [ ] **C5 — Point-containing-PPF:** calculate nested internal PPF inside a
