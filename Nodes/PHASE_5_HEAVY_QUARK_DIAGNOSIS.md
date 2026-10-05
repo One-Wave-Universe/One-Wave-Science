@@ -1,3 +1,12 @@
+---
+artifact_id: "PHASE_5_HEAVY_QUARK_DIAGNOSIS"
+parent_node_id: "C-318"
+title: "Phase 5: Heavy-Quark Mass-Scale Problem Diagnosis"
+namespace: "NODE_ARTIFACT"
+lifecycle: "ACTIVE_HYPOTHESIS"
+metadata_standard: "I-06"
+---
+
 # Phase 5: Heavy-Quark Mass-Scale Problem Diagnosis
 
 **Date:** October 4, 2026  
