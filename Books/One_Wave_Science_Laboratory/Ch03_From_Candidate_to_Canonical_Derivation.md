@@ -181,7 +181,7 @@ inputs, the computed spectrum changes the balance radius from 1 to .758813219;
 pressure and tension both equal .0263569473. Four 200-unit trajectories remain
 bounded, including ±10% radius perturbations and a tighter-tolerance control.
 
-Uniform relative-phase recurrences have nonzero frequencies but zero radius
+Uniform relative-phase recurrences have nonzero frequencies but zero cycle-averaged radius
 pressure. Their energy cannot be assigned to confinement work merely because
 they recur. Five implementation/outcome checks pass. The reflecting graph and
 self-similar spherical geometry remain prescribed, so this is not emergent Knot
