@@ -15,8 +15,9 @@ sys.path.insert(0, str(ROOT / 'solvers'))
 import numpy as np
 from bulk_excitation import BulkExcitation, BulkCoefficients
 from joint_boundary_response import JointResponse, ROLES
+from driven_bulk import DrivenBulk
 
-SOURCE_PATHS = ['solvers/bulk_excitation.py', 'solvers/joint_boundary_response.py',
+SOURCE_PATHS = ['solvers/driven_bulk.py', 'solvers/test_driven_bulk.py', 'solvers/bulk_excitation.py', 'solvers/joint_boundary_response.py',
                 'One_Wave_Simulator/native_3d/server.py',
                 'One_Wave_Simulator/native_3d/app.js', 'One_Wave_Simulator/native_3d/index.html',
                 'One_Wave_Simulator/native_3d/test_lab.py', 'One_Wave_Simulator/native_3d/test_ui.cjs']
@@ -82,7 +83,9 @@ class Lab:
             previous = np.cos(frequency*dt)*field
             config = {'model': model, 'mode': mode, 'coefficients': asdict(engine.coefficients),
                       'initial_condition': 'W-normalized cavity eigenmode at maximum amplitude'}
+        drive = DrivenBulk(engine, field) if model == "bulk" else None
         self.model, self.engine, self.field, self.previous = model, engine, field, previous
+        self.drive = drive
         self.dt, self.config = dt, config
         self.steps = 0
         self.shift = np.zeros(3, int)
@@ -100,6 +103,10 @@ class Lab:
     def record(self):
         row = {'time': self.steps*self.dt, 'energy': self.energy()}
         if self.model == 'bulk':
+            measured = self.drive.measurements(self.field)
+            row.update(total_energy=measured['total_energy'], source_work=measured['switch_work']+measured['intervention_work'],
+                       balance_residual=measured['energy_balance_residual'], applied_force=measured['applied_force'],
+                       centroid=measured['centroid'])
             row['norm'] = self.engine.norm(self.field)
             row['detector_intensity'] = self.engine.detector(self.field, 1.)['intensity']
         self.trace.append(row)
@@ -130,15 +137,24 @@ class Lab:
             count = integer(data.get('count', 5), 1, 50, 'count')
             # Transactional stepping: reject a nonfinite proposal without losing state.
             field, prev = self.field.copy(), None if self.previous is None else self.previous.copy()
+            drive = self.drive.fork() if self.drive is not None else None
             for _ in range(count):
                 if self.model == 'bulk':
-                    field = self.engine.step(field, self.dt)
+                    field = drive.advance(field, self.dt)
                 else:
                     prev, field = field, self.engine.advance(prev, field, self.dt)
             if not np.isfinite(field).all():
                 raise ValueError('Nonfinite evolution rejected')
             self.field, self.previous = field, prev
+            self.drive = drive
             self.steps += count
+            self.record()
+        elif action == 'set_force':
+            if set(data) != {'action', 'force'} or self.model != 'bulk':
+                raise ValueError('Force drive requires a bulk force vector')
+            drive = self.drive.fork()
+            drive.set_force(self.field, data['force'])
+            self.drive = drive
             self.record()
         elif action == 'displace':
             if set(data) != {'action', 'shift'} or self.model != 'bulk':
@@ -149,7 +165,10 @@ class Lab:
             shift = [integer(v, -2, 2, 'shift') for v in raw]
             if sum(shift) % 2:
                 raise ValueError('FCC displacement must preserve even parity')
-            self.field = np.roll(self.engine.full(self.field), shift, axis=(0, 1, 2))[self.engine.mask]
+            after = np.roll(self.engine.full(self.field), shift, axis=(0, 1, 2))[self.engine.mask]
+            drive = self.drive.fork()
+            drive.intervention(self.field, after, shift)
+            self.field, self.drive = after, drive
             self.shift += shift
             self.record()
         else:
@@ -187,10 +206,15 @@ class Lab:
                 'source_drift': self.source_drift(),
                 'response': self.response_probe()}
         if self.model == 'bulk':
-            data.update(measurements=m.measurements(self.field), detector=m.detector(self.field, 1.),
+            data.update(drive=self.drive.measurements(self.field), measurements=m.measurements(self.field), detector=m.detector(self.field, 1.),
                         norm_relative_error=m.norm(self.field)/self.initial_norm-1,
                         imposed_lattice_shift=(self.shift*m.spacing/np.sqrt(2)).tolist(),
                         displacement_scope='Exact imposed lattice translation, not a derived force/acceleration law')
+            data['drive']['centroid']['policy'] = {
+                'minimum_concentration': .5, 'maximum_seam_fraction': .01,
+                'maximum_internal_step_box_fraction': .25,
+                'diagnostic': 'L times seam norm, summed initial/current; a conservative heuristic, not a rigorous arbitrary-field error bound',
+                'threshold': 'displacement above ten times diagnostic; temporal refinement still required'}
         else:
             data['previous_real'] = self.previous.reshape((-1, 4)).tolist()
             data['energy_time'] = (self.steps-.5)*self.dt

@@ -62,6 +62,23 @@ class LabTests(unittest.TestCase):
         zero=a.command({'action':'reset','model':'cavity','mode':0})
         self.assertLess(np.linalg.norm(zero['response']['tensor']),1e-20)
 
+    def test_drive_api_work_and_transactionality(self):
+        a=server.Lab();a.command({'action':'reset','side':12,'kick':0});before=a.field.copy()
+        for force in ([.03,0,0],['.01',0,0],[False,0,0]):
+            with self.assertRaises(ValueError):a.command({'action':'set_force','force':force})
+            np.testing.assert_array_equal(a.field,before)
+            self.assertEqual(a.drive.events,[])
+        s=a.command({'action':'set_force','force':[.01,0,0]})
+        np.testing.assert_array_equal(a.field,before)
+        json.dumps(s,allow_nan=False)
+        self.assertEqual(s['drive']['force_coefficients'],[.01,0,0])
+        self.assertEqual(len(s['drive']['protocol_events']),1)
+        self.assertAlmostEqual(s['drive']['energy_balance_residual'],0,places=12)
+        s=a.command({'action':'step','count':50});self.assertLess(s['drive']['max_norm_relative_error'],1e-10)
+        self.assertEqual(s['drive']['centroid']['temporal_refinement'],'not established by one interactive run')
+        a.command({'action':'reset','model':'cavity'})
+        with self.assertRaises(ValueError):a.command({'action':'set_force','force':[.01,0,0]})
+
     def test_source_receipt(self):
         s=server.Lab().snapshot()
         self.assertIn('solvers/bulk_excitation.py',s['source_sha256'])
@@ -94,6 +111,24 @@ class HTTPTests(unittest.TestCase):
         try:
             with urlopen(request) as response:return response.status,response.read(),dict(response.headers)
         except HTTPError as error:return error.code,error.read(),dict(error.headers)
+    def test_live_force_protocol_receipts(self):
+        headers={'Content-Type':'application/json'}
+        def command(data):
+            status,body,_=self.request('/api/command',json.dumps(data).encode(),headers)
+            self.assertEqual(status,200)
+            return json.loads(body)
+        command({'action':'reset','side':12,'kick':0})
+        command({'action':'set_force','force':[.01,0,0]})
+        command({'action':'step','count':5})
+        state=command({'action':'displace','shift':[1,1,0]})
+        self.assertEqual(state['drive']['protocol_events'][-1]['kind'],'imposed_translation')
+        status,_,_=self.request('/api/command',b'{"action":"set_force","force":[".01",0,0]}',headers)
+        self.assertEqual(status,400)
+        self.assertEqual(json.loads(self.request('/api/state')[1]),state)
+        cleared=command({'action':'set_force','force':[0,0,0]})
+        self.assertEqual(cleared['drive']['force_coefficients'],[0,0,0])
+        self.assertLess(cleared['drive']['max_norm_relative_error'],1e-10)
+
     def test_loopback_assets_and_path_allowlist(self):
         self.assertEqual(self.http.server_address[0],'127.0.0.1')
         for path in ('/','/app.js','/api/state'):
@@ -108,6 +143,8 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(self.request('/api/command',body,{'Content-Type':'text/plain'})[0],400)
         self.assertEqual(self.request('/api/command',b' '*4097,{'Content-Type':'application/json'})[0],400)
         self.assertEqual(self.request('/api/command',body,{'Content-Type':'application/json'})[0],200)
+        status,payload,_=self.request('/api/command',b'{"action":"reset","side":12}',{'Content-Type':'application/json'})
+        self.assertEqual(status,200);self.assertTrue(json.loads(payload)['drive']['centroid']['valid'])
         self.assertEqual(self.request('/api/command',b'[]',{'Content-Type':'application/json'})[0],400)
 
 if __name__=='__main__':unittest.main()

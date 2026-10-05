@@ -37,3 +37,55 @@ node One_Wave_Simulator/native_3d/test_ui.cjs
 ```
 
 The dedicated CI repeats numerical tests and browser interaction, retaining screenshots and the exported state. The endpoint exposes only fixed reset/step/displace operations, capped grids, steps and bodies, strict loopback Host and same-origin mutation guards. It does not serve repository paths, execute commands or enable CORS. It is a single shared experiment per process; do not run competing browser tabs as independent sessions.
+
+## Controlled-push extension
+
+Bulk mode now has a declared **external** periodic potential, implemented by
+`solvers/driven_bulk.py`; `bulk_excitation.py` is unchanged. With box length L,
+K=2π/L and three bounded force coefficients f, the potential is
+V(x)=−Σj fj sin(K xj)/K. Each numerical step applies a half potential phase,
+the original bulk step, then the other half phase. There is no renormalization.
+
+Apply/Clear push changes V while preserving the field and records the exact
+work ΔW=ΔVcell Σi ni(Vnew−Vold). The displayed applied force is the actual
+Σi ΔVcell ni fj cos(K xij), not an assumed Nf. The total-energy ledger is
+Ebulk+Eexternal−Einitial−Wswitch−Wintervention. An imposed translation under a
+nonzero potential is an additional external intervention; it is recorded with
+its shift, force, before/after densities and work. It is never passed off as
+force-driven motion. Up to 64 intervention events are retained; export/reset
+is required at the cap. Camera operations never enter this ledger.
+
+The centroid is an ordinary norm-weighted mean in an unwrapped periodic chart.
+A circular moment chooses the chart but is not the measured dynamical centroid.
+Tracking updates every internal solver step. Concentration below 0.5, more than
+1% norm near the chart seam, or a jump of a quarter box invalidates tracking
+until reset. The 8³ default can therefore report an unresolved centroid; choose
+12³ rather than weakening the guard. A seam-based chart diagnostic (not a rigorous arbitrary-field error bound) is reported, and a
+chart-policy label requires displacement greater than ten times the
+initial-plus-current chart uncertainty. It still requires an independent
+half-timestep comparison before interpreting resolved acceleration. The reported
+displacement includes any manual translation, phase-kick motion and force-driven
+change together.
+
+These additions let a user perform controlled-push experiments. They do not
+assign mass to a pinned, splitting, dispersing or radiating field. A small
+response is not infinite mass. The missing physical closure remains the derived
+four-interaction work metric, recurrence and independently calibrated units.
+
+Run `python solvers/test_driven_bulk.py` for wrapper controls and
+`python solvers/run_driven_bulk.py > /tmp/driven-bulk-results.json` for the bounded
+linear packet sweep. The latter uses alias-safe projector preparation and
+publishes zero/±force, timestep, packet-width and box-size controls. The exact
+long-wavelength lower-band curvature is 0.3 I for the declared coefficients;
+finite packet trajectories must not be forced to equal that limit. A wider
+packet changes its spectral curvature, and a larger periodic box changes the
+spatial force profile. Both distinctions remain visible in the report.
+
+The batch runner includes the exact duration-2 endpoint in both `result` and the sparse `trace`.
+
+The retained [20-case numerical receipt](../../solvers/DRIVEN_BULK_RECEIPT.md)
+reports actual errors and scope. The ±0.01 side32 matched control passes its
+chart policy and timestep refinement. The side32 half-force matched signal is
+unresolved after combining baseline and driven chart diagnostics; larger-grid
+cases have no separate timestep sweeps. Do not infer mass or fully established
+linearity from those controls.
