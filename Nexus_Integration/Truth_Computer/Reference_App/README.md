@@ -6,7 +6,7 @@ The target is a clean One-Wave search-and-answer workspace for one identified AI
 
 ## Start
 
-Python 3 standard library; no package installation. Run from this directory on the verified host. Use existing authorized Git roots; do not move or reset their working trees.
+Python 3 standard library on a POSIX host (Linux/macOS); no package installation. The worker lock uses `fcntl.flock`. Run from this directory on the verified host with a local SQLite state file, not a network filesystem. Use existing authorized Git roots; do not move or reset their working trees.
 
 Claude on the laptop uses the already authenticated Claude Code subscription:
 
@@ -48,7 +48,17 @@ Terminal and code work remain on the existing [bridge routes](../../../AI_BRIDGE
 
 Exactly two worker phases, FIELD and VOID, plus six separate cursors: BEGIN, BUILD, HOLD, BUILD, BREAK, LOOP. Each cursor stores a Field artifact and matching Void decision. Fresh references gate advancement. The final output requires matching citations, an ALLOW audit, an exact candidate hash and an unchanged reference. The audit is a separate pass by the same provider, not independent model corroboration or physical verification. Generated results remain candidates.
 
-SQLite stores **per-app runtime conversations, transitions, corrections and concise journal summaries only**. It is not a second knowledge database or job board. Claude and DeepSeek default to separate files under `~/.local/state/one-wave-answer/`. Same request IDs return the existing record; interrupted provider calls become HOLD after restart and are never automatically repeated. No hidden chain-of-thought is stored. Missing evidence remains a recorded dependency. Corrections persist and are contextual data, not authority to change evidence.
+SQLite stores **per-app runtime conversations, transitions, structured provider returns, corrections and concise journal summaries only**. It is not a second knowledge database or job board. Claude and DeepSeek default to separate files under `~/.local/state/one-wave-answer/`. Same request IDs return the existing record. No hidden chain-of-thought is requested or stored. Missing evidence remains a recorded dependency. Corrections persist and are contextual data, not authority to change evidence.
+
+### Retained checkpoints and explicit recovery
+
+The existing state database is upgraded additively with row versions. Each provider operation retains its stable operation ID, exact structured request/return, input/output hashes, provider identity and timestamps. Candidate and audit checkpoints stay private to the controller; normal history and conversation responses expose only the released answer and safe progress.
+
+An interrupted worker becomes HOLD. A configured local client may explicitly submit the same-origin JSON request `POST /api/resume` with `{"id":"the existing request ID"}`. There is no new browser control in this backend slice. A checkpoint with completed provider returns can resume those saved returns, refresh its reference, finish remaining checks and retain one published consequence. A still-in-flight operation has an unknown outcome and cannot be automatically reissued. A new provider call may occur only for a step that has never been dispatched. Provider identity, source/reference hashes and retained artifacts must still match; otherwise recovery stays on HOLD.
+
+Reference checks run at every phase boundary and before provider dispatch and acceptance. Tracked dirty changes are fingerprinted in addition to the pinned source content. Untracked files remain excluded from source evidence. A process-scoped lock prevents a second app from pausing or duplicating a live worker; row-version checks reject stale writes. Publication binds candidate, audit, reference and stable delivery receipt in one SQLite transaction, with reference checks inside that transaction. This does not lock external Git writers or claim a distributed transaction across Git and SQLite. Completed historical results retain their original reference rather than being silently revalidated.
+
+Recovery tests use deterministic provider fixtures and one deliberately killed local test process. They prove controller behavior, not authenticated Claude/DeepSeek availability, live provider exactly-once execution, deployment or Nexus integration. An adapter call whose return was lost remains ambiguous even if the provider actually completed it.
 
 ## Integration boundary and remaining work
 
@@ -63,4 +73,4 @@ python3 -m unittest discover -s . -v
 node --check app.js
 ```
 
-Tests cover all twelve phase records, retained consequences, duplicate request IDs, restart HOLD, citation rejection, reference drift, journal isolation and denied path/tool access. See `WORK_RECORD.md` for actual host receipts.
+Tests cover all twelve phase records, retained consequences, duplicate request IDs, checkpoint recovery, ambiguous-call HOLD, citation rejection, source/reference drift, publication races, journal isolation, denied path/tool access, old-database migration and live-worker exclusion. See `WORK_RECORD.md` for actual execution scope and earlier host receipts.
