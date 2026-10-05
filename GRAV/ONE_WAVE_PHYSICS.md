@@ -32,6 +32,8 @@ Two-body: two stiffness wells, one path that closes if the walk of rotating fiel
 
 Three-body: three wells, no shared period that stays locked. The sphere has no single RC window for all three. Chaos is not mystery — it is three free updates that will not sit on one stamp. Restricted three-body (one mass tiny) is you treating one well as a tap, not a peer.
 
+Gravity is the wake and the relay, one thing (Updated 64). The parent creates the wake. The child rides it and adds its own displacement and motion to the party. The child does not start that wake. A body is caught in every wake still distinguishable where it sits: the Moon rides Earth's, and that pair rides the Sun's. Jupiter is on the party only while its slope is still distinguishable. Nothing is stored after the slope has fallen into the reference.
+
 ## Eyes and detectors
 
 An eye, a CCD, a photodiode, a CD quad: a surface whose own oscillation can lock to the incoming wave. Readout is collapse-as-“we coupled,” not collapse-as-“the universe picked a branch.” The wave was already in one lattice. The detector spent a window and wrote +1 / STAY / −1. That is why vision in the cell is lean, not a jpeg of many worlds.

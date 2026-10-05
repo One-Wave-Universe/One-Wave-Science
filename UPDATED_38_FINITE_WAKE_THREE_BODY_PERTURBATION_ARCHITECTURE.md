@@ -163,3 +163,5 @@ No visual success criterion is sufficient.
 `relational mechanism -> candidate edge equations -> closure attack -> finite-wake law missing -> perturbation tests -> theorem target`
 
 This update promotes the architecture and test program only. It does **not** claim the celestial three-body problem or gravitational non-locality has been solved.
+
+Updated 64 locks the interpretation those tests are about: gravity is the wake and the relay; the parent creates the wake; the child rides it and adds displacement and motion; many wakes can overlap; nothing is stored after the slope falls into the reference. The assimilation boundary is still missing.

@@ -26,7 +26,7 @@ p = p_inside - B
 ΔP ≈ B + 2γ / R
 ```
 
-`B` is vacuum / bag squeeze = κ of that scale. `γ` is surface tension. Neighboring fields add `ΔS = S_local − S_ref`. No memory relay. Current state only.
+`B` is vacuum / bag squeeze = κ of that scale. `γ` is surface tension. Neighboring fields add `ΔS = S_local − S_ref`. Current state only: no stored memory of a vanished pull. Gravity is the wake and the relay of that present slope (Updated 64).
 
 Energy enters → cannot propagate → tension on the rim → rotation picks an axis → skin slips → fountain. Dump is not mass deletion.
 

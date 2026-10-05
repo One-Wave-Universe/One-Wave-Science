@@ -202,7 +202,7 @@ The relational driver remains
 
 `DeltaS_i(t) = S_local,i(t) - S_ref,i(t)`.
 
-No wake memory or relay memory is used.
+No stored memory of a vanished wake is used. Gravity is the wake and the relay of the present slope (Updated 64), not a stored message.
 
 ## 8. Finite range is an emergent interaction result
 

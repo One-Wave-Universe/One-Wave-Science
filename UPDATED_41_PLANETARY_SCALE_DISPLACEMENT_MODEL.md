@@ -181,7 +181,7 @@ The active region is
 
 No universal AU cutoff is allowed.
 
-No stored wake memory or relay mechanism is required in this architecture. All fields/ranges move with their bodies and are recomputed from the current state.
+No stored memory of a vanished interaction is required. All fields/ranges move with their bodies and are recomputed from the current state. Gravity is the wake and the relay of that present state (Updated 64).
 
 ## 6. Planet-to-planet interaction
 
@@ -359,7 +359,7 @@ The architecture fails or must be revised if:
 
 `NO universal cutoff`
 
-`NO memory relay`
+`NO stored memory of a vanished pull. Gravity is the wake and the relay (Updated 64)`
 
 `NO mass-only well`
 

@@ -341,7 +341,7 @@ where:
 ### Extension 6: Graviton and Spacetime Curvature
 **Module Name:** `gravity_lattice_simulator.py`  
 **Purpose:** Model gravity as macroscopic lattice wave (wake structure)  
-**Mechanism:** Gravity wake nesting and curvature relay from particle sources  
+**Mechanism:** Gravity is the wake and the relay. The parent creates the wake. A child rides it and adds its own displacement and motion. Updated 64. Not a separate graviton message.  
 **Test Cases:** Newton's constant G, gravitational wave detection  
 **Prediction:** General relativity emerges from lattice scaling
 
