@@ -472,7 +472,6 @@ class CascadeSimulator:
             "n_steps": n_steps,
             "scales": [s.value[0] for s in self.scales],
             "final_fields": {},
-            "harmonic_identity": self._compute_harmonic_identity(),
         }
 
         for step in range(n_steps):
@@ -481,6 +480,9 @@ class CascadeSimulator:
             # Print progress
             if step % 50 == 0:
                 print(f"  Timestep {step}/{n_steps}")
+
+        # Compute harmonic identity AFTER simulation
+        results["harmonic_identity"] = self._compute_harmonic_identity()
 
         # Capture final state
         for scale, level in self.levels.items():
@@ -496,27 +498,47 @@ class CascadeSimulator:
         """
         Compute harmonic identity preservation across scales.
 
-        Circle of Fifths: interval ratios {0, 4, 7} preserved across transposition.
-        In physics: energy level ratios preserved across scales.
+        Circle of Fifths: interval ratios {1, 5/4, 3/2} preserved across scales.
+        In physics: frequency structure preserved during cascade evolution.
         """
         identity = {}
 
-        # For each level, find dominant frequency components
+        # For each level, find dominant frequency modes
         for scale, level in self.levels.items():
             psi_ft = fftn(level.field)
             power = np.abs(psi_ft) ** 2
 
-            # Find top 3 frequency components
+            # Find peaks in frequency space (dominant modes)
+            # Get indices of largest power values
             flat_power = power.flatten()
-            top_indices = np.argsort(flat_power)[-3:]
-            top_powers = flat_power[top_indices]
+            # Get top 5 powers to find frequency components
+            sorted_indices = np.argsort(flat_power)
+            top_indices = sorted_indices[-5:] if len(sorted_indices) >= 5 else sorted_indices
+            top_powers = np.sort(flat_power[top_indices])[::-1]  # Descending order
 
-            # Normalize to ratios
-            if top_powers[0] > 0:
-                ratios = top_powers / top_powers[0]
+            # Compute frequency magnitudes from FFT indices
+            # (This is a simplified approach - proper FFT frequency mapping would need axes)
+            frequencies = []
+            for idx in top_indices[-3:]:  # Use top 3
+                unraveled = np.unravel_index(idx, power.shape)
+                freq_magnitude = np.sqrt(sum(u**2 for u in unraveled))
+                if freq_magnitude > 0:
+                    frequencies.append(freq_magnitude)
+
+            # Compute ratios to fundamental (smallest frequency)
+            ratios = []
+            if frequencies:
+                fundamental = min(frequencies)
+                if fundamental > 0:
+                    ratios = [float(f / fundamental) for f in sorted(frequencies)]
+                    # Filter to meaningful ratios (not NaNs or Infs)
+                    ratios = [r for r in ratios if np.isfinite(r) and r > 0]
+
+            if ratios:
                 identity[scale.value[0]] = {
                     "dominant_frequencies": [float(p) for p in top_powers],
-                    "frequency_ratios": [float(r) for r in ratios],
+                    "frequency_ratios": ratios,
+                    "count": len(ratios),
                 }
 
         return identity

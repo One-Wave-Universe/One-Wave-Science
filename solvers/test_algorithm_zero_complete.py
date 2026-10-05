@@ -85,28 +85,44 @@ class TestAlgorithmZeroEngine:
         current_phase = AlgorithmZeroPhase.BEGIN
         time_in_phase = 0
 
-        # Run through multiple cycles
-        for _ in range(42):  # 7 phases * 6 steps
+        # Run through multiple complete cycles (6 phases × 5 steps + extras)
+        for _ in range(36):  # 6 phases × 5 timesteps each = 30 calls, then 6 more for second cycle
             current_phase, time_in_phase = cycle.get_next_phase(
                 current_phase, time_in_phase
             )
             phase_sequence.append(current_phase)
 
-        # Verify phase order repeats
+        # Verify phase order repeats correctly
         expected_order = [
             AlgorithmZeroPhase.BEGIN, AlgorithmZeroPhase.MOVE1,
             AlgorithmZeroPhase.HOLD, AlgorithmZeroPhase.MOVE2,
             AlgorithmZeroPhase.BREAK, AlgorithmZeroPhase.REPEAT,
         ]
 
-        # Check that sequence follows expected pattern
+        # With phase_duration=5, phases appear in groups of 5
+        # Check that sequence follows: BEGIN×5, MOVE1×5, HOLD×5, MOVE2×5, BREAK×5, REPEAT×5
         matches_pattern = True
-        for i, phase in enumerate(phase_sequence[6:12]):  # Second cycle
-            if phase != expected_order[i]:
-                matches_pattern = False
 
-        print(f"Phase sequence: {[p.name for p in phase_sequence[:12]]}")
-        print(f"Cycles correctly: {'✓ PASS' if matches_pattern else '✗ FAIL'}")
+        # Group phases by 5 and check they match expected order
+        for phase_idx in range(6):  # 6 phases in cycle
+            expected_phase = expected_order[phase_idx]
+            # Each phase occupies 5 consecutive slots
+            for i in range(5):
+                idx = phase_idx * 5 + i
+                if idx < len(phase_sequence):
+                    if phase_sequence[idx] != expected_phase:
+                        matches_pattern = False
+
+        # Also verify it cycles: next occurrence should start over with BEGIN
+        second_cycle_idx = 30  # 6 phases × 5 = 30
+        cycles_restart = False
+        if len(phase_sequence) >= second_cycle_idx + 1:
+            if phase_sequence[second_cycle_idx] == AlgorithmZeroPhase.BEGIN:
+                cycles_restart = True
+
+        print(f"Phases cycle in groups of 5: {'✓' if matches_pattern else '✗'}")
+        print(f"Cycle restarts at BEGIN: {'✓' if cycles_restart else '✗'}")
+        print(f"Cycles correctly: {'✓ PASS' if (matches_pattern and cycles_restart) else '✗ FAIL'}")
 
         return matches_pattern
 
