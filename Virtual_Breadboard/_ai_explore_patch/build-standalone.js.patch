@@ -1,0 +1,11 @@
+--- a/build-standalone.js
++++ b/build-standalone.js
+@@ -15,7 +15,7 @@
+ const outPath = path.resolve(root, process.argv[2] || 'dist/standalone.html');
+ 
+ const style = fs.readFileSync(path.join(root, 'style.css'), 'utf8');
+-const scriptFiles = ['js/circuit.js', 'js/board.js', 'js/components.js', 'js/ai.js', 'js/app.js'];
++const scriptFiles = ['js/circuit.js', 'js/board.js', 'js/components.js', 'js/ai-explore.js', 'js/ai.js', 'js/app.js'];
+ const scripts = scriptFiles
+   .map((f) => '<script>\n' + fs.readFileSync(path.join(root, f), 'utf8') + '\n</script>')
+   .join('\n\n');
