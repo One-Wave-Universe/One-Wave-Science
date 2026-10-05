@@ -12,6 +12,45 @@ mode), and a live circuit-physics engine underneath — not a toy animation.
 Click any hole to wire something into it, and the simulator solves the
 actual circuit every frame.
 
+## Programs / downloads
+
+One engine, every platform: the browser page, the desktop apps, the Android
+app and the headless CLI all run the same `index.html` + `js/` (MNA solver in
+`js/circuit.js`). Pick the program for your machine:
+
+| Platform | Program | Build / run (from `Virtual_Breadboard/`) | Output |
+|---|---|---|---|
+| Any browser | Zero-install web app | open `index.html`, or `python3 -m http.server 8000` | — |
+| Any browser / AI chat | Single-file HTML | `npm run bundle` | `dist/standalone.html` |
+| Linux x64/arm64 | AppImage (portable) | `npm install && npm run dist:appimage` | `dist/*.AppImage` |
+| Linux x64 / arm64 | Debian/Ubuntu package | `npm run dist:deb` / `npm run dist:deb-arm64` | `dist/*.deb` |
+| Windows x64 | Installer (Start Menu + Desktop shortcut) | `npm run dist:win-installer` | `dist/*Setup*.exe` |
+| Windows x64 | Portable exe + zip (no install) | `npm run dist:win` | `dist/*.exe`, `dist/*.zip` |
+| macOS Intel/Apple Silicon | Disk image (build on a Mac) | `npm run dist:mac-dmg` | `dist/*.dmg` |
+| macOS Intel/Apple Silicon | Zipped `.app` | `npm run dist:mac` | `dist/*-mac.zip` |
+| Android 7.0+ | Capacitor app (recommended) | `npm run android:apk` (Node 22, JDK 21, Android SDK) | `mobile/android/app/build/outputs/apk/debug/app-debug.apk` |
+| Android (legacy) | Hand-built WebView APK | `cd android && ./build-apk.sh` | `android/build/VirtualBreadboardSimulator.apk` |
+| Node / CI / AI | Headless simulator | `node simulate.js <spec.json>` | JSON receipt on stdout |
+| Desktop dev | Run Electron directly | `npm install && npm start` | — |
+
+**Prebuilt installers from GitHub Actions** (no local toolchain needed; there
+are no GitHub Releases yet, so installers are workflow artifacts):
+
+- **Linux / Windows / macOS** — [Virtual Breadboard - Desktop Installers](../.github/workflows/breadboard-desktop-builds.yml):
+  Actions tab → *Virtual Breadboard - Desktop Installers (manual)* →
+  **Run workflow**, or push a tag named `build-desktop-<anything>`. Download
+  the `linux-installers` (AppImage + deb), `windows-installers` (NSIS + portable
+  exe) and `macos-installers` (dmg + zip) artifacts from the finished run.
+- **Android** — [Virtual Breadboard - Android APK (Capacitor)](../.github/workflows/breadboard-android-build.yml):
+  runs on PRs touching `mobile/`, on tags `build-android-*`, or **Run
+  workflow**; download the `android-debug-apk` artifact.
+
+Artifacts expire (90 days by default) and are not code-signed: macOS needs
+right-click → Open once (Gatekeeper), Windows SmartScreen may need
+*More info → Run anyway*, Android needs "install unknown apps". Per-platform
+install and shortcut details are in [Running it](#running-it); Android
+details are in [ANDROID.md](ANDROID.md).
+
 ## Repeatable human / AI practice
 
 The existing solver is shared by the live editor and `simulate.js`. The editor
@@ -350,15 +389,32 @@ npm run dist:mac-dmg          # -> dist/*.dmg (macOS only)
 - **Linux — .deb**: `sudo dpkg -i virtual-breadboard-simulator_*.deb`
   registers the applications-menu entry for you; no extra script needed.
 
-**As a downloadable Android app:**
+**As a downloadable Android app (Capacitor — recommended):**
 
-`android/VirtualBreadboardSimulator.apk` is a real, signed APK — install it
-by copying it to an Android phone/tablet and opening it (you'll need to
-allow "install unknown apps" for whatever app you used to open it, since
-it isn't from the Play Store). It's a native app with a single Activity
-that hosts a `WebView` loading the same `index.html`/`js` bundled into its
-assets, so it runs fully offline — no native runtime bundled, so it's only
-~29KB.
+`mobile/` wraps the same `index.html`/`style.css`/`js/` in a Capacitor
+Android project (target SDK 36, min SDK 24). It copies the web app fresh on
+every sync, so it never drifts from the desktop/browser engine:
+
+```bash
+# Node 22+, JDK 21 and an Android SDK required -- see ANDROID.md
+npm run android:apk          # forwards to: cd mobile && npm install && npm run android:apk
+# -> mobile/android/app/build/outputs/apk/debug/app-debug.apk
+adb install -r mobile/android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+`npm run android:open` opens it in Android Studio; `npm run android:aab`
+builds a Play Store bundle once release signing is configured. CI builds a
+debug APK with no secrets. Full guide, signing notes and known WebView
+differences: [ANDROID.md](ANDROID.md).
+
+**Legacy Android APK (no Gradle):**
+
+`android/VirtualBreadboardSimulator.apk` is a small signed WebView wrapper
+(target SDK 23 — fine for sideloading on many devices, not accepted by the
+Play Store, and the committed `.apk` can lag behind `js/`). Install it by
+copying it to an Android phone/tablet and opening it (allow "install unknown
+apps"). It loads the same `index.html`/`js` bundled into its assets, so it
+runs fully offline.
 
 To rebuild it after changing the web app:
 
@@ -374,12 +430,7 @@ downloads entirely — it uses only `aapt` (manifest + asset packaging),
 `smali` (assembles `smali/.../MainActivity.smali`, a hand-written Dalvik
 bytecode equivalent of `src/.../MainActivity.java`, into `classes.dex`),
 `zipalign`, and `apksigner`, all available from Ubuntu/Debian's own apt
-repos. If you have Android Studio, it's simpler to just create a new
-project, drop `src/.../MainActivity.java` in, point its assets at this
-folder's `index.html`/`style.css`/`js/`, and build normally — the smali
-file exists only because this environment has no Java-to-Dalvik compiler
-(`dx`/`d8`) packaged, and Google's own SDK servers weren't reachable to
-fetch one.
+repos. The Capacitor track above is the Gradle/Android Studio route.
 
 ## Using the simulator
 
@@ -656,8 +707,14 @@ STAGE1_PHYSICAL_BUILD.md  bench build sheet for the Stage 1 ternary cell (BOM, h
 test/circuit.test.js  standalone physics tests (`npm test` / `node test/circuit.test.js`)
 build-standalone.js   bundles everything into one HTML file (`npm run bundle`)
 main.js               Electron desktop wrapper
-package.json          npm scripts + electron-builder config for Linux
-android/               native Android app (WebView wrapper around the same web app)
+package.json          npm scripts + electron-builder config for Linux/Windows/macOS (+ android:* forwarders to mobile/)
+mobile/                Capacitor Android app (recommended; see ANDROID.md)
+  package.json                  Capacitor deps + android:* scripts
+  capacitor.config.json         appId / appName / webDir
+  scripts/copy-www.js           stages index.html, style.css, js/ -> www/
+  (www/, android/ generated, gitignored)
+ANDROID.md             Android build, CI, signing and WebView notes
+android/               legacy native Android app (WebView wrapper around the same web app)
   AndroidManifest.xml
   src/.../MainActivity.java     canonical source
   smali/.../MainActivity.smali  hand-assembled equivalent (see android section above)
