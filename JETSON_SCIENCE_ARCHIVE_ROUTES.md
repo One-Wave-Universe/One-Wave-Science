@@ -84,3 +84,15 @@ python3 scripts/science_archive_search.py hepdata-doi --query Higgs --limit 3 --
 ```
 
 This preserves DataCite response bytes, DOI IDs, titles, related identifiers and provenance. It does not fetch HEPData measurement tables, and cannot be used to mark the blocked direct route healthy. Inventory-only routes reject unsupported text search rather than silently ignoring it. Sky or ADQL searches use the native query tool.
+
+## Collider measurement route
+
+CERN Open Data supplies selected CMS Higgs-to-four-lepton candidate event CSVs independently of the HEPData server. Fetch a manifest-verified measurement table:
+
+```sh
+python3 scripts/cern_measurement_fetch.py --record 5200 --file 2e2mu_2011.csv --output .one-wave-metadata/cern-higgs
+```
+
+The same command accepts the six manifest-listed CSVs: `2e2mu_2011.csv`, `2e2mu_2012.csv`, `4e_2011.csv`, `4e_2012.csv`, `4mu_2011.csv`, `4mu_2012.csv`. Each file is capped at 2 MiB, matched to its source record, and checked against CERN's size and Adler-32 checksum. Exact CSV bytes, record metadata, parsed rows and SHA-256 receipts remain in the output directory. Use `rows.json` for downstream analysis; retain the source CSV and manifest. Failed verification exits nonzero.
+
+These are selected external event measurements, not replacements for a particular HEPData publication table. Read CERN's record and linked analysis documentation for units and selection before applying `scripts/particle_wave_coordinates.py`. Do not infer measured wave phase or a One-Wave physical result from energy-to-frequency coordinates. No paid API key is required for this public route.
