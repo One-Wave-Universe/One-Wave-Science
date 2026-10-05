@@ -188,3 +188,13 @@ self-similar spherical geometry remain prescribed, so this is not emergent Knot
 Lock. The report specifies the remaining native-field/skin map, nonspherical
 surface dynamics, exterior/Mirror channels, circulation/phase topology, shell
 feedback and constitutive calibration in dependency order.
+
+
+### Current balance/lock work index
+
+[One-Wave lock status](../../solvers/ONE_WAVE_LOCK_STATUS.md) collects the verified
+native compression, recurrence, domain, reciprocal path and moving-boundary
+results. It identifies the next construction as one native field/closed-skin
+work law with geometry derivatives and exterior/Mirror channels. The complete
+architecture is retained; reduced radius locks do not promote to spatial Knot
+Lock or measured Mass Effect.
