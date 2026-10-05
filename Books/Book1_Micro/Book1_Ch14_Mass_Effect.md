@@ -352,3 +352,9 @@ The four-interaction calculation now runs on D-409's native twelve-neighbor 3D F
 One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
 
 Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.
+
+## Bulk excitation follow-up (2026-10-04)
+
+[The nonlinear bulk experiment](../../solvers/BULK_EXCITATION_DERIVATION.md) tests particles as measured signatures of field excitations: evolve the native 3D field, then sample specified detector windows. It supplies a localized candidate without an enclosing reflecting wall and publishes stationary residuals, 100-time-unit perturbation traces, linear and uniform controls, domain growth, spacing refinement and coupling ablations.
+
+This is an additive hypothetical first-order closure, not a derivation from the canonical memory update or an established four-interaction mass mechanism. Coupling-off localization survives; spacing changes energy about 15%; a shifted seed finds a distinct pinned branch. These results are retained as constraints on the next physical derivation. No particle mass target or forced Mirror penetration enters the experiment.
