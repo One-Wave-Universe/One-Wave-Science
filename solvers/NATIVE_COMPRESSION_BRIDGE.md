@@ -104,7 +104,7 @@ Static elimination is a zero-frequency approximation; dynamic runs retain u.
 ## Executed controls
 
 Run `python solvers/native_compression_bridge.py` from the repo root with NumPy
-and SciPy installed. It prints JSON and exits nonzero if any of nine checks fails.
+and SciPy installed. It prints JSON and exits nonzero if any of ten checks fails.
 The published run used Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0, seed 107,
 256 active sites, spacing 1, and beta=shear=k=a_c=1, eta=2.
 
@@ -126,12 +126,57 @@ Compression ranges from -0.02958 to +0.45628. The eliminated compression-sector
 energy is -1.15458 relative to unrelaxed zero displacement at that fixed density.
 This is work from the assumed coupling, not energy creation or a mass prediction.
 
+## A solved obstruction: no stable nontrivial static equilibrium
+
+The candidate has a stronger limitation than the spreading dynamic example.
+For any proposed stationary state, scale psi -> t psi and u -> s u without
+changing its shape. Its potential is exactly
+
+    V(t,s)=P t² + U s² + A s²t² - B st²,
+
+where P=beta/2 <psi,L psi>, U=shear/2 <u,L u>+k/2 <chi,chi>,
+A=a_c/2 <rho,chi²>, and B=eta <rho,chi>, with volume-weighted products.
+All three sectors P,U,A are nonnegative. Stationarity at t=s=1 requires
+
+    P+A-B=0,
+    2U+2A-B=0,
+    hence P=2U+A and B=2(U+A).
+
+The Hessian along these two admissible amplitude directions becomes
+
+    H = [[0, -4U], [-4U, 2(U+A)]],
+    det H = -16 U².
+
+For U>0 the determinant is strictly negative, so every such stationary state
+has a negative energy-curvature direction. The full kinetic metric is positive;
+a negative potential Hessian eigenvalue implies a linearly unstable stationary
+Hamiltonian equilibrium. Static energy minimization cannot yield a stable
+self-held nonzero-displacement excitation under this exact unconstrained law.
+The zero-mean gauge and positive shear ensure U>0 for every nonzero u.
+If u=0, stationarity requires L psi=0, a uniform state on the connected FCC
+periodic graph; it is not a localized static excitation.
+
+This is a conditional analytic theorem, not a claim to have numerically found
+a stationary branch. The report checks its determinant and negative eigenvalue
+with U=1,A=.5 (eigenvalues approximately -2.772 and +5.772). That witness checks
+the algebra; the general argument above excludes static minima for all allowed
+positive shear,k,beta and nonnegative a_c. A fixed-norm restriction would remove
+one scaling direction, but this real second-order update does not conserve that
+norm, so imposing it would change the problem.
+
+Time-periodic localized excitations, including oscillatory dynamic stabilization,
+are not excluded by this stationary argument. They need a genuine recurrence
+search, perturbation/Floquet stability and energy/translation controls. The
+obstruction is specific to this candidate; it does not dismiss One-Wave or the
+four-interaction architecture that this candidate does not yet implement.
+
 ## What remains open
 
 The small-input dynamic run spreads; it does not establish localization.
 psi² is not conserved by these real second-order equations. The full potential
-is not shown globally bounded below when psi is unconstrained; no stable-ground,
-global saturation or long-time stability claim follows from static elimination.
+is not shown globally bounded below when psi is unconstrained. The scaling proof
+excludes stable nontrivial static equilibria; global saturation and long-time
+periodic stability remain unproved.
 The local rational shortcut's saturation cannot be transferred to the nonlocal
 model without a separate proof. Four-interaction necessity, circulation,
 surface/weave geometry, translation, pinning, physical detector response,
@@ -148,13 +193,14 @@ node gates, particle classifications, hardware and dirty Jetson recovery work.
 Field proposal: retain displacement and derive both forces from one energy.
 Void counter-check: reject independent local compression because it violates
 the divergence constraint; require adjoint, gradient, ablation and timestep tests.
-Executed evidence: nine controls pass on the declared finite grid and time window.
+Executed evidence: ten controls pass on the declared finite grid and time window.
 Attempt 1 initially failed JSON serialization of NumPy booleans; attempt 2
 converted check values to Python booleans and returned exit 0. No physics
 parameters were retuned to repair a control or match measurements.
 State: PARTIAL for the physical goal, accepted scoped mathematical experiment.
 Scale: do not promote or extend to mass claims from this result.
-Next bounded test: determine whether this reciprocal law has a self-held
-localized branch with compression/release balance, then compare its dynamic
-stability and pinning with the uncoupled linear control. A failure must remain
+Next bounded test: search for time-periodic localized recurrence with retained
+displacement, compression/release balance and no norm reset. Compare perturbation
+stability, timestep refinement and pinning with the uncoupled linear control.
+Do not repeat a search for a stable static minimum excluded by the scaling proof. A failure must remain
 visible and drive a new geometrically supported constitutive proposal.

@@ -25,7 +25,8 @@
     "coupling_off": true,
     "uniform_density": true,
     "canonical_linear_limit": true,
-    "timestep_convergence": true
+    "timestep_convergence": true,
+    "stationary_scaling_saddle_identity": true
   },
   "all_pass": true,
   "adjoint_error": 5.329070518200751e-15,
@@ -63,6 +64,27 @@
       "final_density_sum": 0.1250525359904393
     }
   ],
+  "stationary_scaling_result": {
+    "scope": "conditional analytic theorem for this real unconstrained law; witness is not a solved lattice state",
+    "hessian_determinant": "-16 U^2",
+    "witness_U": 1.0,
+    "witness_A": 0.5,
+    "witness_hessian": [
+      [
+        0.0,
+        -4.0
+      ],
+      [
+        -4.0,
+        3.0
+      ]
+    ],
+    "witness_eigenvalues": [
+      -2.7720018726587656,
+      5.772001872658765
+    ],
+    "consequence": "Every stationary state with nonzero gauge-fixed displacement is an energy saddle; stable static localization is excluded. Time-periodic excitations are not ruled out."
+  },
   "limits": [
     "Coupling eta and density-dependent stiffness a are assumptions, not derived constants.",
     "No localization, vortex, four-interaction necessity, mass or physical calibration claim.",

@@ -144,6 +144,13 @@ def report():
     expected = 2 * psi - prev - dt ** 2 * beta * g.lap(psi)
     gp0 = g.gradients(psi, np.zeros_like(u), beta=beta, eta=0.)[0]
     actual = 2 * psi - prev - dt ** 2 * gp0
+    # Conditional stationary scaling identity, not a computed lattice equilibrium.
+    # V(t,s)=P t^2+U s^2+A s^2 t^2-B s t^2.
+    # Stationarity implies P=2U+A, B=2(U+A).
+    witness_u, witness_a = 1., .5
+    scaling_hessian = np.array([[0., -4 * witness_u],
+                                [-4 * witness_u, 2 * (witness_u + witness_a)]])
+    scaling_det = float(np.linalg.det(scaling_hessian))
     checks = {"adjoint": adjoint_error < 1e-10, "compression_stationarity": residual < 1e-9,
               "zero_total_compression": abs(c.sum()) < 1e-10,
               "reduced_force_gradient": abs(measured-predicted) < 1e-7,
@@ -151,7 +158,8 @@ def report():
               "coupling_off": np.max(np.abs(ablated[0])) == 0.,
               "uniform_density": np.max(np.abs(uniform[0])) < 1e-10,
               "canonical_linear_limit": np.max(np.abs(actual-expected)) < 1e-14,
-              "timestep_convergence": dynamics[0]['max_scaled_energy_error'] > 3.5 * dynamics[1]['max_scaled_energy_error'] and dynamics[1]['max_scaled_energy_error'] > 3.5 * dynamics[2]['max_scaled_energy_error']}
+              "timestep_convergence": dynamics[0]['max_scaled_energy_error'] > 3.5 * dynamics[1]['max_scaled_energy_error'] and dynamics[1]['max_scaled_energy_error'] > 3.5 * dynamics[2]['max_scaled_energy_error'],
+              "stationary_scaling_saddle_identity": abs(scaling_det + 16 * witness_u ** 2) < 1e-12 and np.linalg.eigvalsh(scaling_hessian)[0] < 0}
     checks = {name: bool(passed) for name, passed in checks.items()}
     return {"scope": "dimensionless constitutive hypothesis; constrained compression elimination and reciprocal second-order update",
             "environment": {"python": platform.python_version(), "numpy": np.__version__},
@@ -162,6 +170,7 @@ def report():
             "reduced_energy": float(energy), "reduced_force_gradient_error": abs(measured-predicted),
             "full_force_gradient_error": abs(full_fd-full_expected),
             "invalid_local_compression_sum": float(local_c.sum()), "dynamics": dynamics,
+            "stationary_scaling_result": {"scope": "conditional analytic theorem for this real unconstrained law; witness is not a solved lattice state", "hessian_determinant": "-16 U^2", "witness_U": witness_u, "witness_A": witness_a, "witness_hessian": scaling_hessian.tolist(), "witness_eigenvalues": np.linalg.eigvalsh(scaling_hessian).tolist(), "consequence": "Every stationary state with nonzero gauge-fixed displacement is an energy saddle; stable static localization is excluded. Time-periodic excitations are not ruled out."},
             "limits": ["Coupling eta and density-dependent stiffness a are assumptions, not derived constants.", "No localization, vortex, four-interaction necessity, mass or physical calibration claim.", "Periodic finite FCC; no HCP, 2D comparison, detector, spatial/domain convergence or dynamic compression elimination validation.", "Central divergence has high-frequency blind modes; positive bond shear regularizes displacement solve.", "Density psi^2 is not conserved by this real second-order update.", "Static elimination is a zero-frequency approximation; full displacement dynamics are retained in evolution."]}
 
 
