@@ -541,4 +541,18 @@ class LocalPairTests(unittest.TestCase):
                 self.assertEqual(x['ok'],ok);self.assertEqual(x['provider'],'ollama-local');self.assertEqual(x['request_id'],'local-request')
                 payload=json.loads(call.call_args.args[0].data);self.assertFalse(payload['think']);self.assertIn('canonical',payload['prompt'])
 
+class LocalReferenceWindowTests(unittest.TestCase):
+    def test_excerpts_and_requested_full_file(self):
+        files=[{'path':name,'content':'x'*3000} for name in ('AI_CANONICAL_START_HERE.md','BRAIN_BUDDY_COUNCIL.md','GENERAL_REFERENCE_RULES.md','I06.json')]
+        shown=c.local_reference_window({'contents':files})
+        self.assertEqual([x['excerpt'] for x in shown],[True,True,False,False])
+        self.assertNotEqual(shown[0]['full_sha256'],shown[0]['shown_sha256'])
+        full=c.local_reference_window({'contents':files},['AI_CANONICAL_START_HERE.md'])
+        self.assertFalse(full[0]['excerpt']);self.assertEqual(full[0]['content'],files[0]['content'])
+    def test_large_window_holds_without_provider_call(self):
+        state=snapshot();state['contents'][0]['content']='x'*41000
+        with patch.object(c,'reference_snapshot',return_value=state),patch.object(c,'urlopen') as call:
+            r=c.run_worker(Path('/tmp'),'local','question',10)
+            self.assertFalse(r['ok']);self.assertIn('40 KB',r['stderr']);call.assert_not_called()
+
 if __name__ == '__main__':unittest.main()

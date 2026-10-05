@@ -299,3 +299,7 @@ Repeat `--science-receipt` for up to four acquisition receipts. The controller c
 Add `--local-pair` to the preceding nested council command to use two separate local Qwen calls as FIELD and VOID. The installed default is `qwen3:0.6b`; `ONE_WAVE_LOCAL_MODEL` selects another already installed model. This route uses loopback Ollama, disables private thinking output, retains complete required reference contents, and verifies the same source artifacts around each call. Its receipts say `ollama-local`, the actual model and opposing workflow phase. It is one model in two roles, not two independent models and not Gemini/DeepSeek. Output truncation cannot advance the council.
 
 Nested web-review turns use `--no-tools` in the Bridge-Comand transports because all evidence is supplied in the packet; unsolicited tool calls are rejected. Other transport modes keep their existing tool behavior.
+
+### Local reference window
+
+The controller reads and hashes complete canonical references before and after each turn. The local CPU provider receives declared 1,500-character excerpts of the two long handbooks, complete reference laws and node metadata, and complete explicitly requested files. Each displayed source carries full and displayed SHA-256 hashes. Missing text must be requested through the existing reference-required gate. Packets over 40 KB hold before inference; no agreement is inferred from a timeout. The checkout receipt includes the actual root and HEAD.
