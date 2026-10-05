@@ -287,18 +287,38 @@ Result: Improves light quarks by ~2% but does NOT improve heavy quarks.
 
 ## Next Session Direction
 
+### COMPLETED (October 4, 2026 - Session Continuation Part 2):
+
+**Implement Combined Solution** ✓
+1. ✓ Modified QuarkTopology to support radius scaling: R(m) = 0.35 × m_scale^α
+2. ✓ Modified BoundaryTensionWeave to support κ_T scaling: κ_T(m) = 1.5 × factor × √m_scale  
+3. ✓ Tested with α = -0.05 (balanced) and α = -0.10 (maximum improvement)
+4. ✓ Verified implementation matches hypothesis testing predictions
+5. ✓ Commit de8aafc0: Solution implemented in main solver
+
+**Validation Results (α = -0.05, balanced approach):**
+- Heavy-quark error: 133.9% → 86.3% (-47.6% improvement)
+- Top quark: 298.2% → 126.4% (-171.7% improvement)
+- Light-quark trade-off: +2.0% (acceptable)
+
 ### IMMEDIATE (Next Session, Priority 1):
 
-**Implement Combined Solution**
-1. Modify QuarkTopology to support radius scaling: R(m) = 0.35 × m_scale^α
-2. Modify FourInteractionCalculator to support κ_T scaling: κ_T(m) = 1.5 × factor × √m_scale
-3. Test with α = -0.05 (balanced) or α = -0.10 (maximum improvement)
-4. Re-calibrate 125 GeV anchor with new parameters
+**Complete 125 GeV Calibration Re-analysis**
+- Current calibration: λ = 0.976 from proton Mirror-Gate simulation
+- Test if new parameters (α = -0.05) require re-calibration
+- If stable, can proceed with full spectrum validation
+- If unstable, re-run proton_compression_simulator.py with new solver
 
-**OR: Test Flavor-Specific Parameters**
-- Use different α for each quark family (light vs. charm vs. bottom vs. top)
-- Allows optimizing each flavor separately
-- More physics-motivated if different confinement regimes exist
+**Validation Across Full Spectrum**
+- Verify light quarks stay within 8-19% error (currently ~37-41%)
+- Check if strange quark improves from 83% error
+- Measure if charm/bottom predictions are acceptable
+- Document accuracy metrics for each quark flavor
+
+**Decision Point:**
+- Is 2% light-quark trade-off for 48% heavy-quark improvement acceptable?
+- If not, test α = -0.10 (3.7% light trade-off, 73.4% heavy improvement)
+- Or consider flavor-specific parameters if needed
 
 ### MEDIUM (Priority 2):
 
