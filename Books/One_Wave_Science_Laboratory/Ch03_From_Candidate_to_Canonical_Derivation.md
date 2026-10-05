@@ -114,3 +114,18 @@ The follow-up also proves an obstruction within this candidate: every stationary
 ## Phase/velocity search and radiation-band constraint
 
 [The follow-up experiment](../../solvers/PHASE_VELOCITY_SEARCH.md) adds seven standing, kicked, quadrature, traveling and angular initial cases under the unchanged real reciprocal FCC law. Full-state returns use a time-5 reference, allowing an initial transient. No seed qualifies; two refinement runs preserve failure for the best completed coupled angular case. Enlarging the box reduces its minimum late localized activity from about 13.7% to 2.6%. Numerically invalid amplitude-stop endpoints remain flagged. A separate vacuum-band calculation derives exact scalar/transverse bands and a sampled plus rigorously bounded longitudinal range. There is no low-frequency gap in this candidate, so a periodic orbit must address outgoing radiation channels and its compression harmonics. The next step is bounded periodic-orbit shooting/continuation with nonzero-state and radiation controls, rather than repeated similar seed screens.
+
+
+### Direct retained-state recurrence solve
+
+The [finite-harmonic One-Wave recurrence solve](../../solvers/PERIODIC_ORBIT_SOLVE.md)
+finds three small periodic-box near-recurrences while retaining displacement and
+compression. All survive ten fitted periods with controlled energy error; the
+smallest state shows approximately fourfold improvement when dt is halved. None
+passes the declared localization screen: central activity is 58.8–64.5%, below
+80%. The two larger amplitudes also exceed the unprojected harmonic-defect limit.
+This advances beyond failed seed launches, but does not establish a Persistent
+Mode, Mass Effect or clock. The next bounded calculation is larger-domain and
+higher-harmonic continuation of the smallest branch, with zero-mean displacement
+and a nonzero-state anchor. Knot, shell, Mirror and Boundary-Tension Weave closure
+remain separate missing mechanisms; no node gate is promoted.
