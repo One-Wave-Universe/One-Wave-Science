@@ -110,18 +110,21 @@ White Energy redistributes stored energy. It does not create volume or stretch d
 
 ## Cosmic Loop
 
-```text
-Mass Effect / compressed structure
--> gravity and extended compression
--> Propagating Light Mode loses energy (redshift)
--> field reservoir
--> Low-Coupling Return Modes
--> compact compression reservoir
--> Mirror-Gate threshold
--> White Energy ejection
--> field reinjection
--> new structure and Mass Effect
-```
+**Local Recycling Mechanism** (per black hole or compressed region):
+
+Compressed structure / lattice discontinuity
+-> Boundary conditions create Propagating Light Mode (E-528)
+-> Light propagates through friction; oscillations dampen via redshift (E-528: $\frac{d\nu}{d\ell}=-\kappa_\gamma\nu$)
+-> Energy dissipated by friction returns directly to field (E-528: field receives $Q_{\gamma\to\chi}=c_L\kappa_\gamma u_\gamma$)
+-> Wave flattening releases residual excitation into Low-Coupling Return Mode (neutrino birth; E-529)
+-> Neutrino carries residual energy to compact compression reservoir ($Q_{\nu\to C}$; E-529)
+-> Compact reservoir accumulates energy; at Mirror-Gate threshold ($U_C \ge U_{\rm on}$) undergoes Mirror crossing
+-> Mirror-Gate crossing releases as White Energy ejection (M(ψ_C, ψ_E) → (ψ_E, −ψ_C))
+-> White Energy reinjected into field and travels outward ($P_{W\to\chi}$)
+-> Reinjected energy creates new boundary conditions, new compressed structures, new lattice discontinuities
+-> Cycle repeats; no net expansion required
+
+Energy accounting: $E_{\rm tot}=E_\gamma+E_\chi+E_\nu+E_C+E_W$ remains constant (E-530); local recycling occurs at each site where compression fails or accumulates.
 
 ## Yellow Audit
 

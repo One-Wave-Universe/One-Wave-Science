@@ -25,6 +25,25 @@ A neutrino is mapped to a **Low-Coupling Return Mode**: a weakly interacting pro
 
 This role is a hypothesis. Standard neutrino observations remain the comparison target.
 
+## End-State Excitation of Wave Flattening
+
+A Propagating Light Mode is created by boundary conditions in the lattice (E-528). As this wave propagates through the field, friction causes energy loss via redshift (E-528: $\frac{dE_\gamma}{d\ell}=-\kappa_\gamma E_\gamma$). The oscillations in the field gradually dampen and flatten.
+
+A **neutrino is the end-state excitation** of a Propagating Light Mode after most of its energy has been dissipated by friction during propagation. When field oscillations have substantially flattened through damping, the remaining excitation becomes a Low-Coupling Return Mode. This weakly-coupled residual excitation carries the remaining energy toward compressed space reservoirs.
+
+The energy dissipated during the flattening (the difference between initial $E_\gamma$ and final neutrino energy) returns directly to the compression field via the friction mechanism itself (E-528 line 34: "The energy lost to friction returns to the compressed space for recycling"). The neutrino carries what is left over — residual, weakly coupled energy that was not fully absorbed by the field during propagation.
+
+In the transport equation, this is captured by:
+
+\[
+\partial_tu_\nu+\nabla\cdot\mathbf J_\nu
+=Q_{\chi\to\nu}-Q_{\nu\to C}-Q_{\nu\to m}.
+\]
+
+- $Q_{\chi\to\nu}$: field energy released into Return Modes as light waves flatten (neutrino birth)
+- $Q_{\nu\to C}$: delivery of residual neutrino energy into compact compression reservoirs
+- $Q_{\nu\to m}$: rare coupling into ordinary bounded modes (weak, suppressed by weak coupling)
+
 ## Transport Variables
 
 Let \(u_\nu\) be Return-Mode energy density and \(\mathbf J_\nu\) its flux. Use
