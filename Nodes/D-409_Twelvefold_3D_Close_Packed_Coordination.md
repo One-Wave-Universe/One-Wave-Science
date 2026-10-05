@@ -120,7 +120,7 @@ The 3D lattice must be capable of displaying and measuring:
 - bounded recurrence,
 - internal/external shell differentiation,
 - Boundary-Tension Weave strain,
-- Mirror-Gate approach and crossing,
+- Mirror-Gate coupling and phase response without forced geometric penetration,
 - translation by sequential displacement and reconstruction,
 - front compression, side transfer, and rear recovery,
 - directional path reorganization and recovery under C-319 controls.
@@ -158,3 +158,9 @@ The close-packed candidate fails if:
 - twelvefold local coordination cannot preserve bounded modes without imposed hard walls;
 - the claimed 2D/3D correspondence cannot be defined without losing the quantities used by the physical interpretation;
 - C-319/C-320 require a preferred hidden 2D plane to generate their claimed effect.
+
+## Bulk excitation follow-up (2026-10-04)
+
+[The nonlinear bulk experiment](../solvers/BULK_EXCITATION_DERIVATION.md) tests particles as measured signatures of field excitations: evolve the native 3D field, then sample specified detector windows. It supplies a localized candidate without an enclosing reflecting wall and publishes stationary residuals, 100-time-unit perturbation traces, linear and uniform controls, domain growth, spacing refinement and coupling ablations.
+
+This is an additive hypothetical first-order closure, not a derivation from the canonical memory update or an established four-interaction mass mechanism. Coupling-off localization survives; spacing changes energy about 15%; a shifted seed finds a distinct pinned branch. These results are retained as constraints on the next physical derivation. No particle mass target or forced Mirror penetration enters the experiment.
