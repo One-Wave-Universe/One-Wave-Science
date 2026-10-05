@@ -295,6 +295,14 @@ That rotation is what other charges and currents respond to.
 One pressure field. Two views. One stress-space transfer path.
 All of electromagnetism.
 
+## Point rotation
+
+Magnetism opens the point. Closed, it resists. That is the turn.
+
+A thing keeps the point spin it already has. It does not start one on its own. The stable axes are the greatest and the least inertia. The middle axis fights itself. An open magnetic gradient lets that turn go. A closed one resists it.
+
+Gravity does not start it. Gravity does not affect point rotation. The path is the ride, and this is not path rotation.
+
 ---
 
 END OF BOOK 1 CHAPTER 13

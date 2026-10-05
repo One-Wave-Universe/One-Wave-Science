@@ -554,6 +554,10 @@ It is the ever-changing gradient field.
 
 Everything else follows.
 
+Gravity is the wake and the relay. The parent creates the wake. The child rides it and adds displacement and motion. That is the path.
+
+Gravity does not affect point rotation. It does not start the point's spin. Opening and closing the point belong to the magnetic gradient.
+
 ---
 
 END OF BOOK 1 CHAPTER 12

@@ -37,6 +37,16 @@ R_{\mathrm{child}}^{\mathrm{ground}} = R_{\mathrm{parent}}^{\mathrm{ground}} R_{
 
 Do not add parent \(\boldsymbol\omega\) to child \(\boldsymbol\omega\) as if they lived in one frame. Transport first, then add. That is the start of C8 (no double count).
 
+## Point spin
+
+A thing keeps the point spin it already has. It does not start one on its own.
+
+The stable axes are the greatest and the least inertia. The middle axis fights itself. That much is rigid-body mechanics.
+
+Magnetism opens the point. Closed, it resists. That is the turn. An open magnetic gradient lets the turn go. A closed one resists it. Gravity does not start it, and gravity does not affect point rotation.
+
+This is not path rotation. The path is the ride.
+
 ## YELLOW / not yet physics
 
 - \(I\) is declared, not derived from the hex/pyramid nest

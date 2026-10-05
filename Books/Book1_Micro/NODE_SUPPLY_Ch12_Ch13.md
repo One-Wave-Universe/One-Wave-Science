@@ -11,3 +11,4 @@ C-319: a rotational magnetic state reorganizes lattice paths. C-320: g = -alpha 
 D-409: the native lattice is three-dimensional close pack. One center, twelve neighbors. A flat hex is a slice.
 
 Displacement is what energy does on that lattice: potential chi, slope grad chi, then point, path, and field rates. Missing one of the three rates leaves the node incomplete (ROTATIONS3).
+Magnetism opens the point. Closed, it resists. That is the turn. Gravity does not affect point rotation (G-749, C-319, Ch13).

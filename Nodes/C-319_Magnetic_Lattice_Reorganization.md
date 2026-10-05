@@ -151,6 +151,12 @@ This hypothesis fails in its current form if:
 - a 2D projection is required to contain information that only exists in 3D;
 - the same parameter set cannot recover the unmagnetized lattice when the drive is removed.
 
+## Point
+
+Magnetism opens the point. Closed, it resists. That is the turn.
+
+The magnetic gradient is the opening. It does not invent a pull. Gravity does not turn the point. Path rotation is not this node.
+
 ## Status
 
 C-319 makes the magnetism-to-lattice connection canonical and machine-addressable. It does **not** establish that real spacetime, gravity, or planetary magnetic fields behave this way. C-320 owns that next coupling claim and its falsification burden.
