@@ -71,6 +71,15 @@ Direction from time difference. Still no entanglement. The eyes share a head (a 
 
 Do not write a state on two distant sites as one inseparable vector with no path. If a claim needs that, it is out of this node.
 
+## Phase-sensitive extension
+
+C-325 carries the stricter phase/readout boundary:
+- propagation phase depends on frequency, path length, and time;
+- ordinary intensity detection does not directly read field sign;
+- a coherent reference is required for phase-sensitive sign/phase readout.
+
+Use C-325 for any claim about peak/trough choice at a detector or lens.
+
 Operational Chain:
 wave on a named path => detector/lens cut => s = +/0/- => memory of (t*, s, site) => map delay to distance/placement
 

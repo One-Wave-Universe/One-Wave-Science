@@ -70,9 +70,9 @@ Normal local events should settle and reinject locally. Measured strain/error co
 
 **J. Seven-cell flower** — one center + six same-orientation identical cells; test competing paths, repeated route training, whole-flower history, and local Override.
 
-**K. Two-flower nerve candidate** — test normal + mirrored/inverted flower pair. Keep it only if it adds a measurable nerve-level function.
+**K. Paired sensor-flower / motor-flower candidate** — two coupled seven-cell flowers using the same CELL_V1 primitive family in different current roles. Sensor side carries Views UP and three opposed A/B/C differentials; motor side carries Actions DOWN and ternary DOWN/HOLD/UP. Keep the pair only if the shared bus-lattice preserves per-axis evidence, retained state, reference stability, and closes the sense -> act -> re-sense loop.
 
-**L. `2+2` M4 candidate** — four coupled flower/volume layers; test whether fast Views-UP / Actions-DOWN routing gains measurable latency, isolation, or correction benefit.
+**L. Short-term vs long-term physical memory** — distinguish a fast-decaying transient state from a hysteretic/remanent/repetition-trained path bias with separate decay and retention receipts.
 
 **M. `3/3/3` or `3x3x3` higher-brain candidate** — only after smaller layers pass; require measurable relational/reconstruction/control benefit.
 
@@ -225,8 +225,8 @@ lock geometry
  -> prove path
  -> prove rotation
  -> prove seven-cell flower
- -> test two-flower nerve candidate
- -> test 2+2 M4 candidate
+ -> test paired sensor-flower / motor-flower coupling
+ -> distinguish short-term and hysteretic long-term physical memory
  -> test 3/3/3 or 3x3x3 higher volume
  -> only then test mirrored hemisphere volumes
 ```

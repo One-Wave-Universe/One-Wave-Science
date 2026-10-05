@@ -202,7 +202,7 @@ The relational driver remains
 
 `DeltaS_i(t) = S_local,i(t) - S_ref,i(t)`.
 
-No wake memory or relay memory is used.
+No detached stored wake memory is used. Current-state parent relay is allowed: the active child/parent configuration updates the current parent field, and that resolved parent state becomes the next-scale reference.
 
 ## 8. Finite range is an emergent interaction result
 

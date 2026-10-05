@@ -147,6 +147,15 @@ The planetary magnetic-lock hypothesis fails in its current form if:
 - each body requires unrelated coupling constants with no derived scaling rule;
 - apparent locking is created only by initial conditions, damping chosen after the fact, or renderer constraints.
 
+## Current architecture links
+
+Use D-416 with:
+- D-418 finite-range gravity relay / nested parent epicenters;
+- D-419 nested epicycles as real parent-child rotations;
+- `NOBEL_READINESS/CHALLENGE_06_PLANETARY_ROTATION_MAGNETIC_LATTICE.md`.
+
+The planetary matrix is the falsification set for the common point-rotation / magnetism / bound-state law.
+
 ## Status
 
 D-416 makes Moon/Mercury/Venus/Uranus/Neptune a permanent joint test set. Their unusual differences are not exceptions to hide; they are the pressure test for whether C-319 and C-320 describe anything real.

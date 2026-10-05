@@ -1,0 +1,22 @@
+{
+  "name": "HEX-SPLIT fifths clock",
+  "law": "fifths weave pyramids; tritone flips one pyramid",
+  "generator": 7,
+  "tonic": "C",
+  "ref_midi": 60,
+  "hold": "1(0)1",
+  "slots": [
+    {"step": 0, "gray": "C",  "idx": 0,  "pyramid": 1, "polarity": "express",  "tag": "P1-E", "midi": 60},
+    {"step": 1, "gray": "G",  "idx": 7,  "pyramid": 2, "polarity": "compress", "tag": "P2-C", "midi": 67},
+    {"step": 2, "gray": "D",  "idx": 2,  "pyramid": 3, "polarity": "express",  "tag": "P3-E", "midi": 62},
+    {"step": 3, "gray": "A",  "idx": 9,  "pyramid": 4, "polarity": "compress", "tag": "P4-C", "midi": 69},
+    {"step": 4, "gray": "E",  "idx": 4,  "pyramid": 5, "polarity": "express",  "tag": "P5-E", "midi": 64},
+    {"step": 5, "gray": "B",  "idx": 11, "pyramid": 6, "polarity": "compress", "tag": "P6-C", "midi": 71},
+    {"step": 6, "gray": "F#", "idx": 6,  "pyramid": 1, "polarity": "compress", "tag": "P1-C", "midi": 66},
+    {"step": 7, "gray": "C#", "idx": 1,  "pyramid": 2, "polarity": "express",  "tag": "P2-E", "midi": 61},
+    {"step": 8, "gray": "G#", "idx": 8,  "pyramid": 3, "polarity": "compress", "tag": "P3-C", "midi": 68},
+    {"step": 9, "gray": "D#", "idx": 3,  "pyramid": 4, "polarity": "express",  "tag": "P4-E", "midi": 63},
+    {"step": 10,"gray": "A#", "idx": 10, "pyramid": 5, "polarity": "compress", "tag": "P5-C", "midi": 70},
+    {"step": 11,"gray": "F",  "idx": 5,  "pyramid": 6, "polarity": "express",  "tag": "P6-E", "midi": 65}
+  ]
+}

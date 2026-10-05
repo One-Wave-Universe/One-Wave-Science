@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HEX-SPLIT · Circle of Fifths</title>
+  <style>
+    :root {
+      --bg: #0b0a09;
+      --ink: #f3e6c8;
+      --amber: #d4a017;
+      --dim: #8a7a5a;
+      --line: #3a3224;
+      --express: #e8c56b;
+      --compress: #6b8ae8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      min-height: 100vh;
+    }
+    header { padding: 1.2rem 1.5rem 0.4rem; }
+    header h1 { font-size: 1rem; letter-spacing: 0.12em; font-weight: 500; margin: 0; color: var(--amber); }
+    header p { margin: 0.35rem 0 0; color: var(--dim); font-size: 0.78rem; max-width: 46rem; }
+    main { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(240px, 320px); gap: 1rem; padding: 1rem 1.5rem 2rem; }
+    @media (max-width: 760px) { main { grid-template-columns: 1fr; } }
+    svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+    .slot { cursor: pointer; }
+    .slot circle { fill: #16130e; stroke: var(--line); stroke-width: 1.5; }
+    .slot.express circle { stroke: var(--express); }
+    .slot.compress circle { stroke: var(--compress); }
+    .slot.active circle { fill: var(--amber); }
+    .slot.active text { fill: #1a1408; font-weight: 700; }
+    .hub text { fill: var(--amber); font-size: 16px; text-anchor: middle; }
+    .hub .sub { fill: var(--dim); font-size: 10px; }
+    aside { border: 1px solid var(--line); padding: 1rem; background: #100e0b; }
+    aside h2 { margin: 0 0 0.6rem; font-size: 0.75rem; letter-spacing: 0.14em; color: var(--amber); }
+    aside dl { margin: 0; font-size: 0.8rem; }
+    aside dt { color: var(--dim); margin-top: 0.55rem; }
+    aside dd { margin: 0.1rem 0 0; }
+    .triads { margin-top: 0.8rem; font-size: 0.75rem; }
+    .triads div { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 0.2rem 0; }
+    footer { padding: 0 1.5rem 1.5rem; color: var(--dim); font-size: 0.72rem; }
+    button {
+      background: transparent; color: var(--ink); border: 1px solid var(--line);
+      padding: 0.35rem 0.6rem; font: inherit; cursor: pointer; margin-right: 0.35rem;
+    }
+    button:hover { border-color: var(--amber); color: var(--amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ONE WAVE · CIRCLE OF FIFTHS</h1>
+    <p>12 slots = 6 pyramids × {Express, Compress}. Fifths weave pyramids. Tritone flips one pyramid. Click a slot or step the generator. Expand this file — it is the bench UI, not a temple.</p>
+  </header>
+  <main>
+    <section>
+      <svg viewBox="0 0 420 420" id="wheel" aria-label="circle of fifths"></svg>
+      <div style="text-align:center;margin-top:0.6rem">
+        <button id="ccw">← fourth</button>
+        <button id="cw">fifth →</button>
+        <button id="flip">flip / tritone</button>
+      </div>
+    </section>
+    <aside>
+      <h2>ACTIVE SLOT</h2>
+      <dl id="card"></dl>
+      <div class="triads" id="triads"></div>
+    </aside>
+  </main>
+  <footer>Sister of HEX-SPLIT music_clock.py · gray stickers are labels · hold 1(0)1</footer>
+  <script>
+    const GRAY = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+    const FIFTH = 7, FOURTH = 5, TRITONE = 6;
+
+    function slot(idx) {
+      idx = ((idx % 12) + 12) % 12;
+      const pyramid = (idx % 6) + 1;
+      const polarity = idx < 6 ? "express" : "compress";
+      return { gray: GRAY[idx], idx, pyramid, polarity, tag: `P${pyramid}-${polarity === "express" ? "E" : "C"}` };
+    }
+
+    const ORDER = Array.from({length:12}, (_,k) => slot(k * FIFTH));
+    let tonicIdx = 0;
+    const svg = document.getElementById("wheel");
+    const CX = 210, CY = 210, R = 150, rDot = 22;
+
+    function polar(i, n=12, r=R) {
+      const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
+    }
+
+    function draw() {
+      svg.innerHTML = "";
+      const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      ring.setAttribute("cx", CX); ring.setAttribute("cy", CY);
+      ring.setAttribute("r", R); ring.setAttribute("fill", "none");
+      ring.setAttribute("stroke", "#3a3224"); ring.setAttribute("stroke-width", "1");
+      svg.appendChild(ring);
+      ORDER.forEach((s, i) => {
+        const [x,y] = polar(i);
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.classList.add("slot", s.polarity);
+        if (s.idx === tonicIdx) g.classList.add("active");
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", rDot);
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", x); t.setAttribute("y", y);
+        t.setAttribute("text-anchor", "middle");
+        t.setAttribute("dominant-baseline", "middle");
+        t.setAttribute("fill", s.idx === tonicIdx ? "#1a1408" : "#f3e6c8");
+        t.setAttribute("font-size", "13");
+        t.textContent = s.gray;
+        g.appendChild(c); g.appendChild(t);
+        g.addEventListener("click", () => { tonicIdx = s.idx; draw(); renderCard(); });
+        svg.appendChild(g);
+      });
+      const hub = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      hub.classList.add("hub");
+      const cur = slot(tonicIdx);
+      const t1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t1.setAttribute("x", CX); t1.setAttribute("y", CY - 8); t1.textContent = cur.gray;
+      const t2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      t2.setAttribute("x", CX); t2.setAttribute("y", CY + 14); t2.classList.add("sub");
+      t2.textContent = cur.tag;
+      hub.appendChild(t1); hub.appendChild(t2);
+      svg.appendChild(hub);
+    }
+
+    function renderCard() {
+      const t = slot(tonicIdx);
+      const fifth = slot(tonicIdx + FIFTH);
+      const fourth = slot(tonicIdx + FOURTH);
+      const tri = slot(tonicIdx + TRITONE);
+      document.getElementById("card").innerHTML = `
+        <dt>tonic</dt><dd>${t.gray} · ${t.tag}</dd>
+        <dt>fifth (+7 weave)</dt><dd>${fifth.gray} · ${fifth.tag}</dd>
+        <dt>fourth (+5 weave)</dt><dd>${fourth.gray} · ${fourth.tag}</dd>
+        <dt>tritone (same pyramid flip)</dt><dd>${tri.gray} · ${tri.tag}</dd>
+      `;
+      const major = [0,2,4,5,7,9,11];
+      const q = ["M","m","m","M","M","m","dim"];
+      const deg = ["I","ii","iii","IV","V","vi","vii°"];
+      document.getElementById("triads").innerHTML = deg.map((d,i) => {
+        const root = slot(tonicIdx + major[i]);
+        return `<div><span>${d} ${root.gray}${q[i]}</span><span>${root.tag}</span></div>`;
+      }).join("");
+    }
+
+    document.getElementById("cw").onclick = () => { tonicIdx = (tonicIdx + FIFTH) % 12; draw(); renderCard(); };
+    document.getElementById("ccw").onclick = () => { tonicIdx = (tonicIdx + FOURTH) % 12; draw(); renderCard(); };
+    document.getElementById("flip").onclick = () => { tonicIdx = (tonicIdx + TRITONE) % 12; draw(); renderCard(); };
+
+    draw(); renderCard();
+  </script>
+</body>
+</html>
