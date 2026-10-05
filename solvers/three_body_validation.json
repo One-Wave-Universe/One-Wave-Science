@@ -1,0 +1,91 @@
+{
+  "status": "PASS",
+  "scope": "Finite-time Newtonian control only; One-Wave source derivation and general analytic solution remain open.",
+  "units": "dimensionless G=1; input masses; R^3; planar Euler/figure-eight fixtures explicitly restricted to z=vz=0",
+  "parameters": {
+    "masses": [
+      1,
+      1,
+      1
+    ],
+    "G": 1,
+    "softening": 0,
+    "rtol": 1e-11,
+    "atol": 1e-13,
+    "figure_eight_period": 6.32591398,
+    "figure_eight_initial": [
+      -0.97000436,
+      0.24308753,
+      0.0,
+      -0.466203685,
+      -0.43236573,
+      0.0,
+      0.97000436,
+      -0.24308753,
+      0.0,
+      -0.466203685,
+      -0.43236573,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.93240737,
+      0.86473146,
+      0.0
+    ]
+  },
+  "source": "https://people.ucsc.edu/~rmont/Nbdy.html",
+  "limits": {
+    "relative_energy_drift": 1e-08,
+    "momentum_drift": 1e-10,
+    "angular_momentum_drift": 1e-09,
+    "center_of_mass_error": 1e-10,
+    "figure_eight_return_error": 2e-06,
+    "tolerance_refinement_difference": 1e-07,
+    "euler_analytic_error": 1e-08
+  },
+  "metrics": {
+    "relative_energy_drift": 4.6614045012284967e-11,
+    "momentum_drift": 2.6131546473217737e-15,
+    "angular_momentum_drift": 8.754896807516843e-11,
+    "center_of_mass_error": 2.539093734146548e-15,
+    "figure_eight_return_error": 7.523417510542595e-08,
+    "tolerance_refinement_difference": 2.4256716801203516e-10,
+    "verlet_errors": [
+      5.00402557762979e-05,
+      1.2511760111823828e-05,
+      3.1280641620639675e-06
+    ],
+    "verlet_refinement_ratio_min": 3.9994577364865718,
+    "euler_analytic_error": 2.1008806876254627e-11,
+    "unequal_mass_3d": {
+      "relative_energy_drift": 2.8675622175384925e-11,
+      "momentum_drift": 1.2755491433176288e-15,
+      "angular_momentum_drift": 5.61429726149628e-11,
+      "center_of_mass_error": 1.0408340855860843e-16
+    },
+    "legacy_outer_radial_acceleration": 0.8090213147489145
+  },
+  "checks": {
+    "relative_energy_drift": true,
+    "momentum_drift": true,
+    "angular_momentum_drift": true,
+    "center_of_mass_error": true,
+    "figure_eight_return_error": true,
+    "tolerance_refinement_difference": true,
+    "euler_analytic_error": true,
+    "verlet_second_order": true,
+    "unequal_mass_3d_conservation": true,
+    "legacy_repulsion_detected": true
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  },
+  "source_sha256": {
+    "three_body_control.py": "633588f7d48b1a85a22cb0f69fa5866581a77d33fee998945ef8e5d6ffbd1073",
+    "three_body_solver.py": "74bd345123bfb2fc7486552f6e26acbd0291499ba6a90f66c1b220fad4f38de5",
+    "test_three_body_control.py": "a7853a09c1aa7794d146bb601bf8ecb2b44c8e6b2e5f92953825a23262631e6c"
+  }
+}
