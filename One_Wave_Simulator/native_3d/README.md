@@ -89,3 +89,9 @@ chart policy and timestep refinement. The side32 half-force matched signal is
 unresolved after combining baseline and driven chart diagnostics; larger-grid
 cases have no separate timestep sweeps. Do not infer mass or fully established
 linearity from those controls.
+
+A later [eight-case larger-box follow-up](../../solvers/DRIVEN_HALF_STRENGTH_RECEIPT.md)
+closes the half-strength measurement gap specifically at side48/width3/T=2, with
+a direct dt=0.02/0.01 comparison. Motion is nearly proportional, with a small
+~11.12ppm finite-force correction resolved under the declared diagnostics.
+This does not change the original side32 finding or establish physical mass.
