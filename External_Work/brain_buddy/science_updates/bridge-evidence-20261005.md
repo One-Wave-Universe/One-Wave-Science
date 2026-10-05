@@ -10,3 +10,7 @@ ATTEMPTS: original transport relocation defect identified; first fixture tests e
 VIEW/ACTION: 50 offline tests, including real subprocess fixture round trip, unchanged nested correction tests, source corruption and failed receipt rejection. Live provider receipt pending before merge.
 STATE/SCALE: do not claim live inference from fixtures; transport readiness and numeric data are independent evidence classes.
 HARD STOP: committed live provider check, actual evidence receipt, reviewed diff, test pass, merge. REENTRY: report provider results without claiming scientific proof; next step applies an accepted bounded science draft.
+
+FRESH REFERENCE: main advanced to fcab0b703d117352d4896bccdf51e89960188428; changed physics files do not overlap this scope. User work preserved.
+LIVE ROUTE DISCOVERY: Gemini browser inference timed out after 55 seconds; separate minimal request also timed out. Local DeepSeek browser inference returned HTTP 500. Existing Gemini CLI authorization is rejected as unsupported client. No cloud answer was accepted. Local qwen3.5:2b returned actual JSON in 26.8 seconds with thinking disabled.
+NEW CHOICE: explicit local provider option inside the same canonical council (not a replacement implementation); same Field/Void gates and evidence identity. Shared reference contents precede varying turn packets for cache reuse. Web packet-only mode is separately tested in Bridge-Comand.

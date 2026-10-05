@@ -293,3 +293,9 @@ python3 scripts/brain_buddy_council.py discussion "Inspect CMS candidate data an
 ```
 
 Repeat `--science-receipt` for up to four acquisition receipts. The controller checks acquired status and exact artifact SHA-256, supplies the same receipt and bounded data sample to Field and Void, and checks for changes before and after each turn. Source classification and source-unit requirements remain explicit. Failed or changed evidence cannot advance the loop. Provider drafts remain proposals until separately applied, tested and merged; peer agreement alone never promotes physical proof status.
+
+### Explicit local fallback
+
+Add `--local-pair` to the preceding nested council command to use two separate local Qwen calls as FIELD and VOID. The installed default is `qwen3.5:2b`; `ONE_WAVE_LOCAL_MODEL` selects another already installed model. This route uses loopback Ollama, disables private thinking output, retains complete required reference contents, and verifies the same source artifacts around each call. Its receipts say `ollama-local`, the actual model and opposing workflow phase. It is one model in two roles, not two independent models and not Gemini/DeepSeek. Output truncation cannot advance the council.
+
+Nested web-review turns use `--no-tools` in the Bridge-Comand transports because all evidence is supplied in the packet; unsolicited tool calls are rejected. Other transport modes keep their existing tool behavior.

@@ -515,4 +515,30 @@ class ScienceEvidenceTests(unittest.TestCase):
             p=Path(d)/'receipt.json';p.write_text('{"status":"failed"}')
             with self.assertRaises(c.CouncilError):c.science_evidence([str(p)])
 
+class SharedEvidenceLoopTests(unittest.TestCase):
+    def test_every_field_void_turn_uses_identical_source_receipt(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);raw=b'Run,E1\n1,3.5\n';(p/'events.csv').write_bytes(raw)
+            (p/'receipt.json').write_text(json.dumps({'status':'acquired','file':'events.csv','sha256':hashlib.sha256(raw).hexdigest(),'classification':'externally_sourced_measurement_product'}))
+            helper=LoopTests();receipt,packets=helper.run_loop(evidence_receipts=[str(p/'receipt.json')])
+            self.assertEqual(receipt['status'],'AGREED_RESOLUTION')
+            self.assertEqual(len(packets),12)
+            self.assertTrue(all(x['science_evidence']==packets[0]['science_evidence'] for x in packets))
+            self.assertEqual({x['science_evidence_sha256'] for x in packets},{receipt['science_evidence_sha256']})
+
+class LocalPairTests(unittest.TestCase):
+    def test_local_pair_preserves_six_field_void_checks(self):
+        receipt,packets=LoopTests().run_loop(workers=('local','local'))
+        self.assertEqual(receipt['status'],'AGREED_RESOLUTION')
+        self.assertEqual({x['worker'] for x in receipt['results']},{'local'})
+        self.assertEqual(len(receipt['loops'][0]['consequences']),6)
+    def test_local_response_identity_and_output_budget(self):
+        for reason,ok in [('stop',True),('length',False)]:
+            with patch.object(c,'reference_snapshot',side_effect=[snapshot(),snapshot()]),patch.object(c,'urlopen') as call:
+                call.return_value.__enter__.return_value.read.return_value=json.dumps({'response':'{"answer":"visible"}','done_reason':reason}).encode()
+                x=c.run_worker(Path('/tmp'),'local','question',30,'local-request')
+                self.assertEqual(x['ok'],ok);self.assertEqual(x['provider'],'ollama-local');self.assertEqual(x['request_id'],'local-request')
+                payload=json.loads(call.call_args.args[0].data);self.assertFalse(payload['think']);self.assertIn('canonical',payload['prompt'])
+
 if __name__ == '__main__':unittest.main()
