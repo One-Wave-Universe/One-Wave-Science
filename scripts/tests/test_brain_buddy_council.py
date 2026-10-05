@@ -28,7 +28,8 @@ def result(worker='gemini', ok=True):
 class WorkerTests(unittest.TestCase):
     def invoke(self, output='answer', code=0, snapshots=None, error=None):
         p = subprocess.CompletedProcess([], code, output, '')
-        with patch.object(c, 'reference_snapshot', side_effect=snapshots or [snapshot(), snapshot()]), \
+        with patch.object(c, 'transport_path', return_value=Path('/bridge/hive-pipe/gemini_web_bridge.py')), patch.object(c, 'git_read', return_value='bridge-head'), \
+             patch.object(c, 'reference_snapshot', side_effect=snapshots or [snapshot(), snapshot()]), \
              patch.object(c.subprocess, 'run', side_effect=error, return_value=p) as run:
             r = c.run_worker(Path('/tmp'), 'gemini', 'question', 10, 'request-1')
             return r, run
@@ -473,15 +474,21 @@ print(json.dumps(value))
             script = root / 'scripts/brain_buddy_council.py'
             script.parent.mkdir(parents=True, exist_ok=True)
             script.write_text(SCRIPT.read_text())
+            bridge = root / 'transport'
+            bridge.mkdir()
+            subprocess.run(['git','-C',str(bridge),'init','-q'],check=True)
+            subprocess.run(['git','-C',str(bridge),'remote','add','origin','https://github.com/One-Wave-Universe/Bridge-Comand.git'],check=True)
             for name in ('gemini', 'deepseek'):
-                p = root / f'One_Wave_Bench/hive-pipe/{name}_web_bridge.py'
+                p = bridge / f'hive-pipe/{name}_web_bridge.py'
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(worker_code)
-            git('add', '.')
+            subprocess.run(['git','-C',str(bridge),'add','.'],check=True)
+            subprocess.run(['git','-C',str(bridge),'-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','transport fixture'],check=True)
+            git('add', 'scripts', *c.ROOT_FILES)
             git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'offline fixture')
             process = subprocess.run([sys.executable, str(script), 'discussion', 'Offline fixture only',
                                       '--loop', '--save', '--request-id', 'offline-fixture', '--max-calls', '12',
-                                      '--budget-seconds', '30'], cwd=d, text=True, input='', capture_output=True, timeout=45)
+                                      '--budget-seconds', '30'], cwd=d, env={**__import__('os').environ,'ONE_WAVE_BRIDGE_ROOT':str(bridge)}, text=True, input='', capture_output=True, timeout=45)
             self.assertEqual(process.returncode, 0, process.stderr + process.stdout)
             self.assertIn('Council AGREED_RESOLUTION', process.stdout)
             saved = list((root / 'External_Work/brain_buddy/outbox').glob('*.json'))
@@ -493,6 +500,59 @@ print(json.dumps(value))
             self.assertTrue(all('OFFLINE_FIXTURE_ONLY' in r['answer'] for r in receipt['results']))
             self.assertTrue(all(r['provider_response_id'] is None for r in receipt['results']))
 
+class ScienceEvidenceTests(unittest.TestCase):
+    def test_source_bytes_verified_and_changes_rejected(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);raw=b"Run,E1\n1,3.5\n";(p/'events.csv').write_bytes(raw)
+            receipt={'status':'acquired','file':'events.csv','sha256':hashlib.sha256(raw).hexdigest(),'classification':'externally_sourced_measurement_product'}
+            (p/'receipt.json').write_text(json.dumps(receipt))
+            x=c.science_evidence([str(p/'receipt.json')]);self.assertEqual(x[0]['receipt']['classification'],receipt['classification'])
+            (p/'events.csv').write_bytes(b'changed')
+            with self.assertRaises(c.CouncilError):c.science_evidence([str(p/'receipt.json')])
+    def test_failed_acquisition_never_supplies_evidence(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'receipt.json';p.write_text('{"status":"failed"}')
+            with self.assertRaises(c.CouncilError):c.science_evidence([str(p)])
 
-if __name__ == '__main__':
-    unittest.main()
+class SharedEvidenceLoopTests(unittest.TestCase):
+    def test_every_field_void_turn_uses_identical_source_receipt(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);raw=b'Run,E1\n1,3.5\n';(p/'events.csv').write_bytes(raw)
+            (p/'receipt.json').write_text(json.dumps({'status':'acquired','file':'events.csv','sha256':hashlib.sha256(raw).hexdigest(),'classification':'externally_sourced_measurement_product'}))
+            helper=LoopTests();receipt,packets=helper.run_loop(evidence_receipts=[str(p/'receipt.json')])
+            self.assertEqual(receipt['status'],'AGREED_RESOLUTION')
+            self.assertEqual(len(packets),12)
+            self.assertTrue(all(x['science_evidence']==packets[0]['science_evidence'] for x in packets))
+            self.assertEqual({x['science_evidence_sha256'] for x in packets},{receipt['science_evidence_sha256']})
+
+class LocalPairTests(unittest.TestCase):
+    def test_local_pair_preserves_six_field_void_checks(self):
+        receipt,packets=LoopTests().run_loop(workers=('local','local'))
+        self.assertEqual(receipt['status'],'AGREED_RESOLUTION')
+        self.assertEqual({x['worker'] for x in receipt['results']},{'local'})
+        self.assertEqual(len(receipt['loops'][0]['consequences']),6)
+    def test_local_response_identity_and_output_budget(self):
+        for reason,ok in [('stop',True),('length',False)]:
+            with patch.object(c,'reference_snapshot',side_effect=[snapshot(),snapshot()]),patch.object(c,'urlopen') as call:
+                call.return_value.__enter__.return_value.read.return_value=json.dumps({'response':'{"answer":"visible"}','done_reason':reason,'done':True}).encode()
+                x=c.run_worker(Path('/tmp'),'local','question',30,'local-request')
+                self.assertEqual(x['ok'],ok);self.assertEqual(x['provider'],'ollama-local');self.assertEqual(x['request_id'],'local-request')
+                payload=json.loads(call.call_args.args[0].data);self.assertFalse(payload['think']);self.assertIn('canonical',payload['prompt'])
+
+class LocalReferenceWindowTests(unittest.TestCase):
+    def test_excerpts_and_requested_full_file(self):
+        files=[{'path':name,'content':'x'*3000} for name in ('AI_CANONICAL_START_HERE.md','BRAIN_BUDDY_COUNCIL.md','GENERAL_REFERENCE_RULES.md','I06.json')]
+        shown=c.local_reference_window({'contents':files})
+        self.assertEqual([x['excerpt'] for x in shown],[True,True,False,False])
+        self.assertNotEqual(shown[0]['full_sha256'],shown[0]['shown_sha256'])
+        full=c.local_reference_window({'contents':files},['AI_CANONICAL_START_HERE.md'])
+        self.assertFalse(full[0]['excerpt']);self.assertEqual(full[0]['content'],files[0]['content'])
+    def test_large_window_holds_without_provider_call(self):
+        state=snapshot();state['contents'][0]['content']='x'*41000
+        with patch.object(c,'reference_snapshot',return_value=state),patch.object(c,'urlopen') as call:
+            r=c.run_worker(Path('/tmp'),'local','question',10)
+            self.assertFalse(r['ok']);self.assertIn('40 KB',r['stderr']);call.assert_not_called()
+
+if __name__ == '__main__':unittest.main()
