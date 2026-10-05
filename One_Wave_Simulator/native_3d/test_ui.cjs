@@ -1,0 +1,25 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox']});
+ const page=await browser.newPage({viewport:{width:1500,height:1000},acceptDownloads:true});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const base=process.env.LAB_URL||'http://127.0.0.1:8765';
+ await page.goto(base);await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Paused'));
+ const get=()=>page.evaluate(async()=>await(await fetch('/api/state')).json());
+ const before=await get();await page.click('#zoomIn');await page.click('#zoomOut');await page.locator('#view').focus();await page.keyboard.press('ArrowRight');await page.keyboard.press('+');
+ await page.mouse.move(700,350);await page.mouse.down();await page.mouse.move(770,410);await page.mouse.up();await page.keyboard.down('Shift');await page.mouse.down();await page.mouse.move(800,430);await page.mouse.up();await page.keyboard.up('Shift');
+ const after=await get();assert.deepEqual(before,after,'camera changed physics');
+ await page.click('#step');await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('step 5'));const advanced=await get();assert.equal(advanced.step,5);assert.notDeepEqual(advanced.real,before.real);
+ await page.click('#shiftPlus');await page.waitForFunction(()=>!document.querySelector('#shiftPlus').disabled);const shifted=await get();assert.notDeepEqual(shifted.real,advanced.real);assert.ok(Math.abs(shifted.energy-advanced.energy)<1e-10);
+ await page.click('#shiftMinus');await page.waitForFunction(()=>!document.querySelector('#shiftMinus').disabled);assert.deepEqual((await get()).real,advanced.real);
+ await page.fill('#norm','25');await page.locator('#norm').dispatchEvent('change');assert.match(await page.locator('#pending').innerText(),/Settings changed/);assert.equal((await get()).config.norm,20);
+ await page.click('#reset');await page.waitForFunction(()=>!document.querySelector('#reset').disabled);assert.equal((await get()).config.norm,25);
+ await page.click('#run');await page.waitForTimeout(500);await page.click('#run');await page.waitForFunction(()=>!document.querySelector('#step').disabled);const paused=await get();await page.waitForTimeout(200);assert.equal((await get()).step,paused.step);
+ const downloadPromise=page.waitForEvent('download');await page.click('#export');const download=await downloadPromise;const artifact=process.env.LAB_ARTIFACTS||'/tmp/native-3d-proof';fs.mkdirSync(artifact,{recursive:true});await download.saveAs(artifact+'/state.json');assert.equal(JSON.parse(fs.readFileSync(artifact+'/state.json')).step,paused.step);
+ await page.screenshot({path:artifact+'/bulk.png',fullPage:true});
+ await page.selectOption('#model','cavity');await page.click('#reset');await page.waitForFunction(()=>document.querySelector('#response').className==='');assert.equal((await get()).model,'cavity');assert.match(await page.locator('#phaseLegend').innerText(),/real cavity sign/);
+ await page.reload();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('Paused'));assert.equal(await page.locator('#model').inputValue(),'cavity');assert.equal(await page.locator('#mode').inputValue(),'4');
+ assert.ok(await page.locator('#tensor').evaluate(el=>{const g=document.createElement('canvas').getContext('2d');g.font=getComputedStyle(el).font;return el.textContent.split('\n').every(line=>g.measureText(line).width<=el.clientWidth);}), 'tensor rows must not wrap');await page.screenshot({path:artifact+'/cavity.png',fullPage:true});await page.setViewportSize({width:390,height:844});await page.locator('summary').click();await page.screenshot({path:artifact+'/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ assert.deepEqual(errors,[]);await browser.close();console.log('PASS: live state, camera invariance, step, reversible displacement, pending/reset, run/pause, export, model switch/reload, mobile, zero page errors');
+})().catch(e=>{console.error(e);process.exit(1)});

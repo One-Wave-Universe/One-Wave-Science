@@ -29,3 +29,7 @@ Later stages are deliberately visible but locked. They must not be represented a
 - top-down and curved-surface projections.
 
 The current implementation remains a Yellow reduced model. The imposed well and collective shell do not derive gravity, quarks, protons, charge, the Mirror Gate, or Mass Effect.
+
+## Native 3D field lab
+
+[Launch instructions and tested scope](native_3d/README.md). Runs existing complex FCC bulk and cavity-response solvers with a state-driven 3D camera, measurements and export. It does not unlock the physical particle or Mass Effect stages above.
