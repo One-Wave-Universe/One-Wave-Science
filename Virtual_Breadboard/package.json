@@ -18,6 +18,7 @@
     "test:netlist": "node test/netlist.test.js",
     "test:fault-states": "node test/fault-states.test.js",
     "test:basic-circuits": "node test/basic-circuits.test.js",
+    "test:ai-build": "node test/ai-build.test.js",
     "test:spice-analysis": "node test/spice-analysis.test.js",
     "test:solver-convergence": "node test/solver-convergence.test.js",
     "test:dc-op": "node test/dc-operating-point.test.js",
