@@ -49,7 +49,12 @@
     "dist:win-installer": "electron-builder --win nsis",
     "dist:mac": "electron-builder --mac zip",
     "dist:mac-dmg": "electron-builder --mac dmg",
-    "bundle": "node build-standalone.js"
+    "bundle": "node build-standalone.js",
+    "android:install": "npm --prefix mobile install",
+    "android:sync": "npm --prefix mobile install && npm --prefix mobile run android:sync",
+    "android:open": "npm --prefix mobile install && npm --prefix mobile run android:open",
+    "android:apk": "npm --prefix mobile install && npm --prefix mobile run android:apk",
+    "android:aab": "npm --prefix mobile install && npm --prefix mobile run android:aab"
   },
   "devDependencies": {
     "electron": "^33.0.0",

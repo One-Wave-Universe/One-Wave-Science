@@ -1,0 +1,26 @@
+{
+  "name": "virtual-breadboard-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Capacitor (Android) packaging of the Virtual Breadboard Simulator. Wraps the same index.html + style.css + js/ engine as the browser and Electron builds -- no rewrite of circuit.js.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "www": "node scripts/copy-www.js",
+    "android:add": "node scripts/ensure-android.js",
+    "android:sync": "npm run www && npm run android:add && cap sync android",
+    "android:open": "npm run android:sync && cap open android",
+    "android:run": "npm run android:sync && cap run android",
+    "android:apk": "npm run android:sync && node scripts/gradle.js assembleDebug",
+    "android:apk-release": "npm run android:sync && node scripts/gradle.js assembleRelease",
+    "android:aab": "npm run android:sync && node scripts/gradle.js bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/core": "^8.5.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.0"
+  }
+}

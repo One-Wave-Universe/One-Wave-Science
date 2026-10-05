@@ -1,0 +1,48 @@
+name: Virtual Breadboard - Android APK (Capacitor)
+
+# Builds a sideloadable debug APK from Virtual_Breadboard/mobile (Capacitor
+# wrapping the same index.html / style.css / js/ engine as browser + desktop).
+# No secrets needed: the debug APK is signed with the runner's throwaway debug
+# key. A Play Store (release/AAB) build needs an upload keystore -- see
+# Virtual_Breadboard/ANDROID.md before adding signing secrets.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Virtual_Breadboard/mobile/**'
+      - '.github/workflows/breadboard-android-build.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'Virtual_Breadboard/mobile/**'
+      - '.github/workflows/breadboard-android-build.yml'
+    tags:
+      - 'build-android-*'
+
+jobs:
+  android-debug-apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+          cache-dependency-path: Virtual_Breadboard/mobile/package.json
+      # lockfiles are gitignored in Virtual_Breadboard/ (repo convention)
+      - run: npm install
+      # stages ../index.html + ../style.css + ../js/ -> www/, generates
+      # android/ if missing, cap sync, then ./gradlew assembleDebug
+      - run: npm run android:apk
+      - run: cp android/app/build/outputs/apk/debug/app-debug.apk VirtualBreadboardSimulator-debug.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: Virtual_Breadboard/mobile/VirtualBreadboardSimulator-debug.apk

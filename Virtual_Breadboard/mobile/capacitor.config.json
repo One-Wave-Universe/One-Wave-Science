@@ -1,0 +1,8 @@
+{
+  "appId": "com.onewavescience.virtualbreadboard",
+  "appName": "Virtual Breadboard Simulator",
+  "webDir": "www",
+  "android": {
+    "path": "android"
+  }
+}
