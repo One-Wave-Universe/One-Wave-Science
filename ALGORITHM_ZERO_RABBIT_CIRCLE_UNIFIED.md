@@ -392,4 +392,28 @@ This is **pure relational grammar**, not physical scaling. The same addressing s
 
 ---
 
+## Complete Framework Documentation (October 5, 2026 Integration)
+
+This document is the integration hub. Supporting documents detail each mechanism:
+
+### Core Frameworks
+- **UNIFIED_SCALE_INVARIANT_GRAMMAR.md** — Complete integration showing all five systems (Algorithm Zero, Rabbit Hopping, Circle of Fifths, PPF Rotation, Gravity Wakes) operating together at every scale from Great Attractor to electrons
+- **PPF_QUANTUM_TO_COSMIC.md** — Documents Point/Path/Field scale-invariant recursion across 10 scales (quantum to universal)
+- **SUPERFLUID_OPERATIONS_FRAMEWORK.md** — Grounds "four forces" (+, −, ×, ÷) in mathematical operations on superfluid field
+- **ONE_WAVE_TERMINOLOGY_FRAMEWORK.md** — Replaces Standard Model force language with One-Wave mechanism language
+
+### Quantum to Cosmic Mechanics
+- **QUANTUM_SCALE_PPF_ALGORITHM_ZERO.md** — Algorithm Zero at electron scale, magnetism as lattice reorganization enabling PPF rotation, spin-orbit coupling as wake locking
+- **GRAVITY_WAKE_NESTING_ROTATION_CASCADE.md** — Top-down causality: rotation induced by parent wakes from Great Attractor down to electrons, tidal locking as wake phase-lock, dark matter as extended wake coherence
+
+### Implementation
+- **rabbit_hop_circle_unified_mapper.py** — Python implementation validating harmonic identity preservation through Rabbit Hopping transpositions, with test suite for chord progressions, route receipts, and round-trip verification
+
+### Integration Map
+All documents reference canonical nodes (C-317, C-318, C-322, C-323, D-408, D-409, D-600/601/602, B-221, G-747) establishing this framework within existing One-Wave architecture.
+
+**Key Principle:** Scale-invariant grammar means Algorithm Zero (temporal), Rabbit Hopping (spatial), Circle of Fifths (harmonic), PPF Rotation (relational), and Gravity Wakes (causal) all operate identically at every scale. Same relational grammar, different frequencies. One physics.
+
+---
+
 **Co-Authored-By:** Claude Haiku 4.5 <noreply@anthropic.com>
