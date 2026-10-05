@@ -69,7 +69,7 @@ jobs:
             scripts/external_work_bridge.py
 
       - name: Hive Pipe MCP terminal tests
-        run: python3 -m unittest discover -s One_Wave_Bench/hive-pipe -p 'test_*.py' -v
+        run: python3 -m unittest discover -s bridge-transport/hive-pipe -p 'test_*.py' -v
 
       - name: Unified bridge contracts
         run: python3 bridge-transport/hive-pipe/bridge_doctor.py --profile ci
