@@ -18,9 +18,11 @@ label{display:flex;gap:6px;align-items:center}pre{white-space:pre-wrap;font-size
 <select id="mode"><option value="all">GWOSC H1 + L1 + V1</option><option value="H1">H1 only</option><option value="L1">L1 only</option><option value="V1">V1 only</option><option value="synthetic">synthetic/manual</option></select>
 <button id="replay">Replay real GW170817</button><button id="pulse">Center pulse</button><button id="toggle">Pause</button><button id="reset">Reset</button>
 </div>
+<p id="solverStatus" role="status">Adaptive numerical substeps; source sample cadence is unchanged.</p>
 <p id="dataStatus">Loading real GWOSC data…</p>
 <div class="grid"><section class="card"><canvas id="c" width="760" height="620"></canvas></section>
 <section class="card"><h2>Combined state + raw input</h2><pre id="out"></pre><h3>Interpretation boundary</h3><p>GWOSC strain is the measured input. Mapping detector streams to lattice ports and scaling strain into numerical drive are explicit simulator transforms, not claims about detector geography or a physical lattice constant.</p></section></div>
+<script src="./lattice-kernel.js"></script>
 <script>
 const $=x=>document.getElementById(x),cv=$('c'),g=cv.getContext('2d');
 const R=3,sites=[],index=new Map(),dirs=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
@@ -30,29 +32,22 @@ const ports={H1:index.get("3,0"),L1:index.get("-3,3"),V1:index.get("0,-3")};
 let running=true,last=performance.now(),energy0=null,steps=0,gw=null,gwPeak=1,replaying=false,sample=0,replayCarry=0;
 function pix(s){const scale=73,cx=cv.width/2,cy=cv.height/2;return[cx+scale*(s.q+s.r/2),cy+scale*.866*s.r]}
 function pulse(i,amp=1){sites[i].v+=amp}
-function reset(){sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;steps=0;sample=0;replayCarry=0;replaying=false;$('replay').textContent='Replay real GW170817'}
+function reset(){solverError=null;solverReceipt=null;sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;steps=0;sample=0;replayCarry=0;replaying=false;$('replay').textContent='Replay real GW170817'}
 function drivesFor(k){
  const d={H1:0,L1:0,V1:0}; if(!gw||k>=gw.window.samples_per_detector)return d;
  const mode=$('mode').value,gain=+$('gwgain').value;
  for(const det of ['H1','L1','V1']) if(mode==='all'||mode===det) d[det]=(gw.detectors[det].values[k]/gwPeak)*gain;
  return d;
 }
+let solverReceipt=null,solverError=null;
+function solverFailure(e){solverError=e.message;running=false;$('toggle').textContent='Resume';$('solverStatus').textContent='Paused safely: '+solverError+'; reduce parameters or reset.'}
+function modelParameters(){return{frequencyHz:+$('freq').value*(2**(+$('oct').value)),damping:+$('damp').value,coupling:+$('coupling').value,nonlinearity:+$('nonlin').value}}
 function step(dt,drive={H1:0,L1:0,V1:0}){
- const f=+$('freq').value*(2**(+$('oct').value)),w=2*Math.PI*f,z=+$('damp').value,J=+$('coupling').value,lam=+$('nonlin').value;
- let acc=new Array(sites.length);
- for(let i=0;i<sites.length;i++){let s=sites[i],lap=s.n.reduce((a,j)=>a+sites[j].x-s.x,0);acc[i]=J*lap-w*w*s.x-2*z*w*s.v-lam*s.x*s.x*s.x}
- const driveScale=250000;
- for(const det of ['H1','L1','V1'])acc[ports[det]]+=drive[det]*driveScale;
- for(let i=0;i<sites.length;i++){sites[i].v+=acc[i]*dt;sites[i].x+=sites[i].v*dt;sites[i].phase=Math.atan2(sites[i].v/w,sites[i].x)}
- steps++;
+ const forces=sites.map(()=>0);for(const det of ['H1','L1','V1'])forces[ports[det]]+=drive[det]*250000;
+ const result=LatticeKernel.advance(sites,modelParameters(),dt,forces);
+ result.sites.forEach((s,i)=>Object.assign(sites[i],s));solverReceipt=result.receipt;steps++;
 }
-function metrics(){
- let q=0,a2=0,v2=0,re=0,im=0,E=0,circ=0;
- const f=+$('freq').value*(2**(+$('oct').value)),w=2*Math.PI*f,J=+$('coupling').value,lam=+$('nonlin').value;
- sites.forEach((s,i)=>{q+=s.x;a2+=s.x*s.x;v2+=s.v*s.v;re+=Math.cos(s.phase);im+=Math.sin(s.phase);E+=.5*s.v*s.v+.5*w*w*s.x*s.x+.25*lam*s.x**4;s.n.forEach(j=>{if(j>i)E+=.5*J*(sites[j].x-s.x)**2})});
- q/=sites.length;let arms=dirs.map(d=>index.get(d[0]+','+d[1])).filter(i=>i!==undefined);for(let k=0;k<arms.length;k++){let a=sites[arms[k]],b=sites[arms[(k+1)%arms.length]];circ+=a.x*b.v-b.x*a.v}
- return{Q:q,A_rms:Math.sqrt(a2/sites.length),V_rms:Math.sqrt(v2/sites.length),phase_coherence:Math.hypot(re,im)/sites.length,energy:E,circulation:circ}
-}
+function metrics(){return LatticeKernel.measure(sites,modelParameters(),dirs.map(d=>index.get(d[0]+','+d[1])).filter(i=>i!==undefined))}
 function draw(){
  g.clearRect(0,0,cv.width,cv.height);
  sites.forEach((s,i)=>s.n.forEach(j=>{if(j>i){let[a,b]=[pix(s),pix(sites[j])];g.strokeStyle='#243149';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}}));
@@ -62,6 +57,7 @@ function draw(){
 }
 function frame(now){
  const elapsed=Math.min(.05,(now-last)/1000);last=now;
+ try{
  if(running){
    if(replaying&&gw){
      replayCarry+=elapsed*gw.window.sample_rate_hz;
@@ -74,14 +70,17 @@ function frame(now){
      for(let k=0;k<sub;k++)step(dt);
    }
  }
- let m=metrics();if(energy0===null&&m.energy>0)energy0=m.energy;draw();
+ }catch(e){solverFailure(e)}
+ let m;try{m=metrics()}catch(e){m={status:'unavailable',reason:e.message};solverFailure(e)}
+ if(!solverError)$('solverStatus').textContent=solverReceipt?'Numerical substeps: '+solverReceipt.substeps+'; sample interval preserved.':'Ready';
+ if(energy0===null&&m.energy>0)energy0=m.energy;if(m.status!=='unavailable')draw();
  const raw=gw&&sample<gw.window.samples_per_detector?{H1:gw.detectors.H1.values[sample],L1:gw.detectors.L1.values[sample],V1:gw.detectors.V1.values[sample]}:null;
  $('out').textContent=JSON.stringify({
    sites:sites.length,numerical_geometry:"triangular / six-neighbor",physical_lattice_spacing:"UNDEFINED",
    source:gw?{event:gw.event,event_gps:gw.event_gps,window:gw.window,catalog:gw.source.catalog,version:gw.source.version,doi:gw.source.doi}:null,
    replay:{active:replaying,sample_index:sample,gps:gw?(gw.window.start_gps+sample/gw.window.sample_rate_hz):null,mode:$('mode').value,shared_raw_peak_abs:gwPeak,numerical_gain:+$('gwgain').value,current_raw_strain:raw},
    base_frequency_hz:+$('freq').value,octave:+$('oct').value,effective_frequency_hz:+$('freq').value*(2**(+$('oct').value)),nonlinear_lambda:+$('nonlin').value,
-   combined_state:m,relative_energy_change:energy0?((m.energy-energy0)/energy0):0,steps
+   solver:solverReceipt,solver_error:solverError,combined_state:m,relative_energy_change:energy0?((m.energy-energy0)/energy0):0,steps
  },null,2);
  requestAnimationFrame(frame)
 }
@@ -95,7 +94,8 @@ async function loadGW(){
 }
 cv.onclick=e=>{let b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*cv.width/b.width,y=(e.clientY-b.top)*cv.height/b.height,bi=0,bd=1e99;sites.forEach((s,i)=>{let p=pix(s),d=(p[0]-x)**2+(p[1]-y)**2;if(d<bd){bd=d;bi=i}});pulse(bi,1)}
 $('pulse').onclick=()=>pulse(index.get('0,0'),1);
-$('replay').onclick=()=>{if(!gw)return;sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;sample=0;replayCarry=0;replaying=true;running=true;$('toggle').textContent='Pause';$('replay').textContent='Replaying…'};
-$('toggle').onclick=()=>{running=!running;$('toggle').textContent=running?'Pause':'Resume'};$('reset').onclick=reset;
+$('replay').onclick=()=>{if(!gw)return;solverError=null;solverReceipt=null;sites.forEach(s=>{s.x=0;s.v=0;s.phase=0});energy0=null;sample=0;replayCarry=0;replaying=true;running=true;$('toggle').textContent='Pause';$('replay').textContent='Replaying…'};
+$('toggle').onclick=()=>{solverError=null;running=!running;$('toggle').textContent=running?'Pause':'Resume'};$('reset').onclick=reset;
+for(const id of ['freq','oct','coupling','damp','nonlin'])$(id).addEventListener('input',()=>{energy0=null;solverError=null;solverReceipt=null});
 loadGW();requestAnimationFrame(frame);
 </script></body></html>

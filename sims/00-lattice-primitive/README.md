@@ -97,3 +97,46 @@ continuous-time analytic frequency with the finite-timestep leapfrog
 frequency, and checks exact-octave and non-octave detector controls. Its JSON
 receipt keeps `a_num` numerical, refuses a physical lattice-spacing claim,
 and does not treat sampling rate as measured signal frequency.
+
+## Reusable numerical kernel and guard
+
+`lattice-kernel.js` exposes `LatticeKernel.advance(sites, parameters, dt, forces)`
+and `LatticeKernel.measure(sites, parameters, circulationRing)` in the browser,
+or the same API through CommonJS in Node. Site state is `{x, v, phase, n}`;
+`n` is a reciprocal neighbor-index array. Parameters are `frequencyHz`,
+`coupling`, `damping` (ζ), and `nonlinearity` (λ), all finite and nonnegative,
+with strictly positive frequency. Coordinates, displacement, coupling and energy
+remain numerical quantities; frequency labels do not establish a physical lattice scale.
+
+The original kick-then-drift symplectic Euler equation is unchanged. Each requested
+interval uses adaptive internal substeps satisfying `h sqrt(K) <= 0.25` and
+`h gamma <= 0.25`, where `K = omega² + 2 maxDegree J + 3 lambda max|x|²`
+and `gamma = 2 zeta omega`. The stiffness bound is checked again against each
+candidate state; a failed candidate halves the trial step. This is a local
+numerical guard, not a global nonlinear stability theorem or an accuracy claim.
+
+A requested interval is atomic: `advance` never mutates the supplied state.
+Nonfinite input/state/energy or more than 4096 trials rejects the entire interval.
+The UI pauses with the error, retains the last valid state, and does not advance
+the rejected replay sample. Reduce parameters or reset, then resume explicitly.
+No clamping or silently replaced state is used. Parameter changes restart the
+energy reference, because the previous energy is no longer a conservation baseline.
+
+GWOSC samples are held constant through internal substeps. Original samples and
+4096 Hz source cadence are unchanged; numerical subdivision does not create new
+measurements. Solver receipts expose the requested interval, subdivisions and
+trial budget. Zero-state phase coherence remains 1 by the existing phase
+convention, not evidence of an oscillating coherent wave.
+
+Run the focused checks without dependencies:
+
+```sh
+node --test sims/00-lattice-primitive/test_lattice_kernel.js
+PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s sims/00-lattice-primitive -p 'test*.py' -v
+```
+
+Tests cover an analytic oscillator, bounded undamped numerical energy, damping,
+timestep refinement, extreme UI frequency, nonlinear drive, atomic refusal,
+37-site/90-edge topology, actual GW input samples and UI event integration.
+These checks do not complete the G-764 falsification list, spatial convergence,
+nonlinear confinement, physical calibration or browser visual-quality review.
