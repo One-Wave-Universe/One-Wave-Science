@@ -15,7 +15,7 @@ def main():
     p.add_argument("--radius-deg", type=float, default=0.01)
     p.add_argument("--mission", default="HST")
     p.add_argument("--catalog", default="numaster")
-    p.add_argument("--adql", default="SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source ORDER BY source_id")
+    p.add_argument("--adql", default="SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source")
     p.add_argument("--output", type=Path, required=True)
     args = p.parse_args()
     if not 0 < args.radius_deg <= 0.1:
@@ -44,7 +44,7 @@ def main():
             receipt["provider_url"] = "https://heasarc.gsfc.nasa.gov/"
         else:
             from astroquery.gaia import Gaia
-            table = Gaia.launch_job_async(args.adql).get_results()
+            table = Gaia.launch_job(args.adql).get_results()
             receipt["provider_url"] = "https://gea.esac.esa.int/archive/"
         path = args.output / "provider-table.ecsv"
         table.write(path, format="ascii.ecsv", overwrite=True)

@@ -1,0 +1,1054 @@
+{
+  "schema": "one-wave-jetson-archive-verification-v1",
+  "utc": "2026-10-05T20:39:26.917862+00:00",
+  "device_id": "fc9b5227-716d-4508-a666-ee0a68a08d4c",
+  "science_main_reference": "7de50755288e75bb176ad79a8ae0fe37a1cb57fe",
+  "science_local_reference": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
+  "bridge_main_reference": "98827b2a8f2feb540fc7f69cd683aa38fbd4b45a",
+  "execution": "Remote Desktop Commander on aarch64 Jetson",
+  "scope": "Bounded live public metadata pages and native archive tables, no bulk measurement analysis or One-Wave physical proof",
+  "raw_cache_root": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005",
+  "tests": "15 offline tests passed",
+  "probes": [
+    {
+      "probe": "HST",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 714,
+      "sha256": "3aa2e7d6497cba6b0f8b9b7dd8114f7912c3c5be2d6b08015149c576b1caec8c",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/HST/receipt.json"
+    },
+    {
+      "probe": "JWST",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 18,
+      "sha256": "e91b771e9691bc84c16d6b58f2e3ff68dd0f0232c6f995307666f610bc54d246",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/JWST/receipt.json"
+    },
+    {
+      "probe": "TESS",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 6,
+      "sha256": "e086a67142ba01df731249b05d214dd9650dca823f126969318187781ff7df0a",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/TESS/receipt.json"
+    },
+    {
+      "probe": "cern-ALICE",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "a0b93d20374a87c905b728761a00ea13966361c21b6eb8d16142c0930bd7155d",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-ALICE/receipt.json"
+    },
+    {
+      "probe": "cern-ATLAS",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "fdfd05d0b54e70f480f537e476cc07751edb6ed235638c77b1ffbd47ecadd236",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-ATLAS/receipt.json"
+    },
+    {
+      "probe": "cern-LHCb",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "85298e5d33ed8dfd0357a788bac4c56173d8edb0db8b6565bc3c3293589e2135",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-LHCb/receipt.json"
+    },
+    {
+      "probe": "cern-gwosc",
+      "source": null,
+      "status": "complete",
+      "row_count": null,
+      "sha256": null,
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-gwosc/receipt.json"
+    },
+    {
+      "probe": "gaia",
+      "source": "gaia-archive",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/gaia/receipt.json"
+    },
+    {
+      "probe": "heasarc",
+      "source": "heasarc",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc/receipt.json"
+    },
+    {
+      "probe": "heasarc-fixed",
+      "source": "heasarc",
+      "status": "acquired",
+      "row_count": 0,
+      "sha256": "6740b6e0eb2648163c9b8747a034f472dae306287618a1fa9f0aab65f8cc95ab",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc-fixed/receipt.json"
+    },
+    {
+      "probe": "heasarc-wide",
+      "source": "heasarc",
+      "status": "acquired",
+      "row_count": 108,
+      "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc-wide/receipt.json"
+    },
+    {
+      "probe": "hst",
+      "source": "mast",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/hst/receipt.json"
+    },
+    {
+      "probe": "relay-alma",
+      "source": "alma",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "11337ce723c0d71c4ea4df7ea25df2c383d585ac78b35e53e2410247f6cb6650",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-alma/receipt.json"
+    },
+    {
+      "probe": "relay-cern-open-data",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "59c8411e7c485f20b2c170c8ace83887da77e439c0f1c0f7334acf574175cf9c",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-cern-open-data/receipt.json"
+    },
+    {
+      "probe": "relay-dandi",
+      "source": "dandi",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "f3c2f26a5a47e7b7aac4852024a00fb53aa3b6eae6bf125ddc00f6b8ae3ca6c6",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-dandi/receipt.json"
+    },
+    {
+      "probe": "relay-desi",
+      "source": "desi",
+      "status": "acquired",
+      "row_count": 7,
+      "sha256": "00c1289154008b778b8b40bcfa12ee482b720b535f5f4dc8c7b0d80c39d5d871",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-desi/receipt.json"
+    },
+    {
+      "probe": "relay-eso",
+      "source": "eso",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "72c7973b13a0ee701e34c1d9b570fead9272d4ca84ceec4237eb8007b9cd7e51",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-eso/receipt.json"
+    },
+    {
+      "probe": "relay-gaia",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "0e55cd71dc0225af3173e9c4e1d2b53370015d8020c2132864674ddff0f2ad9a",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-gaia/receipt.json"
+    },
+    {
+      "probe": "relay-gwosc",
+      "source": "gwosc",
+      "status": "acquired",
+      "row_count": 10,
+      "sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-gwosc/receipt.json"
+    },
+    {
+      "probe": "relay-hepdata",
+      "source": "hepdata",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "HTTPError: HTTP Error 403: Forbidden",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-hepdata/receipt.json"
+    },
+    {
+      "probe": "relay-openneuro",
+      "source": "openneuro",
+      "status": "acquired",
+      "row_count": 1,
+      "sha256": "93498323b4f346ee4181e2298943ecb50bb5680f61fe0ecd0157f38edd9e8ac0",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-openneuro/receipt.json"
+    },
+    {
+      "probe": "relay-physionet-eeg",
+      "source": "physionet-eeg",
+      "status": "acquired",
+      "row_count": 14,
+      "sha256": "02d1de9c00511d3b7548a6b59bdf209c819db025518ddcc52b21fd3b2b9de4a8",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-physionet-eeg/receipt.json"
+    },
+    {
+      "probe": "gaia-sync-native",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "row_count": 10,
+      "sha256": "a0a11ce48d0c8a58032b2e150e5f15156496bf9ed828211eb4dcc25c9a3c49e6",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/gaia-sync-native/receipt.json"
+    }
+  ],
+  "known_failures": [
+    "HEPData search plus two public record URLs return HTTP 403",
+    "Original Gaia async ORDER BY probe exceeded 70-second process cap; synchronous unordered TOP 3 returned 3 records"
+  ],
+  "code_sha256": {
+    "scripts/science_archive_search.py": "cabe54f6949f93f126a9c0f810996015d9cd76c786c90703f55df588736c9762",
+    "scripts/archive_metadata_query.py": "a25b6888e70eb026d0190812a62b84e0fc3737e086bc6b427b4fa033667c18ba",
+    "scripts/particle_wave_coordinates.py": "a94177bb44c50b5a03a784d744e0f456a26ca591c4949750d0a400e49e380330"
+  },
+  "bridge_verification": {
+    "route": "authenticated local Hive Pipe MCP at 127.0.0.1:8765",
+    "request_id": "archive-bridge-aa5cf56d04b64e2e9aec05dfe4b16bdc",
+    "exit_code": 0,
+    "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/hive-pipe-verification.json",
+    "gwosc_sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+    "external_https_verified": false
+  },
+  "published_relay_verification": {
+    "executed_commit": "56df6e9c1ecf7a524267413868c71e04cde25963",
+    "worktree": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/archive-routes-20261005",
+    "matching_request_id": "openneuro-relay-e32c96a2c193488b820e59b396d49acc",
+    "exit_code": 0,
+    "source": "openneuro",
+    "record_id": "ds000224",
+    "raw_sha256": "93498323b4f346ee4181e2298943ecb50bb5680f61fe0ecd0157f38edd9e8ac0",
+    "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/mcp-openneuro-verification.json"
+  },
+  "hepdata_doi_followup": {
+    "tests_passed": 17,
+    "live": {
+      "schema": "one-wave-archive-search-v1",
+      "source": "hepdata-doi",
+      "query": "Higgs",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://api.datacite.org/dois?query=prefix%3A10.17182+AND+%28Higgs%29&page%5Bsize%5D=3",
+      "retrieved_at_utc": "2026-10-05T21:12:46.654994+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "http_status": 200,
+      "final_url": "https://api.datacite.org/dois?query=prefix%3A10.17182+AND+%28Higgs%29&page%5Bsize%5D=3",
+      "content_type": "application/json; charset=utf-8",
+      "raw_file": "provider.raw",
+      "sha256": "509d981d593cb1628d2fff71527a6cfa94395e1aa2b6e954374c95bbc77e240e",
+      "bytes": 11748,
+      "provider": "DataCite",
+      "discovery_for": "hepdata",
+      "measurement_tables_available": false,
+      "limitation": "DOI metadata only; direct HEPData access remains independently blocked",
+      "page_next": null,
+      "status": "acquired",
+      "returned_count": 3,
+      "sample": [
+        {
+          "id": "10.17182/hepdata.158373.v1/t307",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t307",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80b\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV endcap trigger efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and longitudinal decay position Lz for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160593",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:47Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        },
+        {
+          "id": "10.17182/hepdata.158373.v1/t309",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t309",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80d\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV endcap vertex efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and longitudinal decay position Lz for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160595",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:46Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        },
+        {
+          "id": "10.17182/hepdata.158373.v1/t306",
+          "type": "dois",
+          "attributes": {
+            "doi": "10.17182/hepdata.158373.v1/t306",
+            "identifiers": [
+              {
+                "identifier": "https://www.hepdata.net/record/ins2905251",
+                "identifierType": "HEPDataRecord"
+              },
+              {
+                "identifier": "https://www.hepdata.net/record/158373",
+                "identifierType": "HEPDataRecordAlt"
+              }
+            ],
+            "creators": [
+              {
+                "nameType": "Organizational",
+                "name": "ATLAS Collaboration",
+                "affiliation": [],
+                "nameIdentifiers": []
+              }
+            ],
+            "titles": [
+              {
+                "title": "\"figaux_80a\" of \"Search for events with one displaced vertex from long-lived neutral particles decaying into hadronic jets in the ATLAS muon spectrometer in $pp$ collisions at $\\sqrt{s}=13$ TeV\""
+              }
+            ],
+            "publisher": "HEPData",
+            "container": {
+              "identifier": "10.17182/hepdata.158373.v1",
+              "identifierType": "DOI",
+              "type": "DataRepository"
+            },
+            "publicationYear": 2025,
+            "subjects": [],
+            "contributors": [],
+            "dates": [
+              {
+                "date": "2025-07-31 22:02:04.615905",
+                "dateType": "Updated"
+              }
+            ],
+            "language": "en",
+            "types": {
+              "schemaOrg": "Dataset",
+              "resourceTypeGeneral": "Dataset",
+              "citeproc": "dataset",
+              "bibtex": "misc",
+              "ris": "DATA",
+              "resourceType": "Dataset"
+            },
+            "relatedIdentifiers": [
+              {
+                "relationType": "IsSupplementTo",
+                "relatedIdentifier": "https://inspirehep.net/literature/2905251",
+                "relatedIdentifierType": "URL"
+              },
+              {
+                "relationType": "IsSupplementTo",
+                "resourceTypeGeneral": "JournalArticle",
+                "relatedIdentifier": "10.1103/cmql-s9sq",
+                "relatedIdentifierType": "DOI"
+              },
+              {
+                "relationType": "IsPartOf",
+                "resourceTypeGeneral": "Collection",
+                "relatedIdentifier": "10.17182/hepdata.158373.v1",
+                "relatedIdentifierType": "DOI"
+              }
+            ],
+            "relatedItems": [],
+            "sizes": [],
+            "formats": [],
+            "version": "1",
+            "rightsList": [
+              {
+                "rightsIdentifierScheme": "SPDX",
+                "rightsUri": "https://creativecommons.org/publicdomain/zero/1.0/legalcode",
+                "schemeUri": "https://spdx.org/licenses/",
+                "rights": "Creative Commons Zero v1.0 Universal",
+                "rightsIdentifier": "cc0-1.0"
+              }
+            ],
+            "descriptions": [
+              {
+                "descriptionType": "Abstract",
+                "description": "One-DV barrel trigger efficiency for ZH samples in the lepton-triggered region as a function of the LLP boost \u03b2 and transverse decay position Lxy for m\u03d5=1000 GeV, ms=475 GeV, c\u03c4sim=4.5 m."
+              },
+              {
+                "descriptionType": "Other",
+                "description": "A search for events with one displaced vertex from long-lived particles using data collected by the ATLAS detector at the Large Hadron Collider is presented, using 140 fb$^{-1}$ of proton-proton collision data at $\\sqrt{s} = 13$ TeV recorded in 2015-2018. The search employs techniques for reconstructing vertices of long-lived particles decaying into hadronic jets in the muon spectrometer displaced between 3 m and 14 m from the primary interaction vertex. The observed number of events is consistent with the expected background and limits for several benchmark signals are determined. A scalar-portal model and a Higgs-boson-portal baryogenesis model are considered. A dedicated analysis channel is employed to target Z-boson associated long-lived particle production, including an axion-like particle and a dark photon model. For the Higgs boson model, branching fractions above 1% are excluded at 95% confidence level for long-lived particle proper decay lengths ranging from 5 cm to 40 m. For the photo-phobic axion-like particle model considered, this search produces the strongest limits to date for proper decay lengths greater than $\\mathcal{O}(10)$ cm."
+              }
+            ],
+            "geoLocations": [],
+            "fundingReferences": [],
+            "url": "https://www.hepdata.net/record/160592",
+            "contentUrl": null,
+            "metadataVersion": 2,
+            "schemaVersion": "http://datacite.org/schema/kernel-4",
+            "source": "mds",
+            "isActive": true,
+            "state": "findable",
+            "reason": null,
+            "viewCount": 0,
+            "downloadCount": 0,
+            "referenceCount": 0,
+            "citationCount": 1,
+            "partCount": 0,
+            "partOfCount": 2,
+            "versionCount": 0,
+            "versionOfCount": 0,
+            "created": "2025-07-31T22:02:46Z",
+            "registered": "2025-07-31T22:02:47Z",
+            "published": null,
+            "updated": "2026-10-02T01:01:23Z"
+          },
+          "relationships": {
+            "client": {
+              "data": {
+                "id": "cern.hepdata",
+                "type": "clients"
+              }
+            }
+          }
+        }
+      ],
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    "direct_hepdata_status": "blocked_http_403",
+    "classification": "partial_recovery_metadata_discovery_only"
+  },
+  "cern_measurement_recovery": {
+    "tests_passed": 21,
+    "records": [
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "2e2mu_2011.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:23.971587+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/2e2mu_2011.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "e6dc5f2c7fb4a5a3813535c30a868e1b08b342987e6cd880ea94a5ead836acaf",
+        "bytes": 4092,
+        "published_checksum": "adler32:e5c82ef4",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 13,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      },
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "2e2mu_2012.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:25.864730+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/2e2mu_2012.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "65c0fb187623c2ab7790fa8c8ebaaaf8bd3bd861a95b0ed706e0e6f628eb99bd",
+        "bytes": 31445,
+        "published_checksum": "adler32:0fc901c2",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 104,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      },
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "4e_2011.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:27.743827+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/4e_2011.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "53bcf1e51582bf6a49e52167bc5b594b280c623df66258ddc51ec9ea05f6c8c3",
+        "bytes": 2271,
+        "published_checksum": "adler32:0eb9cb89",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 7,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      },
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "4e_2012.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:28.823443+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/4e_2012.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "7f5fee3e126a7800dcdd17ed018f46c786ccfeccc9ec82e04c05487be978914e",
+        "bytes": 12445,
+        "published_checksum": "adler32:46ee8bb8",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 41,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      },
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "4mu_2011.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:30.572438+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/4mu_2011.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "25544c8090e8fe721345cdd56e0af4e169930013d8ded90113aeadea383b5eda",
+        "bytes": 5550,
+        "published_checksum": "adler32:79684aae",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 18,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      },
+      {
+        "schema": "one-wave-cern-measurement-v1",
+        "provider": "CERN Open Data",
+        "record": "5200",
+        "file": "4mu_2012.csv",
+        "retrieved_at_utc": "2026-10-05T21:28:31.748716+00:00",
+        "classification": "externally_sourced_measurement_product",
+        "units_policy": "Preserve source labels; units require the linked record/analysis documentation before conversion",
+        "not_equivalent_to": "HEPData publication tables or One-Wave physical proof",
+        "url": "https://opendata.cern.ch/record/5200/files/4mu_2012.csv",
+        "manifest_sha256": "37ee2997ca582f91b8304049c6a9b8f906e643120d40e5aedd766f1634e72709",
+        "sha256": "0e0fb5a9159e30491b18b6b7888871e394386827f966d502a2e3cc40bf09065d",
+        "bytes": 28664,
+        "published_checksum": "adler32:d176e9e1",
+        "status": "acquired",
+        "checksum_verified": true,
+        "row_count": 95,
+        "columns": [
+          "Run",
+          "Event",
+          "PID1",
+          "E1",
+          "px1",
+          "py1",
+          "pz1",
+          "pt1",
+          "eta1",
+          "phi1",
+          "Q1",
+          "PID2",
+          "E2",
+          "px2",
+          "py2",
+          "pz2",
+          "pt2",
+          "eta2",
+          "phi2",
+          "Q2",
+          "PID3",
+          "E3",
+          "px3",
+          "py3",
+          "pz3",
+          "pt3",
+          "eta3",
+          "phi3",
+          "Q3",
+          "PID4",
+          "E4",
+          "px4",
+          "py4",
+          "pz4",
+          "pt4",
+          "eta4",
+          "phi4",
+          "Q4",
+          "mZ1",
+          "mZ2",
+          "M"
+        ],
+        "source_title": "Higgs candidate events from CMS 2011 and 2012 open data release selected in the Higgs-to-four-lepton analysis example",
+        "source_license": {
+          "attribution": "CC0-1.0"
+        }
+      }
+    ],
+    "total_rows": 278,
+    "status": "verified_external_measurement_route"
+  }
+}

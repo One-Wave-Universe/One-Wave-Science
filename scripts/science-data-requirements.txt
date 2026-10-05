@@ -1,0 +1,2 @@
+astroquery==0.4.11
+astropy==8.0.1

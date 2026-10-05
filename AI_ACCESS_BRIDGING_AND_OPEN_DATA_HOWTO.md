@@ -1089,3 +1089,7 @@ https://gwosc.readthedocs.io/
 ```
 
 Use the official portals as the source of truth for current dataset availability, formats, licenses, acknowledgements, and release status.
+
+## Jetson archive routes and conversion chart
+
+Use [JETSON_SCIENCE_ARCHIVE_ROUTES.md](JETSON_SCIENCE_ARCHIVE_ROUTES.md) for executable archive queries, dependency environment, bridge directions and live proof boundaries. Use [Engine/PARTICLE_TO_WAVE_CONVERSION_CHART.md](Engine/PARTICLE_TO_WAVE_CONVERSION_CHART.md) for the declared measurement-to-wave coordinate mappings.
