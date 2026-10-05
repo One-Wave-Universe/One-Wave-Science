@@ -90,3 +90,9 @@ python sweep_math_gaps.py
 ```
 
 This produces `math_gap_audit/sweep_results.csv` and `findings.json`.
+
+
+## October 5 balance derivation
+
+[The executable energy/phase-charge audit](BALANCE_DERIVATION.md) derives the existing candidate's energy and antisymmetric phase-transfer ledger. With its default positive damping and restoring coefficients, no nonzero exact undriven periodic lock or nonzero static equilibrium exists. The global kernel already transfers phase; measured lock feedback is a separate, still-open constitutive mechanism. Eight audit checks and nine existing regressions pass; see `balance_receipt.json`. This closes the candidate energy/phase-charge accounting subproblem, not the spatial rotation ledger, confinement, physical kernel derivation or three-excitation solution.
+
