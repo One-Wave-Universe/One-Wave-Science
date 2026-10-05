@@ -141,3 +141,60 @@ and a unit-circle view of scale phase. Both are nonspatial 2D coordinate plots,
 with dimensionless axes. They introduce no time, sample rate, frequency or spatial
 field. The manifest's broader visual/validation checklist remains aspirational;
 no 3D view or browser visual quality is established by this headless adapter.
+
+## Automatic module receipt refresh
+
+The **Lattice Kernel Tests** workflow now forms an event-driven loop:
+repository change → exact-head reference → affected tests → actual adapter
+receipts → return-reference comparison → immutable CI artifact. It runs on
+relevant PR/main changes, including governed nodes and shared authorities, and
+can be manually dispatched. It does not poll or install a device service.
+
+`refresh-dependencies.json` declares paths for the two implemented modules.
+G-764/G-766 changes affect slot 1; G-767 changes affect slot 6. Shared authority,
+state-schema, controller or workflow changes affect both. The map supplies no
+commands: executable argument lists are fixed in `refresh.py`. Unrelated changes
+report `NOT_RUN_UNAFFECTED`/`NO_AFFECTED_MODULES`, never borrowed green evidence.
+This is a bounded dependency map for these two modules, not all-node coverage.
+Adding another module requires updating the map and strict registry/receipt gates.
+
+The controller requires an exact clean HEAD, snapshots dependency membership and
+bytes, and checks them before every command and at completion. Added/deleted
+files or mid-run changes invalidate the bundle. Dirty files are preserved;
+there is no pull, stash, reset, source edit, commit, push, merge or deployment.
+Repository tests execute trusted project code in a disposable CI checkout;
+reference checks detect changes but are not a sandbox against malicious code.
+
+The automatic repair allowlist is **derived receipt/log regeneration only**.
+This is not autonomous source-code healing. Test failures, missing dependencies,
+unknown bases, malformed/stale receipts, source drift or exhausted bounds produce
+HOLD. Each command gets one attempt, up to 60 seconds and 4 MiB combined output;
+the complete run has a 240-second budget. No speculative fix/retry loop is run.
+The scientific/physical limits of both adapters remain unchanged.
+
+CI cancels superseded runs per PR/ref. It uses read-only permissions, does not
+persist Git credentials and uploads an artifact named with exact HEAD, run ID
+and attempt. A canceled/interrupted run cannot finalize a success summary.
+Artifacts contain bounded logs, source references, checksums and actual receipts
+when available; failure evidence is uploaded with `always()`. Retention is 14 days.
+Completed older runs are historical evidence for their recorded HEAD, not current
+status. There is no mutable `latest` receipt pointer or cross-run success cache.
+
+For a manual run from a clean checkout (Python and Node installed), supply a
+fresh output directory outside the checkout and Git metadata:
+
+```sh
+python sims/24-1-sandbox/refresh.py \
+  --expected-head "$(git rev-parse HEAD)" \
+  --output /tmp/one-wave-refresh-unique-run
+```
+
+Optional `--base <full-commit-sha>` selects affected modules by the changed paths;
+an unavailable/invalid base HOLDs. With no base, both modules run. The output
+parent must already exist; occupied or unsafe output locations are refused.
+Separate manual runs with different output paths can run concurrently: automatic
+single-flight/cancellation is provided by CI, not a local daemon or lock service.
+Only a finalized `summary.json` describes the bundle result. `RUNNING.json` is
+an ineligible start record; partial logs/receipts without a completed matching
+summary must never be promoted to success. Consumers must compare the summary's
+HEAD and dependency fingerprint with the current repository before reuse.
