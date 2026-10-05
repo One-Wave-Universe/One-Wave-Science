@@ -121,6 +121,9 @@ function resolveTerminals(board, specParts) {
   const errors = [];
   const seenIds = new Map(); // explicit id -> part index that claimed it first
   const parts = specParts.map((p, i) => {
+    if (p.type === 'potentiometer' && p.pos != null && (!Number.isFinite(Number(p.pos)) || Number(p.pos) < 0 || Number(p.pos) > 1)) {
+      errors.push('part ' + i + ' (potentiometer): pos must be finite and between 0 and 1');
+    }
     const terminals = p.type === 'potentiometer'
       ? derivePotentiometerHoles(board, H(board, p.terminals[0].row, p.terminals[0].col, p.terminals[0].board))
       : p.type === 'comparator'
@@ -144,7 +147,7 @@ function resolveTerminals(board, specParts) {
       value: p.value,
       color: p.color,
       closed: !!p.closed,
-      pos: p.type === 'potentiometer' ? 0.5 : undefined,
+      pos: p.type === 'potentiometer' ? (p.pos == null ? 0.5 : Number(p.pos)) : undefined,
       freq: p.freq,
       phase: p.phase,
       sourceR: p.type === 'diffsource' ? p.sourceR : undefined,

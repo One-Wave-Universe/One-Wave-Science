@@ -7,6 +7,16 @@ html, body {
   height: 100%;
 }
 .app { display: flex; flex-direction: column; height: 100vh; }
+.practice-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:8px 18px; border-bottom:1px solid #2c3644; font-size:12px; }
+.practice-controls input { width:85px; }
+.practice-controls button, .practice-panel button { background:#1c2430; color:#e8ecf1; border:1px solid #4d6590; border-radius:5px; padding:6px; cursor:pointer; }
+.practice-controls input, .practice-panel textarea { background:#10141a; color:#e8ecf1; border:1px solid #4d6590; border-radius:4px; padding:5px; }
+.practice-panel { margin:12px 0; font-size:12px; }
+.practice-panel summary { font-weight:600; cursor:pointer; }
+.practice-panel textarea { display:block; width:100%; margin:6px 0; font-family:monospace; resize:vertical; }
+.practice-panel button { margin:3px 0; }
+#practiceStatus { white-space:pre-wrap; overflow-wrap:anywhere; }
+.top-actions { flex-wrap:wrap; }
 
 header.top {
   display: flex;
