@@ -1,0 +1,87 @@
+{
+  "status": "PASS",
+  "checks": {
+    "force_is_negative_energy_gradient": true,
+    "kernel_is_even": true,
+    "nonlocal_quadratic_is_psd": true,
+    "damped_ledger_refines": true,
+    "refined_ledger_small": true,
+    "charge_recurrence": true,
+    "undamped_charge": true,
+    "undamped_energy_error": true
+  },
+  "scope": "Exact energy functional and continuum-time dissipation identity for the existing periodic 2D candidate; no persistent-mode or physical-law validation.",
+  "derivative_error": 5.543818066235284e-10,
+  "kernel_symmetry_error": 0.0,
+  "minimum_nonlocal_quadratic_eigenvalue": 1.1102230246251565e-16,
+  "refinement": [
+    {
+      "dt": 0.08,
+      "duration": 4.8,
+      "initial_energy": 6.437623771033596,
+      "final_energy": 5.777264479322248,
+      "dissipated_energy": 0.6629167619711788,
+      "relative_ledger_residual": 0.0003972692954406758,
+      "max_charge_recurrence_error": 5.329070518200751e-15
+    },
+    {
+      "dt": 0.04,
+      "duration": 4.8,
+      "initial_energy": 6.437622260803466,
+      "final_energy": 5.776515092922348,
+      "dissipated_energy": 0.6627278889799172,
+      "relative_ledger_residual": 0.0002517577194093836,
+      "max_charge_recurrence_error": 1.9095836023552692e-14
+    },
+    {
+      "dt": 0.02,
+      "duration": 4.8,
+      "initial_energy": 6.437621883427894,
+      "final_energy": 5.775914107921733,
+      "dissipated_energy": 0.662603532309316,
+      "relative_ledger_residual": 0.00013914405340589964,
+      "max_charge_recurrence_error": 3.5083047578154947e-14
+    },
+    {
+      "dt": 0.01,
+      "duration": 4.8,
+      "initial_energy": 6.437621789095372,
+      "final_energy": 5.775557115370939,
+      "dissipated_energy": 0.6625338889209752,
+      "relative_ledger_residual": 7.288641860514987e-05,
+      "max_charge_recurrence_error": 1.2256862191861728e-13
+    }
+  ],
+  "ledger_error_reduction": [
+    1.5779825793332503,
+    1.809331503912543,
+    1.9090532374719844
+  ],
+  "undamped": {
+    "dt": 0.01,
+    "duration": 4.8,
+    "initial_energy": 6.4376217576522095,
+    "final_energy": 6.437601007952821,
+    "dissipated_energy": 0.0,
+    "relative_ledger_residual": 3.2231933110033236e-06,
+    "max_charge_recurrence_error": 1.1013412404281553e-13
+  },
+  "parameters": {
+    "n": 24,
+    "dx": 1.0,
+    "wave_speed": 0.35,
+    "alpha": 0.05,
+    "beta": 0.02,
+    "kappa": 0.12,
+    "gamma": 0.02,
+    "kernel_length": 10.0
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5"
+  },
+  "sha256": {
+    "balance_audit.py": "fbb86a58605d9f1244a681ed9c66462298b707a5ad5c353dc1c35af86c544b3b",
+    "nonlocal_field_bench.py": "902e70246424158bba2ae08cd0a0ec9f44a5bc517e9b1752b9b106e8705fceea"
+  }
+}
