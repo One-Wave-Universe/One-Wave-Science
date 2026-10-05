@@ -4,6 +4,13 @@
 [Wrapper](driven_bulk.py) · [Control tests](test_driven_bulk.py) ·
 [Source-binding test](test_driven_report.py).
 
+## Subsequent measurement follow-up
+
+The [eight-case side48/width3 follow-up](DRIVEN_HALF_STRENGTH_RECEIPT.md) resolves
+the half-strength matched displacement and adds a direct timestep check for that
+configuration. The original 20 cases and side32 limitations below remain unchanged.
+It also measures a small finite-force departure from exact proportionality.
+
 ## Scope and reproducibility
 
 This is an external-drive experiment on the existing dimensionless linear bulk

@@ -1,0 +1,2028 @@
+{
+  "scope": "Read-only fixed-width larger-box half-force and timestep extension; no source changes",
+  "source_sha256": {
+    "bulk_excitation.py": "3cf2d4350714d5680225ff79bc6c56aa0ed85397439b23c8553de074bf9ad40f",
+    "joint_boundary_response.py": "18d32d20d25d7729f68680e6ff0110a38577520a1aabf607af55b38f8c4f26f7",
+    "driven_bulk.py": "b0c2a939f9a8a4950619b939eb88801b012e2df4c353c2206146f245211a44b7",
+    "run_driven_bulk.py": "b46414903b7ef502d9d37779984e69791386be3db108462ca5ecf6e64e477e97"
+  },
+  "elapsed_seconds": 127.1429746369995,
+  "runs": [
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": 0,
+      "dt": 0.02,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": 0.0
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.566911308586609e-11,
+              -2.5669329821312623e-11,
+              -2.5669465581933082e-11
+            ],
+            "concentration": [
+              0.925347644323435,
+              0.9253476443234387,
+              0.9253476443234391
+            ],
+            "seam_fraction": 4.5377221618567655e-12,
+            "branch_uncertainty": 1.5401539736589114e-10,
+            "displacement": [
+              -1.236441484514311e-13,
+              -1.244807140394654e-13,
+              -1.2451396291945136e-13
+            ],
+            "displacement_branch_uncertainty": 3.0728431705293757e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516478988,
+          "energy_balance_residual": -6.557254739192331e-16
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.6049889542657256e-11,
+              -2.6049822637437216e-11,
+              -2.6049977034975913e-11
+            ],
+            "concentration": [
+              0.925294958230106,
+              0.925294958230118,
+              0.9252949582301176
+            ],
+            "seam_fraction": 4.604985060690757e-12,
+            "branch_uncertainty": 1.562983758565046e-10,
+            "displacement": [
+              -5.044206052425971e-13,
+              -5.049735301640587e-13,
+              -5.050254159622829e-13
+            ],
+            "displacement_branch_uncertainty": 3.09567295543551e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651647823,
+          "energy_balance_residual": -1.412064909445121e-15
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.670804958899927e-11,
+              -2.6707305533403533e-11,
+              -2.6707408208949135e-11
+            ],
+            "concentration": [
+              0.9252071542887924,
+              0.9252071542887964,
+              0.9252071542887972
+            ],
+            "seam_fraction": 4.721262843674001e-12,
+            "branch_uncertainty": 1.6024497468124648e-10,
+            "displacement": [
+              -1.1625806515846107e-12,
+              -1.1624564261303757e-12,
+              -1.1624565899355048e-12
+            ],
+            "displacement_branch_uncertainty": 3.135138943682929e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516477496,
+          "energy_balance_residual": -2.147587663259287e-15
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.7676728897132307e-11,
+              -2.767595289841577e-11,
+              -2.7675979295942664e-11
+            ],
+            "concentration": [
+              0.925084241819492,
+              0.9250842418194871,
+              0.9250842418194865
+            ],
+            "seam_fraction": 4.892448978974987e-12,
+            "branch_uncertainty": 1.6605522478283585e-10,
+            "displacement": [
+              -2.1312599597176487e-12,
+              -2.131103791142612e-12,
+              -2.131027676929033e-12
+            ],
+            "displacement_branch_uncertainty": 3.193241444698823e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516476813,
+          "energy_balance_residual": -2.831068712794149e-15
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "work": 0.0,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "external_energy": 0.0,
+        "total_energy": 0.024184476516476813,
+        "switch_work": 0.0,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -2.831068712794149e-15,
+        "max_balance_error": 2.831068712794149e-15,
+        "max_norm_relative_error": 1.255662240851052e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            -2.7676728897132307e-11,
+            -2.767595289841577e-11,
+            -2.7675979295942664e-11
+          ],
+          "concentration": [
+            0.925084241819492,
+            0.9250842418194871,
+            0.9250842418194865
+          ],
+          "seam_fraction": 4.892448978974987e-12,
+          "branch_uncertainty": 1.6605522478283585e-10,
+          "displacement": [
+            -2.1312599597176487e-12,
+            -2.131103791142612e-12,
+            -2.131027676929033e-12
+          ],
+          "displacement_branch_uncertainty": 3.193241444698823e-10,
+          "geometrically_resolved": false,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "e1f1f90f8d3df882d075175dece7294bcefa4a6a72f0b6a0aaffba302ba2d280"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": 0.005,
+      "dt": 0.02,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626826034879876,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": -1.4071042574332877e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.00016531922957637452,
+              -2.5669326070745367e-11,
+              -2.5669411420668597e-11
+            ],
+            "concentration": [
+              0.9253476443326784,
+              0.9253476443313282,
+              0.9253476443313281
+            ],
+            "seam_fraction": 7.018619405327777e-12,
+            "branch_uncertainty": 2.382198420515887e-10,
+            "displacement": [
+              0.00016531925512184344,
+              -1.244769634722096e-13,
+              -1.244598016549666e-13
+            ],
+            "displacement_branch_uncertainty": 3.9148876173863513e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626738219449801,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651644971,
+          "energy_balance_residual": -2.9934529011881523e-14
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0006612599133868123,
+              -2.604988958073042e-11,
+              -2.6049815625530842e-11
+            ],
+            "concentration": [
+              0.9252949583794312,
+              0.92529495835652,
+              0.9252949583565208
+            ],
+            "seam_fraction": 7.139649762948288e-12,
+            "branch_uncertainty": 2.423277486085277e-10,
+            "displacement": [
+              0.0006612599389322813,
+              -5.050404734572636e-13,
+              -5.048640065172121e-13
+            ],
+            "displacement_branch_uncertainty": 3.9559666829557415e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626474756485674,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516360978,
+          "energy_balance_residual": -1.186656348080952e-13
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.001487771368012696,
+              -2.6707601557099618e-11,
+              -2.6707602926692288e-11
+            ],
+            "concentration": [
+              0.9252071550542406,
+              0.9252071549292257,
+              0.9252071549292271
+            ],
+            "seam_fraction": 7.346063238885854e-12,
+            "branch_uncertainty": 2.493336542995872e-10,
+            "displacement": [
+              0.001487771393558165,
+              -1.16275244982646e-12,
+              -1.1626513076786575e-12
+            ],
+            "displacement_branch_uncertainty": 4.026025739866336e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626035596031409,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516214064,
+          "energy_balance_residual": -2.65579365988571e-13
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0026447693308923057,
+              -2.767561557916982e-11,
+              -2.7675649339556815e-11
+            ],
+            "concentration": [
+              0.925084244279359,
+              0.9250842438463516,
+              0.9250842438463507
+            ],
+            "seam_fraction": 7.644683576887951e-12,
+            "branch_uncertainty": 2.594691646676593e-10,
+            "displacement": [
+              0.0026447693564377746,
+              -2.1307664718966613e-12,
+              -2.1306977205431845e-12
+            ],
+            "displacement_branch_uncertainty": 4.127380843547057e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004625420655045134,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651600924,
+          "energy_balance_residual": -4.704051056910565e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              0.005,
+              0.0,
+              0.0
+            ],
+            "work": 1.4071042574332877e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          0.005,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          0.004625420655045134,
+          0.0,
+          0.0
+        ],
+        "external_energy": -1.2364593483361565e-05,
+        "total_energy": 0.02418447651600924,
+        "switch_work": 1.4071042574332877e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -4.704051056910565e-13,
+        "max_balance_error": 4.704051056910565e-13,
+        "max_norm_relative_error": 1.2367884494324244e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            0.0026447693308923057,
+            -2.767561557916982e-11,
+            -2.7675649339556815e-11
+          ],
+          "concentration": [
+            0.925084244279359,
+            0.9250842438463516,
+            0.9250842438463507
+          ],
+          "seam_fraction": 7.644683576887951e-12,
+          "branch_uncertainty": 2.594691646676593e-10,
+          "displacement": [
+            0.0026447693564377746,
+            -2.1307664718966613e-12,
+            -2.1306977205431845e-12
+          ],
+          "displacement_branch_uncertainty": 4.127380843547057e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "a64758b0689b001a8615eb4f9ea581d3094f29a2e6f5d2c5cd0f1d9fe3ca6578"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": -0.005,
+      "dt": 0.02,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626826034879876,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": 1.4071042574332877e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0001653192295777388,
+              -2.5669244707834764e-11,
+              -2.5669559823078563e-11
+            ],
+            "concentration": [
+              0.9253476443327026,
+              0.9253476443313503,
+              0.9253476443313509
+            ],
+            "seam_fraction": 7.0186194049199635e-12,
+            "branch_uncertainty": 2.38219842037747e-10,
+            "displacement": [
+              -0.00016531920403226987,
+              -1.243956005616068e-13,
+              -1.2460820406493313e-13
+            ],
+            "displacement_branch_uncertainty": 3.9148876172479345e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626738219449716,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651644971,
+          "energy_balance_residual": -2.993424759103004e-14
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0006612599133861795,
+              -2.6049667126133587e-11,
+              -2.6050047996074522e-11
+            ],
+            "concentration": [
+              0.925294958379467,
+              0.9252949583565122,
+              0.9252949583565127
+            ],
+            "seam_fraction": 7.13964976206329e-12,
+            "branch_uncertainty": 2.423277485784899e-10,
+            "displacement": [
+              -0.0006612598878407105,
+              -5.048180188604296e-13,
+              -5.050963770608921e-13
+            ],
+            "displacement_branch_uncertainty": 3.955966682655363e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626474756485608,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516361037,
+          "energy_balance_residual": -1.1860637278906051e-13
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0014877713680130768,
+              -2.6707217434676213e-11,
+              -2.6707626375754128e-11
+            ],
+            "concentration": [
+              0.9252071550542424,
+              0.9252071549292232,
+              0.9252071549292236
+            ],
+            "seam_fraction": 7.346063237888376e-12,
+            "branch_uncertainty": 2.493336542657317e-10,
+            "displacement": [
+              -0.0014877713424676078,
+              -1.1623683274030553e-12,
+              -1.162674756740498e-12
+            ],
+            "displacement_branch_uncertainty": 4.026025739527781e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626035596031497,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651621402,
+          "energy_balance_residual": -2.656241873780949e-13
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0026447693308926257,
+              -2.7675674915906634e-11,
+              -2.7675992414984918e-11
+            ],
+            "concentration": [
+              0.9250842442793562,
+              0.9250842438463592,
+              0.925084243846361
+            ],
+            "seam_fraction": 7.644683576115759e-12,
+            "branch_uncertainty": 2.594691646414502e-10,
+            "displacement": [
+              -0.002644769305347157,
+              -2.1308258086334764e-12,
+              -2.1310407959712877e-12
+            ],
+            "displacement_branch_uncertainty": 4.127380843284966e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.0046254206550451525,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516009204,
+          "energy_balance_residual": -4.704395187397246e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              -0.005,
+              0.0,
+              0.0
+            ],
+            "work": -1.4071042574332877e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          -0.005,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          -0.0046254206550451525,
+          0.0,
+          0.0
+        ],
+        "external_energy": -1.2364593483358956e-05,
+        "total_energy": 0.024184476516009204,
+        "switch_work": -1.4071042574332877e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -4.704395187397246e-13,
+        "max_balance_error": 4.704395187397246e-13,
+        "max_norm_relative_error": 1.2378986724570495e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            -0.0026447693308926257,
+            -2.7675674915906634e-11,
+            -2.7675992414984918e-11
+          ],
+          "concentration": [
+            0.9250842442793562,
+            0.9250842438463592,
+            0.925084243846361
+          ],
+          "seam_fraction": 7.644683576115759e-12,
+          "branch_uncertainty": 2.594691646414502e-10,
+          "displacement": [
+            -0.002644769305347157,
+            -2.1308258086334764e-12,
+            -2.1310407959712877e-12
+          ],
+          "displacement_branch_uncertainty": 4.127380843284966e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "da2a826205a5281dd03e0caf6c4a525d517f5ce535d776239719e820d16701c8"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": 0,
+      "dt": 0.01,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": 0.0
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.5670082669743604e-11,
+              -2.5669451222656115e-11,
+              -2.5669548914624955e-11
+            ],
+            "concentration": [
+              0.9253476443234372,
+              0.9253476443234363,
+              0.9253476443234367
+            ],
+            "seam_fraction": 4.537722164469217e-12,
+            "branch_uncertainty": 1.540153974545607e-10,
+            "displacement": [
+              -1.2461373232894497e-13,
+              -1.2460211538295759e-13,
+              -1.2459729561132515e-13
+            ],
+            "displacement_branch_uncertainty": 3.072843171416071e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651647825,
+          "energy_balance_residual": -1.394717674685353e-15
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              2.6049240091278192e-11,
+              -2.6049784737279355e-11,
+              -2.6049695392335288e-11
+            ],
+            "concentration": [
+              0.9252949582301047,
+              0.9252949582301208,
+              0.9252949582301208
+            ],
+            "seam_fraction": 7.1359539433644795e-12,
+            "branch_uncertainty": 2.422023083322196e-10,
+            "displacement": [
+              5.159470902869285e-11,
+              -5.049356300061972e-13,
+              -5.047437733216577e-13
+            ],
+            "displacement_branch_uncertainty": 3.95471228019266e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516476774,
+          "energy_balance_residual": -2.869232629265639e-15
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.670810028125204e-11,
+              -2.670710435536423e-11,
+              -2.670761930250027e-11
+            ],
+            "concentration": [
+              0.9252071542887961,
+              0.9252071542887975,
+              0.9252071542887982
+            ],
+            "seam_fraction": 4.721262848179252e-12,
+            "branch_uncertainty": 1.602449748341598e-10,
+            "displacement": [
+              -1.1626313438373827e-12,
+              -1.1622552480910711e-12,
+              -1.162667683486639e-12
+            ],
+            "displacement_branch_uncertainty": 3.135138945212062e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651647531,
+          "energy_balance_residual": -4.333339242990064e-15
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.7676094350246533e-11,
+              -2.7675386988333927e-11,
+              -2.7675798552076315e-11
+            ],
+            "concentration": [
+              0.9250842418194896,
+              0.9250842418194861,
+              0.9250842418194865
+            ],
+            "seam_fraction": 4.892448981950983e-12,
+            "branch_uncertainty": 1.6605522488384453e-10,
+            "displacement": [
+              -2.1306254128318743e-12,
+              -2.1305378810607696e-12,
+              -2.1308469330626847e-12
+            ],
+            "displacement_branch_uncertainty": 3.1932414457089096e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.0241844765164739,
+          "energy_balance_residual": -5.7419347054832315e-15
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "work": 0.0,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "external_energy": 0.0,
+        "total_energy": 0.0241844765164739,
+        "switch_work": 0.0,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -5.7419347054832315e-15,
+        "max_balance_error": 5.7419347054832315e-15,
+        "max_norm_relative_error": 2.4924506902834764e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            -2.7676094350246533e-11,
+            -2.7675386988333927e-11,
+            -2.7675798552076315e-11
+          ],
+          "concentration": [
+            0.9250842418194896,
+            0.9250842418194861,
+            0.9250842418194865
+          ],
+          "seam_fraction": 4.892448981950983e-12,
+          "branch_uncertainty": 1.6605522488384453e-10,
+          "displacement": [
+            -2.1306254128318743e-12,
+            -2.1305378810607696e-12,
+            -2.1308469330626847e-12
+          ],
+          "displacement_branch_uncertainty": 3.1932414457089096e-10,
+          "geometrically_resolved": false,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "faa016e765d07eac5918b80c450d057c1ff2a85e97a4383c0882f57d01942b88"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": 0.005,
+      "dt": 0.01,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626826034879876,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": -1.4071042574332877e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.00016531923005511234,
+              -2.566922963594119e-11,
+              -2.5669539968807145e-11
+            ],
+            "concentration": [
+              0.9253476443326997,
+              0.9253476443313303,
+              0.9253476443313308
+            ],
+            "seam_fraction": 7.018619407628141e-12,
+            "branch_uncertainty": 2.382198421296656e-10,
+            "displacement": [
+              0.00016531925560058126,
+              -1.2438052866803208e-13,
+              -1.2458834979351447e-13
+            ],
+            "displacement_branch_uncertainty": 3.9148876181671203e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0046267382194497934,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516470942,
+          "energy_balance_residual": -8.701513665925408e-15
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0006612599152858859,
+              -2.6049726335673017e-11,
+              -2.6050026260927612e-11
+            ],
+            "concentration": [
+              0.9252949583795448,
+              0.9252949583565276,
+              0.9252949583565291
+            ],
+            "seam_fraction": 7.1396497667338586e-12,
+            "branch_uncertainty": 2.4232774873701425e-10,
+            "displacement": [
+              0.0006612599408313549,
+              -5.048772283998595e-13,
+              -5.050746419139818e-13
+            ],
+            "displacement_branch_uncertainty": 3.955966684240607e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0046264747564859435,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516447284,
+          "energy_balance_residual": -3.23596724312971e-14
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0014877713722444928,
+              -2.6707254282831972e-11,
+              -2.6707815030399003e-11
+            ],
+            "concentration": [
+              0.925207155054485,
+              0.9252071549292441,
+              0.9252071549292434
+            ],
+            "seam_fraction": 7.346063242563328e-12,
+            "branch_uncertainty": 2.4933365442440477e-10,
+            "displacement": [
+              0.0014877713977899617,
+              -1.1624051755588144e-12,
+              -1.162863411385373e-12
+            ],
+            "displacement_branch_uncertainty": 4.026025741114512e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.004626035596032171,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516409262,
+          "energy_balance_residual": -7.038134157775676e-14
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0026447693383354386,
+              -2.767507011790141e-11,
+              -2.767568034442109e-11
+            ],
+            "concentration": [
+              0.9250842442797982,
+              0.9250842438463928,
+              0.9250842438463945
+            ],
+            "seam_fraction": 7.644683578570143e-12,
+            "branch_uncertainty": 2.5946916472475476e-10,
+            "displacement": [
+              0.0026447693638809075,
+              -2.1302210106282514e-12,
+              -2.1307287254074606e-12
+            ],
+            "displacement_branch_uncertainty": 4.127380844118012e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.0046254206550467546,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651635673,
+          "energy_balance_residual": -1.2291223787728643e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              0.005,
+              0.0,
+              0.0
+            ],
+            "work": 1.4071042574332877e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          0.005,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          0.0046254206550467546,
+          0.0,
+          0.0
+        ],
+        "external_energy": -1.2364593565420121e-05,
+        "total_energy": 0.02418447651635673,
+        "switch_work": 1.4071042574332877e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -1.2291223787728643e-13,
+        "max_balance_error": 1.2291223787728643e-13,
+        "max_norm_relative_error": 2.5712765250318625e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            0.0026447693383354386,
+            -2.767507011790141e-11,
+            -2.767568034442109e-11
+          ],
+          "concentration": [
+            0.9250842442797982,
+            0.9250842438463928,
+            0.9250842438463945
+          ],
+          "seam_fraction": 7.644683578570143e-12,
+          "branch_uncertainty": 2.5946916472475476e-10,
+          "displacement": [
+            0.0026447693638809075,
+            -2.1302210106282514e-12,
+            -2.1307287254074606e-12
+          ],
+          "displacement_branch_uncertainty": 4.127380844118012e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "6ba5c9aaf6c54457b44ed6b84216764725593ab79bc5f60c29ecbd0964569964"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": -0.005,
+      "dt": 0.01,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626826034879876,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": 1.4071042574332877e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.00016531923005511345,
+              -2.5669529477913638e-11,
+              -2.5669624261163237e-11
+            ],
+            "concentration": [
+              0.9253476443327286,
+              0.9253476443313539,
+              0.9253476443313541
+            ],
+            "seam_fraction": 7.018619406385489e-12,
+            "branch_uncertainty": 2.3821984208748865e-10,
+            "displacement": [
+              -0.00016531920450964452,
+              -1.2468037064048034e-13,
+              -1.2467264214960648e-13
+            ],
+            "displacement_branch_uncertainty": 3.914887617745351e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626738219449695,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651647092,
+          "energy_balance_residual": -8.722048926785643e-15
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0006612599152847756,
+              -2.6049847442838794e-11,
+              -2.6050302852049872e-11
+            ],
+            "concentration": [
+              0.9252949583795734,
+              0.9252949583565279,
+              0.9252949583565281
+            ],
+            "seam_fraction": 7.139649764819673e-12,
+            "branch_uncertainty": 2.4232774867204464e-10,
+            "displacement": [
+              -0.0006612598897393066,
+              -5.049983355656367e-13,
+              -5.053512330362414e-13
+            ],
+            "displacement_branch_uncertainty": 3.9559666835909107e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004626474756485865,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516447367,
+          "energy_balance_residual": -3.227612428359873e-14
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0014877713722441547,
+              -2.670768141929291e-11,
+              -2.6707722910779447e-11
+            ],
+            "concentration": [
+              0.9252071550545052,
+              0.9252071549292357,
+              0.9252071549292357
+            ],
+            "seam_fraction": 7.346063240479417e-12,
+            "branch_uncertainty": 2.493336543536745e-10,
+            "displacement": [
+              -0.0014877713466986857,
+              -1.1628323120197509e-12,
+              -1.1627712917658171e-12
+            ],
+            "displacement_branch_uncertainty": 4.0260257404072095e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.0046260355960322415,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516409172,
+          "energy_balance_residual": -7.047126577765607e-14
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.002644769338335967,
+              -2.767588212417947e-11,
+              -2.767612397509717e-11
+            ],
+            "concentration": [
+              0.9250842442797989,
+              0.9250842438464031,
+              0.9250842438464045
+            ],
+            "seam_fraction": 7.64468357706154e-12,
+            "branch_uncertainty": 2.594691646735511e-10,
+            "displacement": [
+              -0.002644769312790498,
+              -2.1310330169063134e-12,
+              -2.1311723560835384e-12
+            ],
+            "displacement_branch_uncertainty": 4.127380843605975e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.004625420655046739,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516356756,
+          "energy_balance_residual": -1.2288767032777127e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              -0.005,
+              0.0,
+              0.0
+            ],
+            "work": -1.4071042574332877e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          -0.005,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          -0.004625420655046739,
+          0.0,
+          0.0
+        ],
+        "external_energy": -1.236459356541417e-05,
+        "total_energy": 0.024184476516356756,
+        "switch_work": -1.4071042574332877e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -1.2288767032777127e-13,
+        "max_balance_error": 1.2288767032777127e-13,
+        "max_norm_relative_error": 2.5779378631796135e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            -0.002644769338335967,
+            -2.767588212417947e-11,
+            -2.767612397509717e-11
+          ],
+          "concentration": [
+            0.9250842442797989,
+            0.9250842438464031,
+            0.9250842438464045
+          ],
+          "seam_fraction": 7.64468357706154e-12,
+          "branch_uncertainty": 2.594691646735511e-10,
+          "displacement": [
+            -0.002644769312790498,
+            -2.1310330169063134e-12,
+            -2.1311723560835384e-12
+          ],
+          "displacement_branch_uncertainty": 4.127380843605975e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "1c129f22f2527674a6277fee9d7dc8d421084e0d374f16771d4fd7a4a4043853"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": 0.01,
+      "dt": 0.01,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.009253652069759751,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": -2.8142085148665755e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0003306382064757483,
+              -2.5669498873976276e-11,
+              -2.5669460809664965e-11
+            ],
+            "concentration": [
+              0.9253476443605168,
+              0.9253476443550254,
+              0.9253476443550253
+            ],
+            "seam_fraction": 7.019524880428624e-12,
+            "branch_uncertainty": 2.382505748956209e-10,
+            "displacement": [
+              0.00033063823202121725,
+              -1.246497667031185e-13,
+              -1.2450919065133455e-13
+            ],
+            "displacement_branch_uncertainty": 3.915194945826673e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.009253476425896873,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516448405,
+          "energy_balance_residual": -3.123918177624183e-14
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0013225161510840222,
+              -2.6049579336412147e-11,
+              -2.6049969856722177e-11
+            ],
+            "concentration": [
+              0.9252949588278552,
+              0.9252949587356829,
+              0.9252949587356837
+            ],
+            "seam_fraction": 7.1433587957841295e-12,
+            "branch_uncertainty": 2.4245363735748133e-10,
+            "displacement": [
+              0.0013225161766294911,
+              -5.047302291389898e-13,
+              -5.050182377085468e-13
+            ],
+            "displacement_branch_uncertainty": 3.9572255704452775e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.009252949304988827,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516357852,
+          "energy_balance_residual": -1.2179174722223115e-13
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.0029755241752122377,
+              -2.6707522520935724e-11,
+              -2.670785147853619e-11
+            ],
+            "concentration": [
+              0.9252071573515647,
+              0.9252071568505524,
+              0.9252071568505523
+            ],
+            "seam_fraction": 7.354741750635287e-12,
+            "branch_uncertainty": 2.496282127560015e-10,
+            "displacement": [
+              0.0029755242007577067,
+              -1.1626734136625659e-12,
+              -1.162899859522559e-12
+            ],
+            "displacement_branch_uncertainty": 4.028971324430479e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.00925207013961741,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651620779,
+          "energy_balance_residual": -2.7185226678812887e-13
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              0.005289479839494727,
+              -2.7675987062451983e-11,
+              -2.7675675548719532e-11
+            ],
+            "concentration": [
+              0.9250842516601626,
+              0.92508424992691,
+              0.9250842499269096
+            ],
+            "seam_fraction": 7.660964818294649e-12,
+            "branch_uncertainty": 2.6002176832549023e-10,
+            "displacement": [
+              0.005289479865040195,
+              -2.1311379551788253e-12,
+              -2.130723929705902e-12
+            ],
+            "displacement_branch_uncertainty": 4.1329068801253666e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            0.009250837985893729,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.02418447651599889,
+          "energy_balance_residual": -4.807546066591599e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              0.01,
+              0.0,
+              0.0
+            ],
+            "work": 2.8142085148665755e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          0.01,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          0.009250837985893729,
+          0.0,
+          0.0
+        ],
+        "external_energy": -4.945781029086837e-05,
+        "total_energy": 0.02418447651599889,
+        "switch_work": 2.8142085148665755e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -4.807546066591599e-13,
+        "max_balance_error": 4.807546066591599e-13,
+        "max_norm_relative_error": 2.44582132324922e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            0.005289479839494727,
+            -2.7675987062451983e-11,
+            -2.7675675548719532e-11
+          ],
+          "concentration": [
+            0.9250842516601626,
+            0.92508424992691,
+            0.9250842499269096
+          ],
+          "seam_fraction": 7.660964818294649e-12,
+          "branch_uncertainty": 2.6002176832549023e-10,
+          "displacement": [
+            0.005289479865040195,
+            -2.1311379551788253e-12,
+            -2.130723929705902e-12
+          ],
+          "displacement_branch_uncertainty": 4.1329068801253666e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "533b600f54311cd43ae5ffc431285c27b5bbcb97ebb1f3f7d3733fc60feac5e0"
+    },
+    {
+      "side": 48,
+      "width": 3,
+      "force_coefficient": -0.01,
+      "dt": 0.01,
+      "duration": 2.0,
+      "initial_projection_leakage": 3.252020619425123e-16,
+      "trace": [
+        {
+          "time": 0.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -2.554546893741466e-11,
+              -2.5544849107273158e-11,
+              -2.554495161901363e-11
+            ],
+            "concentration": [
+              0.9253652069759997,
+              0.9253652069759947,
+              0.925365206975995
+            ],
+            "seam_fraction": 4.515728852326953e-12,
+            "branch_uncertainty": 1.5326891968704643e-10,
+            "displacement": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "displacement_branch_uncertainty": 3.0653783937409285e-10,
+            "geometrically_resolved": false,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.009253652069759751,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516479644,
+          "energy_balance_residual": 2.8142085148665755e-19
+        },
+        {
+          "time": 0.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.00033063820647631225,
+              -2.566943361179889e-11,
+              -2.566951153038593e-11
+            ],
+            "concentration": [
+              0.9253476443605143,
+              0.9253476443550356,
+              0.9253476443550364
+            ],
+            "seam_fraction": 7.019524878997925e-12,
+            "branch_uncertainty": 2.3825057484706134e-10,
+            "displacement": [
+              -0.0003306381809308433,
+              -1.2458450452573337e-13,
+              -1.2455991137229956e-13
+            ],
+            "displacement_branch_uncertainty": 3.9151949453410777e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.0092534764258969,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516448433,
+          "energy_balance_residual": -3.1210863358923226e-14
+        },
+        {
+          "time": 1.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0013225161510847328,
+              -2.6049882208795728e-11,
+              -2.6050037021551084e-11
+            ],
+            "concentration": [
+              0.9252949588278717,
+              0.9252949587356757,
+              0.925294958735676
+            ],
+            "seam_fraction": 7.143358793566649e-12,
+            "branch_uncertainty": 2.4245363728221756e-10,
+            "displacement": [
+              -0.0013225161255392638,
+              -5.050331015225702e-13,
+              -5.050854025374541e-13
+            ],
+            "displacement_branch_uncertainty": 3.95722556969264e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.009252949304988678,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516357745,
+          "energy_balance_residual": -1.2189873723603875e-13
+        },
+        {
+          "time": 1.5,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.0029755241752138567,
+              -2.6707602546030824e-11,
+              -2.6707781193387595e-11
+            ],
+            "concentration": [
+              0.9252071573515498,
+              0.925207156850548,
+              0.9252071568505486
+            ],
+            "seam_fraction": 7.354741748105703e-12,
+            "branch_uncertainty": 2.4962821267014453e-10,
+            "displacement": [
+              -0.0029755241496683877,
+              -1.162753438757666e-12,
+              -1.1628295743739648e-12
+            ],
+            "displacement_branch_uncertainty": 4.0289713235719096e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.009252070139617425,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476516207823,
+          "energy_balance_residual": -2.7182047892385833e-13
+        },
+        {
+          "time": 2.0,
+          "centroid": {
+            "valid": true,
+            "reason": "",
+            "position": [
+              -0.005289479839494428,
+              -2.767572931704848e-11,
+              -2.7675866749747343e-11
+            ],
+            "concentration": [
+              0.9250842516601794,
+              0.9250842499268881,
+              0.9250842499268881
+            ],
+            "seam_fraction": 7.660964816594428e-12,
+            "branch_uncertainty": 2.600217682677828e-10,
+            "displacement": [
+              -0.005289479813948959,
+              -2.130880209775321e-12,
+              -2.130915130733713e-12
+            ],
+            "displacement_branch_uncertainty": 4.1329068795482923e-10,
+            "geometrically_resolved": true,
+            "temporal_refinement": "not established by one interactive run"
+          },
+          "applied_force": [
+            -0.009250837985893772,
+            0.0,
+            0.0
+          ],
+          "total_energy": 0.024184476515998827,
+          "energy_balance_residual": -4.80816493862592e-13
+        }
+      ],
+      "result": {
+        "initial_energy": 0.024184476516479644,
+        "initial_norm": 0.9999999999999998,
+        "initial_center": [
+          -2.554546893741466e-11,
+          -2.5544849107273158e-11,
+          -2.554495161901363e-11
+        ],
+        "initial_branch_uncertainty": 1.5326891968704643e-10,
+        "protocol_events": [
+          {
+            "kind": "force_switch",
+            "time": 0.0,
+            "old_force": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "new_force": [
+              -0.01,
+              0.0,
+              0.0
+            ],
+            "work": -2.8142085148665755e-19,
+            "energy_before": 0.024184476516479644,
+            "energy_after": 0.024184476516479644
+          }
+        ],
+        "force_coefficients": [
+          -0.01,
+          0.0,
+          0.0
+        ],
+        "applied_force": [
+          -0.009250837985893772,
+          0.0,
+          0.0
+        ],
+        "external_energy": -4.94578102908557e-05,
+        "total_energy": 0.024184476515998827,
+        "switch_work": -2.8142085148665755e-19,
+        "intervention_work": 0.0,
+        "energy_balance_residual": -4.80816493862592e-13,
+        "max_balance_error": 4.80816493862592e-13,
+        "max_norm_relative_error": 2.4502622153477205e-13,
+        "centroid": {
+          "valid": true,
+          "reason": "",
+          "position": [
+            -0.005289479839494428,
+            -2.767572931704848e-11,
+            -2.7675866749747343e-11
+          ],
+          "concentration": [
+            0.9250842516601794,
+            0.9250842499268881,
+            0.9250842499268881
+          ],
+          "seam_fraction": 7.660964816594428e-12,
+          "branch_uncertainty": 2.600217682677828e-10,
+          "displacement": [
+            -0.005289479813948959,
+            -2.130880209775321e-12,
+            -2.130915130733713e-12
+          ],
+          "displacement_branch_uncertainty": 4.1329068795482923e-10,
+          "geometrically_resolved": true,
+          "temporal_refinement": "not established by one interactive run"
+        },
+        "scope": "External periodic drive of a chosen field model; no fitted inertia or physical mass"
+      },
+      "final_field_sha256": "c04b22a0225bd753a3f83b2c70584be9a1fdcb3fdf06189533d36d49c4dc7c52"
+    }
+  ]
+}
