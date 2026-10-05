@@ -122,6 +122,96 @@
       ],
       "fetch_mode": "tap",
       "verified_note": "Preserve Gaia source_id, data release/table, units, quality fields and query text."
+    },
+    {
+      "id": "openneuro",
+      "domain": "brain-scan",
+      "coverage": [
+        "MRI",
+        "fMRI",
+        "EEG",
+        "MEG",
+        "BIDS datasets"
+      ],
+      "api_root": "https://openneuro.org/crn/graphql",
+      "api_docs": "https://docs.openneuro.org/api.html",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "dandi",
+      "domain": "neuroscience",
+      "coverage": [
+        "electrophysiology",
+        "calcium imaging",
+        "NWB assets"
+      ],
+      "api_root": "https://api.dandiarchive.org/api/dandisets/",
+      "api_docs": "https://docs.dandiarchive.org/api/rest-api/",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "physionet-eeg",
+      "domain": "brain-scan",
+      "coverage": [
+        "EEG motor movement/imagery"
+      ],
+      "api_root": "https://physionet.org/files/eegmmidb/1.0.0/RECORDS",
+      "api_docs": "https://physionet.org/content/eegmmidb/1.0.0/",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "eso",
+      "domain": "ground-telescope",
+      "coverage": [
+        "ESO public ObsCore observations"
+      ],
+      "api_root": "https://archive.eso.org/tap_obs/",
+      "api_docs": "https://archive.eso.org/programmatic/",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "alma",
+      "domain": "radio-telescope",
+      "coverage": [
+        "ALMA public ObsCore observations"
+      ],
+      "api_root": "https://almascience.eso.org/tap/",
+      "api_docs": "https://almascience.eso.org/alma-data/archive/archive-documentation",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
+    },
+    {
+      "id": "desi",
+      "domain": "spectroscopy",
+      "coverage": [
+        "DESI public release directory metadata"
+      ],
+      "api_root": "https://data.desi.lbl.gov/public/dr1/",
+      "api_docs": "https://data.desi.lbl.gov/doc/access/",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Public metadata only; inspect matching live receipt. Coverage labels do not prove each modality or instrument."
     }
   ]
 }

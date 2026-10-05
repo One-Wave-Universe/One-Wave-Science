@@ -1,0 +1,229 @@
+{
+  "schema": "one-wave-jetson-archive-verification-v1",
+  "utc": "2026-10-05T20:39:26.917862+00:00",
+  "device_id": "fc9b5227-716d-4508-a666-ee0a68a08d4c",
+  "science_main_reference": "7de50755288e75bb176ad79a8ae0fe37a1cb57fe",
+  "science_local_reference": "2fec5dbaee311508911c7a6853aeccbc6bfff0c5",
+  "bridge_main_reference": "98827b2a8f2feb540fc7f69cd683aa38fbd4b45a",
+  "execution": "Remote Desktop Commander on aarch64 Jetson",
+  "scope": "Bounded live public metadata pages and native archive tables, no bulk measurement analysis or One-Wave physical proof",
+  "raw_cache_root": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005",
+  "tests": "15 offline tests passed",
+  "probes": [
+    {
+      "probe": "HST",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 714,
+      "sha256": "3aa2e7d6497cba6b0f8b9b7dd8114f7912c3c5be2d6b08015149c576b1caec8c",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/HST/receipt.json"
+    },
+    {
+      "probe": "JWST",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 18,
+      "sha256": "e91b771e9691bc84c16d6b58f2e3ff68dd0f0232c6f995307666f610bc54d246",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/JWST/receipt.json"
+    },
+    {
+      "probe": "TESS",
+      "source": "mast",
+      "status": "acquired",
+      "row_count": 6,
+      "sha256": "e086a67142ba01df731249b05d214dd9650dca823f126969318187781ff7df0a",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/TESS/receipt.json"
+    },
+    {
+      "probe": "cern-ALICE",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "a0b93d20374a87c905b728761a00ea13966361c21b6eb8d16142c0930bd7155d",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-ALICE/receipt.json"
+    },
+    {
+      "probe": "cern-ATLAS",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "fdfd05d0b54e70f480f537e476cc07751edb6ed235638c77b1ffbd47ecadd236",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-ATLAS/receipt.json"
+    },
+    {
+      "probe": "cern-LHCb",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "85298e5d33ed8dfd0357a788bac4c56173d8edb0db8b6565bc3c3293589e2135",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-LHCb/receipt.json"
+    },
+    {
+      "probe": "cern-gwosc",
+      "source": null,
+      "status": "complete",
+      "row_count": null,
+      "sha256": null,
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/cern-gwosc/receipt.json"
+    },
+    {
+      "probe": "gaia",
+      "source": "gaia-archive",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/gaia/receipt.json"
+    },
+    {
+      "probe": "heasarc",
+      "source": "heasarc",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc/receipt.json"
+    },
+    {
+      "probe": "heasarc-fixed",
+      "source": "heasarc",
+      "status": "acquired",
+      "row_count": 0,
+      "sha256": "6740b6e0eb2648163c9b8747a034f472dae306287618a1fa9f0aab65f8cc95ab",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc-fixed/receipt.json"
+    },
+    {
+      "probe": "heasarc-wide",
+      "source": "heasarc",
+      "status": "acquired",
+      "row_count": 108,
+      "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/heasarc-wide/receipt.json"
+    },
+    {
+      "probe": "hst",
+      "source": "mast",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "ModuleNotFoundError: No module named 'astropy'",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/hst/receipt.json"
+    },
+    {
+      "probe": "relay-alma",
+      "source": "alma",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "11337ce723c0d71c4ea4df7ea25df2c383d585ac78b35e53e2410247f6cb6650",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-alma/receipt.json"
+    },
+    {
+      "probe": "relay-cern-open-data",
+      "source": "cern-open-data",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "59c8411e7c485f20b2c170c8ace83887da77e439c0f1c0f7334acf574175cf9c",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-cern-open-data/receipt.json"
+    },
+    {
+      "probe": "relay-dandi",
+      "source": "dandi",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "f3c2f26a5a47e7b7aac4852024a00fb53aa3b6eae6bf125ddc00f6b8ae3ca6c6",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-dandi/receipt.json"
+    },
+    {
+      "probe": "relay-desi",
+      "source": "desi",
+      "status": "acquired",
+      "row_count": 7,
+      "sha256": "00c1289154008b778b8b40bcfa12ee482b720b535f5f4dc8c7b0d80c39d5d871",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-desi/receipt.json"
+    },
+    {
+      "probe": "relay-eso",
+      "source": "eso",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "72c7973b13a0ee701e34c1d9b570fead9272d4ca84ceec4237eb8007b9cd7e51",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-eso/receipt.json"
+    },
+    {
+      "probe": "relay-gaia",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "row_count": 3,
+      "sha256": "0e55cd71dc0225af3173e9c4e1d2b53370015d8020c2132864674ddff0f2ad9a",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-gaia/receipt.json"
+    },
+    {
+      "probe": "relay-gwosc",
+      "source": "gwosc",
+      "status": "acquired",
+      "row_count": 10,
+      "sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-gwosc/receipt.json"
+    },
+    {
+      "probe": "relay-hepdata",
+      "source": "hepdata",
+      "status": "failed",
+      "row_count": null,
+      "sha256": null,
+      "error": "HTTPError: HTTP Error 403: Forbidden",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-hepdata/receipt.json"
+    },
+    {
+      "probe": "relay-openneuro",
+      "source": "openneuro",
+      "status": "acquired",
+      "row_count": 1,
+      "sha256": "93498323b4f346ee4181e2298943ecb50bb5680f61fe0ecd0157f38edd9e8ac0",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-openneuro/receipt.json"
+    },
+    {
+      "probe": "relay-physionet-eeg",
+      "source": "physionet-eeg",
+      "status": "acquired",
+      "row_count": 14,
+      "sha256": "02d1de9c00511d3b7548a6b59bdf209c819db025518ddcc52b21fd3b2b9de4a8",
+      "error": null,
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-physionet-eeg/receipt.json"
+    }
+  ],
+  "known_failures": [
+    "HEPData search plus two public record URLs return HTTP 403",
+    "Original Gaia async ORDER BY probe exceeded 70-second process cap; synchronous unordered TOP 3 returned 3 records"
+  ],
+  "code_sha256": {
+    "scripts/science_archive_search.py": "cabe54f6949f93f126a9c0f810996015d9cd76c786c90703f55df588736c9762",
+    "scripts/archive_metadata_query.py": "a25b6888e70eb026d0190812a62b84e0fc3737e086bc6b427b4fa033667c18ba",
+    "scripts/particle_wave_coordinates.py": "a94177bb44c50b5a03a784d744e0f456a26ca591c4949750d0a400e49e380330"
+  },
+  "bridge_verification": {
+    "route": "authenticated local Hive Pipe MCP at 127.0.0.1:8765",
+    "request_id": "archive-bridge-aa5cf56d04b64e2e9aec05dfe4b16bdc",
+    "exit_code": 0,
+    "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/hive-pipe-verification.json",
+    "gwosc_sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+    "external_https_verified": false
+  }
+}
