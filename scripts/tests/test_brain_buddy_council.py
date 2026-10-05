@@ -536,7 +536,7 @@ class LocalPairTests(unittest.TestCase):
     def test_local_response_identity_and_output_budget(self):
         for reason,ok in [('stop',True),('length',False)]:
             with patch.object(c,'reference_snapshot',side_effect=[snapshot(),snapshot()]),patch.object(c,'urlopen') as call:
-                call.return_value.__enter__.return_value.read.return_value=json.dumps({'response':'{"answer":"visible"}','done_reason':reason}).encode()
+                call.return_value.__enter__.return_value.read.return_value=json.dumps({'response':'{"answer":"visible"}','done_reason':reason,'done':True}).encode()
                 x=c.run_worker(Path('/tmp'),'local','question',30,'local-request')
                 self.assertEqual(x['ok'],ok);self.assertEqual(x['provider'],'ollama-local');self.assertEqual(x['request_id'],'local-request')
                 payload=json.loads(call.call_args.args[0].data);self.assertFalse(payload['think']);self.assertIn('canonical',payload['prompt'])
