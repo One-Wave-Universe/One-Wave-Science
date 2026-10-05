@@ -1,4 +1,4 @@
-"""Private, loopback-only One-Wave answer app. No knowledge database or shell API."""
+"""Private One-Wave answer app and explicitly configured source-record builder. No shell API."""
 import argparse
 import base64
 import fcntl
@@ -26,7 +26,8 @@ def git(root, *args):
     return subprocess.check_output(['git', '-C', str(root), *args], text=True, timeout=20).strip()
 
 class App:
-    def __init__(self, roots, state, provider=None, agent='claude', relay='http://127.0.0.1:3001', discover=False):
+    def __init__(self, roots, state, provider=None, agent='claude', relay='http://127.0.0.1:3001', discover=False,
+                 knowledge_store=None, knowledge_store_id=None):
         self.roots = [Path(p).resolve() for p in roots]
         self.state = Path(state).resolve()
         self.state.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -35,6 +36,10 @@ class App:
         self.agent = agent
         self.relay = relay
         self.discover = discover
+        if bool(knowledge_store) != bool(knowledge_store_id):
+            raise ValueError('Knowledge store path and ID must be configured together')
+        self.knowledge_store = knowledge_store
+        self.knowledge_store_id = knowledge_store_id
         self.remote_cache = {}
         self.provider = provider or (self.deepseek if agent=='deepseek' else self.claude)
         self.active = set()
@@ -254,14 +259,22 @@ class App:
     def health(self):
         return dict(provider=self.agent.title(), installed=bool(shutil.which('claude')) if self.agent=='claude' else True,
                     route='Claude Code subscription CLI' if self.agent=='claude' else 'existing DeepSeek web relay; login verified only by completed return',
-                    nexus='not connected', source_roots=len(self.roots), mode='read-only answers; no solver or code execution')
+                    nexus='no existing database assumed', source_roots=len(self.roots),
+                    knowledge_store='explicitly configured' if self.knowledge_store else 'not configured',
+                    mode='source-qualified knowledge builder and read-only answers; no solver or code execution')
+
+    def knowledge(self, create=True):
+        if not self.knowledge_store:
+            raise ValueError('Configure one explicit shared knowledge store path and ID before building records')
+        from knowledge_loop import KnowledgeLoop
+        return KnowledgeLoop(self, self.knowledge_store, self.knowledge_store_id, create=create)
 
     def pipeline(self, name, arguments):
         """Bounded reference tools. Sources cannot request arbitrary file or shell access."""
         refs = self.reference()
         if name=='reference_manifest':
             return {'protocol':'one-wave-reference/1', 'repositories':refs, 'coverage':'configured roots only',
-                    'excluded':['Bench: declared private'], 'nexus':'not connected',
+                    'excluded':['Bench: declared private'], 'knowledge':'first shared store is constructed through explicit qualified source-record commits',
                     'search_limits':'80 matched documents per repository, ten answer excerpts; full tracked sources available through source_manifest/source_read',
                     'terminal_route':'AI_BRIDGE_START_HERE.md; existing Hive Pipe worker owns terminal authorization'}
         if name=='source_manifest':
@@ -546,7 +559,7 @@ class App:
             if 'sources_hash' not in item:
                 sources = self.search(item['question'], item['reference'])
                 if not sources:
-                    raise ValueError('No matching source evidence. Nexus missing-evidence jobs are not connected.')
+                    raise ValueError('No matching source evidence. No source-qualified result can be released.')
                 with self.db() as db:
                     corrections = [x[0] for x in db.execute('SELECT text FROM corrections ORDER BY seq DESC LIMIT 20')]
                 item.update(sources=sources, sources_hash=digest(sources), corrections=corrections)
@@ -632,6 +645,10 @@ def serve(app, port):
                     return self.respond(200,app.health())
                 if self.path=='/api/history':
                     return self.respond(200,app.history())
+                if self.path.startswith('/api/knowledge/job/'):
+                    return self.respond(200,app.knowledge(create=False).trace(self.path.rsplit('/',1)[1]))
+                if self.path.startswith('/api/knowledge/record/'):
+                    return self.respond(200,app.knowledge(create=False).record(self.path.rsplit('/',1)[1]))
                 if self.path.startswith('/api/conversation/'):
                     return self.respond(200,app.public(app.get(self.path.rsplit('/',1)[1])))
                 files={'/':('index.html','text/html'),'/app.js':('app.js','text/javascript'),'/style.css':('style.css','text/css')}
@@ -652,6 +669,10 @@ def serve(app, port):
                 data=json.loads(self.rfile.read(size))
                 if self.path=='/api/ask':
                     return self.respond(202,app.public(app.ask(data.get('question',''),data.get('id'))))
+                if self.path=='/api/knowledge/build':
+                    if not isinstance(data,dict) or set(data) != {'id','request'}:
+                        raise ValueError('Knowledge build requires exactly id and request')
+                    return self.respond(200,app.knowledge().run(data['id'],data['request']))
                 if self.path=='/api/resume':
                     return self.respond(202,app.public(app.resume(data.get('id'))))
                 if self.path=='/api/correction':
@@ -671,7 +692,10 @@ if __name__=='__main__':
     parser.add_argument('--agent',choices=['claude','deepseek'],default='claude')
     parser.add_argument('--relay',default='http://127.0.0.1:3001')
     parser.add_argument('--discover-repos',action='store_true',help='Paginate authorized One-Wave account using the existing gh login; exclude private Bench')
+    parser.add_argument('--knowledge-store',help='One explicit shared Reality SQLite path; no per-provider knowledge copies')
+    parser.add_argument('--knowledge-store-id',help='Expected stable shared store identity')
     args=parser.parse_args()
     if args.agent=='deepseek' and args.state==str(Path.home()/'.local/state/one-wave-answer/claude.sqlite'):
         args.state=str(Path.home()/'.local/state/one-wave-answer/deepseek.sqlite')
-    serve(App(args.repo,args.state,agent=args.agent,relay=args.relay,discover=args.discover_repos),args.port)
+    serve(App(args.repo,args.state,agent=args.agent,relay=args.relay,discover=args.discover_repos,
+              knowledge_store=args.knowledge_store,knowledge_store_id=args.knowledge_store_id),args.port)

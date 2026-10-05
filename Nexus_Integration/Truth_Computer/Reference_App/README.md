@@ -62,7 +62,7 @@ Recovery tests use deterministic provider fixtures and one deliberately killed l
 
 ## Integration boundary and remaining work
 
-This is an executable isolated answer wrapper. The actual Nexus Reality Database, jobs, saved-run adapter and deployment have not been discovered or connected. Its UI reports that boundary. No schema migration, automatic source promotion, registered physics solver, second-client artifact handoff, unattended service installation or production deployment is claimed. These remain acceptance gates in [the canonical build specification](../REALITY_DATABASE_BUILDER_SPEC.md).
+The user clarified that no Nexus database exists. The source-qualification core below builds the first explicitly selected shared knowledge store; it does not wait for an existing Nexus database. The answer wrapper and its per-app journals remain separate. No automatic truth promotion, registered physics solver, live model-driven knowledge construction, second-client artifact handoff, unattended service installation or production deployment is claimed. These remain acceptance gates in [the canonical build specification](../REALITY_DATABASE_BUILDER_SPEC.md).
 
 The app does not yet meet the complete database-builder specification. Semantic auditing can still miss unsupported interpretation; candidate labels and source links remain visible. It provides a working single-provider vertical slice rather than a claim of a finished truth engine.
 
@@ -74,3 +74,45 @@ node --check app.js
 ```
 
 Tests cover all twelve phase records, retained consequences, duplicate request IDs, checkpoint recovery, ambiguous-call HOLD, citation rejection, source/reference drift, publication races, journal isolation, denied path/tool access, old-database migration and live-worker exclusion. See `WORK_RECORD.md` for actual execution scope and earlier host receipts.
+
+
+## First shared knowledge store
+
+`knowledge_loop.py` is a runnable CPU reference/differential projection of the current M4 architecture. M4 assembles the goal, current canonical authorities, pinned source, prior accepted record and pending findings into the active world used by both sides. It routes accepted consequence back into the next cycle's memory. It is not a third worker state or a claim about associative neural inference, consciousness, physical simultaneity, or numerical AZ0 dynamics.
+
+The two durable worker phases are exactly `FIELD` and `VOID`; the separately constrained cursor has `BEGIN / BUILD / HOLD / BUILD / BREAK / LOOP`. Each cursor requires a retained Field artifact and specific Void check. `running / paused / completed` are job lifecycle values. `ALLOW / CORRECT / HOLD / ESCALATE` are decisions. None adds a worker phase. Four Views remain Direction/Phase/Strength/Reference; Actions remain Inward/Outward/Across/Over. This source-record slice does not simulate their hardware realization.
+
+| Cursor | FIELD artifact | VOID acceptance check |
+|---|---|---|
+| 0 BEGIN | Current active world, source/authority versions and previous consequence | Identity, hash and current-reference equality |
+| 1 BUILD | One bounded append-source-record proposal | Exact quote/span/version/metadata/evidence class; explicit source-fidelity-only permission |
+| 2 HOLD | Candidate readiness and authorization hash | Matching prior authorization plus fresh reference |
+| 3 BUILD | Staged candidate record | Matching readiness and unchanged authorized candidate; no knowledge publication yet |
+| 4 BREAK | Candidate/return differential | Deterministic source comparison and retained evidence; no confidence-based promotion |
+| 5 LOOP | Retained-consequence packet | Exact audit/candidate/reference binding; append immutable record version, consequence and next FIELD/BEGIN checkpoint in one transaction |
+
+The executable transition table is `knowledge_loop.TRANSITIONS`. FIELD proposal hands to VOID atomically with its artifact. Void CORRECT retains the rejected artifact and an exact source-bound counterproposal, returning to FIELD at the same proposal cursor. A distinct repair attempt must pass authorization again. Three failed attempts ESCALATE. Missing/stale evidence HOLDs at the actual phase/cursor; repeated calls do not consume more attempts or fabricate a result. Start a new immutable goal revision after changed canonical sources. This bounded core has no external model-call ambiguity; the answer wrapper's provider-return recovery remains separate.
+
+### Explicit single-store identity
+
+Choose one shared knowledge path and stable store ID for all wrappers. Both are required; there is no per-agent knowledge default. Store identity, schema version and resolved location are checked before mutation. An app already bound to another path/identity refuses rebinding. An unrelated existing SQLite file is rejected without modifying it. Jobs, Field artifacts, Void audits, source versions, record versions, transitions and accepted consequences live in this one store. Authoritative artifact/audit/source/record/history tables are append-only; changed source commits append versions and retain their predecessor.
+
+Per-provider runtime journals remain separate. Their only shared-store write is configuration binding; accepted knowledge and its checkpoint commit together in the shared store. No transaction across those databases is claimed. After a lost HTTP response or process exit, the stable job ID retrieves the committed consequence directly from the shared store. Reusing an ID with a changed goal or input is rejected.
+
+### Run one source cycle and continue after restart
+
+Use an authorized existing checkout and explicit local POSIX paths. The first slice accepts tracked public Science Markdown spans of 1–60 lines. It reads the mandatory authority paths declared in `AUTHORITIES`; missing authority or source content causes HOLD. No model or solver is invoked.
+
+```bash
+python3 knowledge_loop.py --repo /verified/One-Wave-Science   --runtime-state /approved/runtime/claude.sqlite   --knowledge-store /approved/shared/reality.sqlite --store-id one-wave-reality   --id source-first --path Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md   --start-line 1 --end-line 10 --goal 'Retain the current routing source and its declared status'
+```
+
+Rerun without `--path` and with the same ID after restart to reconcile/resume retained work. For a new cue, use another ID and the same store path/identity. The second cycle records its prior accepted record; unchanged source versions are reused without duplicate records. JSON output includes the exact phase transitions, audits and accepted receipt. Only a completed receipt may identify a published record.
+
+For the existing local server, add `--knowledge-store PATH --knowledge-store-id ID`. The same-origin JSON endpoint `POST /api/knowledge/build` accepts exactly `{id, request}`, where request has goal, repo, path, start_line and end_line. Read `/api/knowledge/job/ID` for checked trace and `/api/knowledge/record/HASH` for a committed record. Reads before the first build do not create the store. There is no new frontend control in this slice.
+
+### What the first record proves
+
+A record contains repository/path/commit, whole-source content hash, exact source span, declared metadata/gate/lifecycle, evidence class, qualification and uncertainty. `qualification=exact-source-span` and `evidence_class=repository-statement` never mean experimental truth: `proposition_status=NOT_VALIDATED` stays explicit. A wrong quote is challenged/corrected; source status is never changed to make a proposal pass. The Bench and Mythos-and-Stories repositories, arbitrary file paths and untracked content are outside this first builder scope. This is a repository-scope restriction, not a semantic fiction classifier for every document inside Science.
+
+Tests cover non-empty first commit, challenge/correction, preserved failed attempts, restart at every FIELD/VOID cursor, final-transaction fault injection, real process exit/lost handoff, immutable version history, reference drift, same/different-job concurrency, identity/schema mismatch and safe HTTP readback. Fixture execution is not live AI corroboration. Solver integration, general semantic proposition validation and live-provider orchestration are later acceptance gates.

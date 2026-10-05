@@ -2,7 +2,7 @@
 
 ## Reality Database, journal and Truth Computer reference
 
-For database-builder, cross-repo lens, Field/Void loop, solver, journal or response-balance work, read [the required build and operation specification](Nexus_Integration/Truth_Computer/REALITY_DATABASE_BUILDER_SPEC.md) before proposing or acting. Use its node-based reference/differential checks and evidence gates. Start the model connection with Claude through an authenticated non-API route; do not require a developer API key or claim an unverified connection is live. Preserve the existing Nexus database and job system.
+For database-builder, cross-repo lens, Field/Void loop, solver, journal or response-balance work, read [the required build and operation specification](Nexus_Integration/Truth_Computer/REALITY_DATABASE_BUILDER_SPEC.md) before proposing or acting. Use its node-based reference/differential checks and evidence gates. Start the model connection with Claude through an authenticated non-API route; do not require a developer API key or claim an unverified connection is live. The user clarified on 2026-10-05 that no Nexus database exists: the reliable two-phase Field/Void machine with the M4 loop must build the first shared source-qualified knowledge store. Do not wait for an imaginary existing database or claim a schema alone completes the machine. Preserve any verified store built thereafter, without per-agent knowledge copies.
 
 ## Laptop and Jetson terminal access
 
@@ -273,3 +273,4 @@ Priority order:
 The core operating law is:
 
 **MAIN GOAL -> reference -> Field movement -> Void oversight/override -> test -> differential -> learn -> update memory -> next bounded software state.**
+
