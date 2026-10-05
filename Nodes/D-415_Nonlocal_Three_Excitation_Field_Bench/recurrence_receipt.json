@@ -1,0 +1,172 @@
+{
+  "status": "PASS",
+  "checks": {
+    "stationary_residual": true,
+    "eigenpair_residual": true,
+    "three_localized_peaks": true,
+    "domain_stationary_residual": true,
+    "energy_refines": true
+  },
+  "scope": "Existence and finite-grid stability diagnostic of a supplied-frequency stationary three-peak rotating field. Not orbiting bodies, an attractor, arbitrary initial data, or a physical law.",
+  "config": {
+    "n": 12,
+    "dx": 1.0,
+    "dt": 0.04,
+    "wave_speed": 0.35,
+    "damping": 0,
+    "linear_response": 0.05,
+    "nonlinear_response": 0.02,
+    "nonlocal_response": 0.12,
+    "kernel_length": 10.0,
+    "window_width": 6.0,
+    "lock_frequency_epsilon": 0.12,
+    "lock_phase_epsilon": 0.55,
+    "break_frequency_epsilon": 0.24,
+    "break_phase_epsilon": 1.1,
+    "lock_rate": 0.1,
+    "break_rate": 0.06,
+    "steps": 300
+  },
+  "profile": {
+    "omega": 1.5,
+    "centers": [
+      [
+        4,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        4,
+        8
+      ]
+    ],
+    "band_max_frequency": 0.9503941653229524,
+    "stationary_relative_residual": 4.15976696609485e-15,
+    "continuation_max_absolute_residual": 1.4921397450962104e-13,
+    "core_intensity_fraction": 0.9999021077532714,
+    "peak_amplitudes": [
+      8.865347598097662,
+      8.865347598097655,
+      8.865347598097658
+    ]
+  },
+  "stability": {
+    "max_real_growth_rate": 1.970645868709653e-15,
+    "imaginary_part": 2.4073569758358513,
+    "eigen_relative_residual": 2.553954578018763e-15,
+    "status": "no_growth_resolved_on_this_grid"
+  },
+  "unperturbed": [
+    {
+      "dt": 0.04,
+      "duration": 50.28,
+      "perturbation": 0.0,
+      "max_relative_orbit_error": 0.008401789062456309,
+      "final_relative_orbit_error": 0.008401789062456309,
+      "max_relative_energy_error": 1.2147508238642167e-07
+    },
+    {
+      "dt": 0.02,
+      "duration": 50.26,
+      "perturbation": 0.0,
+      "max_relative_orbit_error": 0.0020992520334331016,
+      "final_relative_orbit_error": 0.0020992520334331016,
+      "max_relative_energy_error": 7.585525032699479e-09
+    },
+    {
+      "dt": 0.01,
+      "duration": 50.27,
+      "perturbation": 0.0,
+      "max_relative_orbit_error": 0.0005247816030958879,
+      "final_relative_orbit_error": 0.0005247816030958879,
+      "max_relative_energy_error": 4.740494213227578e-10
+    }
+  ],
+  "perturbed": [
+    {
+      "dt": 0.02,
+      "duration": 50.26,
+      "perturbation": 0.0001,
+      "max_relative_orbit_error": 0.002125868582746465,
+      "final_relative_orbit_error": 0.002125868582746465,
+      "max_relative_energy_error": 7.976516720558807e-09
+    },
+    {
+      "dt": 0.01,
+      "duration": 50.27,
+      "perturbation": 0.0001,
+      "max_relative_orbit_error": 0.0005952083860491558,
+      "final_relative_orbit_error": 0.0005952083860491558,
+      "max_relative_energy_error": 5.767158049504426e-10
+    }
+  ],
+  "domain_profiles": [
+    {
+      "n": 18,
+      "omega": 1.5,
+      "centers": [
+        [
+          7,
+          7
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          7,
+          11
+        ]
+      ],
+      "band_max_frequency": 0.9506162408568855,
+      "stationary_relative_residual": 4.5453169243443635e-15,
+      "continuation_max_absolute_residual": 9.592326932761353e-14,
+      "core_intensity_fraction": 0.9998901097964117,
+      "peak_amplitudes": [
+        8.861232745126781,
+        8.861232745126781,
+        8.861232745126783
+      ]
+    },
+    {
+      "n": 24,
+      "omega": 1.5,
+      "centers": [
+        [
+          10,
+          10
+        ],
+        [
+          14,
+          10
+        ],
+        [
+          10,
+          14
+        ]
+      ],
+      "band_max_frequency": 0.950720037720488,
+      "stationary_relative_residual": 2.9561874378802934e-15,
+      "continuation_max_absolute_residual": 1.7053025658242404e-13,
+      "core_intensity_fraction": 0.999884351435062,
+      "peak_amplitudes": [
+        8.85942638084287,
+        8.859426380842867,
+        8.859426380842867
+      ]
+    }
+  ],
+  "sha256": {
+    "rotating_recurrence.py": "c24b48c4d539cea6d0b7212649fe35b2d1944d1bf68717e1bf5e44523e7b83e6",
+    "nonlocal_field_bench.py": "902e70246424158bba2ae08cd0a0ec9f44a5bc517e9b1752b9b106e8705fceea",
+    "balance_audit.py": "fbb86a58605d9f1244a681ed9c66462298b707a5ad5c353dc1c35af86c544b3b"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0"
+  }
+}
