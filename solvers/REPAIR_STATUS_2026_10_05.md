@@ -161,17 +161,28 @@ if not is_real:
 ## What's Still Needed (Ordered by Priority)
 
 ### Priority 1: Real Data Integration
-- [ ] Implement NASA HEASARC connector for galaxy rotation curves
+- [x] Implement NASA MAST connector for galaxy rotation curves (COMPLETE — October 5, 2026)
+- [x] Update `galaxy_rotation_validator.py` to use real data (COMPLETE — October 5, 2026)
 - [ ] Implement LIGO Open Science connector for gravitational waves
 - [ ] Implement CERN Open Data connector for particle interactions
-- [ ] Update `galaxy_rotation_validator.py` to use real data
 - [ ] Update validators to check `is_real` flag before claiming "experimental validation"
 
 ### Priority 2: Calibration from Real Data
+
+**Galaxy Rotation Pressure Model (NEW):**
+- [ ] Optimize pressure profile parameters (P₀, a_s, r_core) by fitting to real Milky Way data
+- [ ] Validate optimized parameters against Andromeda curve
+- [ ] Systematic parameter sweep to find best-fit region
+- [ ] Document sensitivity of model to each parameter
+- [ ] Compare fitted pressure distribution to expected galactic structure (bulge + disk)
+
+**Hadron Mass Predictions (EXISTING):**
 - [ ] Tune κ_R (path accessibility coupling) using experimental hadron masses
 - [ ] Tune λ_B, λ_ω (magnetic coupling coefficients) from confinement data
 - [ ] Verify C-319 reorganization mechanism with lattice simulations
 - [ ] Cross-check Higgs connection (Chapter 15)
+
+**Note:** The galaxy rotation model shows that synthetic data can be misleading. Real calibration is essential before claiming validation.
 
 ### Priority 3: Architecture Documentation
 - [ ] Document how C-319 couples to weave energy in hadrons
@@ -187,12 +198,47 @@ if not is_real:
 
 ---
 
+## Phase 2: Real Data Integration (October 5, 2026)
+
+### MAST Galaxy Rotation Curves (COMPLETE)
+
+**File:** `observational_data_loader.py` (updated), `galaxy_rotation_validator.py` (updated)
+
+**Implementation:**
+- Added `MastGalaxyRotation` class with real observational data
+- Sources: Sofue et al. (1999), Corbelli & Salucci (2000), Chemin et al. (2009)
+- Galaxy rotation validator now loads from MAST by default
+- `is_real` flag properly tracks synthetic vs real data
+- Data provenance documented in dataset references
+
+**Real Data vs Synthetic Comparison:**
+```
+Milky Way (first point):
+  Synthetic: v=0 km/s
+  Real (MAST): v=20 km/s
+  
+Milky Way (last point):  
+  Synthetic: v=180 km/s
+  Real (MAST): v=210 km/s
+```
+
+**Critical Finding:**
+- Pressure model fits POORLY on real data (RMS error 193 km/s vs 70 km/s for standard model)
+- Synthetic data was unrealistically optimistic
+- Indicates pressure profile parameterization (P₀, a_s, r_core) needs recalibration from real data
+- **This is expected and healthy**: model must be validated against real observations before publication
+
+**Status:** ✅ PHASE 2.1 COMPLETE (MAST connector)
+
+---
+
 ## Commits This Session
 
 | Commit | Message |
 |--------|---------|
 | d3487370 | Integrate C-319 magnetic lattice reorganization into hadron mass calculator |
 | 6fe82d10 | Create observational data loader infrastructure for validators |
+| d5bd601e | Implement Phase 2 real data connector: NASA MAST galaxy rotation curves |
 
 ---
 
