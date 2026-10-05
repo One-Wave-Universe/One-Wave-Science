@@ -50,6 +50,12 @@
     selectedPartId: null,
     lastResult: { voltages: new Map(), currents: new Map(), warnings: [], uf: null },
     animT: 0,
+    running: true,
+    nodeNames: {},
+    measurements: [],
+    lastStep: null,
+    solvedSpec: null,
+    resultStale: false,
     wireColorIdx: 0,
     scopeColorIdx: 0,
     draggingPot: null,
@@ -116,11 +122,13 @@
   }
 
   function newId(prefix) {
-    return prefix + (state.nextId++);
+    let id;
+    do { id = prefix + (state.nextId++); } while (state.parts.some((p) => p.id === id));
+    return id;
   }
 
   function addPart(part) {
-    part.id = newId(part.type[0]);
+    part.id = part.id || newId(part.type[0]);
     state.parts.push(part);
     return part;
   }
@@ -233,6 +241,7 @@
           id: p.id, type: p.type, label: p.id,
           a: p.terminals[0].cellId, b: p.terminals[1].cellId,
           value: p.value, color: p.color, closed: p.closed,
+          initialV: p.initialV, capacityAh: p.capacityAh,
         });
       }
     });
@@ -1163,8 +1172,9 @@
   document.getElementById('btnClear').addEventListener('click', () => {
     if (!confirm('Clear the whole breadboard?')) return;
     state.parts = [];
+    state.nodeNames = {}; state.measurements = [];
     state.selectedPartId = null;
-    circuit.reset();
+    resetSimulation();
     renderProps();
   });
 
@@ -1239,7 +1249,7 @@
     const flashClone = bodyClone.querySelector('#flash');
     if (flashClone) { flashClone.textContent = ''; flashClone.removeAttribute('style'); }
 
-    const stateBootstrap = 'window.__EXPORT_STATE__ = ' + JSON.stringify({ layout: currentLayoutKey, parts: state.parts }) + ';';
+    const stateBootstrap = 'window.__EXPORT_STATE__ = ' + JSON.stringify({ layout: currentLayoutKey, parts: state.parts, nodeNames: state.nodeNames, measurements: state.measurements }).replace(/</g, '\\u003c') + ';';
     // this file (app.js) is itself one of the scripts getting inlined below,
     // so writing the literal closing-script-tag text directly in this
     // source file would prematurely end the tag when the browser parses
@@ -1294,18 +1304,19 @@
     board = Board.build(layout);
     state.board = board;
     state.parts = [];
+    state.nodeNames = {}; state.measurements = [];
     state.selectedPartId = null;
     state.pending = [];
     state.hoverHole = null;
     state.hoverPart = null;
-    circuit.reset();
+    resetSimulation();
     setupCanvas();
     renderProps();
   }
   boardLayoutEl.addEventListener('change', () => rebuildBoard(boardLayoutEl.value));
   document.getElementById('btnSave').addEventListener('click', () => {
     try {
-      localStorage.setItem('virtual-breadboard-save', JSON.stringify({ layout: currentLayoutKey, parts: state.parts }));
+      localStorage.setItem('virtual-breadboard-save', JSON.stringify({ layout: currentLayoutKey, parts: state.parts, nodeNames: state.nodeNames, measurements: state.measurements }));
       flashStatus('Saved to browser storage.');
     } catch (e) {
       flashStatus('Could not save: ' + e.message);
@@ -1331,8 +1342,9 @@
     });
     state.nextId = maxId + 1;
     state.parts = loaded;
+    state.nodeNames = saved.nodeNames || {}; state.measurements = saved.measurements || [];
     state.selectedPartId = null;
-    circuit.reset();
+    resetSimulation();
     renderProps();
   }
   document.getElementById('btnLoad').addEventListener('click', () => {
@@ -1419,8 +1431,8 @@
       { type: 'switch', terminals: [H('c', 5), H('c', 16)], closed: false },
       { type: 'resistor', terminals: [H('d', 16), H('h', 5)], value: 1000000 },
       { type: 'nmos', terminals: [H('a', 16), H('a', 12), H('i', 5)], value: 1.5 },
-      { type: 'scope', terminals: [H('a', 12)], color: nextScopeColor() },
-      { type: 'scope', terminals: [H('a', 16)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('c', 12)], color: nextScopeColor() },
+      { type: 'scope', terminals: [H('e', 16)], color: nextScopeColor() },
     ];
   }
   // Cal D: two N-MOSFETs, sources tied together and gates tied to that
@@ -1478,7 +1490,7 @@
       { type: 'resistor', terminals: [H('d', 16), H('h', 5)], value: 1000000 },
       { type: 'nmos', terminals: [H('e', 16), H('e', 12), H('a', 20)], value: 1.5 },
       { type: 'nmos', terminals: [H('b', 16), H('b', 24), H('b', 20)], value: 1.5 },
-      { type: 'capacitor', terminals: [H('c', 24), H('d', 8)], value: 10e-6 },
+      { type: 'capacitor', terminals: [H('c', 24), H('b', 8)], value: 10e-6 },
       { type: 'resistor', terminals: [H('d', 24), H('e', 8)], value: 100000 },
       { type: 'scope', terminals: [H('a', 24)], color: nextScopeColor() },
       { type: 'scope', terminals: [H('a', 12)], color: nextScopeColor() },
@@ -1636,9 +1648,15 @@
   // executor: the one place that actually clears the board and writes a
   // preset's parts into it.
   function applyPreset(parts) {
+    state.nodeNames = {};
+    state.measurements = [];
+    state.selectedPartId = null;
+    state.pending = [];
     state.parts = [];
-    circuit.reset();
+    resetSimulation();
     parts.forEach(addPart);
+    const probes = state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope');
+    if (!probes.some((p) => p.id === state.scope.trigger.channelId)) state.scope.trigger.channelId = probes.length ? probes[0].id : null;
   }
   document.getElementById('presetLed').addEventListener('click', () => { applyPreset(presetLedResistorParts()); selectTool('select'); });
   document.getElementById('presetShort').addEventListener('click', () => { applyPreset(presetShortParts()); selectTool('select'); });
@@ -1733,18 +1751,22 @@
         }
         const isWire = p.type === 'wire' || p.type === 'ywire';
         return {
+          id: p.id,
           type: p.type,
+          initialV: p.initialV,
+          capacityAh: p.capacityAh,
           value: p.value,
-          color: p.type === 'scope' || p.type === 'diffscope' ? nextScopeColor() : isWire ? nextWireColor() : p.color,
+          color: p.color || (p.type === 'scope' || p.type === 'diffscope' ? nextScopeColor() : isWire ? nextWireColor() : undefined),
+          coupling: p.coupling,
           closed: !!p.closed,
-          pos: p.type === 'potentiometer' ? 0.5 : undefined,
-          style: isWire ? 'loop' : undefined,
+          pos: p.type === 'potentiometer' ? (p.pos == null ? 0.5 : p.pos) : undefined,
+          style: isWire ? (p.style || 'loop') : undefined,
           freq: p.freq,
           phase: p.phase,
           turnsPerSection: p.type === 'toroid' ? p.turns : undefined,
           turnsPerWinding: p.type === 'memorycore' ? p.turns : undefined,
           core: p.type === 'toroid' ? (p.core || 'medium') : p.type === 'memorycore' ? (p.core || 'small') : undefined,
-          gauge: p.type === 'toroid' || p.type === 'memorycore' ? (p.gauge || 'standard') : undefined,
+          gauge: p.type === 'toroid' || p.type === 'memorycore' || isWire ? (p.gauge || 'standard') : undefined,
           spacing: p.type === 'toroid' ? (p.spacing || 'normal') : undefined,
           terminals,
         };
@@ -1786,14 +1808,229 @@
         setAiStatus("The AI's response wasn't a valid circuit:\n" + errors.join('\n'), 'err');
         return;
       }
-      applyPreset(specPartsToBoardParts(parts));
-      selectTool('select');
+      loadCircuitSpec({ ...spec, layout: spec.layout || currentLayoutKey });
       setAiStatus('Built ' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '. Check the status bar for any warnings.', 'ok');
     } catch (err) {
       setAiStatus('Could not build that: ' + err.message, 'err');
     }
   }
   document.getElementById('aiBuild').addEventListener('click', runAiBuild);
+
+  // Layer 11: execution controls and interchange only; all results come
+  // directly from the existing solver. Fixed runs are intentionally bounded.
+  function resetSimulation() {
+    circuit.reset();
+    state.animT = 0;
+    state.lastStep = null;
+    state.solvedSpec = null;
+    state.resultStale = false;
+    state.lastResult = { voltages: new Map(), currents: new Map(), warnings: [], uf: null };
+    document.getElementById('simReceipt').value = '';
+    state.scope.lastSampleT = 0;
+    Object.assign(state.scope.trigger, { armed: true, triggered: false, prevAboveLevel: null });
+    state.parts.forEach((p) => { p.samples = []; p._acMean = null; p._bwFiltered = null; });
+  }
+
+  function advanceSimulation(dt, elements) {
+    state.lastResult = circuit.solve(elements || toEngineElements(), dt);
+    state.animT += dt;
+    sampleScopeProbes(dt);
+    state.solvedSpec = JSON.stringify(circuitSpec());
+    state.resultStale = false;
+  }
+
+  function updateSimulationStatus() {
+    document.getElementById('simToggle').textContent = state.running ? 'Pause' : 'Run live';
+    document.getElementById('simStatus').textContent = (state.running ? 'Live' : 'Paused') + ' · ' + state.animT.toFixed(6) + ' s';
+  }
+
+  function runDuration(seconds, dt) {
+    seconds = Number(seconds); dt = Number(dt == null ? 0.001 : dt);
+    if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 10 ||
+        !Number.isFinite(dt) || dt < 0.000001 || dt > 0.05 || Math.ceil(seconds / dt) > 10000) {
+      throw new Error('Use duration > 0 and <= 10 s, step size 0.000001–0.05 s, and at most 10,000 steps.');
+    }
+    state.running = false;
+    invalidateEditedCircuit();
+    const start = state.animT;
+    const steps = Math.ceil(seconds / dt);
+    const elements = toEngineElements();
+    for (let i = 0; i < steps; i++) advanceSimulation(Math.min(dt, seconds - i * dt), elements);
+    state.lastStep = { startSeconds: start, requestedSeconds: seconds, dtSeconds: dt, steps };
+    updateSimulationStatus();
+    return simulationReceipt();
+  }
+
+  function circuitSpec() {
+    return JSON.parse(JSON.stringify({
+      layout: currentLayoutKey,
+      parts: state.parts.map((p) => {
+        const out = { id: p.id, type: p.type };
+        ['value', 'color', 'closed', 'freq', 'phase', 'pos', 'core', 'gauge', 'spacing', 'initialV', 'capacityAh', 'coupling', 'style'].forEach((key) => {
+          if (p[key] != null && (key !== 'closed' || p.type === 'switch' || p.type === 'pushbutton')) out[key] = p[key];
+        });
+        if (p.type === 'toroid') out.turns = p.turnsPerSection;
+        if (p.type === 'memorycore') out.turns = p.turnsPerWinding;
+        const terminals = p.type === 'potentiometer' || p.type === 'comparator' ? p.terminals.slice(0, 1) : p.terminals;
+        out.terminals = terminals.map((t) => ({ row: t.row, col: t.col, board: t.boardIdx || 0 }));
+        return out;
+      }),
+      nodeNames: state.nodeNames,
+      measurements: state.measurements,
+    }));
+  }
+
+  function loadCircuitSpec(input) {
+    const spec = typeof input === 'string' ? JSON.parse(input) : JSON.parse(JSON.stringify(input));
+    const checked = AIBuilder.validateSpec(spec);
+    if (!checked.ok) throw new Error(checked.errors.join('\n'));
+    const layout = spec.layout || '1large';
+    if (!Object.prototype.hasOwnProperty.call(LAYOUT_PRESETS, layout)) throw new Error('Unknown layout: ' + layout);
+    // These CLI-only shapes do not have a complete editor/rendering contract.
+    // Reject rather than silently converting them into two-terminal parts.
+    const supported = new Set(['wire','ywire','resistor','capacitor','led','diode','battery','switch','pushbutton','potentiometer','vgnd','inductor','acsource','mtjsensor','scope','diffscope','toroid','nmos','pmos','memorycore','comparator']);
+    const ids = new Set();
+    checked.parts.forEach((p, i) => {
+      if (!supported.has(p.type)) throw new Error('UI does not support ' + p.type + '; use simulate.js for this part.');
+      if (p.id == null) p.id = p.type[0] + (i + 1);
+      if (typeof p.id !== 'string' || !/^[A-Za-z0-9_.:-]{1,80}$/.test(p.id) || ids.has(p.id)) throw new Error('Part IDs must be unique safe names (letters, digits, _ . : -, max80): ' + p.id);
+      ids.add(p.id);
+      const fields = {
+        wire: ['color','style','gauge'], ywire: ['color','style','gauge'],
+        resistor: ['value'], capacitor: ['value','initialV'], battery: ['value','capacityAh'],
+        led: ['color'], diode: [], switch: ['closed'], pushbutton: ['closed'],
+        potentiometer: ['value','pos'], vgnd: [], inductor: ['value'],
+        acsource: ['value','freq','phase'], mtjsensor: ['value','freq','phase'],
+        scope: ['color','coupling'], diffscope: ['color','coupling'],
+        toroid: ['turns','core','gauge','spacing'], memorycore: ['turns','core','gauge'],
+        nmos: ['value'], pmos: ['value'], comparator: [],
+      };
+      Object.keys(p).forEach((key) => {
+        if (!['id','type','terminals',...fields[p.type]].includes(key)) throw new Error(p.id + ': unsupported parameter ' + key);
+      });
+      if (p.turns) {
+        p.turns = p.turns.map(Number);
+        if (p.turns.some((n) => !Number.isSafeInteger(n) || n <= 0)) throw new Error(p.id + '.turns must contain finite positive integers');
+      }
+      if (p.color != null && p.type !== 'led' && (typeof p.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(p.color))) throw new Error(p.id + '.color must be a six-digit hex color');
+      if (p.style != null && !['loop','flat'].includes(p.style)) throw new Error(p.id + '.style must be loop or flat');
+      if (p.closed != null && typeof p.closed !== 'boolean') throw new Error(p.id + '.closed must be boolean');
+      if (p.coupling != null && !['AC','DC'].includes(p.coupling)) throw new Error(p.id + '.coupling must be AC or DC');
+      if (p.core != null && !Object.prototype.hasOwnProperty.call(p.type === 'toroid' ? Components.TOROID_CORES : Components.MEMORY_CORES, p.core)) throw new Error(p.id + ': unknown core');
+      if (p.gauge != null && !Object.prototype.hasOwnProperty.call(Components.WIRE_GAUGES, p.gauge)) throw new Error(p.id + ': unknown gauge');
+      if (p.spacing != null && !Object.prototype.hasOwnProperty.call(Components.TOROID_SPACING_COUPLING, p.spacing)) throw new Error(p.id + ': unknown spacing');
+      const holes = new Set();
+      p.terminals.forEach((t) => {
+        const key = JSON.stringify([t.board || 0, t.row, t.col]);
+        if (holes.has(key)) throw new Error(p.id + ': more than one lead in the same physical hole');
+        holes.add(key);
+      });
+      ['value','freq','phase','pos','initialV','capacityAh'].forEach((key) => {
+        if (p[key] != null && !Number.isFinite(Number(p[key]))) throw new Error(p.id + '.' + key + ' must be finite');
+        if (p[key] != null) p[key] = Number(p[key]);
+      });
+      if (p.pos != null && (p.pos < 0 || p.pos > 1)) throw new Error(p.id + '.pos must be between 0 and 1');
+    });
+    ['sweep','experiment','monteCarlo','sim'].forEach((key) => {
+      if (spec[key] != null) throw new Error(key + ' is a CLI execution request; remove it to load the circuit, then use Run duration.');
+    });
+    const previousBoard = board;
+    const previousWireColor = state.wireColorIdx, previousScopeColor = state.scopeColorIdx;
+    let resolved;
+    try {
+      // Resolve against a temporary board before committing anything visible.
+      board = Board.build(LAYOUT_PRESETS[layout]);
+      resolved = specPartsToBoardParts(checked.parts);
+      if (spec.nodeNames != null && (typeof spec.nodeNames !== 'object' || Array.isArray(spec.nodeNames))) throw new Error('nodeNames must be an object');
+      Object.entries(spec.nodeNames || {}).forEach(([name, ref]) => {
+        if (!ref || !H(ref.row, ref.col, ref.board)) throw new Error('Invalid named node: ' + name);
+      });
+      if (spec.measurements != null && !Array.isArray(spec.measurements)) throw new Error('measurements must be an array');
+      const labels = new Set();
+      (spec.measurements || []).forEach((m) => {
+        if (!m || typeof m.label !== 'string' || !m.label || labels.has(m.label) ||
+            !Object.prototype.hasOwnProperty.call(spec.nodeNames || {}, m.a) || !Object.prototype.hasOwnProperty.call(spec.nodeNames || {}, m.b)) throw new Error('Measurements need unique labels and two valid named nodes (a, b).');
+        labels.add(m.label);
+      });
+    } finally {
+      board = previousBoard;
+      state.wireColorIdx = previousWireColor; state.scopeColorIdx = previousScopeColor;
+    }
+    board = Board.build(LAYOUT_PRESETS[layout]);
+    state.board = board;
+    currentLayoutKey = layout; boardLayoutEl.value = layout;
+    applyPreset(resolved);
+    state.nodeNames = spec.nodeNames || {};
+    state.measurements = spec.measurements || [];
+    state.running = false;
+    state.hoverHole = null; state.hoverPart = null;
+    setupCanvas(); selectTool('select'); renderProps(); updateSimulationStatus();
+    return { ok: true, parts: resolved.length, layout, status: 'PAUSED_UNRUN' };
+  }
+
+  function invalidateEditedCircuit() {
+    if (state.solvedSpec && state.solvedSpec !== JSON.stringify(circuitSpec())) {
+      // Withhold stale measurements, but preserve capacitor/inductor/core
+      // history: switching is an experiment, not a power-cycle/reset.
+      state.lastResult = { voltages: new Map(), currents: new Map(), warnings: [], uf: null };
+      state.lastStep = null;
+      state.solvedSpec = null;
+      state.resultStale = true;
+      document.getElementById('simReceipt').value = '';
+      document.getElementById('practiceStatus').textContent = 'Circuit edited. Run a step to measure the new state; stored component energy is retained.';
+    }
+  }
+
+  function simulationReceipt() {
+    invalidateEditedCircuit();
+    const result = state.lastResult;
+    const read = (ref) => {
+      const h = ref && H(ref.row, ref.col, ref.board);
+      return h && result.uf ? (result.voltages.get(result.uf.find(h.cellId)) ?? null) : null;
+    };
+    const namedVoltages = Object.fromEntries(Object.entries(state.nodeNames).map(([name, ref]) => [name, read(ref)]));
+    const measurements = Object.fromEntries(state.measurements.map((m) => [m.label,
+      namedVoltages[m.a] == null || namedVoltages[m.b] == null ? null : namedVoltages[m.a] - namedVoltages[m.b]]));
+    const probes = state.parts.filter((p) => p.type === 'scope' || p.type === 'diffscope').map((p) => ({
+      id: p.id, type: p.type, volts: rawScopeValue(p, result.uf) ?? null,
+      samples: (p.samples || []).map((sample) => ({...sample})),
+    }));
+    return JSON.parse(JSON.stringify({ schema: 'virtual-breadboard-receipt/v1', status: result.uf ? 'MODELED' : state.resultStale ? 'EDITED_PENDING' : 'UNRUN',
+      physicallyValidated: false, units: { voltage: 'V', current: 'A', time: 's' },
+      timeSeconds: state.animT, running: state.running, run: state.lastStep,
+      spec: circuitSpec(), voltages: Object.fromEntries(result.voltages), currents: Object.fromEntries(result.currents),
+      namedVoltages, measurements, probes, warnings: result.warnings || [],
+      solver: result.solver || null,
+      acquisition: { sampleRateHz: state.scope.sampleRateHz, bandwidthLimit: state.scope.bwLimit, trigger: state.scope.trigger,
+        probeVolts: 'raw solved voltage; differential probes subtract terminal B from A',
+        traceSamples: 'display acquisition values; per-probe coupling, bandwidth limit, sample rate and trigger apply' },
+      limits: ['Results apply only to implemented component equations.', 'No physical bench or independent SPICE validation is implied.', 'Live mode is frame-timed; use reset then fixed duration for repeatable runs.'],
+    }));
+  }
+
+  function practiceAction(action) {
+    try {
+      const result = action();
+      document.getElementById('practiceStatus').textContent = 'Done. Measurements are modeled, not bench qualification.';
+      return result;
+    } catch (error) {
+      document.getElementById('practiceStatus').textContent = error.message;
+      return null;
+    }
+  }
+  document.getElementById('simToggle').addEventListener('click', () => { state.running = !state.running; updateSimulationStatus(); });
+  document.getElementById('simReset').addEventListener('click', () => { state.running = false; resetSimulation(); updateSimulationStatus(); });
+  document.getElementById('simStep').addEventListener('click', () => practiceAction(() => {
+    const receipt = runDuration(document.getElementById('simSeconds').value, document.getElementById('simDt').value);
+    document.getElementById('simReceipt').value = JSON.stringify(receipt, null, 2);
+  }));
+  document.getElementById('specRead').addEventListener('click', () => {
+    document.getElementById('circuitSpec').value = JSON.stringify(circuitSpec(), null, 2);
+  });
+  document.getElementById('specImport').addEventListener('click', () => practiceAction(() => loadCircuitSpec(document.getElementById('circuitSpec').value)));
+  document.getElementById('receiptRead').addEventListener('click', () => {
+    document.getElementById('simReceipt').value = JSON.stringify(simulationReceipt(), null, 2);
+  });
 
   // ---------------- oscilloscope ----------------
   // Scope probes are zero-load voltage taps sampled straight off the live
@@ -2144,11 +2381,9 @@
     let dt = (now - lastT) / 1000;
     lastT = now;
     dt = Math.min(Math.max(dt, 0), 0.05);
-    state.animT += dt;
-
-    const elements = toEngineElements();
-    state.lastResult = circuit.solve(elements, dt);
-    sampleScopeProbes(dt);
+    invalidateEditedCircuit();
+    if (state.running && dt > 0) advanceSimulation(dt);
+    updateSimulationStatus();
 
     render(dt);
     renderScope();
@@ -2339,7 +2574,7 @@
   function updateWarnings() {
     const w = state.lastResult.warnings || [];
     if (!w.length) {
-      warnEl.innerHTML = '<div class="ok">Circuit looks safe — no shorts, no over-current parts.</div>';
+      warnEl.innerHTML = '<div class="ok">No modeled warnings. This does not establish physical safety or bench qualification.</div>';
       return;
     }
     warnEl.innerHTML = w.map((m) => `<div class="warn">⚠ ${escapeHtml(m)}</div>`).join('');
@@ -2383,21 +2618,21 @@
   // near-instantly, then keep watching it run live afterward same as always
   // -- the same state.lastResult the render loop itself reads.
   window.__runFast = (seconds, dt) => {
-    dt = dt || 1 / 1000;
-    const steps = Math.max(1, Math.round(seconds / dt));
-    const elements = toEngineElements();
-    for (let i = 0; i < steps; i++) {
-      state.animT += dt;
-      state.lastResult = circuit.solve(elements, dt);
-    }
-    return {
-      seconds,
-      steps,
-      voltages: Object.fromEntries(state.lastResult.voltages || []),
-      currents: Object.fromEntries(state.lastResult.currents || []),
-      warnings: state.lastResult.warnings,
-    };
+    const receipt = runDuration(seconds, dt == null ? 0.001 : dt);
+    return { ...receipt, seconds: Number(seconds), steps: receipt.run.steps };
   };
+
+  // Public, local-only human/AI practice API. No network or provider calls.
+  window.breadboard = Object.freeze({
+    version: 1,
+    load: loadCircuitSpec,
+    spec: circuitSpec,
+    pause: () => { state.running = false; updateSimulationStatus(); return simulationReceipt(); },
+    resume: () => { state.running = true; updateSimulationStatus(); },
+    reset: () => { state.running = false; resetSimulation(); return simulationReceipt(); },
+    run: runDuration,
+    receipt: simulationReceipt,
+  });
 
   // an exported/shared circuit file (see buildExportHtml above) bakes its
   // circuit in as this global instead of localStorage -- load it the same

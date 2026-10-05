@@ -12,16 +12,63 @@ mode), and a live circuit-physics engine underneath — not a toy animation.
 Click any hole to wire something into it, and the simulator solves the
 actual circuit every frame.
 
-Physics honesty is a hard rule here: if a real bench build would fail or
-read a certain way, the simulator has to fail or read the same way. There
-is no comparator or decision-making part anywhere in the palette, and none
-of the parts carry any pre-decided outcome — every voltage, current, and
-state you see is the solver's own answer to the components and wiring
-actually on the board. A design like a window-comparator-driven switch
-(hold/positive/negative from a differential input) has to be built and
-proven from the real discrete `nmos`/`pmos` parts, the same way it would
-on a bench. See "Calibration boards" below for the tests that keep this
-claim honest.
+## Repeatable human / AI practice
+
+The existing solver is shared by the live editor and `simulate.js`. The editor
+now supports an offline circuit JSON workflow; no AI account or API key is
+required to import a circuit, change it, or inspect its modeled results.
+
+1. Select an example or paste a spec into **Circuit JSON / practice** and click
+   **Load JSON**. Import validates the entire circuit before replacing the board
+   and starts paused. Invalid input leaves the previous circuit unchanged.
+2. Use **Reset time** to clear component history and scope traces while retaining
+   the circuit. **Run duration & pause** advances an explicit simulation duration
+   with a fixed step size. **Run live** uses frame timing and is exploratory.
+3. Click **Measure / receipt** for JSON with the exact circuit, simulation time,
+   units, node/branch values, differential probe values, warnings and solver
+   diagnostics. Scope sample acquisition settings are included; filtered scope
+   samples are distinct from raw probe volts.
+4. Use the Inspector to edit values/toggle switches, or **Read board JSON**, edit
+   the spec, and **Load JSON** again. Ordinary live edits preserve stored energy;
+   old measurements are withheld until the next solve. Import and Reset restart
+   history. Reset before fixed runs when comparing independent trials.
+5. JSON may declare `nodeNames` as hole references and `measurements` as
+   `{label, a, b}` differential voltage probes. Named part IDs remain stable.
+   Receipts say `UNRUN`, `EDITED_PENDING`, or `MODELED`; `MODELED` is not PASS.
+   Check warnings, solver convergence, and declared numeric tolerances yourself.
+
+The local browser API exposes the same operations for automation:
+`window.breadboard.load(spec)`, `.spec()`, `.pause()`, `.resume()`, `.reset()`,
+`.run(seconds, dt)`, and `.receipt()`. Returned specs/receipts are detached copies.
+Fixed runs allow at most 10 seconds / 10,000 steps and step sizes of 1 microsecond
+to 50 milliseconds. This is an execution bound, not a bandwidth/accuracy claim.
+
+Part IDs use letters, digits, `_ . : -` (1–80 characters). Probe and wire colors
+use six-digit hex. Unknown component parameters are rejected rather than
+silently ignored. The editor supports its rendered palette only; CLI-only
+`diffsource`, `latchrelay`, `hbridge`, `schmitt` and advanced execution requests
+(`sim`, `experiment`, `sweep`, `monteCarlo`) must use `simulate.js`. Remove an
+execution request to import just its supported circuit, then use the controls.
+The CLI accepts potentiometer `pos` in [0,1], matching the editor.
+
+Run controller regression checks with:
+
+```bash
+node test/practice-interface.test.js
+```
+
+These execute the real app and circuit solver with a minimal DOM adapter. They
+are not visual/browser proof; desktop smoke and visual QA remain separate gates.
+
+### Model and physical limits
+
+The palette includes a modeled TLV3202 dual comparator. Every result describes
+implemented equations and selected parameters, not a physically validated part
+or build. An absence of warnings is not proof of safety, correct topology,
+frequency fidelity, energy closure or bench qualification. Follow
+[BENCH_REALITY_CONTRACT.md](BENCH_REALITY_CONTRACT.md) for that separate boundary.
+The descriptions below explain model behavior; words such as “real” do not
+replace physical measurements or independent SPICE comparison.
 
 ## What makes the physics "real"
 

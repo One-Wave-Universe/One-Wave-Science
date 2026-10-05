@@ -9,6 +9,7 @@
     "start": "electron .",
     "test:desktop-smoke": "electron . --smoke-test",
     "test": "node test/circuit.test.js",
+    "test:practice-interface": "node test/practice-interface.test.js",
     "test:qualification": "node test/qualification.test.js",
     "test:primitives": "node test/primitives.test.js",
     "test:regression": "node test/run_regression_builds.js",

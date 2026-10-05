@@ -63,9 +63,10 @@ async function runDesktopSmoke(win) {
       warnings: !!document.getElementById('warnings'),
       preset: !!document.getElementById('presetLed'),
       debug: typeof window.__debugState === 'function',
-      runFast: typeof window.__runFast === 'function'
+      runFast: typeof window.__runFast === 'function',
+      practice: typeof window.breadboard === 'object' && ['simToggle','simReset','simStep','circuitSpec','specImport','specRead','receiptRead','simReceipt'].every(id => !!document.getElementById(id))
     }))()`);
-    const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'clear', 'inspector', 'scope', 'warnings', 'preset', 'debug', 'runFast'];
+    const required = ['canvas', 'toolbox', 'save', 'load', 'exportButton', 'clear', 'inspector', 'scope', 'warnings', 'preset', 'debug', 'runFast', 'practice'];
     const missing = required.filter((key) => !ui[key]);
     if (missing.length) throw new Error(`missing required UI/runtime hooks: ${missing.join(', ')}`);
     if (!/Virtual Breadboard Simulator/.test(ui.title)) throw new Error(`unexpected title: ${ui.title}`);
@@ -111,6 +112,44 @@ async function runDesktopSmoke(win) {
       };
     })()`);
 
+    const practice = await win.webContents.executeJavaScript(`(async () => {
+      const api = window.breadboard;
+      const same = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+      document.getElementById('simReset').click();
+      document.getElementById('specRead').click();
+      const spec = JSON.parse(document.getElementById('circuitSpec').value);
+      document.getElementById('specImport').click();
+      if (api.receipt().status !== 'UNRUN' || api.receipt().running) throw new Error('JSON import did not pause');
+      document.getElementById('simSeconds').value = '0.02';
+      document.getElementById('simDt').value = '0.001';
+      document.getElementById('simStep').click();
+      const first = JSON.parse(document.getElementById('simReceipt').value);
+      if (first.run.steps !== 20 || first.status !== 'MODELED') throw new Error('fixed-run button did not produce a receipt');
+      await new Promise(resolve => setTimeout(resolve, 80));
+      if (api.receipt().timeSeconds !== first.timeSeconds) throw new Error('paused renderer advanced simulation');
+      document.getElementById('simReset').click();
+      document.getElementById('simStep').click();
+      const again = JSON.parse(document.getElementById('simReceipt').value);
+      if (!same(first.voltages, again.voltages) || !same(first.currents, again.currents)) throw new Error('reset fixed run is not repeatable');
+      const before = api.spec();
+      document.getElementById('circuitSpec').value = '{bad JSON';
+      document.getElementById('specImport').click();
+      if (!same(before, api.spec())) throw new Error('failed import changed board');
+      const malicious = JSON.parse(JSON.stringify(spec));
+      malicious.parts[0].id = '<img src=x onerror=alert(1)>';
+      let rejected = false;
+      try { api.load(malicious); } catch (e) { rejected = true; }
+      if (!rejected || !same(before, api.spec())) throw new Error('unsafe ID accepted');
+      document.getElementById('specRead').click();
+      document.getElementById('receiptRead').click();
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      return { practiceChecks: 6, practiceStatus: again.status };
+    })()`);
+    if (process.env.BREADBOARD_SMOKE_SCREENSHOT) {
+      const screenshot = await win.webContents.capturePage();
+      fs.writeFileSync(process.env.BREADBOARD_SMOKE_SCREENSHOT, screenshot.toPNG());
+    }
+
     exportPath = path.join(app.getPath('temp'), `virtual-breadboard-smoke-${process.pid}.html`);
     try { fs.unlinkSync(exportPath); } catch (e) { /* ignore */ }
     const downloadDone = new Promise((resolve, reject) => {
@@ -133,7 +172,7 @@ async function runDesktopSmoke(win) {
 
     clearTimeout(timer);
     try { fs.unlinkSync(exportPath); } catch (e) { /* ignore */ }
-    console.log('APP_SMOKE_OK', JSON.stringify({ ...ui, ...acceptance, exportBytes: exported.length }));
+    console.log('APP_SMOKE_OK', JSON.stringify({ ...ui, ...acceptance, ...practice, exportBytes: exported.length }));
     app.exit(0);
   } catch (err) {
     fail(err);

@@ -33,6 +33,15 @@
     </div>
   </header>
 
+  <section class="practice-controls" aria-label="Simulation controls">
+    <button id="simToggle" type="button">Pause</button>
+    <button id="simReset" type="button">Reset time</button>
+    <label>Run duration (s) <input id="simSeconds" type="number" value="0.1" min="0.000001" max="10" step="0.1"></label>
+    <label>Step size (s) <input id="simDt" type="number" value="0.001" min="0.000001" max="0.05" step="0.001"></label>
+    <button id="simStep" type="button">Run duration &amp; pause</button>
+    <output id="simStatus" aria-live="polite">Live · 0 s</output>
+    <span class="hint">Modeled results only. No warning is not proof of physical safety.</span>
+  </section>
   <div class="workspace">
     <aside class="toolbox">
       <div id="toolbox"></div>
@@ -66,6 +75,18 @@
       <h3>Inspector</h3>
       <div id="props"></div>
 
+      <details class="practice-panel" open>
+        <summary>Circuit JSON / practice</summary>
+        <p class="hint">Load an example, or paste a human/AI circuit spec. No account needed. Import replaces the board only after validation, and starts paused.</p>
+        <label for="circuitSpec">Circuit specification</label>
+        <textarea id="circuitSpec" rows="6" spellcheck="false" placeholder='{"parts": [...]}'></textarea>
+        <button id="specRead" type="button">Read board JSON</button>
+        <button id="specImport" type="button">Load JSON</button>
+        <button id="receiptRead" type="button">Measure / receipt</button>
+        <label for="simReceipt">Result JSON (V, A, seconds)</label>
+        <textarea id="simReceipt" rows="7" readonly></textarea>
+        <p id="practiceStatus" role="status"></p>
+      </details>
       <div class="ai-panel">
         <h3>Ask AI to build <button id="aiSettingsToggle" class="link-btn" type="button">settings</button></h3>
 
