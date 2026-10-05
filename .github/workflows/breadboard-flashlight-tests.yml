@@ -203,3 +203,44 @@ jobs:
 
       - name: Run packaged Linux x64 desktop acceptance
         run: xvfb-run --auto-servernum ./dist/linux-unpacked/virtual-breadboard-simulator --smoke-test --no-sandbox
+
+
+      - name: Archive and verify downloadable Linux x64 application
+        run: |
+          printf '%s\n' \
+            'Virtual Breadboard Simulator - Linux x64 portable directory' \
+            'Extract the tar.gz archive, then run ./linux-unpacked/virtual-breadboard-simulator as your normal desktop user.' \
+            'Requires a Linux x86_64 desktop with Electron-compatible GTK, NSS and ALSA libraries. Tested on GitHub ubuntu-latest.' \
+            'This includes the Electron runtime; Node.js and npm are not needed to run the app.' \
+            'Keep the full extracted directory together. This is not an installer and does not configure your system.' \
+            'Keep the Electron sandbox enabled; the CI-only --no-sandbox flag is not a desktop launch recommendation.' \
+            'Circuit results are modeled evidence only, not physical-bench qualification or a guarantee of electrical safety.' \
+            > dist/linux-unpacked/README-linux.txt
+          test -x dist/linux-unpacked/virtual-breadboard-simulator
+          test -f dist/linux-unpacked/resources/app.asar
+          if find dist/linux-unpacked \( -name '.git' -o -name '.env' -o -name '.npmrc' -o -name '*.pem' -o -name '*.key' \) -print -quit | grep -q .; then
+            echo 'Unexpected private or source-control file in package' >&2
+            exit 1
+          fi
+          tar -C dist -czf dist/virtual-breadboard-linux-x64.tar.gz linux-unpacked
+          (cd dist && sha256sum virtual-breadboard-linux-x64.tar.gz > virtual-breadboard-linux-x64.tar.gz.sha256)
+          verify_dir=$(mktemp -d)
+          trap 'rm -rf "$verify_dir"' EXIT
+          tar -xzf dist/virtual-breadboard-linux-x64.tar.gz -C "$verify_dir"
+          test -x "$verify_dir/linux-unpacked/virtual-breadboard-simulator"
+          test -f "$verify_dir/linux-unpacked/resources/app.asar"
+          test -s "$verify_dir/linux-unpacked/README-linux.txt"
+          (cd dist && sha256sum -c virtual-breadboard-linux-x64.tar.gz.sha256)
+          xvfb-run --auto-servernum "$verify_dir/linux-unpacked/virtual-breadboard-simulator" --smoke-test --no-sandbox
+          tar -tzf dist/virtual-breadboard-linux-x64.tar.gz
+          stat -c '%n: %s bytes' dist/virtual-breadboard-linux-x64.tar.gz
+
+      - name: Preserve verified downloadable Linux x64 application
+        uses: actions/upload-artifact@v4
+        with:
+          name: virtual-breadboard-linux-x64
+          path: |
+            Virtual_Breadboard/dist/virtual-breadboard-linux-x64.tar.gz
+            Virtual_Breadboard/dist/virtual-breadboard-linux-x64.tar.gz.sha256
+          if-no-files-found: error
+          compression-level: 0
