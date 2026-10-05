@@ -343,7 +343,7 @@ Result: Improves light quarks by ~2% but does NOT improve heavy quarks.
 
 **Key Finding:** Framework works to 2-5% accuracy for nucleons using calibrated parameters. Strangeness and meson binding require additional physics modeling (flavor-SU(3) and relativistic pair dynamics).
 
-**Documented in:** `/tmp/PHASE_5_HADRON_EXTENSION_REPORT.md` (comprehensive analysis)
+**Documented in:** `Nodes/PHASE_5_HADRON_EXTENSION_VERIFIED.md` (grounded in verified consequences; canonical source)
 
 ### Framework Consistency Verification ✓
 
