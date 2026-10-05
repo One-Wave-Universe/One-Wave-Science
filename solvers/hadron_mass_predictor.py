@@ -66,7 +66,7 @@ class HadronMassCalculator:
     alpha_radius: float = -0.05        # Phase 5: radius scaling exponent
     kappa_factor: float = 1.0          # Phase 5: κ_T scaling multiplier
     sigma_T: float = 0.01              # Surface tension (GeV/fm²)
-    kappa_T_base: float = 1.5          # Base κ_T coupling (GeV)
+    kappa_T_base: float = 0.297        # Base κ_T coupling (GeV) — calibrated value
     eta_T: float = 0.01                # Twist coefficient
 
     def compute_boundary_radius(self, knot: KnotGeometry,

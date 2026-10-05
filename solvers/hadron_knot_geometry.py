@@ -174,7 +174,7 @@ class WeavingEnergyCalculator:
     def phase_locking_energy(self, vortices: List[VortexPhase],
                             boundary_radius: float,
                             num_sample_points: int = 100) -> float:
-        """E_phase = (κ_T/2) * Σ_{a<b} ∫ |ψ_a - ψ_b|² dV
+        """E_phase = κ_T × Σ_{a<b} ∫_V |ψ_a - ψ_b|² dV
 
         Simplified: sample phase difference on a grid inside the sphere
         """
@@ -205,18 +205,24 @@ class WeavingEnergyCalculator:
 
     def twist_energy(self, vortices: List[VortexPhase],
                     boundary_radius: float) -> float:
-        """E_twist = (η_T/2) * Σ_a ∫ |∇ × v_a|² dV
+        """E_twist = η_T × Σ_a ∫_V |∇×v_a|² dV
 
-        Simplified: vorticity estimated from phase gradient
-        For Y_ℓm, typical vorticity scales as ℓ(ℓ+1)/R²
+        Twist/vorticity energy computed from vortex circulation.
+        For each vortex with angular momentum ℓ, compute vorticity contribution
+        and integrate over the volume.
         """
         energy = 0.0
-        volume = (4/3) * np.pi * boundary_radius**3
+
+        # Volume integral of vorticity for each vortex
+        volume = (4.0/3.0) * np.pi * boundary_radius**3
 
         for vortex in vortices:
-            # Vorticity scale from angular momentum
-            vorticity_scale = vortex.ell * (vortex.ell + 1) / boundary_radius**2
-            energy += vorticity_scale
+            # Vorticity scales with angular momentum quantum number ℓ
+            # |∇×v| ~ ℓ/R (angular momentum density)
+            vorticity_density = vortex.ell * (vortex.ell + 1) / (boundary_radius**2)
+
+            # Integrate over volume
+            energy += vorticity_density * volume
 
         energy *= self.density.eta_T * volume / len(vortices)
 
