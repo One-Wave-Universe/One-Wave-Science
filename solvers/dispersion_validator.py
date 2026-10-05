@@ -71,8 +71,8 @@ class OneWaveDispersionValidator:
         return lambda_plus, lambda_minus
 
     def d600_omega_from_lambda(self, lam: np.ndarray) -> np.ndarray:
-        """Convert eigenvalue λ to frequency ω via ω = -i ln(λ)."""
-        return -1j * np.log(lam)
+        """Convert eigenvalue λ to frequency ω via ω = i ln(λ)."""
+        return 1j * np.log(lam)
 
     def d600_theoretical_dispersion(self, k: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
