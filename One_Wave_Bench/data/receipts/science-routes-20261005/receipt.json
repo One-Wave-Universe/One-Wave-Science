@@ -207,6 +207,14 @@
       "sha256": "02d1de9c00511d3b7548a6b59bdf209c819db025518ddcc52b21fd3b2b9de4a8",
       "error": null,
       "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/relay-physionet-eeg/receipt.json"
+    },
+    {
+      "probe": "gaia-sync-native",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "row_count": 10,
+      "sha256": "a0a11ce48d0c8a58032b2e150e5f15156496bf9ed828211eb4dcc25c9a3c49e6",
+      "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/gaia-sync-native/receipt.json"
     }
   ],
   "known_failures": [
@@ -225,5 +233,15 @@
     "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/hive-pipe-verification.json",
     "gwosc_sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
     "external_https_verified": false
+  },
+  "published_relay_verification": {
+    "executed_commit": "56df6e9c1ecf7a524267413868c71e04cde25963",
+    "worktree": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/archive-routes-20261005",
+    "matching_request_id": "openneuro-relay-e32c96a2c193488b820e59b396d49acc",
+    "exit_code": 0,
+    "source": "openneuro",
+    "record_id": "ds000224",
+    "raw_sha256": "93498323b4f346ee4181e2298943ecb50bb5680f61fe0ecd0157f38edd9e8ac0",
+    "cache_receipt": "/home/Scales/One-Wave-Science/.one-wave-metadata/science-routes-20261005/mcp-openneuro-verification.json"
   }
 }

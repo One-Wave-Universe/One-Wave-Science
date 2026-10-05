@@ -11,7 +11,7 @@ Read GENERAL_REFERENCE_RULES.md, AI_CANONICAL_START_HERE.md, AI_BRIDGE_START_HER
 | MAST Hubble/HST | 714 observations near Crab | Native query table |
 | MAST JWST / TESS | 18 / 6 observations near Crab | Native query tables |
 | HEASARC NuSTAR | 108 rows in 0.1-degree Crab region | numaster table; 0.01-degree query legitimately returned zero |
-| Gaia | 3 source IDs and coordinates via synchronous TAP | Removed expensive global ORDER BY and asynchronous polling |
+| Gaia | 3 source IDs via relay; corrected native synchronous query returned 10 | Removed expensive global ORDER BY and asynchronous polling |
 | ESO / ALMA | 3 observation IDs and sky coordinates each | Public ObsCore TAP metadata |
 | DESI | DR1 directory links returned | Release inventory only; no spectral download or database search |
 | OpenNeuro | ds000224 Midnight Scan Club record returned | Brain MRI/fMRI dataset metadata; no subject images fetched |
@@ -64,3 +64,13 @@ Use intention: retrieve public metadata for the named repository question. Use c
 Before each fetch, inspect this registry and current metadata status. Before each transform, verify raw hashes and classify the source. Before each scientific conclusion, read units, calibration, quality, masks, selection and held-out controls. Metadata never supplies missing phase, waveform, detector units or a physical coupling law. Acquisition failures remain failures. Do not bypass HEPData's denial or invent replacement measurements; another permitted acquisition route requires a separate receipt.
 
 Official source documentation: https://docs.openneuro.org/api.html ; https://docs.dandiarchive.org/api/rest-api/ ; https://physionet.org/content/eegmmidb/1.0.0/ ; https://archive.eso.org/programmatic/ ; https://almascience.eso.org/alma-data/archive/archive-documentation ; https://data.desi.lbl.gov/doc/access/ ; https://astroquery.readthedocs.io/en/stable/mast/mast_obsquery.html .
+
+## Matching published-code activation receipt
+
+Until the PR is merged, a temporary sparse task worktree on Jetson contains the published code at commit 56df6e9c1ecf7a524267413868c71e04cde25963:
+
+```text
+/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/archive-routes-20261005
+```
+
+This is a Git worktree, not a maintained runtime clone or competing canon. Verify its current HEAD and status before use. An authenticated local Hive Pipe call executed science_archive_search.py from that worktree and returned OpenNeuro ds000224, exit 0 and matching request ID openneuro-relay-e32c96a2c193488b820e59b396d49acc. The provider-body hash matched the direct-device query. Exact activation evidence is in the canonical receipt. The user's dirty primary checkout remains untouched. After merge, refresh the canonical checkout safely and retire this temporary worktree; do not overwrite the existing recovery branch or dirty user edits.
