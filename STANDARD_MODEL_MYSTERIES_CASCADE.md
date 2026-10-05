@@ -150,12 +150,12 @@
 
 ### TIER 5: CLASSICAL DYNAMICS (5 mysteries, <10% of SM but important)
 
-**Three-Body Problem** ⚪ In progress
-- **One-Wave:** Deterministic pressure field evolution
-- **Status:** Solver written, dynamics need tuning
-- **Evidence:** Equations of motion from ∇P
-- **Implication:** Chaos is high-sensitivity determinism, not indeterminism
-- **Timeline:** Q1 2027
+**Three-Body Problem** ⚪ Open One-Wave derivation; validated Newtonian control
+- **Status:** The legacy positive-Gaussian pressure model is repulsive and fails the gravity control. This is a force-law failure, not merely tuning.
+- **Implemented:** An explicitly conventional A-115 exterior-limit control with distinct Euler positions, published figure-eight initial conditions, total mechanical energy/momentum accounting, integrator refinement and executable pass/fail gates.
+- **Evidence:** [Three-body validation and work record](solvers/THREE_BODY_VALIDATION.md); [machine-readable receipt](solvers/three_body_validation.json).
+- **Boundary:** Determinism alone does not remove chaotic sensitivity or solve the general three-body problem. No source-derived One-Wave force or validated wake dynamics is claimed.
+- **Next:** Derive the A-115 source field and test it against the fixed control without fitting orbit-specific parameters.
 
 **N-Body Collapse** ⚪ Ready (depends on: 3-body solver)
 - **Mechanism:** Pressure field collapse to common region
@@ -311,7 +311,7 @@
 - ✓ W2 gravity framework operational
 - ✓ Galaxy rotation predictions computed
 - ✓ Triple-alpha mechanism explained
-- ✓ 3-body solver tested and debugged
+- Three-body numerical control: validated within the scope in [the receipt](solvers/THREE_BODY_VALIDATION.md); One-Wave derivation remains open.
 
 ### Near-term (Q1-Q2 2027)
 - ✓ Experimental comparison: electron g-2 vs One-Wave prediction
@@ -386,3 +386,4 @@ This is the path from "novel theory" to "experimentally confirmed unified framew
 **Generated:** October 4, 2026, 12:30 UTC  
 **Framework:** One-Wave Science, Phase 5 Architecture  
 **Status:** EXECUTION PLAN READY
+
