@@ -320,17 +320,19 @@ class BoundaryTensionWeave:
 
         # Phase-locking stiffness (GeV/fm³)
         # PHASE 5 MODIFICATION: Scale with √m_scale to fix constant-term energy scaling
-        # Original: kappa_T = 1.0 for all flavors (no scaling)
-        # Modified: kappa_T(m) = 1.0 × (1.5 × factor × √m_scale) when factor != 1.0
-        # When factor = 1.0, use original behavior (kappa_T = 1.0, no scaling)
+        # When combined solution is used (radius_scaling_alpha != 0):
+        #   κ_T(m) = 1.5 × factor × √m_scale (always applies scaling)
+        # When original behavior (radius_scaling_alpha == 0):
+        #   κ_T = 1.0 (original, no scaling)
+        # This ensures backward compatibility while enabling the solution framework
         factor = topology.radius_scaling_kappa_factor
         sqrt_m_scale = np.sqrt(topology.mass_scale)
 
-        if factor != 1.0:
-            # Apply flavor-dependent scaling: κ_T(m) = 1.5 × factor × √m_scale
+        if abs(topology.radius_scaling_alpha) > 1e-6:
+            # Combined solution framework: apply κ_T scaling
             self.kappa_T = 1.5 * factor * sqrt_m_scale
         else:
-            # Original behavior: constant κ_T = 1.0 (no scaling)
+            # Original framework: constant κ_T = 1.0 (no scaling)
             self.kappa_T = 1.0
 
         # Flavor modulation: down quark stronger internal phase-opposition
