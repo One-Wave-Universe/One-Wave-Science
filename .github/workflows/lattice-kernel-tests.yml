@@ -4,14 +4,14 @@ on:
   pull_request:
     paths:
       - 'sims/00-lattice-primitive/**'
-      - 'sims/24-1-sandbox/modules/01-lattice-primitive/**'
+      - 'sims/24-1-sandbox/**'
       - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
   push:
     branches: [main]
     paths:
       - 'sims/00-lattice-primitive/**'
-      - 'sims/24-1-sandbox/modules/01-lattice-primitive/**'
+      - 'sims/24-1-sandbox/**'
       - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
 
@@ -38,3 +38,9 @@ jobs:
         env:
           PYTHONDONTWRITEBYTECODE: '1'
         run: python -m unittest discover -s sims/00-lattice-primitive -p 'test*.py' -v
+      - name: Sandbox registry negative and reference-path controls
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python -m unittest discover -s sims/24-1-sandbox -p 'test*.py' -v
+          python sims/24-1-sandbox/sandbox.py --json
