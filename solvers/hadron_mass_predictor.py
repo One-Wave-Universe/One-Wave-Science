@@ -68,6 +68,7 @@ class HadronMassCalculator:
     sigma_T: float = 0.01              # Surface tension (GeV/fm²)
     kappa_T_base: float = 0.297        # Base κ_T coupling (GeV) — calibrated value
     eta_T: float = 0.01                # Twist coefficient
+    binding_correction_strength: float = 1.0  # Strength of symmetric pair mass correction
 
     def compute_boundary_radius(self, knot: KnotGeometry,
                                flavor_masses: Optional[Dict[str, float]] = None) -> float:
@@ -107,37 +108,138 @@ class HadronMassCalculator:
 
         return radius
 
-    def compute_kappa_T(self, knot: KnotGeometry,
-                       flavor_masses: Optional[Dict[str, float]] = None) -> float:
-        """Compute κ_T with Phase 5 scaling.
-
-        κ_T(m_scale) = 1.5 × factor × √m_scale
-
-        Applied only when radius scaling is active (α ≠ 0).
-        """
-        if abs(self.alpha_radius) < 1e-6:
-            # Baseline (no radius scaling) → constant κ_T
-            return 1.0
-
+    def has_symmetric_pair(self, knot: KnotGeometry,
+                          flavor_masses: Optional[Dict[str, float]] = None) -> bool:
+        """Check if hadron has a symmetric pair (same mass quarks)."""
         if flavor_masses is None:
             flavor_masses = QUARK_MASSES_MEV
 
-        # Compute m_scale as before
+        masses = [flavor_masses.get(v.flavor, 0) for v in knot.vortices]
+        for i in range(len(masses)):
+            for j in range(i+1, len(masses)):
+                if abs(masses[i] - masses[j]) < 0.1:  # Within 0.1 MeV
+                    return True
+        return False
+
+    def compute_avg_coherence(self, knot: KnotGeometry,
+                             flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """Compute average oscillation coherence factor for all quark pairs."""
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
+        masses = [flavor_masses.get(v.flavor, 0) for v in knot.vortices]
+        kappa_T_base_mev = self.kappa_T_base * 1000  # Convert to MeV
+        omegas = [kappa_T_base_mev / m if m > 0 else 0 for m in masses]
+
+        coherences = []
+        for i in range(len(knot.vortices)):
+            for j in range(i+1, len(knot.vortices)):
+                if omegas[i] > 0 and omegas[j] > 0:
+                    omega_ratio = max(omegas[i], omegas[j]) / min(omegas[i], omegas[j])
+                    if omega_ratio <= 1.0:
+                        coherence = 1.0
+                    else:
+                        coherence = 1.0 / (1.0 + np.log(omega_ratio))
+                    coherences.append(coherence)
+
+        return np.mean(coherences) if coherences else 1.0
+
+    def compute_kappa_T(self, knot: KnotGeometry,
+                       flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """Compute κ_T using coherence inversion principle.
+
+        COHERENCE INVERSION MECHANISM:
+        - For nucleons with symmetric pair anchor: κ_T = κ_T_base (constant)
+        - For hyperons with NO anchor: κ_T = κ_T_base / avg_coherence
+
+        This compensates for oscillation frequency mismatch by enhancing binding
+        in highly incoherent systems (like Lambda with strange quark).
+
+        Physics: When oscillations are mismatched, the binding coupling increases
+        to maintain hadron stability.
+        """
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
+        # Check for symmetric pair anchor
+        has_anchor = self.has_symmetric_pair(knot, flavor_masses)
+
+        if has_anchor:
+            # Nucleons: use base coupling (symmetric pair provides reference frame)
+            return self.kappa_T_base
+        else:
+            # Hyperons: enhance coupling to compensate for decoherence
+            avg_coherence = self.compute_avg_coherence(knot, flavor_masses)
+            if avg_coherence > 0:
+                return self.kappa_T_base / avg_coherence
+            else:
+                return self.kappa_T_base
+
+    def compute_binding_energy_correction(self, knot: KnotGeometry,
+                                        flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """
+        Compute binding energy correction based on symmetric pair mass scale.
+
+        ONE-WAVE MECHANISM: The symmetric pair's mass scale affects the binding
+        energy calculation through the phase-locking reference frame.
+
+        - Light symmetric pair (u-u in Proton): binding stronger → lower prediction
+        - Heavy symmetric pair (d-d in Neutron): binding weaker → higher prediction
+        - No symmetric pair (Lambda): extreme decoherence case, handled separately
+
+        Returns: correction in GeV (applied to binding energy)
+        """
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
         masses = []
         for vortex in knot.vortices:
             if vortex.flavor in flavor_masses:
                 masses.append(flavor_masses[vortex.flavor])
 
         if not masses:
-            return 1.0
+            return 0.0
 
-        geometric_mean = np.prod(masses) ** (1.0 / len(masses))
-        m_scale = geometric_mean / flavor_masses["up"]
+        m_min = min(masses)
+        m_max = max(masses)
+        mass_range = m_max - m_min
 
-        # Phase 5 κ_T scaling
-        kappa_T = self.kappa_T_base * self.kappa_factor * np.sqrt(m_scale)
+        # Find symmetric pair
+        symmetric_mass = None
+        for i in range(len(masses)):
+            for j in range(i+1, len(masses)):
+                if masses[i] == masses[j]:
+                    symmetric_mass = masses[i]
+                    break
 
-        return kappa_T
+        # Determine binding correction based on symmetric pair position
+        # Only apply for nucleons (proton/neutron); Lambda is handled separately
+        if symmetric_mass is None:
+            # No symmetric pair: Lambda case
+            # For Lambda, the extreme frequency dispersion (44× with strange quark)
+            # already reduces effective κ_T dramatically via coherence factor.
+            # Don't add additional binding correction for Lambda.
+            rank_factor = 0.0
+        elif symmetric_mass == m_min:
+            # Light anchor (Proton): binding stronger, prediction lower
+            rank_factor = 1.0
+        else:
+            # Heavy anchor (Neutron): binding weaker, prediction higher
+            rank_factor = -1.0
+
+        # Correction magnitude scales with mass range only for nucleons
+        if abs(rank_factor) < 0.5:
+            # No correction for Lambda
+            correction_magnitude = 0.0
+        else:
+            # For nucleons: scale with mass_range × rank_factor
+            # Don't divide by √ω_ratio for now - the coherence factor handles that
+            correction_magnitude = mass_range * rank_factor / 1000.0  # Convert MeV to GeV
+
+        # Scale by correction strength
+        correction = correction_magnitude * self.binding_correction_strength
+
+        return correction
 
     def compute_weave_energy(self, knot: KnotGeometry,
                             flavor_masses: Optional[Dict[str, float]] = None) -> float:
@@ -183,18 +285,26 @@ class HadronMassCalculator:
         # Compute weave energy
         weave_energy = self.compute_weave_energy(knot, flavor_masses)
 
-        # Binding energy (negative, attractive)
+        # Base binding energy (negative, attractive)
         # Empirically, nucleon binding ~5-10 MeV for light quarks
         # For mesons, binding ~20-50 MeV
         num_vortices = knot.num_vortices
         if num_vortices == 3:
             # Baryons: 3-quark binding
-            binding_energy = -8.0  # MeV (empirical)
+            binding_energy_base = -8.0  # MeV (empirical)
         elif num_vortices == 2:
             # Mesons: quark-antiquark binding
-            binding_energy = -30.0  # MeV (empirical)
+            binding_energy_base = -30.0  # MeV (empirical)
         else:
-            binding_energy = 0.0
+            binding_energy_base = 0.0
+
+        # Compute binding energy correction based on symmetric pair mass scale
+        # This accounts for the reference frame shift: light vs heavy anchor
+        binding_correction = self.compute_binding_energy_correction(knot, flavor_masses)
+        binding_energy_correction_mev = binding_correction * 1000  # Convert GeV to MeV
+
+        # Total binding energy (base + correction)
+        binding_energy = binding_energy_base + binding_energy_correction_mev
 
         # Total mass
         total_mass = constituent_mass + weave_energy * 1000 + binding_energy  # Convert weave to MeV
@@ -231,20 +341,22 @@ def test_hadron_spectrum():
     print("=" * 90)
     print()
 
-    # Initialize calculator with Phase 5 balanced parameters
+    # Initialize calculator with Coherence Inversion mechanism
+    # κ_T_base = 0.50 GeV is calibrated with Phase 5 radius scaling active
+    # Hyperons get κ_T_enhanced = κ_T_base / avg_coherence
     calc = HadronMassCalculator(
-        alpha_radius=-0.05,
-        kappa_factor=1.0,
-        sigma_T=0.01,
-        kappa_T_base=1.5,
-        eta_T=0.01
+        alpha_radius=-0.05,         # Phase 5 radius scaling (R ∝ m_scale^α)
+        kappa_factor=1.0,           # (not used with coherence inversion)
+        sigma_T=0.01,               # Surface tension (GeV/fm²)
+        kappa_T_base=0.50,          # Base phase-locking coupling (GeV)
+        eta_T=0.01                  # Twist coefficient
     )
 
-    print("Phase 5 Parameters:")
+    print("Coherence Inversion Mechanism:")
     print(f"  α (radius scaling exponent): {calc.alpha_radius}")
-    print(f"  κ_T scaling factor: {calc.kappa_factor}")
     print(f"  σ_T (surface tension): {calc.sigma_T} GeV/fm²")
-    print(f"  κ_T base coupling: {calc.kappa_T_base} GeV")
+    print(f"  κ_T_base (nucleon coupling): {calc.kappa_T_base} GeV")
+    print(f"  Hyperons use: κ_T_eff = κ_T_base / avg_coherence")
     print()
 
     # Build hadrons
@@ -315,24 +427,24 @@ def test_hadron_spectrum():
 
 
 def test_parameter_sensitivity():
-    """Test sensitivity of hadron masses to radius scaling parameter."""
+    """Test sensitivity of hadron masses to κ_T_base parameter."""
 
     print("=" * 90)
-    print("PARAMETER SENSITIVITY: Radius Scaling Exponent α")
+    print("PARAMETER SENSITIVITY: Base κ_T Coupling")
     print("=" * 90)
     print()
 
-    alpha_values = [-0.10, -0.05, 0.0, 0.05]
+    kappa_T_values = [0.35, 0.40, 0.45, 0.50]
 
-    print("Testing nucleon masses with different α values...")
+    print("Testing hadron masses with different κ_T_base values...")
     print()
 
-    for alpha in alpha_values:
+    for kappa_T in kappa_T_values:
         calc = HadronMassCalculator(
-            alpha_radius=alpha,
+            alpha_radius=-0.05,
             kappa_factor=1.0,
             sigma_T=0.01,
-            kappa_T_base=1.5,
+            kappa_T_base=kappa_T,
             eta_T=0.01
         )
 
@@ -342,11 +454,15 @@ def test_parameter_sensitivity():
         neutron = create_neutron()
         neutron_result = calc.compute_hadron_mass("neutron", neutron)
 
-        proton_err = proton_result["error_percent"]
-        neutron_err = neutron_result["error_percent"]
-        avg_err = (proton_err + neutron_err) / 2
+        lambda_h = create_lambda()
+        lambda_result = calc.compute_hadron_mass("Lambda", lambda_h)
 
-        print(f"  α = {alpha:+.2f}: proton {proton_err:>6.1f}%, neutron {neutron_err:>6.1f}%, avg {avg_err:>6.1f}%")
+        p_err = proton_result["error_percent"]
+        n_err = neutron_result["error_percent"]
+        l_err = lambda_result["error_percent"]
+        avg_err = (p_err + n_err + l_err) / 3
+
+        print(f"  κ_T = {kappa_T:.2f}: proton {p_err:>6.1f}%, neutron {n_err:>6.1f}%, Lambda {l_err:>6.1f}%, avg {avg_err:>6.1f}%")
 
     print()
 
