@@ -24,7 +24,7 @@ Hypotheses, thought experiments, math, simulations, theoretical papers, axioms.
 
 **To Mythos-and-Stories**
 - Books/ fiction
-- Musical Universe stories
+- Musical Universe stays in this repo. It is science, not fiction.
 - narrative Dreamscape / Miniverse fiction
 
 ## Builds-class repos (do not merge into Science)
