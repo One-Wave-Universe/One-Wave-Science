@@ -1,0 +1,17 @@
+name: Brain Buddy Council offline contracts
+on:
+  push:
+    paths: ['scripts/brain_buddy_council.py', 'scripts/tests/test_brain_buddy_council.py', '.github/workflows/brain-buddy-council.yml']
+  pull_request:
+    paths: ['scripts/brain_buddy_council.py', 'scripts/tests/test_brain_buddy_council.py', '.github/workflows/brain-buddy-council.yml']
+permissions: {contents: read}
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python3 -m unittest discover -s scripts/tests -p 'test_brain_buddy_council.py' -v
+      - run: python3 -m py_compile scripts/brain_buddy_council.py
