@@ -1,0 +1,92 @@
+name: Virtual Breadboard — Linux Release
+
+# Builds Linux .deb + AppImage and publishes a public GitHub Release
+# so anyone can click Download (no terminal required to get the files).
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag
+        required: true
+        default: vbb-linux-1.0.0
+      name:
+        description: Release title
+        required: true
+        default: Virtual Breadboard — Linux
+  push:
+    branches:
+      - 'release/vbb-linux-1.0.0'
+    paths:
+      - '.github/workflows/vbb-linux-release.yml'
+      - 'Virtual_Breadboard/INSTALL_LINUX.md'
+      - 'Virtual_Breadboard/package.json'
+
+permissions:
+  contents: write
+
+jobs:
+  linux-release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Virtual_Breadboard
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build AppImage
+        run: npm run dist:appimage
+
+      - name: Build .deb
+        run: npm run dist:deb
+
+      - name: Stage release assets
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets
+          DEB=$(ls Virtual_Breadboard/dist/*.deb | head -1)
+          APPIMAGE=$(ls Virtual_Breadboard/dist/*.AppImage | head -1)
+          cp "$DEB" release-assets/VirtualBreadboardSimulator-linux-amd64.deb
+          cp "$APPIMAGE" release-assets/VirtualBreadboardSimulator-linux-x64.AppImage
+          cp Virtual_Breadboard/INSTALL_LINUX.md release-assets/INSTALL.md
+          ls -lh release-assets
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || 'vbb-linux-1.0.0' }}
+          name: ${{ github.event.inputs.name || 'Virtual Breadboard — Linux' }}
+          draft: false
+          prerelease: false
+          body: |
+            # Virtual Breadboard — Linux
+
+            Click **Download** under Assets below. No terminal needed to get the file.
+
+            ## Recommended: `.deb` (Ubuntu, Debian, Mint, Pop!_OS, Zorin)
+
+            1. Click **VirtualBreadboardSimulator-linux-amd64.deb**
+            2. Open your Downloads folder
+            3. Double-click the file → **Install** in Software Install / App Center
+            4. Open **Virtual Breadboard Simulator** from your app menu
+
+            ## Also: AppImage (Fedora, Arch, and others)
+
+            1. Click **VirtualBreadboardSimulator-linux-x64.AppImage**
+            2. Make it executable (right-click → Properties → Allow running as a program)
+            3. Double-click to launch
+
+            Full click-by-click steps: see **INSTALL.md** in Assets.
+          files: |
+            release-assets/VirtualBreadboardSimulator-linux-amd64.deb
+            release-assets/VirtualBreadboardSimulator-linux-x64.AppImage
+            release-assets/INSTALL.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
