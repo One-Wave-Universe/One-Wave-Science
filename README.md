@@ -10,6 +10,16 @@
 > *This is a joke, not part of the scientific model. Experimental replication is encouraged.*
 
 
+## Current science evidence and books — October 4, 2026
+
+Read the new [**One-Wave Science Laboratory**](Books/One_Wave_Science_Laboratory/README.md): three chapters explain the joint response solver, localized excitations and measurements, and the next canonical derivation. [Book 1 Chapter 18](Books/Book1_Micro/Book1_Ch18_Excitations_Measurements_and_Solver_Evidence.md) connects that evidence to the Micro book.
+
+The current numerical record is a tested joint response control plus an explicitly hypothetical nonlinear bulk excitation model. It does **not** establish a measured particle-mass spectrum, a predicted 125 GeV response, a solved hierarchy problem or complete physical unification. Particles are interpreted as measured signatures of field excitations; the excitation and detector response must actually be calculated.
+
+Older “mass predictions derived,” “hierarchy solved,” and phase-completion language below is retained as **historical unconfirmed proposal language**, not the current evidence status. For mass and excitation claims, the canonical nodes, [reproduction audit](Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) and the Laboratory's source-linked controls take precedence. Submission and prize aspirations do not change proof status.
+
+---
+
 ## 🎯 PUBLICATION READY — Nobel Prize Track
 
 **Status: October 4, 2026**
