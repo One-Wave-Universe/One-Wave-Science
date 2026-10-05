@@ -209,3 +209,24 @@ electrical shell or Mirror phase lock. Surface coefficient and boundary kinetic
 weight are illustrative, not measured Mass Effect. The result is a quantitative
 target for the native evolving-boundary solver, not Bronze completion or a
 node-gate promotion.
+
+
+
+## Computed spatial pressure and missing interface (2026-10-05)
+
+The [spatial boundary-pressure control](../solvers/SPATIAL_BOUNDARY_PRESSURE_AND_GAPS.md)
+replaces the previous assumed carrier coefficient with the native 13-site
+four-role reflecting-cavity spectrum. The reciprocal skin force includes both
+the field-stiffness derivative and the moving kinetic-metric derivative. With
+the previous action and tension inputs, the actual balance radius is .758813219,
+not 1; both pressures are .0263569473 and averaged curvature is positive. Four
+200-unit runs, including ±10% radius perturbations, stay bounded with accepted-step
+energy error below 1e-12. Five controls pass.
+
+Uniform phase recurrences can have nonzero frequency yet zero geometric pressure.
+Total recurrence energy is therefore not automatically confinement work. This
+control still prescribes the reflecting graph and self-similar spherical shape.
+Its four role coordinates are response fixtures, not a derived knot/shell/Mirror/
+weave state. Full native field-to-skin mapping, freely deforming closed geometry
+and exterior/phase coupling remain the next interface closure. No node metadata
+or gate changes; no physical Knot Lock or Mass Effect is assigned.

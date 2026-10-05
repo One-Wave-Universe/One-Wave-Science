@@ -168,3 +168,23 @@ improves energy error by four. This is a reduced radial lock, not a self-held
 native spatial knot. Carrier confinement and its inverse-radius frequency are
 assumed. Next replace that assumption with a computed spatial recurrence and
 evolving boundary work law, retaining knot, shell, Mirror and weave coupling.
+
+
+
+### Computed spatial pressure replaces the assumed radial carrier
+
+The [spatial pressure and closure map](../../solvers/SPATIAL_BOUNDARY_PRESSURE_AND_GAPS.md)
+identifies and supplies the immediate field-to-boundary feedback for a computed
+13-site four-role FCC cavity. The moving material metric and stiffness both
+contribute to the reciprocal radius force. Under the same action and tension
+inputs, the computed spectrum changes the balance radius from 1 to .758813219;
+pressure and tension both equal .0263569473. Four 200-unit trajectories remain
+bounded, including ±10% radius perturbations and a tighter-tolerance control.
+
+Uniform relative-phase recurrences have nonzero frequencies but zero radius
+pressure. Their energy cannot be assigned to confinement work merely because
+they recur. Five implementation/outcome checks pass. The reflecting graph and
+self-similar spherical geometry remain prescribed, so this is not emergent Knot
+Lock. The report specifies the remaining native-field/skin map, nonspherical
+surface dynamics, exterior/Mirror channels, circulation/phase topology, shell
+feedback and constitutive calibration in dependency order.
