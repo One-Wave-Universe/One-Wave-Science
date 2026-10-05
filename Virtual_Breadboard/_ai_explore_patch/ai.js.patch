@@ -1,0 +1,30 @@
+--- a/js/ai.js
++++ b/js/ai.js
+@@ -120,6 +120,12 @@
+       'Build a real, working circuit: a battery needs a closed path back to itself through the other parts.',
+       'Use wires to connect parts that do not already share a node.',
+       'Only include parts the user actually asked for.',
++      '',
++      'UI-SUPPORTED part types only (Ask AI / breadboard.load): wire, ywire, resistor, led, diode,',
++      'capacitor, battery, switch, pushbutton, potentiometer, vgnd, inductor, acsource, mtjsensor,',
++      'scope, diffscope, toroid, nmos, pmos, memorycore, comparator.',
++      'Do NOT emit CLI-only types: diffsource, latchrelay, hbridge, schmitt (those work in simulate.js only).',
++      'Every part field must be one the UI accepts for that type (value/color/closed/freq/phase/pos/turns/core/gauge/spacing/initialV/capacityAh/coupling/style as documented above).',
+     ].join('\n');
+   }
+ 
+@@ -352,6 +358,14 @@
+   }
+ 
+   const api = { systemPrompt, PROVIDERS, extractJson, validateSpec };
++  // Explore loop / offline templates live in ai-explore.js so Ask AI can
++  // build → test → adjust without bloating this file's provider layer.
++  try {
++    const explore = (typeof require === 'function')
++      ? require('./ai-explore.js')
++      : (typeof window !== 'undefined' ? window.AIExplore : null);
++    if (explore && typeof explore.attachExplore === 'function') explore.attachExplore(api);
++  } catch (e) { /* headless/browser without the extras file still gets validateSpec */ }
+   if (typeof module !== 'undefined' && module.exports) module.exports = api;
+   if (typeof window !== 'undefined') window.AIBuilder = api;
+ })(typeof globalThis !== 'undefined' ? globalThis : this);

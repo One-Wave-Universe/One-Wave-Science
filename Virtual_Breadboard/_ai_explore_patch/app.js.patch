@@ -1,0 +1,110 @@
+--- a/js/app.js
++++ b/js/app.js
+@@ -1789,27 +1789,98 @@
+     return boardParts;
+   }
+ 
++  // Probe a candidate AI spec the same way a human would: place it, run a
++  // short fixed-duration settle, read the receipt. Used by the explore loop
++  // (build → test → adjust → test again). loadCircuitSpec still owns commit.
++  function probeAiSpec(spec) {
++    try {
++      loadCircuitSpec({ ...spec, layout: spec.layout || currentLayoutKey });
++    } catch (err) {
++      return { ok: false, errors: [err.message], committed: false, summary: '' };
++    }
++    let receipt;
++    try {
++      // Short settle: enough for DC LED/divider; RC templates still get a first look.
++      receipt = runDuration(0.05, 0.001);
++      document.getElementById('simReceipt').value = JSON.stringify(receipt, null, 2);
++    } catch (err) {
++      return { ok: false, errors: [err.message], committed: true, summary: '' };
++    }
++    const summary = AIBuilder.summarizeReceipt(receipt);
++    const errors = [];
++    if (AIBuilder.receiptLooksBad(receipt)) {
++      const warnings = receipt.warnings || [];
++      errors.push('Simulation warnings: ' + (warnings.length ? warnings.join(' | ') : 'unhealthy receipt'));
++    }
++    return { ok: errors.length === 0, errors, receipt, summary, committed: true };
++  }
++
+   async function runAiBuild() {
+     const text = aiPromptEl.value.trim();
+     if (!text) return setAiStatus('Describe what you want built first.', 'err');
+     const settings = loadAiSettings();
++
++    // Offline keyword templates: LED / divider / RC when no API key (and not custom/Ollama).
+     if (settings.provider !== 'custom' && !settings.apiKey) {
+-      return setAiStatus('Add an API key in settings first.', 'err');
++      const tpl = AIBuilder.matchOfflineTemplate(text);
++      if (!tpl) {
++        return setAiStatus('Add an API key in settings first.\nOr try offline: "LED with resistor", "voltage divider", "RC circuit".', 'err');
++      }
++      setAiStatus('No API key — placing offline template (' + tpl.name + ')…', 'busy');
++      try {
++        const probe = probeAiSpec(tpl);
++        if (!probe.ok && !probe.committed) {
++          setAiStatus('Offline template failed to load:\n' + (probe.errors || []).join('\n'), 'err');
++          return;
++        }
++        const n = (tpl.parts || []).length;
++        setAiStatus(
++          'Offline template built ' + n + ' part' + (n === 1 ? '' : 's') +
++          ' (' + tpl.name + '). Explore: build → test → adjust.\n' + (probe.summary || ''),
++          probe.ok ? 'ok' : 'err'
++        );
++      } catch (err) {
++        setAiStatus('Could not build offline template: ' + err.message, 'err');
++      }
++      return;
+     }
++
+     const call = AIBuilder.PROVIDERS[settings.provider];
+     if (!call) return setAiStatus('Unknown provider.', 'err');
+ 
+-    setAiStatus('Thinking…', 'busy');
++    setAiStatus('Exploring: build → test → adjust…', 'busy');
+     try {
+-      const raw = await call({ apiKey: settings.apiKey, model: settings.model, endpoint: settings.endpoint, userText: text });
+-      const spec = AIBuilder.extractJson(raw);
+-      const { ok, errors, parts } = AIBuilder.validateSpec(spec);
+-      if (!ok) {
+-        setAiStatus("The AI's response wasn't a valid circuit:\n" + errors.join('\n'), 'err');
++      const result = await AIBuilder.exploreBuild({
++        userText: text,
++        maxAttempts: 3,
++        uiOnly: true,
++        callModel: async (promptText) => call({
++          apiKey: settings.apiKey,
++          model: settings.model,
++          endpoint: settings.endpoint,
++          userText: promptText,
++        }),
++        probe: async (spec) => probeAiSpec(spec),
++      });
++
++      if (result.ok) {
++        const n = (result.parts || result.spec.parts || []).length;
++        setAiStatus(
++          'Built ' + n + ' part' + (n === 1 ? '' : 's') +
++          ' after ' + result.attempts + ' attempt' + (result.attempts === 1 ? '' : 's') +
++          '.\n' + (result.summary || 'Check the status bar for warnings.'),
++          'ok'
++        );
+         return;
+       }
+-      loadCircuitSpec({ ...spec, layout: spec.layout || currentLayoutKey });
+-      setAiStatus('Built ' + parts.length + ' part' + (parts.length === 1 ? '' : 's') + '. Check the status bar for any warnings.', 'ok');
++
++      // Last attempt may already be on the board (probe commits). Show what we know.
++      const errText = (result.errors || ['Explore failed.']).join('\n');
++      setAiStatus(
++        'Explore stopped after ' + result.attempts + ' attempt' + (result.attempts === 1 ? '' : 's') +
++        ':\n' + errText + (result.summary ? '\n\nLast measured:\n' + result.summary : ''),
++        'err'
++      );
+     } catch (err) {
+       setAiStatus('Could not build that: ' + err.message, 'err');
+     }

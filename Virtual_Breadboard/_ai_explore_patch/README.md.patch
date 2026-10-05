@@ -1,0 +1,31 @@
+--- a/README.md
++++ b/README.md
+@@ -636,6 +636,28 @@
+ Adding another provider is one function in `js/ai.js`'s `PROVIDERS` map —
+ anything that can take a system prompt + user text and return text works.
+ 
++### AI explore: build, test, adjust
++
++**Ask AI to build** is no longer one-shot. After the model returns Circuit
++JSON, the app:
++
++1. **Validates** against `js/ai.js` (`validateSpec` + UI-supported part types)
++2. **Loads** the parts onto the board (same path as Load JSON / human clicks)
++3. **Tests** with a short fixed-duration settle (`run` / receipt)
++4. **Adjusts** if validation fails or the receipt shows unhealthy warnings
++   (short, over-current, non-convergence, …): errors + a receipt summary are
++   sent back to the model for revised JSON
++5. **Retries** up to 3 attempts, then shows the measured summary
++
++Humans can still click parts or paste JSON — those flows are unchanged.
++External AIs can drive the same loop via `window.breadboard.load` /
++`.run` / `.receipt`, or call `AIBuilder.exploreBuild({ userText, callModel,
++probe })` with their own model + probe.
++
++**Offline (no API key):** keyword templates for common student circuits —
++say "LED with resistor", "voltage divider", or "RC circuit" and the board
++places a canned working build. Tests: `npm run test:ai-build`.
++
+ Note: this only works in the real app (opened directly, the Ubuntu
+ AppImage, or the Android APK) — the in-chat Artifact preview's sandbox
+ blocks calls to external AI APIs, so the dialogue box won't be able to
