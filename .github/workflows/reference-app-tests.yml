@@ -1,0 +1,32 @@
+name: Reference App offline recovery tests
+
+on:
+  push:
+    paths:
+      - 'Nexus_Integration/Truth_Computer/Reference_App/**'
+      - '.github/workflows/reference-app-tests.yml'
+  pull_request:
+    paths:
+      - 'Nexus_Integration/Truth_Computer/Reference_App/**'
+      - '.github/workflows/reference-app-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  offline-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile reference app and tests
+        working-directory: Nexus_Integration/Truth_Computer/Reference_App
+        run: python3 -m py_compile app.py test_app.py
+      - name: Run offline controller and recovery tests
+        working-directory: Nexus_Integration/Truth_Computer/Reference_App
+        run: python3 -m unittest discover -s . -p 'test_app.py' -v
