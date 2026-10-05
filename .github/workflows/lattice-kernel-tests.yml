@@ -4,11 +4,15 @@ on:
   pull_request:
     paths:
       - 'sims/00-lattice-primitive/**'
+      - 'sims/24-1-sandbox/modules/01-lattice-primitive/**'
+      - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
   push:
     branches: [main]
     paths:
       - 'sims/00-lattice-primitive/**'
+      - 'sims/24-1-sandbox/modules/01-lattice-primitive/**'
+      - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
 
 permissions:
@@ -28,6 +32,8 @@ jobs:
           python-version: '3.12'
       - name: Kernel and UI integration controls
         run: node --test sims/00-lattice-primitive/test_lattice_kernel.js
+      - name: Slot 1 adapter and reproducible receipts
+        run: node --test sims/24-1-sandbox/modules/01-lattice-primitive/test_adapter.js
       - name: Dispersion and octave controls
         env:
           PYTHONDONTWRITEBYTECODE: '1'
