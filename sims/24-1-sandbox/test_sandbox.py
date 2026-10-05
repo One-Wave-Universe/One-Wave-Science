@@ -168,7 +168,7 @@ class RegistryTests(unittest.TestCase):
         result = sandbox.registry_report()
         self.assertTrue(result["ok"], result)
         self.assertEqual(result["occupied_slots"], [1, 6])
-        self.assertEqual([item["entry_point_present"] for item in result["modules"]], [True, False])
+        self.assertEqual([item["entry_point_present"] for item in result["modules"]], [True, True])
         self.assertTrue(all(item["module_execution"] == "not-run" for item in result["modules"]))
 
 

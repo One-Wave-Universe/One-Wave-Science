@@ -5,6 +5,7 @@ on:
     paths:
       - 'sims/00-lattice-primitive/**'
       - 'sims/24-1-sandbox/**'
+      - 'sims/06-spectral-lattice-phase/**'
       - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
   push:
@@ -12,6 +13,7 @@ on:
     paths:
       - 'sims/00-lattice-primitive/**'
       - 'sims/24-1-sandbox/**'
+      - 'sims/06-spectral-lattice-phase/**'
       - 'sims/00-state-container/state-schema.json'
       - '.github/workflows/lattice-kernel-tests.yml'
 
@@ -44,3 +46,10 @@ jobs:
         run: |
           python -m unittest discover -s sims/24-1-sandbox -p 'test*.py' -v
           python sims/24-1-sandbox/sandbox.py --json
+      - name: Slot 6 static spectral adapter and source controls
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python -m unittest discover -s sims/24-1-sandbox/modules/06-spectral-lattice-phase -p 'test*.py' -v
+          python sims/06-spectral-lattice-phase/test_spectral_lattice_phase.py
+          python sims/24-1-sandbox/modules/06-spectral-lattice-phase/adapter.py > spectral-receipt.json
