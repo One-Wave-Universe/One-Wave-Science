@@ -1,0 +1,5530 @@
+{
+  "reference": "PR193 at 7c1bd2f33f9b5ee0451b35913fd7a3607e90ba9d",
+  "scope": "real scalar excitation and vector displacement under unchanged candidate law; phase labels denote initial quadratures, not topological vortices",
+  "law_parameters": {
+    "beta": 1.0,
+    "shear": 1.0,
+    "k": 1.0,
+    "a": 1.0
+  },
+  "run_environment": "isolated scientific workspace; not a device-side simulation receipt",
+  "runs": [
+    {
+      "parameters": {
+        "kind": "standing",
+        "amplitude": 0.2,
+        "relaxed_u": false,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.1476375892407623,
+      "max_scaled_energy_error": 2.8038621089077065e-05,
+      "min_late_localized_fraction": 0.09611042945712987,
+      "best_reference_return_error": 0.9700949976285047,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203886,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.2,
+          "compression_sum": 0.0,
+          "activity": 0.22264236060435838
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.9184202378175373,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.14511091026356857,
+          "compression_sum": 0.0,
+          "activity": 0.28414691199209624
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8150648438051834,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.038460709330314154,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.33466037842327045
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.6369033877620254,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08126432638696823,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2868857280297827
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.4080484145316912,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10928073659319512,
+          "compression_sum": 0.0,
+          "activity": 0.2506578259494172
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.29118508224272266,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06854854028663472,
+          "compression_sum": -8.673617379884035e-18,
+          "activity": 0.2732922701383015
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.2947091797976239,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05132774804541729,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.3016946474714718
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.35260333974986974,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06617968992839386,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2957530011556838
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.3638235227360911,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07866554130834133,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.2648168013996822
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.2986405926024772,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06784909433167598,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.2696011358786311
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.25313805131006434,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.06145107232175536,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.30571470249159854
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.22666190936225955,
+          "return_to_time5_error": 0.5479064754029299,
+          "peak_amplitude": 0.06560471210434674,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2986090340096017
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.17492507327410087,
+          "return_to_time5_error": 1.0557797854026842,
+          "peak_amplitude": 0.07719289463848517,
+          "compression_sum": 0.0,
+          "activity": 0.2654615358887313
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.11020442866846904,
+          "return_to_time5_error": 1.4661839474130347,
+          "peak_amplitude": 0.0881976125608883,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.2684662860214896
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.07034384403953528,
+          "return_to_time5_error": 1.6923456489359565,
+          "peak_amplitude": 0.05570961519128941,
+          "compression_sum": 0.0,
+          "activity": 0.29841788442310296
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.06540310381559632,
+          "return_to_time5_error": 1.7108506221339226,
+          "peak_amplitude": 0.045732743283347636,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.32323984558145935
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.06718587995947731,
+          "return_to_time5_error": 1.545281447216481,
+          "peak_amplitude": 0.09736994990929185,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.31097896192444185
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.04057222896651044,
+          "return_to_time5_error": 1.2663995303099411,
+          "peak_amplitude": 0.14168866715691833,
+          "compression_sum": 0.0,
+          "activity": 0.2705533851270592
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.03671592414080861,
+          "return_to_time5_error": 1.0489741622725373,
+          "peak_amplitude": 0.13748034690975186,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.2837123351144046
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.06529726740676058,
+          "return_to_time5_error": 0.989272050011971,
+          "peak_amplitude": 0.08794058404234302,
+          "compression_sum": 0.0,
+          "activity": 0.3449028965788366
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.0968344778524782,
+          "return_to_time5_error": 0.9700949976285047,
+          "peak_amplitude": 0.05015029842825887,
+          "compression_sum": 2.6020852139652106e-18,
+          "activity": 0.3512178269361143
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.20665425429677894,
+          "return_to_time5_error": 0.9723534751000976,
+          "peak_amplitude": 0.058758622758684494,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.30283386955363323
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.3615395957861471,
+          "return_to_time5_error": 1.121207863981307,
+          "peak_amplitude": 0.09397945904394804,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.302210575762684
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.3825627357510556,
+          "return_to_time5_error": 1.3340809052754363,
+          "peak_amplitude": 0.08765767177712204,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.3628069029880444
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.38541395211670665,
+          "return_to_time5_error": 1.4180252658351533,
+          "peak_amplitude": 0.1137214417230385,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.3796528209676528
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.443963028063602,
+          "return_to_time5_error": 1.361125257211007,
+          "peak_amplitude": 0.09523470412452324,
+          "compression_sum": 0.0,
+          "activity": 0.3345366659387338
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.41591211696047126,
+          "return_to_time5_error": 1.3126560443931692,
+          "peak_amplitude": 0.115598544355015,
+          "compression_sum": 0.0,
+          "activity": 0.34189588433558327
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.2898479637066008,
+          "return_to_time5_error": 1.3477175543356228,
+          "peak_amplitude": 0.10517398261831336,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.41552485553217794
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.1736055685884556,
+          "return_to_time5_error": 1.3434781989891218,
+          "peak_amplitude": 0.05200165388485368,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.42541913281099947
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.0687309778107886,
+          "return_to_time5_error": 1.3137421969414598,
+          "peak_amplitude": 0.0739455737677124,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.3758572204675155
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.07838374287316122,
+          "return_to_time5_error": 1.3652596666023449,
+          "peak_amplitude": 0.08335492377287707,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.38680461521107257
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.21932333271413534,
+          "return_to_time5_error": 1.4247532603462505,
+          "peak_amplitude": 0.06810048417424502,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.44990551858291733
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.40770556319569917,
+          "return_to_time5_error": 1.379279328719424,
+          "peak_amplitude": 0.0727716088036311,
+          "compression_sum": 8.673617379884035e-18,
+          "activity": 0.4804564820093077
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.5843269190321415,
+          "return_to_time5_error": 1.2148535964120497,
+          "peak_amplitude": 0.08829643351680097,
+          "compression_sum": 2.949029909160572e-17,
+          "activity": 0.46582954914912955
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.6568469431965757,
+          "return_to_time5_error": 1.0376693714980791,
+          "peak_amplitude": 0.1455911608884131,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.4516373500543694
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.6114920732880708,
+          "return_to_time5_error": 1.0095137570570836,
+          "peak_amplitude": 0.16311257514824987,
+          "compression_sum": 2.0816681711721685e-17,
+          "activity": 0.4810064221517934
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.5390729698642239,
+          "return_to_time5_error": 1.1337813005508652,
+          "peak_amplitude": 0.12513257407424436,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.531301884175302
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.43419714898500644,
+          "return_to_time5_error": 1.3197958805965995,
+          "peak_amplitude": 0.0728713518451269,
+          "compression_sum": 0.0,
+          "activity": 0.5490559926775478
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.24904250575114464,
+          "return_to_time5_error": 1.5021776618700926,
+          "peak_amplitude": 0.07879471313385399,
+          "compression_sum": -4.163336342344337e-17,
+          "activity": 0.5418762520064038
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.07656582463046091,
+          "return_to_time5_error": 1.675946176073818,
+          "peak_amplitude": 0.06658780039966564,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.5591048294030612
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.055778746205748984,
+          "return_to_time5_error": 1.795082149550852,
+          "peak_amplitude": 0.08804573302578475,
+          "compression_sum": 0.0,
+          "activity": 0.6060873186532328
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.14042063020610354,
+          "return_to_time5_error": 1.7773275949453886,
+          "peak_amplitude": 0.10545047096664267,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 0.6450152520871252
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.22516895549899918,
+          "return_to_time5_error": 1.605990981672994,
+          "peak_amplitude": 0.11642081954622385,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.6574756048981251
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.2737573185269487,
+          "return_to_time5_error": 1.2997053467959296,
+          "peak_amplitude": 0.11790060636696115,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 0.6686589414030529
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.2890172329981241,
+          "return_to_time5_error": 1.039549794394355,
+          "peak_amplitude": 0.11074451383013954,
+          "compression_sum": 2.0816681711721685e-17,
+          "activity": 0.7279624865312776
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.276993435948721,
+          "return_to_time5_error": 1.036359573340732,
+          "peak_amplitude": 0.09218041626520297,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.812741742390134
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.2563941188485223,
+          "return_to_time5_error": 1.198606756778283,
+          "peak_amplitude": 0.0982823886103444,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 0.8290958671579783
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.23435571882442174,
+          "return_to_time5_error": 1.4916464130254568,
+          "peak_amplitude": 0.1189451768389085,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.8190921164194122
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.21762491791954733,
+          "return_to_time5_error": 1.8447115474803204,
+          "peak_amplitude": 0.10984350043558354,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.9164609841363865
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.21909291243201703,
+          "return_to_time5_error": 2.068861292414768,
+          "peak_amplitude": 0.07762460313224002,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.0415886423669098
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.22089388334061388,
+          "return_to_time5_error": 2.0735410400134735,
+          "peak_amplitude": 0.12662973401230912,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 1.0736086158283071
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.19460867049633016,
+          "return_to_time5_error": 1.951549374856721,
+          "peak_amplitude": 0.1662261039215157,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.103279998262119
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.15209608832330515,
+          "return_to_time5_error": 1.8466647432808894,
+          "peak_amplitude": 0.15648938320665456,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.2040567206481803
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.11780502514770627,
+          "return_to_time5_error": 1.7861088668206373,
+          "peak_amplitude": 0.13032643849404552,
+          "compression_sum": 0.0,
+          "activity": 1.3216798499621008
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.09558328966855152,
+          "return_to_time5_error": 1.7967723107869102,
+          "peak_amplitude": 0.10927392124987091,
+          "compression_sum": 0.0,
+          "activity": 1.416288021826478
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.12104751894002101,
+          "return_to_time5_error": 1.881063221290367,
+          "peak_amplitude": 0.11120015941916282,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 1.4846897804745858
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.2143133305982041,
+          "return_to_time5_error": 2.0298403028181755,
+          "peak_amplitude": 0.11606661144245821,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 1.5830424328604176
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.3159503482904387,
+          "return_to_time5_error": 2.205081409174827,
+          "peak_amplitude": 0.11144804621389115,
+          "compression_sum": 0.0,
+          "activity": 1.7353935799809315
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.38380132468455347,
+          "return_to_time5_error": 2.296939777590467,
+          "peak_amplitude": 0.18417022492336504,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 1.8593158197916775
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.4165597570053383,
+          "return_to_time5_error": 2.3220065677108113,
+          "peak_amplitude": 0.2126767570525994,
+          "compression_sum": 8.326672684688674e-17,
+          "activity": 1.958000160406869
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.4016218582188898,
+          "return_to_time5_error": 2.3406556139086003,
+          "peak_amplitude": 0.19706059155305353,
+          "compression_sum": 0.0,
+          "activity": 2.093919244184353
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.33690112812339695,
+          "return_to_time5_error": 2.3949262572973598,
+          "peak_amplitude": 0.1609020325280489,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 2.2520411671851135
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.23968788602817626,
+          "return_to_time5_error": 2.530146654601183,
+          "peak_amplitude": 0.18083565688785116,
+          "compression_sum": 0.0,
+          "activity": 2.427218967624836
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.14673001485320647,
+          "return_to_time5_error": 2.697096270658789,
+          "peak_amplitude": 0.14786932730790883,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 2.6035951712588385
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.09611042945712987,
+          "return_to_time5_error": 2.8561216258806583,
+          "peak_amplitude": 0.15419220852197357,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 2.7581568600952355
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.10087155233637042,
+          "return_to_time5_error": 2.9816781665383836,
+          "peak_amplitude": 0.17182616543756254,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 2.939490287214877
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.14439515298842515,
+          "return_to_time5_error": 3.080456009744758,
+          "peak_amplitude": 0.16964426525681622,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 3.183787642999555
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.20121039234540145,
+          "return_to_time5_error": 3.139623692160321,
+          "peak_amplitude": 0.16467391051315453,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 3.447438356036356
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.25436383691605025,
+          "return_to_time5_error": 3.1414801626233566,
+          "peak_amplitude": 0.20870632809756598,
+          "compression_sum": 0.0,
+          "activity": 3.6846402892803836
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.29203325915645273,
+          "return_to_time5_error": 3.1656724684072084,
+          "peak_amplitude": 0.2167801168003984,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 3.919407779040306
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.30415408767065316,
+          "return_to_time5_error": 3.258924206732784,
+          "peak_amplitude": 0.21668064458942993,
+          "compression_sum": -8.326672684688674e-17,
+          "activity": 4.2239025798825836
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.292426394142193,
+          "return_to_time5_error": 3.42535490723516,
+          "peak_amplitude": 0.22041557595060984,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 4.59120365523281
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.2690459282886572,
+          "return_to_time5_error": 3.624236985953852,
+          "peak_amplitude": 0.2109766725194213,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 4.9353457392941635
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.24230666460824382,
+          "return_to_time5_error": 3.817888901157096,
+          "peak_amplitude": 0.18616305879391595,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 5.264245767512147
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.21547006492148263,
+          "return_to_time5_error": 4.034971507851712,
+          "peak_amplitude": 0.20262895233373643,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 5.656747535150799
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.19251768398582758,
+          "return_to_time5_error": 4.244461277572154,
+          "peak_amplitude": 0.20742033070191776,
+          "compression_sum": 3.469446951953614e-17,
+          "activity": 6.1236740123128515
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.1767218343244452,
+          "return_to_time5_error": 4.414432519163255,
+          "peak_amplitude": 0.22159263851999272,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 6.601595839651109
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.16876596975277597,
+          "return_to_time5_error": 4.552975160787761,
+          "peak_amplitude": 0.27285667170719585,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 7.053347152620193
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.16989371376791695,
+          "return_to_time5_error": 4.683691120096838,
+          "peak_amplitude": 0.31177768946708984,
+          "compression_sum": 0.0,
+          "activity": 7.558204921436121
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.17665752972113985,
+          "return_to_time5_error": 4.820431119774448,
+          "peak_amplitude": 0.33461945971256635,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 8.136989231864844
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.18222108831754014,
+          "return_to_time5_error": 4.948688208136679,
+          "peak_amplitude": 0.3244741960600267,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 8.726216789657213
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "kick",
+        "amplitude": 0.2,
+        "relaxed_u": false,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 31.68,
+      "initial_energy": 0.1754678843163071,
+      "max_scaled_energy_error": 13.472347540049098,
+      "min_late_localized_fraction": 5.735669716526729e-05,
+      "best_reference_return_error": 0.9983747361906089,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": false,
+        "energy": false,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203883,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.2,
+          "compression_sum": 0.0,
+          "activity": 0.27830295075544803
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.8742549332115853,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.19044436641064805,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.32371457550983246
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.7286236353893499,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09022364321104642,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.4366113309703922
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.5166219524653964,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04912952795381767,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.46667856052105877
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.25541500728571803,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07462214317268598,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.4666290245183679
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.0898868165570197,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06170178787155836,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.5197867299359822
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.08276435858771697,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07752923755667214,
+          "compression_sum": -1.734723475976807e-17,
+          "activity": 0.613976366309962
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.16903843519014872,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09313138903978779,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.6997391034529713
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.2531298226075456,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.12380139946568913,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.7514550343586591
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.2881910101413476,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.13318930459454198,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.8237041685839137
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.28596626009146453,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.11090873637847475,
+          "compression_sum": 0.0,
+          "activity": 0.9550663967675258
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.27114626689873933,
+          "return_to_time5_error": 0.34148646418714707,
+          "peak_amplitude": 0.10897002273416352,
+          "compression_sum": 0.0,
+          "activity": 1.082479733414675
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.25395787591578367,
+          "return_to_time5_error": 0.6303442316449381,
+          "peak_amplitude": 0.1296392679419906,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.1823103955288803
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.24198697451703358,
+          "return_to_time5_error": 0.8535610464179617,
+          "peak_amplitude": 0.12799360240143615,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.2989144791191027
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.23217335226637825,
+          "return_to_time5_error": 0.9977897616753091,
+          "peak_amplitude": 0.11201480534717292,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.462184959712746
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.21765381980884055,
+          "return_to_time5_error": 1.0572153938198368,
+          "peak_amplitude": 0.11827124829375642,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.6678148668167312
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.19627422182790244,
+          "return_to_time5_error": 1.03544802429631,
+          "peak_amplitude": 0.12075180849642621,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 1.8748117025467284
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.1659838517361984,
+          "return_to_time5_error": 0.9616152432872905,
+          "peak_amplitude": 0.19412385178081074,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 2.0514983991997133
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.13643930447205413,
+          "return_to_time5_error": 0.9109416409772138,
+          "peak_amplitude": 0.23325077655696366,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 2.253014783009854
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.12300284522107503,
+          "return_to_time5_error": 0.9357924670173381,
+          "peak_amplitude": 0.2316314802281218,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 2.5400987067398257
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.12556112916916434,
+          "return_to_time5_error": 0.9983747361906089,
+          "peak_amplitude": 0.19419275851631668,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 2.8561926029514026
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.14572942568618275,
+          "return_to_time5_error": 1.0618185588754434,
+          "peak_amplitude": 0.16566560599880312,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 3.1406801307176777
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.18774179776661673,
+          "return_to_time5_error": 1.1371856787310541,
+          "peak_amplitude": 0.16893475842095879,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 3.4347102539574537
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.2393488413890681,
+          "return_to_time5_error": 1.2478896486912474,
+          "peak_amplitude": 0.15851653785317532,
+          "compression_sum": 0.0,
+          "activity": 3.8014693792514853
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.28614055506953795,
+          "return_to_time5_error": 1.381252162440332,
+          "peak_amplitude": 0.20844057794166246,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 4.240189039260127
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.3221829249829676,
+          "return_to_time5_error": 1.4897207786604172,
+          "peak_amplitude": 0.23675837540866795,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 4.66900406022498
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.3352989895400086,
+          "return_to_time5_error": 1.5692633331827797,
+          "peak_amplitude": 0.23874868337615648,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 5.07421617673449
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.3142497260022744,
+          "return_to_time5_error": 1.6682470386974175,
+          "peak_amplitude": 0.2371452429308755,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 5.565543790136993
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.26775199318097376,
+          "return_to_time5_error": 1.7928318253681403,
+          "peak_amplitude": 0.2382608732464247,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 6.145579870191358
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.21438439439551982,
+          "return_to_time5_error": 1.9124772751429497,
+          "peak_amplitude": 0.2246242799544956,
+          "compression_sum": 2.0816681711721685e-17,
+          "activity": 6.720557621762516
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.16972107303119555,
+          "return_to_time5_error": 2.0281507480661736,
+          "peak_amplitude": 0.22765511552672704,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 7.312982742731837
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.14257010841034937,
+          "return_to_time5_error": 2.143973077249449,
+          "peak_amplitude": 0.26093261908333565,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 7.968741982999004
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.13609654241812272,
+          "return_to_time5_error": 2.2580359563724635,
+          "peak_amplitude": 0.27108581220690386,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 8.682521360920395
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.15081198573101337,
+          "return_to_time5_error": 2.374813570293667,
+          "peak_amplitude": 0.27612760387971425,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 9.473257478418201
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.18018023234347694,
+          "return_to_time5_error": 2.4939033374694897,
+          "peak_amplitude": 0.31211846240063873,
+          "compression_sum": 0.0,
+          "activity": 10.33141681451521
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.21385366382465043,
+          "return_to_time5_error": 2.608993342579764,
+          "peak_amplitude": 0.32493318748878885,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 11.22162416807182
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.24330272445655268,
+          "return_to_time5_error": 2.7217709942391903,
+          "peak_amplitude": 0.31787280932986084,
+          "compression_sum": 7.632783294297951e-17,
+          "activity": 12.157957676574647
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.2619028508687753,
+          "return_to_time5_error": 2.846527593864805,
+          "peak_amplitude": 0.3554550764338563,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 13.185779870149476
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.2671750633874683,
+          "return_to_time5_error": 2.988488710422983,
+          "peak_amplitude": 0.3703874335778397,
+          "compression_sum": 0.0,
+          "activity": 14.322512782940995
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.26242357915606224,
+          "return_to_time5_error": 3.1477240154969213,
+          "peak_amplitude": 0.3658827634881739,
+          "compression_sum": -1.6653345369377348e-16,
+          "activity": 15.53237895286673
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.2530276965734509,
+          "return_to_time5_error": 3.3242188904816894,
+          "peak_amplitude": 0.35014563657163467,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 16.79657050841235
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.24287982457200552,
+          "return_to_time5_error": 3.5116657999329695,
+          "peak_amplitude": 0.36146912845800233,
+          "compression_sum": 0.0,
+          "activity": 18.153260340004476
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.2346918768108446,
+          "return_to_time5_error": 3.7038600141765015,
+          "peak_amplitude": 0.3871160014506886,
+          "compression_sum": 1.6653345369377348e-16,
+          "activity": 19.622440804068585
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.23026554335677768,
+          "return_to_time5_error": 3.896479752454127,
+          "peak_amplitude": 0.3989372795900194,
+          "compression_sum": 0.0,
+          "activity": 21.21193335973821
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.23013998373460243,
+          "return_to_time5_error": 4.08716077519592,
+          "peak_amplitude": 0.39424887957712806,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 22.937790464200546
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.23299439852707363,
+          "return_to_time5_error": 4.271101134103473,
+          "peak_amplitude": 0.3887013151058302,
+          "compression_sum": 0.0,
+          "activity": 24.771226095345842
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.23508759022418857,
+          "return_to_time5_error": 4.449874484216331,
+          "peak_amplitude": 0.4312377100183754,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 26.694855413978523
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.23254761033924246,
+          "return_to_time5_error": 4.630627639013029,
+          "peak_amplitude": 0.4878724406960092,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 28.72778062658215
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.224535381086298,
+          "return_to_time5_error": 4.8202498465436046,
+          "peak_amplitude": 0.514440164287556,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 30.8970990451686
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.21242247430437558,
+          "return_to_time5_error": 5.023081319151763,
+          "peak_amplitude": 0.5039979617253607,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 33.23349744491877
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.19751715966972058,
+          "return_to_time5_error": 5.239485094425906,
+          "peak_amplitude": 0.5311690802816509,
+          "compression_sum": 1.6653345369377348e-16,
+          "activity": 35.736735432088906
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.18155789996644886,
+          "return_to_time5_error": 5.471142149776734,
+          "peak_amplitude": 0.5591600798985208,
+          "compression_sum": 0.0,
+          "activity": 38.41796961508873
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.1665920228878196,
+          "return_to_time5_error": 5.721407498208486,
+          "peak_amplitude": 0.5975997740158113,
+          "compression_sum": -2.220446049250313e-16,
+          "activity": 41.35037151261959
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.1533634472274429,
+          "return_to_time5_error": 6.001712405598469,
+          "peak_amplitude": 0.6503521284455406,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 44.67251514175461
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.1408190397905791,
+          "return_to_time5_error": 6.328499436737447,
+          "peak_amplitude": 0.70450784503241,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 48.63759968488338
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.1272706470422045,
+          "return_to_time5_error": 6.736561882332754,
+          "peak_amplitude": 0.7539678639044136,
+          "compression_sum": -8.881784197001252e-16,
+          "activity": 53.73994499050941
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.11147606455328132,
+          "return_to_time5_error": 7.29533412408373,
+          "peak_amplitude": 0.8312436760028069,
+          "compression_sum": 0.0,
+          "activity": 60.958853291459874
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.09188225616280535,
+          "return_to_time5_error": 8.172825204798764,
+          "peak_amplitude": 1.0024906645958425,
+          "compression_sum": 0.0,
+          "activity": 72.74941049655543
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.06612179794535995,
+          "return_to_time5_error": 9.822371328613125,
+          "peak_amplitude": 1.3588744001160107,
+          "compression_sum": 1.7763568394002505e-15,
+          "activity": 96.7302902431565
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.035120131373818406,
+          "return_to_time5_error": 13.60089935620313,
+          "peak_amplitude": 2.1160753742643204,
+          "compression_sum": 0.0,
+          "activity": 165.08270187690738
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.010659056683014978,
+          "return_to_time5_error": 23.48550283108384,
+          "peak_amplitude": 3.93374468766309,
+          "compression_sum": 1.7763568394002505e-15,
+          "activity": 461.137985824049
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.0019033853091898504,
+          "return_to_time5_error": 48.66554302494306,
+          "peak_amplitude": 8.238399238563272,
+          "compression_sum": -1.0658141036401503e-14,
+          "activity": 2095.5783393798206
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.00020482894779183427,
+          "return_to_time5_error": 109.61209006997898,
+          "peak_amplitude": 17.53823440531623,
+          "compression_sum": 7.105427357601002e-15,
+          "activity": 11292.38784211204
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 5.735669716526729e-05,
+          "return_to_time5_error": 255.97353928726787,
+          "peak_amplitude": 38.198990885078885,
+          "compression_sum": -7.105427357601002e-15,
+          "activity": 63209.45451111434
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "quadrature",
+        "amplitude": 0.2,
+        "relaxed_u": false,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 26.900000000000002,
+      "initial_energy": 0.11132118030217919,
+      "max_scaled_energy_error": 10.003534405884471,
+      "min_late_localized_fraction": null,
+      "best_reference_return_error": 1.079359674962595,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": false,
+        "energy": false,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203886,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0,
+          "compression_sum": 0.0,
+          "activity": 0.22264236060435838
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.9394459165485389,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09057858478125086,
+          "compression_sum": 1.0842021724855044e-19,
+          "activity": 0.21052581447646693
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8149049318099598,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.13337432131239554,
+          "compression_sum": -2.6020852139652106e-18,
+          "activity": 0.2234188157110531
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.6368453999214999,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.11618979277857111,
+          "compression_sum": 0.0,
+          "activity": 0.3052278313816483
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.45143358559426716,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06937836072817542,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.41815148108819505
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.2619123465347509,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0636050293498124,
+          "compression_sum": 0.0,
+          "activity": 0.5315917108244645
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.11372212290652031,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07302053176730432,
+          "compression_sum": 0.0,
+          "activity": 0.6632227642068232
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.05724622299315853,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07840061031813406,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.8371767996554789
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.08338930629387657,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09817555688549666,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 1.0492798590969628
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.141297487083162,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.12846069062626644,
+          "compression_sum": 0.0,
+          "activity": 1.2775613372199672
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.1927196917563797,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.15351496710770673,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 1.525625934883887
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.22557862298582415,
+          "return_to_time5_error": 0.21634469005029497,
+          "peak_amplitude": 0.15708473705988257,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.8166327048886453
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.24331831277475702,
+          "return_to_time5_error": 0.41162672289384816,
+          "peak_amplitude": 0.13719456899851024,
+          "compression_sum": 0.0,
+          "activity": 2.1475483873587105
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.25233343792524027,
+          "return_to_time5_error": 0.5665788021756796,
+          "peak_amplitude": 0.13792399459751217,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 2.5042466619571444
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.25689457293224405,
+          "return_to_time5_error": 0.6738387039000098,
+          "peak_amplitude": 0.15622291417183368,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 2.8866445100239515
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.2582417780431763,
+          "return_to_time5_error": 0.7408230805447754,
+          "peak_amplitude": 0.16003903653458718,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 3.3042877653652245
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.2547629176874061,
+          "return_to_time5_error": 0.7934546688923879,
+          "peak_amplitude": 0.15812755137292644,
+          "compression_sum": 0.0,
+          "activity": 3.7746691036599667
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.24520573223079334,
+          "return_to_time5_error": 0.850982914534058,
+          "peak_amplitude": 0.16615031399394892,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 4.298335626945724
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.22999495502843534,
+          "return_to_time5_error": 0.9138366392536782,
+          "peak_amplitude": 0.18394384582142206,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 4.853497586806087
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.21084417626278842,
+          "return_to_time5_error": 0.9866022553817178,
+          "peak_amplitude": 0.2199386797502149,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 5.435373426063738
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.19085691655204243,
+          "return_to_time5_error": 1.079359674962595,
+          "peak_amplitude": 0.258947001018711,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 6.070660851851528
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.17327617648707702,
+          "return_to_time5_error": 1.1888506545795603,
+          "peak_amplitude": 0.27724886787641984,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 6.777227092020309
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.16085438073970984,
+          "return_to_time5_error": 1.3010390370094145,
+          "peak_amplitude": 0.27401201216576476,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 7.535473392647075
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.15735374365834154,
+          "return_to_time5_error": 1.4082366625744787,
+          "peak_amplitude": 0.251646601139667,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 8.326751069521078
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.1662256025741601,
+          "return_to_time5_error": 1.5142543122507792,
+          "peak_amplitude": 0.2540927522772554,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 9.162995892689306
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.18726889806458716,
+          "return_to_time5_error": 1.6262046885028945,
+          "peak_amplitude": 0.25624321859097465,
+          "compression_sum": 0.0,
+          "activity": 10.063043325242107
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.2158775970127207,
+          "return_to_time5_error": 1.7474149951612996,
+          "peak_amplitude": 0.25275191987079165,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 11.02984929733918
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.24455788261353048,
+          "return_to_time5_error": 1.8752925164118945,
+          "peak_amplitude": 0.27765511054397657,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 12.045898229442658
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.26605781620289476,
+          "return_to_time5_error": 2.0065908275372455,
+          "peak_amplitude": 0.31047145383214864,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 13.104856184362552
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.276560245002647,
+          "return_to_time5_error": 2.1411214574822286,
+          "peak_amplitude": 0.3444395288875646,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 14.233642618048014
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.2768674446412909,
+          "return_to_time5_error": 2.276916626990307,
+          "peak_amplitude": 0.3772877114451129,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 15.450717722439652
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.27070165691749576,
+          "return_to_time5_error": 2.4107805634527426,
+          "peak_amplitude": 0.40099433847039945,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 16.753248869937682
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.2613238691357689,
+          "return_to_time5_error": 2.542297314742271,
+          "peak_amplitude": 0.40872230198679294,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 18.14555639533221
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.2496882354576837,
+          "return_to_time5_error": 2.6741196555595703,
+          "peak_amplitude": 0.3986922503788667,
+          "compression_sum": 0.0,
+          "activity": 19.635532266041746
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.23574223890460383,
+          "return_to_time5_error": 2.808197424897536,
+          "peak_amplitude": 0.37410482477108287,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 21.218197326374096
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.22050357432986148,
+          "return_to_time5_error": 2.9438915283096923,
+          "peak_amplitude": 0.3676164578235272,
+          "compression_sum": -4.163336342344337e-17,
+          "activity": 22.880315294214217
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.2063897250126026,
+          "return_to_time5_error": 3.081039980856301,
+          "peak_amplitude": 0.38587976171175004,
+          "compression_sum": -1.214306433183765e-17,
+          "activity": 24.619336159234336
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.19591378160603504,
+          "return_to_time5_error": 3.219163229208702,
+          "peak_amplitude": 0.39907062406418764,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 26.442312564021897
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.19011665353551105,
+          "return_to_time5_error": 3.358324238933957,
+          "peak_amplitude": 0.41378355070787143,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 28.34852738829253
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.1882790279005477,
+          "return_to_time5_error": 3.501369169472431,
+          "peak_amplitude": 0.44235710844223436,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 30.342751793520456
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.18855720725167066,
+          "return_to_time5_error": 3.650499232741751,
+          "peak_amplitude": 0.4766805621649347,
+          "compression_sum": 0.0,
+          "activity": 32.45018149126272
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.18822294418546703,
+          "return_to_time5_error": 3.8066328572102917,
+          "peak_amplitude": 0.521067855566752,
+          "compression_sum": 0.0,
+          "activity": 34.70754041121937
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.18437236750557168,
+          "return_to_time5_error": 3.973605350022201,
+          "peak_amplitude": 0.5730330674927714,
+          "compression_sum": 3.3306690738754696e-16,
+          "activity": 37.183416517249555
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.17553335318064078,
+          "return_to_time5_error": 4.157335669427417,
+          "peak_amplitude": 0.627290559667627,
+          "compression_sum": 3.3306690738754696e-16,
+          "activity": 39.983008781436595
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.16240137960616566,
+          "return_to_time5_error": 4.3658376193079755,
+          "peak_amplitude": 0.683363945639411,
+          "compression_sum": -4.440892098500626e-16,
+          "activity": 43.232838360379326
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.14672111987000996,
+          "return_to_time5_error": 4.6171969586211885,
+          "peak_amplitude": 0.7496387155709148,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 47.17244682106326
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.12918328815528898,
+          "return_to_time5_error": 4.950106168231124,
+          "peak_amplitude": 0.8452106593963085,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 52.39477086512484
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.10840226324652515,
+          "return_to_time5_error": 5.453250382457354,
+          "peak_amplitude": 1.006532208386124,
+          "compression_sum": -4.440892098500626e-16,
+          "activity": 60.4389162361519
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.08197060502329868,
+          "return_to_time5_error": 6.353808123479821,
+          "peak_amplitude": 1.3056677727089567,
+          "compression_sum": 1.3322676295501878e-15,
+          "activity": 75.69637976588115
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.049620516526690174,
+          "return_to_time5_error": 8.307210306542032,
+          "peak_amplitude": 1.906160213426565,
+          "compression_sum": 0.0,
+          "activity": 113.94848460293859
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.01924534479813297,
+          "return_to_time5_error": 13.273499264865142,
+          "peak_amplitude": 3.2431751698856868,
+          "compression_sum": 0.0,
+          "activity": 253.44602993560486
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.004153632456453991,
+          "return_to_time5_error": 26.100928410187965,
+          "peak_amplitude": 6.332416263901415,
+          "compression_sum": 0.0,
+          "activity": 958.6738251310079
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.0006500598600039011,
+          "return_to_time5_error": 57.23340558455502,
+          "peak_amplitude": 12.938843665222638,
+          "compression_sum": 3.552713678800501e-15,
+          "activity": 4825.492475470006
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 4.042978976492912e-05,
+          "return_to_time5_error": 131.29487876761806,
+          "peak_amplitude": 27.12033364263786,
+          "compression_sum": 0.0,
+          "activity": 26210.18773740181
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "travel",
+        "amplitude": 0.2,
+        "relaxed_u": false,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.17774711489655887,
+      "max_scaled_energy_error": 2.7558588450077304e-05,
+      "min_late_localized_fraction": 0.06843641699558987,
+      "best_reference_return_error": 0.9500754449554196,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203886,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.2,
+          "compression_sum": 0.0,
+          "activity": 0.22264236060435838
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.936226864687494,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.13242426273559832,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.29345720749142024
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8571997033086497,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09115917936195685,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.32101727694447824
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.7109973506012756,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10957109363640476,
+          "compression_sum": 0.0,
+          "activity": 0.2600150796420103
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.5909213908919881,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.1053812847685559,
+          "compression_sum": 0.0,
+          "activity": 0.2700342973263795
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.45990722651079363,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0714335339880238,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.28417978492636775
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.3359986394939674,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08036950235776677,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27721437965371787
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.3674278496515926,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04694549677029692,
+          "compression_sum": 0.0,
+          "activity": 0.29604950480517306
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.3361142551665181,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05996589717789681,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.2734320617228918
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.21997627457271343,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05803069541413943,
+          "compression_sum": 0.0,
+          "activity": 0.2591547321035808
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.2089220431871993,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.044831098883736334,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.3026084513534125
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.17335322073067694,
+          "return_to_time5_error": 0.6615816370192803,
+          "peak_amplitude": 0.06451372346954913,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2924387644424863
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.11354684797311065,
+          "return_to_time5_error": 1.2585968107550192,
+          "peak_amplitude": 0.08207436510745694,
+          "compression_sum": 0.0,
+          "activity": 0.2608313689959036
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.12923879486223852,
+          "return_to_time5_error": 1.6722470429031973,
+          "peak_amplitude": 0.07851907700044482,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.28128821277675464
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.10725728994699456,
+          "return_to_time5_error": 1.778207229940947,
+          "peak_amplitude": 0.05918296591446849,
+          "compression_sum": 0.0,
+          "activity": 0.28778528895059496
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.09801693684462856,
+          "return_to_time5_error": 1.6505428505032977,
+          "peak_amplitude": 0.05555551702876885,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.29359380672960345
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.1377156145073707,
+          "return_to_time5_error": 1.4311385510521262,
+          "peak_amplitude": 0.07665403832638076,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.30243489904277565
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.10841898687000846,
+          "return_to_time5_error": 1.2291378374373847,
+          "peak_amplitude": 0.11046442305542026,
+          "compression_sum": 0.0,
+          "activity": 0.2712426861471418
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.08362881654605116,
+          "return_to_time5_error": 1.1953650742910007,
+          "peak_amplitude": 0.10477768464018838,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.27381591144066986
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.14505228264186198,
+          "return_to_time5_error": 1.2510398689877738,
+          "peak_amplitude": 0.07402700368727717,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.31707340786788224
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.15796165048169417,
+          "return_to_time5_error": 1.207923595539699,
+          "peak_amplitude": 0.05345070023907967,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.31385621827569643
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.19639502636899242,
+          "return_to_time5_error": 1.127506158877994,
+          "peak_amplitude": 0.0671223732371323,
+          "compression_sum": 0.0,
+          "activity": 0.2840552004717095
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.3183472526922371,
+          "return_to_time5_error": 1.1848241432115882,
+          "peak_amplitude": 0.08240459869647657,
+          "compression_sum": 0.0,
+          "activity": 0.2860296903219517
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.31537160373196127,
+          "return_to_time5_error": 1.36628192336417,
+          "peak_amplitude": 0.07982318808684889,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.31776112346187696
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.2949304786829666,
+          "return_to_time5_error": 1.4977916314449815,
+          "peak_amplitude": 0.09889197885392154,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.33282685824577946
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.36875362584446775,
+          "return_to_time5_error": 1.4706677598062698,
+          "peak_amplitude": 0.06999519970101971,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2983558235310123
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.34878303979939446,
+          "return_to_time5_error": 1.3644676395475739,
+          "peak_amplitude": 0.10617343104270202,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.29340121853459417
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.25350203302294627,
+          "return_to_time5_error": 1.3147244669251923,
+          "peak_amplitude": 0.0937723766245898,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.35064868938110116
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.19246467857452623,
+          "return_to_time5_error": 1.2967244312709265,
+          "peak_amplitude": 0.05754725306346751,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.3479591366539422
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.11383922147310632,
+          "return_to_time5_error": 1.3569970640440487,
+          "peak_amplitude": 0.06074046539718485,
+          "compression_sum": -8.673617379884035e-18,
+          "activity": 0.30671448402646095
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.1265005687563117,
+          "return_to_time5_error": 1.5025872526316277,
+          "peak_amplitude": 0.06861155961836812,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.327286061499978
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.23163091431864385,
+          "return_to_time5_error": 1.5474663365975947,
+          "peak_amplitude": 0.06134448914724724,
+          "compression_sum": 0.0,
+          "activity": 0.35713939272914236
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.3654634638478507,
+          "return_to_time5_error": 1.425199168985245,
+          "peak_amplitude": 0.07172076335902904,
+          "compression_sum": 0.0,
+          "activity": 0.359395704430412
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.4901055902121402,
+          "return_to_time5_error": 1.2197628383203685,
+          "peak_amplitude": 0.09105316571822751,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.3592027016539647
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.5437547855738044,
+          "return_to_time5_error": 1.0526145331485408,
+          "peak_amplitude": 0.11768659126027022,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.3502962369398224
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.5267995881396379,
+          "return_to_time5_error": 1.0706309471600108,
+          "peak_amplitude": 0.13587889824642768,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.35357327219806195
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.4799027702106494,
+          "return_to_time5_error": 1.2501446696762508,
+          "peak_amplitude": 0.09676997086403517,
+          "compression_sum": 4.163336342344337e-17,
+          "activity": 0.38974263054255087
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.4100974824622353,
+          "return_to_time5_error": 1.401275061426383,
+          "peak_amplitude": 0.07773131737214344,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.396551253378764
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.2752904136181303,
+          "return_to_time5_error": 1.4871644162576088,
+          "peak_amplitude": 0.08394979668436733,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 0.3717274580579182
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.13729152280512172,
+          "return_to_time5_error": 1.6016024301725005,
+          "peak_amplitude": 0.06163864865654651,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.39454908877560024
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.11610832032001003,
+          "return_to_time5_error": 1.6937962758065335,
+          "peak_amplitude": 0.06817897292064835,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.42101211974400043
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.17723511935696123,
+          "return_to_time5_error": 1.6843756217488945,
+          "peak_amplitude": 0.08750852043492478,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.41895027889673647
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.2358191187932281,
+          "return_to_time5_error": 1.5726647283920636,
+          "peak_amplitude": 0.08854952745420672,
+          "compression_sum": 0.0,
+          "activity": 0.43747609411472144
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.263561599700119,
+          "return_to_time5_error": 1.3042966692956663,
+          "peak_amplitude": 0.08693699298214705,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.44149807770350513
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.2691393855006643,
+          "return_to_time5_error": 0.9792074374693408,
+          "peak_amplitude": 0.08410976870767035,
+          "compression_sum": 0.0,
+          "activity": 0.4492234574466149
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.22711503881778056,
+          "return_to_time5_error": 0.9500754449554196,
+          "peak_amplitude": 0.06720952177862312,
+          "compression_sum": 0.0,
+          "activity": 0.5114261363229806
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.18708066110373775,
+          "return_to_time5_error": 1.1528571385168822,
+          "peak_amplitude": 0.08618118802042399,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.517922846197816
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.1727557950247955,
+          "return_to_time5_error": 1.4347605255426246,
+          "peak_amplitude": 0.09448548567771714,
+          "compression_sum": 0.0,
+          "activity": 0.47708736408232255
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.16358326011150837,
+          "return_to_time5_error": 1.7635028260325891,
+          "peak_amplitude": 0.081845373942099,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.550098052042204
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.18400612321136428,
+          "return_to_time5_error": 1.912018583252834,
+          "peak_amplitude": 0.08320435497931228,
+          "compression_sum": 0.0,
+          "activity": 0.6230928201699891
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.21682052077061373,
+          "return_to_time5_error": 1.82116464006212,
+          "peak_amplitude": 0.1223808269848746,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.594374080513615
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.18648236033126783,
+          "return_to_time5_error": 1.6739869621198573,
+          "peak_amplitude": 0.14170458603996078,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.6187448621024808
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.14633596671381843,
+          "return_to_time5_error": 1.5545127268120802,
+          "peak_amplitude": 0.11427528649784474,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.6841089591598194
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.13544115830929027,
+          "return_to_time5_error": 1.4625810486707884,
+          "peak_amplitude": 0.11914043364446628,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.7131463487208073
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.11720569352442571,
+          "return_to_time5_error": 1.4879722122478811,
+          "peak_amplitude": 0.1021794627407014,
+          "compression_sum": 0.0,
+          "activity": 0.7636762350775262
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.15070840785152761,
+          "return_to_time5_error": 1.5773588116038024,
+          "peak_amplitude": 0.091404143454661,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.7939233300337573
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.26414086159631067,
+          "return_to_time5_error": 1.6951723318964147,
+          "peak_amplitude": 0.10466476119688456,
+          "compression_sum": 0.0,
+          "activity": 0.8158231445545305
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.3517327686636254,
+          "return_to_time5_error": 1.8568402532632384,
+          "peak_amplitude": 0.101854075294553,
+          "compression_sum": 0.0,
+          "activity": 0.9060470757705297
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.406353612494044,
+          "return_to_time5_error": 1.9216805856793624,
+          "peak_amplitude": 0.15278830678309077,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.9571828806802509
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.4429578832087925,
+          "return_to_time5_error": 1.875006933565559,
+          "peak_amplitude": 0.1535084642303237,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.9695270211255049
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.4041325324123191,
+          "return_to_time5_error": 1.8384370740528762,
+          "peak_amplitude": 0.1370506800918215,
+          "compression_sum": 0.0,
+          "activity": 1.050165147014446
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.3175058377334876,
+          "return_to_time5_error": 1.828346044649272,
+          "peak_amplitude": 0.14246995921813954,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 1.1216287194529555
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.20495176678249,
+          "return_to_time5_error": 1.9071389272887165,
+          "peak_amplitude": 0.16009149301838982,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.1779073822942854
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.10280998642502419,
+          "return_to_time5_error": 2.092929769077657,
+          "peak_amplitude": 0.11005750775719535,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.2634797391630734
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.06843641699558987,
+          "return_to_time5_error": 2.25366217735167,
+          "peak_amplitude": 0.11742499574639134,
+          "compression_sum": 6.245004513516506e-17,
+          "activity": 1.3152596086955695
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.1127738681315859,
+          "return_to_time5_error": 2.344710002575908,
+          "peak_amplitude": 0.12571428024217934,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 1.388400302230832
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.18750383525696723,
+          "return_to_time5_error": 2.362983849082959,
+          "peak_amplitude": 0.12082189337705095,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 1.5166476514583676
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.2614208896122113,
+          "return_to_time5_error": 2.2795233593912223,
+          "peak_amplitude": 0.135133971454814,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 1.6138979414489296
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.31780611221146615,
+          "return_to_time5_error": 2.175581319035493,
+          "peak_amplitude": 0.17325975001503408,
+          "compression_sum": 0.0,
+          "activity": 1.696940820776545
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.3324907577486807,
+          "return_to_time5_error": 2.1791333621343965,
+          "peak_amplitude": 0.14930387540146173,
+          "compression_sum": -8.326672684688674e-17,
+          "activity": 1.8056856211835592
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.3124812615425562,
+          "return_to_time5_error": 2.307672457961458,
+          "peak_amplitude": 0.15222333373874974,
+          "compression_sum": 0.0,
+          "activity": 1.9448579053729063
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.27612598912834346,
+          "return_to_time5_error": 2.50729924714143,
+          "peak_amplitude": 0.14712900589765432,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 2.10638249389525
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.23601914109001954,
+          "return_to_time5_error": 2.698190734158553,
+          "peak_amplitude": 0.13604133001115826,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 2.242859993327235
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.19827823304345968,
+          "return_to_time5_error": 2.8367408012905324,
+          "peak_amplitude": 0.16169718186446555,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 2.372110449364328
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.16942658694997856,
+          "return_to_time5_error": 2.97094793409416,
+          "peak_amplitude": 0.16360829552734577,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 2.5755869227409827
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.1551610767872192,
+          "return_to_time5_error": 3.081366108558837,
+          "peak_amplitude": 0.1622962433587903,
+          "compression_sum": 8.326672684688674e-17,
+          "activity": 2.8046748333402944
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.1530644363543065,
+          "return_to_time5_error": 3.130654386170659,
+          "peak_amplitude": 0.18980667346589464,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 2.9778950568036264
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.16589052918557348,
+          "return_to_time5_error": 3.1951976595859266,
+          "peak_amplitude": 0.20276470215273673,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 3.185580118941179
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.18971087760686642,
+          "return_to_time5_error": 3.271500419216536,
+          "peak_amplitude": 0.21402188724837645,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 3.4587140828074494
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.20792428452405917,
+          "return_to_time5_error": 3.313395972374563,
+          "peak_amplitude": 0.20531477773076226,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 3.7137047909180345
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.21399642253700532,
+          "return_to_time5_error": 3.379558206605899,
+          "peak_amplitude": 0.17977810310260145,
+          "compression_sum": 0.0,
+          "activity": 3.9915914764612523
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "travel",
+        "amplitude": 0.5,
+        "relaxed_u": true,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 23.54,
+      "initial_energy": 1.0581313842763211,
+      "max_scaled_energy_error": 14.601154094529589,
+      "min_late_localized_fraction": null,
+      "best_reference_return_error": 1.3164400484881191,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": false,
+        "energy": false,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203884,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.5,
+          "compression_sum": 0.0,
+          "activity": 1.3915147537772399
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.9321677111139332,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.3543605019636076,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 1.7246999229134083
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8468357176387157,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.2332467693960175,
+          "compression_sum": 5.551115123125783e-17,
+          "activity": 1.88989900838234
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.6890823573314744,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.23147503949407028,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 1.5651481533506684
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.5486622981876575,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.24663396821575198,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 1.5954524343329624
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.42331216815851186,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.16286533837870276,
+          "compression_sum": 0.0,
+          "activity": 1.70264545993303
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.29888238441131937,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.18534520528194756,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 1.6739554029891976
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.3508554050854104,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.12734917562909737,
+          "compression_sum": 7.632783294297951e-17,
+          "activity": 1.8312078101001883
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.358712646014607,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.15904445067184095,
+          "compression_sum": 0.0,
+          "activity": 1.7803893092702843
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.2699666697630589,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.16650542486423967,
+          "compression_sum": -5.551115123125783e-17,
+          "activity": 1.735886924771622
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.24187388648362784,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.13682800817475585,
+          "compression_sum": 0.0,
+          "activity": 2.0557211484863416
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.1985488147771872,
+          "return_to_time5_error": 0.6259907050097347,
+          "peak_amplitude": 0.175482860619671,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 2.14659861874039
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.14043894266771245,
+          "return_to_time5_error": 1.1660261133194436,
+          "peak_amplitude": 0.23670811944713283,
+          "compression_sum": 8.326672684688674e-17,
+          "activity": 2.0687087664662256
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.16449528364280805,
+          "return_to_time5_error": 1.5331160089468574,
+          "peak_amplitude": 0.16569186957743345,
+          "compression_sum": 0.0,
+          "activity": 2.312904006633323
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.16753810734880487,
+          "return_to_time5_error": 1.6204867092684152,
+          "peak_amplitude": 0.1925450400437958,
+          "compression_sum": 1.1102230246251565e-16,
+          "activity": 2.522014989203223
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.15527155853354938,
+          "return_to_time5_error": 1.4979741786574496,
+          "peak_amplitude": 0.17607205088772176,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 2.721715771645143
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.1613585626721754,
+          "return_to_time5_error": 1.326945394782505,
+          "peak_amplitude": 0.2250224722305283,
+          "compression_sum": 0.0,
+          "activity": 3.0304004612970608
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.12378011547633916,
+          "return_to_time5_error": 1.2069344441172416,
+          "peak_amplitude": 0.3135186620636792,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 3.119668330334128
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.09095986510398735,
+          "return_to_time5_error": 1.2404899702182612,
+          "peak_amplitude": 0.3233182755604108,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 3.367072338551226
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.12826635128648847,
+          "return_to_time5_error": 1.3308543162649207,
+          "peak_amplitude": 0.2767179586280343,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 3.9000598304762764
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.15785583713217397,
+          "return_to_time5_error": 1.330576971167161,
+          "peak_amplitude": 0.2246940712821009,
+          "compression_sum": 0.0,
+          "activity": 4.2571950838355646
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.1852563906272182,
+          "return_to_time5_error": 1.3164400484881191,
+          "peak_amplitude": 0.25659809219226615,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 4.626492596815958
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.2401169407159291,
+          "return_to_time5_error": 1.3732986160790523,
+          "peak_amplitude": 0.23864064746034724,
+          "compression_sum": -2.220446049250313e-16,
+          "activity": 5.187966757423656
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.27227389775275457,
+          "return_to_time5_error": 1.5219887947327957,
+          "peak_amplitude": 0.2619513380107893,
+          "compression_sum": 3.0531133177191805e-16,
+          "activity": 5.856207059128892
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.29745332643124395,
+          "return_to_time5_error": 1.7226718524088944,
+          "peak_amplitude": 0.33132996289890754,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 6.796217880859528
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.3337801654664133,
+          "return_to_time5_error": 1.8228728729155832,
+          "peak_amplitude": 0.30808165136249294,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 7.711865089278751
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.33936165605565133,
+          "return_to_time5_error": 1.846631338794425,
+          "peak_amplitude": 0.3500087753774396,
+          "compression_sum": 0.0,
+          "activity": 8.658750948927523
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.30474916753385406,
+          "return_to_time5_error": 1.9280083259111847,
+          "peak_amplitude": 0.38850467134014255,
+          "compression_sum": 0.0,
+          "activity": 10.111964719720287
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.2553623024738628,
+          "return_to_time5_error": 2.0692601400427604,
+          "peak_amplitude": 0.33649139846866316,
+          "compression_sum": 0.0,
+          "activity": 11.799563405232846
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.2056393228763483,
+          "return_to_time5_error": 2.245107537912043,
+          "peak_amplitude": 0.3381986876642226,
+          "compression_sum": 2.220446049250313e-16,
+          "activity": 13.591056094239157
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.16409935261805622,
+          "return_to_time5_error": 2.466540302185833,
+          "peak_amplitude": 0.35863444869917377,
+          "compression_sum": 0.0,
+          "activity": 15.72913882196332
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.1363563748903124,
+          "return_to_time5_error": 2.7116467207566157,
+          "peak_amplitude": 0.4233759403073522,
+          "compression_sum": 0.0,
+          "activity": 18.18431496950683
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.1280838394155378,
+          "return_to_time5_error": 2.931383248595595,
+          "peak_amplitude": 0.4550716301334726,
+          "compression_sum": -3.3306690738754696e-16,
+          "activity": 20.95267572086535
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.14253201106677474,
+          "return_to_time5_error": 3.1419833508963895,
+          "peak_amplitude": 0.4486983382026304,
+          "compression_sum": -1.1102230246251565e-16,
+          "activity": 24.182906630933925
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.16938293767377127,
+          "return_to_time5_error": 3.3628875085897683,
+          "peak_amplitude": 0.5604385517230942,
+          "compression_sum": 0.0,
+          "activity": 27.939282478566795
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.19181566569290168,
+          "return_to_time5_error": 3.5952402552754426,
+          "peak_amplitude": 0.6225380884087651,
+          "compression_sum": 4.440892098500626e-16,
+          "activity": 32.165962195719224
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.20403143477502414,
+          "return_to_time5_error": 3.8563329596223856,
+          "peak_amplitude": 0.6170599331662833,
+          "compression_sum": 0.0,
+          "activity": 36.94221926094723
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.20979302245609258,
+          "return_to_time5_error": 4.155460181534119,
+          "peak_amplitude": 0.6497263217896013,
+          "compression_sum": -8.881784197001252e-16,
+          "activity": 42.6760911000574
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.2114470176863001,
+          "return_to_time5_error": 4.496725731418979,
+          "peak_amplitude": 0.709634622799082,
+          "compression_sum": 0.0,
+          "activity": 49.75122585619395
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.20566203968852342,
+          "return_to_time5_error": 4.885881926057523,
+          "peak_amplitude": 0.8799580580303261,
+          "compression_sum": 8.881784197001252e-16,
+          "activity": 58.44902652708568
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.1873071089055365,
+          "return_to_time5_error": 5.398342938789925,
+          "peak_amplitude": 1.099108140266844,
+          "compression_sum": 0.0,
+          "activity": 69.79644602825246
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.15316246585595167,
+          "return_to_time5_error": 6.196432552694269,
+          "peak_amplitude": 1.376068285565271,
+          "compression_sum": 0.0,
+          "activity": 87.30782783967786
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.10469599415561073,
+          "return_to_time5_error": 7.740127690379461,
+          "peak_amplitude": 1.8759279200907286,
+          "compression_sum": -1.7763568394002505e-15,
+          "activity": 125.05031756958539
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.04953085336636399,
+          "return_to_time5_error": 11.474167425731677,
+          "peak_amplitude": 2.9153907764086204,
+          "compression_sum": -3.552713678800501e-15,
+          "activity": 249.08817625104336
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.013563528083053165,
+          "return_to_time5_error": 21.28149468678751,
+          "peak_amplitude": 5.2688419903660915,
+          "compression_sum": 0.0,
+          "activity": 841.055911166179
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.0024854649830530922,
+          "return_to_time5_error": 45.485628848984106,
+          "peak_amplitude": 10.532028225815996,
+          "compression_sum": 0.0,
+          "activity": 4110.6311005353455
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.0004002775153838262,
+          "return_to_time5_error": 103.39001300168627,
+          "peak_amplitude": 21.978023518545566,
+          "compression_sum": -1.4210854715202004e-14,
+          "activity": 22164.111394154734
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.001133029416192793,
+          "return_to_time5_error": 243.21599355434168,
+          "peak_amplitude": 47.47940874209784,
+          "compression_sum": 0.0,
+          "activity": 125251.00814139939
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "angular",
+        "amplitude": 0.2,
+        "relaxed_u": true,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.1755939186444324,
+      "max_scaled_energy_error": 1.887456558449796e-05,
+      "min_late_localized_fraction": 0.13718982808570052,
+      "best_reference_return_error": 0.7312067668197676,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.8913560602286709,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10405201900457779,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2221728131953671
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.8883652917158263,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09321355435814427,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2698047588661848
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8554528972142482,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06708881906106692,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.2913590944639303
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.732889381360913,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08885670283117662,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.24780771633215928
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.6022041690788363,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0864485766249259,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.24907321781545386
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.5304862137132085,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06301859487096845,
+          "compression_sum": 5.204170427930421e-18,
+          "activity": 0.2649548591488835
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.40102636608682507,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04885329265165902,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.26558554320607475
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.2609441180026471,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05212195200929019,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2691273271291757
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.1711621473415895,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05874234897115814,
+          "compression_sum": 0.0,
+          "activity": 0.25139792441069625
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.121381925569351,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06508372601494686,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2486205347675953
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.09366836349774679,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.044810997956851686,
+          "compression_sum": -6.071532165918825e-18,
+          "activity": 0.27560682164855577
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.07056048137716216,
+          "return_to_time5_error": 0.6951167367061372,
+          "peak_amplitude": 0.0629843329419691,
+          "compression_sum": 0.0,
+          "activity": 0.26561240557619287
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.062376010879887964,
+          "return_to_time5_error": 1.3141744103101771,
+          "peak_amplitude": 0.048036382444405064,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.24991434250842254
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.06439741984894795,
+          "return_to_time5_error": 1.7296170421831842,
+          "peak_amplitude": 0.07133923265605481,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.26091006535998834
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.06797141729731268,
+          "return_to_time5_error": 1.8576586008205638,
+          "peak_amplitude": 0.06109194777236098,
+          "compression_sum": 0.0,
+          "activity": 0.2579554916621283
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.07296342561383752,
+          "return_to_time5_error": 1.7623627615628668,
+          "peak_amplitude": 0.05822007847376999,
+          "compression_sum": -8.673617379884035e-19,
+          "activity": 0.2641605957451406
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.06703837143270155,
+          "return_to_time5_error": 1.540827272901062,
+          "peak_amplitude": 0.055137571875465495,
+          "compression_sum": 5.204170427930421e-18,
+          "activity": 0.27290770705165907
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.06962586625741826,
+          "return_to_time5_error": 1.281882024207512,
+          "peak_amplitude": 0.08458799747401897,
+          "compression_sum": 0.0,
+          "activity": 0.24772143072325795
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.1056356774093602,
+          "return_to_time5_error": 1.1565166275332144,
+          "peak_amplitude": 0.07877091869886015,
+          "compression_sum": 0.0,
+          "activity": 0.24618869228081233
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.12219460420103254,
+          "return_to_time5_error": 1.192991750697881,
+          "peak_amplitude": 0.06212203962872485,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27635882662103656
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.12067696807261293,
+          "return_to_time5_error": 1.2328214904440642,
+          "peak_amplitude": 0.060481718848587024,
+          "compression_sum": -2.6020852139652106e-18,
+          "activity": 0.2727870376860319
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.15998258234083185,
+          "return_to_time5_error": 1.2623545328183083,
+          "peak_amplitude": 0.06825418165818053,
+          "compression_sum": 2.6020852139652106e-18,
+          "activity": 0.24574027075605565
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.21986166909860128,
+          "return_to_time5_error": 1.3570929944682248,
+          "peak_amplitude": 0.07659093994675656,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2459999695515042
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.21225873398064554,
+          "return_to_time5_error": 1.478175989822937,
+          "peak_amplitude": 0.06332075570124474,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2725715388687379
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.19871454470755803,
+          "return_to_time5_error": 1.5243064168245668,
+          "peak_amplitude": 0.05109777531531475,
+          "compression_sum": 0.0,
+          "activity": 0.27928736455230385
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.23837130964888156,
+          "return_to_time5_error": 1.4467067855811182,
+          "peak_amplitude": 0.059043528934977926,
+          "compression_sum": 0.0,
+          "activity": 0.24581550149175746
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.2548181506540474,
+          "return_to_time5_error": 1.348694710740054,
+          "peak_amplitude": 0.06750110673871017,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.24014605632456087
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.2307249760056131,
+          "return_to_time5_error": 1.344160616644348,
+          "peak_amplitude": 0.0533560279841153,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2809349071006712
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.22960214356221115,
+          "return_to_time5_error": 1.3778379970242711,
+          "peak_amplitude": 0.06212682426625179,
+          "compression_sum": 0.0,
+          "activity": 0.27668129735401903
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.2590785504000527,
+          "return_to_time5_error": 1.4550777258649097,
+          "peak_amplitude": 0.05491556115499999,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.24270743717049587
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.2810122980406439,
+          "return_to_time5_error": 1.5652472016367698,
+          "peak_amplitude": 0.060778781700073045,
+          "compression_sum": 0.0,
+          "activity": 0.25341844661037716
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.27168590234082285,
+          "return_to_time5_error": 1.5806209345014501,
+          "peak_amplitude": 0.057131719341641615,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.27413110846803895
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.32089927467433826,
+          "return_to_time5_error": 1.4494951633771107,
+          "peak_amplitude": 0.05224509040493526,
+          "compression_sum": -4.336808689942018e-19,
+          "activity": 0.26910041601714724
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.41534304329914734,
+          "return_to_time5_error": 1.2431932706443594,
+          "peak_amplitude": 0.05818215691474951,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.26084916712087813
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.4284334530419085,
+          "return_to_time5_error": 1.0865423376855938,
+          "peak_amplitude": 0.06694350633609059,
+          "compression_sum": 0.0,
+          "activity": 0.25837796332555407
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.40856638955725616,
+          "return_to_time5_error": 1.0779779684949151,
+          "peak_amplitude": 0.08143769341289474,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2598871325192312
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.45886432984435443,
+          "return_to_time5_error": 1.2095729474316121,
+          "peak_amplitude": 0.06351823868651818,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.2726169486022553
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.5019111231800129,
+          "return_to_time5_error": 1.371406283753397,
+          "peak_amplitude": 0.06204345996914031,
+          "compression_sum": 0.0,
+          "activity": 0.27304945630301664
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.4489192646474184,
+          "return_to_time5_error": 1.505475292481469,
+          "peak_amplitude": 0.06912973987871925,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2554012541740058
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.3696233244264905,
+          "return_to_time5_error": 1.6492122531032247,
+          "peak_amplitude": 0.07554869722666328,
+          "compression_sum": 5.204170427930421e-18,
+          "activity": 0.2608362098686999
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.35078630103194786,
+          "return_to_time5_error": 1.7459656534461334,
+          "peak_amplitude": 0.05949033567409808,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.2728691737190285
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.32758205691121944,
+          "return_to_time5_error": 1.7217112555121967,
+          "peak_amplitude": 0.06680830559349163,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.27134168253780055
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.2536767071598978,
+          "return_to_time5_error": 1.5535010710851846,
+          "peak_amplitude": 0.05711452841885223,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2717825603442867
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.189791157337546,
+          "return_to_time5_error": 1.1989736006822573,
+          "peak_amplitude": 0.06666728087723328,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.2585848312895708
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.16815198785249483,
+          "return_to_time5_error": 0.7944746808042182,
+          "peak_amplitude": 0.05859010497806043,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.26070464607467686
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.15629950404293705,
+          "return_to_time5_error": 0.7312067668197676,
+          "peak_amplitude": 0.06210208376840394,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.29579244899315915
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.1438798097612561,
+          "return_to_time5_error": 1.0154307226451782,
+          "peak_amplitude": 0.06534663002468868,
+          "compression_sum": 0.0,
+          "activity": 0.281718416910508
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.12028573033535424,
+          "return_to_time5_error": 1.3896378673147378,
+          "peak_amplitude": 0.06810036893895904,
+          "compression_sum": 0.0,
+          "activity": 0.24142074127220625
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.123612650144836,
+          "return_to_time5_error": 1.7312731581754954,
+          "peak_amplitude": 0.0752451341677825,
+          "compression_sum": 2.0816681711721685e-17,
+          "activity": 0.2791891710004413
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.16660654896749152,
+          "return_to_time5_error": 1.8694223933104719,
+          "peak_amplitude": 0.05271505704321895,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.3112805023951804
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.18840491495645043,
+          "return_to_time5_error": 1.7460291314117296,
+          "peak_amplitude": 0.07444589373678855,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.2705140370242956
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.16941044621790666,
+          "return_to_time5_error": 1.5142142842250186,
+          "peak_amplitude": 0.06917557176118257,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2643792773216054
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.23012697738333487,
+          "return_to_time5_error": 1.2865386423335128,
+          "peak_amplitude": 0.06023770185024385,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.2936631376732957
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.312541693369331,
+          "return_to_time5_error": 1.1055477825061786,
+          "peak_amplitude": 0.07200721386089719,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.2969534436742484
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.2904810040192097,
+          "return_to_time5_error": 1.1210287488628428,
+          "peak_amplitude": 0.0769195209066652,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.2957302152824549
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.30821776550684193,
+          "return_to_time5_error": 1.285065732700773,
+          "peak_amplitude": 0.08300331431413141,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.2864719881404809
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.4146485838698261,
+          "return_to_time5_error": 1.4826564377118667,
+          "peak_amplitude": 0.06920026780827188,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.28664354413461407
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.42541767558526633,
+          "return_to_time5_error": 1.6370568021383278,
+          "peak_amplitude": 0.06855591565753033,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.31791571893100934
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.3974889765465285,
+          "return_to_time5_error": 1.6075709053100717,
+          "peak_amplitude": 0.07903501922850201,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.31333175887457126
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.40168668172185445,
+          "return_to_time5_error": 1.4442098336257683,
+          "peak_amplitude": 0.09120718222726168,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.29404133701843044
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.40249674337985863,
+          "return_to_time5_error": 1.2962491725090697,
+          "peak_amplitude": 0.07436900255203302,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.31809394662960155
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.39045215236182923,
+          "return_to_time5_error": 1.230285283874253,
+          "peak_amplitude": 0.07384515331888492,
+          "compression_sum": 0.0,
+          "activity": 0.32507858773970866
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.3313401303341309,
+          "return_to_time5_error": 1.3584199850884742,
+          "peak_amplitude": 0.07164366751118166,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.32497591278424975
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.27032858027074597,
+          "return_to_time5_error": 1.6001032856483195,
+          "peak_amplitude": 0.0818094888444947,
+          "compression_sum": 0.0,
+          "activity": 0.3443445580130911
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.27328434109066024,
+          "return_to_time5_error": 1.7708784266019986,
+          "peak_amplitude": 0.07372971346779586,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.332904520045467
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.26484762179874205,
+          "return_to_time5_error": 1.8098852799757055,
+          "peak_amplitude": 0.07809179000255077,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.3359531641230991
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.2310331683585579,
+          "return_to_time5_error": 1.7108302830370428,
+          "peak_amplitude": 0.07457327064714846,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.37541850602439125
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.24438150018368102,
+          "return_to_time5_error": 1.4384447227259105,
+          "peak_amplitude": 0.07517143133963466,
+          "compression_sum": -8.673617379884035e-18,
+          "activity": 0.3771980898035873
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.26481858034686545,
+          "return_to_time5_error": 1.104234227632776,
+          "peak_amplitude": 0.08506389789937696,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.36502432420323416
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.24715812935584333,
+          "return_to_time5_error": 1.016286257681458,
+          "peak_amplitude": 0.07652553042051563,
+          "compression_sum": 0.0,
+          "activity": 0.3805714766213967
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.24293659186880895,
+          "return_to_time5_error": 1.2352431997747297,
+          "peak_amplitude": 0.07972850965733912,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.4091425225269626
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.2475179977393581,
+          "return_to_time5_error": 1.5498672243004865,
+          "peak_amplitude": 0.08464255657689194,
+          "compression_sum": 0.0,
+          "activity": 0.43249504243329834
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.22903097071000802,
+          "return_to_time5_error": 1.773386304768617,
+          "peak_amplitude": 0.09711350594932947,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.4205347956823481
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.2007382390916088,
+          "return_to_time5_error": 1.8806110008709713,
+          "peak_amplitude": 0.08716347101009601,
+          "compression_sum": -1.734723475976807e-17,
+          "activity": 0.4192601257265996
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.17875636444296134,
+          "return_to_time5_error": 1.9341384381815405,
+          "peak_amplitude": 0.08300089928021857,
+          "compression_sum": 0.0,
+          "activity": 0.4787031315393585
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.16635665497313293,
+          "return_to_time5_error": 1.8651695931007863,
+          "peak_amplitude": 0.08940390257731058,
+          "compression_sum": 0.0,
+          "activity": 0.5008207881269054
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.15639381137950306,
+          "return_to_time5_error": 1.7003892532367346,
+          "peak_amplitude": 0.1059509237407116,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.47445569704446794
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.14465371697874058,
+          "return_to_time5_error": 1.5918377292909502,
+          "peak_amplitude": 0.10862277119201359,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.5109874637433416
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.13718982808570052,
+          "return_to_time5_error": 1.503321557335861,
+          "peak_amplitude": 0.0925186046964766,
+          "compression_sum": 0.0,
+          "activity": 0.5600319050933585
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.14026600559111654,
+          "return_to_time5_error": 1.4426382598644334,
+          "peak_amplitude": 0.100047131041488,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.5696524391153311
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.14955486101926496,
+          "return_to_time5_error": 1.5046400151429162,
+          "peak_amplitude": 0.10790866894668659,
+          "compression_sum": 0.0,
+          "activity": 0.5942887089220541
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "travel",
+        "amplitude": 0.2,
+        "relaxed_u": false,
+        "eta": 0.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.17774711489655887,
+      "max_scaled_energy_error": 2.7663925187493277e-05,
+      "min_late_localized_fraction": 0.1101710084670181,
+      "best_reference_return_error": 0.7165667512699891,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.9707360689203886,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.2,
+          "compression_sum": 0.0,
+          "activity": 0.22264236060435838
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.9363481774784723,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.1322842595069428,
+          "compression_sum": 0.0,
+          "activity": 0.29404455543923896
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.858044928201281,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09109612293505927,
+          "compression_sum": 0.0,
+          "activity": 0.3231992455033636
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.7123205572150193,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.11035367843186275,
+          "compression_sum": 0.0,
+          "activity": 0.2615254331832988
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.5927696787898231,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10505462530495473,
+          "compression_sum": 0.0,
+          "activity": 0.27197207410871393
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.4594516785207857,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.07157824349388983,
+          "compression_sum": 0.0,
+          "activity": 0.2859340545900264
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.33527792027737374,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08061175551998365,
+          "compression_sum": 0.0,
+          "activity": 0.2792162989873715
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.36548221714728635,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.046929425094319334,
+          "compression_sum": 0.0,
+          "activity": 0.2981109150145031
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.3317674697247972,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0601931429827249,
+          "compression_sum": 0.0,
+          "activity": 0.27498266115439146
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.21537988832386568,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05728060315163414,
+          "compression_sum": 0.0,
+          "activity": 0.2610132720499579
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.20612909856252584,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.04399336668657274,
+          "compression_sum": 0.0,
+          "activity": 0.30478298443415436
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.1712378943617886,
+          "return_to_time5_error": 0.6606579481413853,
+          "peak_amplitude": 0.06423499202459655,
+          "compression_sum": 0.0,
+          "activity": 0.29320309448833687
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.1129100389188689,
+          "return_to_time5_error": 1.2603049390781502,
+          "peak_amplitude": 0.08116881824425642,
+          "compression_sum": 0.0,
+          "activity": 0.2606946188414579
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.12760246604219538,
+          "return_to_time5_error": 1.6754688375273803,
+          "peak_amplitude": 0.08053971348290338,
+          "compression_sum": 0.0,
+          "activity": 0.2807107496363559
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.10351021267520323,
+          "return_to_time5_error": 1.7823921474757374,
+          "peak_amplitude": 0.057786950865015105,
+          "compression_sum": 0.0,
+          "activity": 0.2854248676216891
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.09616685590978205,
+          "return_to_time5_error": 1.6583113415943587,
+          "peak_amplitude": 0.05423292912676424,
+          "compression_sum": 0.0,
+          "activity": 0.2904357462379103
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.14010860424254237,
+          "return_to_time5_error": 1.4394040592107455,
+          "peak_amplitude": 0.07518894324753124,
+          "compression_sum": 0.0,
+          "activity": 0.2968397420579153
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.11464597558875904,
+          "return_to_time5_error": 1.2315425298393363,
+          "peak_amplitude": 0.10858613701660476,
+          "compression_sum": 0.0,
+          "activity": 0.2623840945870114
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.09267305255877015,
+          "return_to_time5_error": 1.1929470609354478,
+          "peak_amplitude": 0.10156376642900494,
+          "compression_sum": 0.0,
+          "activity": 0.26422372558024093
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.15240635945635114,
+          "return_to_time5_error": 1.2496767166366805,
+          "peak_amplitude": 0.07077157200921622,
+          "compression_sum": 0.0,
+          "activity": 0.30624302148515686
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.15838569497019267,
+          "return_to_time5_error": 1.205922375960847,
+          "peak_amplitude": 0.05306549065548064,
+          "compression_sum": 0.0,
+          "activity": 0.2990617884538494
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.1910455036117657,
+          "return_to_time5_error": 1.1245204250784315,
+          "peak_amplitude": 0.06296954792528464,
+          "compression_sum": 0.0,
+          "activity": 0.26560399648444477
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.3100103282408263,
+          "return_to_time5_error": 1.1823719965725263,
+          "peak_amplitude": 0.08886151699608731,
+          "compression_sum": 0.0,
+          "activity": 0.26617249422420836
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.2930608468243132,
+          "return_to_time5_error": 1.363629485605157,
+          "peak_amplitude": 0.07565221879457408,
+          "compression_sum": 0.0,
+          "activity": 0.29502963264998683
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.26403793064934705,
+          "return_to_time5_error": 1.4985952846387784,
+          "peak_amplitude": 0.09297149903466899,
+          "compression_sum": 0.0,
+          "activity": 0.305260532930715
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.3440409841430902,
+          "return_to_time5_error": 1.4712405552815668,
+          "peak_amplitude": 0.0633799354753488,
+          "compression_sum": 0.0,
+          "activity": 0.2658817960118359
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.3412114074465833,
+          "return_to_time5_error": 1.3622198398760479,
+          "peak_amplitude": 0.09960344868800541,
+          "compression_sum": 0.0,
+          "activity": 0.25801138790767486
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.27291645881514015,
+          "return_to_time5_error": 1.3056816390562336,
+          "peak_amplitude": 0.08574090956688026,
+          "compression_sum": 0.0,
+          "activity": 0.3108741559365958
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.24824166366200417,
+          "return_to_time5_error": 1.2828357611423502,
+          "peak_amplitude": 0.04919260432022127,
+          "compression_sum": 0.0,
+          "activity": 0.3020283565051718
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.1987508618604696,
+          "return_to_time5_error": 1.3448549418895637,
+          "peak_amplitude": 0.051301908162934444,
+          "compression_sum": 0.0,
+          "activity": 0.25591756038733054
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.20605875192381776,
+          "return_to_time5_error": 1.491209671249798,
+          "peak_amplitude": 0.05850301647872532,
+          "compression_sum": 0.0,
+          "activity": 0.2720821910525934
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.28636286445906073,
+          "return_to_time5_error": 1.5315796533930495,
+          "peak_amplitude": 0.06028834797870535,
+          "compression_sum": 0.0,
+          "activity": 0.2971321203926084
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.3900524977726023,
+          "return_to_time5_error": 1.397091161004951,
+          "peak_amplitude": 0.060556006516098534,
+          "compression_sum": 0.0,
+          "activity": 0.29334786763330234
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.48738926246096553,
+          "return_to_time5_error": 1.1755432019499585,
+          "peak_amplitude": 0.07903108933921753,
+          "compression_sum": 0.0,
+          "activity": 0.2860136321419419
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.518782022394323,
+          "return_to_time5_error": 0.9987789199442687,
+          "peak_amplitude": 0.1064714282038166,
+          "compression_sum": 0.0,
+          "activity": 0.27189989930923564
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.5047987447408939,
+          "return_to_time5_error": 1.0163576693453324,
+          "peak_amplitude": 0.1226770158691956,
+          "compression_sum": 0.0,
+          "activity": 0.2690049499387701
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.4967325602791551,
+          "return_to_time5_error": 1.2065831429113012,
+          "peak_amplitude": 0.07978538900491675,
+          "compression_sum": 0.0,
+          "activity": 0.3000426184115827
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.4825849601869091,
+          "return_to_time5_error": 1.3570831332778264,
+          "peak_amplitude": 0.06251566358377982,
+          "compression_sum": 0.0,
+          "activity": 0.29918360576227565
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.3942300320086,
+          "return_to_time5_error": 1.4412174003724774,
+          "peak_amplitude": 0.06754558786272484,
+          "compression_sum": 0.0,
+          "activity": 0.26365309846813073
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.25410272975505827,
+          "return_to_time5_error": 1.5643159315140323,
+          "peak_amplitude": 0.08173701783984351,
+          "compression_sum": 0.0,
+          "activity": 0.27959957044942324
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.22194526113450253,
+          "return_to_time5_error": 1.6535357530896473,
+          "peak_amplitude": 0.058519227628845275,
+          "compression_sum": 0.0,
+          "activity": 0.29669131309761193
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.2608830469559366,
+          "return_to_time5_error": 1.6258678617001863,
+          "peak_amplitude": 0.06874152503964832,
+          "compression_sum": 0.0,
+          "activity": 0.2814034264678963
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.2563990502071751,
+          "return_to_time5_error": 1.4778790445695495,
+          "peak_amplitude": 0.06785974728657744,
+          "compression_sum": 0.0,
+          "activity": 0.2867636805393075
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.2161101912012989,
+          "return_to_time5_error": 1.1542532246639912,
+          "peak_amplitude": 0.0659538920218064,
+          "compression_sum": 0.0,
+          "activity": 0.2755911148059036
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.18727836952614035,
+          "return_to_time5_error": 0.7568087058314495,
+          "peak_amplitude": 0.05673294842933077,
+          "compression_sum": 0.0,
+          "activity": 0.27095955536731703
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.15064689301024456,
+          "return_to_time5_error": 0.7165667512699891,
+          "peak_amplitude": 0.051608087793823976,
+          "compression_sum": 0.0,
+          "activity": 0.3162390568163478
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.12207819573620211,
+          "return_to_time5_error": 0.9668704650378056,
+          "peak_amplitude": 0.07373572498511922,
+          "compression_sum": 0.0,
+          "activity": 0.29374194143864185
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.1013263975608048,
+          "return_to_time5_error": 1.288962950402913,
+          "peak_amplitude": 0.10987675842922213,
+          "compression_sum": 0.0,
+          "activity": 0.2335633973138701
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.07743300730387764,
+          "return_to_time5_error": 1.636822129345822,
+          "peak_amplitude": 0.07164685495728332,
+          "compression_sum": 0.0,
+          "activity": 0.29033041804553034
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.102855309806621,
+          "return_to_time5_error": 1.77154793385848,
+          "peak_amplitude": 0.05155183612723906,
+          "compression_sum": 0.0,
+          "activity": 0.33117273275357456
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.1610205641870992,
+          "return_to_time5_error": 1.634834001052378,
+          "peak_amplitude": 0.0950418075495816,
+          "compression_sum": 0.0,
+          "activity": 0.2671369533013641
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.15432088301465838,
+          "return_to_time5_error": 1.4332367579465481,
+          "peak_amplitude": 0.10907971124416552,
+          "compression_sum": 0.0,
+          "activity": 0.261901363355202
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.17279523215847362,
+          "return_to_time5_error": 1.246183886430735,
+          "peak_amplitude": 0.07879723288352815,
+          "compression_sum": 0.0,
+          "activity": 0.293996222372653
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.22932306325400845,
+          "return_to_time5_error": 1.0818984968631822,
+          "peak_amplitude": 0.08078573296664643,
+          "compression_sum": 0.0,
+          "activity": 0.2871199704173886
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.19556946896147578,
+          "return_to_time5_error": 1.0818126469958051,
+          "peak_amplitude": 0.08614901937358765,
+          "compression_sum": 0.0,
+          "activity": 0.29523144639105114
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.24102711697643425,
+          "return_to_time5_error": 1.1704875205464915,
+          "peak_amplitude": 0.0853901265617323,
+          "compression_sum": 0.0,
+          "activity": 0.280002759475695
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.4355555250420776,
+          "return_to_time5_error": 1.3002030603961146,
+          "peak_amplitude": 0.060125199218056674,
+          "compression_sum": 0.0,
+          "activity": 0.2630804770412715
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.4661646874925891,
+          "return_to_time5_error": 1.4622766069149549,
+          "peak_amplitude": 0.06525094244569699,
+          "compression_sum": 0.0,
+          "activity": 0.30612576609166814
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.4678003901016876,
+          "return_to_time5_error": 1.4759215894137578,
+          "peak_amplitude": 0.10782934941454579,
+          "compression_sum": 0.0,
+          "activity": 0.2984541075298545
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.5449801767587003,
+          "return_to_time5_error": 1.3488391421845196,
+          "peak_amplitude": 0.09873227403383572,
+          "compression_sum": 0.0,
+          "activity": 0.256886479129566
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.5162887930131768,
+          "return_to_time5_error": 1.2468066278764316,
+          "peak_amplitude": 0.07813765821274904,
+          "compression_sum": 0.0,
+          "activity": 0.2862570617680079
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.47260496098962257,
+          "return_to_time5_error": 1.1747249094205763,
+          "peak_amplitude": 0.09290564835052371,
+          "compression_sum": 0.0,
+          "activity": 0.2968887031639006
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.38214243738386505,
+          "return_to_time5_error": 1.2320294443675688,
+          "peak_amplitude": 0.09964114483048218,
+          "compression_sum": 0.0,
+          "activity": 0.2852552515381165
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.2373405019457941,
+          "return_to_time5_error": 1.4419183569544594,
+          "peak_amplitude": 0.06420075046042346,
+          "compression_sum": 0.0,
+          "activity": 0.29593271515640684
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.20745888993842346,
+          "return_to_time5_error": 1.5881449822165996,
+          "peak_amplitude": 0.07146197957178027,
+          "compression_sum": 0.0,
+          "activity": 0.2668115752415562
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.2888072244053569,
+          "return_to_time5_error": 1.6312804352543984,
+          "peak_amplitude": 0.06164506652844018,
+          "compression_sum": 0.0,
+          "activity": 0.26880992854024943
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.317542748265587,
+          "return_to_time5_error": 1.5360927557889879,
+          "peak_amplitude": 0.046030921084376515,
+          "compression_sum": 0.0,
+          "activity": 0.31381638743768225
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.360869299991306,
+          "return_to_time5_error": 1.2233896582053716,
+          "peak_amplitude": 0.07133629921441702,
+          "compression_sum": 0.0,
+          "activity": 0.2956259976754342
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.4240386959697819,
+          "return_to_time5_error": 0.8499509006838046,
+          "peak_amplitude": 0.09534959503065654,
+          "compression_sum": 0.0,
+          "activity": 0.2662434959321088
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.39670024819150124,
+          "return_to_time5_error": 0.7671516265339062,
+          "peak_amplitude": 0.071212299103051,
+          "compression_sum": 0.0,
+          "activity": 0.27449424410006323
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.35464869474114125,
+          "return_to_time5_error": 1.0266414844952716,
+          "peak_amplitude": 0.06425882744372437,
+          "compression_sum": 0.0,
+          "activity": 0.29252364440300116
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.3213809756212724,
+          "return_to_time5_error": 1.3428102352533973,
+          "peak_amplitude": 0.0854425637872419,
+          "compression_sum": 0.0,
+          "activity": 0.3078808732668426
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.26081883823404695,
+          "return_to_time5_error": 1.5233371152349369,
+          "peak_amplitude": 0.07315521658811848,
+          "compression_sum": 0.0,
+          "activity": 0.2760531690839516
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.17003190847543617,
+          "return_to_time5_error": 1.601279923845082,
+          "peak_amplitude": 0.07068992968180908,
+          "compression_sum": 0.0,
+          "activity": 0.2539684660391354
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.1369540993831725,
+          "return_to_time5_error": 1.6582722692155136,
+          "peak_amplitude": 0.05725030827418493,
+          "compression_sum": 0.0,
+          "activity": 0.31272755008808223
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.12922662682012948,
+          "return_to_time5_error": 1.5866841060885828,
+          "peak_amplitude": 0.07684958665799435,
+          "compression_sum": 0.0,
+          "activity": 0.31175800949269405
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.1101710084670181,
+          "return_to_time5_error": 1.3949108990080075,
+          "peak_amplitude": 0.08813843776997116,
+          "compression_sum": 0.0,
+          "activity": 0.24767136024207648
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.1420782307065083,
+          "return_to_time5_error": 1.261676269503531,
+          "peak_amplitude": 0.0830822497025763,
+          "compression_sum": 0.0,
+          "activity": 0.2776709872276054
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.15061436351128382,
+          "return_to_time5_error": 1.1060145895750004,
+          "peak_amplitude": 0.058933400285901216,
+          "compression_sum": 0.0,
+          "activity": 0.3109332623236578
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.12003129416919149,
+          "return_to_time5_error": 0.8977620268360944,
+          "peak_amplitude": 0.06022445857431441,
+          "compression_sum": 0.0,
+          "activity": 0.28634775671931995
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.13130701893406158,
+          "return_to_time5_error": 0.9174162677824951,
+          "peak_amplitude": 0.06854164214003282,
+          "compression_sum": 0.0,
+          "activity": 0.2891130495760523
+        }
+      ]
+    }
+  ],
+  "refinement_controls": [
+    {
+      "parameters": {
+        "kind": "angular",
+        "amplitude": 0.2,
+        "relaxed_u": true,
+        "eta": 2.0,
+        "side": 8,
+        "sites": 256,
+        "dt": 0.01,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.1755939186444324,
+      "max_scaled_energy_error": 4.719379607998064e-06,
+      "min_late_localized_fraction": 0.13721091888487516,
+      "best_reference_return_error": 0.7309796368329052,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.8913560602286709,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10405201900457779,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2221728131953671
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.8883746140313389,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09321098511055985,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.2698257378563609
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.855481464351947,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06708349737374898,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2913959697342557
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.7329292014088749,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08885753224124285,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.24782259710639218
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.6022367702898418,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08645162105981212,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.24908325579188176
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.5305553906476698,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06301723802210331,
+          "compression_sum": -2.6020852139652106e-18,
+          "activity": 0.26497915289907864
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.40111686310242545,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04885333954942801,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.265605064860326
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.2610133367831232,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.05211907580272905,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.26914968707810866
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.17121410465192766,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.058734795529884525,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2514231553729341
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.12141592733338719,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0650898953934184,
+          "compression_sum": 0.0,
+          "activity": 0.24862719538381703
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.0936898375878256,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.04481980092155799,
+          "compression_sum": -8.673617379884035e-19,
+          "activity": 0.2756279647330024
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.07056067443648148,
+          "return_to_time5_error": 0.6950704662489778,
+          "peak_amplitude": 0.06297838917648628,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.26564897668786275
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.062360112741171404,
+          "return_to_time5_error": 1.3140977623137686,
+          "peak_amplitude": 0.04804725728747393,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.24992206547283924
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.06438699708780737,
+          "return_to_time5_error": 1.7296013235402559,
+          "peak_amplitude": 0.07133126964133435,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2609272704971546
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.06795780725833368,
+          "return_to_time5_error": 1.8577007817601123,
+          "peak_amplitude": 0.06110162727154924,
+          "compression_sum": 2.6020852139652106e-18,
+          "activity": 0.2579853989280946
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.07295569361003396,
+          "return_to_time5_error": 1.7624000588101592,
+          "peak_amplitude": 0.05821187161469239,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.26416835674213424
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.06703984984233981,
+          "return_to_time5_error": 1.5408563181799944,
+          "peak_amplitude": 0.055133526311183345,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2729369522784603
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.06960411998528888,
+          "return_to_time5_error": 1.281868495793431,
+          "peak_amplitude": 0.0845801711659446,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.2477553994787215
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.10560518624195128,
+          "return_to_time5_error": 1.1564375968708134,
+          "peak_amplitude": 0.0787869862279282,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2461857513852156
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.12218832253471475,
+          "return_to_time5_error": 1.1929855955772506,
+          "peak_amplitude": 0.06211607020280618,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.27637548798625544
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.12065611589234472,
+          "return_to_time5_error": 1.2328949882761626,
+          "peak_amplitude": 0.060485996961305334,
+          "compression_sum": -8.239936510889834e-18,
+          "activity": 0.2728302711638675
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.15992695801879261,
+          "return_to_time5_error": 1.262376843806861,
+          "peak_amplitude": 0.0682451198339602,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.245763522753375
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.21984828235155268,
+          "return_to_time5_error": 1.3570313021805565,
+          "peak_amplitude": 0.07659888598751044,
+          "compression_sum": 8.673617379884035e-18,
+          "activity": 0.24600588541285323
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.21229923003498474,
+          "return_to_time5_error": 1.4780977051297302,
+          "peak_amplitude": 0.0633155420042287,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27257957024252455
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.1987005334357068,
+          "return_to_time5_error": 1.5243072228302015,
+          "peak_amplitude": 0.05109474586130664,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.27932491345005506
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.23834950151205167,
+          "return_to_time5_error": 1.4468130706524478,
+          "peak_amplitude": 0.05902307488574064,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.24586374190683816
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.2548836113411304,
+          "return_to_time5_error": 1.3487655969990366,
+          "peak_amplitude": 0.06750112304938541,
+          "compression_sum": 5.204170427930421e-18,
+          "activity": 0.24013332780787658
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.23075273201056798,
+          "return_to_time5_error": 1.3441789635891639,
+          "peak_amplitude": 0.053366683680179744,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2809342206516217
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.22960206036234113,
+          "return_to_time5_error": 1.3778245414499133,
+          "peak_amplitude": 0.062113083841782143,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2767516467856203
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.25902689275980506,
+          "return_to_time5_error": 1.4549295998096718,
+          "peak_amplitude": 0.054941043615453496,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.24272744589179468
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.28097994181020486,
+          "return_to_time5_error": 1.565119275897823,
+          "peak_amplitude": 0.06076828488725878,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2534047165461172
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.2716245589582738,
+          "return_to_time5_error": 1.5806585444752674,
+          "peak_amplitude": 0.057113407657693044,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2741623179126436
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.3206893057736396,
+          "return_to_time5_error": 1.44964322332274,
+          "peak_amplitude": 0.052234009276653504,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.2691366278262365
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.4151577903018018,
+          "return_to_time5_error": 1.2433368244980796,
+          "peak_amplitude": 0.05816829669114864,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.26086468624163023
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.4283617337673649,
+          "return_to_time5_error": 1.086601133780652,
+          "peak_amplitude": 0.06690201691883017,
+          "compression_sum": 1.734723475976807e-17,
+          "activity": 0.2584006528874543
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.40844740744413427,
+          "return_to_time5_error": 1.0779464850496256,
+          "peak_amplitude": 0.08143789432518012,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.25990699926876304
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.4587261422103317,
+          "return_to_time5_error": 1.2095017601167268,
+          "peak_amplitude": 0.0635368009067846,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27262035279432195
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.5019436837889327,
+          "return_to_time5_error": 1.3714021367461007,
+          "peak_amplitude": 0.06206729868397954,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2730942681731186
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.4490942155103748,
+          "return_to_time5_error": 1.5054261503014408,
+          "peak_amplitude": 0.06912825474194821,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2554333988351659
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.36974285167543325,
+          "return_to_time5_error": 1.6490400452570577,
+          "peak_amplitude": 0.0755570276334168,
+          "compression_sum": -1.214306433183765e-17,
+          "activity": 0.26082679344078885
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.35089168173257773,
+          "return_to_time5_error": 1.7458557766986271,
+          "peak_amplitude": 0.05952697299916906,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27290651596652477
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.32776539148655315,
+          "return_to_time5_error": 1.7216966944685703,
+          "peak_amplitude": 0.06678297974264702,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.2713641853994993
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.25386092563252494,
+          "return_to_time5_error": 1.5537028866198375,
+          "peak_amplitude": 0.0571651723690149,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.27179543671936074
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.1898661094726256,
+          "return_to_time5_error": 1.199495105905811,
+          "peak_amplitude": 0.06666318077923226,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2586455777525234
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.16819927563994513,
+          "return_to_time5_error": 0.7948597560341701,
+          "peak_amplitude": 0.05860546121710496,
+          "compression_sum": 0.0,
+          "activity": 0.2606961674731727
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.1563191908936762,
+          "return_to_time5_error": 0.7309796368329052,
+          "peak_amplitude": 0.06213312456359801,
+          "compression_sum": 0.0,
+          "activity": 0.2957688581018577
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.14386010390153672,
+          "return_to_time5_error": 1.015062278910616,
+          "peak_amplitude": 0.06529622980069164,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.28183370608384956
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.12027638477817346,
+          "return_to_time5_error": 1.3892196321985382,
+          "peak_amplitude": 0.06804417566962939,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.24145261022857792
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.12350836663916026,
+          "return_to_time5_error": 1.730991488112085,
+          "peak_amplitude": 0.07527632203185194,
+          "compression_sum": 0.0,
+          "activity": 0.27909611930669753
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.16645910775221173,
+          "return_to_time5_error": 1.8695499862145415,
+          "peak_amplitude": 0.05271430991828309,
+          "compression_sum": 0.0,
+          "activity": 0.3113654843159947
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.1883706905370567,
+          "return_to_time5_error": 1.7463539397609336,
+          "peak_amplitude": 0.07445696969610642,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2706100608229869
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.1693757899380188,
+          "return_to_time5_error": 1.5143951602922368,
+          "peak_amplitude": 0.0691809196982641,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2643225239739843
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.2298590823856237,
+          "return_to_time5_error": 1.2867264674170265,
+          "peak_amplitude": 0.060168429809287334,
+          "compression_sum": 0.0,
+          "activity": 0.293689090089789
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.3124394254741976,
+          "return_to_time5_error": 1.1055973387645868,
+          "peak_amplitude": 0.07201260566301232,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.2970038558951148
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.29053968537065183,
+          "return_to_time5_error": 1.1207633627505043,
+          "peak_amplitude": 0.07687527128919361,
+          "compression_sum": 0.0,
+          "activity": 0.2957336506918052
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.30794838817116543,
+          "return_to_time5_error": 1.2848521757681157,
+          "peak_amplitude": 0.08304186195919075,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.28654259300339713
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.4144683780971745,
+          "return_to_time5_error": 1.482376283822328,
+          "peak_amplitude": 0.06925416048954489,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2866343473496846
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.42549406864395,
+          "return_to_time5_error": 1.636936120358422,
+          "peak_amplitude": 0.06851714611106825,
+          "compression_sum": 0.0,
+          "activity": 0.31789137367936215
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.3974732711238297,
+          "return_to_time5_error": 1.6078469883024062,
+          "peak_amplitude": 0.07899247254607704,
+          "compression_sum": 0.0,
+          "activity": 0.3134488284695352
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.40175970662370786,
+          "return_to_time5_error": 1.4445002027448146,
+          "peak_amplitude": 0.0912324960106667,
+          "compression_sum": 0.0,
+          "activity": 0.2940451972917275
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.4026708144463195,
+          "return_to_time5_error": 1.2965091369927826,
+          "peak_amplitude": 0.07436980743711259,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.31805884808865037
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.3906596808805112,
+          "return_to_time5_error": 1.2304179672614322,
+          "peak_amplitude": 0.07382339888189261,
+          "compression_sum": 0.0,
+          "activity": 0.32518376337889016
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.3317069889969584,
+          "return_to_time5_error": 1.3580494703655372,
+          "peak_amplitude": 0.07163398123371933,
+          "compression_sum": 0.0,
+          "activity": 0.3249633359624632
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.27052285139367954,
+          "return_to_time5_error": 1.5996668075495308,
+          "peak_amplitude": 0.08182163991165764,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.3443497635932884
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.2733260133665959,
+          "return_to_time5_error": 1.7706676517092401,
+          "peak_amplitude": 0.07378615091687676,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.3330228188528566
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.2649834569707805,
+          "return_to_time5_error": 1.8098574968036047,
+          "peak_amplitude": 0.07813265279538924,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.33591181750761256
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.23100849672760868,
+          "return_to_time5_error": 1.7111214091729352,
+          "peak_amplitude": 0.07457492258912883,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.3754143064615756
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.2441774332731731,
+          "return_to_time5_error": 1.4390919919242255,
+          "peak_amplitude": 0.07514111611464731,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.3773084560382343
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.2647537416840419,
+          "return_to_time5_error": 1.1046355801875505,
+          "peak_amplitude": 0.08504509256447841,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.3650418998132535
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.24714379447650464,
+          "return_to_time5_error": 1.0160598615703864,
+          "peak_amplitude": 0.07659505604988455,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.3805862827179938
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.24285832316680872,
+          "return_to_time5_error": 1.2347259065943923,
+          "peak_amplitude": 0.07976905958188066,
+          "compression_sum": 0.0,
+          "activity": 0.40915327738080787
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.2475617944866331,
+          "return_to_time5_error": 1.5493962133278694,
+          "peak_amplitude": 0.08468314672005563,
+          "compression_sum": 0.0,
+          "activity": 0.43251481594184843
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.22915411261394225,
+          "return_to_time5_error": 1.7733084885773294,
+          "peak_amplitude": 0.09715128798782932,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.42067038999913575
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.2008559042181935,
+          "return_to_time5_error": 1.880635165199214,
+          "peak_amplitude": 0.08715390979208167,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.41925564983909847
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.1788560528376305,
+          "return_to_time5_error": 1.9341366032273626,
+          "peak_amplitude": 0.08301048088203637,
+          "compression_sum": 0.0,
+          "activity": 0.4786037873068201
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.16642878437697603,
+          "return_to_time5_error": 1.865446645655269,
+          "peak_amplitude": 0.08941107083166593,
+          "compression_sum": 0.0,
+          "activity": 0.5009960906997668
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.15645920113253162,
+          "return_to_time5_error": 1.7004795565975857,
+          "peak_amplitude": 0.10591758104456955,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.474543894216955
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.1447026671655701,
+          "return_to_time5_error": 1.5917245882953486,
+          "peak_amplitude": 0.10862897018453811,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.5108728941392955
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.13721091888487516,
+          "return_to_time5_error": 1.5035421666177669,
+          "peak_amplitude": 0.09246984290693286,
+          "compression_sum": 2.7755575615628914e-17,
+          "activity": 0.560132632179593
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.14024718379813236,
+          "return_to_time5_error": 1.4427860860876656,
+          "peak_amplitude": 0.10005903015849249,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.5697393092223143
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.1495450532399601,
+          "return_to_time5_error": 1.5045305598493248,
+          "peak_amplitude": 0.10778628649675293,
+          "compression_sum": -2.7755575615628914e-17,
+          "activity": 0.5942712882060894
+        }
+      ]
+    },
+    {
+      "parameters": {
+        "kind": "angular",
+        "amplitude": 0.2,
+        "relaxed_u": true,
+        "eta": 2.0,
+        "side": 12,
+        "sites": 864,
+        "dt": 0.02,
+        "duration": 40.0,
+        "phase_or_velocity_scale": 1.0,
+        "kick_scale": 0.5
+      },
+      "actual_end_time": 40.0,
+      "initial_energy": 0.17255437198836032,
+      "max_scaled_energy_error": 1.8592387147159384e-05,
+      "min_late_localized_fraction": 0.025809475779813216,
+      "best_reference_return_error": 1.1605440251456915,
+      "sampled_return_times": [],
+      "gates": {
+        "completed": true,
+        "energy": true,
+        "late_localization": false,
+        "two_sampled_returns": false
+      },
+      "candidate": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "localized_fraction": 0.8891376164508602,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.10405201900457779,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.22272714571477997
+        },
+        {
+          "t": 0.5,
+          "localized_fraction": 0.8779641866724064,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.09323219573766783,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2724870730463942
+        },
+        {
+          "t": 1.0,
+          "localized_fraction": 0.8255445199913664,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.06714269588216976,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.29639276562442113
+        },
+        {
+          "t": 1.5,
+          "localized_fraction": 0.6788446555848132,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.08817097973130046,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.24905304300880146
+        },
+        {
+          "t": 2.0,
+          "localized_fraction": 0.5311073348277169,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.0773286483961734,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2526096189448506
+        },
+        {
+          "t": 2.5,
+          "localized_fraction": 0.45176452285347407,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04867557380528732,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.27724456773117534
+        },
+        {
+          "t": 3.0,
+          "localized_fraction": 0.317735629978217,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04148433563508058,
+          "compression_sum": 0.0,
+          "activity": 0.27000344138099064
+        },
+        {
+          "t": 3.5,
+          "localized_fraction": 0.17375054203586193,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.04088772507385117,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.26230745536416616
+        },
+        {
+          "t": 4.0,
+          "localized_fraction": 0.10179839227857293,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.035527976156095285,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2558599914933522
+        },
+        {
+          "t": 4.5,
+          "localized_fraction": 0.07304587103866696,
+          "return_to_time5_error": null,
+          "peak_amplitude": 0.030547054997989535,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2579674095971995
+        },
+        {
+          "t": 5.0,
+          "localized_fraction": 0.04149742672634416,
+          "return_to_time5_error": 0.0,
+          "peak_amplitude": 0.03152825189239722,
+          "compression_sum": -1.5612511283791264e-17,
+          "activity": 0.2728156833817496
+        },
+        {
+          "t": 5.5,
+          "localized_fraction": 0.017107927305829024,
+          "return_to_time5_error": 0.7035363899440664,
+          "peak_amplitude": 0.03495825981130811,
+          "compression_sum": 1.734723475976807e-17,
+          "activity": 0.2662982200305627
+        },
+        {
+          "t": 6.0,
+          "localized_fraction": 0.017131271540098334,
+          "return_to_time5_error": 1.3065273659528955,
+          "peak_amplitude": 0.04037662971961158,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.25141955813824146
+        },
+        {
+          "t": 6.5,
+          "localized_fraction": 0.019276337603411256,
+          "return_to_time5_error": 1.7177364618639266,
+          "peak_amplitude": 0.04182726206538069,
+          "compression_sum": 0.0,
+          "activity": 0.2663452919202335
+        },
+        {
+          "t": 7.0,
+          "localized_fraction": 0.01677131719885008,
+          "return_to_time5_error": 1.8524358980128361,
+          "peak_amplitude": 0.03463907106725542,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.27785214622671484
+        },
+        {
+          "t": 7.5,
+          "localized_fraction": 0.02125740036521756,
+          "return_to_time5_error": 1.7232339163006218,
+          "peak_amplitude": 0.038151693600927655,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2588552834902561
+        },
+        {
+          "t": 8.0,
+          "localized_fraction": 0.027188101802720136,
+          "return_to_time5_error": 1.4706909543662183,
+          "peak_amplitude": 0.04417101076832171,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.25010304129715966
+        },
+        {
+          "t": 8.5,
+          "localized_fraction": 0.033967868452836836,
+          "return_to_time5_error": 1.2780929176700397,
+          "peak_amplitude": 0.036917383332413505,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2654442549029389
+        },
+        {
+          "t": 9.0,
+          "localized_fraction": 0.05080231142609185,
+          "return_to_time5_error": 1.2339354020080544,
+          "peak_amplitude": 0.037732994083789155,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.27053734520281264
+        },
+        {
+          "t": 9.5,
+          "localized_fraction": 0.0667387482753514,
+          "return_to_time5_error": 1.305379327594432,
+          "peak_amplitude": 0.040000760147158164,
+          "compression_sum": -1.0408340855860843e-17,
+          "activity": 0.257119735384485
+        },
+        {
+          "t": 10.0,
+          "localized_fraction": 0.0675893041133113,
+          "return_to_time5_error": 1.4179070655357113,
+          "peak_amplitude": 0.030561719726580835,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2562372828467338
+        },
+        {
+          "t": 10.5,
+          "localized_fraction": 0.07623684125052851,
+          "return_to_time5_error": 1.4912085967968818,
+          "peak_amplitude": 0.030319342240078963,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.27021949907503157
+        },
+        {
+          "t": 11.0,
+          "localized_fraction": 0.10441438307943927,
+          "return_to_time5_error": 1.4764598794448531,
+          "peak_amplitude": 0.040625665042779285,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2680700195696466
+        },
+        {
+          "t": 11.5,
+          "localized_fraction": 0.11115972323867088,
+          "return_to_time5_error": 1.4010906366479754,
+          "peak_amplitude": 0.0431038202858733,
+          "compression_sum": -8.673617379884035e-18,
+          "activity": 0.2581537341123134
+        },
+        {
+          "t": 12.0,
+          "localized_fraction": 0.09181402028573406,
+          "return_to_time5_error": 1.3255815988033248,
+          "peak_amplitude": 0.041134119507365535,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2610427649856841
+        },
+        {
+          "t": 12.5,
+          "localized_fraction": 0.10848804856831933,
+          "return_to_time5_error": 1.2729650324407533,
+          "peak_amplitude": 0.0437432646645024,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.26482890148318783
+        },
+        {
+          "t": 13.0,
+          "localized_fraction": 0.13452308256893572,
+          "return_to_time5_error": 1.2609850305248105,
+          "peak_amplitude": 0.03773700625346431,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2592370808589248
+        },
+        {
+          "t": 13.5,
+          "localized_fraction": 0.10816489664273658,
+          "return_to_time5_error": 1.322250787620603,
+          "peak_amplitude": 0.04396255670530472,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.2556272613524438
+        },
+        {
+          "t": 14.0,
+          "localized_fraction": 0.08470406599461802,
+          "return_to_time5_error": 1.4450639052307668,
+          "peak_amplitude": 0.0340074916876573,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2662849840907126
+        },
+        {
+          "t": 14.5,
+          "localized_fraction": 0.09637629762159014,
+          "return_to_time5_error": 1.5420291487963975,
+          "peak_amplitude": 0.03423887444777027,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2671493468828778
+        },
+        {
+          "t": 15.0,
+          "localized_fraction": 0.08733919453060499,
+          "return_to_time5_error": 1.560960859940924,
+          "peak_amplitude": 0.03492133407826039,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.25648396781005145
+        },
+        {
+          "t": 15.5,
+          "localized_fraction": 0.056694768155426956,
+          "return_to_time5_error": 1.5110532155844123,
+          "peak_amplitude": 0.03776625769433498,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.2665614784234008
+        },
+        {
+          "t": 16.0,
+          "localized_fraction": 0.042735018913143616,
+          "return_to_time5_error": 1.3722290073815921,
+          "peak_amplitude": 0.05456671195929606,
+          "compression_sum": 0.0,
+          "activity": 0.26731354781972816
+        },
+        {
+          "t": 16.5,
+          "localized_fraction": 0.04210695284068798,
+          "return_to_time5_error": 1.1968677645543089,
+          "peak_amplitude": 0.05025580006384377,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2509168468673097
+        },
+        {
+          "t": 17.0,
+          "localized_fraction": 0.041145739525067504,
+          "return_to_time5_error": 1.1605440251456915,
+          "peak_amplitude": 0.04185052849286909,
+          "compression_sum": 0.0,
+          "activity": 0.2624145113769361
+        },
+        {
+          "t": 17.5,
+          "localized_fraction": 0.028923495022626634,
+          "return_to_time5_error": 1.268932847639645,
+          "peak_amplitude": 0.041574059594833436,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.269804583296996
+        },
+        {
+          "t": 18.0,
+          "localized_fraction": 0.033937999681598933,
+          "return_to_time5_error": 1.418702408171562,
+          "peak_amplitude": 0.05064416084638613,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2531010480482806
+        },
+        {
+          "t": 18.5,
+          "localized_fraction": 0.06568435659808955,
+          "return_to_time5_error": 1.5642577269318676,
+          "peak_amplitude": 0.05509389373276509,
+          "compression_sum": 0.0,
+          "activity": 0.25637489465814617
+        },
+        {
+          "t": 19.0,
+          "localized_fraction": 0.07116858642513478,
+          "return_to_time5_error": 1.620901598219082,
+          "peak_amplitude": 0.04186069107251089,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2680386197021765
+        },
+        {
+          "t": 19.5,
+          "localized_fraction": 0.06560658679588129,
+          "return_to_time5_error": 1.5596460894816964,
+          "peak_amplitude": 0.03801732160222925,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2685024780290659
+        },
+        {
+          "t": 20.0,
+          "localized_fraction": 0.08822127105644606,
+          "return_to_time5_error": 1.4300026155158585,
+          "peak_amplitude": 0.0432633163962028,
+          "compression_sum": 0.0,
+          "activity": 0.26372470434905965
+        },
+        {
+          "t": 20.5,
+          "localized_fraction": 0.10835631296160825,
+          "return_to_time5_error": 1.29705438921814,
+          "peak_amplitude": 0.046423078685915296,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2495920012698455
+        },
+        {
+          "t": 21.0,
+          "localized_fraction": 0.09530052803492373,
+          "return_to_time5_error": 1.2755010148966495,
+          "peak_amplitude": 0.03530973738993176,
+          "compression_sum": 0.0,
+          "activity": 0.25527582097820745
+        },
+        {
+          "t": 21.5,
+          "localized_fraction": 0.08624251768594732,
+          "return_to_time5_error": 1.3599853355286555,
+          "peak_amplitude": 0.03599333280125348,
+          "compression_sum": 0.0,
+          "activity": 0.27695253971947126
+        },
+        {
+          "t": 22.0,
+          "localized_fraction": 0.09473433668560413,
+          "return_to_time5_error": 1.4138904411219755,
+          "peak_amplitude": 0.031761827659698476,
+          "compression_sum": -1.3877787807814457e-17,
+          "activity": 0.26012178338497255
+        },
+        {
+          "t": 22.5,
+          "localized_fraction": 0.09376104970397364,
+          "return_to_time5_error": 1.4247269375789096,
+          "peak_amplitude": 0.0382887739446288,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.24006088571139167
+        },
+        {
+          "t": 23.0,
+          "localized_fraction": 0.07671606947318962,
+          "return_to_time5_error": 1.4202614359790768,
+          "peak_amplitude": 0.033554117219353814,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2664327975860417
+        },
+        {
+          "t": 23.5,
+          "localized_fraction": 0.062086892595143155,
+          "return_to_time5_error": 1.348805377023566,
+          "peak_amplitude": 0.0307167794051137,
+          "compression_sum": 0.0,
+          "activity": 0.28070750737860517
+        },
+        {
+          "t": 24.0,
+          "localized_fraction": 0.05210568828020931,
+          "return_to_time5_error": 1.2263068445613137,
+          "peak_amplitude": 0.03900962278973556,
+          "compression_sum": 0.0,
+          "activity": 0.2562792617756605
+        },
+        {
+          "t": 24.5,
+          "localized_fraction": 0.04323298840742672,
+          "return_to_time5_error": 1.1945217857097772,
+          "peak_amplitude": 0.03719317296183797,
+          "compression_sum": 2.0816681711721685e-17,
+          "activity": 0.24640169199955497
+        },
+        {
+          "t": 25.0,
+          "localized_fraction": 0.03845353385219202,
+          "return_to_time5_error": 1.3033880621479175,
+          "peak_amplitude": 0.03237496632096594,
+          "compression_sum": 5.204170427930421e-18,
+          "activity": 0.26450773171270464
+        },
+        {
+          "t": 25.5,
+          "localized_fraction": 0.041006635661455314,
+          "return_to_time5_error": 1.4423492918593128,
+          "peak_amplitude": 0.03782445746322248,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.27418245991107015
+        },
+        {
+          "t": 26.0,
+          "localized_fraction": 0.045764614117926,
+          "return_to_time5_error": 1.5304275688762068,
+          "peak_amplitude": 0.0346955920701017,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.2550021036379373
+        },
+        {
+          "t": 26.5,
+          "localized_fraction": 0.06293629885730836,
+          "return_to_time5_error": 1.575477345295975,
+          "peak_amplitude": 0.04063306036868181,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.24244790258132873
+        },
+        {
+          "t": 27.0,
+          "localized_fraction": 0.07802826534032027,
+          "return_to_time5_error": 1.6043899070698513,
+          "peak_amplitude": 0.03384003823237757,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.26727625840751984
+        },
+        {
+          "t": 27.5,
+          "localized_fraction": 0.08016207599112692,
+          "return_to_time5_error": 1.5751817399627246,
+          "peak_amplitude": 0.02943275760954831,
+          "compression_sum": 1.734723475976807e-18,
+          "activity": 0.2800267368203592
+        },
+        {
+          "t": 28.0,
+          "localized_fraction": 0.08873430205795604,
+          "return_to_time5_error": 1.4735052024407773,
+          "peak_amplitude": 0.039406762882198354,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.2565389134569444
+        },
+        {
+          "t": 28.5,
+          "localized_fraction": 0.09053462497718028,
+          "return_to_time5_error": 1.3689509796311778,
+          "peak_amplitude": 0.05202480294753941,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.24605203964253572
+        },
+        {
+          "t": 29.0,
+          "localized_fraction": 0.0832594914594521,
+          "return_to_time5_error": 1.3044944848195108,
+          "peak_amplitude": 0.05804405466392162,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.26461890206012256
+        },
+        {
+          "t": 29.5,
+          "localized_fraction": 0.07432602389899402,
+          "return_to_time5_error": 1.254155947273498,
+          "peak_amplitude": 0.04281176039556651,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.2765187898767079
+        },
+        {
+          "t": 30.0,
+          "localized_fraction": 0.05758794112182222,
+          "return_to_time5_error": 1.198628257599252,
+          "peak_amplitude": 0.06176947938851369,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.25568515147590687
+        },
+        {
+          "t": 30.5,
+          "localized_fraction": 0.05337028180898843,
+          "return_to_time5_error": 1.1947407050048366,
+          "peak_amplitude": 0.06858894743655074,
+          "compression_sum": 1.3877787807814457e-17,
+          "activity": 0.23923403788697667
+        },
+        {
+          "t": 31.0,
+          "localized_fraction": 0.04527745203190965,
+          "return_to_time5_error": 1.2855773644634487,
+          "peak_amplitude": 0.05721278203412779,
+          "compression_sum": -2.0816681711721685e-17,
+          "activity": 0.26785466482267
+        },
+        {
+          "t": 31.5,
+          "localized_fraction": 0.025809475779813216,
+          "return_to_time5_error": 1.3645710970901208,
+          "peak_amplitude": 0.04176680471448734,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2797081705122462
+        },
+        {
+          "t": 32.0,
+          "localized_fraction": 0.028945344234626243,
+          "return_to_time5_error": 1.4014589603165466,
+          "peak_amplitude": 0.057252585350079335,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2491355755933307
+        },
+        {
+          "t": 32.5,
+          "localized_fraction": 0.03236304630100767,
+          "return_to_time5_error": 1.4950842818024614,
+          "peak_amplitude": 0.04853528454094591,
+          "compression_sum": -1.734723475976807e-18,
+          "activity": 0.2522632240049727
+        },
+        {
+          "t": 33.0,
+          "localized_fraction": 0.026585137524329807,
+          "return_to_time5_error": 1.594156389289345,
+          "peak_amplitude": 0.03304171998110664,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.27644046657686583
+        },
+        {
+          "t": 33.5,
+          "localized_fraction": 0.052854748002109056,
+          "return_to_time5_error": 1.5925697722446037,
+          "peak_amplitude": 0.04313383454311712,
+          "compression_sum": 0.0,
+          "activity": 0.2627293227250593
+        },
+        {
+          "t": 34.0,
+          "localized_fraction": 0.07500351559669138,
+          "return_to_time5_error": 1.5102669380819276,
+          "peak_amplitude": 0.036778140379020226,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2462188800750328
+        },
+        {
+          "t": 34.5,
+          "localized_fraction": 0.07054723704555711,
+          "return_to_time5_error": 1.4049199251698885,
+          "peak_amplitude": 0.042927725838563434,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.25927131769367084
+        },
+        {
+          "t": 35.0,
+          "localized_fraction": 0.10128169493091495,
+          "return_to_time5_error": 1.3109038164422795,
+          "peak_amplitude": 0.037525331369176906,
+          "compression_sum": -3.469446951953614e-18,
+          "activity": 0.2691193199947846
+        },
+        {
+          "t": 35.5,
+          "localized_fraction": 0.14193471524035256,
+          "return_to_time5_error": 1.2695061511155525,
+          "peak_amplitude": 0.04152916599992154,
+          "compression_sum": 0.0,
+          "activity": 0.25987486683543454
+        },
+        {
+          "t": 36.0,
+          "localized_fraction": 0.1442098996844955,
+          "return_to_time5_error": 1.30997144635222,
+          "peak_amplitude": 0.041842928018915135,
+          "compression_sum": 6.938893903907228e-18,
+          "activity": 0.2553215677324728
+        },
+        {
+          "t": 36.5,
+          "localized_fraction": 0.14246587352469298,
+          "return_to_time5_error": 1.370631859507373,
+          "peak_amplitude": 0.03678252332563544,
+          "compression_sum": 1.0408340855860843e-17,
+          "activity": 0.2617295370209496
+        },
+        {
+          "t": 37.0,
+          "localized_fraction": 0.15566882977347524,
+          "return_to_time5_error": 1.3826886621139587,
+          "peak_amplitude": 0.039216127703289014,
+          "compression_sum": 0.0,
+          "activity": 0.2664882262327816
+        },
+        {
+          "t": 37.5,
+          "localized_fraction": 0.1671207403877215,
+          "return_to_time5_error": 1.3600265566238643,
+          "peak_amplitude": 0.043890375898246924,
+          "compression_sum": -8.673617379884035e-18,
+          "activity": 0.2641985752870231
+        },
+        {
+          "t": 38.0,
+          "localized_fraction": 0.16473757646756865,
+          "return_to_time5_error": 1.362350682406323,
+          "peak_amplitude": 0.047824119003886334,
+          "compression_sum": 0.0,
+          "activity": 0.2552298956982306
+        },
+        {
+          "t": 38.5,
+          "localized_fraction": 0.14248766514226283,
+          "return_to_time5_error": 1.4428476954211522,
+          "peak_amplitude": 0.04347839834429043,
+          "compression_sum": 3.469446951953614e-18,
+          "activity": 0.25264016563892994
+        },
+        {
+          "t": 39.0,
+          "localized_fraction": 0.12988512998774687,
+          "return_to_time5_error": 1.559632854397994,
+          "peak_amplitude": 0.04370841113740587,
+          "compression_sum": 8.673617379884035e-18,
+          "activity": 0.26239656322108523
+        },
+        {
+          "t": 39.5,
+          "localized_fraction": 0.13122776779103112,
+          "return_to_time5_error": 1.6070527509562276,
+          "peak_amplitude": 0.04247424567954697,
+          "compression_sum": -6.938893903907228e-18,
+          "activity": 0.2661807358434156
+        },
+        {
+          "t": 40.0,
+          "localized_fraction": 0.1207680426351326,
+          "return_to_time5_error": 1.5233375020578308,
+          "peak_amplitude": 0.040621516282401335,
+          "compression_sum": -5.204170427930421e-18,
+          "activity": 0.2571158875231849
+        }
+      ]
+    }
+  ],
+  "selected": {
+    "kind": "angular",
+    "amplitude": 0.2,
+    "relaxed_u": true,
+    "eta": 2.0,
+    "side": 8,
+    "sites": 256,
+    "dt": 0.02,
+    "duration": 40.0,
+    "phase_or_velocity_scale": 1.0,
+    "kick_scale": 0.5
+  },
+  "candidate_count": 0,
+  "limits": [
+    "Initial sin/cos quadratures are prescribed seeds, not a derived frequency or conserved phase charge.",
+    "Angular seed is not proof of vector vorticity or vortex topology.",
+    "Reference is full state at time 5; no normalization, phase alignment or recentering.",
+    "Return minima are sampled every .5 and separated by at least 1; no exhaustive orbit/Floquet proof.",
+    "Activity psi^2+v_psi^2 is a dimensionless diagnostic, not energy or norm conservation.",
+    "No perturbation stability, translation clock ratio, particle classification or SI calibration established."
+  ],
+  "vacuum_band_analysis": {
+    "grid_resolution_each_axis": 64,
+    "scalar_squared_frequency_max_exact": 8.0,
+    "scalar_frequency_band": [
+      0.0,
+      2.8284271247461903
+    ],
+    "transverse_frequency_band": [
+      0.0,
+      2.8284271247461903
+    ],
+    "longitudinal_max_sampled": 2.8284271247461903,
+    "longitudinal_max_rigorous_upper_bound": 3.7416573867739413,
+    "reason_upper_bound": "L<=8 and each q component has square <=2, so |q|^2<=6",
+    "radiation_condition": "Far-field harmonics in a vacuum band have propagating channels; localization then requires an actual cancellation or nonradiating mechanism. Frequency above a band alone does not prove a nonlinear localized orbit.",
+    "compression_forcing": "psi^2 can drive displacement at DC and twice a single carrier frequency; compare those harmonics with longitudinal response."
+  }
+}
