@@ -283,3 +283,13 @@ The outbox receipt preserves the trace; it is not a resumable Nexus job and does
 not claim database integration. Live structured Gemini/DeepSeek returns must
 still be proven before promoting this optional path as activated. Offline fixtures
 are deliberately labeled tests and never stand in for real provider replies.
+
+## Verified science evidence in the nested council
+
+The canonical council uses transport scripts in Bridge-Comand. By default that repository is the sibling `Bridge-Comand` checkout; set `ONE_WAVE_BRIDGE_ROOT` for a verified detached transport worktree. The controller verifies its Git origin and tracked script before dispatch and records its HEAD. Science remains the orchestration and reference authority. DeepSeek uses the transport's local endpoint and private key-file configuration unless explicitly overridden; Gemini retains the Dell web-relay route.
+
+```sh
+python3 scripts/brain_buddy_council.py discussion "Inspect CMS candidate data and propose one grounded science update" --loop --save --science-receipt .one-wave-metadata/science-routes-20261005/cern-higgs-measurements/receipt.json
+```
+
+Repeat `--science-receipt` for up to four acquisition receipts. The controller checks acquired status and exact artifact SHA-256, supplies the same receipt and bounded data sample to Field and Void, and checks for changes before and after each turn. Source classification and source-unit requirements remain explicit. Failed or changed evidence cannot advance the loop. Provider drafts remain proposals until separately applied, tested and merged; peer agreement alone never promotes physical proof status.

@@ -28,7 +28,8 @@ def result(worker='gemini', ok=True):
 class WorkerTests(unittest.TestCase):
     def invoke(self, output='answer', code=0, snapshots=None, error=None):
         p = subprocess.CompletedProcess([], code, output, '')
-        with patch.object(c, 'reference_snapshot', side_effect=snapshots or [snapshot(), snapshot()]), \
+        with patch.object(c, 'transport_path', return_value=Path('/bridge/hive-pipe/gemini_web_bridge.py')), patch.object(c, 'git_read', return_value='bridge-head'), \
+             patch.object(c, 'reference_snapshot', side_effect=snapshots or [snapshot(), snapshot()]), \
              patch.object(c.subprocess, 'run', side_effect=error, return_value=p) as run:
             r = c.run_worker(Path('/tmp'), 'gemini', 'question', 10, 'request-1')
             return r, run
@@ -473,15 +474,21 @@ print(json.dumps(value))
             script = root / 'scripts/brain_buddy_council.py'
             script.parent.mkdir(parents=True, exist_ok=True)
             script.write_text(SCRIPT.read_text())
+            bridge = root / 'transport'
+            bridge.mkdir()
+            subprocess.run(['git','-C',str(bridge),'init','-q'],check=True)
+            subprocess.run(['git','-C',str(bridge),'remote','add','origin','https://github.com/One-Wave-Universe/Bridge-Comand.git'],check=True)
             for name in ('gemini', 'deepseek'):
-                p = root / f'One_Wave_Bench/hive-pipe/{name}_web_bridge.py'
+                p = bridge / f'hive-pipe/{name}_web_bridge.py'
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(worker_code)
-            git('add', '.')
+            subprocess.run(['git','-C',str(bridge),'add','.'],check=True)
+            subprocess.run(['git','-C',str(bridge),'-c','user.name=Test','-c','user.email=test@example.invalid','commit','-qm','transport fixture'],check=True)
+            git('add', 'scripts', *c.ROOT_FILES)
             git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'offline fixture')
             process = subprocess.run([sys.executable, str(script), 'discussion', 'Offline fixture only',
                                       '--loop', '--save', '--request-id', 'offline-fixture', '--max-calls', '12',
-                                      '--budget-seconds', '30'], cwd=d, text=True, input='', capture_output=True, timeout=45)
+                                      '--budget-seconds', '30'], cwd=d, env={**__import__('os').environ,'ONE_WAVE_BRIDGE_ROOT':str(bridge)}, text=True, input='', capture_output=True, timeout=45)
             self.assertEqual(process.returncode, 0, process.stderr + process.stdout)
             self.assertIn('Council AGREED_RESOLUTION', process.stdout)
             saved = list((root / 'External_Work/brain_buddy/outbox').glob('*.json'))
@@ -493,6 +500,19 @@ print(json.dumps(value))
             self.assertTrue(all('OFFLINE_FIXTURE_ONLY' in r['answer'] for r in receipt['results']))
             self.assertTrue(all(r['provider_response_id'] is None for r in receipt['results']))
 
+class ScienceEvidenceTests(unittest.TestCase):
+    def test_source_bytes_verified_and_changes_rejected(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d);raw=b"Run,E1\n1,3.5\n";(p/'events.csv').write_bytes(raw)
+            receipt={'status':'acquired','file':'events.csv','sha256':hashlib.sha256(raw).hexdigest(),'classification':'externally_sourced_measurement_product'}
+            (p/'receipt.json').write_text(json.dumps(receipt))
+            x=c.science_evidence([str(p/'receipt.json')]);self.assertEqual(x[0]['receipt']['classification'],receipt['classification'])
+            (p/'events.csv').write_bytes(b'changed')
+            with self.assertRaises(c.CouncilError):c.science_evidence([str(p/'receipt.json')])
+    def test_failed_acquisition_never_supplies_evidence(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'receipt.json';p.write_text('{"status":"failed"}')
+            with self.assertRaises(c.CouncilError):c.science_evidence([str(p)])
 
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == '__main__':unittest.main()
