@@ -197,3 +197,26 @@ domains. Before integration, R, boundary geometry, kinetic metric and reciprocal
 force terms need one closed work/energy ledger and the mandatory isotropic
 recovery test. No physical coefficient, node gate or upstream claim is promoted
 by these implementation receipts.
+
+
+
+## Reciprocal path/circulation core candidate (2026-10-05)
+
+The [new work-balance candidate](../solvers/RECIPROCAL_BALANCE_AND_LOCK.md)
+uses positive directional edge weights dependent on symmetric traceless R and a
+completed-square local coupling to displacement-circulation orientation. All
+forces derive from one energy. Six controls pass, including native force/energy
+recovery when the new couplings vanish. Conditional R force balance is solved
+below 1.2e-18 for fixed displacement; it is not a persistent-state claim.
+
+An initially curl-free compression seed develops displacement curl about 2.04e-8.
+Halving dt changes that peak by less than 1e-5 relative; coupling-off stays near
+1.37e-16. Seeded circulation runs show quadratic energy-error improvement, but
+all six trajectories fail full return/localization. No Vortex Phase or magnetic
+observable is assigned.
+
+The new strain-driven R term and reversible R dynamics are explicit hypotheses,
+not derivations of the owner's magnetic-only first-order relaxation, hysteretic
+memory or physical coefficients. The evolving closed boundary and connection to
+velocity circulation remain open. The full architecture, metadata and node gate
+are preserved.

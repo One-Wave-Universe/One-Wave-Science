@@ -185,3 +185,27 @@ The four-interaction calculation now runs on D-409's native twelve-neighbor 3D F
 One declared joint operator computes exact discrete energy, passive coupling and phase response, boundary-coordinate inertia and carried-profile energy curvature. Eleven tests pass. The 500-step relative energy drift is below 9.38e-14; the maximum lossless power-ledger error is below 1.34e-15. Cross-coupling removal eliminates interaction-port transfer. No measured mass or 125 GeV target is an input.
 
 Refinement from 13 to 55 to 177 sites changes the first spatial frequency from 0.459660896 to 0.632761487 to 0.683984404. These are dimensionless candidate-cavity results. A self-held knot, constitutive coefficients, physical amplitude, absolute units and observable channel mapping remain required before a particle-mass claim. The imposed reflecting cavity is a conservation control, not demonstrated confinement. Boundary ports currently describe interaction coordinates rather than angular bounce, roll-off or spatial scattering distributions.
+
+
+
+## Pressure–tension radius-balance candidate (2026-10-05)
+
+The [reduced boundary calculation](../solvers/RECIPROCAL_BALANCE_AND_LOCK.md)
+makes the spherical surface energy a reciprocal pressure-work model. Assuming
+Omega(R)=a_omega/R for one cavity recurrence, its adiabatic action J gives
+U_avg=J a_omega/R+4 pi sigma_T R². Wave and surface pressures match at
+R_*³=J a_omega/(8 pi sigma_T), with averaged radial curvature 24 pi sigma_T>0.
+
+The executable evolves the free radius and carrier through the instantaneous
+Hamiltonian; R is not clamped and J is not reset. With illustrative fixed inputs,
+balanced radius remains .998849–1.001255 over 200 time units. Both ±10% radius
+perturbations remain bounded. Removing either tension or recurrence loses the
+radius screen; timestep energy error improves by four. See the
+[raw results](../solvers/boundary_balance_lock_results.json).
+
+This 3D area-law balance assumes the spatial reflecting carrier and its
+inverse-radius frequency. It does not derive confinement, Three-Vortex Knot,
+electrical shell or Mirror phase lock. Surface coefficient and boundary kinetic
+weight are illustrative, not measured Mass Effect. The result is a quantitative
+target for the native evolving-boundary solver, not Bronze completion or a
+node-gate promotion.

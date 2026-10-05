@@ -151,3 +151,20 @@ accessibility tensor produces a nonsymmetric derivative in the current unit
 kinetic coordinates. The next physical step is a common energy/force closure
 for boundary, rotation and reorganization, preserving C-317 and D-412 rather
 than naming this near-linear branch as a complete knot.
+
+
+
+### Reciprocal balance and conditional pressure–tension radius lock
+
+The [balance/lock calculation](../../solvers/RECIPROCAL_BALANCE_AND_LOCK.md)
+supplies two separately scoped candidate cores. The reciprocal FCC path/circulation
+energy passes six work/recovery controls and permits a small timestep-converged
+compression-to-curl response. All six trajectories still fail the spatial
+return/localization screen. A separate freely moving spherical radius and assumed
+cavity recurrence give R_*³=J a_omega/(8 pi sigma_T), with positive averaged
+curvature 24 pi sigma_T. Radius remains bounded over 200 time units after ±10%
+radius perturbations; removing tension or recurrence loses that lock. Halving dt
+improves energy error by four. This is a reduced radial lock, not a self-held
+native spatial knot. Carrier confinement and its inverse-radius frequency are
+assumed. Next replace that assumption with a computed spatial recurrence and
+evolving boundary work law, retaining knot, shell, Mirror and weave coupling.
