@@ -80,7 +80,7 @@ The averaged radial balance and stability conditions are
 J is used for the prediction and initial field amplitude, not reset in the full
 Hamiltonian evolution. Only radius-dependent spectral energy supplies pressure.
 For lambda_L=0, uniform relative-phase recurrences have frequencies .2828427,
-.2828427 and .4 yet omega'=0 and zero radius pressure. The common uniform role
+.2828427 and .4 yet omega'=0 and zero cycle-averaged radius pressure. The common uniform role
 is free. A nonzero recurrence frequency is not by itself confinement work or
 Mass Effect. Treating all role energy as J/s pressure would miss this distinction.
 
@@ -100,7 +100,7 @@ The actual balance is
 The old radius 1 therefore does not remain the predicted balance under the same
 J and sigma_T. This is a model correction, not a particle-scale calibration.
 Five checks pass: spectral derivative, full moving-metric energy gradient,
-positive averaged curvature, all four radius runs, and zero pressure for uniform
+positive averaged curvature, all four radius runs, and zero cycle-averaged pressure for uniform
 phase controls. The program uses adaptive DOP853 with maximum step .2; checks
 energy and radius at accepted integration steps and publishes a trace every 2
 units. Tight tolerance repeats the balanced run. The same field equations and
@@ -160,7 +160,7 @@ explicit closure map; preserve the original successful and failed reports.
 Allowed: executable, raw results, this derivation and additive C-317/laboratory
 receipts. Protected: earlier solvers/data, node metadata/gates, full architecture,
 hardware and dirty Jetson work. Field derived the actual pressure feedback;
-Void checked frequency derivatives, Hamiltonian gradients, zero-pressure phase
+Void checked frequency derivatives, Hamiltonian gradients, zero-cycle-averaged-pressure phase
 controls, radius perturbations and tighter integration tolerance. Same assistant
 proposed and checked; no independent corroboration.
 
@@ -173,3 +173,11 @@ State: immediate pressure feedback and computed-cavity radial balance RESOLVED;
 full native spatial/topological lock PARTIAL. Scale: no node gate, persistent-mode
 or physical-mass claim. Next: implement the native field/closed-skin/exterior
 interface under the same work law, retaining the complete four-role architecture.
+
+
+Precision check at `c2caefb1bea18bccf53acdbe26809d0b2cf2a1e6`: the uniform-mode
+zero-pressure result is cycle-averaged/adiabatic. The instantaneous moving-metric
+force can still oscillate within a carrier cycle. Those oscillatory forces are
+retained in the Hamiltonian evolution; zero averaged pressure is not a claim of
+zero instantaneous stress. This reporting-only clarification preserves every
+solver/result blob and all measured gates.

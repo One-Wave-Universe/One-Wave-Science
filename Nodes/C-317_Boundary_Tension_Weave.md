@@ -223,7 +223,7 @@ not 1; both pressures are .0263569473 and averaged curvature is positive. Four
 200-unit runs, including ±10% radius perturbations, stay bounded with accepted-step
 energy error below 1e-12. Five controls pass.
 
-Uniform phase recurrences can have nonzero frequency yet zero geometric pressure.
+Uniform phase recurrences can have nonzero frequency yet zero cycle-averaged geometric pressure.
 Total recurrence energy is therefore not automatically confinement work. This
 control still prescribes the reflecting graph and self-similar spherical shape.
 Its four role coordinates are response fixtures, not a derived knot/shell/Mirror/
