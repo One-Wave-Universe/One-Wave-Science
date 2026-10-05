@@ -1,0 +1,74 @@
+{
+  "scope": "dimensionless constitutive hypothesis; constrained compression elimination and reciprocal second-order update",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5"
+  },
+  "parameters": {
+    "side": 8,
+    "sites": 256,
+    "spacing": 1.0,
+    "volume_per_site": 0.7071067811865475,
+    "beta": 1.0,
+    "shear": 1.0,
+    "k": 1.0,
+    "a": 1.0,
+    "eta": 2.0,
+    "seed": 107
+  },
+  "checks": {
+    "adjoint": true,
+    "compression_stationarity": true,
+    "zero_total_compression": true,
+    "reduced_force_gradient": true,
+    "reciprocal_full_gradient": true,
+    "coupling_off": true,
+    "uniform_density": true,
+    "canonical_linear_limit": true,
+    "timestep_convergence": true
+  },
+  "all_pass": true,
+  "adjoint_error": 5.329070518200751e-15,
+  "stationarity_relative_residual": 4.468481518979522e-12,
+  "total_compression": 4.440892098500626e-16,
+  "compression_min": -0.029579625013380628,
+  "compression_max": 0.4562833488756348,
+  "reduced_energy": -1.1545792117803053,
+  "reduced_force_gradient_error": 3.734812459299519e-11,
+  "full_force_gradient_error": 1.922752845828768e-09,
+  "invalid_local_compression_sum": 12.051503923208692,
+  "dynamics": [
+    {
+      "dt": 0.04,
+      "time": 4.0,
+      "max_scaled_energy_error": 0.0001085849004245909,
+      "peak_amplitude": 0.0786847783559831,
+      "compression_sum": -4.163336342344337e-17,
+      "final_density_sum": 0.1250603403001885
+    },
+    {
+      "dt": 0.02,
+      "time": 4.0,
+      "max_scaled_energy_error": 2.7148046201408427e-05,
+      "peak_amplitude": 0.07866554130834132,
+      "compression_sum": -1.3877787807814457e-17,
+      "final_density_sum": 0.12505409822775101
+    },
+    {
+      "dt": 0.01,
+      "time": 4.0,
+      "max_scaled_energy_error": 6.787125193363774e-06,
+      "peak_amplitude": 0.07866073458582983,
+      "compression_sum": 0.0,
+      "final_density_sum": 0.1250525359904393
+    }
+  ],
+  "limits": [
+    "Coupling eta and density-dependent stiffness a are assumptions, not derived constants.",
+    "No localization, vortex, four-interaction necessity, mass or physical calibration claim.",
+    "Periodic finite FCC; no HCP, 2D comparison, detector, spatial/domain convergence or dynamic compression elimination validation.",
+    "Central divergence has high-frequency blind modes; positive bond shear regularizes displacement solve.",
+    "Density psi^2 is not conserved by this real second-order update.",
+    "Static elimination is a zero-frequency approximation; full displacement dynamics are retained in evolution."
+  ]
+}

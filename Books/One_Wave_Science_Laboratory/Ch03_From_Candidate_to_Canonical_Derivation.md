@@ -100,3 +100,7 @@ A PASS accepts only its declared scope. FAIL, INCONCLUSIVE and INVALID results s
 Keep the exact energy and passive response controls. Keep the localized nonlinear branch and its detector trace. Also keep the coupling-off survival, approximately 15% spacing energy shift, shifted-seed branch and missing norm-selection rule. Those observations decide where the next calculation has to go.
 
 The objective is a field law whose excitations, measured responses and classifications arise together under reproducible constraints. That is a stronger result than either an unsupported prediction or a list of unresolved questions, because every next step has a specific observable and a condition that can reject it.
+
+## Constrained native compression follow-up
+
+[The native compression derivation](../../solvers/NATIVE_COMPRESSION_BRIDGE.md) retains displacement and enforces compression as minus its discrete divergence on the twelve-neighbor FCC graph. Nine controls pass: constrained stationarity, zero total compression, reciprocal and reduced force gradients, coupling-off and uniform-density controls, the canonical linear limit, and timestep refinement. This is a constitutive hypothesis, with its coupling terms still assumed. The independently eliminated local compression shortcut fails the periodic divergence constraint. The small-input dynamic run spreads; no self-held localization or complete four-interaction requirement has been established. See the linked code and raw report for scope and the next branch test.
