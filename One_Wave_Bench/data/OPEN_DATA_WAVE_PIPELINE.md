@@ -38,6 +38,55 @@ derived analysis sequence. This output is always labeled:
 and carries an explicit warning that the source metadata is **not** thereby
 claimed to be a physical waveform.
 
+## Frequency and timing contract (v2)
+
+The output schema is `one-wave-wave-data-v2`. For both representations, each
+state has `f: null` and `frequency_known: false`: this adapter does not estimate
+physical signal frequency. Unknown is distinct from an observed zero-Hz/DC
+component. Never replace null with zero for physical inference.
+
+For a measurement series with complete, finite, strictly increasing source `t`
+values and an explicit top-level `time_unit` of `s`, `ms`, `us` or `ns`:
+
+- `sample_interval_s` is the elapsed source time before the state; the first
+  state has null because there is no preceding sample.
+- `inverse_sample_interval_Hz` is the inverse of that interval, not signal
+  frequency. Nonuniform time steps retain their individual interval rates.
+- `timing.sample_rate_Hz` is populated only when all converted intervals agree
+  within relative tolerance `1e-9` (zero absolute tolerance); otherwise null.
+- `timing.uniform_sampling` is true/false when intervals can be assessed and
+  null when unavailable. A single sample cannot establish cadence.
+
+Absent, mixed source/index, undeclared-unit or unsupported-unit timing produces
+no cadence in Hz. Existing fallback index coordinates are retained but explicitly
+classified in `timing.time_coordinates`; output `t` stays in the source unit,
+not silently converted to seconds. For complete source timestamp series, duplicate
+or reversed timestamps are rejected. Mixed source/index timing is unassessed and
+never produces cadence. Nonfinite supplied timestamps, sample values and positions
+are rejected. Metadata
+sequence coordinates are `metadata_index`, never physical time or Hertz.
+
+The existing `A` normalization is a dimensionless display coordinate. Existing
+`phi` is zero for measurements and algebraic for metadata, not a measured phase.
+Raw sample records, provenance, mapping fields, ordering and representation labels
+are preserved. This adapter does not assert that every source series is periodic.
+
+### Migration from v1
+
+v1 filled measurement `f` with inverse absolute time spacing (including inferred
+row spacing) and metadata `f` with zero. Neither was a signal-frequency estimate.
+Consumers must branch on the schema and require `frequency_known` before using
+`f` physically; they must not coerce missing frequency to numeric zero. Read
+cadence from the explicit timing fields only. External numeric-only v1 consumers
+need adaptation; v2 intentionally does not preserve misleading numeric frequency.
+No executable consumer of the adapter's output was found in the inspected producer,
+tests and pipeline documentation; the separate universal state-container schema
+already permits null frequency. This is not proof about external integrations.
+
+Tests: `python3 scripts/test_open_data_to_wave.py`. The 10-Hz synthetic test series
+sampled at 100 Hz verifies that cadence is reported as 100 Hz while the unestimated
+signal frequency stays null. It is a software fixture, not acquired physical data.
+
 ## Source registry
 
 `One_Wave_Bench/data/open_data_sources.json` currently covers:
@@ -59,6 +108,7 @@ Example measurement-series input:
 ```json
 {
   "mode": "measurement_series",
+  "time_unit": "s",
   "provenance": {
     "source": "gwosc",
     "record_id": "GW150914-L1"
