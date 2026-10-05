@@ -173,25 +173,37 @@ The heavy-quark underprediction traces directly to the unfixed energy scale, not
 
 ---
 
+## Keystone Problem: Heavy-Quark Mass-Scale Failure (DIAGNOSED)
+
+**October 4, 2026 Session Continuation: ROOT CAUSE IDENTIFIED**
+
+After comprehensive diagnostic analysis, the heavy-quark overprediction has been traced to:
+
+**Root Cause:** Energy composition shifts from constant-term-dominated (light quarks) to E_K-dominated (heavy quarks), causing the mass extraction formula to produce **mass ∝ m_scale^(3/2)** instead of **mass ∝ √m_scale**.
+
+**Evidence:**
+- E_K scales correctly as m_scale (consistent with octave-scaling ω ∝ √m_scale) ✓
+- For light quarks: E_total ≈ constant → mass ∝ √m_scale works ✓
+- For heavy quarks: E_total ≈ E_K ∝ m_scale → mass ∝ m_scale^(3/2) breaks ✗
+- Metric E_total/√m_scale varies 20× (should be constant for true octave-scaling)
+
+**Documented in:** `Nodes/PHASE_5_HEAVY_QUARK_DIAGNOSIS.md` (85 lines, complete analysis)
+
+**Four Solution Hypotheses (prioritized):**
+1. **Hypothesis A:** Non-universal confinement radius R(m_scale) [QUICK TEST]
+2. **Hypothesis B:** Weight-factor over-suppression of constant terms [PHYSICS REVIEW]
+3. **Hypothesis C:** Recalibration of confinement parameters (E_T, κ_T, σ_T)
+4. **Hypothesis D:** Additional QCD physics (color effects, hyperfine splitting)
+
 ## Next Session Direction
 
 ### IMMEDIATE (Session Continuation, Calibration Phase 2):
 
-**Priority: Refine Heavy-Quark Physics**
-1. Investigate why heavy quarks (c/b/t) remain underpredicted by 2-4×
-   - Is octave-scaling insufficient for heavy flavors?
-   - Do mass_scale factors need recalibration?
-   - Is additional physics required (color-hyperfine splitting, QCD effects)?
-
-2. Resolve strange quark anomaly (83% error, much worse than up/down)
-   - Systematic error in down-quark family treatment?
-   - Flavor-mixing effects not captured?
-   - Need dedicated strange-quark investigation
-
-3. Address top quark overprediction (298% error)
-   - Top mass scale 80000× reference seems too extreme
-   - Check whether top mass methodology differs (pole vs running mass?)
-   - May need separate treatment from light/charm/bottom
+**Priority: Resolve Heavy-Quark Keystone Problem**
+- Test Hypothesis A: Does confinement radius scale with m_scale? (Low effort, quick answer)
+- Test Hypothesis B: Weight factor analysis for heavy quarks (Medium effort, high potential)
+- If A/B fail: Implement Hypothesis C (higher effort, requires re-tuning)
+- Only if 1-3 fail: Consider Hypothesis D (framework extension needed)
 
 **Priority: Extend to Hadron Spectrum**
 - Once quark masses are reliable, compute meson spectrum (π, K, ρ, ω)
