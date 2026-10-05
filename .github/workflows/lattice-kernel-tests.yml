@@ -3,53 +3,66 @@ name: Lattice Kernel Tests
 on:
   pull_request:
     paths:
-      - 'sims/00-lattice-primitive/**'
-      - 'sims/24-1-sandbox/**'
-      - 'sims/06-spectral-lattice-phase/**'
-      - 'sims/00-state-container/state-schema.json'
+      - 'sims/**'
+      - 'Nodes/**'
+      - 'Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md'
+      - 'AGENTS.md'
+      - 'GENERAL_REFERENCE_RULES.md'
+      - 'AI_CANONICAL_START_HERE.md'
       - '.github/workflows/lattice-kernel-tests.yml'
   push:
     branches: [main]
     paths:
-      - 'sims/00-lattice-primitive/**'
-      - 'sims/24-1-sandbox/**'
-      - 'sims/06-spectral-lattice-phase/**'
-      - 'sims/00-state-container/state-schema.json'
+      - 'sims/**'
+      - 'Nodes/**'
+      - 'Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md'
+      - 'AGENTS.md'
+      - 'GENERAL_REFERENCE_RULES.md'
+      - 'AI_CANONICAL_START_HERE.md'
       - '.github/workflows/lattice-kernel-tests.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: module-refresh-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   numerical-controls:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      REFRESH_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+      REFRESH_BASE: ${{ github.event.pull_request.base.sha || github.event.before || '' }}
+      REFRESH_BUNDLE: module-refresh-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Kernel and UI integration controls
-        run: node --test sims/00-lattice-primitive/test_lattice_kernel.js
-      - name: Slot 1 adapter and reproducible receipts
-        run: node --test sims/24-1-sandbox/modules/01-lattice-primitive/test_adapter.js
-      - name: Dispersion and octave controls
-        env:
-          PYTHONDONTWRITEBYTECODE: '1'
-        run: python -m unittest discover -s sims/00-lattice-primitive -p 'test*.py' -v
-      - name: Sandbox registry negative and reference-path controls
-        env:
-          PYTHONDONTWRITEBYTECODE: '1'
+      - name: Refresh controller safety contracts
+        run: python -m unittest discover -s sims/24-1-sandbox -p 'test_refresh.py' -v
+      - name: Reference, affected tests, receipts, return reference
+        shell: bash
         run: |
-          python -m unittest discover -s sims/24-1-sandbox -p 'test*.py' -v
-          python sims/24-1-sandbox/sandbox.py --json
-      - name: Slot 6 static spectral adapter and source controls
-        env:
-          PYTHONDONTWRITEBYTECODE: '1'
-        run: |
-          python -m unittest discover -s sims/24-1-sandbox/modules/06-spectral-lattice-phase -p 'test*.py' -v
-          python sims/06-spectral-lattice-phase/test_spectral_lattice_phase.py
-          python sims/24-1-sandbox/modules/06-spectral-lattice-phase/adapter.py > spectral-receipt.json
+          args=(--expected-head "$REFRESH_HEAD" --output "$RUNNER_TEMP/$REFRESH_BUNDLE")
+          if [[ -n "$REFRESH_BASE" ]]; then args+=(--base "$REFRESH_BASE"); fi
+          python sims/24-1-sandbox/refresh.py "${args[@]}"
+      - name: Retain exact-head receipts and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: module-refresh-${{ env.REFRESH_HEAD }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/${{ env.REFRESH_BUNDLE }}
+          if-no-files-found: warn
+          retention-days: 14

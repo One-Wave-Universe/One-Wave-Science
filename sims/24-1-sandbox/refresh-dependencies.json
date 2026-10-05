@@ -1,0 +1,35 @@
+{
+  "schema": "one-wave-module-refresh-dependencies/v1",
+  "shared": [
+    "AGENTS.md",
+    "GENERAL_REFERENCE_RULES.md",
+    "AI_CANONICAL_START_HERE.md",
+    "Governance_I_Series/I-06_Canonical_Node_Metadata_and_Alias_Resolution.md",
+    "Nodes/D-412_Lattice_Simulation_and_State_Driven_Visualization_Standard.md",
+    "sims/00_CANONICAL_INGEST_RULE.md",
+    "sims/00-state-container/state-schema.json",
+    "sims/24-1-sandbox/GOLD_STANDARD.md",
+    "sims/24-1-sandbox/README.md",
+    "sims/24-1-sandbox/module-manifest.template.json",
+    "sims/24-1-sandbox/sandbox.py",
+    "sims/24-1-sandbox/test_sandbox.py",
+    "sims/24-1-sandbox/refresh.py",
+    "sims/24-1-sandbox/test_refresh.py",
+    "sims/24-1-sandbox/refresh-dependencies.json",
+    "sims/24-1-sandbox/REFRESH_LOOP_RECEIPT.md",
+    ".github/workflows/lattice-kernel-tests.yml"
+  ],
+  "modules": {
+    "lattice-primitive": [
+      "Nodes/G-764_Combined_State_Lattice_Simulator_Foundation.md",
+      "Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md",
+      "sims/00-lattice-primitive/**",
+      "sims/24-1-sandbox/modules/01-lattice-primitive/**"
+    ],
+    "spectral-lattice-phase": [
+      "Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md",
+      "sims/06-spectral-lattice-phase/**",
+      "sims/24-1-sandbox/modules/06-spectral-lattice-phase/**"
+    ]
+  }
+}
