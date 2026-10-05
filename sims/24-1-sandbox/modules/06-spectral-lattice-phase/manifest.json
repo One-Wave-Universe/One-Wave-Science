@@ -59,6 +59,11 @@
   },
   "state_schema": "../../../00-state-container/state-schema.json",
   "adapter": {
-    "existing": "../../../06-spectral-lattice-phase"
+    "existing": "../../../06-spectral-lattice-phase",
+    "entry_point": "adapter.py",
+    "node_bindings": [
+      "G-767"
+    ],
+    "implementation_scope": "static scale-phase/coherence and seeded log-uniform diagnostic; full scientific controls and browser path unverified"
   }
 }

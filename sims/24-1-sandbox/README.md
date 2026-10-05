@@ -66,10 +66,78 @@ it does not import or run code. It is `null` when malformed structure prevents
 path inspection, rather than falsely asserting that a file is absent. An adapter may remain unimplemented while its
 manifest and existing-engine reference pass. `ok` and `occupied_slots` describe
 valid registry entries, never validated node coverage, fixture execution,
-scientific claims, GOLD status or browser quality. Slot 6 is still manifest-only.
+scientific claims, GOLD status or browser quality. Slot 6 has a static diagnostic adapter; file presence alone does not execute it.
 
 Run registry positive/negative controls from the repository root:
 
 ```sh
 python -m unittest discover -s sims/24-1-sandbox -p 'test*.py' -v
 ```
+
+
+## Runnable slot 6: static spectral phase diagnostic
+
+Slot 6 wraps G-767's existing `phases`, `coherence` and `null_test` functions
+without changing their arithmetic. This is a positive-scale logarithmic map,
+not an FFT or a time-evolving physical solver. Run from the repository root:
+
+```sh
+python sims/24-1-sandbox/modules/06-spectral-lattice-phase/adapter.py > spectral-receipt.json
+python -m unittest discover -s sims/24-1-sandbox/modules/06-spectral-lattice-phase -p 'test*.py' -v
+```
+
+The default uses an explicitly labeled synthetic exact-octave fixture. An
+optional JSON file supplies the configuration directly, for example:
+
+```json
+{
+  "records": [{"scale": 1}, {"scale": 2}, {"scale": 4}],
+  "x0": 1,
+  "scale_unit": "dimensionless",
+  "reference_unit": "dimensionless",
+  "reference_policy": "predeclared",
+  "source": {"kind": "synthetic", "description": "exact-octave control"},
+  "trials": 1000,
+  "seed": 767
+}
+```
+
+For provided data use `source.kind: "caller-provided"`. Units and reference
+policy (`predeclared` or `training-frozen`) are caller declarations, not verified
+external evidence. All scales and x0 must be finite and positive with matching
+units; no implicit unit conversion occurs. Optional row `unit` must match.
+Width and uncertainty, when supplied, are nonnegative numbers in the declared
+scale unit. Labels are metadata strings. All raw record fields survive the
+receipt; labels, widths and uncertainties do not affect this statistic.
+Uncertainty propagation, width/Q analysis and mixed-unit ingest are not supplied.
+There must be 3–10,000 records, 1–10,000 trials, at most 250,000 sample-trials,
+and an integer seed in 0–2^32−1. Inputs whose ratios or null endpoints cannot be
+represented by the unchanged floating-point engine are refused.
+
+The API exports `manifest`, `initialize`, `step`, `measure`, `geometry`,
+`serialize`, `restore`, `references`, `controls`, `validate`, and `run`. `step`
+performs one static analysis and refuses dt, dynamic inputs and a second step.
+Initialization/stepping and geometry return independently owned data. Snapshots
+use the Universal State Container envelope. Restore and receipt validation
+recompute the deterministic result, enforce resource bounds and reject altered
+source identities, measurements or unsupported Python versions.
+
+Receipts retain raw scales, log2 ratios, octave indices, fractional scale phases,
+coherence, seeded null mean and the add-one upper-tail empirical p. The null is
+independent matched-range log-uniform draws, not a permutation test. That p is
+only an exploratory diagnostic: the required smooth-density, detector-acceptance,
+background, uncertainty, selection and held-out controls remain unverified.
+A large coherence or small p does not establish a lattice or physical result.
+
+Input SHA-256 identifies canonical JSON of the declared configuration, not raw
+external file bytes. Source hashes identify captured source files and are checked
+again before use; the engine executes captured source bytes. Git HEAD is context
+only. These checks do not attest the host interpreter or arbitrary in-process
+monkeypatching. Use a fresh-process CLI for reproducible receipts; Python version
+is retained. No external data is downloaded or silently fabricated.
+
+Geometry consumes the exact verified analysis arrays: log2-ratio/phase scatter
+and a unit-circle view of scale phase. Both are nonspatial 2D coordinate plots,
+with dimensionless axes. They introduce no time, sample rate, frequency or spatial
+field. The manifest's broader visual/validation checklist remains aspirational;
+no 3D view or browser visual quality is established by this headless adapter.
