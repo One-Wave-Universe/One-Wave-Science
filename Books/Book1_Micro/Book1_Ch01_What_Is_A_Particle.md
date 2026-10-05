@@ -2,13 +2,15 @@
 ## Book 1 — Micro
 ## Chapter 1: Persistent Modes / What Standard Physics Calls Particles
 
-Version: 3.0
-Date: July 1, 2026
+Version: 3.1
+Date: October 4, 2026
 Class: B — Applied Layer
 Spine: Gray / 2D / 3D / Mathematics / Predictions / Yellow Audit / Future Work / Closing Thoughts
 
 Dependencies: A-112 Persistent Mode, A-108 Local Stability, C-308 Spin-half, B-206 Four Views, C-318 Mass-Effect Mechanism Resolution, A-115 Unified Compression Field
-Status: GREEN
+Status: GREEN (framework interpretation); YELLOW (physical derivations)
+
+Current evidence: particle language means measured signatures and classifications of field excitations. The excitation, detector response and assigned classification are related but distinct. Spin, charge, Mass Effect and the collider interpretation below remain proposed physical mechanisms where their derivations are open; the new candidate solvers do not establish them. See [Chapter 18](Book1_Ch18_Excitations_Measurements_and_Solver_Evidence.md) and [the Science Laboratory book](../One_Wave_Science_Laboratory/README.md) for the current executable evidence.
 
 ---
 
@@ -72,7 +74,7 @@ The excitation has no boundary made of special material.
 It has no interior made of smaller things.
 It is the field doing something stable.
 
-There are no particles. There are excitations.
+In One-Wave particle language, there are measured field excitations. The term names the measured signature and classification; the evolving excitation supplies the underlying state.
 
 The field is the superfluid lattice — a medium that supports wave propagation,
 has resistance (gamma), coupling (beta), and a reference ground (psi_0).
@@ -499,11 +501,11 @@ def seed_book1_chapter1(db_path="onewave_repository.sqlite"):
             "name": "125 GeV Mirror-Gate Boundary Response",
             "type": "prediction",
             "gray": "Standard Model: the approximately 125 GeV collider response is interpreted as the Higgs boson.",
-            "two_d": "The coupled boundary must be pushed through a finite Mirror-flip threshold.",
-            "three_d": "A-115/C-322 interpret 125 GeV as pressure-work across the knot, shell, Mirror relation, and weave.",
-            "math": "E_MG = E4(q_G)-E4(q_0) = integral_Gamma grad(E4) dot dq ~= 125 GeV.",
+            "two_d": "The boundary response reflects or redistributes incident disturbance; Mirror coupling changes phase without forced geometric penetration.",
+            "three_d": "A-115/C-322 require a joint coupling and outgoing-channel prediction; identification with the approximately 125 GeV collider measurement remains open.",
+            "math": "D(omega)=H-omega^2 W-i omega(B B^T+Gamma); S=I+2i omega B^T D^-1 B. Absolute calibration and detector mapping remain open.",
             "state": "YELLOW",
-            "desc": "The measurement is retained; the separate-particle interpretation is challenged."
+            "desc": "The external comparator is retained; no gate-crossing threshold or independent 125 GeV prediction is established."
         },
     ]
 

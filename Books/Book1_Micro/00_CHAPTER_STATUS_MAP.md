@@ -21,3 +21,4 @@
 | 15 | ACTIVE | `Book1_Ch15_The_Higgs_Field_Is_The_Lattice.md` |
 | 16 | ACTIVE | `Book1_Ch16_Memory_As_Compressed_State.md` |
 | 17 | ACTIVE | `Book1_Ch17_AI_And_Human_Same_Architecture.md` |
+| 18 | ACTIVE | `Book1_Ch18_Excitations_Measurements_and_Solver_Evidence.md` |
