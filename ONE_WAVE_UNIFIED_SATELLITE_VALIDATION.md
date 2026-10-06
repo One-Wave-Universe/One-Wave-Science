@@ -96,19 +96,19 @@ $$\text{Dark matter} = \text{ψ displacement from galaxy motion, persisted via E
 
 Not a particle. Not a new substance. NOT A SEPARATE PROBLEM.
 
-When a galaxy moves through the superfluid, it displaces ψ. The superfluid resists—that's pushback. The displaced field organizes into a compression ring around the moving galaxy. Electromagnetic coherence (C-319) determines whether this ψ displacement pattern persists or gets scrambled by local field chaos.
+When a galaxy moves through the superfluid, it displaces ψ. The superfluid resists—that's pushback. This pushback creates a compression ring around the moving galaxy. Electromagnetic coherence (C-319) determines whether this ψ displacement persists or gets scrambled by local field chaos.
 
 **The mechanism (pure physics of displacement):**
 1. Galaxy moves through superfluid lattice → displaces ψ locally
-2. Superfluid resists displacement → creates pressure gradient (pushback)
-3. Pressure gradient self-organizes into compression ring around galaxy's motion
-4. Compression ring produces measurable gravitational effects (g_wake)
-5. EM coherence (C-319) determines if displacement pattern persists or degrades
-6. At galactic scale, R_ring ~ R_gravity → ring's gravity is observable as "dark matter"
+2. Superfluid resists displacement → creates pressure gradient
+3. Pressure gradient IS the compression ring (pushback/resistance)
+4. Compression ring has measurable gravitational effects (g_wake)
+5. EM coherence (C-319) determines if ring persists or degrades
+6. At galactic scale, R_ring ~ R_gravity → ring's gravity IS what Standard Model calls "dark matter"
 
 **Proof:** Satellite validation shows satellites couple to the host's ψ displacement. The observed "dark matter" is retained ψ from the host galaxy's own motion through the superfluid.
 
-**Physics:** There is no dark matter particle. The ψ displacement created by a galaxy's motion, persisted through electromagnetic organization, is what Standard Model mislabels "dark matter." It's retained displacement from local motion, not inherited cascade, not mysterious—it's the galaxy's displacement organized by field coherence.
+**Physics:** There is no dark matter particle. The ψ displacement created by a galaxy's motion is what Standard Model mislabels "dark matter." It's retained displacement from local motion, not inherited cascade, not mysterious—it's the galaxy's displacement persisted by electromagnetic field coherence.
 
 ---
 
