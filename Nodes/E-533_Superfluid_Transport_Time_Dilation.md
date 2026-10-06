@@ -261,3 +261,34 @@ HYPOTHESIS:
 Derive \mathcal T(v,\Xi) from the exact A-114 characteristic roots plus the C-309/E-509 propagation constraints.
 
 Do not fit supernova data until that timing law is frozen.
+
+## Resistance and change interpretation — 2026-10-04
+
+Mark Adlard states the intended One-Wave interpretation: **time is resistance and change — how difficult it is for an excitation to move and reorganize through the proposed superfluid lattice.** This remains a physical hypothesis, not an established identity. Operationally, measure internal recurrence against an external reference while measuring translation and the field work required to carry and rebuild the same excitation. Resistance here may include reversible compression, strain and reorganization; it must not be reduced to the memory-damping coefficient gamma without a derivation.
+
+### Time, clock rate and the full response factors
+
+Time measures the order of events and duration between changes. A clock supplies a reproducible change against which another process can be compared. In the proposed One-Wave mechanism, the field response governs how quickly an excitation can complete its internal change while the lattice carries and rebuilds it.
+
+The factors below are the declared working inventory for this mechanism, not a demonstrated exhaustive physical timing law. They interact through one retained state; their contributions cannot be presumed independent or multiplied into a timing formula without derivation.
+
+| Factor | Physical role proposed | Observable needed |
+|---|---|---|
+| Internal recurrence | Repeated evolution supplies the clock ticks | Full-state phase/cycle count and recurrence error |
+| Motion and reconstruction | Translation carries and rebuilds the pattern relative to the field | Center trajectory, velocity, acceleration and deformation |
+| Compression and release | Displacement changes local stored energy and restoring bias | chi=-div(u), its gradient, front/rear balance and compression work |
+| Restoring response | The field pushes back after displacement | Force/energy gradient and response to a controlled perturbation |
+| Retained memory | Prior motion and state condition subsequent change | History-dependent response and retention parameters |
+| Rotation and phase | Internal cycles align, oppose and reorganize | Circulation, relative phases and phase response |
+| Boundary and weave coupling | Coupled geometry maintains and reconstructs the excitation | Boundary strain, role coupling and reversible closure work |
+| Dissipation and energy return | Energy is transferred, retained or reinjected | Input/output/storage/loss/reinjection ledger |
+| Propagation limits | Change reaches neighboring regions at finite rates | Dispersion, group speed and independently defined signal-front bound |
+| Measurement and reference | A particular clock and signal path define the comparison | Reference calibration, detector response and transport delays |
+
+Resistance means the field's response to changing and carrying the pattern. It includes reversible pushback, strain and reconstruction work even when dissipative drag is absent. Memory damping is one separate mechanism. Larger work per change does not automatically prove slower change: the dynamics and available energy must establish that relationship.
+
+Let nu_exc and nu_ref be internal and reference cycle rates read over the same comparison interval. The directly measured quantity is R=nu_exc/nu_ref. Normalize it against a declared baseline R0 for the same calibrated clocks to obtain T_measured=R/R0. A proper-time interpretation requires showing that the clock tracks the excitation's internal recurrence reproducibly and reproduces the required timing relations; it is not granted by calling a wave phase a tick.
+
+The prediction sought is a derived T(v,X_retained), with X_retained containing the relevant displacement, compression, memory, rotational, phase, boundary and energy-exchange state. Xi may summarize that state only after a validated reduction. The measured work needed to carry/rebuild the excitation and its internal cycle rate must be outputs of the same frozen dynamics. No new timing factor is inserted here.
+
+[The executed resistance/change probe](../solvers/TIME_RESISTANCE_PROBE.md) evolves the actual one-dimensional A-114 recurrence in nine packet cases and measures carrier frequency, group motion, decay and phase change along the moving packet. Five numerical controls pass. It does not yet implement a self-held clock or native 3D compression/weave dynamics. Increasing gamma can increase carrier frequency, and moving carrier phase does not reproduce the Lorentz factor. These results reject a simple damping/carrier-clock shortcut, while leaving the retained-field interpretation open. A bound periodic excitation, conserved work budget and derived field-difficulty Xi remain required before promoting a timing law.
