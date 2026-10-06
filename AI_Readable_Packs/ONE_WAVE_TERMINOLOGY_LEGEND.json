@@ -9,7 +9,8 @@
     "proton": "Three-Vortex Knot",
     "confinement": "Knot Lock",
     "neutrino": "Low-Coupling Return Mode",
-    "photon": "Propagating Light Mode",
+    "photon (as traveling object/carrier)": "Propagating Light Mode",
+    "photon (as detection/count/measurement)": "photon (retained — focal-point measurement)",
     "rest mass": "rest Mass Effect"
   },
   "geometry": "3D volumetric and sphere-like by default; 2D only cross-section, projection, or explicit negative-space layer",
@@ -21,7 +22,7 @@
     "displacement": "u"
   },
   "symbolic_architecture": {
-    "mirrored_alphabet_packet": "C\u00b1(n)=\u00b1(n,2n,2n+1)",
+    "mirrored_alphabet_packet": "C±(n)=±(n,2n,2n+1)",
     "rabbit_hop_branch": "b=|r|-2|n| in {0,1}",
     "fibonacci_word_convention": "W0=0, W1=01, Wk=W(k-1)W(k-2)",
     "golden_ratio_scope": "ordered Fibonacci-word length and branch-count convergence only",
