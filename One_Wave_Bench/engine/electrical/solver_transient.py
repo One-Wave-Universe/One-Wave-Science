@@ -254,11 +254,22 @@ class TransientCircuit:
                 prev_voltages[root] = 0.0
 
         # Apply gate voltages from gate_voltage_func (if provided)
+        # Build map of gate_id -> primary MOSFET that drives it
+        # (to avoid overwriting gate voltage when multiple MOSFETs share a gate)
         if gate_voltage_func is not None:
+            gate_drivers = {}  # gate_root -> mosfet_id
             for nmos in self.nmos:
-                prev_voltages[uf.find(nmos.gate)] = gate_voltage_func(nmos.id, time)
+                gate_root = uf.find(nmos.gate)
+                if gate_root not in gate_drivers:
+                    gate_drivers[gate_root] = nmos.id
             for pmos in self.pmos:
-                prev_voltages[uf.find(pmos.gate)] = gate_voltage_func(pmos.id, time)
+                gate_root = uf.find(pmos.gate)
+                if gate_root not in gate_drivers:
+                    gate_drivers[gate_root] = pmos.id
+
+            # Apply gate voltages for each unique gate
+            for gate_root, mosfet_id in gate_drivers.items():
+                prev_voltages[gate_root] = gate_voltage_func(mosfet_id, time)
 
         # Backward Euler with one nonlinear iteration
         for iteration in range(1):  # P0: one iteration is enough
@@ -335,31 +346,30 @@ class TransientCircuit:
                 b[row] += s.volts
 
 
-            # Op-amp buffers: model as resistive coupling from input to output
-            # For a unity buffer: V_out is pulled towards V_in through 1 ohm coupling resistor
-            # Plus output impedance to ground for current sourcing capability
-            # Note: opamps don't add MNA rows anymore (simplified model with just resistors)
+            # Op-amp buffers: unity gain buffer with output impedance
+            # Simplified model: V_out = V_in (via VCVS-like equation)
+            # Output impedance Rout models current sourcing limits
+            # Note: does not add additional MNA rows; uses existing node equations
             for op_idx, op in enumerate(self.opamps):
                 v_in_idx = gi(op.v_in)
                 v_out_idx = gi(op.v_out)
                 v_gnd_idx = gi(op.gnd)
 
-                # Input-to-output coupling resistor (1 ohm to model unity buffering)
+                # Coupling from input to output: unity gain with stiff coupling
+                # Use very small resistance to approximate VCVS: V_out ≈ V_in
                 if v_out_idx >= 0 and v_in_idx >= 0:
-                    g_io = 1.0 / 1.0  # 1 ohm internal coupling
-                    A[v_out_idx][v_out_idx] += g_io
-                    A[v_out_idx][v_in_idx] -= g_io
-                    A[v_in_idx][v_out_idx] -= g_io
-                    A[v_in_idx][v_in_idx] += g_io
+                    g_coupling = 1.0 / 0.001  # 1000 siemens - very stiff coupling
+                    A[v_out_idx][v_out_idx] += g_coupling
+                    A[v_out_idx][v_in_idx] -= g_coupling
+                    # Do NOT couple back to v_in; it's determined by resistor divider
 
-                # Output impedance to ground (Rout)
-                if op.Rout > 0 and v_out_idx >= 0:
+                # Output impedance to ground (Rout) provides current sourcing path
+                if op.Rout > 0 and v_out_idx >= 0 and v_gnd_idx >= 0:
                     g_out = 1.0 / op.Rout
                     A[v_out_idx][v_out_idx] += g_out
-                    if v_gnd_idx >= 0:
-                        A[v_out_idx][v_gnd_idx] -= g_out
-                        A[v_gnd_idx][v_out_idx] -= g_out
-                        A[v_gnd_idx][v_gnd_idx] += g_out
+                    A[v_out_idx][v_gnd_idx] -= g_out
+                    A[v_gnd_idx][v_out_idx] -= g_out
+                    A[v_gnd_idx][v_gnd_idx] += g_out
 
             # Inductors: backward Euler gives: V = L/dt * (I_new - I_old)
             # Treated as voltage source in MNA: adds a row
