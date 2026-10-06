@@ -68,41 +68,55 @@ class MagneticWakeCoupling:
         Compute C-319 magnetic enhancement factor β(r).
 
         Physical interpretation:
-        - β(r) > 1.0: magnetic organization enhances inherited wake coupling
-        - β(r) scales with: local field strength, lattice coherence, phase-lock stability
+        - β(r) calibrated from satellite data: β₀ = 0.2480 from M31/MW satellites
+        - C-319 modulates coherence of this baseline coupling
+        - f_EM factor (0.3 to 0.9) represents EM field organization quality
+        - Enhancement is MODEST: factor of 1.5-3.0x, not 10x
 
-        Empirical model:
-        - Inner region (r < 5 kpc): high coherence, β ~ 10-15 (magnetic focus)
-        - Middle region (5-20 kpc): intermediate, β ~ 5-10 (organized wake)
-        - Outer region (r > 20 kpc): lower coherence, β ~ 2-4 (extended plateau)
+        Basis from satellites:
+        - β₀ = 0.2480 (universal coupling strength)
+        - r_decay ~ 45-50 kpc (distance over which coupling falls off)
+        - f_EM = 0.927 (M31, high coherence) vs 0.362 (MW, chaotic disk)
 
-        The enhancement comes from lattice reorganization allowing more effective
-        directional coupling from parent cluster wake to galaxy orbital motion.
+        C-319 at galactic scale:
+        - Inner disk (r < 10 kpc): f_EM ~ 0.7-0.8 (organized spiral structure)
+        - Outer disk (10-30 kpc): f_EM ~ 0.4-0.6 (decreasing coherence)
+        - Halo (r > 30 kpc): f_EM ~ 0.3-0.5 (extended, noisy field)
         """
-        beta = np.zeros_like(radii_kpc, dtype=float)
+        # Base cascade parameter from satellites
+        beta_0 = 0.2480  # From satellite_galaxy_validator_em_coherence_fixed.py
+        r_decay = 50.0 if "milky" in self.galaxy_name.lower() else 46.0
+
+        # Cascade inheritance with distance decay (satellite-calibrated)
+        beta_base = beta_0 * np.exp(-radii_kpc / r_decay)
+
+        # C-319 EM coherence modulation (depends on galactic latitude/structure)
+        # Inner disk: better organized magnetic field from bulge
+        # Outer disk: more chaotic from spiral arm turbulence
+        f_em = np.zeros_like(radii_kpc, dtype=float)
 
         for i, r in enumerate(radii_kpc):
-            if r < 1.0:
-                # Very inner: magnetic focus at galactic center
-                # High field strength, strong alignment
-                beta[i] = 8.0 * self.magnetic_field_strength
-            elif r < 5.0:
-                # Bulge region: well-organized magnetic field and spiral arms
-                # Magnetic field + density wave structure create coherent wake coupling
-                beta[i] = 12.0 * self.magnetic_field_strength * (5.0 - r) / 4.0
-            elif r < 15.0:
-                # Disk region: intermediate coherence
-                # Magnetic arms align with density waves, moderate coupling
-                coherence = 1.0 - (r - 5.0) / 10.0  # Decreases outward
-                beta[i] = 6.0 * self.magnetic_field_strength * coherence
+            if r < 3.0:
+                # Bulge: highly organized, f_EM ~ 0.75-0.80
+                f_em[i] = 0.75 + 0.05 * (3.0 - r) / 3.0
+            elif r < 10.0:
+                # Inner disk: spiral structure helps organization, f_EM ~ 0.65-0.75
+                f_em[i] = 0.70 - 0.05 * (r - 3.0) / 7.0
+            elif r < 20.0:
+                # Middle disk: moderate spiral coherence, f_EM ~ 0.55-0.65
+                f_em[i] = 0.60 - 0.05 * (r - 10.0) / 10.0
             else:
-                # Outer halo: extended but lower coherence
-                # Magnetic field still organized but less dense
-                beta[i] = 2.5 * self.magnetic_field_strength * (1.0 + 20.0 / r)
+                # Outer disk/halo: low coherence, f_EM ~ 0.35-0.50
+                f_em[i] = 0.40 * np.exp(-(r - 20.0) / 30.0)
 
-        # Apply galaxy-specific alignment factors
-        beta *= self.rotation_axis_alignment
-        beta *= self.disk_inclination
+        # Apply galaxy-specific asymmetry: M31 more organized than MW
+        if "milky" in self.galaxy_name.lower():
+            f_em *= 0.85  # MW: disk is more chaotic (bar, spiral perturbations)
+        else:
+            f_em *= 0.95  # M31: bulge is older, more stable
+
+        # Combined: cascade inheritance modulated by EM coherence
+        beta = beta_base * (1.0 + f_em)  # Enhancement 1.3-1.8x
 
         return beta
 
