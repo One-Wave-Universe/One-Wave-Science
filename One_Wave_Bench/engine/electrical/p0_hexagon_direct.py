@@ -110,21 +110,21 @@ class P0HexagonDirect:
             "L_C": InductorState(id="L_C", current=0.0),
         }
 
-        v_mid = self.v_supply / 2.0
+        v_baseline = 0.50  # Biological baseline: 0.50V (not 2.5V)
         voltages = {
             "+V": self.v_supply,
             "GND": 0.0,
-            # Hex vertices all at midpoint initially
-            "a_pos": v_mid,
-            "b_pos": v_mid,
-            "c_pos": v_mid,
-            "a_neg": v_mid,
-            "b_neg": v_mid,
-            "c_neg": v_mid,
+            # Hex vertices all at baseline initially
+            "a_pos": v_baseline,
+            "b_pos": v_baseline,
+            "c_pos": v_baseline,
+            "a_neg": v_baseline,
+            "b_neg": v_baseline,
+            "c_neg": v_baseline,
             # Winding midpoints
-            "mid_A": v_mid,
-            "mid_B": v_mid,
-            "mid_C": v_mid,
+            "mid_A": v_baseline,
+            "mid_B": v_baseline,
+            "mid_C": v_baseline,
         }
 
         return circuit, {

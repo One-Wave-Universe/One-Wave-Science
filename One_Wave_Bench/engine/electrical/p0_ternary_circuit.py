@@ -168,32 +168,33 @@ class P0TernaryCircuit:
         ))
         circuit.add(Ground(node="GND"))
 
-        # Virtual ground: resistor divider feeding a unity buffer
-        # Passive divider: two equal resistors from +V to GND
-        r_div = 1000.0  # 1k resistor divider
+        # Virtual ground: resistor divider set to 0.50V (biological baseline)
+        # Divider creates 0.50V reference (9:1 ratio from 5V supply)
+        r_div_low = 100.0  # Lower impedance for stability
+        r_div_high = 900.0  # 9:1 divider → 0.50V from 5V supply
         circuit.add(Resistor(
             id="R_div_top",
             a="+V",
             b="vg_raw",
-            ohms=r_div
+            ohms=r_div_high
         ))
         circuit.add(Resistor(
             id="R_div_bottom",
             a="vg_raw",
             b="GND",
-            ohms=r_div
+            ohms=r_div_low
         ))
 
-        # TLE2426 or op-amp buffer (unity gain, ~1 ohm output impedance)
+        # TLE2426 or op-amp buffer (unity gain, very low output impedance)
         circuit.add(OpAmpBuffer(
             id="VG_buffer",
             v_in="vg_raw",
             v_out="0",
             gnd="GND",
             gain=1.0,
-            Rout=self.buffer_rout,
-            max_sourcing_mA=100.0,
-            max_sinking_mA=100.0
+            Rout=0.1,  # Ultra-low output impedance
+            max_sourcing_mA=500.0,
+            max_sinking_mA=500.0
         ))
 
         # Three phases
@@ -239,19 +240,19 @@ class P0TernaryCircuit:
             "L_V": InductorState(id="L_V", current=0.0),
             "L_W": InductorState(id="L_W", current=0.0),
         }
-        v_mid = self.v_supply / 2.0  # Midpoint voltage (virtual ground)
+        v_baseline = 0.50  # Biological baseline: 0.50V
         voltages = {
             "+V": self.v_supply,
             "GND": 0.0,
-            "0": v_mid,  # virtual ground starts at midpoint
-            "vg_raw": v_mid,
+            "0": v_baseline,  # virtual ground at 0.50V
+            "vg_raw": v_baseline,  # Divider sets 0.50V
             # Initialize winding and phase nodes for proper Vgs calculation
-            "mid_U": v_mid,      # Each phase initially at midpoint
-            "mid_V": v_mid,
-            "mid_W": v_mid,
-            "winding_U_return": v_mid,  # Winding returns initially at virtual ground
-            "winding_V_return": v_mid,
-            "winding_W_return": v_mid,
+            "mid_U": v_baseline,      # Each phase initially at virtual ground (0.50V)
+            "mid_V": v_baseline,
+            "mid_W": v_baseline,
+            "winding_U_return": v_baseline,  # Winding returns initially at virtual ground
+            "winding_V_return": v_baseline,
+            "winding_W_return": v_baseline,
         }
 
         return circuit, {
