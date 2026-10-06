@@ -430,3 +430,7 @@ Any imported text that conflicts with these files must be quarantined rather tha
 - `Internal_Proofs/00_PROOF_INDEX.md`
 
 Read gate and lifecycle from node YAML front matter. Do not reconstruct status from prose.
+
+## Astronomy and planetary metadata
+
+Read [JETSON_SCIENCE_ARCHIVE_ROUTES.md](JETSON_SCIENCE_ARCHIVE_ROUTES.md#astronomy-and-planetary-access--2026-10-06-utc) for executable Hubble/JWST, galactic archive, Mars rover and planetary probe routes, current verification boundaries and the repeatable health runner.
