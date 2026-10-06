@@ -161,6 +161,14 @@ back — this is UPDATED_43's required "return" output, given a precise,
 checkable definition directly from the equation of motion rather than a
 qualitative description.
 
+**Caveat confirmed by G-765:** this criterion is only valid while \(h\) is
+held fixed. If \(h(t)\) itself changes after a trajectory is marked
+captured, the barrier \(V(x^\ast;h)\) moves and a previously-captured
+trajectory can become uncaptured with no new energy added to it — the field
+did work when \(h\) changed, so nothing is violated, but the captured/escaped
+read must be re-evaluated at the new \(h\), not carried forward from the old
+one. G-765 Section 4 shows this exact transition numerically.
+
 ## 8. Phase: post-commitment ringdown frequency
 
 Linearizing about either well, \(V''(x_\pm)=3a(x_\pm)^2-b=3b-b=2b\), giving
@@ -175,6 +183,23 @@ decaying at rate \(\zeta\omega_0\) from the same damping term. This is the
 derived, well-defined quantity, distinct from the (undamped, unstable)
 behavior at Ground in Section 3.
 
+**This formula is derived at \(h=0\) only.** G-765 found by direct
+numerical measurement that a *biased* well's rest point \(x_{\rm well}(h)\)
+is not \(x_\pm\) — it is the shifted root of \(ax^3-bx-h=0\) — so its local
+curvature is \(V''(x_{\rm well}(h))=3a\,x_{\rm well}(h)^2-b\neq2b\) in
+general. Including the standard damped-oscillator correction, the general
+ringdown frequency is
+
+\[
+\omega_{\rm ring}=\sqrt{V''(x_{\rm well}(h))-(\zeta\omega_0)^2},
+\]
+
+which reduces to \(\sqrt{2b}\) exactly at \(h=0\) (where \(x_{\rm
+well}(0)=x_\pm\)) and matched a direct numerical measurement to four
+significant figures at \(h=-0.3\) in G-765. G-765 Section 5 flags this as
+checked numerically at one biased point, not yet proven in closed form for
+general \(h\).
+
 ## 9. Required-output checklist (UPDATED_43 Section 4)
 
 | Required output | This node's answer |
@@ -184,7 +209,7 @@ behavior at Ground in Section 3.
 | Partial/full excursion | position criterion, Section 6 (\(x^\ast\) vs \(x_\pm\)); cross-checked by the field criterion, Section 5 (\(h_c\)) |
 | Hysteresis | Section 5, exact closed form \(h_c=\sqrt{4b^3/27a}\) |
 | Return | Section 7, energy-vs-barrier criterion \(E(t)\lessgtr V(x^\ast;h)\) |
-| Phase | Section 8, \(\omega_{\rm well}=\sqrt{2b}\) post-commitment ringdown |
+| Phase | Section 8, \(\omega_{\rm ring}=\sqrt{V''(x_{\rm well}(h))-(\zeta\omega_0)^2}\), reducing to \(\sqrt{2b}\) at \(h=0\) |
 
 ## What this is not
 
@@ -224,3 +249,10 @@ exact equation across a grid of \((h,u(t))\) route assignments and confirm
 the gate sequence (Begin/Build/Hold/Build/Break/Loop) it measures lines up
 with the crossing/capture events derived here. That is a Yellow-to-Bronze
 promotion test this node sets up but does not perform.
+
+**Update:** G-765 performs this test on one concrete trajectory. The gate
+order was reproduced, the Loop-crossing time matched exactly, and two real
+corrections came out of it — both folded back into Sections 7 and 8 above.
+G-765's own Recommended Next Step is to extend the same test across a grid
+of \((h_0,\gamma)\) rather than the single program used so far, and to prove
+the Section 8 generalization in closed form for general \(h\).

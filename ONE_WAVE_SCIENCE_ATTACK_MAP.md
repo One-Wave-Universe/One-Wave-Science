@@ -61,6 +61,13 @@ Attack next:
 - define thresholds/hysteresis for route commitment;
 - test whether the same route grammar survives across electrical, magnetic, mechanical, and software realizations.
 
+Attacked: the first two items — see G-764 (closed-form five-state `K` map,
+inflection threshold `x*`, and exact hysteresis field `h_c` from the biased
+double-well test bench UPDATED_43 proposed) and G-765 (numerical validation
+against G-739's extractor, one real bug found and fixed, two corrections
+folded back into G-764). The cross-realization survival question is not
+attacked.
+
 ## D. Oscillation and six process gates
 
 Current structure:
@@ -74,6 +81,14 @@ Attack next:
 - derive gate boundaries from measured trajectories;
 - identify invariants that survive damping, noise, asymmetry, and scale changes;
 - distinguish geometric phase, timing phase, and state-history phase.
+
+Attacked (first item): G-765 runs G-739's real extractor against a numerically
+integrated trajectory of G-764's test bench and reports the actual gate
+sequence, a found-and-fixed calibration bug (boundary vs. commitment
+threshold), and a confirmed bias-dependent generalization of the ringdown
+frequency. Damping/noise/asymmetry/scale invariance and the phase-type
+distinction are not attacked — G-765 explicitly ran one bias program at one
+damping value, not a scan.
 
 ## E. Mirror behavior
 
