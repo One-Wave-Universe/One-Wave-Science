@@ -201,13 +201,13 @@ class KeystoneSolvers:
             pressure_max = float(np.max(np.abs(pressure_field)))
             ricci_max = float(np.max(np.abs(ricci_scalar)))
 
-            # Superfluid displacement signature from pressure gradient
-            # (What was called "dark matter" is actually displaced energy in the superfluid)
+            # Extended Compression Effect signature from pressure gradient (A-115 / Book 5 Ch1)
+            # (What was called "dark matter" is actually the compression ring from galaxy displacement)
             pressure_gradient = np.gradient(np.abs(pressure_field))
-            superfluid_displacement_signature = float(np.sum(np.abs(pressure_gradient)) / np.size(pressure_gradient))
+            extended_compression_signature = float(np.sum(np.abs(pressure_gradient)) / np.size(pressure_gradient))
 
-            # Superfluid expansion from pressure rarefaction (cosmic scale)
-            # (What was called "dark energy" is actually superfluid rarefaction)
+            # Superfluid expansion from pressure rarefaction (rarefaction pressure, cosmic scale)
+            # (What was called "dark energy" is actually low-pressure regions in the field)
             superfluid_expansion_magnitude = 0.68  # Empirical cosmological constant
 
             results = {
@@ -215,7 +215,7 @@ class KeystoneSolvers:
                 "pressure_field_max": pressure_max,
                 "ricci_scalar_max": ricci_max,
                 "gravity_acceleration_magnitude": 9.81,
-                "superfluid_displacement_signature": superfluid_displacement_signature,
+                "extended_compression_signature": extended_compression_signature,
                 "superfluid_expansion_magnitude": superfluid_expansion_magnitude,
                 "lattice_size": 32,
                 "einstein_error": float(einstein_result.get("total_error", 0.0)),
@@ -231,7 +231,7 @@ class KeystoneSolvers:
                 "pressure_field_max": 1.0,
                 "ricci_scalar_max": 0.05,
                 "gravity_acceleration_magnitude": 9.81,
-                "superfluid_displacement_signature": 0.27,
+                "extended_compression_signature": 0.27,
                 "superfluid_expansion_magnitude": 0.68,
                 "lattice_size": 32,
             }
@@ -853,10 +853,10 @@ class UnifiedSolverOrchestrator:
         # Define cascade tasks with dependencies
         cascade_tasks = [
             ("superfluid_expansion", lambda: CascadeSolvers.solve_dark_energy(gravity_results)),
-            ("superfluid_displacement", lambda: {
-                "name": "Superfluid Displacement (Previously 'Dark Matter')",
+            ("extended_compression_effect", lambda: {
+                "name": "Extended Compression Effect (Previously called 'Dark Matter')",
                 "status": "success",
-                "prediction": gravity_results.get("superfluid_displacement_signature", 0.27),
+                "prediction": gravity_results.get("extended_compression_signature", 0.27),
                 "experimental_value": 0.27,
                 "error_percent": 0.0,
             }),
@@ -902,7 +902,7 @@ class UnifiedSolverOrchestrator:
         # Validation checks
         validation_checks = [
             ("Superfluid Expansion", all_results.get("superfluid_expansion", {})),
-            ("Superfluid Displacement", all_results.get("superfluid_displacement", {})),
+            ("Extended Compression Effect", all_results.get("extended_compression_effect", {})),
             ("Neutrino Masses", all_results.get("neutrino_masses", {})),
             ("CP Violation", all_results.get("cp_violation", {})),
             ("Baryon Asymmetry", all_results.get("baryon_asymmetry", {})),

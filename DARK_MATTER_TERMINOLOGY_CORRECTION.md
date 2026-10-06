@@ -6,88 +6,101 @@
 
 **Old interpretation:** Dark matter is a separate exotic particle species (~85% of universe's matter).
 
-**Correct interpretation:** 
-- Dark matter observations are manifestations of **displaced superfluid energy**
-- What we measure as "dark matter" is the superfluid's pressure response to mass concentrations
-- It is NOT a separate particle—it is the field itself in a displaced state
-- The superfluid can be compressed (high pressure → apparent dark matter) or rarefied (low pressure → apparent dark energy)
+**CORRECT interpretation (from A-115 and Book 5 Ch1):**
+- **Dark matter = Extended Compression Effect** (official One-Wave term)
+- **Mathematically: g_wake** (the wake contribution to gravitational acceleration)
+- **Physically: compression ring** from galaxy displacement through superfluid field
+- **Pressure relation: P_displacement = volume_displaced**
+- It is NOT a separate particle—it is the field's pressure response to displacement
+- No cascade inheritance, no special mechanism—just: displacement creates pressure
+
+## Repository Authority
+
+The correct definition comes directly from:
+1. **A-115 Unified Compression Field** (Section 3: Extended Compression / Dark-Matter View)
+2. **Book 5, Chapter 1: Galaxies and the Extended Compression Effect**
+
+Both define dark matter as the "Extended Compression Effect" (g_wake) from galaxy motion through the superfluid field.
 
 ## Terminology Mapping (Systematic Replacement)
 
 ### Core Terms
 
-| Old Terminology | New Terminology | Physical Meaning |
+| Old Terminology | NEW Official Term | Physical Meaning |
 |---|---|---|
-| dark matter | displaced superfluid energy | Compression of the superfluid field around masses |
-| dark matter halo | extended displaced energy region | The superfluid's extended response to galaxy mass |
-| dark matter particle | (remove entirely) | No such thing; only field configurations |
-| dark energy | superfluid expansion / superfluid rarefaction | Low-pressure regions where field expands |
-| dark energy acceleration | superfluid expansion effect | The field's tendency to flow from high→low pressure |
+| dark matter | **Extended Compression Effect** | Compression ring (g_wake) from galaxy displacement |
+| dark matter halo | **compression ring** or **g_wake region** | Extended compression from galaxy motion |
+| dark matter particle | (remove entirely) | No such thing; only pressure field response |
+| missing mass | **extended compression field** | Field's response at galactic scale (R_ring ~ R_gravity) |
 
-### Descriptive Phrases
+### Variable Names (Consistent Replacement)
 
-| Old | New | Context |
+| Old Pattern | NEW Pattern | Context |
 |---|---|---|
-| "dark matter explained by..." | "displaced superfluid energy arises from..." | When explaining observations |
-| "dark matter halo surrounds..." | "extended displaced energy surrounds..." | Spatial distribution |
-| "dark matter makes up..." | "displaced superfluid energy comprises..." | Mass/energy budget |
-| "missing dark matter" | "unexpected superfluid displacement" | When observations diverge from predictions |
+| `dark_matter_*` | `extended_compression_*` | Measures of compression effect strength |
+| `dark_matter_volume` | `extended_compression_volume` | Volume of high-pressure regions |
+| `dark_matter_halo` | `extended_compression_effect` | Name in data structures |
+| `dark_matter_signature` | `extended_compression_signature` | Observable measure of effect |
+| `dm2_*` | Keep as-is | Standard physics notation for neutrino masses |
 
-### Code/Variable Names
+### Descriptive Phrases in Comments
 
-| Old | New |
+| Old | NEW |
 |---|---|
-| `dark_matter_signature` | `superfluid_displacement_signature` |
-| `dark_matter_view` | `displaced_superfluid_energy_view` |
-| `dark_energy_magnitude` | `superfluid_expansion_magnitude` |
-| `dm2_*` (neutrino mass-squared) | Keep as-is; this is standard physics notation |
+| "dark matter halo" | "Extended Compression Effect" or "compression ring (g_wake)" |
+| "displaced superfluid energy" | "Extended Compression Effect" or "compression ring" |
+| "cascade-inherited displacement" | "compression ring from galaxy motion" |
+| "superfluid displacement signature" | "extended_compression_signature" |
 
-## Files Requiring Comprehensive Fix
+## Why This Terminology
 
-### Critical Documentation (Highest Priority)
-- [ ] DARK_MATTER_COMPLETE_NODE_CHAPTER_REFERENCE.md
-- [ ] Books/Book5_Macro/Book5_Ch1_Galaxies_and_Dark_Matter.md
-- [ ] PHASE_2_COMPREHENSIVE_VALIDATION_REPORT.md
-- [ ] GRAVITY_WAKE_NESTING_ROTATION_CASCADE.md
-- [ ] README.md
+The official term "Extended Compression Effect" appears in:
+- **A-115, Section 3, line 152:** "In One-Wave this is the **Extended Compression Effect**, not unseen particulate matter."
+- **Book 5 Ch1, line 51:** "The **Extended Compression Effect** is the One-Wave name for the 'extra' gravity conventionally attributed to dark matter"
 
-### Node Documentation
-- [ ] Nodes/A-115_Unified_Compression_Field.md
-- [ ] Nodes/C-323_Four_Forces_as_Displacement_Regimes.md
-- [ ] Nodes/D-415_Hexagonal_Lattice_Interaction_Dynamics/README.md
+Using this terminology ensures consistency with the authoritative repository sources and prevents confusion with incorrect interpretations (cascade inheritance, generic superfluid energy, etc.).
 
-### Solver Files (Python)
-- [ ] solvers/galaxy_rotation_cascade_wake_validator.py ✓ (DONE)
+## Physics Summary (A-115 / Book 5 Ch1)
+
+```
+When galaxy moves through superfluid ψ field:
+  
+  Displacement creates compression ring around moving structure
+  Compression creates pressure field (like water wave around boat)
+  
+  At atomic scale: R_ring << R_gravity (negligible)
+  At galactic scale: R_ring ~ R_gravity (measurable)
+  
+  Observed in: rotation curves, lensing, structure formation
+  Mathematical form: g_0 = g_local + g_wake
+  
+  Pressure = volume displaced (P = V_displaced)
+```
+
+## Files Corrected
+
+### Reference Documents
+- [x] DARK_MATTER_COMPLETE_NODE_CHAPTER_REFERENCE.md (FIXED)
+
+### Solver Files
+- [x] solvers/unified_phase_solver.py (FIXED)
+- [x] solvers/standard_model_mysteries_unified.py (FIXED)
+- [x] solvers/galaxy_rotation_cascade_wake_validator.py (FIXED)
+- [x] solvers/algorithm_zero_emergence.py (FIXED)
+- [x] Nodes/D-415_Hexagonal_Lattice_Interaction_Dynamics/simulate_d415.py (FIXED)
+
+### Remaining Files (follow same pattern)
 - [ ] solvers/galaxy_rotation_validator.py
 - [ ] solvers/galaxy_rotation_inherited_rotation_field.py
 - [ ] solvers/galaxy_rotation_constant_inherited_velocity.py
-- [ ] solvers/algorithm_zero_emergence.py
 - [ ] solvers/algorithm_zero_galaxy_validation_comprehensive.py
-- [ ] solvers/unified_phase_solver.py ✓ (DONE)
-- [ ] solvers/standard_model_mysteries_unified.py ✓ (DONE)
 - [ ] solvers/neutrino_mass_solver.py
 - [ ] solvers/three_body_solver.py
 - [ ] solvers/w2_gravity_emergence.py
 - [ ] solvers/satellite_galaxy_validator_clean_systems.py
 - [ ] solvers/satellite_galaxy_velocity_validator.py
-
-### Status/Summary Documents
-- [ ] STATUS_OCTOBER_5_2026_FINAL.md
-- [ ] PHASE_2_DIAGNOSTIC_BREAKTHROUGH.md
-- [ ] ALGORITHM_ZERO_STATUS.md
-- [ ] INTEGRATION_SESSION_SUMMARY_OCT5_2026.md
-
-## Execution Plan
-
-**Phase 1:** Fix all critical documentation (DARK_MATTER_COMPLETE_NODE_CHAPTER_REFERENCE.md first, as it's the canonical reference)
-
-**Phase 2:** Fix all node documentation files
-
-**Phase 3:** Systematically go through all solver Python files
-
-**Phase 4:** Fix all status/summary documents
-
-**Phase 5:** Verify no remaining "dark matter" references (except in historical context or Standard Model neutrino mass notation)
+- [ ] Books/Book5_Macro/Book5_Ch1_Galaxies_and_Dark_Matter.md
+- [ ] Status documents (STATUS_*, PHASE_2_*, ALGORITHM_*, INTEGRATION_*)
 
 ## Verification Command
 
@@ -95,18 +108,15 @@
 grep -r "dark.matter\|dark_matter\|Dark Matter\|Dark matter" /home/claude/one-wave-science \
   --include="*.py" --include="*.md" \
   | grep -v "dm2_" \
-  | grep -v "DARK_MATTER_TERMINOLOGY_CORRECTION"
+  | grep -v "Extended Compression Effect" \
+  | grep -v "DARK_MATTER_TERMINOLOGY_CORRECTION" \
+  | grep -v "^Binary"
 ```
 
-Should return: 0 results (except for Standard Model constants like dm2_31)
-
-## Why This Matters
-
-This correction aligns the codebase with the **fundamental One-Wave insight**: there are no separate exotic particles. All phenomena emerge from a single superfluid field and its configurations. What we observe as "dark matter" is simply displaced superfluid energy—measurable pressure deviations in the field.
-
-This is not a cosmetic change. It reflects the correct physics and ensures the entire framework is internally consistent.
+Should return: Only references in context of Standard Model conventions or comparisons.
 
 ---
 
 **Implementation Date:** October 5, 2026  
-**Directive:** All nodes, chapters, solvers must reflect this terminology by end of session
+**Authority:** A-115 and Book 5 Ch1 (authoritative repository definitions)  
+**Status:** In progress — correcting all references across codebase

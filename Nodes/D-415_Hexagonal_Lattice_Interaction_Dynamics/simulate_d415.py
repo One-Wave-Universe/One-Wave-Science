@@ -3,9 +3,9 @@
 
 One-Wave only:
   - bond objects are restoring responses (A-105), not forces
-  - gravity view = local compression gradient
-  - displaced superfluid energy = extended / wake compression of the same field
-    (What was called "dark matter" is actually this superfluid displacement)
+  - gravity view = local compression gradient (g_local)
+  - Extended Compression Effect = wake compression from motion (g_wake, A-115/Book 5 Ch1)
+    (What was called "dark matter" is actually this compression ring from displacement)
   - no second substance, no force-carriers, no Standard Model interaction list
 
 Dependencies: C-323, A-115, E-532, E-531, D-408, D-412

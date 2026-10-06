@@ -45,7 +45,7 @@ class FieldConfiguration(Enum):
     DIPOLE_VORTEX = "Dipole-vortex (Meson)"
     TRIPOLE_VORTEX = "Tripole-vortex (Baryon)"
     ROTATION_MODE = "Rotation-mode (Gauge boson)"
-    HIGH_PRESSURE = "High-pressure region (Displaced superfluid energy)"
+    HIGH_PRESSURE = "High-pressure region (Extended Compression Effect / g_wake)"
     LOW_PRESSURE = "Low-pressure region (Superfluid expansion)"
     PHASE_BOUNDARY = "Phase-boundary resonance (Higgs)"
     UNKNOWN = "Unknown configuration"
@@ -150,13 +150,13 @@ class PressureField:
     def identify_high_pressure_regions(self, P: np.ndarray,
                                       threshold: float = 0.5) -> np.ndarray:
         """
-        Identify high-pressure regions (displaced superfluid energy).
+        Identify high-pressure regions (Extended Compression Effect / g_wake).
 
-        High P regions are compressions in the superfluid. They confine
-        field structure and produce gravitational effects. What was called
-        "dark matter" is actually this displaced superfluid energy—not a
-        separate particle species, but the superfluid's pressure response
-        to mass concentrations.
+        High P regions are compressions in the superfluid from displacement.
+        They confine field structure and produce gravitational effects.
+        What was called "dark matter" is the Extended Compression Effect—not a
+        separate particle species, but the field's pressure response
+        to galaxy displacement (A-115 / Book 5 Ch1).
         """
         high_P_mask = P > threshold
         return high_P_mask
@@ -286,7 +286,7 @@ class FieldConfigurationAnalyzer:
             "mesons_present": len(vortices[2]) > 0,
             "baryons_present": len(vortices[3]) > 0,
             "waves": waves,
-            "dark_matter_volume": np.sum(high_P_regions),
+            "extended_compression_volume": np.sum(high_P_regions),
             "dark_energy_volume": np.sum(low_P_regions),
             "scale": scale.value[0],
             "field_energy": float(np.sum(np.abs(psi)**2)),
@@ -315,8 +315,8 @@ class GravityFromPressure:
         """
         Calculate Ricci curvature from pressure field.
 
-        High-pressure regions (displaced superfluid energy): positive curvature (attractive)
-        Low-pressure regions (superfluid expansion): negative curvature (repulsive)
+        High-pressure regions (Extended Compression Effect): positive curvature (attractive)
+        Low-pressure regions (Superfluid expansion): negative curvature (repulsive)
         """
         # Ricci curvature ∝ ∇²P (second derivative of pressure)
         laplacian_P = ndimage.laplace(P)
@@ -350,7 +350,7 @@ class GravityFromPressure:
         Predict galaxy rotation velocity from pressure field.
 
         This should match observed galaxy rotation curves.
-        No dark matter particles needed—just pressure field.
+        No dark matter particles needed—just pressure field (Extended Compression Effect).
 
         v(r) = sqrt(r * a_grav(r)) where a_grav from pressure gradient
         """
@@ -402,7 +402,7 @@ class UnifiedPhaseSolver:
         Identifies:
         - Phase state (Plasma, Gas, Solid, Liquid, Superfluid)
         - Field configurations (particles, forces)
-        - Pressure field (displaced superfluid energy, superfluid expansion)
+        - Pressure field (Extended Compression Effect, superfluid expansion)
         - Gravity from pressure gradients
         """
         # Calculate pressure field
@@ -509,7 +509,7 @@ def generate_report(solver_results: Dict) -> str:
         if config['baryons_present']:
             report += f"  - Baryons: {config['vortices'][3]} tripole-vortices\n"
 
-        report += f"Dark matter volume: {config['dark_matter_volume']}\n"
+        report += f"Extended compression volume: {config['extended_compression_volume']}\n"
         report += f"Dark energy volume: {config['dark_energy_volume']}\n"
         report += f"Mean gravitational acceleration: {result['gravity']['mean_acceleration']:.6e}\n\n"
 
@@ -548,7 +548,7 @@ if __name__ == "__main__":
     print(f"\nField configurations found:")
     print(f"  Extrema (leptons): {result['field_configuration']['extrema_count']}")
     print(f"  Photons: {result['field_configuration']['vortices'][1]}")
-    print(f"  Dark matter volume: {result['field_configuration']['dark_matter_volume']}")
+    print(f"  Extended compression volume: {result['field_configuration']['extended_compression_volume']}")
     print(f"  Dark energy volume: {result['field_configuration']['dark_energy_volume']}")
 
     print("\n✓ Phase 5 solver initialized and tested")

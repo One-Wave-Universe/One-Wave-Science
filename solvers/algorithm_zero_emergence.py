@@ -408,11 +408,11 @@ class EmergenceEncyclopedia:
                     dependent_on=["galactic_wake", "magnetic_field"],
                 ),
                 EmergentProperty(
-                    name="dark_matter_halo",
-                    standard_name="Dark Matter Distribution",
+                    name="extended_compression_effect",
+                    standard_name="Extended Compression Effect (Compression Ring / g_wake)",
                     origin=PropertyOrigin.PRESSURE_GRADIENT,
                     scale="Galactic",
-                    parent_origin="Extended magnetic wake",
+                    parent_origin="Compression ring from galaxy displacement",
                     emergence_mechanism="High-pressure regions confine field",
                     observable_signature="Gravitational lensing, rotation curves",
                     predicted_value=1e12,  # Solar masses
