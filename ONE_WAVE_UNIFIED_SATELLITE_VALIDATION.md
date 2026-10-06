@@ -21,9 +21,9 @@
 
 **The compression ring is the superfluid's pushback against motion.**
 
-When a structure moves through the superfluid lattice, it displaces ψ. The field resists this displacement—that's the pushback. The displaced field organizes into a compression ring around the moving structure because the superfluid is compressed on one side and released on the other, creating a structured pressure gradient.
+When a structure moves through the superfluid lattice, it displaces ψ. The superfluid resists—that's the pushback. This pushback creates a compression ring around the moving structure. The superfluid is compressed on one side and released on the other, creating a pressure gradient.
 
-$$\text{Compression ring} = \text{Superfluid pushback + organized pressure gradient from displacement}$$
+$$\text{Compression ring} = \text{Superfluid pushback (pressure gradient from displacement)}$$
 
 **The scaling difference:**
 
@@ -84,7 +84,7 @@ $$\beta_{eff}(r) = \beta_0 \times e^{-r/r_{decay}} \times f_{EM}(location)$$
 
 **No new physics.** Same Extended Compression Effect model. EM field organization just determines signal strength (C-319).
 
-This is why C-319 is load-bearing: magnetic lattice reorganization enables the compression ring mechanism to persist and couple to satellites.
+This is why C-319 is load-bearing: electromagnetic field coherence determines whether the compression ring persists and couples to satellites.
 
 ---
 
