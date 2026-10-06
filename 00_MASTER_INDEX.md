@@ -403,6 +403,11 @@ See `PRESENTATION_ARCHITECTURE.md` and `BOOK_SYSTEM_MASTER_PLAN.md`.
 The [Phase 5 reproduction audit](Internal_Proofs/Boundary_Coupling_and_Phase5_Audit.md) withdraws target-dependent numerical prediction claims. C-318's architectural definition remains distinct from its unresolved numerical spectrum. C-322 and Chapters 14–15 now use the no-penetration boundary rule. Historical chapter PDFs and pinned versions predate this correction; current Markdown nodes/chapters are authoritative.
 
 Use the [science data runbook](One_Wave_Bench/data/SCIENCE_DATA_RUNBOOK.md) for CERN/GWOSC snapshots and MAST/HEASARC/Gaia clients. The registry defines routes; receipts state what actually returned.
+Additional node with a nonstandard ID (retained from the existing master index):
+
+| Node | Name | Definition / source | Gate |
+|---|---|---|---|
+| PHASE_5_HADRON_EXTENSION_VERIFIED | Phase 5 Hadron Spectrum Extension — Verification by Consequence | Applied Hadron Physics verification: radius scaling (R ∝ m_scale^-0.05), boundary-tension weave parameters (σ_T, κ_T), nucleon mass predictions (2.6% and 5.4% error). Framework verified for nucleons; extension to strangeness and light mesons still open. Source: `Nodes/PHASE_5_HADRON_EXTENSION_VERIFIED.md`. | YELLOW |
 
 <!-- AUTO-NODE-REGISTRY:START -->
 ## Auto-synchronized canonical node registry supplement
@@ -426,7 +431,7 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
 | E-533 | Superfluid Transport Time Dilation | Propagation / Time-Transport Hypothesis. Source: `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`. | YELLOW |
-| E-534 | Settling Dynamics | Applied Dynamics and Stability — frequency-dependent settling times in oscillating systems; bridge between harmonic theory and coherence timescales. Source: `Nodes/E-534_Settling_Dynamics.md`. | YELLOW |
+| E-534 | Settling Dynamics | Applied Dynamics and Stability. Source: `Nodes/E-534_Settling_Dynamics.md`. | YELLOW |
 | G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
 | G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
 | G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
@@ -472,5 +477,5 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-766 | Discrete Lattice Dispersion and Octave-Emergence Proof | Exploratory Proof Packet / Lattice Dispersion / Scale Testing. Source: `Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md`. | YELLOW |
 | G-767 | Measured Spectrum Lattice Phase Map | Spectral Field Mapping / Open Data / Cross-Scale Lattice Test. Source: `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`. | YELLOW |
 | G-768 | Anisotropic Signed-Axis Spectrum and Rotating-Axis Scale Test | Analytic lattice result / mode selection / renormalization boundary. Source: `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`. | YELLOW |
-| PHASE_5_HADRON_EXTENSION_VERIFIED | Phase 5 Hadron Spectrum Extension — Verification by Consequence | Applied Hadron Physics verification: radius scaling (R ∝ m_scale^-0.05), boundary-tension weave parameters (σ_T, κ_T), nucleon mass predictions (2.6% and 5.4% error). Framework verified for nucleons; extension to strangeness and light mesons still open. Source: `Nodes/PHASE_5_HADRON_EXTENSION_VERIFIED.md`. | YELLOW |
+| G-769 | C3 Path Rotation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-769_Path_Rotation.md`. | BROWN |
 <!-- AUTO-NODE-REGISTRY:END -->
