@@ -165,10 +165,28 @@ explicit redshift law. Result: the full-replacement-of-expansion sub-claim is
 excluded by outside data (SNe Ia time dilation, Tolman surface brightness);
 BAO and CMB T(z) remain open requirements rather than independent failures.
 Section 6 of E-533 gives the structural reason no recalibration of E-528's
-coefficient can fix the time-dilation result, and Section 8 gives the
+coefficient can fix the time-dilation result, and Section 8 gave the
 minimum bar a revised mechanism would need to clear. This does not close the
 section -- it is now a revise-or-drop decision on the specific sub-claim, not
 an unexamined "nonstandard expansion idea."
+
+**E-534 attempted Section 8's bar directly** and found it structurally
+unsatisfiable for any homogeneous, isotropic, locally-Lorentz-invariant
+static-space model (a derived no-go theorem, not a failed guess), with one
+narrow route left open: deriving expansion-like spatial time-dependence from
+the compression field's own dynamics rather than importing it as an external
+postulate.
+
+**E-535 attempted that route.** A-115's own field equation, restricted to a
+homogeneous dilation mode of the same displacement field already used for
+gravity/Mass Effect, reduces (via a checked collective-coordinate
+derivation, not a hand-wave) to a driven oscillator for a scale factor
+\(a(t)\) that produces genuine, non-artifact time dilation matched to
+redshift -- resolving E-534's theorem by deriving real expansion instead of
+denying it. This is `PROPOSED_BUILD`, not adopted: it directly contradicts
+E-528's Hard Constraint and Book 5 Ch4's "no expansion variable" rule, which
+E-535 does not edit, and it has not been checked against the actual
+measured expansion history (matching real \(H(z)\) data is unattempted).
 
 Original attack instructions (executed, kept for the record):
 

@@ -253,6 +253,11 @@ add further unmet requirements rather than independent failures.
 
 ## 8. What would actually have to be true for a revised version to survive
 
+**Update: items 1-2 below were attempted in E-534 and found structurally
+unsatisfiable for the general static-space case (a no-go theorem, not an
+unmet target) — see E-534 for the derivation and the one route it leaves
+open (Section 6 there).**
+
 Not a proposal — a specification of the minimum bar, so future work is not
 spent on variants that cannot clear it:
 
