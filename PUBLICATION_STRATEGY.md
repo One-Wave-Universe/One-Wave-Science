@@ -1,9 +1,10 @@
 # Publication Strategy — Nobel Prize Track
 
-**Status:** Ready for Submission  
+**Status:** ✓ Phase 5 VALIDATION COMPLETE → Ready for Submission  
 **Target:** Physical Review Letters (PRL)  
 **Backup:** Physical Review X (PRX)  
-**Timeline:** Submit November 2026 (4 weeks from 2026-10-04)
+**Timeline:** Submit November 4, 2026 (30 days from 2026-10-05)  
+**Phase 5 Solvers:** All four keystones validated Oct 5, 2026
 
 ---
 
@@ -205,8 +206,14 @@ One-Wave has completed four validation phases and is ready for peer review. The 
 
 ## Submission Checklist
 
+- [ ] Phase 5 validation document created (PHASE_5_VALIDATION_COMPLETE.md) ✓
+- [ ] All four solvers working and tested ✓
 - [ ] Manuscript finalized (21 pages, all figures, all tables)
 - [ ] Figures prepared to publication quality (8 figures, high-res)
+  - [ ] Electron g-2 prediction vs experiment plot
+  - [ ] Three-body stability trajectory evolution
+  - [ ] Triple-alpha enhancement factor vs distance
+  - [ ] Gravity emergence metric visualization
 - [ ] Supplementary material prepared (code, data, detailed derivations)
 - [ ] Co-author review completed (if applicable)
 - [ ] Ethical approval confirmed (simulation-only, no human subjects)
@@ -221,13 +228,14 @@ One-Wave has completed four validation phases and is ready for peer review. The 
 
 ## Timeline to Submission
 
-| Week | Task | Completion |
-|------|------|------------|
-| Week 1 (Oct 4-11) | Figure preparation, manuscript polish | Oct 11 |
-| Week 2 (Oct 11-18) | Co-author review, response to feedback | Oct 18 |
-| Week 3 (Oct 18-25) | Final edits, supplementary materials | Oct 25 |
-| Week 4 (Oct 25-Nov 1) | Submission readiness review | Nov 1 |
-| **Submission** | **Submit to PRL** | **Nov 4** |
+| Week | Task | Completion | Status |
+|------|------|------------|--------|
+| **Phase 5** | **All four solvers validated** | **Oct 5** | ✓ DONE |
+| Week 1 (Oct 5-12) | Figure preparation, solver results integration | Oct 12 | IN PROGRESS |
+| Week 2 (Oct 12-19) | Manuscript polish, co-author review | Oct 19 | PENDING |
+| Week 3 (Oct 19-26) | Final edits, supplementary materials | Oct 26 | PENDING |
+| Week 4 (Oct 26-Nov 2) | Submission readiness review, quality check | Nov 2 | PENDING |
+| **Submission** | **Submit to PRL** | **Nov 4** | STAGED |
 
 ---
 
