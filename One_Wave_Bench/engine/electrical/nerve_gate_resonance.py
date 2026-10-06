@@ -22,14 +22,18 @@ import math
 from datetime import datetime
 
 
-class SixStepPhase(Enum):
-    """Six-step recursive choice algorithm phases."""
-    BEGIN = 0
-    MOVE_1 = 1
-    HOLD = 2
-    MOVE_2 = 3
-    BREAK = 4
-    REPEAT = 5
+class AlgorithmZeroPhase(Enum):
+    """Algorithm Zero six-step recursive choice structure."""
+    BEGIN = 0      # Initialize, gather options
+    MOVE_1 = 1     # First binary choice
+    HOLD = 2       # Commit choice, establish reference
+    MOVE_2 = 3     # Verify or pivot
+    BREAK = 4      # Resolve, close loop
+    REPEAT = 5     # Recurse to next level
+
+
+# Legacy alias for compatibility
+SixStepPhase = AlgorithmZeroPhase
 
 
 @dataclass
@@ -77,38 +81,48 @@ class NerveSignals:
 
 @dataclass
 class VirtualBusState:
-    """Unified system state accessible to all control levels."""
+    """Unified system state accessible to all control levels.
+
+    Implements four-views-up / four-actions-down architecture with M-level recursion:
+    - M1 (Point): Individual node voltage (V_0)
+    - M2 (Path): Gate voltage control (three phases)
+    - M3 (Field): Lattice resonance and energy circulation
+    - M4 (Supervisor): Six-step Algorithm Zero orchestration
+    """
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     time_us: float = 0.0
 
-    # Gate state
+    # M1: Point-level (Node voltages)
+    v_0: float = 2.5  # Virtual ground voltage (point center)
+    v_0_prev: float = 2.5  # Previous V_0 (for derivative)
+
+    # M2: Path-level (Gate control addressing)
     gate_voltages: Dict[str, float] = field(default_factory=dict)  # {mosfet_id: voltage}
     gate_frequencies: Dict[str, float] = field(default_factory=dict)  # {phase: omega}
 
-    # Resonance state
+    # M3: Field-level (Resonance and energy state)
     resonance: ResonanceState = field(default_factory=ResonanceState)
-
-    # Nerve signals
-    nerve: NerveSignals = field(default_factory=NerveSignals)
-
-    # Field measurements
-    v_0: float = 2.5  # Virtual ground voltage
-    v_0_prev: float = 2.5  # Previous V_0 (for derivative)
     field_amplitude: float = 0.0  # Rotating field amplitude
 
-    # Six-step phase (supervisor level)
-    current_step: SixStepPhase = SixStepPhase.BEGIN
+    # M4: Supervisor-level (Algorithm Zero recursion)
+    current_step: AlgorithmZeroPhase = AlgorithmZeroPhase.BEGIN
     step_counter: int = 0
+
+    # Cross-level nerve signals (feedback flowing up from M1 → M4)
+    nerve: NerveSignals = field(default_factory=NerveSignals)
 
 
 class ThreeMirroredGate:
     """
-    Three-phase gate with mirrored control law.
+    Three-phase gate with mirrored control law using Algorithm Zero structure.
 
     Single control law mirrored at three 120° phase offsets:
     - U phase: 0°
     - V phase: 120°
     - W phase: 240°
+
+    Each phase implements Algorithm Zero HOLD state with circle-of-fifths-like
+    asymmetric offset windows to preserve identity through transposition.
     """
 
     def __init__(self, phase_offset_deg: float = 0.0):
@@ -117,9 +131,21 @@ class ThreeMirroredGate:
             phase_offset_deg: Phase offset in degrees (0, 120, or 240)
         """
         self.phase_offset = math.radians(phase_offset_deg)
-        self.v_center = 2.5  # Center voltage (midpoint)
-        self.v_max = 5.0
-        self.v_min = 0.0
+        # Biological nerve signaling: -70mV resting → +30mV action potential
+        # Operating range: 0 to ~100mV (millivolts), matching biological scales
+        self.v_center = 0.05  # 50 mV center (millivolt scale) = Algorithm Zero CENTER
+        self.v_max = 0.10    # 100 mV maximum (biological resting-to-action range)
+        self.v_min = 0.0     # 0 mV minimum
+
+        # Biological asymmetric window (major-key like stability)
+        # Resting range: deeper floor (hyperpolarization) to restrained ceiling (depolarization)
+        self.v_floor = 0.02  # 20 mV floor (hyperpolarized baseline)
+        self.v_ceiling = 0.08  # 80 mV ceiling (action potential approach)
+
+        # PID gains tuned for biological millivolt scale
+        self.K_p = 0.001  # Proportional gain (mV scale, very sensitive)
+        self.K_i = 0.0001  # Integral gain (accumulation)
+        self.K_d = 0.0005   # Derivative gain (rate response)
 
     def compute_gate_voltage(self,
                             proportional: float,
@@ -129,25 +155,26 @@ class ThreeMirroredGate:
         """
         Compute mirrored gate voltage for this phase.
 
-        Control law:
+        Control law (Algorithm Zero HOLD state):
           V_gate = V_center + K_p*freq_error + K_i*integral + K_d*derivative
 
         Then rotate by phase_offset to create three-phase mirror.
+        Asymmetric window (circle-of-fifths like) preserves control identity.
         """
-        K_p = 0.1  # Proportional gain (frequency tuning)
-        K_i = 0.01  # Integral gain (frequency lock)
-        K_d = 0.05  # Derivative gain (damping)
+        # Compute control signal (proportional + integral + derivative)
+        control = self.K_p * frequency_error + self.K_i * integral + self.K_d * derivative
 
-        # Compute control signal
-        control = K_p * frequency_error + K_i * integral + K_d * derivative
-
-        # Apply phase rotation (mirror the response)
+        # Apply phase rotation (mirror the response across three phases)
         phase_response = control * math.cos(self.phase_offset)
 
         # Convert to gate voltage
         v_gate = self.v_center + phase_response
 
-        # Clamp to valid range
+        # Clamp to asymmetric window (not symmetric [0.0, 5.0])
+        # This prevents over-saturation in one direction
+        v_gate = max(self.v_floor, min(self.v_ceiling, v_gate))
+
+        # As fallback, clamp to absolute limits
         return max(self.v_min, min(self.v_max, v_gate))
 
 
@@ -196,26 +223,29 @@ class NerveGateResonanceTuner:
         Extract three-signal nerve feedback from V_0.
 
         Signals:
-        - P: Frequency error (how far from resonance)
+        - P: Frequency error (how far from resonance) - millivolt scale
         - I: Accumulated error (integral for lock)
         - D: Rate of change (derivative for damping)
+
+        Biological scaling: V_0 error in volts → nerve signal in millivolts
         """
         # Calculate virtual ground error
         v_target = 2.5
         v_0_error = v_0 - v_target
 
-        # Proportional: translate to frequency error
-        # (larger V_0 deviation = larger frequency error)
-        frequency_error = v_0_error * 10.0  # Tunable scaling
+        # Proportional: translate V_0 error to biological nerve signal (millivolts)
+        # Small errors (tens of mV) drive gate control, matching biological scales
+        # Scale down from volts to millivolts: multiply by 0.04 (4% coupling)
+        frequency_error = v_0_error * 0.04  # Biological scaling factor
 
         # Integral: accumulate error over time
         self.integral_error += frequency_error * dt_s
 
-        # Derivative: rate of V_0 change
+        # Derivative: rate of V_0 change (biological responsiveness)
         v_0_rate = (v_0 - self.prev_v_0) / dt_s if dt_s > 0 else 0.0
         self.prev_v_0 = v_0
 
-        derivative = v_0_rate * 5.0  # Tunable scaling
+        derivative = v_0_rate * 0.02  # Millivolt-scale rate response
 
         return NerveSignals(
             proportional=frequency_error,
@@ -231,9 +261,11 @@ class NerveGateResonanceTuner:
         Compute three-phase gate voltages using 3:1 nerve gating.
 
         Single nerve signal (3 components) drives three mirrored gates.
+        Uses V_0 feedback error (extracted as P/I/D), NOT omega mismatch.
         """
-        # Frequency error: how far current omega is from target omega_0
-        frequency_error = self.resonance.omega_0 - self.resonance.omega_gate
+        # Use the extracted frequency error from V_0 feedback, not omega state
+        # This closes the feedback loop: V_0 error → frequency error → gate voltage
+        frequency_error = nerve.proportional  # Already contains V_0_error * 10.0 scaling
 
         voltages = {}
         mosfet_map = {

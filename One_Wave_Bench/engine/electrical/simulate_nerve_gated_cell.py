@@ -119,13 +119,17 @@ class NerveGatedCellSimulator:
             current_state = self._make_state()
             v_0 = current_state.node_voltages.get('0', 2.5)
 
-            # Update resonance tuner gate frequency (simulate frequency sweep)
-            # In real system, this comes from feedback
-            omega_sweep = self.tuner.resonance.omega_0 * (1 + 0.2 * math.sin(step * 0.001))
-            self.tuner.resonance.omega_gate = omega_sweep
-
-            # Compute gate voltages using nerve-gated control
+            # Feedback-driven gate control: extract nerve signals and compute gate voltages
+            # The tuner.step() will update resonance state based on feedback
             gate_voltages = self.tuner.step(v_0, dt_s)
+
+            # Update gate frequency tracking for measurement (feedback-driven, not sweep)
+            # omega_gate follows the actual oscillation of the system in response to V_0 error
+            # For now, track frequency error magnitude to guide next iteration
+            if abs(self.tuner.resonance.frequency_error) > 1e-6:
+                # Gate frequency adjust toward target based on error direction
+                freq_adjust = 0.01 * self.tuner.resonance.frequency_error  # Slow tuning
+                self.tuner.resonance.omega_gate += freq_adjust
 
             # Apply gate control to circuit controller
             def gate_control(mosfet_id: str, time: float) -> float:
