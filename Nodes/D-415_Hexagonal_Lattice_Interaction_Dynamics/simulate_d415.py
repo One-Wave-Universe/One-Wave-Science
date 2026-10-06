@@ -3,8 +3,9 @@
 
 One-Wave only:
   - bond objects are restoring responses (A-105), not forces
-  - gravity view = local compression gradient
-  - dark-matter view = extended / wake compression of the same field
+  - gravity view = local compression gradient (g_local)
+  - Extended Compression Effect = wake compression from motion (g_wake, A-115/Book 5 Ch1)
+    (What was called "dark matter" is actually this compression ring from displacement)
   - no second substance, no force-carriers, no Standard Model interaction list
 
 Dependencies: C-323, A-115, E-532, E-531, D-408, D-412
@@ -248,7 +249,8 @@ def run_case(name: str, p: Params, init_fn, out: Path) -> tuple[list, RunReceipt
         bound_count = int(bound.sum())
         bound_max = max(bound_max, bound_count)
 
-        # outer annulus wake measure (dark-matter view bookkeeping)
+        # outer annulus wake measure (displaced superfluid energy bookkeeping)
+        # This measures the extended compression/expansion in the outer field region
         radii = np.linalg.norm(base, axis=1)
         outer = radii > (p.grid_radius * p.spacing * 0.55)
         wake_chi_rms = float(np.sqrt(np.mean(chi[outer] ** 2))) if np.any(outer) else 0.0
@@ -381,7 +383,7 @@ def main():
         "status": "YELLOW reduced runner",
         "identity": {
             "gravity_view": "local compression gradient response",
-            "dark_matter_view": "extended / wake compression of the same field",
+            "displaced_superfluid_energy_view": "extended / wake compression of the same field",
             "no_second_substance": True,
             "no_force_carriers": True,
         },

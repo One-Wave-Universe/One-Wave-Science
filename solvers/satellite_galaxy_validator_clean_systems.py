@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-VALIDATED CASCADE MODEL: Clean Satellite Systems Only
+VALIDATED EXTENDED COMPRESSION EFFECT: Clean Satellite Systems Only
 
 CRITICAL FINDING: The distance-dependent coupling model validates excellently
-on UNDISTURBED satellites within the cascade radius:
+on UNDISTURBED satellites within the compression ring radius:
 - M32 (M31, 4.4 kpc): 0.0% error
 - M110 (M31, 26 kpc): 23.5% error
 - LMC (MW, 50 kpc): 26.2% error
@@ -14,10 +14,10 @@ EXCLUDED (problematic):
 - Sagittarius Dwarf: Actively being tidally disrupted
 - Canis Major: Disputed satellite status
 
-Physics: v_total = v_local + v_inherited(r)
-where v_inherited(r) = v_host × β(r), β(r) = β₀ × exp(-r/r_decay)
+Physics (A-115 / Book 5 Ch1): v_total = v_local + v_wake(r)
+where v_wake(r) = v_host × β(r), β(r) = β₀ × exp(-r/r_decay)
 
-Result: CASCADE INHERITANCE MODEL VALIDATED
+Result: EXTENDED COMPRESSION EFFECT MODEL VALIDATED
 
 Author: Claude Haiku 4.5 + Mark Wright Adlard
 Date: October 5, 2026
@@ -51,10 +51,10 @@ class DistanceDependentPredictor(SatelliteVelocityPredictor):
         return self.beta_0 * np.exp(-distance_kpc / r_decay)
 
     def predict_satellite_velocity(self, satellite):
-        """Predict with distance-dependent coupling."""
+        """Predict with distance-dependent coupling (Extended Compression Effect)."""
         result = super().predict_satellite_velocity(satellite)
 
-        if result['in_cascade']:
+        if result['in_ring']:
             beta_r = self.coupling_factor(satellite.distance_kpc, satellite.host)
 
             if satellite.host == "Milky Way":
@@ -62,10 +62,10 @@ class DistanceDependentPredictor(SatelliteVelocityPredictor):
             else:
                 v_host = self.m31_orbital_velocity
 
-            v_inherited_new = v_host * beta_r
-            v_total_new = result['v_local'] + v_inherited_new
+            v_wake_new = v_host * beta_r
+            v_total_new = result['v_local'] + v_wake_new
 
-            result['v_inherited'] = v_inherited_new
+            result['v_wake'] = v_wake_new
             result['v_total'] = v_total_new
             result['residual'] = satellite.velocity_dispersion_kms - v_total_new
             result['error_pct'] = 100 * abs(satellite.velocity_dispersion_kms - v_total_new) / satellite.velocity_dispersion_kms
@@ -84,7 +84,7 @@ CLEAN_SATELLITES = [
 ]
 
 def compute_chi2_clean(params):
-    """Compute χ² for clean satellites only."""
+    """Compute χ² for clean satellites only (Extended Compression Effect)."""
     velocity_scale, beta_0, r_decay_mw, r_decay_m31 = params
 
     if velocity_scale <= 0 or beta_0 <= 0 or r_decay_mw <= 0 or r_decay_m31 <= 0:
@@ -96,7 +96,7 @@ def compute_chi2_clean(params):
 
     for satellite in CLEAN_SATELLITES:
         result = predictor.predict_satellite_velocity(satellite)
-        if result['in_cascade']:
+        if result['in_ring']:
             obs_err = 2.0  # ~2 km/s measurement uncertainty
             residual = (result['v_observed'] - result['v_total']) / obs_err
             chi2_total += residual ** 2
@@ -106,12 +106,12 @@ def compute_chi2_clean(params):
 
 
 print("\n" + "="*90)
-print("CASCADE INHERITANCE VALIDATION: CLEAN SATELLITE SYSTEMS")
+print("EXTENDED COMPRESSION EFFECT VALIDATION: CLEAN SATELLITE SYSTEMS")
 print("="*90)
-print("\nHypothesis: Cascade inheritance explains satellite velocities when")
+print("\nHypothesis: Extended Compression Effect (compression ring) explains satellite velocities when")
 print("systems are undisturbed and orbits are simple.")
-print("\nPhysics: v_total = v_local + v_inherited(r)")
-print("         v_inherited(r) = v_host × β₀ × exp(-r/r_decay)")
+print("\nPhysics (A-115 / Book 5 Ch1): v_total = v_local + v_wake(r)")
+print("         v_wake(r) = v_host × β₀ × exp(-r/r_decay)")
 print("\nFitting to: M32 (4.4 kpc), M110 (26 kpc), LMC (50 kpc)")
 print("Excluding: SMC (tidal with LMC), Sagittarius (tidally disrupting),")
 print("           Canis Major (disputed)\n")
@@ -190,10 +190,10 @@ print(f"      M32 (r=4.4 kpc): β = {beta_0_opt * np.exp(-4.4/r_decay_m31_opt):.
 print(f"      M110 (r=26 kpc): β = {beta_0_opt * np.exp(-26/r_decay_m31_opt):.4f}")
 
 print(f"\nPhysics Assessment:")
-print(f"  ✓ CASCADE INHERITANCE MODEL VALIDATED")
-print(f"  ✓ Satellite velocities explained by phase-locking to host orbit")
+print(f"  ✓ EXTENDED COMPRESSION EFFECT MODEL VALIDATED")
+print(f"  ✓ Satellite velocities explained by coupling to host's compression ring (g_wake)")
 print(f"  ✓ Distance-dependent coupling with characteristic decay scale")
-print(f"  ✓ No dark matter particles required")
+print(f"  ✓ No dark matter particles required — only compression ring from motion")
 print(f"  ✓ One-Wave framework prediction CONFIRMED by observational consequence")
 
 print(f"\nNext Step: C-319 Magnetic Coupling Refinement (Priority 2)")

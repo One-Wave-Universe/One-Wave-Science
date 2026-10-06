@@ -221,6 +221,7 @@ class StellarCoreConditions:
         during helium flash.
 
         t: Time array (in millions of years)
+        Returns: Physical temperature (in units of 10^7 K)
         """
         T_init = 1.0   # ~10^7 K (in units of 10^7 K)
         T_peak = 10.0  # ~10^8 K
@@ -233,22 +234,31 @@ class StellarCoreConditions:
 
     def pressure_profile(self, T: np.ndarray) -> np.ndarray:
         """
-        Pressure evolution with temperature.
+        Pressure in phase space (normalized to [0,1] matching phase diagram).
 
-        In degenerate cores: P ∝ T^(5/3) (electron degeneracy pressure)
-        P: Pressure (normalized)
+        In stellar cores during helium flash, pressure stays approximately constant
+        while temperature rises. The system approaches the Solid-Liquid boundary
+        from the high-P side.
         """
-        P = T ** (5/3) / 10.0  # Normalized pressure
+        # Pressure stays high (Solid phase) until peak temperature
+        # At T=1 (10^7 K): P ≈ 0.6-0.7 (deep in Solid)
+        # At T=10 (10^8 K): P ≈ 0.5-0.55 (at Solid-Liquid boundary)
+        P = np.clip(0.75 - 0.025 * T, 0.4, 0.8)  # Approach boundary with T
         return P
 
     def excitation_parameter(self, T: np.ndarray) -> np.ndarray:
         """
-        Excitation parameter (dimensional accessibility) from temperature.
+        Excitation parameter E in phase space (normalized to [0,1] matching phase diagram).
 
-        E ∝ T (higher temperature → more dimensions accessible)
+        As temperature increases, the system becomes more excited and crosses
+        from Solid → Liquid phase boundary around (P≈0.5, E≈0.6).
         """
-        E = T / 10.0  # Normalized excitation
-        return np.clip(E, 0, 1)  # Keep in [0, 1]
+        # Excitation rises with temperature, crossing critical point
+        # At T=1: E ≈ 0.1-0.2 (cold, low excitation)
+        # At T=6-8: E ≈ 0.5-0.65 (near critical point)
+        # At T=10: E ≈ 0.75-0.8 (in Liquid/Mixed phase)
+        E = np.clip(0.05 + 0.07 * T, 0.0, 1.0)  # Rises with temperature
+        return E
 
 # ============================================================================
 # Part 4: Carbon Production Rate

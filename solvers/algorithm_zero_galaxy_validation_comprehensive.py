@@ -6,7 +6,7 @@ Comprehensive Galaxy Validation for Algorithm Zero Phase 2
 Validates against:
 1. Multiple galaxy datasets (rotation curves, velocity dispersion)
 2. Cluster dynamics (galaxy clusters, scaling relations)
-3. Halo structure (dark matter profiles, concentration parameters)
+3. Compression ring structure (Extended Compression Effect, pressure profiles)
 4. Statistical rigor (proper error bars, χ² fits, significance tests)
 
 No approximations. Real validation.

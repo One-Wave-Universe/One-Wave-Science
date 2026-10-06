@@ -95,10 +95,13 @@ class GalaxyLocalGravity:
 
 class ClusterWakeGeometry:
     """
-    Model gravity wake inherited from parent cluster.
-    
-    This is the "dark matter halo" in standard terminology.
-    One-Wave interpretation: It's an extended compression wake.
+    Model compression ring (g_wake) from galaxy motion.
+
+    Standard terminology: "dark matter halo"
+    One-Wave interpretation: Extended Compression Effect (A-115 / Book 5 Ch1).
+    The ring is not a separate entity—it's the superfluid's response to the
+    galaxy's displacement. Pressure gradients ∇P in the superfluid generate the
+    measured gravitational effects (g_wake contribution to rotation curves).
     """
     
     def __init__(self, cluster_name: str, radii_kpc: np.ndarray,
@@ -114,31 +117,32 @@ class ClusterWakeGeometry:
         self.wake_amplitude = wake_amplitude
         
         # Compute inherited wake
-        self.g_wake_profile = self._compute_inherited_wake()
+        self.g_wake_profile = self._compute_compression_ring()
     
-    def _compute_inherited_wake(self) -> np.ndarray:
+    def _compute_compression_ring(self) -> np.ndarray:
         """
-        Compute inherited gravity wake from parent cluster.
-        
-        Wake properties:
-        - Core: weak (galaxy is inside cluster, not sampling strong gradient there)
-        - Middle: rising (galaxy samples edge of cluster compression)
-        - Outer: extended plateau (magnetic field keeps wake coherent)
-        
-        Model: Extended NFW-like profile
+        Compute compression ring (g_wake) from galaxy motion.
+
+        Ring properties (A-115 / Book 5 Ch1):
+        - Core: weak (direct gradient g_local dominates near center)
+        - Middle: rising (galaxy's displaced field creates compression)
+        - Outer: extended plateau (compression ring persists, visible in rotation curves)
+
+        Model: Extended compression profile from displacement pressure
         """
         g_wake = np.zeros_like(self.radii)
         
         for i, r in enumerate(self.radii):
             if r < 1.0:
-                # Inside cluster core: weak wake
+                # Core: direct gradient (g_local) dominates
                 g_wake[i] = 0.1 * self.wake_amplitude
             elif r < 15.0:
-                # Rising edge: galaxy samples cluster's compression gradient
+                # Rising: compression ring from galaxy's displacement grows
                 g_wake[i] = self.wake_amplitude * (r - 1.0) / (r + 5.0)
             else:
-                # Extended halo: magnetic field maintains coherence
-                # This is the "dark matter"-like extended component
+                # Extended compression ring: visible in flat rotation curves
+                # Not separate dark matter particles, but the field's
+                # pressure response to galaxy displacement (g_wake)
                 g_wake[i] = self.wake_amplitude * 10.0 / (r + 20.0)
         
         return g_wake
@@ -324,8 +328,8 @@ def main():
     print("INTERPRETATION")
     print("="*70)
     print("\nIf χ² ~ 10-50 (reasonable fit):")
-    print("  → Cascade wake model works")
-    print("  → Dark matter = inherited gravity wake, not particle")
+    print("  → Compression ring model works")
+    print("  → Dark matter = Extended Compression Effect (g_wake), not particle")
     print("\nIf χ² still large (> 100):")
     print("  → Model needs refinement:")
     print("    - C-319 magnetic effects")
