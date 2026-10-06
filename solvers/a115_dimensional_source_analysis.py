@@ -128,18 +128,24 @@ def solve_a115_dimensional(dimension=3, cells=256, outer_radius=4.,
 
 
 def dimensional_comparison_study():
-    """Compare compression-expression wake structure across 2D, 3D, 4D."""
+    """Compare compression-expression wake structure across 2D, 3D, 4D.
+
+    Outer radii aligned to canonical One-Wave harmonic layers (A-117):
+    - 2D: radius=6 (6:1 layer)
+    - 3D: radius=12 (12:1 layer — 12 musical scales)
+    - 4D: radius=24 (24:1 layer — extended complexity)
+    """
 
     dimensions = [2, 3, 4]
+    outer_radii = {2: 6.0, 3: 12.0, 4: 24.0}  # Canonical harmonic layers
     cells = 512
-    outer_radius = 8.0
     stiffness = 2.0
     alpha = 1.0
 
     results = {}
     for d in dimensions:
         results[f"{d}D"] = solve_a115_dimensional(
-            dimension=d, cells=cells, outer_radius=outer_radius,
+            dimension=d, cells=cells, outer_radius=outer_radii[d],
             stiffness=stiffness, alpha=alpha,
             source_func=lambda r, dim=d: source_hybrid_nd(r, dim, sigma_core=0.5,
                                                          sigma_tail=2.0, weight_tail=0.4)
@@ -175,8 +181,14 @@ def report():
 
     return dict(
         schema_version=1,
-        scope="A-115 dimensional analysis: 2D, 3D, 4D with radial symmetry",
+        scope="A-115 dimensional analysis: 2D, 3D, 4D aligned to canonical harmonic layers (A-117)",
         units="dimensionless",
+
+        canonical_layers_a117={
+            "2D": "outer_radius=6 (6:1 harmonic layer)",
+            "3D": "outer_radius=12 (12:1 harmonic layer — 12 musical scales)",
+            "4D": "outer_radius=24 (24:1 harmonic layer — extended complexity)",
+        },
 
         dimensional_wave_kernels={
             "1D": "W(r) ∝ e^(-r/σ) — pure exponential decay",
