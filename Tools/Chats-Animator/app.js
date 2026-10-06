@@ -152,6 +152,10 @@
     };
     state.assets.push(asset);
     state.selectedAssetId = asset.id;
+    // Placement is a deliberate editor state: importing art turns the
+    // perspective/depth grid on so feet position and apparent size share one
+    // reference. Playback/export turn it off and never render the overlay.
+    state.placementMode = true;
     renderAll();
     window.Animator?.reel?.captureCurrent?.();
     status(`${kind} ready: ${name}`);
@@ -203,6 +207,7 @@
   $('toggle-placement')?.addEventListener('click', () => {
     state.placementMode = !state.placementMode;
     renderCalibration();
+    $('toggle-placement').textContent = state.placementMode ? 'Finish Placement' : 'Placement / Sizing Mode';
     status(state.placementMode ? 'Placement / sizing mode' : 'Placement finished');
   });
   $('add-character')?.addEventListener('click', () => $('character-picker')?.click());
