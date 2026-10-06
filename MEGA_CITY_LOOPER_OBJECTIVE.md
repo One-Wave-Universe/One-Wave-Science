@@ -1,6 +1,6 @@
 # Mega City First Looper Objective
 
-**Status:** Open construction objective
+**Status:** One-room prototype running in `megacity/`. City scale still closed.
 
 **Purpose:** build the smallest useful persistent reference loop that lets an AI/agent compare what just happened against a retained goal/path and make the next decision from that reference.
 
