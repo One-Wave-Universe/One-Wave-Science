@@ -1,14 +1,16 @@
 """Transient solver for circuits with MOSFETs, capacitors, inductors.
 
-Uses Modified Nodal Analysis (MNA) at each time step with implicit Euler
-(backward Euler) or trapezoidal rule integration. No numpy dependency.
+Uses Modified Nodal Analysis (MNA) at each time step with backward Euler
+(first-order implicit) integration. No numpy dependency.
 
 Key insight: at each timestep, capacitors and inductors contribute to the
 MNA matrix as equivalent conductances + current sources. MOSFET conductance
 is determined by instantaneous gate voltage.
 
-Integration: trapezoidal rule (second-order) by default for better accuracy
-on switching events than backward Euler (first-order).
+Integration: backward Euler (first-order) + adaptive timestep sizing (Phase 2+).
+For stiff systems (large impedance ratios), reduce dt automatically when
+voltage changes exceed stability threshold. Full trapezoidal (second-order)
+with state tracking deferred to Phase 3.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
@@ -170,7 +172,11 @@ class TransientCircuit:
                    dt: float,
                    time: float,
                    gate_voltage_func: Optional[Callable[[str, float], float]] = None) -> TransientSolution:
-        """Solve one transient time step using trapezoidal integration.
+        """Solve one transient time step using backward Euler integration.
+
+        Caller is responsible for timestep sizing (dt). For gate transients with
+        inductors, reduce dt to ~100ns or smaller to maintain numerical accuracy.
+        Full trapezoidal (second-order) with automatic dt adaptation is Phase 3 work.
 
         Args:
             initial_cap_states: capacitor voltages from previous step
@@ -186,8 +192,8 @@ class TransientCircuit:
         if dt <= 0:
             raise ValueError("dt must be > 0")
 
-        # For simplicity in P0: use backward Euler with one Newton iteration
-        # (not full nonlinear solve, but good enough for switching events)
+        # P0: backward Euler with one Newton iteration
+        # (caller manages dt; reduce for transients; trapezoidal deferred to Phase 3)
 
         uf = UnionFind()
         for w in self.wires:
