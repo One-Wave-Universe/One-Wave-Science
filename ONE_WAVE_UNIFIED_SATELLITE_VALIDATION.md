@@ -88,23 +88,23 @@ This is why C-319 is load-bearing: magnetic lattice reorganization enables the c
 
 ---
 
-## Consequence 4: There Is No Dark Matter — Only Superfluid Pushback
+## Consequence 4: There Is No Dark Matter — Only ψ Displacement and Pushback
 
-**What Standard Model calls "dark matter" is actually the superfluid pushing back against galaxy motion (A-115 / Book 5 Ch1):**
+**What Standard Model calls "dark matter" is ψ displacement from the galaxy's own motion through the superfluid (A-115 / Book 5 Ch1):**
 
-When a galaxy moves through the superfluid, the field resists. This resistance creates a pressure gradient—the compression ring. This is NOT a particle, NOT a new substance, NOT a mystery. It is the superfluid doing what any medium does when you push through it: pushing back.
+The galaxy moves through the superfluid lattice. This motion displaces ψ. The superfluid resists the displacement—that's pushback. The displaced field organizes into a compression ring around the moving galaxy. This ring creates measurable gravity (g_wake). Electromagnetic coherence (C-319) determines whether this pattern persists or gets scrambled by local field chaos.
 
-**The mechanism (pure mechanics):**
-1. Galaxy moves through superfluid lattice → displaces ψ
-2. Superfluid resists displacement (pushback) → creates pressure gradient
-3. Pressure gradient organizes into compression ring around moving structure
-4. Compression ring produces measurable g_wake (gravitational signature of the pushback)
-5. Electromagnetic coherence (C-319) can stabilize/persist this ring pattern
-6. At galactic scale, R_ring ~ R_gravity → ring's gravity is measurable in rotation curves
+**The mechanism (pure kinematics of displacement):**
+1. Galaxy moves through superfluid lattice → displaces ψ locally
+2. Superfluid resists displacement → creates pressure gradient (pushback)
+3. Pressure gradient self-organizes into compression ring around galaxy's own motion
+4. Compression ring has mass-like gravitational effects (g_wake)
+5. EM coherence (C-319) can stabilize this ψ displacement pattern or scramble it
+6. At galactic scale, R_ring ~ R_gravity → ring's gravity is observable in rotation curves as "dark matter"
 
-**Proof:** Satellite validation shows the pushback model works. The observed "dark matter" phenomena are the superfluid's pressure response—there is no separate particle or mysterious substance.
+**Proof:** Satellite validation shows satellites couple to host's compression ring. The observed "dark matter" is the host galaxy's displacement—local ψ pushed out and organized by the host's own motion.
 
-**Physics:** Dark matter exists ONLY in Standard Model's incomplete accounting. In One-Wave, what they call "dark matter" is the superfluid pushing back against motion. The Extended Compression Effect is just organized pushback. Period.
+**Physics:** Dark matter does not exist. The ψ displacement created by a galaxy's motion through the superfluid creates a measurable compression ring. That ring's gravity is what Standard Model mislabels "dark matter." It's not inherited, not a cascade, not a particle—it's the galaxy's own displacement shadow.
 
 ---
 
@@ -137,13 +137,13 @@ Electron doesn't "have spin ½." Electron phase-locks to nuclear field compressi
 
 1. **One field ψ exists** (scalar displacement on superfluid lattice) — observation is consequence
 2. **ψ propagates via one update rule** (universal across all scales)
-3. **Moving structures displace ψ** → create compression rings
-4. **Compression ring geometry couples to nearby structures** → Extended Compression Effect (g_wake)
-5. **EM coherence (C-319) enables ring persistence** → dark matter is organized displacement
+3. **Moving structures displace ψ** → create compression rings around their own motion
+4. **Compression ring gravity couples to nearby structures** → produces observable g_wake (Extended Compression Effect)
+5. **EM coherence (C-319) determines ring stability** → either persists or gets scrambled by local fields
 6. **Lattice operations produce four interaction types** → unifies "forces"
 7. **Wave resonance produces quantization** → no new postulates needed
 
-**No scale transition. No invented particles. One grammar, infinite scales.**
+**No scale transition. No inherited patterns. No invented particles. One grammar, infinite scales. Every structure creates its own displacement shadow.**
 
 ---
 
