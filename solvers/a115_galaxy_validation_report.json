@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "test": "A-115 derived source validation against MW rotation curve",
+  "data": {
+    "source": "DR3+ 2023 published MW kinematics",
+    "points": 45,
+    "radius_range_kpc": [
+      5.25,
+      27.25
+    ],
+    "velocity_mean_kms": 210.49777777777774,
+    "velocity_std_kms": 16.513960274586385
+  },
+  "derived_parameters": {
+    "sigma_core": 0.5,
+    "sigma_tail": 2.0,
+    "weight_tail": 0.4,
+    "dimension": 3,
+    "layer": 12,
+    "predicted_ext_int_ratio": 0.0391,
+    "source": "Derived from dimensional amplitude law (not fitted to galaxy data)"
+  },
+  "solver": {
+    "method": "A-115 static compression field (radial symmetry, 3D)",
+    "cells": 512,
+    "outer_radius_kpc": 30.0,
+    "stiffness": 2.0,
+    "alpha": 1.0
+  },
+  "fitting": {
+    "free_parameters": 1,
+    "parameter": "overall_amplitude_scale",
+    "fitted_scale": 742425.4656126582,
+    "method": "error-weighted least squares on interpolated predictions"
+  },
+  "results": {
+    "mean_absolute_error_kms": 47.01341925905564,
+    "mean_absolute_percentage_error_percent": 22.810727089041617,
+    "rms_residual_kms": 40.11375729471546,
+    "chi_squared_diagnostic": 18195.35899889332,
+    "chi_squared_per_point": 404.3413110865182,
+    "interpretation": "Derived source does not match observations; model requires revision",
+    "status": "\u2717 POOR"
+  },
+  "detailed_predictions": [
+    {
+      "radius_kpc": 5.25,
+      "observed_velocity_kms": 226.8,
+      "quoted_error_kms": 1.9,
+      "predicted_velocity_raw_kms": 0.0004208980774886498,
+      "predicted_velocity_scaled_kms": 312.4854511549835,
+      "residual_kms": -85.68545115498347,
+      "relative_error_percent": 37.78018128526608
+    },
+    {
+      "radius_kpc": 5.75,
+      "observed_velocity_kms": 230.8,
+      "quoted_error_kms": 1.4,
+      "predicted_velocity_raw_kms": 0.00039645592628011564,
+      "predicted_velocity_scaled_kms": 294.33897566341255,
+      "residual_kms": -63.53897566341254,
+      "relative_error_percent": 27.529885469416175
+    },
+    {
+      "radius_kpc": 6.25,
+      "observed_velocity_kms": 231.2,
+      "quoted_error_kms": 1.4,
+      "predicted_velocity_raw_kms": 0.00037526739016231346,
+      "predicted_velocity_scaled_kms": 278.6080668705026,
+      "residual_kms": -47.40806687050264,
+      "relative_error_percent": 20.50521923464647
+    },
+    {
+      "radius_kpc": 6.75,
+      "observed_velocity_kms": 229.9,
+      "quoted_error_kms": 1.4,
+      "predicted_velocity_raw_kms": 0.00035680794238519104,
+      "predicted_velocity_scaled_kms": 264.90330275962,
+      "residual_kms": -35.00330275961997,
+      "relative_error_percent": 15.225447046376672
+    },
+    {
+      "radius_kpc": 7.25,
+      "observed_velocity_kms": 229.6,
+      "quoted_error_kms": 1.2,
+      "predicted_velocity_raw_kms": 0.0003406451972195282,
+      "predicted_velocity_scaled_kms": 252.903669154424,
+      "residual_kms": -23.303669154424,
+      "relative_error_percent": 10.149681687466899
+    },
+    {
+      "radius_kpc": 7.75,
+      "observed_velocity_kms": 229.9,
+      "quoted_error_kms": 0.9,
+      "predicted_velocity_raw_kms": 0.0003264204060996766,
+      "predicted_velocity_scaled_kms": 242.34282198402536,
+      "residual_kms": -12.442821984025358,
+      "relative_error_percent": 5.412275765126298
+    },
+    {
+      "radius_kpc": 8.25,
+      "observed_velocity_kms": 228.9,
+      "quoted_error_kms": 0.7,
+      "predicted_velocity_raw_kms": 0.0003138347519218112,
+      "predicted_velocity_scaled_kms": 232.99891182098375,
+      "residual_kms": -4.098911820983744,
+      "relative_error_percent": 1.7906997907312119
+    },
+    {
+      "radius_kpc": 8.75,
+      "observed_velocity_kms": 224.2,
+      "quoted_error_kms": 2.4,
+      "predicted_velocity_raw_kms": 0.00030263879256069875,
+      "predicted_velocity_scaled_kms": 224.68674647932943,
+      "residual_kms": -0.48674647932944026,
+      "relative_error_percent": 0.21710369283204295
+    },
+    {
+      "radius_kpc": 9.25,
+      "observed_velocity_kms": 223.8,
+      "quoted_error_kms": 2.0,
+      "predicted_velocity_raw_kms": 0.0002926240643581208,
+      "predicted_velocity_scaled_kms": 217.25155723054627,
+      "residual_kms": 6.548442769453743,
+      "relative_error_percent": 2.926024472499438
+    },
+    {
+      "radius_kpc": 9.75,
+      "observed_velocity_kms": 223.7,
+      "quoted_error_kms": 2.2,
+      "predicted_velocity_raw_kms": 0.0002836162448812249,
+      "predicted_velocity_scaled_kms": 210.56392266125707,
+      "residual_kms": 13.136077338742922,
+      "relative_error_percent": 5.872184773689281
+    },
+    {
+      "radius_kpc": 10.25,
+      "observed_velocity_kms": 224.5,
+      "quoted_error_kms": 1.8,
+      "predicted_velocity_raw_kms": 0.00027546950189259696,
+      "predicted_velocity_scaled_kms": 204.5155732046983,
+      "residual_kms": 19.984426795301687,
+      "relative_error_percent": 8.901749129310328
+    },
+    {
+      "radius_kpc": 10.75,
+      "observed_velocity_kms": 223.6,
+      "quoted_error_kms": 1.8,
+      "predicted_velocity_raw_kms": 0.0002680617777798812,
+      "predicted_velocity_scaled_kms": 199.0158901811852,
+      "residual_kms": 24.584109818814795,
+      "relative_error_percent": 10.994682387663147
+    },
+    {
+      "radius_kpc": 11.25,
+      "observed_velocity_kms": 222.2,
+      "quoted_error_kms": 2.0,
+      "predicted_velocity_raw_kms": 0.0002612908417444257,
+      "predicted_velocity_scaled_kms": 193.98897484242863,
+      "residual_kms": 28.211025157571356,
+      "relative_error_percent": 12.69623094400151
+    },
+    {
+      "radius_kpc": 11.75,
+      "observed_velocity_kms": 222.4,
+      "quoted_error_kms": 1.8,
+      "predicted_velocity_raw_kms": 0.00025507097819857654,
+      "predicted_velocity_scaled_kms": 189.37118975335437,
+      "residual_kms": 33.028810246645634,
+      "relative_error_percent": 14.85108374399534
+    },
+    {
+      "radius_kpc": 12.25,
+      "observed_velocity_kms": 222.0,
+      "quoted_error_kms": 1.9,
+      "predicted_velocity_raw_kms": 0.000249330214519873,
+      "predicted_velocity_scaled_kms": 185.10910060622064,
+      "residual_kms": 36.890899393779364,
+      "relative_error_percent": 16.617522249450165
+    },
+    {
+      "radius_kpc": 12.75,
+      "observed_velocity_kms": 222.4,
+      "quoted_error_kms": 2.2,
+      "predicted_velocity_raw_kms": 0.000244008002463462,
+      "predicted_velocity_scaled_kms": 181.15775484215044,
+      "residual_kms": 41.24224515784957,
+      "relative_error_percent": 18.54417498104747
+    },
+    {
+      "radius_kpc": 13.25,
+      "observed_velocity_kms": 223.1,
+      "quoted_error_kms": 1.8,
+      "predicted_velocity_raw_kms": 0.0002390532858489073,
+      "predicted_velocity_scaled_kms": 177.47924705261087,
+      "residual_kms": 45.62075294738912,
+      "relative_error_percent": 20.44856698672753
+    },
+    {
+      "radius_kpc": 13.75,
+      "observed_velocity_kms": 220.5,
+      "quoted_error_kms": 1.9,
+      "predicted_velocity_raw_kms": 0.00023442289260519578,
+      "predicted_velocity_scaled_kms": 174.04152519267865,
+      "residual_kms": 46.45847480732135,
+      "relative_error_percent": 21.069603087220568
+    },
+    {
+      "radius_kpc": 14.25,
+      "observed_velocity_kms": 219.5,
+      "quoted_error_kms": 2.3,
+      "predicted_velocity_raw_kms": 0.00023008020105016227,
+      "predicted_velocity_scaled_kms": 170.81740039292072,
+      "residual_kms": 48.68259960707928,
+      "relative_error_percent": 22.17886086882883
+    },
+    {
+      "radius_kpc": 14.75,
+      "observed_velocity_kms": 219.3,
+      "quoted_error_kms": 1.9,
+      "predicted_velocity_raw_kms": 0.00022599403497985815,
+      "predicted_velocity_scaled_kms": 167.78372664560456,
+      "residual_kms": 51.51627335439545,
+      "relative_error_percent": 23.491232719742566
+    },
+    {
+      "radius_kpc": 15.25,
+      "observed_velocity_kms": 218.0,
+      "quoted_error_kms": 2.1,
+      "predicted_velocity_raw_kms": 0.00022213775033215954,
+      "predicted_velocity_scaled_kms": 164.92072272050197,
+      "residual_kms": 53.07927727949803,
+      "relative_error_percent": 24.34829233004497
+    },
+    {
+      "radius_kpc": 15.75,
+      "observed_velocity_kms": 217.6,
+      "quoted_error_kms": 2.4,
+      "predicted_velocity_raw_kms": 0.00021848848072470096,
+      "predicted_velocity_scaled_kms": 162.2114120330384,
+      "residual_kms": 55.38858796696158,
+      "relative_error_percent": 25.454314323052195
+    },
+    {
+      "radius_kpc": 16.25,
+      "observed_velocity_kms": 216.4,
+      "quoted_error_kms": 2.4,
+      "predicted_velocity_raw_kms": 0.00021502651481679187,
+      "predicted_velocity_scaled_kms": 159.64116038192384,
+      "residual_kms": 56.758839618076166,
+      "relative_error_percent": 26.22866895474869
+    },
+    {
+      "radius_kpc": 16.75,
+      "observed_velocity_kms": 214.0,
+      "quoted_error_kms": 2.4,
+      "predicted_velocity_raw_kms": 0.0002117347825473548,
+      "predicted_velocity_scaled_kms": 157.19729451911482,
+      "residual_kms": 56.80270548088518,
+      "relative_error_percent": 26.543320318170643
+    },
+    {
+      "radius_kpc": 17.25,
+      "observed_velocity_kms": 215.1,
+      "quoted_error_kms": 2.8,
+      "predicted_velocity_raw_kms": 0.00020859843105415276,
+      "predicted_velocity_scaled_kms": 154.86878730144934,
+      "residual_kms": 60.23121269855065,
+      "relative_error_percent": 28.001493583705557
+    },
+    {
+      "radius_kpc": 17.75,
+      "observed_velocity_kms": 213.3,
+      "quoted_error_kms": 2.7,
+      "predicted_velocity_raw_kms": 0.0002056044745263858,
+      "predicted_velocity_scaled_kms": 152.6459977322979,
+      "residual_kms": 60.65400226770211,
+      "relative_error_percent": 28.436006689030524
+    },
+    {
+      "radius_kpc": 18.25,
+      "observed_velocity_kms": 208.9,
+      "quoted_error_kms": 2.7,
+      "predicted_velocity_raw_kms": 0.00020274150462784742,
+      "predicted_velocity_scaled_kms": 150.5204559723405,
+      "residual_kms": 58.379544027659506,
+      "relative_error_percent": 27.946167557520106
+    },
+    {
+      "radius_kpc": 18.75,
+      "observed_velocity_kms": 209.1,
+      "quoted_error_kms": 3.4,
+      "predicted_velocity_raw_kms": 0.00019999945086285467,
+      "predicted_velocity_scaled_kms": 148.48468542913082,
+      "residual_kms": 60.615314570869174,
+      "relative_error_percent": 28.9886726785601
+    },
+    {
+      "radius_kpc": 19.25,
+      "observed_velocity_kms": 206.9,
+      "quoted_error_kms": 3.2,
+      "predicted_velocity_raw_kms": 0.00019736938171530292,
+      "predicted_velocity_scaled_kms": 146.53205511766623,
+      "residual_kms": 60.367944882333774,
+      "relative_error_percent": 29.17735373723237
+    },
+    {
+      "radius_kpc": 19.75,
+      "observed_velocity_kms": 203.4,
+      "quoted_error_kms": 3.3,
+      "predicted_velocity_raw_kms": 0.00019484333946302742,
+      "predicted_velocity_scaled_kms": 144.65665702236336,
+      "residual_kms": 58.743342977636644,
+      "relative_error_percent": 28.880699595691567
+    },
+    {
+      "radius_kpc": 20.25,
+      "observed_velocity_kms": 201.2,
+      "quoted_error_kms": 3.5,
+      "predicted_velocity_raw_kms": 0.00019241420244544785,
+      "predicted_velocity_scaled_kms": 142.8532038410499,
+      "residual_kms": 58.3467961589501,
+      "relative_error_percent": 28.9994016694583
+    },
+    {
+      "radius_kpc": 20.75,
+      "observed_velocity_kms": 200.1,
+      "quoted_error_kms": 3.5,
+      "predicted_velocity_raw_kms": 0.00019007557006178028,
+      "predicted_velocity_scaled_kms": 141.11694360470867,
+      "residual_kms": 58.98305639529133,
+      "relative_error_percent": 29.476789802744293
+    },
+    {
+      "radius_kpc": 21.25,
+      "observed_velocity_kms": 197.3,
+      "quoted_error_kms": 5.3,
+      "predicted_velocity_raw_kms": 0.00018782166631915053,
+      "predicted_velocity_scaled_kms": 139.44358806914065,
+      "residual_kms": 57.856411930859366,
+      "relative_error_percent": 29.324081059736116
+    },
+    {
+      "radius_kpc": 21.75,
+      "observed_velocity_kms": 205.2,
+      "quoted_error_kms": 9.2,
+      "predicted_velocity_raw_kms": 0.0001856472587789908,
+      "predicted_velocity_scaled_kms": 137.82925253870587,
+      "residual_kms": 67.37074746129412,
+      "relative_error_percent": 32.831748275484465
+    },
+    {
+      "radius_kpc": 22.25,
+      "observed_velocity_kms": 184.0,
+      "quoted_error_kms": 13.5,
+      "predicted_velocity_raw_kms": 0.00018354759011770508,
+      "predicted_velocity_scaled_kms": 136.27040505521853,
+      "residual_kms": 47.72959494478147,
+      "relative_error_percent": 25.939997252598623
+    },
+    {
+      "radius_kpc": 22.75,
+      "observed_velocity_kms": 194.4,
+      "quoted_error_kms": 13.4,
+      "predicted_velocity_raw_kms": 0.0001815183201811803,
+      "predicted_velocity_scaled_kms": 134.76382337774035,
+      "residual_kms": 59.636176622259654,
+      "relative_error_percent": 30.677045587582125
+    },
+    {
+      "radius_kpc": 23.25,
+      "observed_velocity_kms": 195.2,
+      "quoted_error_kms": 4.5,
+      "predicted_velocity_raw_kms": 0.00017955547669389407,
+      "predicted_velocity_scaled_kms": 133.3065583877671,
+      "residual_kms": 61.89344161223289,
+      "relative_error_percent": 31.707705743971772
+    },
+    {
+      "radius_kpc": 23.75,
+      "observed_velocity_kms": 185.1,
+      "quoted_error_kms": 9.7,
+      "predicted_velocity_raw_kms": 0.00017765541317853886,
+      "predicted_velocity_scaled_kms": 131.89590284768587,
+      "residual_kms": 53.20409715231412,
+      "relative_error_percent": 28.743434442092987
+    },
+    {
+      "radius_kpc": 24.25,
+      "observed_velocity_kms": 196.3,
+      "quoted_error_kms": 1.7,
+      "predicted_velocity_raw_kms": 0.0001758147728796981,
+      "predicted_velocity_scaled_kms": 130.5293646167936,
+      "residual_kms": 65.77063538320641,
+      "relative_error_percent": 33.50516321100683
+    },
+    {
+      "radius_kpc": 24.75,
+      "observed_velocity_kms": 193.4,
+      "quoted_error_kms": 3.7,
+      "predicted_velocity_raw_kms": 0.00017403045769338906,
+      "predicted_velocity_scaled_kms": 129.20464358379837,
+      "residual_kms": 64.19535641620163,
+      "relative_error_percent": 33.19304881913217
+    },
+    {
+      "radius_kpc": 25.25,
+      "observed_velocity_kms": 190.3,
+      "quoted_error_kms": 10.4,
+      "predicted_velocity_raw_kms": 0.00017229960131574725,
+      "predicted_velocity_scaled_kms": 127.91961173171902,
+      "residual_kms": 62.380388268280996,
+      "relative_error_percent": 32.78002536430951
+    },
+    {
+      "radius_kpc": 25.75,
+      "observed_velocity_kms": 179.3,
+      "quoted_error_kms": 9.4,
+      "predicted_velocity_raw_kms": 0.00017061954591010792,
+      "predicted_velocity_scaled_kms": 126.67229581493218,
+      "residual_kms": 52.62770418506783,
+      "relative_error_percent": 29.35175916623972
+    },
+    {
+      "radius_kpc": 26.25,
+      "observed_velocity_kms": 174.3,
+      "quoted_error_kms": 9.2,
+      "predicted_velocity_raw_kms": 0.00016898782178091182,
+      "predicted_velocity_scaled_kms": 125.46086226856235,
+      "residual_kms": 48.83913773143766,
+      "relative_error_percent": 28.020159341042834
+    },
+    {
+      "radius_kpc": 26.75,
+      "observed_velocity_kms": 178.4,
+      "quoted_error_kms": 8.1,
+      "predicted_velocity_raw_kms": 0.00016740212955613715,
+      "predicted_velocity_scaled_kms": 124.28360398026565,
+      "residual_kms": 54.11639601973435,
+      "relative_error_percent": 30.334302701644816
+    },
+    {
+      "radius_kpc": 27.25,
+      "observed_velocity_kms": 176.9,
+      "quoted_error_kms": 8.2,
+      "predicted_velocity_raw_kms": 0.00016586032454394764,
+      "predicted_velocity_scaled_kms": 123.13892867620693,
+      "residual_kms": 53.761071323793075,
+      "relative_error_percent": 30.390656486033397
+    }
+  ]
+}
