@@ -19,14 +19,16 @@
 
 ## Consequence 1: Extended Compression Effect (A-115 / Book 5 Ch1)
 
-When a structure moves through the superfluid lattice, it displaces ψ locally. The displaced field does not simply return to rest — it forms a **compression ring** around the moving structure, the same way a boat moving through water leaves a wake.
+**The compression ring is the superfluid's pushback against motion.**
 
-$$\text{Compression ring from motion} = \text{Pressure gradient response in displaced field}$$
+When a structure moves through the superfluid lattice, it displaces ψ. The field resists this displacement—that's the pushback. The displaced field organizes into a compression ring around the moving structure because the superfluid is compressed on one side and released on the other, creating a structured pressure gradient.
+
+$$\text{Compression ring} = \text{Superfluid pushback + organized pressure gradient from displacement}$$
 
 **The scaling difference:**
 
-- **Atomic scale (Book 1 Ch12)**: R_ring << R_gravity → compression effect is negligible
-- **Galactic scale (Book 5 Ch1)**: R_ring ~ R_gravity → compression effect is measurable in rotation curves
+- **Atomic scale (Book 1 Ch12)**: R_ring << R_gravity → pushback compression is negligible, drowned out by direct gravity
+- **Galactic scale (Book 5 Ch1)**: R_ring ~ R_gravity → pushback compression is measurable, visible in rotation curves as "dark matter"
 
 **Physics (A-115 Section 3):**
 
@@ -34,7 +36,7 @@ For bookkeeping: **g_0 = g_local + g_wake**
 
 This does NOT introduce a second substance. It separates:
 - **g_local**: Direct gradient response from mass distribution
-- **g_wake**: Extended compression response from the galaxy's displacement through the superfluid
+- **g_wake**: Compression ring from superfluid pushback against the galaxy's motion
 
 For circular motion in galaxies:
 $$v_c^2(r)/r = |g_{local}(r) + g_{wake}(r)|$$
@@ -86,22 +88,23 @@ This is why C-319 is load-bearing: magnetic lattice reorganization enables the c
 
 ---
 
-## Consequence 4: There Is No Dark Matter — Only Compression Ring
+## Consequence 4: There Is No Dark Matter — Only Superfluid Pushback
 
-**What Standard Model calls "dark matter" is actually Extended Compression Effect (A-115 / Book 5 Ch1):**
+**What Standard Model calls "dark matter" is actually the superfluid pushing back against galaxy motion (A-115 / Book 5 Ch1):**
 
-When a galaxy moves through the superfluid, it displaces ψ. The pressure gradient in the displaced field creates a compression ring. This ring is NOT a separate particle or substance—it IS the organized ψ field response to displacement.
+When a galaxy moves through the superfluid, the field resists. This resistance creates a pressure gradient—the compression ring. This is NOT a particle, NOT a new substance, NOT a mystery. It is the superfluid doing what any medium does when you push through it: pushing back.
 
-**The mechanism:**
+**The mechanism (pure mechanics):**
 1. Galaxy moves through superfluid lattice → displaces ψ
-2. Displaced ψ creates pressure gradient (compression ring)
-3. Pressure gradient produces measurable g_wake (Extended Compression Effect)
-4. Electromagnetic coherence (C-319) can stabilize/persist this ring
-5. At galactic scale, R_ring ~ R_gravity → ring is measurable in rotation curves
+2. Superfluid resists displacement (pushback) → creates pressure gradient
+3. Pressure gradient organizes into compression ring around moving structure
+4. Compression ring produces measurable g_wake (gravitational signature of the pushback)
+5. Electromagnetic coherence (C-319) can stabilize/persist this ring pattern
+6. At galactic scale, R_ring ~ R_gravity → ring's gravity is measurable in rotation curves
 
-**Proof:** Satellite validation shows the compression ring model works. The observed "dark matter" phenomena are the extended compression ring—there is no separate particle or mysterious substance.
+**Proof:** Satellite validation shows the pushback model works. The observed "dark matter" phenomena are the superfluid's pressure response—there is no separate particle or mysterious substance.
 
-**Physics:** Dark matter exists ONLY in the Standard Model's incomplete accounting. In One-Wave, it is the Extended Compression Effect (g_wake) from galaxy displacement. Period.
+**Physics:** Dark matter exists ONLY in Standard Model's incomplete accounting. In One-Wave, what they call "dark matter" is the superfluid pushing back against motion. The Extended Compression Effect is just organized pushback. Period.
 
 ---
 
@@ -174,9 +177,9 @@ Electron doesn't "have spin ½." Electron phase-locks to nuclear field compressi
 
 ## Complete Picture (One Sentence)
 
-**The universe is ONE scalar displacement field on a superfluid lattice that updates via one rule; every structure creates compression rings from its motion through the field; electromagnetic coherence persists these rings; four mathematical operations produce four interactions; quantization emerges from resonance; there is no dark matter particle—observed "dark matter" is the Extended Compression Effect (compression ring); all scales use identical grammar.**
+**The universe is ONE scalar displacement field on a superfluid lattice that updates via one rule; when structures move through the field, the superfluid pushes back and organizes into compression rings; electromagnetic coherence can stabilize these rings; four mathematical operations on the field produce four interactions (EM, strong, weak, gravity); quantization emerges from resonance; there is no dark matter particle—observed "dark matter" is superfluid pushback; all scales use identical grammar.**
 
-This is not speculative. It is validated through Extended Compression Effect (g_wake) model prediction of satellite velocities. The only question left is polish for publication (C-319 magnetic coupling refinement, D-409 lattice integration).
+This is not speculative. It is validated through superfluid-pushback (g_wake) model prediction of satellite velocities. The only question left is polish for publication (C-319 magnetic coupling refinement, D-409 lattice integration).
 
 ---
 
