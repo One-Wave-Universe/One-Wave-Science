@@ -1,0 +1,51 @@
+from .models import (
+    RULE_BOOK_HEADING,
+    TRIGGER_EXPLICIT_REQUEST,
+    TRIGGER_MISSING_PREREQUISITE,
+    TRIGGER_REPEATED_ERROR,
+    VALID_TRIGGER_REASONS,
+    AnswerLeakError,
+    CircularPrerequisiteError,
+    CoachError,
+    MalformedRuleExplanationError,
+    RuleExplanation,
+    UnknownRuleError,
+)
+from .registry import (
+    RuleExplanationAlreadyRegisteredError,
+    get_rule_explanation,
+    known_explained_rule_ids,
+    register_rule_explanation,
+    unregister_rule_explanation,
+)
+from .worker import (
+    check_no_answer_leak,
+    explain_rule,
+    explain_rules_used,
+    next_prerequisite_to_explain,
+    to_explanation_payload,
+)
+
+__all__ = [
+    "RULE_BOOK_HEADING",
+    "TRIGGER_EXPLICIT_REQUEST",
+    "TRIGGER_MISSING_PREREQUISITE",
+    "TRIGGER_REPEATED_ERROR",
+    "VALID_TRIGGER_REASONS",
+    "AnswerLeakError",
+    "CircularPrerequisiteError",
+    "CoachError",
+    "MalformedRuleExplanationError",
+    "RuleExplanation",
+    "RuleExplanationAlreadyRegisteredError",
+    "UnknownRuleError",
+    "check_no_answer_leak",
+    "explain_rule",
+    "explain_rules_used",
+    "get_rule_explanation",
+    "known_explained_rule_ids",
+    "next_prerequisite_to_explain",
+    "register_rule_explanation",
+    "to_explanation_payload",
+    "unregister_rule_explanation",
+]

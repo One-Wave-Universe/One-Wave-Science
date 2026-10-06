@@ -455,6 +455,137 @@ combination with a newer rule, and a completed rule's inverse getting
 scheduled *and successfully served* in reverse direction — completes in
 under 20 cycles. Running it twice produces byte-identical output.
 
+## Phase 4: Logic-Clear Explanation / Coach Worker (issue #47)
+
+Phase 4 extends the Phase 2/3 `RouterLoop` — unmodified in its core
+contract — with a Coach Worker: a deterministic, concept-first explanation
+card for exactly one rule at a time, called when the learner is genuinely
+blocked, without ever giving away the active problem's answer.
+
+```text
+STATE MACHINE A <-> ROUTER LOOP <-> STATE MACHINE B
+                         |
+          +--------------+-------------------+
+          |              |                   |
+   Problem Builder   Recall Worker   Coach Worker (Phase 4)
+    (Phase 1)          (Phase 3)
+```
+
+**The Coach Worker is a worker under Router authority, exactly like the
+Phase 1 problem builder and the Phase 3 Recall Worker — not a third state
+machine, and it does not decide curriculum.** It lives in
+`Learner_App/coach/` and is fully domain-agnostic: `coach/models.py`,
+`coach/registry.py`, and `coach/worker.py` never import `router` or
+`parser`, only ever handling `rule_id` strings and an already-explained
+set.
+
+- **`RuleExplanation`** (`coach/models.py`) — one rule's complete card:
+  `rule_id`/`title`/`pattern`, the required `if_text`/`then_text`/
+  `why_text`/`only_when_text`/`do_not_use_when_text` quintet (missing or
+  blank and construction raises `MalformedRuleExplanationError` — a card
+  that can only produce vague prose fails loudly, it is never silently
+  registered), `prerequisites`/`uses_with` (other rule_ids),
+  `examples`/`counterexamples`, a `concept_first_note` kept separate from
+  `formal_terms` (the label comes after the meaning, not before it), and
+  `source_kind`. There is no field capable of holding a solved answer —
+  this type cannot leak what it was never given.
+- **Registry** (`coach/registry.py`) — explicit, like
+  `parser/adapter.py`'s adapter registry: a rule_id's explanation is only
+  available after something calls `register_rule_explanation()` (or a
+  fixtures module's `register_default_explanations()`). No import-time
+  registration magic.
+- The worker's public surface is deterministic facts only:
+  `explain_rule()` (registry lookup), `next_prerequisite_to_explain()`
+  (walks a prerequisite chain to the *deepest* not-yet-explained
+  prerequisite, raising `CircularPrerequisiteError` if the chain revisits
+  a rule instead of recursing forever), `check_no_answer_leak()`, and
+  `explain_rules_used()` (the `problem.rules_used[] -> rule explanation
+  record(s)` reference-link lookup). It never returns a `RouteDecision`.
+
+### The router decides, using the worker's facts
+
+`router/coach_integration.py` is where Phase 4's *decisions* live — kept
+separate from the domain-agnostic worker exactly as `recall_integration.py`
+keeps `RULE_INVERSES`/injection policy separate from the Recall Worker:
+
+- `decide_coach_request()` only ever fires off the Router's own
+  **already-existing** `RouteAction.EXPLAIN` decision (Phase 2's
+  `policy.REASON_REPEATED_ERROR_EXPLAIN`, produced by the repeated-error
+  threshold) — there is no opaque "the learner seemed confused" trigger.
+  The exact rule_id comes straight out of `EvaluationEvidence.error_kind`'s
+  deterministic `"missing_rule:<id>"` shape (State Machine B already
+  encodes it there), not an inference.
+- `apply_prerequisite_first()` — when `coach_prerequisite_first=True` (the
+  `RouterLoop` default) and the requested rule has an unexplained
+  prerequisite, redirects the request to that prerequisite instead,
+  recording `trigger_reason=TRIGGER_MISSING_PREREQUISITE`.
+- `RouterLoop.pending_coach_request` is set by `route_next()` (repeated
+  error) or `request_explanation()` (the explicit "I don't understand"
+  path — grades nothing; `task_state`/`evaluator_state`/`recall_records`
+  are untouched by it). `RouterLoop.explain()` resolves prerequisite-first
+  redirection, looks up the `RuleExplanation`, leak-checks it against the
+  active problem, and **only then** marks the (possibly redirected)
+  rule_id explained and clears `pending_coach_request` — an unknown
+  rule_id, a circular prerequisite chain, or a leak all raise *before* any
+  of that state changes, so a rejected request can never partially mutate
+  session state. Clearing `pending_coach_request` is what "returns control
+  to the Router": policy.py's `EXPLAIN` decision already holds
+  `target_rules`/`difficulty` steady, so the next `generate_problem()`
+  naturally repeats the same pattern.
+
+### No-answer-leak
+
+`check_no_answer_leak()` rejects a `RuleExplanation` whose examples or
+counterexamples would expose the active problem: an exact match (after
+whitespace-insensitive normalization), in whole or as a substring, against
+the problem's own `artifact_text`. `RouterLoop.explain()` runs this check
+automatically, remembering the just-attempted problem (`_last_problem_id`)
+so the check still applies even after `route_next()` has already reset
+`task_state.current_problem_id` back to `None` for the repeated-error
+path.
+
+### Reference-link behavior
+
+`RouterLoop.rule_explanations_for(problem)` resolves every rule in
+`problem.rules_used` to its `RuleExplanation`, leak-checked the same way —
+a read-only inspection link the learner can use at any time, which never
+marks anything explained or touches `pending_coach_request`.
+
+### Rule-book heading
+
+`coach.RULE_BOOK_HEADING` is the exact heading issue #47 specifies for the
+learner-facing reference view that groups rule cards — kept verbatim
+unless a future explicit UI setting changes it.
+
+### Fixtures: `math/basic_equations`
+
+`coach/fixtures/math_basic_equations.py` registers eight cards: the five
+Phase 1 operational rules (`EQ.IDENTITY`/`EQ.ADD_INVERSE`/
+`EQ.SUB_INVERSE`/`EQ.MUL_INVERSE`/`EQ.DIV_INVERSE` — the rule_id string
+literals are written out rather than imported, since Coach keeps the same
+one-way-dependency rule the Recall Worker has; a test checks they stay in
+sync with the parser adapter's real constants) plus three reusable
+prerequisite concept cards issue #47 specifies verbatim: **Coefficient**,
+**Whole-equation scaling**, and **Inverse operation** — the inverse-rule
+cards each list `EQ.CONCEPT.INVERSE_OPERATION` as a prerequisite, and the
+multiplication/division cards also list `EQ.CONCEPT.COEFFICIENT`. These
+are fixtures, not hardcoded core logic — a future domain adds its own
+fixtures module, not changes to `coach/`.
+
+### Running the Phase 4 demo
+
+```bash
+python3 -m Learner_App.demo_phase4
+```
+
+Headless, no UI, no LLM/network. Shows both trigger paths — an explicit
+"I don't understand" request (redirected to the `INVERSE_OPERATION`
+prerequisite first, since it hasn't been explained yet) and a repeated
+same-category error (explained directly, since the prerequisite is now
+already marked explained) — followed by the Router producing an
+appropriate next problem. Running it twice produces byte-identical
+output.
+
 ## Running the tests
 
 ```bash
@@ -481,3 +612,8 @@ Per issue #45 (Phase 3): no UI, no LLM/network calls in the core loop, no
 free-form AI tutoring, no Phase 4 explanation/coach worker, no database/
 cloud persistence (snapshot/restore is a plain in-memory/JSON path only),
 no generic workflow engine, no additional state machines.
+
+Per issue #47 (Phase 4): no UI polish, no chatty free-form LLM tutor, no
+network calls in the core explanation path, no voice, no database/cloud
+persistence, no independent Coach state machine, no curriculum redesign,
+no answer-generation shortcuts.

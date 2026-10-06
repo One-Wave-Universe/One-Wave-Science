@@ -17,10 +17,12 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
+from . import coach_integration
 from . import policy
 from . import recall_integration
 from . import state_machine_a as sm_a
 from . import state_machine_b as sm_b
+from .coach_integration import CoachRequest
 from .models import (
     EvaluationEvidence,
     EvaluationLifecycle,
@@ -31,10 +33,18 @@ from .models import (
     initial_evaluator_state,
     initial_task_state,
 )
+from ..coach import worker as coach_worker
+from ..coach.models import TRIGGER_EXPLICIT_REQUEST, RuleExplanation
 from ..parser.core import build_problem
 from ..parser.models import GeneratedProblem, RulePacket
 from ..recall import worker as recall_worker
 from ..recall.models import RecallConfig, RecallRecord
+
+
+class NoCoachRequestPendingError(ValueError):
+    """Raised by RouterLoop.explain() when called with no pending Coach
+    request and none given explicitly -- a usage error at the Router/
+    caller boundary, not a Coach-domain failure."""
 
 
 class RouterLoop:
@@ -49,6 +59,7 @@ class RouterLoop:
         packet_id_prefix: str = "cycle",
         recall_config: RecallConfig | None = None,
         recall_inverses: Mapping[str, str] | None = None,
+        coach_prerequisite_first: bool = True,
     ):
         self.config = config
         self.base_seed = base_seed
@@ -61,6 +72,7 @@ class RouterLoop:
         self._last_error_kind: str | None = None
         self._consecutive_same_error: int = 0
         self._problems_by_id: dict[str, GeneratedProblem] = {}
+        self._last_problem_id: str | None = None
 
         # Phase 3: recall bookkeeping, instance state like everything else
         # on this object -- see recall_integration.py for the demo
@@ -71,6 +83,15 @@ class RouterLoop:
         )
         self.recall_records: dict[str, RecallRecord] = {}
         self._known_recall_rule_ids = recall_integration.known_rule_ids(config, self.recall_inverses)
+
+        # Phase 4: coach bookkeeping, instance state like everything else
+        # on this object. pending_coach_request is set by route_next()
+        # (action == EXPLAIN) or request_explanation() (explicit "I don't
+        # understand"), and cleared by explain() only once a lookup
+        # actually succeeds -- see explain()'s docstring.
+        self.coach_prerequisite_first = coach_prerequisite_first
+        self.pending_coach_request: CoachRequest | None = None
+        self._coach_explained_rule_ids: frozenset[str] = frozenset()
 
     def generate_problem(self) -> GeneratedProblem:
         """IDLE -> PRIMED -> EXECUTING.
@@ -118,6 +139,11 @@ class RouterLoop:
         self.evaluator_state = sm_b.begin_evaluation(self.evaluator_state)
         evidence = sm_b.evaluate_attempt(attempt, self.task_state)
         self.evaluator_state = sm_b.emit_evidence(self.evaluator_state, evidence)
+        # Phase 4: remembered past resolve_cycle()'s reset of
+        # task_state.current_problem_id, so explain() can still find the
+        # just-attempted problem for its no-answer-leak check even after
+        # the EXPLAIN-triggering cycle has already closed (see explain()).
+        self._last_problem_id = evidence.problem_id
         return evidence
 
     def route_next(self) -> RouteDecision:
@@ -174,6 +200,12 @@ class RouterLoop:
         due_rule_ids = self._due_recall_rule_ids(cycle=current_cycle)
         next_route = recall_integration.inject_due_recall(next_route, due_rule_ids)
 
+        # Phase 4: resolve *which rule* (not *whether*) only -- prerequisite
+        # redirection is deferred to explain() itself (see its docstring),
+        # so a gap in registered Coach content never makes route_next()
+        # raise as a side effect of ordinary per-cycle routing.
+        self.pending_coach_request = coach_integration.decide_coach_request(next_route, evidence)
+
         self.route = next_route
         self.curriculum_index = next_index
 
@@ -221,6 +253,77 @@ class RouterLoop:
 
     def _due_recall_rule_ids(self, *, cycle: int) -> tuple[str, ...]:
         return tuple(r.rule_id for r in recall_worker.due_rules(self.recall_records, cycle=cycle))
+
+    def request_explanation(self, rule_id: str | None = None) -> CoachRequest:
+        """Explicit, learner-initiated "I don't understand" path -- the
+        Router may call Coach for the current rule without marking the
+        in-progress attempt correct or incorrect. Deliberately touches
+        nothing but pending_coach_request: task_state, evaluator_state,
+        and recall_records are exactly as they were before and after this
+        call, so asking for help can never grade an attempt or advance
+        (or retreat) curriculum/recall on its own.
+
+        `rule_id` defaults to the currently active route's first target
+        rule when omitted (there is always at least one once a RouterLoop
+        has been constructed, via policy.initial_route_decision())."""
+        target = rule_id if rule_id is not None else (
+            self.route.target_rules[0] if self.route.target_rules else None
+        )
+        if target is None:
+            raise ValueError("no rule_id given and no active target rule to explain")
+        request = CoachRequest(rule_id=target, trigger_reason=TRIGGER_EXPLICIT_REQUEST)
+        self.pending_coach_request = request
+        return request
+
+    def explain(self, request: CoachRequest | None = None) -> RuleExplanation:
+        """Call the Coach Worker and return control to the Router.
+
+        Resolves prerequisite-first redirection (if configured) and looks
+        up the registered RuleExplanation, then checks it against the
+        active problem for answer leakage, BEFORE touching any instance
+        state -- an unknown rule_id, a circular prerequisite chain, or a
+        leak all raise before `_coach_explained_rule_ids` or
+        `pending_coach_request` change at all, so a rejected request can
+        never partially mutate session state. Only on success does this
+        mark the (possibly prerequisite-redirected) rule_id as explained
+        and clear pending_coach_request -- that clearing *is* "returning
+        control to the Router": the caller decides what happens next
+        (repeat the same pattern, as policy.py's EXPLAIN decision already
+        holds target_rules/difficulty to do, or something else).
+        """
+        active_request = request if request is not None else self.pending_coach_request
+        if active_request is None:
+            raise NoCoachRequestPendingError("explain() called with no pending coach request")
+
+        resolved_request = coach_integration.apply_prerequisite_first(
+            active_request,
+            already_explained=self._coach_explained_rule_ids,
+            prefer_prerequisite_first=self.coach_prerequisite_first,
+        )
+        explanation = coach_worker.explain_rule(resolved_request.rule_id)
+
+        problem_id = self.task_state.current_problem_id or self._last_problem_id
+        active_problem = self._problems_by_id.get(problem_id) if problem_id else None
+        if active_problem is not None:
+            coach_worker.check_no_answer_leak(
+                explanation, active_artifact_text=active_problem.artifact_text
+            )
+
+        self._coach_explained_rule_ids = self._coach_explained_rule_ids | {resolved_request.rule_id}
+        self.pending_coach_request = None
+        return explanation
+
+    def rule_explanations_for(self, problem: GeneratedProblem) -> tuple[RuleExplanation, ...]:
+        """The deterministic `problem.rules_used[] -> rule explanation
+        record(s)` lookup path (issue #47's "Reference-link behavior"): a
+        reference the learner can inspect for `problem` at any time,
+        independent of whether an EXPLAIN cycle ever fires. Read-only --
+        unlike explain(), this never marks anything as explained or
+        touches pending_coach_request, since inspecting a rule link is not
+        the Router deciding an explanation cycle happened."""
+        return coach_worker.explain_rules_used(
+            problem.rules_used, active_artifact_text=problem.artifact_text
+        )
 
     def recall_snapshot(self) -> list[dict]:
         """A JSON-serializable snapshot of every tracked RecallRecord."""
