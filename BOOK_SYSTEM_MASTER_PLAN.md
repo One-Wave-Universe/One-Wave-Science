@@ -6,6 +6,8 @@
 
 The canonical source remains the A-G node architecture. Green/Yellow/Bronze/Silver/Gold describe proof status, not storage location.
 
+`Books/README.md` is the publication-root authority for manuscript location, generated outputs, figures, and duplicate handling.
+
 ## Presentation families
 
 ### Appendix A-G Wiki System
@@ -17,23 +19,21 @@ Every active appendix should have:
 - an AI-readable appendix pack;
 - direct links to any simulation code, data, and figures.
 
-Appendix A's missing wiki and machine views are now present.
-
 ### Books 1-5: Micro through Macro
 
 These are technical textbooks using the shared spine:
 
-`Gray -> 2D -> 3D -> Mathematics -> Predictions -> Yellow Audit -> Future Work -> Closing Thoughts`
+`Gray -> 2D -> 3D -> Mathematics -> Predictions/Tests -> Yellow Audit -> Future Work -> Closing Thoughts`
 
-Current state:
+Current state on the book-recovery branch:
 
-- Book 1 Micro: 17 active chapters numbered continuously from Ch1 through Ch17.
-- Book 2 Small/Cellular: one active chapter; expansion requires new nodes first.
-- Book 3 Medium/Human-Biological: scope document only; appendix grounding remains thin.
-- Book 4 Large/Planetary-Solar: scope document only; new mechanics must be built before prose.
-- Book 5 Macro: five active chapters.
+- Book 1 Micro: 17 active chapters; equation/figure audit still required across the volume.
+- Book 2 Small/Cellular: five active Markdown chapters. Ch1 has been corrected and illustrated; Ch2-Ch5 now contain quantitative control mathematics and specify the data-backed graphs still required.
+- Book 3 Medium/Human-Biological: scope document only; appendix grounding remains thin. Do not fabricate One-Wave physiology mechanics at book layer.
+- Book 4 Large/Planetary-Solar: scope document only; new grounded mechanics/control chapters are required before One-Wave prose can honestly expand.
+- Book 5 Macro: five active chapters. Cosmology text must wait for explicit resolution of the stacked E-533/E-534/E-535 line before adopting any mutually incompatible mechanism.
 
-The PDFs in those folders are generated presentation copies of the current Markdown chapters.
+The PDFs in those folders are generated presentation copies. They are outputs, not duplicate manuscript authorities.
 
 ### Android Body & Brain
 
@@ -68,9 +68,23 @@ Status: Active Hypothesis. The specific grounding failures recorded in G-719 rem
 
 ### Musical Universe
 
-Format remains intentionally undecided.
+Format remains intentionally undecided. Root-level `Musical_Universe/` and `Books/Musical_Universe/` currently form a parallel active manuscript problem. Unique root material must be merged into the canonical `Books/` tree before the redundant editable tree is deleted.
 
-## Current load-bearing corrections carried into this presentation release
+## Publication completion gate
+
+A quantitative book chapter is complete only when it has:
+
+1. named source nodes and claim status;
+2. control/reference science separated from One-Wave interpretation;
+3. equations with defined variables and dimensional sanity;
+4. figures/graphs appropriate to geometry, dynamics, or comparisons;
+5. data/simulation links for evidence-bearing graphs;
+6. falsifiable predictions/tests;
+7. a Yellow Audit stating unresolved dependencies.
+
+Art may improve explanation and identity, but it never upgrades evidence status.
+
+## Current load-bearing corrections
 
 - A-115 is the home for the Unified Compression Field: gravity, dark-matter behavior, and Higgs-like resistance as three views of one field.
 - C-322 holds the 125 GeV Mirror-Gate pressure-work boundary-response anchor.
@@ -84,4 +98,4 @@ Format remains intentionally undecided.
 
 ## Status inheritance
 
-A chapter cannot carry a stronger claim than its strongest unresolved dependency. Visual polish does not promote proof status. The universe remains stubbornly unimpressed by typography.
+A chapter cannot carry a stronger claim than its strongest unresolved dependency. Visual polish does not promote proof status.
