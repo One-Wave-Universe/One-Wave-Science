@@ -135,6 +135,13 @@ class P0TernaryCircuit:
             "+V": self.v_supply,
             "-V": -self.v_supply,
             "0": 0.0,
+            # Initialize phase and winding nodes for proper MNA
+            "mid_U": 0.0,      # Each phase initially at midpoint (0V)
+            "mid_V": 0.0,
+            "mid_W": 0.0,
+            "winding_U_return": 0.0,  # Winding returns initially at centerpoint
+            "winding_V_return": 0.0,
+            "winding_W_return": 0.0,
         }
 
         return circuit, {
@@ -232,11 +239,19 @@ class P0TernaryCircuit:
             "L_V": InductorState(id="L_V", current=0.0),
             "L_W": InductorState(id="L_W", current=0.0),
         }
+        v_mid = self.v_supply / 2.0  # Midpoint voltage (virtual ground)
         voltages = {
             "+V": self.v_supply,
             "GND": 0.0,
-            "0": self.v_supply / 2.0,  # virtual ground starts at midpoint
-            "vg_raw": self.v_supply / 2.0,
+            "0": v_mid,  # virtual ground starts at midpoint
+            "vg_raw": v_mid,
+            # Initialize winding and phase nodes for proper Vgs calculation
+            "mid_U": v_mid,      # Each phase initially at midpoint
+            "mid_V": v_mid,
+            "mid_W": v_mid,
+            "winding_U_return": v_mid,  # Winding returns initially at virtual ground
+            "winding_V_return": v_mid,
+            "winding_W_return": v_mid,
         }
 
         return circuit, {

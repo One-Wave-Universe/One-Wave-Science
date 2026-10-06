@@ -281,8 +281,12 @@ class TransientCircuit:
             for gate_root, mosfet_id in gate_drivers.items():
                 prev_voltages[gate_root] = gate_voltage_func(mosfet_id, time)
 
-        # Backward Euler with one nonlinear iteration
-        for iteration in range(1):  # P0: one iteration is enough
+        # Backward Euler/Trapezoidal with Newton iterations for nonlinear elements
+        # Increase iterations when opamps are present (current limiting is nonlinear)
+        n_iterations = 3 if self.opamps else 1
+
+        for iteration in range(n_iterations):
+            # Initialize MNA matrix and RHS vector for this iteration
             A = [[0.0] * size for _ in range(size)]
             b = [0.0] * size
 
@@ -378,7 +382,7 @@ class TransientCircuit:
             # Op-amp buffers: unity gain buffer with output impedance
             # Simplified model: V_out = V_in (via VCVS-like equation)
             # Output impedance Rout models current sourcing limits
-            # Note: does not add additional MNA rows; uses existing node equations
+            # Current limiting enforced through Newton iteration
             for op_idx, op in enumerate(self.opamps):
                 v_in_idx = gi(op.v_in)
                 v_out_idx = gi(op.v_out)
@@ -392,9 +396,40 @@ class TransientCircuit:
                     A[v_out_idx][v_in_idx] -= g_coupling
                     # Do NOT couple back to v_in; it's determined by resistor divider
 
-                # Output impedance to ground (Rout) provides current sourcing path
+                # Output impedance with current limiting (enforced via Newton iteration)
                 if op.Rout > 0 and v_out_idx >= 0 and v_gnd_idx >= 0:
-                    g_out = 1.0 / op.Rout
+                    # Calculate actual output current from previous iteration
+                    v_out = prev_voltages.get(op.v_out, 0.0)
+                    v_gnd = prev_voltages.get(op.gnd, 0.0)
+                    v_out_diff = v_out - v_gnd
+                    i_out = v_out_diff / op.Rout if op.Rout > 0 else 0.0
+
+                    # Determine effective output resistance
+                    # If current is being limited, increase Rout to create voltage sag
+                    rout_effective = op.Rout
+
+                    if iteration > 0:  # Start limiting checks after first iteration
+                        i_max_source_a = op.max_sourcing_mA * 1e-3  # Convert mA to A
+                        i_max_sink_a = op.max_sinking_mA * 1e-3
+
+                        # Current limiting logic:
+                        # If sourcing current exceeds max, add series resistance
+                        # This creates voltage sag on next iteration, reducing current draw
+                        if i_out > i_max_source_a:
+                            # Sourcing too much - increase Rout to limit current
+                            excess_current = i_out - i_max_source_a
+                            # Add extra resistance: V_sag = I_excess * R_extra
+                            # Target sag proportional to excess current
+                            r_extra = abs(v_out_diff) / max(excess_current, 1e-12) if v_out_diff != 0 else op.Rout
+                            rout_effective = op.Rout + r_extra
+                        elif i_out < -i_max_sink_a:
+                            # Sinking too much - increase Rout to limit current
+                            excess_current = -i_out - i_max_sink_a
+                            r_extra = abs(v_out_diff) / max(excess_current, 1e-12) if v_out_diff != 0 else op.Rout
+                            rout_effective = op.Rout + r_extra
+
+                    # Stamp the effective output impedance
+                    g_out = 1.0 / rout_effective
                     A[v_out_idx][v_out_idx] += g_out
                     A[v_out_idx][v_gnd_idx] -= g_out
                     A[v_gnd_idx][v_out_idx] -= g_out
@@ -442,7 +477,8 @@ class TransientCircuit:
 
             full_voltages = {n: new_voltages[uf.find(n)] for n in all_nodes}
 
-            prev_voltages = new_voltages.copy()
+            # Preserve gate voltages across Newton iterations (they're external to MNA)
+            prev_voltages.update(new_voltages)
 
         # Update capacitor/inductor states based on final voltages
         new_cap_states = {}
