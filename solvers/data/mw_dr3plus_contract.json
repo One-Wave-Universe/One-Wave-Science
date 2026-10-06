@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "frozen_before_evaluation_utc": "2026-10-06T05:29:00Z",
+  "reference_commit": "4f23a49afd17577d0b25ef3c4055eff0586b5fee",
+  "source": {
+    "authors": "Francesco Sylos Labini, Zofia Chrobakova, Roberto Capuzzo-Dolcetta, Martin Lopez-Corredoira",
+    "title": "Mass Models of the Milky Way and Estimation of Its Mass from the Gaia DR3 Data Set",
+    "citation": "ApJ 945, 3 (2023), Table 1, page 3",
+    "doi": "https://doi.org/10.3847/1538-4357/acb92c",
+    "url": "https://discovery.ucl.ac.uk/id/eprint/10202950/1/mass_models.pdf",
+    "license": "CC BY 4.0",
+    "retrieved_utc": "2026-10-06",
+    "transformation": "Manual transcription of all 45 Table 1 rows from primary-source web-extracted text; no row exclusions, interpolation or smoothing. Independent reviewer checks transcription. Raw PDF bytes were unavailable; no PDF hash claimed."
+  },
+  "observable": "Milky Way inferred midplane circular speed in km/s at Galactocentric radius in kpc",
+  "independence": "External published-data evaluation, not blind or proven independent of legacy calibration; overlap cannot be excluded. DR3+ combines Eilers2019 and Wang2023.",
+  "assumptions": [
+    "Time-independent axisymmetric Jeans inference and tracer-density assumptions inherited from source",
+    "Quoted errors used diagonally; covariance and complete systematics unavailable",
+    "GalaxyRotationConstantInherited is a phenomenological candidate, not an A-115 source-derived law"
+  ],
+  "variants": [
+    {
+      "name": "constructor_default",
+      "velocity_scale_factor": 30.0,
+      "mw_inherited_velocity_kms": 110.0
+    },
+    {
+      "name": "reused_legacy_calibration",
+      "velocity_scale_factor": 39.23,
+      "mw_inherited_velocity_kms": 110.0
+    }
+  ],
+  "cohort": {
+    "rows": 45,
+    "radius_min_kpc": 5.25,
+    "radius_max_kpc": 27.25,
+    "excluded_rows": []
+  },
+  "diagnostic_screen": {
+    "criterion": "RMS residual <= 10% of mean observed circular speed",
+    "relative_rms_max": 0.1,
+    "meaning": "Declared coarse discrepancy screen only; passing is not physical confirmation"
+  },
+  "sha256": {
+    "data/mw_dr3plus_2023.csv": "b0ad5be943356840710b2589be1159983a1d6e01df1e7987c47bd0bf9110a626",
+    "galaxy_rotation_constant_inherited_velocity.py": "d38673ac9353b1c895a5391c59786a91ec2740d819511e64308eeffc6b429efa",
+    "galaxy_rotation_cascade_wake_validator.py": "d423b0872bf65f99ff5f6af6337803d232537de5847ec8253b8f93e055f2527f",
+    "observational_data_loader.py": "5a4ae5d9bbf9a3d7dfa4e16dc0531d94a6921fd5640bba0e3223fe331d3658c5"
+  }
+}

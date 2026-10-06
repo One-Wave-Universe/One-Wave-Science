@@ -1,3 +1,5 @@
+> Evidence correction (2026-10-06): The satellite proof claims below are historical hypotheses, not established results. Comparing orbital motion directly with internal velocity dispersion does not establish cascade inheritance or a dark-matter explanation. The source-qualified [external circular-speed evaluation](GALAXY_EXTERNAL_VALIDATION.md) tests a fixed rotation candidate on all 45 published bins; it is nonblind and does not settle the broader One-Wave hypothesis. This correction concerns the galaxy/satellite evidence only.
+
 # One-Wave Unified Field: Satellite Validation and Complete Framework
 **Complete synthesis: ONE field, ONE rule, ONE mechanism explains ALL phenomena**
 
