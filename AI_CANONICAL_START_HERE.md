@@ -96,6 +96,10 @@ Point -> Path -> Rotation -> Field -> Volume -> next-scale Point
 
 `3 x 3 x 3`, mirrored volumes, `2+2`, `3+3`, `3+ / 3- / 3+`, M4 physical depth, higher-brain depth, and hemisphere stack counts remain **OPEN hardware hypotheses** until measurements establish what the extra depth contributes. Do not promote numerical symmetry into canon.
 
+## Brain Buddy proven-route gate
+
+Before changing, diagnosing, or invoking Gemini/DeepSeek Brain Buddy transport, read `BRAIN_BUDDY_PROVEN_ROUTE_AUTHORITY.md`. Successful execution receipts are operational evidence and must carry forward. A new transport does not supersede a proven route until the same canonical probe succeeds through it. Transport failure must not be reported as model failure, and a newer failed route must not erase an older verified success.
+
 ## Open research: Jetson Dreamscape translator
 
 **Help wanted:** [Dreamscape translator open work](DREAMSCAPE_TRANSLATOR_OPEN_WORK.md) connects the [full verbatim hypothesis](RABBIT_HOPPING_TRANSLATOR_HYPOTHESIS_QUESTIONS.md) to the intended external-USB Jetson X/Y/Z 3D lattice sandbox, shared AI Mega City, terraforming and persistent homes. Mathematical and runtime integration work remain open; follow the work packages and evidence gates.
