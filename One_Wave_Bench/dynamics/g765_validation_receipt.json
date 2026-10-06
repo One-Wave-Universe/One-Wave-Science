@@ -1,0 +1,60 @@
+{
+  "constants": {
+    "x_pm": 1.0,
+    "x_star": 0.5773502691896257,
+    "h_c": 0.3849001794597505,
+    "omega_well_h0_formula": 1.4142135623730951
+  },
+  "thresholds": {
+    "center_band": 0.5773502691896257,
+    "boundary": 2.0,
+    "begin_energy_max": 0.025,
+    "hold_energy_min": 0.125,
+    "speed_tol": 0.05,
+    "energy_rate_tol": 0.05,
+    "break_rate_min": 1.0,
+    "coherence_min": 0.5,
+    "heat_max": 0.35
+  },
+  "collapsed_gate_sequence": [
+    "Begin",
+    "Coherent Build",
+    "Unstable Build",
+    "Hold",
+    "Unstable Build",
+    "Hold",
+    "Hold",
+    "Break",
+    "Coherent Build",
+    "Unstable Build",
+    "Loop",
+    "Unstable Build",
+    "Hold",
+    "Unstable Build",
+    "Hold",
+    "Hold"
+  ],
+  "raw_gate_counts": {
+    "Begin": 34,
+    "Unclassified": 1321,
+    "Coherent Build": 219,
+    "Unstable Build": 1137,
+    "Hold": 5189,
+    "Break": 100,
+    "Loop": 1
+  },
+  "crossing_time_ground_truth": 16.9,
+  "loop_gate_detected_time": 16.9,
+  "capture_criterion": {
+    "captured_during_hold_t10": true,
+    "captured_after_bias_flip_t16_5": false,
+    "note": "Sec.7's capture criterion assumes fixed h; once h(t) itself changes the barrier V(x*;h) moves, so a previously-captured trajectory can become uncaptured without new energy input."
+  },
+  "ringdown_frequency": {
+    "measured": 1.596743407161267,
+    "h0_formula_sqrt_2b": 1.4142135623730951,
+    "bias_generalized_formula": 1.596900637731628,
+    "x_well_final": -1.1254764393784054,
+    "note": "sqrt(2b) is derived at the unbiased well x_pm. For a biased well the rest point shifts, so the correct ringdown formula is sqrt(V''(x_well(h)) - (gamma/2)^2), i.e. curvature at the ACTUAL (bias-shifted) minimum with the standard damped-oscillator correction."
+  }
+}
