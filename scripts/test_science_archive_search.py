@@ -12,6 +12,22 @@ class Client:
     def __init__(self,raw):self.raw=raw;self.request=None
     def open(self,request,timeout):self.request=request;return Response(self.raw,request.full_url)
 class Tests(unittest.TestCase):
+    def test_pds_identifier_and_mission_scope(self):
+        with tempfile.TemporaryDirectory() as d:
+            x=relay.acquire("pds","","urn:nasa:pds:mars2020.spice",3,d,opener=Client(b'{"id":"urn:nasa:pds:mars2020.spice::16.0"}'))
+            self.assertEqual(x["status"],"acquired")
+        with tempfile.TemporaryDirectory() as d:
+            x=relay.acquire("pds","","urn:nasa:pds:mars2020.spice::15.0",3,d,opener=Client(b'{"id":"urn:nasa:pds:mars2020.spice::16.0"}'))
+            self.assertEqual(x["status"],"failed")
+        with self.assertRaises(ValueError):relay.route("pds","bad/mission","",3)
+        with self.assertRaises(ValueError):relay.route("pds","mars2020","urn:nasa:pds:test",3)
+    def test_sdss_table_marker_and_identifiers(self):
+        with tempfile.TemporaryDirectory() as d:
+            raw=b'#Table1\nspecObjID,ra,dec,z\n123,1.0,2.0,0.1\n'
+            x=relay.acquire("sdss","","",3,d,opener=Client(raw))
+            self.assertEqual(x["sample"][0]["specObjID"],"123")
+            self.assertEqual(x["sha256"],hashlib.sha256(raw).hexdigest())
+        with self.assertRaises(ValueError):relay.route("sdss","arbitrary SQL","",3)
     def test_openneuro_matching_metadata_and_exact_hash(self):
         raw=b'{"data":{"dataset":{"id":"ds000224","name":"MSC"}}}'
         with tempfile.TemporaryDirectory() as d:

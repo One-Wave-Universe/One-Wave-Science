@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Bounded public archive search/relay with exact response receipts."""
 import argparse,csv,hashlib,io,json,pathlib,re,subprocess,sys
-from urllib.parse import urlencode,urlparse
+from urllib.parse import urlencode,urlparse,quote
 from urllib.request import Request,build_opener,HTTPRedirectHandler
 from open_data_fetch import load_registry,source_by_id,allowed_hosts,utc_now
 MAX_BYTES=2*1024*1024
@@ -14,11 +14,19 @@ class CheckedRedirect(HTTPRedirectHandler):
         return super().redirect_request(req,fp,code,msg,headers,newurl)
 
 def route(source,query,record,limit):
-    if record and source!="openneuro":raise ValueError("--record is supported only for OpenNeuro on this relay")
+    if record and source not in ("openneuro","pds"):raise ValueError("--record is supported only for OpenNeuro and PDS on this relay")
     if source=="cern-open-data":return "https://opendata.cern.ch/api/records/?"+urlencode({"q":query or "CMS","size":limit}),None,"json"
     if source=="hepdata-doi":return "https://api.datacite.org/dois?"+urlencode({"query":"prefix:10.17182 AND ("+(query or "Higgs")+")","page[size]":limit}),None,"json"
     if source=="hepdata":return "https://www.hepdata.net/search/?"+urlencode({"q":query or "Higgs","format":"json"}),None,"json"
     if query and source in ("gwosc","gaia-archive","eso","alma","desi"):raise ValueError("This route is a bounded inventory; text search is unsupported. Use the native query tool for sky/ADQL queries.")
+    if source=="pds":
+        if query and record:raise ValueError("Choose either PDS mission or product record")
+        if query and not re.fullmatch(r"[a-z0-9_-]+",query):raise ValueError("PDS mission must be a context mission slug")
+        if record and not re.fullmatch(r"urn:nasa:pds:[A-Za-z0-9_.:\-]+",record):raise ValueError("PDS record must be a NASA PDS LID/LIDVID")
+        return "https://pds.nasa.gov/api/search/1/products"+("/"+quote(record,safe=":") if record else "?"+urlencode({"limit":limit,**({"q":'ref_lid_investigation eq "urn:nasa:pds:context:investigation:mission.'+query+'"'} if query else {})})),None,"json"
+    if source=="sdss":
+        if query:raise ValueError("SDSS relay uses a bounded galaxy sample; arbitrary SQL is unsupported")
+        return "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?"+urlencode({"cmd":"SELECT TOP "+str(limit)+" specObjID,ra,dec,z FROM SpecObj WHERE class='GALAXY'","format":"csv"}),None,"csv"
     if source=="gwosc":return "https://gwosc.org/api/v2/runs",None,"json"
     if source=="dandi":return "https://api.dandiarchive.org/api/dandisets/?"+urlencode({"page_size":limit,"search":query}),None,"json"
     if source=="openneuro":
@@ -61,6 +69,10 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
             doc=json.loads(raw)
             if isinstance(doc,dict) and (doc.get("errors") or doc.get("status")=="ERROR"):raise ValueError("Provider returned application error: "+str(doc)[:1000])
             if source=="openneuro":rows=([doc["data"]["dataset"]] if record and doc["data"].get("dataset") else [x["node"] for x in doc["data"].get("datasets",{}).get("edges",[])])
+            elif source=="pds":
+                rows=[doc] if record else doc.get("data",[])
+                if record and (("::" in record and doc.get("id") != record) or ("::" not in record and str(doc.get("id","")).split("::")[0] != record)):raise ValueError("PDS returned a different product identifier")
+                receipt["page_links"]=doc.get("links",[])
             elif source=="hepdata-doi":
                 rows=doc.get("data",[])
                 if any(not str(x.get("id","")).startswith("10.17182/") for x in rows):raise ValueError("DataCite returned a DOI outside the HEPData prefix")
@@ -71,7 +83,7 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
             receipt["page_next"]=doc.get("next") if isinstance(doc,dict) else None
             (output/"provider.json").write_text(json.dumps(doc,indent=2))
         elif kind=="csv":
-            text=raw.decode();rows=list(csv.DictReader(io.StringIO(text)))
+            text=raw.decode();csv_text="\n".join(line for line in text.splitlines() if not line.startswith("#"));rows=list(csv.DictReader(io.StringIO(csv_text)))
             if text.lstrip().startswith("<"):raise ValueError("TAP returned XML/HTML rather than CSV")
         elif kind=="text":rows=[x for x in raw.decode().splitlines() if not query or query.lower() in x.lower()]
         else:

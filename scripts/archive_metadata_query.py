@@ -14,6 +14,7 @@ def main():
     p.add_argument("--coordinates", default="83.6331 22.0145", help="ICRS RA Dec in degrees")
     p.add_argument("--radius-deg", type=float, default=0.01)
     p.add_argument("--mission", default="HST")
+    p.add_argument("--inventory", action="store_true", help="MAST bounded first page without a cone filter")
     p.add_argument("--catalog", default="numaster")
     p.add_argument("--adql", default="SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source")
     p.add_argument("--output", type=Path, required=True)
@@ -34,8 +35,12 @@ def main():
         if args.source == "mast":
             from astroquery.mast import Observations
             Observations.TIMEOUT = 30
-            table = Observations.query_criteria(coordinates=position, radius=args.radius_deg * u.deg,
-                                                obs_collection=args.mission)
+            if args.inventory:
+                table = Observations.query_criteria(obs_collection=args.mission, pagesize=10, page=1)
+                receipt["scope"] = "MAST first page, at most 10 observations; not complete mission inventory"
+            else:
+                table = Observations.query_criteria(coordinates=position, radius=args.radius_deg * u.deg,
+                                                    obs_collection=args.mission)
             receipt["provider_url"] = "https://mast.stsci.edu/"
         elif args.source == "heasarc":
             from astroquery.heasarc import Heasarc

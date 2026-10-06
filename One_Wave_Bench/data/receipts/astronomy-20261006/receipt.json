@@ -1,0 +1,1837 @@
+{
+  "reference_head": "e26bf1eb7b8abd3ca50f83a8c13815a3125f5ff1",
+  "device": "fc9b5227-716d-4508-a666-ee0a68a08d4c",
+  "classification": "archive acquisition receipts; not physical validation",
+  "receipts": [
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/Chandra/receipt.json",
+      "receipt_sha256": "1c40795b2781b73530e1f3c0072a272afc6bce11b95d74a8bc54b9f047c32846",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:55.409202+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "chanmaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 101,
+      "sha256": "e06adbbffa98e42fd973f396be2bdcf3321b5398cbcb493e404b0b7c58fc9e93",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/Fermi/receipt.json",
+      "receipt_sha256": "bd6ce58b3d85b27e7aa50609d9ee50c11f94c2746ee5705041d973243d001883",
+      "source_id": "heasarc",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:27:04.170491+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "fermimaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "error": "DALQueryError: Error[s] detected in query preprocessing: syntax error at or near \",\". Query: SELECT ,__row FROM fermimaster WHERE CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',83.6331,22.0145,0.1))=1",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/Fermi-corrected/receipt.json",
+      "receipt_sha256": "0ea081a460635e56d2fc58d68fd8bc2b2da93af1d8a296c69e91567a7359bac9",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:28:30.370590+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "fermilasp",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 7369,
+      "sha256": "3198d2f73207171f729a7e98e386dc9306ccde562c18c76275914cbe5d280132",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/GALEX/receipt.json",
+      "receipt_sha256": "d59f92a0eb2b1ef71c8a7372da281c9f19ed238ecdbc8a93fc02c4c3cb976411",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:39.509951+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "10.6847 41.269",
+        "mission": "GALEX",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 25,
+      "sha256": "f292ab038c7d494276bced34b6ec2c06aba8e9885e0c2889968dfc62a6716ebe",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/HST/receipt.json",
+      "receipt_sha256": "10327ba67b4de62eb916c097b80db9f417bbde506c0c3a44a264df083ae5adc9",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:24.462527+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 1573,
+      "sha256": "3fa548e91fe50661d75eee3d342855296b3216b3089bc1de8c736a9c2d9907e6",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/IXPE/receipt.json",
+      "receipt_sha256": "b1ef696a31242c285eb1134149a4c17ed3b8c1d93b62c5733593847238060ec4",
+      "source_id": "heasarc",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:27:10.212086+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "ixpemaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "error": "DALQueryError: Error[s] detected in query preprocessing: syntax error at or near \",\". Query: SELECT ,__row FROM ixpemaster WHERE CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',83.6331,22.0145,0.1))=1",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/IXPE-corrected/receipt.json",
+      "receipt_sha256": "c0c3cd955fe668d099e32244ca7f73318e19713aa692f1727defa284fdc14d42",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:33.733728+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "ixmaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 17,
+      "sha256": "b9ed883258da75a7c4ba6e0f81f38c131a62e1c6d9782c052faee6f568123dec",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/JWST/receipt.json",
+      "receipt_sha256": "28d86b83ab57dfdcf706431e5834ec8f35a5fe4d3023f7f826491ef0fad87bdb",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:24.462274+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "JWST",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 216,
+      "sha256": "60e6f834516d41ba2c54aa9c60214525d6d590542ab2b073527f242d23a0bfe9",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/K2/receipt.json",
+      "receipt_sha256": "faaccb2dec8142c9c1f2531ff15e1cec8b18444f7bc1c7f60d956d19a03c03bc",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:47.773855+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "166.0 1.0",
+        "mission": "K2",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 0,
+      "sha256": "d0313bad780a117d7d1d8faa73ae3cc5e00b7d480d42be8165b52b5c45b6108d",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/Kepler-inventory/receipt.json",
+      "receipt_sha256": "bc3f41930340c05bd52d5c1907141dcab19a3e96b9b1f1419d3e7859a21dfbe2",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:28:56.143572+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "Kepler",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "8cea9c3af065500515f96d5888be93122368c91e8e2c4e1f6d1c2a00cd8ca600",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/NICER/receipt.json",
+      "receipt_sha256": "70d7e1bbd0804d966297965d1f6dabd83baf231c3b4645025ae3e538bef2be4c",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:09.247118+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "nicermastr",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 188,
+      "sha256": "0b4aa04ea47b0fd0ff1f22fa0f84bdf92e8a9fcaf9232a13364bbf17a747300c",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/NuSTAR/receipt.json",
+      "receipt_sha256": "4ae08496fa6d3bc3cea2b88fbc4406b1674e4060ca12e0d43d4dedb20c21dce6",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:48.157985+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 108,
+      "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/Swift/receipt.json",
+      "receipt_sha256": "a386d4b1bb3ca3585b4da97009930d511749ad3e01f4223f7012efd0ae484c7b",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:56.431985+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "swiftmastr",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 123,
+      "sha256": "4201c07726da625c688f2c467efd0bc4a8eb886c9069e21be1e3c871b0b92006",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/TESS/receipt.json",
+      "receipt_sha256": "76bf8d770552a8e20e96ebbba1982789c4d7c4d8f05fefcdeb87e46050629601",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:26:24.462428+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "TESS",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 8,
+      "sha256": "1cb187c3f2b04c3170ccd8b57ae572ccbe99b76dc1dc1c78abe7e899bf481f5d",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/XMM/receipt.json",
+      "receipt_sha256": "4baaf889f63e2715ee058f7245b186d18e7bfa0d388e3b753064474d5345a710",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:03.026320+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "xmmmaster",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 145,
+      "sha256": "fd5f79bb95bd67cee13f81faefd325ecbd4c062ecfe8269617ce8216fb57b07c",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/XRISM/receipt.json",
+      "receipt_sha256": "ca1915d1f5f119b5bb6c81579378248470e6ecdb3d0d6e273d7670aa87a194e7",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:16.359404+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "xrismmastr",
+        "coordinates": "83.6331 22.0145",
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 17,
+      "sha256": "c1ce845b5b476f8590d225d183af6e1fcb5a78cf9414f660d433052d66c13a4e",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/alma/receipt.json",
+      "receipt_sha256": "0db49000b1a45ae993409c6c885953e073d03cf39bc6fcb6604529cc0c2681f0",
+      "source": "alma",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:20.834544+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "11337ce723c0d71c4ea4df7ea25df2c383d585ac78b35e53e2410247f6cb6650",
+      "requested_url": "https://almascience.eso.org/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+obs_id%2C+s_ra%2C+s_dec+FROM+ivoa.obscore",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/desi/receipt.json",
+      "receipt_sha256": "665b6e51c00b0bbef73866c80eb078cc53628fe412694cfd3a84144dc481e513",
+      "source": "desi",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:22.061507+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 7,
+      "sha256": "00c1289154008b778b8b40bcfa12ee482b720b535f5f4dc8c7b0d80c39d5d871",
+      "requested_url": "https://data.desi.lbl.gov/public/dr1/",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/eso/receipt.json",
+      "receipt_sha256": "ccc9147ade18a193c30c6f6c8f249b0d7b07bf97e56826637194e665000efbf5",
+      "source": "eso",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:19.086023+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "72c7973b13a0ee701e34c1d9b570fead9272d4ca84ceec4237eb8007b9cd7e51",
+      "requested_url": "https://archive.eso.org/tap_obs/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+obs_id%2C+s_ra%2C+s_dec+FROM+ivoa.obscore",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/Chandra/receipt.json",
+      "receipt_sha256": "7ccdc653660e908a0ee208da38ef3f65ca937f11ed423eff2c415c5110e62dff",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:27.883948+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "chanmaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 101,
+      "sha256": "e06adbbffa98e42fd973f396be2bdcf3321b5398cbcb493e404b0b7c58fc9e93",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/Fermi/receipt.json",
+      "receipt_sha256": "3059d54b369feefd161b7d7bbcf070001569ad2c29650e4ad5d3d1ef2f0a4f92",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:40.158239+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "fermilasp",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 7369,
+      "sha256": "3198d2f73207171f729a7e98e386dc9306ccde562c18c76275914cbe5d280132",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/GALEX/receipt.json",
+      "receipt_sha256": "b94e95bae6cfca09579f1777cf27872a80cdbd2632098e2598bafe6e4549d053",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:31:15.227512+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "GALEX",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "07ecd6ff22c79499004213428f0553b41b4bdbc58a52b6ec8deaeff927976fa3",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/IXPE/receipt.json",
+      "receipt_sha256": "12a7a1c45fa17df4437d975f78309f6faf3304f92ceb2f44933c33f3567022b2",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:43.521146+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "ixmaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 17,
+      "sha256": "b9ed883258da75a7c4ba6e0f81f38c131a62e1c6d9782c052faee6f568123dec",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/JWST/receipt.json",
+      "receipt_sha256": "b0e8184b8dbe423c1b619a38cc5a75dd61dad046bbf6a0c175878ae4a66f1d99",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:57.770035+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "JWST",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "5aedc90e838f3cb1478f2d96164ab984860560592153d842237d2e2821ede3d1",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/K2/receipt.json",
+      "receipt_sha256": "7bf40e4d4aee4f319fb35750b21f367c49293419d63ea950760bfc75be28024c",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:21.232989+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "K2",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "0e2e1a5f167a49451f5bd2b38acc5dc6882bdfdb39d373a72b8277d014f1de25",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/Kepler/receipt.json",
+      "receipt_sha256": "69f9fa0e0cf7daed8e576cb7a861be8b94e3a3b8860a4cfe1111ece2a941dd57",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:31:50.831527+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "Kepler",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "8cea9c3af065500515f96d5888be93122368c91e8e2c4e1f6d1c2a00cd8ca600",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/NICER/receipt.json",
+      "receipt_sha256": "2b502e3b72cb725f5b8a96a9bc6fe153433965cb26a92be4569473ce07c03b3d",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:43.293507+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "nicermastr",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 188,
+      "sha256": "0b4aa04ea47b0fd0ff1f22fa0f84bdf92e8a9fcaf9232a13364bbf17a747300c",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/NuSTAR/receipt.json",
+      "receipt_sha256": "115349b450e871c43fad2a379d8a22952f129162aafe88bd6adb64462bcee460",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:27.882788+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 108,
+      "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/Swift/receipt.json",
+      "receipt_sha256": "639ae72b4a2e4b92f0db79c31391848672f5b12638acc7f331817842568930fb",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:36.086854+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "swiftmastr",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 123,
+      "sha256": "4201c07726da625c688f2c467efd0bc4a8eb886c9069e21be1e3c871b0b92006",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/XMM/receipt.json",
+      "receipt_sha256": "c8f8e7b999f0462fc905f82deba384750290a68a799c320263d2c79bc69ee2a9",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:36.443410+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "xmmmaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 145,
+      "sha256": "fd5f79bb95bd67cee13f81faefd325ecbd4c062ecfe8269617ce8216fb57b07c",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/XRISM/receipt.json",
+      "receipt_sha256": "2ae593f317dc6aa6a5120a05f2d25334251b274b15ebd4b371fb4b8fa4e14641",
+      "source_id": "heasarc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:50.289306+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "xrismmastr",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "heasarc"
+      },
+      "row_count": 17,
+      "sha256": "c1ce845b5b476f8590d225d183af6e1fcb5a78cf9414f660d433052d66c13a4e",
+      "provider_url": "https://heasarc.gsfc.nasa.gov/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/alma/receipt.json",
+      "receipt_sha256": "b43835b88ddd3276cfa733957c6ec97225d516deead4ccb4964a348cd525db58",
+      "source": "alma",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:53.053243+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "11337ce723c0d71c4ea4df7ea25df2c383d585ac78b35e53e2410247f6cb6650",
+      "requested_url": "https://almascience.eso.org/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+obs_id%2C+s_ra%2C+s_dec+FROM+ivoa.obscore",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/desi/receipt.json",
+      "receipt_sha256": "73dad4f787853206d6bb2749f657b9e74f040fcb070ef9dab07f126ab4434429",
+      "source": "desi",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:53.595179+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 7,
+      "sha256": "00c1289154008b778b8b40bcfa12ee482b720b535f5f4dc8c7b0d80c39d5d871",
+      "requested_url": "https://data.desi.lbl.gov/public/dr1/",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/eso/receipt.json",
+      "receipt_sha256": "e0f20d66e6998112b4401e89ed0dcca80b22931545c04fda28a557a4ae2b2b15",
+      "source": "eso",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:52.146667+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "72c7973b13a0ee701e34c1d9b570fead9272d4ca84ceec4237eb8007b9cd7e51",
+      "requested_url": "https://archive.eso.org/tap_obs/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+obs_id%2C+s_ra%2C+s_dec+FROM+ivoa.obscore",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/gaia-archive/receipt.json",
+      "receipt_sha256": "3c3afd349781baa11a2e549875a1857e2302e613844f2e70ff03bf196088bcea",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:51.804363+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "8978da83e8926ad5084c551bfd8f75d771e1cc3c7bcede7b1440656ae77536b8",
+      "requested_url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+source_id%2Cra%2Cdec+FROM+gaiadr3.gaia_source",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/gwosc/receipt.json",
+      "receipt_sha256": "c68aaf7f14dbd6094fe54fe10eda1890754ed47c03882b2ac41f0f1b8c3906d7",
+      "source": "gwosc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:54.208659+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 10,
+      "sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+      "requested_url": "https://gwosc.org/api/v2/runs",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-cassini-huygens/receipt.json",
+      "receipt_sha256": "74f2e47a871831e1692e2f1d35b3abf71613ff9af742f64463f1cd8f99acfa27",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:56.885076+00:00",
+      "query": "cassini-huygens",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "a622ee3b8c6584178afebd0b94cca861c3537972c0f75e20c65ef5c1f23b3d90",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.cassini-huygens%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-insight/receipt.json",
+      "receipt_sha256": "aa4893db97b24848b34ccb82f7dcccb650efbb7a1b6f5f819df2f9060de4ed14",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:57.445127+00:00",
+      "query": "insight",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "3f2821a88389d4db30232b033ffb29b494b01cf9e2b7d6d12c9701d63f1d6ea3",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.insight%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-juno/receipt.json",
+      "receipt_sha256": "b8d9adafe17bac3317f099db63e8fb4a402b5922fc3f167383e331b59638bb3a",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:56.985552+00:00",
+      "query": "juno",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "c9ce4a88097a4d6e8c72036cad6e6994d3056884df7648a4c76492e5a02f4926",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.juno%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-mars2020/receipt.json",
+      "receipt_sha256": "131e76b2ab8c79f18e85eb274bfe5540ceec63e8295646f38a5ab187991487dd",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:54.804113+00:00",
+      "query": "mars2020",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "9a015a82fec6f04c8841e5b86c3c3e51bc6c3c128e65a6d9c3001f6c7c4e6a47",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars2020%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-mars_exploration_rover/receipt.json",
+      "receipt_sha256": "40a263f5ddc77475cbca2ff482017b7a3641fcaadcf1aeb06558487e924bdef5",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:55.967462+00:00",
+      "query": "mars_exploration_rover",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "ab6b089cf54078943ae3ddd0e55e11b5b61758dca929cd50423634d784fd9f27",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_exploration_rover%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-mars_reconnaissance_orbiter/receipt.json",
+      "receipt_sha256": "160e71c25e022b9e532d2dda3702ff6e8310529cdc4cd9422632f5a88fbfa0fd",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:57.974478+00:00",
+      "query": "mars_reconnaissance_orbiter",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "2ca1b553964426791a1a7bb09c8a6b30a2faf0956e9aa6f18553835dc14be407",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_reconnaissance_orbiter%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-mars_science_laboratory/receipt.json",
+      "receipt_sha256": "185f42d00d7d5fd01f7abe4d0efbb8c813a04738258f8f0957b6fdc56bed6b16",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:55.427818+00:00",
+      "query": "mars_science_laboratory",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "a75a80e0a59cc634fa0a1e7065475373f18126fcadf8307017c9b4f8d9954ef7",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_science_laboratory%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-maven/receipt.json",
+      "receipt_sha256": "90f59cd20bfaee0f299021f34cc7dd25c8d7365b15d64d949e1831f753b76be1",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:57.969769+00:00",
+      "query": "maven",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "018c6c2caf5ca5545422140ee7e94861917eb576e46dd0d9d47fdd666661596f",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.maven%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-new_horizons/receipt.json",
+      "receipt_sha256": "b7ecc9e1132ec5eef7163b662b7b4e9ec0e64baef46f285356932890b85bc10b",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:57.387595+00:00",
+      "query": "new_horizons",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "cb3a0bf57820547db24f0f688db508a7fc44f3157b5fec87299c5017f43d2470",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.new_horizons%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-orex/receipt.json",
+      "receipt_sha256": "9606e57aa0622fb57bf31c1a4eee440d34315a10c455e61284c3ffe8a35bfd64",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:58.590960+00:00",
+      "query": "orex",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "f794426211ce220b496f5e812e983f0f2261e7f928499ecd863c8e1dabbe4351",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.orex%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/pds-voyager/receipt.json",
+      "receipt_sha256": "f7e825ef488a5b625ff391f54424668d6f15f35b612460cc6d8937885e22876b",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:56.439014+00:00",
+      "query": "voyager",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "9cc93c5884b8a41d40f11e5020bbf3c3aaea0fc44922e8641bec88e8a7581a46",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.voyager%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/sdss/receipt.json",
+      "receipt_sha256": "a7247e19c703aca9a91abadb3e6822796ceb8d4725270ca8d11ecd8ba318a5f0",
+      "source": "sdss",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:53.961057+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "c4225a19a318ef9b2da7aa94d935c5ece2a795b84bc451a1a9c2c083617abfdc",
+      "requested_url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+TOP+3+specObjID%2Cra%2Cdec%2Cz+FROM+SpecObj+WHERE+class%3D%27GALAXY%27&format=csv",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/gaia-archive/receipt.json",
+      "receipt_sha256": "bde96e94f36b4110a9303c3aeb5a1c2d919baf58c3610646e31e22adf75ee77d",
+      "source": "gaia-archive",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:17.658388+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "8978da83e8926ad5084c551bfd8f75d771e1cc3c7bcede7b1440656ae77536b8",
+      "requested_url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=3&QUERY=SELECT+TOP+3+source_id%2Cra%2Cdec+FROM+gaiadr3.gaia_source",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/gwosc/receipt.json",
+      "receipt_sha256": "a5731925773732d4c40ddcc026d7513e6da7a92c19cbb8e21f61f78723c86b92",
+      "source": "gwosc",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:22.406789+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 10,
+      "sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6",
+      "requested_url": "https://gwosc.org/api/v2/runs",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/hive-pds/receipt.json",
+      "receipt_sha256": "746851a1cdae7b5d50802c0803686c9bc28f82d2796ba21928d0f09dfe300d1d",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:44.463912+00:00",
+      "query": "mars2020",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "9a015a82fec6f04c8841e5b86c3c3e51bc6c3c128e65a6d9c3001f6c7c4e6a47",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars2020%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-Cassini/receipt.json",
+      "receipt_sha256": "356f2b61d307b536a44c5aa53ffd9dd7a749635e8c7d2056cf40f1c7a408d3e7",
+      "source": "pds",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:29:11.651023+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:cassini_spice",
+      "error": "HTTPError: HTTP Error 404: ",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:cassini_spice"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-Curiosity/receipt.json",
+      "receipt_sha256": "4d62df182ed850fcc2615b15b67d3fcd2cf98ce3ca7367cc9a8b624909dd52fd",
+      "source": "pds",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:29:11.205380+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:msl.spice",
+      "error": "HTTPError: HTTP Error 404: ",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:msl.spice"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-Juno/receipt.json",
+      "receipt_sha256": "5f6af1e4097e8cfa54ccddec0d97d912ec140134c7727d4d4dfbaf4877b1164f",
+      "source": "pds",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:29:11.651108+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:juno.spice",
+      "error": "HTTPError: HTTP Error 404: ",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:juno.spice"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-NewHorizons/receipt.json",
+      "receipt_sha256": "d49e367db2e5ad004777001e889797689ade5b97331805310c44ef912ad7446a",
+      "source": "pds",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:29:12.047080+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:nh.spice",
+      "error": "HTTPError: HTTP Error 404: ",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:nh.spice"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-Perseverance/receipt.json",
+      "receipt_sha256": "54ee7bbe5593f59a3ee27f1d3971aa0252d451766f3d53a604b458859f9fa76e",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:29:11.205028+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:mars2020.spice",
+      "returned_count": 1,
+      "sha256": "1048e024471956aa9b00ac309e900abb37c1e0f0b93c67b7bed976dc6ae82212",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:mars2020.spice",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-Voyager/receipt.json",
+      "receipt_sha256": "04ee5a002003b17ae3dae68c9526cfea7602c2b415f1d6ca4ed3904d8a6efd3b",
+      "source": "pds",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:29:12.118337+00:00",
+      "query": "",
+      "record": "urn:nasa:pds:voyager.spice",
+      "error": "HTTPError: HTTP Error 404: ",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products/urn:nasa:pds:voyager.spice"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-cassini-huygens/receipt.json",
+      "receipt_sha256": "b6760dba8ba95c866a17fbc6e4bc97df23c1972cdc34188d2071ca6d86b0926f",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.894795+00:00",
+      "query": "cassini-huygens",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "a622ee3b8c6584178afebd0b94cca861c3537972c0f75e20c65ef5c1f23b3d90",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.cassini-huygens%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-insight/receipt.json",
+      "receipt_sha256": "c08d7545d1f49c16a4689b191ab61bdd8041f7ecbf8565e5785c33bbb439a552",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:08.371068+00:00",
+      "query": "insight",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "3f2821a88389d4db30232b033ffb29b494b01cf9e2b7d6d12c9701d63f1d6ea3",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.insight%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-juno/receipt.json",
+      "receipt_sha256": "bd872b51a4abc235317d8decbff97a95e319d25f27389126cf142195c57310d4",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.894702+00:00",
+      "query": "juno",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "c9ce4a88097a4d6e8c72036cad6e6994d3056884df7648a4c76492e5a02f4926",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.juno%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-mars2020/receipt.json",
+      "receipt_sha256": "09363a70a37e04a284f2b95f0ecc26a19061ce46d78df64754714d58b69c6458",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.274856+00:00",
+      "query": "mars2020",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "9a015a82fec6f04c8841e5b86c3c3e51bc6c3c128e65a6d9c3001f6c7c4e6a47",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars2020%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-mars_exploration_rover/receipt.json",
+      "receipt_sha256": "089c14a6fce11bc119a09719460b0c22dbbaf5bc11b97fafe43030e65e60a9a5",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.274941+00:00",
+      "query": "mars_exploration_rover",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "ab6b089cf54078943ae3ddd0e55e11b5b61758dca929cd50423634d784fd9f27",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_exploration_rover%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-mars_reconnaissance_orbiter/receipt.json",
+      "receipt_sha256": "bccf4944f88dae77f08f5a6cbc9266b4b7da45a52bcda8d2639ad66f779dc4f9",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:08.823249+00:00",
+      "query": "mars_reconnaissance_orbiter",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "2ca1b553964426791a1a7bb09c8a6b30a2faf0956e9aa6f18553835dc14be407",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_reconnaissance_orbiter%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-mars_science_laboratory/receipt.json",
+      "receipt_sha256": "79e264bf4fb030095552e1a3ee4e18acdc9626eeaa0c2ff413f5ca0536334a6c",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.274698+00:00",
+      "query": "mars_science_laboratory",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "a75a80e0a59cc634fa0a1e7065475373f18126fcadf8307017c9b4f8d9954ef7",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.mars_science_laboratory%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-maven/receipt.json",
+      "receipt_sha256": "2b9e27d30e9aa5ef9dad465e4eed2b932e9936d887151579f7536e8d11ec5c43",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:08.444459+00:00",
+      "query": "maven",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "018c6c2caf5ca5545422140ee7e94861917eb576e46dd0d9d47fdd666661596f",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.maven%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-new_horizons/receipt.json",
+      "receipt_sha256": "3aa3b3f06e8d3b1ed83cae210e9fb2729aee54c18a95b9ee7a432b8ed2f07eee",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:08.310835+00:00",
+      "query": "new_horizons",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "cb3a0bf57820547db24f0f688db508a7fc44f3157b5fec87299c5017f43d2470",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.new_horizons%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-orex/receipt.json",
+      "receipt_sha256": "41a2adba831b5f4995161fb464cc681dfb839cf35d6053c36c2845666c6c02cc",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:08.847855+00:00",
+      "query": "orex",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "f794426211ce220b496f5e812e983f0f2261e7f928499ecd863c8e1dabbe4351",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.orex%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/pds-mission-voyager/receipt.json",
+      "receipt_sha256": "24bc1375f765b79510363631c4fb704031d19d13c2af48aa035034a18d834d7a",
+      "source": "pds",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:07.852783+00:00",
+      "query": "voyager",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "9cc93c5884b8a41d40f11e5020bbf3c3aaea0fc44922e8641bec88e8a7581a46",
+      "requested_url": "https://pds.nasa.gov/api/search/1/products?limit=3&q=ref_lid_investigation+eq+%22urn%3Anasa%3Apds%3Acontext%3Ainvestigation%3Amission.voyager%22",
+      "scope": "bounded provider page; no complete-catalog claim"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/recheck/HST/receipt.json",
+      "receipt_sha256": "bd47d75791f3bc234edad9d11aee402e5967c9e02e8acc59f3ba7d17b4628cf6",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:30.128961+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "HST",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "903987c785d68991640d2d55b884edcf70e71ec2c5ea572eeaa6143d0ad954ee",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/recheck/JWST/receipt.json",
+      "receipt_sha256": "1f2cc5e4f6c3dd3bbddb5803b2efa409c58ec8a3948f04ada12e37839734371a",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:30.130687+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "JWST",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "5aedc90e838f3cb1478f2d96164ab984860560592153d842237d2e2821ede3d1",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/recheck/K2/receipt.json",
+      "receipt_sha256": "485d70be836d022a0a791b0e8049b327403cd5f2c1fe743a63cae0b07fc9493c",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:31:07.072736+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "K2",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "96fa030a8d1d744994007f5d23188f3d5298115382216b3a11fbcaefe4ad7d92",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/recheck/Kepler/receipt.json",
+      "receipt_sha256": "cedf119815901da27327149edaf865c895948ec1c13b77f67a81778a247537df",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:30:30.130672+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": true,
+        "mission": "Kepler",
+        "radius_deg": 0.01,
+        "source": "mast"
+      },
+      "row_count": 10,
+      "sha256": "8cea9c3af065500515f96d5888be93122368c91e8e2c4e1f6d1c2a00cd8ca600",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "MAST first page, at most 10 observations; not complete mission inventory"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/runner-corrected/HST/receipt.json",
+      "receipt_sha256": "d224c636980dd6892cb1c47eed2d6b7f05f7edf56bdbf0f3a155d56d62d8f9d7",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:44.673565+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "HST",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 1573,
+      "sha256": "3fa548e91fe50661d75eee3d342855296b3216b3089bc1de8c736a9c2d9907e6",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/runner-corrected/TESS/receipt.json",
+      "receipt_sha256": "fe0198c7a18996a98d61a444933180ae20d1297b4a6050219c2cb715856ef499",
+      "source_id": "mast",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:32:44.673685+00:00",
+      "query": {
+        "adql": "SELECT TOP 10 source_id,ra,dec FROM gaiadr3.gaia_source",
+        "catalog": "numaster",
+        "coordinates": "83.6331 22.0145",
+        "inventory": false,
+        "mission": "TESS",
+        "radius_deg": 0.1,
+        "source": "mast"
+      },
+      "row_count": 8,
+      "sha256": "2fe80bc535721bbaf111ad45d7d78b497ca7a4b83f286b783fb5d744bfb4326b",
+      "provider_url": "https://mast.stsci.edu/",
+      "scope": "provider table as returned by native client; no One-Wave transform; not raw HTTP bytes"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/sdss/receipt.json",
+      "receipt_sha256": "098a78cb2eeb31347ad9c822c78494c982638157899c24c06df17d0e748463fd",
+      "source": "sdss",
+      "status": "failed",
+      "retrieved_at_utc": "2026-10-06T04:27:22.943271+00:00",
+      "query": "",
+      "record": "",
+      "error": "HTTPError: HTTP Error 503: Service Unavailable",
+      "requested_url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+TOP+3+specObjID%2Cra%2Cdec%2Cz+FROM+SpecObj+WHERE+class%3D%27GALAXY%27&format=csv"
+    },
+    {
+      "path": "/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/sdss-retry/receipt.json",
+      "receipt_sha256": "6ea198ea735a5b35a91d146bc0717cb2c18e9f8afca50f3b895d2f836c67bd25",
+      "source": "sdss",
+      "status": "acquired",
+      "retrieved_at_utc": "2026-10-06T04:27:40.251762+00:00",
+      "query": "",
+      "record": "",
+      "returned_count": 3,
+      "sha256": "c4225a19a318ef9b2da7aa94d935c5ece2a795b84bc451a1a9c2c083617abfdc",
+      "requested_url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+TOP+3+specObjID%2Cra%2Cdec%2Cz+FROM+SpecObj+WHERE+class%3D%27GALAXY%27&format=csv",
+      "scope": "bounded provider page; no complete-catalog claim"
+    }
+  ],
+  "hive_pipe": {
+    "request_id": "astronomy-live-a6fe44494ba84f79af3a2aef26fcc006",
+    "exit_code": 0,
+    "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006"
+  },
+  "full": {
+    "schema": "one-wave-astronomy-health-v1",
+    "repo_head": "e26bf1eb7b8abd3ca50f83a8c13815a3125f5ff1",
+    "routes": [
+      {
+        "route": "HST",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "HST",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:57.610503+00:00",
+        "exit_code": 1,
+        "error": "Command '['/home/Scales/.local/share/one-wave/science-data-venv/bin/python', '/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py', 'mast', '--mission', 'HST', '--inventory', '--output', '/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/HST']' timed out after 90 seconds",
+        "status": null,
+        "returned_count": null,
+        "sha256": null
+      },
+      {
+        "route": "JWST",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "JWST",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:57.611220+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "5aedc90e838f3cb1478f2d96164ab984860560592153d842237d2e2821ede3d1"
+      },
+      {
+        "route": "TESS",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "TESS",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:57.612599+00:00",
+        "exit_code": 1,
+        "error": "Command '['/home/Scales/.local/share/one-wave/science-data-venv/bin/python', '/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py', 'mast', '--mission', 'TESS', '--inventory', '--output', '/home/Scales/One-Wave-Science/.one-wave-metadata/galactic-health-20261006/full/TESS']' timed out after 90 seconds",
+        "status": null,
+        "returned_count": null,
+        "sha256": null
+      },
+      {
+        "route": "GALEX",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "GALEX",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:31:15.054272+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "07ecd6ff22c79499004213428f0553b41b4bdbc58a52b6ec8deaeff927976fa3"
+      },
+      {
+        "route": "Kepler",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "Kepler",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:31:50.687818+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "8cea9c3af065500515f96d5888be93122368c91e8e2c4e1f6d1c2a00cd8ca600"
+      },
+      {
+        "route": "K2",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "K2",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:21.081267+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "0e2e1a5f167a49451f5bd2b38acc5dc6882bdfdb39d373a72b8277d014f1de25"
+      },
+      {
+        "route": "NuSTAR",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "numaster",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:27.720330+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 108,
+        "sha256": "2a8c23c6faf52dc955d0d2456166343747a4c99d3b6b134332f110788d668d1b"
+      },
+      {
+        "route": "Chandra",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "chanmaster",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:27.720730+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 101,
+        "sha256": "e06adbbffa98e42fd973f396be2bdcf3321b5398cbcb493e404b0b7c58fc9e93"
+      },
+      {
+        "route": "Swift",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "swiftmastr",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:35.928487+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 123,
+        "sha256": "4201c07726da625c688f2c467efd0bc4a8eb886c9069e21be1e3c871b0b92006"
+      },
+      {
+        "route": "XMM",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "xmmmaster",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:36.292122+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 145,
+        "sha256": "fd5f79bb95bd67cee13f81faefd325ecbd4c062ecfe8269617ce8216fb57b07c"
+      },
+      {
+        "route": "Fermi",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "fermilasp",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:39.989210+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 7369,
+        "sha256": "3198d2f73207171f729a7e98e386dc9306ccde562c18c76275914cbe5d280132"
+      },
+      {
+        "route": "NICER",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "nicermastr",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:43.128326+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 188,
+        "sha256": "0b4aa04ea47b0fd0ff1f22fa0f84bdf92e8a9fcaf9232a13364bbf17a747300c"
+      },
+      {
+        "route": "IXPE",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "ixmaster",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:43.333455+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 17,
+        "sha256": "b9ed883258da75a7c4ba6e0f81f38c131a62e1c6d9782c052faee6f568123dec"
+      },
+      {
+        "route": "XRISM",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "heasarc",
+          "--catalog",
+          "xrismmastr",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:50.139556+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 17,
+        "sha256": "c1ce845b5b476f8590d225d183af6e1fcb5a78cf9414f660d433052d66c13a4e"
+      },
+      {
+        "route": "gaia-archive",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "gaia-archive"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:51.635861+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "8978da83e8926ad5084c551bfd8f75d771e1cc3c7bcede7b1440656ae77536b8"
+      },
+      {
+        "route": "eso",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "eso"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:52.008032+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "72c7973b13a0ee701e34c1d9b570fead9272d4ca84ceec4237eb8007b9cd7e51"
+      },
+      {
+        "route": "alma",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "alma"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:52.917266+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "11337ce723c0d71c4ea4df7ea25df2c383d585ac78b35e53e2410247f6cb6650"
+      },
+      {
+        "route": "desi",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "desi"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:53.459882+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 7,
+        "sha256": "00c1289154008b778b8b40bcfa12ee482b720b535f5f4dc8c7b0d80c39d5d871"
+      },
+      {
+        "route": "sdss",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "sdss"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:53.824126+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "c4225a19a318ef9b2da7aa94d935c5ece2a795b84bc451a1a9c2c083617abfdc"
+      },
+      {
+        "route": "gwosc",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "gwosc"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:54.071894+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "4011d08ba2945bbfe7f243b7a64fc3219d8910af76969eb266e65573ffe084a6"
+      },
+      {
+        "route": "pds-mars2020",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "mars2020"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:54.667140+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "9a015a82fec6f04c8841e5b86c3c3e51bc6c3c128e65a6d9c3001f6c7c4e6a47"
+      },
+      {
+        "route": "pds-mars_science_laboratory",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "mars_science_laboratory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:55.280161+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "a75a80e0a59cc634fa0a1e7065475373f18126fcadf8307017c9b4f8d9954ef7"
+      },
+      {
+        "route": "pds-mars_exploration_rover",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "mars_exploration_rover"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:55.835579+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "ab6b089cf54078943ae3ddd0e55e11b5b61758dca929cd50423634d784fd9f27"
+      },
+      {
+        "route": "pds-voyager",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "voyager"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:56.286485+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "9cc93c5884b8a41d40f11e5020bbf3c3aaea0fc44922e8641bec88e8a7581a46"
+      },
+      {
+        "route": "pds-cassini-huygens",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "cassini-huygens"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:56.740289+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "a622ee3b8c6584178afebd0b94cca861c3537972c0f75e20c65ef5c1f23b3d90"
+      },
+      {
+        "route": "pds-juno",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "juno"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:56.849417+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "c9ce4a88097a4d6e8c72036cad6e6994d3056884df7648a4c76492e5a02f4926"
+      },
+      {
+        "route": "pds-new_horizons",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "new_horizons"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:57.237564+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "cb3a0bf57820547db24f0f688db508a7fc44f3157b5fec87299c5017f43d2470"
+      },
+      {
+        "route": "pds-insight",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "insight"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:57.309894+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "3f2821a88389d4db30232b033ffb29b494b01cf9e2b7d6d12c9701d63f1d6ea3"
+      },
+      {
+        "route": "pds-maven",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "maven"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:57.823754+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "018c6c2caf5ca5545422140ee7e94861917eb576e46dd0d9d47fdd666661596f"
+      },
+      {
+        "route": "pds-mars_reconnaissance_orbiter",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "mars_reconnaissance_orbiter"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:57.832043+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "2ca1b553964426791a1a7bb09c8a6b30a2faf0956e9aa6f18553835dc14be407"
+      },
+      {
+        "route": "pds-orex",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/science_archive_search.py",
+          "pds",
+          "--query",
+          "orex"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:58.440700+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 3,
+        "sha256": "f794426211ce220b496f5e812e983f0f2261e7f928499ecd863c8e1dabbe4351"
+      }
+    ]
+  },
+  "recheck": {
+    "schema": "one-wave-astronomy-health-v1",
+    "repo_head": "e26bf1eb7b8abd3ca50f83a8c13815a3125f5ff1",
+    "routes": [
+      {
+        "route": "HST",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "HST",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:29.970332+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "903987c785d68991640d2d55b884edcf70e71ec2c5ea572eeaa6143d0ad954ee"
+      },
+      {
+        "route": "JWST",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "JWST",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:29.970868+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "5aedc90e838f3cb1478f2d96164ab984860560592153d842237d2e2821ede3d1"
+      },
+      {
+        "route": "Kepler",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "Kepler",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:30:29.971700+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "8cea9c3af065500515f96d5888be93122368c91e8e2c4e1f6d1c2a00cd8ca600"
+      },
+      {
+        "route": "K2",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "K2",
+          "--inventory"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:31:06.922174+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 10,
+        "sha256": "96fa030a8d1d744994007f5d23188f3d5298115382216b3a11fbcaefe4ad7d92"
+      }
+    ]
+  },
+  "runner-corrected": {
+    "schema": "one-wave-astronomy-health-v1",
+    "repo_head": "e26bf1eb7b8abd3ca50f83a8c13815a3125f5ff1",
+    "routes": [
+      {
+        "route": "HST",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "HST",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:44.507489+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 1573,
+        "sha256": "3fa548e91fe50661d75eee3d342855296b3216b3089bc1de8c736a9c2d9907e6"
+      },
+      {
+        "route": "TESS",
+        "argv": [
+          "/home/Scales/.local/share/one-wave/science-data-venv/bin/python",
+          "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006/scripts/archive_metadata_query.py",
+          "mast",
+          "--mission",
+          "TESS",
+          "--radius-deg",
+          "0.1"
+        ],
+        "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006",
+        "timestamp": "2026-10-06T04:32:44.508081+00:00",
+        "exit_code": 0,
+        "status": "acquired",
+        "returned_count": 8,
+        "sha256": "2fe80bc535721bbaf111ad45d7d78b497ca7a4b83f286b783fb5d744bfb4326b"
+      }
+    ]
+  }
+}

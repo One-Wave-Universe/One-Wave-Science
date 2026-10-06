@@ -96,3 +96,52 @@ python3 scripts/cern_measurement_fetch.py --record 5200 --file 2e2mu_2011.csv --
 The same command accepts the six manifest-listed CSVs: `2e2mu_2011.csv`, `2e2mu_2012.csv`, `4e_2011.csv`, `4e_2012.csv`, `4mu_2011.csv`, `4mu_2012.csv`. Each file is capped at 2 MiB, matched to its source record, and checked against CERN's size and Adler-32 checksum. Exact CSV bytes, record metadata, parsed rows and SHA-256 receipts remain in the output directory. Use `rows.json` for downstream analysis; retain the source CSV and manifest. Failed verification exits nonzero.
 
 These are selected external event measurements, not replacements for a particular HEPData publication table. Read CERN's record and linked analysis documentation for units and selection before applying `scripts/particle_wave_coordinates.py`. Do not infer measured wave phase or a One-Wave physical result from energy-to-frequency coordinates. No paid API key is required for this public route.
+
+## Astronomy and planetary access — 2026-10-06 UTC
+
+Runnable health check (on demand, not a continuously downloading daemon):
+
+```sh
+~/.local/share/one-wave/science-data-venv/bin/python scripts/astronomy_pipeline_health.py --output .one-wave-metadata/astronomy/current
+# Targeted check:
+~/.local/share/one-wave/science-data-venv/bin/python scripts/astronomy_pipeline_health.py --only HST JWST --output .one-wave-metadata/astronomy/hst-jwst
+```
+
+The runner checks 31 named routes with three concurrent workers and a 90-second per-process deadline. It saves provider artifacts, execution logs, individual acquisition receipts and a summary with repository HEAD. A failed route causes nonzero exit; an empty query is distinguished from an acquisition failure. No API secret is needed for these public archive queries. Repository source provenance still governs every use.
+
+MAST mission names: `HST`, `JWST`, `TESS`, `GALEX`, `Kepler`, `K2`. Use `archive_metadata_query.py mast --mission JWST --coordinates '83.6331 22.0145' --radius-deg 0.1 --output PATH` for a sky query. Use `--inventory` for the bounded first ten observations without a sky filter. Kepler's cone query timed out in this pass, while its first-page inventory worked. K2's initial sky query returned zero rows: that is not evidence of a dead archive. Product downloads and proprietary data access are separate operations.
+
+HEASARC catalog names verified here: `numaster` (NuSTAR), `chanmaster` (Chandra), `swiftmastr` (Swift), `xmmmaster` (XMM-Newton), `fermilasp` (Fermi monitored-source flux entries), `nicermastr` (NICER), `ixmaster` (IXPE), `xrismmastr` (XRISM). These are different table scopes, not interchangeable mission master catalogs. Fermi's monitored-source table includes repeated time bins. The previously tried names `fermimaster` and `ixpemaster` fail; do not reuse them.
+
+```sh
+~/.local/share/one-wave/science-data-venv/bin/python scripts/archive_metadata_query.py heasarc --catalog ixmaster --radius-deg 0.1 --output .one-wave-metadata/ixpe
+python3 scripts/science_archive_search.py sdss --limit 3 --output .one-wave-metadata/sdss
+```
+
+SDSS supplies a bounded DR18 galaxy catalog sample with `specObjID`, RA, Dec and redshift; it does not download spectra or perform arbitrary user SQL. Source bytes including the `#Table1` marker are retained unchanged; the marker is removed only for CSV parsing. A transient SDSS HTTP 503 occurred; a subsequent identical query succeeded. DESI remains release-directory inventory, not a catalog/spectrum acquisition adapter. Gaia, ESO, ALMA and GWOSC keep the commands above.
+
+### NASA rovers and probes: Planetary Data System
+
+```sh
+python3 scripts/science_archive_search.py pds --query mars2020 --output .one-wave-metadata/pds/perseverance
+python3 scripts/science_archive_search.py pds --query mars_science_laboratory --output .one-wave-metadata/pds/curiosity
+python3 scripts/science_archive_search.py pds --record urn:nasa:pds:mars2020.spice --output .one-wave-metadata/pds/perseverance-spice
+```
+
+`--query` here means an exact PDS mission context slug, not free text. Verified slugs: `mars2020`, `mars_science_laboratory`, `mars_exploration_rover`, `voyager`, `cassini-huygens`, `juno`, `new_horizons`, `insight`, `maven`, `mars_reconnaissance_orbiter`, `orex`. Spirit and Opportunity share the Mars Exploration Rover mission context. Results may include documentation, context products, collections and products used by more than one mission; inspect product IDs, type, mission references and calibration before selecting measurements.
+
+The structured filter is `ref_lid_investigation eq "urn:nasa:pds:context:investigation:mission.SLUG"`. The PDS `keyword` parameter returned HTTP 400; `keywords` was accepted but ignored in a control query. Therefore this relay does not expose keyword search. Five guessed mission SPICE bundle identifiers returned 404; use returned identifiers rather than guessing bundle names. Perseverance's actual `mars2020.spice` bundle resolved successfully. Legacy PDS3 archives may require the mission's PDS node. The archive registry does not contain every historical product.
+
+Preserve returned LID/LIDVID, metadata, label URL, raw hash and retrieval time. This implementation discovers metadata and resolves product identifiers; it does not yet download camera images, spectra, seismograms or SPICE kernels, or convert them into validated physical results. SPICE supplies geometry/time context, not a substitute for instrument measurements.
+
+### AI relay execution and activation
+
+The existing authenticated local Hive Pipe `/mcp` `terminal_run` executed the PDS Perseverance query on Jetson with matching request ID and exit 0. Direct Remote Desktop Commander also fetched the same route. The gateway and agent processes were present; generic systemd unit names were inactive, so do not equate those unit names with the running processes. No new credentials, listener or duplicated daemon was created. External tunnel access and connector availability in every other chat remain independently unverified.
+
+Use the commands above as argv through `terminal_run`, with verified cwd, intention, consequence and bounded timeout. Use the direct Jetson tool if the current chat lacks Hive Pipe. The temporary task worktree for this pass is `.one-wave-metadata/task-worktrees/galactic-health-20261006`; the dirty recovery checkout was preserved. Verify branch and HEAD there before use. After merge, use current canonical code or a verified task worktree, never assume an old checkout already contains these scripts.
+
+Official references: https://skyserver.sdss.org/dr17/Support/api ; https://nasa-pds.github.io/pds-api/guides/search/endpoints.html ; https://heasarc.gsfc.nasa.gov/w3browse/all/fermilasp.html . Fresh receipt index: `One_Wave_Bench/data/receipts/astronomy-20261006/receipt.json`.
+
+Health-run correction: broad HST/TESS first-page queries exceeded the outer deadline despite successful cone queries. The runner therefore uses verified cones for HST/JWST/TESS/GALEX and bounded first pages for Kepler/K2. Provider latency is not hidden or called a pass. Each run's summary is authoritative for that execution; earlier successful acquisitions do not guarantee future service availability.
+
+Branch-step record: goal was usable astronomy/planetary metadata acquisition with reproducible AI directions. Hard start: main e26bf1e and preserved dirty recovery checkout. Allowed scope: archive adapters, registry, health runner, focused tests, route authority, entrypoint pointer and receipts. Protected: science equations, Brain Buddy and user runtime edits. Field finding: native mission/table distinctions and PDS exact mission filtering are necessary. Void check: provider records remain external evidence; DESI inventory, PDS discovery, spatial samples and model conclusions must stay distinct. Initial approach recorded cone timeout, wrong table names, PDS keyword failures and guessed-LID 404s. Corrected approach used source-backed table names and mission-context filtering. Ten focused relay tests passed; matching live device and local authenticated relay receipts establish acquisition only. Hard stop: publish checked code/directions and retain exact remaining external boundaries. No continuously scheduled acquisition or new daemon was requested or installed.

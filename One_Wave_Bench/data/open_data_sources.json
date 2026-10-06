@@ -226,6 +226,35 @@
       ],
       "fetch_mode": "science_archive_search",
       "verified_note": "Independent DOI metadata discovery only. No measurement tables; does not repair direct HEPData HTTP 403."
+    },
+    {
+      "id": "sdss",
+      "domain": "galaxy-spectroscopy",
+      "coverage": [
+        "SDSS DR18 galaxy spectroscopic catalog sample"
+      ],
+      "api_root": "https://skyserver.sdss.org/dr18/SkyServerWS/",
+      "api_docs": "https://skyserver.sdss.org/dr17/Support/api",
+      "source_kind": [
+        "catalog-measurements"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Bounded galaxy sample: specObjID, sky coordinates and catalog redshift. No spectra downloaded."
+    },
+    {
+      "id": "pds",
+      "domain": "planetary-missions",
+      "coverage": [
+        "NASA PDS4 product discovery and identifier resolution"
+      ],
+      "api_root": "https://pds.nasa.gov/api/search/1/",
+      "landing_url": "https://pds.mcp.nasa.gov/portal/",
+      "api_docs": "https://nasa-pds.github.io/pds-api/guides/search.html",
+      "source_kind": [
+        "metadata"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "PDS product metadata and labels; mission coverage must have a matching identifier receipt. Legacy PDS3 holdings may require node archives."
     }
   ]
 }
