@@ -18,16 +18,16 @@
     "GalaxyRotationConstantInherited is a phenomenological candidate, not an A-115 source-derived law"
   ],
   "hashes": {
-    "contract": "63b215c408eb57fe89db68c71e5a71e212b1b0ad7688410e8f87dc73288765ff",
+    "contract": "ad8d0f1bcd56f2ea3fcd9788ee42238066bea1e7bc3a917e956842922ad4e822",
     "runner": "c6be5196662026d13d615893c6c43457d9d5f2e61a5a93e402ebb9bb74d628af",
     "data/mw_dr3plus_2023.csv": "b0ad5be943356840710b2589be1159983a1d6e01df1e7987c47bd0bf9110a626",
     "galaxy_rotation_constant_inherited_velocity.py": "d38673ac9353b1c895a5391c59786a91ec2740d819511e64308eeffc6b429efa",
-    "galaxy_rotation_cascade_wake_validator.py": "d423b0872bf65f99ff5f6af6337803d232537de5847ec8253b8f93e055f2527f",
+    "galaxy_rotation_cascade_wake_validator.py": "fe5f95ca8ba46e198beb6bcccc3a6255de65224c659cddc716c67ba234a17ab8",
     "observational_data_loader.py": "5a4ae5d9bbf9a3d7dfa4e16dc0531d94a6921fd5640bba0e3223fe331d3658c5"
   },
   "runtime": {
-    "python": "3.12.14",
-    "numpy": "2.3.5"
+    "python": "3.12.3",
+    "numpy": "1.26.4"
   },
   "model_fit_performed": false,
   "variants": [

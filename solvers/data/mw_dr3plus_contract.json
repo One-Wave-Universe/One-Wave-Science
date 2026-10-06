@@ -45,7 +45,15 @@
   "sha256": {
     "data/mw_dr3plus_2023.csv": "b0ad5be943356840710b2589be1159983a1d6e01df1e7987c47bd0bf9110a626",
     "galaxy_rotation_constant_inherited_velocity.py": "d38673ac9353b1c895a5391c59786a91ec2740d819511e64308eeffc6b429efa",
-    "galaxy_rotation_cascade_wake_validator.py": "d423b0872bf65f99ff5f6af6337803d232537de5847ec8253b8f93e055f2527f",
+    "galaxy_rotation_cascade_wake_validator.py": "fe5f95ca8ba46e198beb6bcccc3a6255de65224c659cddc716c67ba234a17ab8",
     "observational_data_loader.py": "5a4ae5d9bbf9a3d7dfa4e16dc0531d94a6921fd5640bba0e3223fe331d3658c5"
+  },
+  "source_revision_review": {
+    "reference_commit": "0ac6e27b831157c99b6f313a7c277295408cb4d4",
+    "path": "galaxy_rotation_cascade_wake_validator.py",
+    "prior_sha256": "d423b0872bf65f99ff5f6af6337803d232537de5847ec8253b8f93e055f2527f",
+    "current_sha256": "fe5f95ca8ba46e198beb6bcccc3a6255de65224c659cddc716c67ba234a17ab8",
+    "scope": "Compression-ring terminology and internal method rename; numerical wake body AST unchanged after method-name/docstring normalization. External candidate parameters, data and equations unchanged.",
+    "no_refitting": true
   }
 }
