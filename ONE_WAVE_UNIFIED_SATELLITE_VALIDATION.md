@@ -88,23 +88,27 @@ This is why C-319 is load-bearing: magnetic lattice reorganization enables the c
 
 ---
 
-## Consequence 4: There Is No Dark Matter — Only ψ Displacement and Pushback
+## Consequence 4: "Dark Matter" is Retained ψ Displacement
 
-**What Standard Model calls "dark matter" is ψ displacement from the galaxy's own motion through the superfluid (A-115 / Book 5 Ch1):**
+**Redefine dark matter (A-115 / Book 5 Ch1):**
 
-The galaxy moves through the superfluid lattice. This motion displaces ψ. The superfluid resists the displacement—that's pushback. The displaced field organizes into a compression ring around the moving galaxy. This ring creates measurable gravity (g_wake). Electromagnetic coherence (C-319) determines whether this pattern persists or gets scrambled by local field chaos.
+$$\text{Dark matter} = \text{ψ displacement from galaxy motion, persisted via EM coherence}$$
 
-**The mechanism (pure kinematics of displacement):**
+Not a particle. Not a new substance. NOT A SEPARATE PROBLEM.
+
+When a galaxy moves through the superfluid, it displaces ψ. The superfluid resists—that's pushback. The displaced field organizes into a compression ring around the moving galaxy. Electromagnetic coherence (C-319) determines whether this ψ displacement pattern persists or gets scrambled by local field chaos.
+
+**The mechanism (pure physics of displacement):**
 1. Galaxy moves through superfluid lattice → displaces ψ locally
 2. Superfluid resists displacement → creates pressure gradient (pushback)
-3. Pressure gradient self-organizes into compression ring around galaxy's own motion
-4. Compression ring has mass-like gravitational effects (g_wake)
-5. EM coherence (C-319) can stabilize this ψ displacement pattern or scramble it
-6. At galactic scale, R_ring ~ R_gravity → ring's gravity is observable in rotation curves as "dark matter"
+3. Pressure gradient self-organizes into compression ring around galaxy's motion
+4. Compression ring produces measurable gravitational effects (g_wake)
+5. EM coherence (C-319) determines if displacement pattern persists or degrades
+6. At galactic scale, R_ring ~ R_gravity → ring's gravity is observable as "dark matter"
 
-**Proof:** Satellite validation shows satellites couple to host's compression ring. The observed "dark matter" is the host galaxy's displacement—local ψ pushed out and organized by the host's own motion.
+**Proof:** Satellite validation shows satellites couple to the host's ψ displacement. The observed "dark matter" is retained ψ from the host galaxy's own motion through the superfluid.
 
-**Physics:** Dark matter does not exist. The ψ displacement created by a galaxy's motion through the superfluid creates a measurable compression ring. That ring's gravity is what Standard Model mislabels "dark matter." It's not inherited, not a cascade, not a particle—it's the galaxy's own displacement shadow.
+**Physics:** There is no dark matter particle. The ψ displacement created by a galaxy's motion, persisted through electromagnetic organization, is what Standard Model mislabels "dark matter." It's retained displacement from local motion, not inherited cascade, not mysterious—it's the galaxy's displacement organized by field coherence.
 
 ---
 
