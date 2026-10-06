@@ -137,21 +137,25 @@ class ThreeMirroredGate:
         self.v_max = 0.10    # 100 mV maximum (biological resting-to-action range)
         self.v_min = 0.0     # 0 mV minimum
 
-        # Biological asymmetric window (major-key like stability)
-        # Resting range: deeper floor (hyperpolarization) to restrained ceiling (depolarization)
-        self.v_floor = 0.02  # 20 mV floor (hyperpolarized baseline)
-        self.v_ceiling = 0.08  # 80 mV ceiling (action potential approach)
+        # Biological operating window (asymmetric for stability, wide for control range)
+        # Covers full biological range: resting potential to action potential
+        # -70mV → 0V, +30mV → 0.1V, total swing ~100mV
+        self.v_floor = 0.0   # 0 mV floor (resting potential mapped to 0V)
+        self.v_ceiling = 0.10  # 100 mV ceiling (action potential mapped to 0.1V)
 
-        # PID gains tuned for biological millivolt scale
-        self.K_p = 0.001  # Proportional gain (mV scale, very sensitive)
-        self.K_i = 0.0001  # Integral gain (accumulation)
-        self.K_d = 0.0005   # Derivative gain (rate response)
+        # PID gains tuned for volt-scale errors, producing biological-scale gate modulation
+        # Gate modulation range: ±0.05V around 50mV center (total 0-100mV)
+        # For 10mV V_0 error (0.01V): desire ~2-3mV gate swing (weak feedback)
+        # K_p = 0.2 / 0.01 = 0.2 (weak proportional response for stability)
+        # Reduced gains 7-10x to allow slower feedback response
+        self.K_p = 0.15   # Proportional gain (very weak, let system settle)
+        self.K_i = 0.01   # Integral gain (slow accumulation)
+        self.K_d = 0.03   # Derivative gain (light damping)
 
     def compute_gate_voltage(self,
                             proportional: float,
                             integral: float,
-                            derivative: float,
-                            frequency_error: float) -> float:
+                            derivative: float) -> float:
         """
         Compute mirrored gate voltage for this phase.
 
@@ -162,7 +166,9 @@ class ThreeMirroredGate:
         Asymmetric window (circle-of-fifths like) preserves control identity.
         """
         # Compute control signal (proportional + integral + derivative)
-        control = self.K_p * frequency_error + self.K_i * integral + self.K_d * derivative
+        # Note: proportional is the frequency_error passed in (already computed in extract_feedback)
+        # We don't use the frequency_error parameter again—it would double-count
+        control = self.K_p * proportional + self.K_i * integral + self.K_d * derivative
 
         # Apply phase rotation (mirror the response across three phases)
         phase_response = control * math.cos(self.phase_offset)
@@ -170,11 +176,10 @@ class ThreeMirroredGate:
         # Convert to gate voltage
         v_gate = self.v_center + phase_response
 
-        # Clamp to asymmetric window (not symmetric [0.0, 5.0])
-        # This prevents over-saturation in one direction
+        # Clamp to biological window [0.0, 0.1]V
         v_gate = max(self.v_floor, min(self.v_ceiling, v_gate))
 
-        # As fallback, clamp to absolute limits
+        # As fallback, clamp to absolute limits (should be redundant)
         return max(self.v_min, min(self.v_max, v_gate))
 
 
@@ -223,29 +228,29 @@ class NerveGateResonanceTuner:
         Extract three-signal nerve feedback from V_0.
 
         Signals:
-        - P: Frequency error (how far from resonance) - millivolt scale
+        - P: Frequency error (V_0 deviation from target)
         - I: Accumulated error (integral for lock)
         - D: Rate of change (derivative for damping)
 
-        Biological scaling: V_0 error in volts → nerve signal in millivolts
+        Note: Error signals are measured in volts. Gate scaling to biological range
+        (0-100 mV) happens in compute_gate_voltages(), not here.
         """
-        # Calculate virtual ground error
+        # Calculate virtual ground error (in volts)
         v_target = 2.5
         v_0_error = v_0 - v_target
 
-        # Proportional: translate V_0 error to biological nerve signal (millivolts)
-        # Small errors (tens of mV) drive gate control, matching biological scales
-        # Scale down from volts to millivolts: multiply by 0.04 (4% coupling)
-        frequency_error = v_0_error * 0.04  # Biological scaling factor
+        # Proportional: V_0 error in volts
+        # No scaling here; PID gains will scale to appropriate control magnitude
+        frequency_error = v_0_error
 
         # Integral: accumulate error over time
         self.integral_error += frequency_error * dt_s
 
-        # Derivative: rate of V_0 change (biological responsiveness)
+        # Derivative: rate of V_0 change
         v_0_rate = (v_0 - self.prev_v_0) / dt_s if dt_s > 0 else 0.0
         self.prev_v_0 = v_0
 
-        derivative = v_0_rate * 0.02  # Millivolt-scale rate response
+        derivative = v_0_rate
 
         return NerveSignals(
             proportional=frequency_error,
@@ -261,12 +266,8 @@ class NerveGateResonanceTuner:
         Compute three-phase gate voltages using 3:1 nerve gating.
 
         Single nerve signal (3 components) drives three mirrored gates.
-        Uses V_0 feedback error (extracted as P/I/D), NOT omega mismatch.
+        Uses V_0 feedback error (extracted as P/I/D).
         """
-        # Use the extracted frequency error from V_0 feedback, not omega state
-        # This closes the feedback loop: V_0 error → frequency error → gate voltage
-        frequency_error = nerve.proportional  # Already contains V_0_error * 10.0 scaling
-
         voltages = {}
         mosfet_map = {
             "U": ("M_U_high", "M_U_low"),
@@ -278,8 +279,7 @@ class NerveGateResonanceTuner:
             v_gate = self.gates[phase].compute_gate_voltage(
                 proportional=nerve.proportional,
                 integral=nerve.integral,
-                derivative=nerve.derivative,
-                frequency_error=frequency_error
+                derivative=nerve.derivative
             )
             # Apply same voltage to high and low sides for symmetric operation
             voltages[high_mosfet] = v_gate
@@ -297,11 +297,13 @@ class NerveGateResonanceTuner:
         if not self.allow_override:
             return voltages
 
-        # Example: limit maximum voltage change between steps
-        max_v_change = 0.5  # Volts per timestep
+        # Limit maximum voltage change between steps
+        # At biological scales (0-100mV), this prevents wild swings
+        max_v_change = 0.02  # 20 mV per timestep (biological rate limit)
 
         for mosfet_id, v_desired in list(voltages.items()):
-            v_current = self.virtual_bus.gate_voltages.get(mosfet_id, 2.5)
+            # Default to 50mV center (not 2.5V!) if gate voltage not yet set
+            v_current = self.virtual_bus.gate_voltages.get(mosfet_id, 0.05)
             v_change = v_desired - v_current
 
             if abs(v_change) > max_v_change:

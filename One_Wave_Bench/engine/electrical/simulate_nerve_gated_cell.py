@@ -132,8 +132,18 @@ class NerveGatedCellSimulator:
                 self.tuner.resonance.omega_gate += freq_adjust
 
             # Apply gate control to circuit controller
+            # Interface amplification: biological nerve signal (0-100mV) → MOSFET drive (0-5V)
+            # Nerve signal range: [0.02, 0.08]V = [20, 80]mV (asymmetric biological window)
+            # Amplified range: [1.0, 4.0]V around nominal 2.5V bias
+            # Gain: 50x (converts 100mV swing to 5V swing)
             def gate_control(mosfet_id: str, time: float) -> float:
-                return gate_voltages.get(mosfet_id, 2.5)
+                nerve_signal = gate_voltages.get(mosfet_id, 0.05)  # Default to 50mV center
+                # Amplify biological signal to MOSFET gate drive level
+                # Map: nerve_signal = 0.05V (50mV center) → gate_drive = 2.5V (nominal bias)
+                #      nerve_signal ± 0.03V (±30mV) → gate_drive ± 1.5V
+                gate_drive = 2.5 + (nerve_signal - 0.05) * 50.0
+                # Clamp to valid MOSFET gate range [0, 5]V
+                return max(0.0, min(5.0, gate_drive))
 
             self.controller.set_gate_control(gate_control)
 
@@ -148,12 +158,17 @@ class NerveGatedCellSimulator:
             snapshot = self._create_snapshot(step, dt_s)
             self.snapshots.append(snapshot)
 
-            # Print progress
-            if step % (n_steps // 20) == 0 or step < 10:
+            # Print progress with gate control details
+            if step % (n_steps // 20) == 0 or step < 10 or (35 <= step <= 45):
                 progress = (step / n_steps) * 100
+                gate_u = self.tuner.virtual_bus.gate_voltages.get('M_U_high', 0.05)
+                gate_v = self.tuner.virtual_bus.gate_voltages.get('M_V_high', 0.05)
+                gate_w = self.tuner.virtual_bus.gate_voltages.get('M_W_high', 0.05)
+                drive_u = 2.5 + (gate_u - 0.05) * 50.0
                 print(f"  [{progress:5.1f}%] Step {step}: V_0={v_0:.6f}V, "
-                      f"ω_gate={self.tuner.resonance.omega_gate:.6f} rad/s, "
-                      f"Freq_error={self.tuner.resonance.frequency_error:.6f}")
+                      f"nerve_U={gate_u:.4f}V({gate_u*1000:.1f}mV), "
+                      f"drive_U={drive_u:.2f}V, "
+                      f"Freq_err={self.tuner.resonance.frequency_error:.6f}")
 
         print(f"\nSimulation complete: {len(self.snapshots)} snapshots recorded")
         return self.snapshots
