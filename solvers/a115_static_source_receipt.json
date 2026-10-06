@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "scope": "Static spherical A-115; V_b=0; constant K_chi+S_u; K_L=I; regular origin; chi(4)=0",
+  "units": "dimensionless; no physical calibration or galaxy fitting",
+  "equation": "(K_chi+S_u) laplacian(chi)=div(J); chi'=J_r/(K_chi+S_u)",
+  "source": "J_r=r(1-r^2)^2 for r<1, otherwise zero",
+  "reference_commit": "87ad3af06c86498bd6d4f868b73540346e1934d2",
+  "authority_sha256": {
+    "Nodes/A-115_Unified_Compression_Field.md": "f447953b029dfd488f42efb2b5f3324d8c93e5e77f7fec4267ee0874f579d19b",
+    "Nodes/C-320_Magnetic_Compression_Path_Coupling.md": "9cb31de0db07e7e65b29d616cbe990796e31da1c10a13ab6f7cf7a291b111f2a"
+  },
+  "solver_sha256": "4318f74377af5c2d80d82bccb3c3afec11cfed5f28620b8bbbe1e0f962d966ef",
+  "runs": [
+    {
+      "cells": 64,
+      "outer_radius": 4.0,
+      "stiffness": 2.0,
+      "alpha": 1.0,
+      "max_compression_error": 8.050608448684216e-05,
+      "max_flux_balance_residual": 0.0,
+      "max_displacement_identity_error": 3.469446951953614e-18,
+      "max_exterior_acceleration": 0.0,
+      "max_acceleration_gradient_error": 0.0,
+      "center_compression": -0.08316993713378906,
+      "radial_source_flux_at_outer_boundary": 0.0
+    },
+    {
+      "cells": 128,
+      "outer_radius": 4.0,
+      "stiffness": 2.0,
+      "alpha": 1.0,
+      "max_compression_error": 2.0290415704948828e-05,
+      "max_flux_balance_residual": 0.0,
+      "max_displacement_identity_error": 8.326672684688674e-17,
+      "max_exterior_acceleration": 0.0,
+      "max_acceleration_gradient_error": 0.0,
+      "center_compression": -0.08329260349273682,
+      "radial_source_flux_at_outer_boundary": 0.0
+    },
+    {
+      "cells": 256,
+      "outer_radius": 4.0,
+      "stiffness": 2.0,
+      "alpha": 1.0,
+      "max_compression_error": 5.082848190340883e-06,
+      "max_flux_balance_residual": 0.0,
+      "max_displacement_identity_error": 1.3183898417423734e-16,
+      "max_exterior_acceleration": 0.0,
+      "max_acceleration_gradient_error": 0.0,
+      "center_compression": -0.0833231583237648,
+      "radial_source_flux_at_outer_boundary": 0.0
+    },
+    {
+      "cells": 512,
+      "outer_radius": 4.0,
+      "stiffness": 2.0,
+      "alpha": 1.0,
+      "max_compression_error": 1.2713523274143768e-06,
+      "max_flux_balance_residual": 0.0,
+      "max_displacement_identity_error": 2.8102520310824275e-16,
+      "max_exterior_acceleration": 0.0,
+      "max_acceleration_gradient_error": 0.0,
+      "center_compression": -0.08333079004660249,
+      "radial_source_flux_at_outer_boundary": 0.0
+    }
+  ],
+  "conclusion": "This restricted compact vector-source branch has zero exterior acceleration; it does not recover inverse-square gravity.",
+  "limits": [
+    "Nonzero V_b, dynamics, nonlocal sources and nonregular boundaries are not tested",
+    "No general no-go theorem for all One-Wave source laws",
+    "Tensor path weighting cannot create acceleration where grad(chi)=0"
+  ]
+}
