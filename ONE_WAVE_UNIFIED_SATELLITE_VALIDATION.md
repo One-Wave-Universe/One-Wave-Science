@@ -86,21 +86,22 @@ This is why C-319 is load-bearing: magnetic lattice reorganization enables the c
 
 ---
 
-## Consequence 4: "Dark Matter" is Compression Ring (Extended ψ Displacement)
+## Consequence 4: There Is No Dark Matter — Only Compression Ring
 
-**Redefine dark matter (A-115 / Book 5 Ch1):**
+**What Standard Model calls "dark matter" is actually Extended Compression Effect (A-115 / Book 5 Ch1):**
 
-$$\text{Dark matter} = \text{Extended compression ring from galaxy motion through superfluid lattice}$$
+When a galaxy moves through the superfluid, it displaces ψ. The pressure gradient in the displaced field creates a compression ring. This ring is NOT a separate particle or substance—it IS the organized ψ field response to displacement.
 
-**Not a particle. Not a new substance. NOT A SEPARATE PROBLEM.**
+**The mechanism:**
+1. Galaxy moves through superfluid lattice → displaces ψ
+2. Displaced ψ creates pressure gradient (compression ring)
+3. Pressure gradient produces measurable g_wake (Extended Compression Effect)
+4. Electromagnetic coherence (C-319) can stabilize/persist this ring
+5. At galactic scale, R_ring ~ R_gravity → ring is measurable in rotation curves
 
-It is the organized ψ field compression created by the galaxy's displacement. It persists because:
-1. The galaxy is constantly moving through the superfluid
-2. This motion creates a pressure gradient (compression ring)
-3. Electromagnetic coherence (C-319) can stabilize this ring
-4. At galactic scale, R_ring ~ R_gravity → measurable in rotation curves
+**Proof:** Satellite validation shows the compression ring model works. The observed "dark matter" phenomena are the extended compression ring—there is no separate particle or mysterious substance.
 
-**Proof:** Satellite validation shows the compression ring model works. The "dark" component is the extended ring that carries the motion pattern.
+**Physics:** Dark matter exists ONLY in the Standard Model's incomplete accounting. In One-Wave, it is the Extended Compression Effect (g_wake) from galaxy displacement. Period.
 
 ---
 
@@ -173,7 +174,7 @@ Electron doesn't "have spin ½." Electron phase-locks to nuclear field compressi
 
 ## Complete Picture (One Sentence)
 
-**The universe is ONE scalar displacement field on a superfluid lattice that updates via one rule; every structure creates compression rings from its motion through the field; electromagnetic coherence persists these rings; four mathematical operations produce four interactions; quantization emerges from resonance; dark matter is organized compression rings; all scales use identical grammar.**
+**The universe is ONE scalar displacement field on a superfluid lattice that updates via one rule; every structure creates compression rings from its motion through the field; electromagnetic coherence persists these rings; four mathematical operations produce four interactions; quantization emerges from resonance; there is no dark matter particle—observed "dark matter" is the Extended Compression Effect (compression ring); all scales use identical grammar.**
 
 This is not speculative. It is validated through Extended Compression Effect (g_wake) model prediction of satellite velocities. The only question left is polish for publication (C-319 magnetic coupling refinement, D-409 lattice integration).
 
