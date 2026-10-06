@@ -127,3 +127,15 @@ is changed.
   required by A-115. The prior failed galaxy comparison is preserved.
 - Hard stop: tested diagnostic and retained evidence; next step must reference
   an explicit constitutive source/boundary law before another solver change.
+
+### Fresh-reference integration check
+
+Main advanced to 96b1a1463bdb55cfd20cc63f65c105cb63423743 while this
+diagnostic was prepared. The branch was rebased without conflicts; A-115 and
+C-320 authorities are unchanged and all five diagnostic tests still pass.
+The unchanged eight-test galaxy suite now reports three passes, four errors
+and one failure: upstream renamed in_cascade without updating the fixed-EM
+caller, and changed galaxy_rotation_cascade_wake_validator.py without a new
+reviewed frozen contract. Earlier eight-pass evidence applies only to 87ad3af.
+These newly inherited failures are preserved rather than fixed or suppressed
+inside this four-file diagnostic scope. Next Reference must include them.
