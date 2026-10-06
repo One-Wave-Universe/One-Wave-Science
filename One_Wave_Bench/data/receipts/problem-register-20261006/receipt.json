@@ -1,0 +1,344 @@
+{
+  "all_complete": true,
+  "finished_at_utc": "2026-10-06T17:09:15.926640+00:00",
+  "registry_sha256": "9cac5d11ab8620f9738611c34b59e31f9b34ce7c43dd5fb67732b54f212462d8",
+  "requests": [
+    {
+      "next_url": null,
+      "pages": [
+        {
+          "bytes": 16679,
+          "envelope_file": "cern-open-data-e76252a14c0a6a50dea56d2d7c0a4d6326fbab550a06dfb8b8567d40fb01b6bf.json",
+          "raw_body_file": "../science-metadata-20261004/cern-open-data-e76252a14c0a6a50dea56d2d7c0a4d6326fbab550a06dfb8b8567d40fb01b6bf.raw",
+          "requested_url": "https://opendata.cern.ch/api/records/5501",
+          "retrieved_at_utc": "2026-10-06T17:08:53.790154+00:00",
+          "sha256": "e76252a14c0a6a50dea56d2d7c0a4d6326fbab550a06dfb8b8567d40fb01b6bf",
+          "source_id": "cern-open-data",
+          "summary": {
+            "classification": "provider_metadata_not_event_measurements",
+            "doi": "10.7483/OPENDATA.CMS.JKB8.D634",
+            "experiment": [
+              "CMS"
+            ],
+            "files": [
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:716974f3",
+                "key": "rootfilelist.txt",
+                "size": 1143,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/rootfilelist.txt",
+                "version_id": "d87cbbcf-260d-4058-9869-2339b4260fe1"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:90cb6b24",
+                "key": "DY1011.root",
+                "size": 66215,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY1011.root",
+                "version_id": "429b50f8-0e51-4e7b-97db-9176af61861a"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:a55fe748",
+                "key": "DY1012.root",
+                "size": 67648,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY1012.root",
+                "version_id": "09c92293-133f-4f5d-bdfe-f0e102a8f8c7"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:b87b46e3",
+                "key": "DY101Jets12.root",
+                "size": 65418,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY101Jets12.root",
+                "version_id": "46cbecee-0597-4866-87e4-200610068699"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:ef0a2275",
+                "key": "DY50Mag12.root",
+                "size": 71402,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY50Mag12.root",
+                "version_id": "8c5bf25c-63bf-4c71-ab9b-4042cc374b0e"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:c166c66b",
+                "key": "DY50TuneZ11.root",
+                "size": 71524,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY50TuneZ11.root",
+                "version_id": "2be994c8-5c20-440c-87f3-7de80870d174"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:b82b0a01",
+                "key": "DY50TuneZ12.root",
+                "size": 70776,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DY50TuneZ12.root",
+                "version_id": "c1a18c3f-68ee-4971-8fc8-068e24a7afb3"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:e7764055",
+                "key": "DYTo2mu12.root",
+                "size": 61720,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DYTo2mu12.root",
+                "version_id": "8901daeb-b4ab-4821-b875-6de486a2bcc7"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:7944cd82",
+                "key": "DoubleE11.root",
+                "size": 68531,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DoubleE11.root",
+                "version_id": "dfbc319a-d557-4b8a-a7c3-b4fcc138f14a"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:6f7b4a98",
+                "key": "DoubleE12.root",
+                "size": 71621,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DoubleE12.root",
+                "version_id": "cffa0219-8194-4057-90fa-8073e7b71fab"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:86de9000",
+                "key": "DoubleMu11.root",
+                "size": 70933,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DoubleMu11.root",
+                "version_id": "54cfa6a7-0221-4ab0-a814-b99c992b69af"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:63849033",
+                "key": "DoubleMu12.root",
+                "size": 74483,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/DoubleMu12.root",
+                "version_id": "9a7ad05b-a239-4c2a-a797-1984dc1ef31c"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:6bca010d",
+                "key": "HZZ11.root",
+                "size": 70789,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/HZZ11.root",
+                "version_id": "e3b4378d-495c-4939-9b76-77c909c45dd2"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:4169df3f",
+                "key": "HZZ12.root",
+                "size": 70752,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/HZZ12.root",
+                "version_id": "5cdcaccb-69ac-493a-983a-731433ef8a1a"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:5c10862e",
+                "key": "TTBar11.root",
+                "size": 71657,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/TTBar11.root",
+                "version_id": "f984f42e-c5f4-4974-9e6f-e8f1194b57c3"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:eb78c43b",
+                "key": "TTBar12.root",
+                "size": 67994,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/TTBar12.root",
+                "version_id": "e930d050-d310-4c39-a52e-f41521a2c4af"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:bb54e5de",
+                "key": "TTJets11.root",
+                "size": 73350,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/TTJets11.root",
+                "version_id": "bd5f6dc6-26b7-4a30-b975-77bca39ced6f"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:8f268633",
+                "key": "TTJets12.root",
+                "size": 73386,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/TTJets12.root",
+                "version_id": "24ea0bea-f2e8-435c-8c28-2f242f3f1d4d"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:a1aa79d6",
+                "key": "ZZ2mu2e11.root",
+                "size": 69836,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ2mu2e11.root",
+                "version_id": "83d4061c-459c-4483-8efd-d4127b3c3bad"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:bc06de85",
+                "key": "ZZ2mu2e12.root",
+                "size": 69966,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ2mu2e12.root",
+                "version_id": "180e4f3d-e9cf-43e0-ab23-5cab8d74ff75"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:f65713e6",
+                "key": "ZZ4e11.root",
+                "size": 64345,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ4e11.root",
+                "version_id": "aeb0418b-25bd-45e2-ab3e-96c3d5a29838"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:191e5429",
+                "key": "ZZ4e12.root",
+                "size": 65011,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ4e12.root",
+                "version_id": "c59271ae-c361-4a56-9314-b2a55b1e3a5c"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:9f269d41",
+                "key": "ZZ4mu11.root",
+                "size": 67169,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ4mu11.root",
+                "version_id": "02bff4bd-d491-4a29-801e-d2b96e22ed9b"
+              },
+              {
+                "bucket": "307580c4-5461-4c52-8057-c42df5b51066",
+                "checksum": "adler32:58bebe9e",
+                "key": "ZZ4mu12.root",
+                "size": 67882,
+                "uri": "root://eospublic.cern.ch//eos/opendata/cms/software/HiggsExample20112012/ZZ4mu12.root",
+                "version_id": "83607742-474d-4011-a984-356fd9eff18b"
+              }
+            ],
+            "license": {
+              "attribution": "GPL-3.0-only"
+            },
+            "record_id": "5501",
+            "release": "2025-06-06T08:39:35.066467+00:00",
+            "title": "Root files for Higgs-to-four-lepton analysis example using 2011-2012 data",
+            "units": null
+          }
+        }
+      ],
+      "reason": null,
+      "source_id": "cern-open-data",
+      "status": "complete",
+      "url": "https://opendata.cern.ch/api/records/5501"
+    },
+    {
+      "next_url": null,
+      "pages": [
+        {
+          "bytes": 656,
+          "envelope_file": "gwosc-eae783d9034917dbfdea57cbe9b7b6a1abee8ad0d7be57e11f0543f121a0d9aa.json",
+          "raw_body_file": "../science-metadata-20261004/gwosc-eae783d9034917dbfdea57cbe9b7b6a1abee8ad0d7be57e11f0543f121a0d9aa.raw",
+          "requested_url": "https://gwosc.org/api/v2/events/GW150914",
+          "retrieved_at_utc": "2026-10-06T17:09:05.198178+00:00",
+          "sha256": "eae783d9034917dbfdea57cbe9b7b6a1abee8ad0d7be57e11f0543f121a0d9aa",
+          "source_id": "gwosc",
+          "summary": {
+            "classification": "provider_event_metadata_not_measurements",
+            "record_id": "GW150914",
+            "run": "O1",
+            "units": null,
+            "versions": [
+              {
+                "catalog": "O1_O2-Preliminary",
+                "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v1",
+                "version": 1
+              },
+              {
+                "catalog": "O1_O2-Preliminary",
+                "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v2",
+                "version": 2
+              },
+              {
+                "catalog": "GWTC-1-confident",
+                "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v3",
+                "version": 3
+              },
+              {
+                "catalog": "GWTC-2.1-confident",
+                "detail_url": "https://gwosc.org/api/v2/event-versions/GW150914-v4",
+                "version": 4
+              }
+            ]
+          }
+        }
+      ],
+      "reason": null,
+      "source_id": "gwosc",
+      "status": "complete",
+      "url": "https://gwosc.org/api/v2/events/GW150914"
+    },
+    {
+      "next_url": null,
+      "pages": [
+        {
+          "bytes": 1555,
+          "envelope_file": "gwosc-0b2e39b0af02cd1ae66fd284d18eafd30eaa941b80f08e862b885c84e94283fb.json",
+          "raw_body_file": "../science-metadata-20261004/gwosc-0b2e39b0af02cd1ae66fd284d18eafd30eaa941b80f08e862b885c84e94283fb.raw",
+          "requested_url": "https://gwosc.org/api/v2/events/GW150914/strain-files",
+          "retrieved_at_utc": "2026-10-06T17:09:15.925998+00:00",
+          "sha256": "0b2e39b0af02cd1ae66fd284d18eafd30eaa941b80f08e862b885c84e94283fb",
+          "source_id": "gwosc",
+          "summary": {
+            "classification": "provider_metadata_not_strain_samples",
+            "files": [
+              {
+                "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-16kHz",
+                "detector": "L1",
+                "gps_start": 1126256640,
+                "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.gwf",
+                "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/L-L1_LOSC_16_V1-1126256640-4096.hdf5",
+                "sample_rate_kHz": 16,
+                "utc_start": "2015-09-14T09:03:43"
+              },
+              {
+                "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-4kHz",
+                "detector": "H1",
+                "gps_start": 1126256640,
+                "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.gwf",
+                "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/H-H1_LOSC_4_V1-1126256640-4096.hdf5",
+                "sample_rate_kHz": 4,
+                "utc_start": "2015-09-14T09:03:43"
+              },
+              {
+                "detail_url": "https://gwosc.org/api/v2/strain-files/H1-1126256640-16kHz",
+                "detector": "H1",
+                "gps_start": 1126256640,
+                "gwf_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.gwf",
+                "hdf5_url": "https://gwosc.org/archive/data/O1_16KHZ/1126170624/H-H1_LOSC_16_V1-1126256640-4096.hdf5",
+                "sample_rate_kHz": 16,
+                "utc_start": "2015-09-14T09:03:43"
+              },
+              {
+                "detail_url": "https://gwosc.org/api/v2/strain-files/L1-1126256640-4kHz",
+                "detector": "L1",
+                "gps_start": 1126256640,
+                "gwf_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.gwf",
+                "hdf5_url": "https://gwosc.org/archive/data/O1/1126170624/L-L1_LOSC_4_V1-1126256640-4096.hdf5",
+                "sample_rate_kHz": 4,
+                "utc_start": "2015-09-14T09:03:43"
+              }
+            ],
+            "record_id": null,
+            "results_count": 4,
+            "strain_units": "dimensionless strain (not downloaded)"
+          }
+        }
+      ],
+      "reason": null,
+      "source_id": "gwosc",
+      "status": "complete",
+      "url": "https://gwosc.org/api/v2/events/GW150914/strain-files"
+    }
+  ],
+  "schema": "one-wave-science-metadata-receipt-v1",
+  "scope": "metadata acquisition only; no physical validation",
+  "started_at_utc": "2026-10-06T17:08:47.624170+00:00"
+}
