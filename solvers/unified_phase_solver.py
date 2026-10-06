@@ -45,8 +45,8 @@ class FieldConfiguration(Enum):
     DIPOLE_VORTEX = "Dipole-vortex (Meson)"
     TRIPOLE_VORTEX = "Tripole-vortex (Baryon)"
     ROTATION_MODE = "Rotation-mode (Gauge boson)"
-    HIGH_PRESSURE = "High-pressure region (Dark matter)"
-    LOW_PRESSURE = "Low-pressure region (Dark energy)"
+    HIGH_PRESSURE = "High-pressure region (Displaced superfluid energy)"
+    LOW_PRESSURE = "Low-pressure region (Superfluid expansion)"
     PHASE_BOUNDARY = "Phase-boundary resonance (Higgs)"
     UNKNOWN = "Unknown configuration"
 
@@ -150,9 +150,13 @@ class PressureField:
     def identify_high_pressure_regions(self, P: np.ndarray,
                                       threshold: float = 0.5) -> np.ndarray:
         """
-        Identify high-pressure regions (dark matter).
+        Identify high-pressure regions (displaced superfluid energy).
 
-        High P regions confine field structure → appears as dark matter
+        High P regions are compressions in the superfluid. They confine
+        field structure and produce gravitational effects. What was called
+        "dark matter" is actually this displaced superfluid energy—not a
+        separate particle species, but the superfluid's pressure response
+        to mass concentrations.
         """
         high_P_mask = P > threshold
         return high_P_mask
@@ -160,9 +164,12 @@ class PressureField:
     def identify_low_pressure_regions(self, P: np.ndarray,
                                      threshold: float = 0.1) -> np.ndarray:
         """
-        Identify low-pressure regions (dark energy / expansion).
+        Identify low-pressure regions (superfluid expansion).
 
-        Low P regions allow expansion → appears as dark energy acceleration
+        Low P regions are rarefactions in the superfluid where field displacement
+        is minimal. They allow expansion. What was called "dark energy" is
+        actually this superfluid rarefaction—the field's natural tendency to
+        expand into low-pressure regions.
         """
         low_P_mask = P < threshold
         return low_P_mask
@@ -308,8 +315,8 @@ class GravityFromPressure:
         """
         Calculate Ricci curvature from pressure field.
 
-        High-pressure regions (dark matter): positive curvature (attractive)
-        Low-pressure regions (dark energy): negative curvature (repulsive)
+        High-pressure regions (displaced superfluid energy): positive curvature (attractive)
+        Low-pressure regions (superfluid expansion): negative curvature (repulsive)
         """
         # Ricci curvature ∝ ∇²P (second derivative of pressure)
         laplacian_P = ndimage.laplace(P)
@@ -395,7 +402,7 @@ class UnifiedPhaseSolver:
         Identifies:
         - Phase state (Plasma, Gas, Solid, Liquid, Superfluid)
         - Field configurations (particles, forces)
-        - Pressure field (dark matter, dark energy)
+        - Pressure field (displaced superfluid energy, superfluid expansion)
         - Gravity from pressure gradients
         """
         # Calculate pressure field

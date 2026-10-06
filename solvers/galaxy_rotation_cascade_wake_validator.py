@@ -96,9 +96,12 @@ class GalaxyLocalGravity:
 class ClusterWakeGeometry:
     """
     Model gravity wake inherited from parent cluster.
-    
-    This is the "dark matter halo" in standard terminology.
-    One-Wave interpretation: It's an extended compression wake.
+
+    Standard terminology: "dark matter halo"
+    One-Wave interpretation: Extended displaced energy in the superfluid.
+    The halo is not a separate entity—it's the superfluid's response to mass
+    concentrations. Pressure gradients ∇P in the superfluid generate the
+    measured gravitational effects.
     """
     
     def __init__(self, cluster_name: str, radii_kpc: np.ndarray,
@@ -137,8 +140,9 @@ class ClusterWakeGeometry:
                 # Rising edge: galaxy samples cluster's compression gradient
                 g_wake[i] = self.wake_amplitude * (r - 1.0) / (r + 5.0)
             else:
-                # Extended halo: magnetic field maintains coherence
-                # This is the "dark matter"-like extended component
+                # Extended halo: coherent displaced superfluid energy
+                # Not separate dark matter particles, but the superfluid's
+                # pressure response to the mass distribution
                 g_wake[i] = self.wake_amplitude * 10.0 / (r + 20.0)
         
         return g_wake
