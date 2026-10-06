@@ -175,3 +175,54 @@ This provides solid mathematical foundation for C-319's magnetic reorganization 
 The rotational projection B = ∇×(∇×ψ) structure is now proven compatible with lattice physics.
 
 See: C-311 Phase 6B validation, discrete_maxwell_solver_v4.py, faraday_scaling_test.py
+
+
+## Native recurrence implementation-gap receipt (2026-10-05)
+
+The [retained-state domain check](../solvers/RECURRENCE_DOMAIN_CHECK.md) and
+[raw results](../solvers/recurrence_domain_results.json) distinguish the current
+reduced compression solver from this node’s intended magnetic reorganization.
+Its displacement equation is `ddot(u)=-L u-grad[(1+psi²)chi-2psi²]`. On the
+periodic native graph, discrete curl commutes with L and curl(grad)=0, so
+`ddot(curl u)=-L curl u`. Zero initial displacement and velocity curl cannot
+generate circulation through that compression channel. Random-state identity
+errors are below 6.3e-15; the solved displacement-harmonic curls are below
+2.2e-19. This is a scoped mathematical result for that solver, not rejection of
+C-319 or the complete One-Wave architecture.
+
+The refined recurrence also spreads when lifted from 32 to 108 sites: central
+activity falls from 64.55% to 31.07%, despite equation defects below 9e-12 and
+controlled ten-cycle returns. Its fundamental is almost wholly in the scalar
+upper-band eigenspace. It is not a demonstrated Persistent Mode or Vortex Phase.
+
+C-320’s positive path-accessibility tensor remains the owner of the intended
+restoring-response handoff. A naive substitution `K_L C^T C` has a nonsymmetric
+derivative for the positive control `K_L=diag(1.2,.9,.9)` under the existing
+unit-kinetic coordinates. Relative asymmetries are .0990 and .1305 in the two
+domains. Before integration, R, boundary geometry, kinetic metric and reciprocal
+force terms need one closed work/energy ledger and the mandatory isotropic
+recovery test. No physical coefficient, node gate or upstream claim is promoted
+by these implementation receipts.
+
+
+
+## Reciprocal path/circulation core candidate (2026-10-05)
+
+The [new work-balance candidate](../solvers/RECIPROCAL_BALANCE_AND_LOCK.md)
+uses positive directional edge weights dependent on symmetric traceless R and a
+completed-square local coupling to displacement-circulation orientation. All
+forces derive from one energy. Six controls pass, including native force/energy
+recovery when the new couplings vanish. Conditional R force balance is solved
+below 1.2e-18 for fixed displacement; it is not a persistent-state claim.
+
+An initially curl-free compression seed develops displacement curl about 2.04e-8.
+Halving dt changes that peak by less than 1e-5 relative; coupling-off stays near
+1.37e-16. Seeded circulation runs show quadratic energy-error improvement, but
+all six trajectories fail full return/localization. No Vortex Phase or magnetic
+observable is assigned.
+
+The new strain-driven R term and reversible R dynamics are explicit hypotheses,
+not derivations of the owner's magnetic-only first-order relaxation, hysteretic
+memory or physical coefficients. The evolving closed boundary and connection to
+velocity circulation remain open. The full architecture, metadata and node gate
+are preserved.

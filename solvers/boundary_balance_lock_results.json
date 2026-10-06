@@ -1,0 +1,4281 @@
+{
+  "scope": "Reduced moving-surface pressure/recurrence balance; assumed one-carrier cavity reduction, not spatial confinement proof.",
+  "parameters": {
+    "sigma": 0.01,
+    "frequency_radius": 1.0,
+    "boundary_kinetic_weight": 100.0,
+    "initial_wave_action": 0.25132741228718347,
+    "duration": 200
+  },
+  "balance": {
+    "radius": 1.0,
+    "wave_pressure": 0.02,
+    "tension_pressure": 0.02,
+    "averaged_energy_curvature": 0.7539822368615504,
+    "small_radial_frequency": 0.08683215054699213
+  },
+  "checks": {
+    "instantaneous_energy_gradient": true,
+    "positive_averaged_curvature": true,
+    "balanced_radius_numerical_lock": true,
+    "both_radius_perturbations_lock": true,
+    "both_ablations_lose_lock": true
+  },
+  "energy_gradient_error": 1.091926549179334e-11,
+  "runs": {
+    "balanced_radius": {
+      "completed": true,
+      "dt": 0.01,
+      "end_time": 200.0,
+      "radius_min": 0.9988493464521616,
+      "radius_max": 1.0012546361255785,
+      "max_scaled_energy_error": 6.2818629811278726e-06,
+      "late_mean_radius_pressure_tension": [
+        0.9999413579691048,
+        0.020015163783678024,
+        0.02000118017682411
+      ],
+      "passes_radius_lock_screen": true,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 1.0,
+          "wave_coordinate": 0.7089815403622064,
+          "wave_energy": 0.25132741228718347,
+          "wave_action": 0.25132741228718347,
+          "wave_pressure": 0.04,
+          "tension_pressure": 0.02
+        },
+        {
+          "t": 2.0,
+          "radius": 1.001032460213736,
+          "wave_coordinate": -0.29456471016891445,
+          "wave_energy": 0.2510166264096336,
+          "wave_action": 0.2512757910893878,
+          "wave_pressure": 0.006869272818835596,
+          "tension_pressure": 0.019979372093218328
+        },
+        {
+          "t": 4.0,
+          "radius": 1.0006850920179795,
+          "wave_coordinate": -0.4639730820340619,
+          "wave_energy": 0.2510762142436907,
+          "wave_action": 0.25124822455397355,
+          "wave_pressure": 0.017072163339069815,
+          "tension_pressure": 0.019986307540235303
+        },
+        {
+          "t": 6.0,
+          "radius": 1.0000230138665145,
+          "wave_coordinate": 0.6803595366580641,
+          "wave_energy": 0.2512963392686657,
+          "wave_action": 0.2513021225690732,
+          "wave_pressure": 0.036831305765427244,
+          "tension_pressure": 0.01999953973326223
+        },
+        {
+          "t": 8.0,
+          "radius": 1.0010988230078939,
+          "wave_coordinate": -0.10162542940416165,
+          "wave_energy": 0.25103739917380663,
+          "wave_action": 0.25131324484386064,
+          "wave_pressure": 0.0008173539568754165,
+          "tension_pressure": 0.01997804766157666
+        },
+        {
+          "t": 10.0,
+          "radius": 1.0001659086260757,
+          "wave_coordinate": -0.5957001540891564,
+          "wave_energy": 0.25122243260519395,
+          "wave_action": 0.25126411257382686,
+          "wave_pressure": 0.028215342388590966,
+          "tension_pressure": 0.019996682377900612
+        },
+        {
+          "t": 12.0,
+          "radius": 1.0000797949927318,
+          "wave_coordinate": 0.5971650959295827,
+          "wave_energy": 0.251235216225388,
+          "wave_action": 0.2512552635376407,
+          "wave_pressure": 0.028366496569457632,
+          "tension_pressure": 0.019998404227480022
+        },
+        {
+          "t": 14.0,
+          "radius": 1.0008578399952293,
+          "wave_coordinate": 0.09865814391344599,
+          "wave_energy": 0.2511010810348062,
+          "wave_action": 0.25131648558496317,
+          "wave_pressure": 0.0007712479807513907,
+          "tension_pressure": 0.019982857905269876
+        },
+        {
+          "t": 16.0,
+          "radius": 0.9996303350700042,
+          "wave_coordinate": -0.6792491175717337,
+          "wave_energy": 0.2513992745327478,
+          "wave_action": 0.25130634103752664,
+          "wave_pressure": 0.03678334049677034,
+          "tension_pressure": 0.02000739603265381
+        },
+        {
+          "t": 18.0,
+          "radius": 1.0001401971397714,
+          "wave_coordinate": 0.4669437476975865,
+          "wave_energy": 0.25120443705037104,
+          "wave_action": 0.2512396551939434,
+          "wave_pressure": 0.01733863292910541,
+          "tension_pressure": 0.019997196450254228
+        },
+        {
+          "t": 20.0,
+          "radius": 1.0003759407399633,
+          "wave_coordinate": 0.28994960688793714,
+          "wave_energy": 0.2511880897331832,
+          "wave_action": 0.2512825215695074,
+          "wave_pressure": 0.006677578358549869,
+          "tension_pressure": 0.019992484010767288
+        },
+        {
+          "t": 22.0,
+          "radius": 0.9992313921855659,
+          "wave_coordinate": -0.7086832960346446,
+          "wave_energy": 0.25152048099996177,
+          "wave_action": 0.251327160392775,
+          "wave_pressure": 0.04012030086182208,
+          "tension_pressure": 0.02001538398053634
+        },
+        {
+          "t": 24.0,
+          "radius": 1.0001716532433842,
+          "wave_coordinate": 0.300909405319748,
+          "wave_energy": 0.2512279972568809,
+          "wave_action": 0.25127112135743895,
+          "wave_pressure": 0.007199278137881468,
+          "tension_pressure": 0.019996567524327897
+        },
+        {
+          "t": 26.0,
+          "radius": 0.9997917863543065,
+          "wave_coordinate": 0.4573909794118411,
+          "wave_energy": 0.25130376880164773,
+          "wave_action": 0.25125144392776905,
+          "wave_pressure": 0.016665467606737826,
+          "tension_pressure": 0.020004165140152887
+        },
+        {
+          "t": 28.0,
+          "radius": 0.9990763321462384,
+          "wave_coordinate": -0.6827032129140745,
+          "wave_energy": 0.25153565763939295,
+          "wave_action": 0.25130332223835666,
+          "wave_pressure": 0.037261529314613774,
+          "tension_pressure": 0.02001849043609666
+        },
+        {
+          "t": 30.0,
+          "radius": 1.0001540133389066,
+          "wave_coordinate": 0.11248102796691933,
+          "wave_energy": 0.25127375574499594,
+          "wave_action": 0.2513124552550978,
+          "wave_pressure": 0.0010060377551126055,
+          "tension_pressure": 0.019996920207550985
+        },
+        {
+          "t": 32.0,
+          "radius": 0.9992739388590614,
+          "wave_coordinate": 0.588640991302424,
+          "wave_energy": 0.25144207006201985,
+          "wave_action": 0.2512595077457506,
+          "wave_pressure": 0.02767377044172839,
+          "tension_pressure": 0.020014531773775022
+        },
+        {
+          "t": 34.0,
+          "radius": 0.9992002325770931,
+          "wave_coordinate": -0.6041334174598022,
+          "wave_energy": 0.251462548547619,
+          "wave_action": 0.25126143699320946,
+          "wave_pressure": 0.029160382893676,
+          "tension_pressure": 0.020016008151256013
+        },
+        {
+          "t": 36.0,
+          "radius": 1.000086798884425,
+          "wave_coordinate": -0.0839707110669864,
+          "wave_energy": 0.25129504165180544,
+          "wave_action": 0.25131685378108237,
+          "wave_pressure": 0.0005608636893297041,
+          "tension_pressure": 0.019998264172979348
+        },
+        {
+          "t": 38.0,
+          "radius": 0.9989719776357484,
+          "wave_coordinate": 0.6743308209870005,
+          "wave_energy": 0.2515573522935269,
+          "wave_action": 0.25129874570947724,
+          "wave_pressure": 0.036372204685102764,
+          "tension_pressure": 0.02002058160563592
+        },
+        {
+          "t": 40.0,
+          "radius": 0.9995602772975318,
+          "wave_coordinate": -0.4792355924354232,
+          "wave_energy": 0.25135781433991017,
+          "wave_action": 0.2512472866025021,
+          "wave_pressure": 0.018316535087420774,
+          "tension_pressure": 0.020008798322871675
+        },
+        {
+          "t": 42.0,
+          "radius": 0.9999882545171462,
+          "wave_coordinate": -0.27395902377393705,
+          "wave_energy": 0.25128254231975333,
+          "wave_action": 0.25127959088496105,
+          "wave_pressure": 0.005972922243551226,
+          "tension_pressure": 0.020000234912416235
+        },
+        {
+          "t": 44.0,
+          "radius": 0.998975217450023,
+          "wave_coordinate": 0.7082163890716855,
+          "wave_energy": 0.2515841616906975,
+          "wave_action": 0.2513263426319463,
+          "wave_pressure": 0.04011885312626145,
+          "tension_pressure": 0.020020516676131223
+        },
+        {
+          "t": 46.0,
+          "radius": 1.0000493679283318,
+          "wave_coordinate": -0.31717761392638194,
+          "wave_energy": 0.25126296273549265,
+          "wave_action": 0.2512753670674294,
+          "wave_pressure": 0.008003648234439387,
+          "tension_pressure": 0.019999012690174806
+        },
+        {
+          "t": 48.0,
+          "radius": 0.9998895654747543,
+          "wave_coordinate": -0.44341789995552894,
+          "wave_energy": 0.25127049306630994,
+          "wave_action": 0.2512427441286999,
+          "wave_pressure": 0.015655119834171585,
+          "tension_pressure": 0.02000220893444754
+        },
+        {
+          "t": 50.0,
+          "radius": 0.9992881838718128,
+          "wave_coordinate": 0.6873639162857789,
+          "wave_energy": 0.25149083695020963,
+          "wave_action": 0.2513118217163772,
+          "wave_pressure": 0.037732000800257,
+          "tension_pressure": 0.02001424646342618
+        },
+        {
+          "t": 52.0,
+          "radius": 1.0005256498585744,
+          "wave_coordinate": -0.1297188878885498,
+          "wave_energy": 0.25118105922654704,
+          "wave_action": 0.25131309251480605,
+          "wave_pressure": 0.0013355354956344561,
+          "tension_pressure": 0.01998949252608069
+        },
+        {
+          "t": 54.0,
+          "radius": 0.9998268917958829,
+          "wave_coordinate": -0.5792589518460648,
+          "wave_energy": 0.2512924587462743,
+          "wave_action": 0.2512489579600326,
+          "wave_pressure": 0.026724622321532693,
+          "tension_pressure": 0.020003462763515115
+        },
+        {
+          "t": 56.0,
+          "radius": 0.9998275056301671,
+          "wave_coordinate": 0.61253601395176,
+          "wave_energy": 0.2513145260255863,
+          "wave_action": 0.2512711756847897,
+          "wave_pressure": 0.029883261220958503,
+          "tension_pressure": 0.020003450482585478
+        },
+        {
+          "t": 58.0,
+          "radius": 1.0008523539595278,
+          "wave_coordinate": 0.06910574295145726,
+          "wave_energy": 0.2511026387665991,
+          "wave_action": 0.25131666709499967,
+          "wave_pressure": 0.00037841499908668403,
+          "tension_pressure": 0.019982967438580614
+        },
+        {
+          "t": 60.0,
+          "radius": 0.9998313029770356,
+          "wave_coordinate": -0.6702342346947977,
+          "wave_energy": 0.25133557674284207,
+          "wave_action": 0.2512931771792805,
+          "wave_pressure": 0.035777476270041436,
+          "tension_pressure": 0.020003374509729034
+        },
+        {
+          "t": 62.0,
+          "radius": 1.0004418637026027,
+          "wave_coordinate": 0.48865862989076375,
+          "wave_energy": 0.251138947825543,
+          "wave_action": 0.25124991701089694,
+          "wave_pressure": 0.018960160047523423,
+          "tension_pressure": 0.01999116662909392
+        },
+        {
+          "t": 64.0,
+          "radius": 1.0009383410223902,
+          "wave_coordinate": 0.263642722033472,
+          "wave_energy": 0.25104543795977247,
+          "wave_action": 0.25128100419269406,
+          "wave_pressure": 0.005505351893501842,
+          "tension_pressure": 0.01998125077272129
+        },
+        {
+          "t": 66.0,
+          "radius": 0.9999166740143459,
+          "wave_coordinate": -0.7081454007141074,
+          "wave_energy": 0.251347271442229,
+          "wave_action": 0.25132632768309465,
+          "wave_pressure": 0.03992233744791163,
+          "tension_pressure": 0.020001666658589053
+        },
+        {
+          "t": 68.0,
+          "radius": 1.000952744267128,
+          "wave_coordinate": 0.3250179398436797,
+          "wave_energy": 0.25103229272991007,
+          "wave_action": 0.2512714623076725,
+          "wave_pressure": 0.008366367344126947,
+          "tension_pressure": 0.019980963251810143
+        },
+        {
+          "t": 70.0,
+          "radius": 1.0007662497433838,
+          "wave_coordinate": 0.437841259613586,
+          "wave_energy": 0.2510549809733403,
+          "wave_action": 0.2512473517880863,
+          "wave_pressure": 0.01519708358224896,
+          "tension_pressure": 0.019984686738914702
+        },
+        {
+          "t": 72.0,
+          "radius": 1.0000692416070023,
+          "wave_coordinate": -0.689116405938862,
+          "wave_energy": 0.2512932142097657,
+          "wave_action": 0.25131061415574635,
+          "wave_pressure": 0.03777678232520872,
+          "tension_pressure": 0.019998615263741318
+        },
+        {
+          "t": 74.0,
+          "radius": 1.0012070714058676,
+          "wave_coordinate": 0.13481391593625286,
+          "wave_energy": 0.2510064724992623,
+          "wave_action": 0.25130945523490383,
+          "wave_pressure": 0.0014376065473538327,
+          "tension_pressure": 0.019975887677178054
+        },
+        {
+          "t": 76.0,
+          "radius": 1.0003968252320996,
+          "wave_coordinate": 0.5769603895272979,
+          "wave_energy": 0.2511565462883834,
+          "wave_action": 0.25125621154315764,
+          "wave_pressure": 0.0264375136141912,
+          "tension_pressure": 0.019992066643514037
+        },
+        {
+          "t": 78.0,
+          "radius": 1.0002459075040095,
+          "wave_coordinate": -0.6144456063874754,
+          "wave_energy": 0.2512022488835475,
+          "wave_action": 0.251264021401572,
+          "wave_pressure": 0.030007036499105386,
+          "tension_pressure": 0.01999508305903249
+        },
+        {
+          "t": 80.0,
+          "radius": 1.001125642646143,
+          "wave_coordinate": -0.06607464352835897,
+          "wave_energy": 0.2510360827349697,
+          "wave_action": 0.2513186596554169,
+          "wave_pressure": 0.00034547519155062674,
+          "tension_pressure": 0.019977512460011157
+        },
+        {
+          "t": 82.0,
+          "radius": 0.9999468148974384,
+          "wave_coordinate": 0.6693608442664909,
+          "wave_energy": 0.2513122807029618,
+          "wave_action": 0.2512989146335376,
+          "wave_pressure": 0.03566368674916339,
+          "tension_pressure": 0.020001063758627344
+        },
+        {
+          "t": 84.0,
+          "radius": 1.0003862293351924,
+          "wave_coordinate": -0.4906256544564591,
+          "wave_energy": 0.25114262365049234,
+          "wave_action": 0.2512396222990633,
+          "wave_pressure": 0.019118425293957447,
+          "tension_pressure": 0.019992278395606283
+        },
+        {
+          "t": 86.0,
+          "radius": 1.0007294999996847,
+          "wave_coordinate": -0.2608981835249712,
+          "wave_energy": 0.251105415404232,
+          "wave_action": 0.25128859680469023,
+          "wave_pressure": 0.005396954232260381,
+          "tension_pressure": 0.019985420635652593
+        },
+        {
+          "t": 88.0,
+          "radius": 0.9995495582568704,
+          "wave_coordinate": 0.7078480029073708,
+          "wave_energy": 0.25144023783092373,
+          "wave_action": 0.2513269786519023,
+          "wave_pressure": 0.039962118229990816,
+          "tension_pressure": 0.020009012894646568
+        },
+        {
+          "t": 90.0,
+          "radius": 1.0004350252910095,
+          "wave_coordinate": -0.3284512800618743,
+          "wave_energy": 0.2511544536678142,
+          "wave_action": 0.25126371220710936,
+          "wave_pressure": 0.008566188236526375,
+          "tension_pressure": 0.01999130327747406
+        },
+        {
+          "t": 92.0,
+          "radius": 1.000133703614556,
+          "wave_coordinate": -0.4339283602259491,
+          "wave_energy": 0.25122158159013597,
+          "wave_action": 0.251255170823649,
+          "wave_pressure": 0.0149739332250561,
+          "tension_pressure": 0.019997326285194215
+        },
+        {
+          "t": 94.0,
+          "radius": 0.9993142297759179,
+          "wave_coordinate": 0.6901921044814273,
+          "wave_energy": 0.2514810833420717,
+          "wave_action": 0.2513086251031958,
+          "wave_pressure": 0.0380381819596486,
+          "tension_pressure": 0.020013724816552166
+        },
+        {
+          "t": 96.0,
+          "radius": 1.0003649491868207,
+          "wave_coordinate": -0.14152713761585886,
+          "wave_energy": 0.2512152372709977,
+          "wave_action": 0.25130691806755673,
+          "wave_pressure": 0.00159102590102177,
+          "tension_pressure": 0.019992703679049983
+        },
+        {
+          "t": 98.0,
+          "radius": 0.9995112609272487,
+          "wave_coordinate": -0.5719311637430569,
+          "wave_energy": 0.25138068811299064,
+          "wave_action": 0.2512578285485747,
+          "wave_pressure": 0.02609391248063595,
+          "tension_pressure": 0.020009779561108654
+        },
+        {
+          "t": 100.0,
+          "radius": 0.999297379275924,
+          "wave_coordinate": 0.6188159994664726,
+          "wave_energy": 0.25144129969883505,
+          "wave_action": 0.2512646318307781,
+          "wave_pressure": 0.030580139443098807,
+          "tension_pressure": 0.020014062294941376
+        },
+        {
+          "t": 102.0,
+          "radius": 1.0001880251796056,
+          "wave_coordinate": 0.055305967115459154,
+          "wave_energy": 0.25127248553709436,
+          "wave_action": 0.25131973109131744,
+          "wave_pressure": 0.0002431788862207427,
+          "tension_pressure": 0.01999624020334433
+        },
+        {
+          "t": 104.0,
+          "radius": 0.9990411399938115,
+          "wave_coordinate": -0.6649671644887918,
+          "wave_energy": 0.2515357301575259,
+          "wave_action": 0.2512945426057504,
+          "wave_pressure": 0.035356858819651324,
+          "tension_pressure": 0.02001919560602268
+        },
+        {
+          "t": 106.0,
+          "radius": 0.9994923450252526,
+          "wave_coordinate": 0.4999807523378321,
+          "wave_energy": 0.25137111806172674,
+          "wave_action": 0.2512435082631349,
+          "wave_pressure": 0.01994340671305531,
+          "tension_pressure": 0.020010158256384337
+        },
+        {
+          "t": 108.0,
+          "radius": 0.9999520064456245,
+          "wave_coordinate": 0.24720046870034562,
+          "wave_energy": 0.2513002923182337,
+          "wave_action": 0.25128823152398977,
+          "wave_pressure": 0.0048639929284918304,
+          "tension_pressure": 0.020000959917157345
+        },
+        {
+          "t": 110.0,
+          "radius": 0.9988575536067975,
+          "wave_coordinate": -0.7066106586710318,
+          "wave_energy": 0.251612483091194,
+          "wave_action": 0.25132502931740175,
+          "wave_pressure": 0.03996066558728311,
+          "tension_pressure": 0.020022875061395436
+        },
+        {
+          "t": 112.0,
+          "radius": 0.999835232894687,
+          "wave_coordinate": 0.34291353177784484,
+          "wave_energy": 0.2513087268939682,
+          "wave_action": 0.251267319482498,
+          "wave_pressure": 0.00936520307700669,
+          "tension_pressure": 0.020003295885159717
+        },
+        {
+          "t": 114.0,
+          "radius": 0.9997253106577442,
+          "wave_coordinate": 0.42006433426038314,
+          "wave_energy": 0.25131734909978837,
+          "wave_action": 0.2512483149024667,
+          "wave_pressure": 0.014061068259800193,
+          "tension_pressure": 0.020005495296344454
+        },
+        {
+          "t": 116.0,
+          "radius": 0.9990138264083813,
+          "wave_coordinate": -0.6939128415243978,
+          "wave_energy": 0.2515638464702457,
+          "wave_action": 0.25131576084825075,
+          "wave_pressure": 0.038507248759114085,
+          "tension_pressure": 0.020019742941800197
+        },
+        {
+          "t": 118.0,
+          "radius": 1.0002238157780114,
+          "wave_coordinate": 0.15916918337181107,
+          "wave_energy": 0.2512519725223844,
+          "wave_action": 0.2513082066780914,
+          "wave_pressure": 0.002013826988422992,
+          "tension_pressure": 0.019995524686085637
+        },
+        {
+          "t": 120.0,
+          "radius": 0.9995774720102684,
+          "wave_coordinate": 0.5610464755498439,
+          "wave_energy": 0.25135185246953984,
+          "wave_action": 0.2512456492766006,
+          "wave_pressure": 0.02510183755611695,
+          "tension_pressure": 0.02000845413190199
+        },
+        {
+          "t": 122.0,
+          "radius": 0.9994680740341808,
+          "wave_coordinate": -0.627434539348209,
+          "wave_energy": 0.25141061757878364,
+          "wave_action": 0.25127688574321083,
+          "wave_pressure": 0.031411042500815015,
+          "tension_pressure": 0.020010644181232766
+        },
+        {
+          "t": 124.0,
+          "radius": 1.0005456636937975,
+          "wave_coordinate": -0.03778179530743132,
+          "wave_energy": 0.2511823072037123,
+          "wave_action": 0.2513193682692777,
+          "wave_pressure": 0.0001132845664885192,
+          "tension_pressure": 0.019989092677853742
+        },
+        {
+          "t": 126.0,
+          "radius": 0.9995602831580473,
+          "wave_coordinate": 0.6590794830980135,
+          "wave_energy": 0.2513955139127956,
+          "wave_action": 0.25128497107133674,
+          "wave_pressure": 0.0346434203805973,
+          "tension_pressure": 0.020008798205558218
+        },
+        {
+          "t": 128.0,
+          "radius": 1.0000932448365414,
+          "wave_coordinate": -0.5114638606961088,
+          "wave_energy": 0.2512280323296756,
+          "wave_action": 0.2512514580464848,
+          "wave_pressure": 0.020807388297379457,
+          "tension_pressure": 0.01999813527714495
+        },
+        {
+          "t": 130.0,
+          "radius": 1.0007103155141968,
+          "wave_coordinate": -0.23300314366894512,
+          "wave_energy": 0.25110887952729005,
+          "wave_action": 0.25128724606017083,
+          "wave_pressure": 0.004304986700168088,
+          "tension_pressure": 0.01998580377351598
+        },
+        {
+          "t": 132.0,
+          "radius": 0.9996921557765558,
+          "wave_coordinate": 0.7057185430151826,
+          "wave_energy": 0.25140077196581145,
+          "wave_action": 0.25132337969039237,
+          "wave_pressure": 0.03969371725297046,
+          "tension_pressure": 0.020006158780413858
+        },
+        {
+          "t": 134.0,
+          "radius": 1.00071042546681,
+          "wave_coordinate": -0.35424804478327404,
+          "wave_energy": 0.2510891223930016,
+          "wave_action": 0.2512675024999885,
+          "wave_pressure": 0.009950913205066372,
+          "tension_pressure": 0.019985801577584672
+        },
+        {
+          "t": 136.0,
+          "radius": 1.0006768477063936,
+          "wave_coordinate": -0.4109108086153453,
+          "wave_energy": 0.25107833193076606,
+          "wave_action": 0.25124827372385855,
+          "wave_pressure": 0.01339109241628587,
+          "tension_pressure": 0.019986472202131088
+        },
+        {
+          "t": 138.0,
+          "radius": 0.9999483141461573,
+          "wave_coordinate": 0.696237259545413,
+          "wave_energy": 0.2513305682768322,
+          "wave_action": 0.25131757804181404,
+          "wave_pressure": 0.038584857038173985,
+          "tension_pressure": 0.020001033770508166
+        },
+        {
+          "t": 140.0,
+          "radius": 1.0011392382120838,
+          "wave_coordinate": -0.1678809629701724,
+          "wave_energy": 0.2510194244306258,
+          "wave_action": 0.25130539535091245,
+          "wave_pressure": 0.0022300809253497722,
+          "tension_pressure": 0.019977241163494534
+        },
+        {
+          "t": 142.0,
+          "radius": 1.0004663752291358,
+          "wave_coordinate": -0.556617746917913,
+          "wave_energy": 0.2511314459267133,
+          "wave_action": 0.25124856741235063,
+          "wave_pressure": 0.02459754417534055,
+          "tension_pressure": 0.01999067684350653
+        },
+        {
+          "t": 144.0,
+          "radius": 1.000261559518719,
+          "wave_coordinate": 0.6306393106050808,
+          "wave_energy": 0.251208365125283,
+          "wave_action": 0.25127407106436334,
+          "wave_pressure": 0.031607075843551685,
+          "tension_pressure": 0.019994770177535467
+        },
+        {
+          "t": 146.0,
+          "radius": 1.0012522596898576,
+          "wave_coordinate": 0.032474006143500045,
+          "wave_energy": 0.25100563277413557,
+          "wave_action": 0.25131995700998583,
+          "wave_pressure": 8.339582835516801e-05,
+          "tension_pressure": 0.019974986130063856
+        },
+        {
+          "t": 148.0,
+          "radius": 1.0001529943754237,
+          "wave_coordinate": -0.6576388049787675,
+          "wave_energy": 0.25125123482484274,
+          "wave_action": 0.2512896748505892,
+          "wave_pressure": 0.03439004953022704,
+          "tension_pressure": 0.019996940580565493
+        },
+        {
+          "t": 150.0,
+          "radius": 1.0005380248359963,
+          "wave_coordinate": 0.5141127913690995,
+          "wave_energy": 0.25110747148413004,
+          "wave_action": 0.2512425735402927,
+          "wave_pressure": 0.020976786739587926,
+          "tension_pressure": 0.019989245289581382
+        },
+        {
+          "t": 152.0,
+          "radius": 1.0010155065380575,
+          "wave_coordinate": 0.23007830791058947,
+          "wave_energy": 0.25103888827544474,
+          "wave_action": 0.25129381990779515,
+          "wave_pressure": 0.004191191068321496,
+          "tension_pressure": 0.019979710473385783
+        },
+        {
+          "t": 154.0,
+          "radius": 0.9998362331842069,
+          "wave_coordinate": -0.7054983426218269,
+          "wave_energy": 0.2513663054080224,
+          "wave_action": 0.251325139948588,
+          "wave_pressure": 0.03964037697234151,
+          "tension_pressure": 0.02000327587279512
+        },
+        {
+          "t": 156.0,
+          "radius": 1.0006863894907163,
+          "wave_coordinate": 0.3566044169649133,
+          "wave_energy": 0.2510857345716695,
+          "wave_action": 0.2512580771811483,
+          "wave_pressure": 0.010084946709377868,
+          "tension_pressure": 0.01998628162633319
+        },
+        {
+          "t": 158.0,
+          "radius": 1.0004995293543155,
+          "wave_coordinate": 0.4085301827813207,
+          "wave_energy": 0.2511327458767587,
+          "wave_action": 0.25125819405515404,
+          "wave_pressure": 0.013248111947485687,
+          "tension_pressure": 0.019990014401013504
+        },
+        {
+          "t": 160.0,
+          "radius": 0.999607187539486,
+          "wave_coordinate": -0.6967231313368778,
+          "wave_energy": 0.2514132022699642,
+          "wave_action": 0.2513144440313748,
+          "wave_pressure": 0.03870470340836269,
+          "tension_pressure": 0.02000785933645557
+        },
+        {
+          "t": 162.0,
+          "radius": 1.0006503848282813,
+          "wave_coordinate": 0.17155703246898202,
+          "wave_energy": 0.2511374677075049,
+          "wave_action": 0.25130080370631486,
+          "wave_pressure": 0.0023345079276173614,
+          "tension_pressure": 0.019987000757944188
+        },
+        {
+          "t": 164.0,
+          "radius": 0.9998566124398537,
+          "wave_coordinate": 0.5535752844279439,
+          "wave_energy": 0.2512915884260464,
+          "wave_action": 0.2512555563382967,
+          "wave_pressure": 0.024403656545811312,
+          "tension_pressure": 0.020002868162461745
+        },
+        {
+          "t": 166.0,
+          "radius": 0.9995222676594644,
+          "wave_coordinate": -0.6329365298868473,
+          "wave_energy": 0.25138996992699375,
+          "wave_action": 0.25126987280827334,
+          "wave_pressure": 0.03195568193185922,
+          "tension_pressure": 0.02000955921355618
+        },
+        {
+          "t": 168.0,
+          "radius": 1.0004304225081793,
+          "wave_coordinate": -0.025787396281959564,
+          "wave_energy": 0.2512128354351526,
+          "wave_action": 0.2513209630938674,
+          "wave_pressure": 5.2804468416875666e-05,
+          "tension_pressure": 0.01999139525351298
+        },
+        {
+          "t": 170.0,
+          "radius": 0.9992732285703004,
+          "wave_coordinate": 0.6543528833200751,
+          "wave_energy": 0.25147275138440855,
+          "wave_action": 0.2512899881733544,
+          "wave_pressure": 0.03419738633137039,
+          "tension_pressure": 0.020014546000211363
+        },
+        {
+          "t": 172.0,
+          "radius": 0.9995920578651393,
+          "wave_coordinate": -0.5201613852735595,
+          "wave_energy": 0.2513437483341164,
+          "wave_action": 0.2512412146288371,
+          "wave_pressure": 0.02157507774239439,
+          "tension_pressure": 0.020008162172391247
+        },
+        {
+          "t": 174.0,
+          "radius": 1.0000849750358203,
+          "wave_coordinate": -0.2199897116306893,
+          "wave_energy": 0.2512748656304565,
+          "wave_action": 0.2512962177211642,
+          "wave_pressure": 0.0038495535356456775,
+          "tension_pressure": 0.01999830064368646
+        },
+        {
+          "t": 176.0,
+          "radius": 0.9989151247598967,
+          "wave_coordinate": 0.7039086948172265,
+          "wave_energy": 0.2515962961310945,
+          "wave_action": 0.2513233455389202,
+          "wave_pressure": 0.03964421756648214,
+          "tension_pressure": 0.020021721069452502
+        },
+        {
+          "t": 178.0,
+          "radius": 0.9997843751954345,
+          "wave_coordinate": -0.3677427269960095,
+          "wave_energy": 0.25131320793258205,
+          "wave_action": 0.2512590185712369,
+          "wave_pressure": 0.010773246434294935,
+          "tension_pressure": 0.020004313426172985
+        },
+        {
+          "t": 180.0,
+          "radius": 0.999712361364143,
+          "wave_coordinate": -0.3965560378116608,
+          "wave_energy": 0.2513276664609111,
+          "wave_action": 0.25125537491377714,
+          "wave_pressure": 0.012532103082999417,
+          "tension_pressure": 0.020005754427912935
+        },
+        {
+          "t": 182.0,
+          "radius": 0.9988818084121542,
+          "wave_coordinate": 0.6991489082376415,
+          "wave_energy": 0.25160014023133,
+          "wave_action": 0.2513188030710225,
+          "wave_pressure": 0.039116409531366456,
+          "tension_pressure": 0.020022388866799433
+        },
+        {
+          "t": 184.0,
+          "radius": 1.00003662149742,
+          "wave_coordinate": -0.18734130568981422,
+          "wave_energy": 0.2512926052755826,
+          "wave_action": 0.25130180798707835,
+          "wave_pressure": 0.0027924004567427343,
+          "tension_pressure": 0.019999267596873302
+        },
+        {
+          "t": 186.0,
+          "radius": 0.9994214084028032,
+          "wave_coordinate": -0.5425858212419079,
+          "wave_energy": 0.2513905798301425,
+          "wave_action": 0.2512451273530384,
+          "wave_pressure": 0.023495450502254035,
+          "tension_pressure": 0.020011578531184786
+        },
+        {
+          "t": 188.0,
+          "radius": 0.9991810070006077,
+          "wave_coordinate": 0.6405987939777074,
+          "wave_energy": 0.25148737051301434,
+          "wave_action": 0.25128140411712857,
+          "wave_pressure": 0.032790007706824886,
+          "tension_pressure": 0.020016393285974297
+        },
+        {
+          "t": 190.0,
+          "radius": 1.000273468015526,
+          "wave_coordinate": 0.007767184285683635,
+          "wave_energy": 0.2512521951745056,
+          "wave_action": 0.25132090461371653,
+          "wave_pressure": 4.794282354228465e-06,
+          "tension_pressure": 0.019994532134975675
+        },
+        {
+          "t": 192.0,
+          "radius": 0.9993009647381831,
+          "wave_coordinate": -0.6471749876301703,
+          "wave_energy": 0.2514541333474899,
+          "wave_action": 0.25127835804155035,
+          "wave_pressure": 0.03344660572899642,
+          "tension_pressure": 0.02001399048507874
+        },
+        {
+          "t": 194.0,
+          "radius": 0.9997272708432263,
+          "wave_coordinate": 0.5322724487328575,
+          "wave_energy": 0.2513208126531278,
+          "wave_action": 0.2512522701398132,
+          "wave_pressure": 0.02257617768667791,
+          "tension_pressure": 0.020005456071165162
+        },
+        {
+          "t": 196.0,
+          "radius": 1.0004274822744856,
+          "wave_coordinate": 0.20316731306787772,
+          "wave_energy": 0.2511868577465655,
+          "wave_action": 0.2512942356758359,
+          "wave_pressure": 0.0032777040848068653,
+          "tension_pressure": 0.019991454007770484
+        },
+        {
+          "t": 198.0,
+          "radius": 0.9993952927234372,
+          "wave_coordinate": -0.7019073498120892,
+          "wave_energy": 0.25147139179070205,
+          "wave_action": 0.2513193252102388,
+          "wave_pressure": 0.03932450081220596,
+          "tension_pressure": 0.020012101463374215
+        },
+        {
+          "t": 200.0,
+          "radius": 1.000364575984496,
+          "wave_coordinate": 0.3817155536916777,
+          "wave_energy": 0.25117169714812043,
+          "wave_action": 0.2512632683168857,
+          "wave_pressure": 0.01157386270966004,
+          "tension_pressure": 0.01999271113765425
+        }
+      ]
+    },
+    "half_timestep": {
+      "completed": true,
+      "dt": 0.005,
+      "end_time": 200.0,
+      "radius_min": 0.9988493686096186,
+      "radius_max": 1.0012546280975336,
+      "max_scaled_energy_error": 1.5704664227400578e-06,
+      "late_mean_radius_pressure_tension": [
+        0.9999413591338097,
+        0.020015195314631837,
+        0.020001180153357435
+      ],
+      "passes_radius_lock_screen": true,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 1.0,
+          "wave_coordinate": 0.7089815403622064,
+          "wave_energy": 0.25132741228718347,
+          "wave_action": 0.25132741228718347,
+          "wave_pressure": 0.04,
+          "tension_pressure": 0.02
+        },
+        {
+          "t": 2.0,
+          "radius": 1.0010324467914897,
+          "wave_coordinate": -0.2945606974659321,
+          "wave_energy": 0.2510205258868644,
+          "wave_action": 0.25127969122341437,
+          "wave_pressure": 0.00686908612751277,
+          "tension_pressure": 0.019979372361109794
+        },
+        {
+          "t": 4.0,
+          "radius": 1.0006850637843339,
+          "wave_coordinate": -0.4639797706752304,
+          "wave_energy": 0.2510789183772631,
+          "wave_action": 0.2512509234512531,
+          "wave_pressure": 0.017072657976081877,
+          "tension_pressure": 0.01998630810413532
+        },
+        {
+          "t": 6.0,
+          "radius": 1.000023026517984,
+          "wave_coordinate": 0.6803558093155864,
+          "wave_energy": 0.251296707621654,
+          "wave_action": 0.25130249410981137,
+          "wave_pressure": 0.036830899876928246,
+          "tension_pressure": 0.01999953948024449
+        },
+        {
+          "t": 8.0,
+          "radius": 1.0010988119393078,
+          "wave_coordinate": -0.10160793792329836,
+          "wave_energy": 0.2510420103270067,
+          "wave_action": 0.25131785828522185,
+          "wave_pressure": 0.0008170726649658113,
+          "tension_pressure": 0.01997804788246269
+        },
+        {
+          "t": 10.0,
+          "radius": 1.0001658707017111,
+          "wave_coordinate": -0.5957121443312723,
+          "wave_energy": 0.2512238355502468,
+          "wave_action": 0.25126550622413607,
+          "wave_pressure": 0.02821648358541552,
+          "tension_pressure": 0.019996683136136315
+        },
+        {
+          "t": 12.0,
+          "radius": 1.000079837557796,
+          "wave_coordinate": 0.5971507996409251,
+          "wave_energy": 0.251236574144926,
+          "wave_action": 0.25125663225943473,
+          "wave_pressure": 0.028365132346677115,
+          "tension_pressure": 0.019998403376314616
+        },
+        {
+          "t": 14.0,
+          "radius": 1.0008578103918908,
+          "wave_coordinate": 0.0986888029015725,
+          "wave_energy": 0.25110569899749846,
+          "wave_action": 0.2513211000755615,
+          "wave_pressure": 0.0007717275151470106,
+          "tension_pressure": 0.01998285849632217
+        },
+        {
+          "t": 16.0,
+          "radius": 0.9996303095171726,
+          "wave_coordinate": -0.6792592394517223,
+          "wave_energy": 0.2513996730086044,
+          "wave_action": 0.25130673294210715,
+          "wave_pressure": 0.036784441465641575,
+          "tension_pressure": 0.020007396544088504
+        },
+        {
+          "t": 18.0,
+          "radius": 1.0001402667728359,
+          "wave_coordinate": 0.4669137808810031,
+          "wave_energy": 0.2512070945787545,
+          "wave_action": 0.25124233058722456,
+          "wave_pressure": 0.017336401499789718,
+          "tension_pressure": 0.019997195057983447
+        },
+        {
+          "t": 20.0,
+          "radius": 1.0003758773415508,
+          "wave_coordinate": 0.2899900139681471,
+          "wave_energy": 0.2511920206440437,
+          "wave_action": 0.2512864380329822,
+          "wave_pressure": 0.006679441765728596,
+          "tension_pressure": 0.019992485277782794
+        },
+        {
+          "t": 22.0,
+          "radius": 0.9992314075885849,
+          "wave_coordinate": -0.7086837065710134,
+          "wave_energy": 0.25152047338096795,
+          "wave_action": 0.2513271566538118,
+          "wave_pressure": 0.04012034425252962,
+          "tension_pressure": 0.020015383672001865
+        },
+        {
+          "t": 24.0,
+          "radius": 1.0001717248788728,
+          "wave_coordinate": 0.3008612696663636,
+          "wave_energy": 0.2512318565959496,
+          "wave_action": 0.25127499935609254,
+          "wave_pressure": 0.007196972447146335,
+          "tension_pressure": 0.01999656609210996
+        },
+        {
+          "t": 26.0,
+          "radius": 0.9997916914494857,
+          "wave_coordinate": 0.45743500570020074,
+          "wave_energy": 0.25130654426883103,
+          "wave_action": 0.25125419496685963,
+          "wave_pressure": 0.01666868395036981,
+          "tension_pressure": 0.02000416703904015
+        },
+        {
+          "t": 28.0,
+          "radius": 0.9990764082181061,
+          "wave_coordinate": -0.6826865679705563,
+          "wave_energy": 0.2515359621579679,
+          "wave_action": 0.25130364561046803,
+          "wave_pressure": 0.037259698209642124,
+          "tension_pressure": 0.020018488911844916
+        },
+        {
+          "t": 30.0,
+          "radius": 1.0001540486336566,
+          "wave_coordinate": 0.1124153424693915,
+          "wave_energy": 0.25127834910087243,
+          "wave_action": 0.25131705818721894,
+          "wave_pressure": 0.001004862930017042,
+          "tension_pressure": 0.019996919501873395
+        },
+        {
+          "t": 32.0,
+          "radius": 0.9992738363560403,
+          "wave_coordinate": 0.5886805278807433,
+          "wave_energy": 0.25144357211196133,
+          "wave_action": 0.25126098293138627,
+          "wave_pressure": 0.02767750222718719,
+          "tension_pressure": 0.020014533826815836
+        },
+        {
+          "t": 34.0,
+          "radius": 0.99920036676645,
+          "wave_coordinate": -0.6040939739274988,
+          "wave_energy": 0.25146379175698813,
+          "wave_action": 0.25126271295206476,
+          "wave_pressure": 0.029156555709699192,
+          "tension_pressure": 0.020016005463171272
+        },
+        {
+          "t": 36.0,
+          "radius": 1.0000867626143943,
+          "wave_coordinate": -0.0840500569882973,
+          "wave_energy": 0.25129968840960154,
+          "wave_action": 0.25132149182756447,
+          "wave_pressure": 0.0005619242388798295,
+          "tension_pressure": 0.019998264898254077
+        },
+        {
+          "t": 38.0,
+          "radius": 0.9989719070734439,
+          "wave_coordinate": 0.6743567415571419,
+          "wave_energy": 0.25155783131144993,
+          "wave_action": 0.2512992064844588,
+          "wave_pressure": 0.03637501380444238,
+          "tension_pressure": 0.020020583019788176
+        },
+        {
+          "t": 40.0,
+          "radius": 0.999560439374397,
+          "wave_coordinate": -0.4791701484444481,
+          "wave_energy": 0.2513603407083214,
+          "wave_action": 0.2512498525997079,
+          "wave_pressure": 0.018311518003253445,
+          "tension_pressure": 0.02000879507848226
+        },
+        {
+          "t": 42.0,
+          "radius": 0.9999881321605012,
+          "wave_coordinate": -0.2740450589751452,
+          "wave_energy": 0.251286563008012,
+          "wave_action": 0.25128358077941404,
+          "wave_pressure": 0.005976678010472888,
+          "tension_pressure": 0.02000023735960692
+        },
+        {
+          "t": 44.0,
+          "radius": 0.9989752195407358,
+          "wave_coordinate": 0.7082196684527874,
+          "wave_energy": 0.2515841657325086,
+          "wave_action": 0.2513263471956056,
+          "wave_pressure": 0.040119224246314665,
+          "tension_pressure": 0.020020516634231135
+        },
+        {
+          "t": 46.0,
+          "radius": 1.00004950559446,
+          "wave_coordinate": -0.31708623025847016,
+          "wave_energy": 0.25126672073131406,
+          "wave_action": 0.2512791598396919,
+          "wave_pressure": 0.007999031448892207,
+          "tension_pressure": 0.01999900993712445
+        },
+        {
+          "t": 48.0,
+          "radius": 0.9998893751911856,
+          "wave_coordinate": -0.4435010951875127,
+          "wave_energy": 0.2512734043845398,
+          "wave_action": 0.2512456073122197,
+          "wave_pressure": 0.015661009796541697,
+          "tension_pressure": 0.020002212740960333
+        },
+        {
+          "t": 50.0,
+          "radius": 0.9992882822668522,
+          "wave_coordinate": 0.6873368403553018,
+          "wave_energy": 0.25149107098573864,
+          "wave_action": 0.2513120803307897,
+          "wave_pressure": 0.03772900968372003,
+          "tension_pressure": 0.020014244492721028
+        },
+        {
+          "t": 52.0,
+          "radius": 1.0005257048533724,
+          "wave_coordinate": -0.129605330248019,
+          "wave_energy": 0.25118561125611655,
+          "wave_action": 0.2513176607510512,
+          "wave_pressure": 0.0013331978616301257,
+          "tension_pressure": 0.0199894914273402
+        },
+        {
+          "t": 54.0,
+          "radius": 0.9998266851568645,
+          "wave_coordinate": -0.5793280910959151,
+          "wave_energy": 0.251294098865063,
+          "wave_action": 0.25125054586773726,
+          "wave_pressure": 0.026731029925867466,
+          "tension_pressure": 0.020003466897727546
+        },
+        {
+          "t": 56.0,
+          "radius": 0.9998276916958564,
+          "wave_coordinate": 0.612473393760186,
+          "wave_energy": 0.2513156535572775,
+          "wave_action": 0.2512723497832083,
+          "wave_pressure": 0.0298771237393954,
+          "tension_pressure": 0.02000344675998824
+        },
+        {
+          "t": 58.0,
+          "radius": 1.00085228441608,
+          "wave_coordinate": 0.06923392935097625,
+          "wave_energy": 0.25110730317859414,
+          "wave_action": 0.25132131801985713,
+          "wave_pressure": 0.00037982030066883706,
+          "tension_pressure": 0.019982968827081664
+        },
+        {
+          "t": 60.0,
+          "radius": 0.9998311517400329,
+          "wave_coordinate": -0.6702776297242716,
+          "wave_energy": 0.2513361469954841,
+          "wave_action": 0.2512937093243971,
+          "wave_pressure": 0.03578213638411913,
+          "tension_pressure": 0.020003377535490332
+        },
+        {
+          "t": 62.0,
+          "radius": 1.0004420915078964,
+          "wave_coordinate": 0.48855887764986033,
+          "wave_energy": 0.25114137115322194,
+          "wave_action": 0.25125239862069026,
+          "wave_pressure": 0.018952398402179684,
+          "tension_pressure": 0.01999116207701277
+        },
+        {
+          "t": 64.0,
+          "radius": 1.0009381424253077,
+          "wave_coordinate": 0.26377460569227024,
+          "wave_energy": 0.25104951175972856,
+          "wave_action": 0.25128503195756313,
+          "wave_pressure": 0.005510866691900404,
+          "tension_pressure": 0.019981254737220136
+        },
+        {
+          "t": 66.0,
+          "radius": 0.9999166452745539,
+          "wave_coordinate": -0.7081523687584564,
+          "wave_energy": 0.25134729662131167,
+          "wave_action": 0.2513263456364102,
+          "wave_pressure": 0.039923128848771715,
+          "tension_pressure": 0.02000166723348071
+        },
+        {
+          "t": 68.0,
+          "radius": 1.000952940483022,
+          "wave_coordinate": 0.32488381575577624,
+          "wave_energy": 0.25103599415463923,
+          "wave_action": 0.25127521651616486,
+          "wave_pressure": 0.008359455532602651,
+          "tension_pressure": 0.0199809593349601
+        },
+        {
+          "t": 70.0,
+          "radius": 1.0007659652379504,
+          "wave_coordinate": 0.43796343915539926,
+          "wave_energy": 0.2510579542665876,
+          "wave_action": 0.25125025593226674,
+          "wave_pressure": 0.015205587867481368,
+          "tension_pressure": 0.01998469242031491
+        },
+        {
+          "t": 72.0,
+          "radius": 1.0000693696440115,
+          "wave_coordinate": -0.6890788213864179,
+          "wave_energy": 0.2512934148524664,
+          "wave_action": 0.2513108469871972,
+          "wave_pressure": 0.03777263755060403,
+          "tension_pressure": 0.019998612703356046
+        },
+        {
+          "t": 74.0,
+          "radius": 1.001207159046181,
+          "wave_coordinate": 0.13465276159405878,
+          "wave_energy": 0.2510110081547849,
+          "wave_action": 0.25131401836397,
+          "wave_pressure": 0.001434170991373729,
+          "tension_pressure": 0.019975885928595814
+        },
+        {
+          "t": 76.0,
+          "radius": 1.000396538336701,
+          "wave_coordinate": 0.5770583804782294,
+          "wave_energy": 0.2511582381811714,
+          "wave_action": 0.2512578320511885,
+          "wave_pressure": 0.026446532593145704,
+          "tension_pressure": 0.019992072376872467
+        },
+        {
+          "t": 78.0,
+          "radius": 1.000246174263581,
+          "wave_coordinate": -0.6143592581993189,
+          "wave_energy": 0.2512033248273452,
+          "wave_action": 0.2512651646208437,
+          "wave_pressure": 0.029998563297457755,
+          "tension_pressure": 0.01999507772646544
+        },
+        {
+          "t": 80.0,
+          "radius": 1.0011255706696054,
+          "wave_coordinate": -0.06625128450362949,
+          "wave_energy": 0.251040749540814,
+          "wave_action": 0.2513233136453729,
+          "wave_pressure": 0.00034732494108369506,
+          "tension_pressure": 0.019977513896306684
+        },
+        {
+          "t": 82.0,
+          "radius": 0.9999466244235585,
+          "wave_coordinate": 0.669420751307253,
+          "wave_energy": 0.2513128797064234,
+          "wave_action": 0.25129946573660195,
+          "wave_pressure": 0.03567010472723769,
+          "tension_pressure": 0.020001067568510913
+        },
+        {
+          "t": 84.0,
+          "radius": 1.0003865634095024,
+          "wave_coordinate": -0.49049115396736626,
+          "wave_energy": 0.2511450031624598,
+          "wave_action": 0.25124208663116177,
+          "wave_pressure": 0.019107912546529285,
+          "tension_pressure": 0.0199922717192805
+        },
+        {
+          "t": 86.0,
+          "radius": 1.0007292667721779,
+          "wave_coordinate": -0.2610755203901038,
+          "wave_energy": 0.2511095053133587,
+          "wave_action": 0.25129263113176176,
+          "wave_pressure": 0.00540429982366409,
+          "tension_pressure": 0.019985425293405676
+        },
+        {
+          "t": 88.0,
+          "radius": 0.9995495436246536,
+          "wave_coordinate": 0.7078582055454238,
+          "wave_energy": 0.2514402580964253,
+          "wave_action": 0.251326995229147,
+          "wave_pressure": 0.03996327315935037,
+          "tension_pressure": 0.020009013187554724
+        },
+        {
+          "t": 90.0,
+          "radius": 1.0004353215981665,
+          "wave_coordinate": -0.3282743777498194,
+          "wave_energy": 0.2511581244728141,
+          "wave_action": 0.2512674590289521,
+          "wave_pressure": 0.008556950632269605,
+          "tension_pressure": 0.019991297356485353
+        },
+        {
+          "t": 92.0,
+          "radius": 1.0001333639776342,
+          "wave_coordinate": -0.4340897235272822,
+          "wave_energy": 0.2512245969816219,
+          "wave_action": 0.25125810129315496,
+          "wave_pressure": 0.014985097339811418,
+          "tension_pressure": 0.019997333076118895
+        },
+        {
+          "t": 94.0,
+          "radius": 0.9993144199999736,
+          "wave_coordinate": 0.6901446948879139,
+          "wave_energy": 0.25148123669949735,
+          "wave_action": 0.25130882619323425,
+          "wave_pressure": 0.03803292022213873,
+          "tension_pressure": 0.020013721006848402
+        },
+        {
+          "t": 96.0,
+          "radius": 1.0003651026391684,
+          "wave_coordinate": -0.14131846353831307,
+          "wave_energy": 0.25121975799787755,
+          "wave_action": 0.2513114789945338,
+          "wave_pressure": 0.0015863363806517816,
+          "tension_pressure": 0.019992700612242367
+        },
+        {
+          "t": 98.0,
+          "radius": 0.999510913256672,
+          "wave_coordinate": -0.5720595715322901,
+          "wave_energy": 0.2513824514093008,
+          "wave_action": 0.25125950358481125,
+          "wave_pressure": 0.026105676209111854,
+          "tension_pressure": 0.020009786521324405
+        },
+        {
+          "t": 100.0,
+          "radius": 0.9992977375942294,
+          "wave_coordinate": 0.6187078147492607,
+          "wave_energy": 0.25144228565673665,
+          "wave_action": 0.25126570719229885,
+          "wave_pressure": 0.030569393204811987,
+          "tension_pressure": 0.020014055118496743
+        },
+        {
+          "t": 102.0,
+          "radius": 1.00018796649067,
+          "wave_coordinate": 0.055531613046630346,
+          "wave_energy": 0.2512771690140845,
+          "wave_action": 0.25132440070172957,
+          "wave_pressure": 0.00024516732459380086,
+          "tension_pressure": 0.019996241376681833
+        },
+        {
+          "t": 104.0,
+          "radius": 0.9990408972504528,
+          "wave_coordinate": -0.6650469044515535,
+          "wave_energy": 0.2515364032549424,
+          "wave_action": 0.25129515399896935,
+          "wave_pressure": 0.03536538197347941,
+          "tension_pressure": 0.020019200470214722
+        },
+        {
+          "t": 106.0,
+          "radius": 0.999492774816455,
+          "wave_coordinate": 0.49981397417305745,
+          "wave_energy": 0.25137338330392567,
+          "wave_action": 0.25124588039344103,
+          "wave_pressure": 0.019930061070246825,
+          "tension_pressure": 0.02001014965182991
+        },
+        {
+          "t": 108.0,
+          "radius": 0.9999517284623876,
+          "wave_coordinate": 0.24742513606309072,
+          "wave_energy": 0.2513044514911022,
+          "wave_action": 0.2512923206388199,
+          "wave_pressure": 0.004872844968453689,
+          "tension_pressure": 0.020000965477357326
+        },
+        {
+          "t": 110.0,
+          "radius": 0.9988575073879455,
+          "wave_coordinate": -0.7066287882605857,
+          "wave_energy": 0.2516125322468805,
+          "wave_action": 0.2513250667876881,
+          "wave_pressure": 0.03996272540993634,
+          "tension_pressure": 0.020022875987888246
+        },
+        {
+          "t": 112.0,
+          "radius": 0.9998356032932626,
+          "wave_coordinate": 0.3426959035237833,
+          "wave_energy": 0.2513122966036985,
+          "wave_action": 0.2512709816897743,
+          "wave_pressure": 0.009353302371033281,
+          "tension_pressure": 0.020003288474749168
+        },
+        {
+          "t": 114.0,
+          "radius": 0.9997248771627271,
+          "wave_coordinate": 0.4202681784846633,
+          "wave_energy": 0.2513204889892684,
+          "wave_action": 0.25125134498327284,
+          "wave_pressure": 0.014074748888739903,
+          "tension_pressure": 0.02000550397101358
+        },
+        {
+          "t": 116.0,
+          "radius": 0.9990140145569392,
+          "wave_coordinate": -0.6938605756967119,
+          "wave_energy": 0.25156394967158835,
+          "wave_action": 0.25131591127921327,
+          "wave_pressure": 0.038501411955246576,
+          "tension_pressure": 0.020019739171396874
+        },
+        {
+          "t": 118.0,
+          "radius": 1.0002240001945741,
+          "wave_coordinate": 0.15891387974511006,
+          "wave_energy": 0.2512564426087009,
+          "wave_action": 0.25131272410073324,
+          "wave_pressure": 0.002007370056675117,
+          "tension_pressure": 0.019995520999405523
+        },
+        {
+          "t": 120.0,
+          "radius": 0.9995770052555146,
+          "wave_coordinate": 0.5612092615237693,
+          "wave_energy": 0.25135376533461196,
+          "wave_action": 0.2512474440128688,
+          "wave_pressure": 0.025116464757899932,
+          "tension_pressure": 0.02000846347489511
+        },
+        {
+          "t": 122.0,
+          "radius": 0.9994684616695811,
+          "wave_coordinate": -0.6273084934480168,
+          "wave_energy": 0.25141148726764007,
+          "wave_action": 0.25127785242544975,
+          "wave_pressure": 0.03139836249416993,
+          "tension_pressure": 0.02001063642027345
+        },
+        {
+          "t": 124.0,
+          "radius": 1.0005455813286759,
+          "wave_coordinate": -0.03805669078435789,
+          "wave_energy": 0.25118700416020767,
+          "wave_action": 0.25132404709968353,
+          "wave_pressure": 0.00011493909872297067,
+          "tension_pressure": 0.019989094323360036
+        },
+        {
+          "t": 126.0,
+          "radius": 0.9995599309935648,
+          "wave_coordinate": 0.6591823669865247,
+          "wave_energy": 0.2513963081129062,
+          "wave_action": 0.25128567638937344,
+          "wave_pressure": 0.034654298113721,
+          "tension_pressure": 0.020008805255048546
+        },
+        {
+          "t": 128.0,
+          "radius": 1.0000937265075456,
+          "wave_coordinate": -0.5112670406629943,
+          "wave_energy": 0.25123016998009107,
+          "wave_action": 0.2512537169065134,
+          "wave_pressure": 0.020791327233231367,
+          "tension_pressure": 0.019998125645525788
+        },
+        {
+          "t": 130.0,
+          "radius": 1.0007099638904444,
+          "wave_coordinate": -0.23327566875303285,
+          "wave_energy": 0.2511131017441427,
+          "wave_action": 0.25129138297879855,
+          "wave_pressure": 0.004315070565588045,
+          "tension_pressure": 0.019985810796013578
+        },
+        {
+          "t": 132.0,
+          "radius": 0.9996920451449323,
+          "wave_coordinate": 0.7057460809919783,
+          "wave_energy": 0.251400869154,
+          "wave_action": 0.25132344903577575,
+          "wave_pressure": 0.039696837070897675,
+          "tension_pressure": 0.020006160994409494
+        },
+        {
+          "t": 134.0,
+          "radius": 1.0007108516034626,
+          "wave_coordinate": -0.3539903808178203,
+          "wave_energy": 0.2510926059864441,
+          "wave_action": 0.2512710955680272,
+          "wave_pressure": 0.009936421627048235,
+          "tension_pressure": 0.019985793066951887
+        },
+        {
+          "t": 136.0,
+          "radius": 1.0006763138659835,
+          "wave_coordinate": -0.41115676036572,
+          "wave_energy": 0.251081555076545,
+          "wave_action": 0.25125136501373596,
+          "wave_pressure": 0.013407163523540261,
+          "tension_pressure": 0.01998648286450649
+        },
+        {
+          "t": 138.0,
+          "radius": 0.9999485045817981,
+          "wave_coordinate": 0.6961794324371798,
+          "wave_energy": 0.2513306438936222,
+          "wave_action": 0.25131770151700794,
+          "wave_pressure": 0.03857841111387864,
+          "tension_pressure": 0.020001029961402333
+        },
+        {
+          "t": 140.0,
+          "radius": 1.0011394612319575,
+          "wave_coordinate": -0.16757914702256688,
+          "wave_energy": 0.25102386221805245,
+          "wave_action": 0.25130989417734617,
+          "wave_pressure": 0.0022220671910489153,
+          "tension_pressure": 0.01997723671324362
+        },
+        {
+          "t": 142.0,
+          "radius": 1.000465817144808,
+          "wave_coordinate": -0.556812896584851,
+          "wave_energy": 0.25113343187814235,
+          "wave_action": 0.25125041413634563,
+          "wave_pressure": 0.024614863605063896,
+          "tension_pressure": 0.019990687994795517
+        },
+        {
+          "t": 144.0,
+          "radius": 1.0002620144491028,
+          "wave_coordinate": 0.630493206880785,
+          "wave_energy": 0.251209171345023,
+          "wave_action": 0.25127499177766255,
+          "wave_pressure": 0.0315923605222392,
+          "tension_pressure": 0.019994761083689715
+        },
+        {
+          "t": 146.0,
+          "radius": 1.0012521858411074,
+          "wave_coordinate": 0.032797536634095265,
+          "wave_energy": 0.25101032960262515,
+          "wave_action": 0.25132464118332526,
+          "wave_pressure": 8.506584131799548e-05,
+          "tension_pressure": 0.019974987603346792
+        },
+        {
+          "t": 148.0,
+          "radius": 1.0001525939880693,
+          "wave_coordinate": -0.6577614530115885,
+          "wave_energy": 0.25125206887643736,
+          "wave_action": 0.25129040843163786,
+          "wave_pressure": 0.03440294690897886,
+          "tension_pressure": 0.019996948585866064
+        },
+        {
+          "t": 150.0,
+          "radius": 1.0005386149862658,
+          "wave_coordinate": 0.5138835656811442,
+          "wave_energy": 0.2511095541995426,
+          "wave_action": 0.25124480556862905,
+          "wave_pressure": 0.020958023406613343,
+          "tension_pressure": 0.019989233499273326
+        },
+        {
+          "t": 152.0,
+          "radius": 1.0010151340079414,
+          "wave_coordinate": 0.23039720778599607,
+          "wave_energy": 0.25104312237293863,
+          "wave_action": 0.2512979647839192,
+          "wave_pressure": 0.004202825335414964,
+          "tension_pressure": 0.01997971790888162
+        },
+        {
+          "t": 154.0,
+          "radius": 0.999836135319181,
+          "wave_coordinate": -0.7055318032682287,
+          "wave_energy": 0.25136639985786624,
+          "wave_action": 0.2513252097829849,
+          "wave_pressure": 0.03964415662161906,
+          "tension_pressure": 0.020003277830737066
+        },
+        {
+          "t": 156.0,
+          "radius": 1.000686930565208,
+          "wave_coordinate": 0.3563052861291992,
+          "wave_energy": 0.2510891874210562,
+          "wave_action": 0.25126166825848895,
+          "wave_pressure": 0.010068007454825542,
+          "tension_pressure": 0.01998627081968943
+        },
+        {
+          "t": 158.0,
+          "radius": 1.000498956262751,
+          "wave_coordinate": 0.40881661039962136,
+          "wave_energy": 0.25113599291373223,
+          "wave_action": 0.25126129879019876,
+          "wave_pressure": 0.013266733419567632,
+          "tension_pressure": 0.019990025851408882
+        },
+        {
+          "t": 160.0,
+          "radius": 0.9996074473669668,
+          "wave_coordinate": -0.6966577057042328,
+          "wave_energy": 0.2514132361277839,
+          "wave_action": 0.25131454319996255,
+          "wave_pressure": 0.03869738434331592,
+          "tension_pressure": 0.020007854135822362
+        },
+        {
+          "t": 162.0,
+          "radius": 1.0006506967897637,
+          "wave_coordinate": 0.17120832530403038,
+          "wave_energy": 0.2511418931188059,
+          "wave_action": 0.2513053103424335,
+          "wave_pressure": 0.0023250236974332833,
+          "tension_pressure": 0.01998699452682437
+        },
+        {
+          "t": 164.0,
+          "radius": 0.9998560099166972,
+          "wave_coordinate": 0.5538025043364698,
+          "wave_energy": 0.25129361734995054,
+          "wave_action": 0.2512574335610549,
+          "wave_pressure": 0.024423767643736733,
+          "tension_pressure": 0.020002880216388654
+        },
+        {
+          "t": 166.0,
+          "radius": 0.9995228270992307,
+          "wave_coordinate": -0.6327706747012852,
+          "wave_energy": 0.25139070316796647,
+          "wave_action": 0.2512707463369094,
+          "wave_pressure": 0.0319388473600016,
+          "tension_pressure": 0.020009548014068956
+        },
+        {
+          "t": 168.0,
+          "radius": 1.000430388995631,
+          "wave_coordinate": -0.026159890802041674,
+          "wave_energy": 0.2512175398553975,
+          "wave_action": 0.2513256611200608,
+          "wave_pressure": 5.434099832740565e-05,
+          "tension_pressure": 0.01999139592318736
+        },
+        {
+          "t": 170.0,
+          "radius": 0.9992727880573641,
+          "wave_coordinate": 0.6544976923719723,
+          "wave_energy": 0.2514736388494568,
+          "wave_action": 0.25129076421602736,
+          "wave_pressure": 0.034212599258866556,
+          "tension_pressure": 0.02001455482329404
+        },
+        {
+          "t": 172.0,
+          "radius": 0.9995927593698782,
+          "wave_coordinate": -0.5199020333043954,
+          "wave_energy": 0.2513457377570527,
+          "wave_action": 0.2512433795604301,
+          "wave_pressure": 0.021553492849382957,
+          "tension_pressure": 0.020008148130852377
+        },
+        {
+          "t": 174.0,
+          "radius": 1.0000845829767173,
+          "wave_coordinate": -0.22035676952966357,
+          "wave_energy": 0.2512791452002363,
+          "wave_action": 0.2513003991383243,
+          "wave_pressure": 0.003862417960930368,
+          "tension_pressure": 0.019998308483539153
+        },
+        {
+          "t": 176.0,
+          "radius": 0.9989149975549366,
+          "wave_coordinate": 0.7039534462752405,
+          "wave_energy": 0.2515964217222922,
+          "wave_action": 0.2513234389895543,
+          "wave_pressure": 0.03964928378641491,
+          "tension_pressure": 0.020021723619081087
+        },
+        {
+          "t": 178.0,
+          "radius": 0.9997850072593388,
+          "wave_coordinate": -0.36740491933443203,
+          "wave_energy": 0.25131657042704186,
+          "wave_action": 0.25126253918879216,
+          "wave_pressure": 0.010753428972312441,
+          "tension_pressure": 0.020004300779449584
+        },
+        {
+          "t": 180.0,
+          "radius": 0.9997117095000999,
+          "wave_coordinate": -0.3968871510418676,
+          "wave_energy": 0.251331012524302,
+          "wave_action": 0.25125855618106097,
+          "wave_pressure": 0.012553080659357662,
+          "tension_pressure": 0.02000576747270559
+        },
+        {
+          "t": 182.0,
+          "radius": 0.9988820562503786,
+          "wave_coordinate": 0.699083084750163,
+          "wave_energy": 0.25160014335187075,
+          "wave_action": 0.2513188685442067,
+          "wave_pressure": 0.039108995895044886,
+          "tension_pressure": 0.020022383898932333
+        },
+        {
+          "t": 184.0,
+          "radius": 1.00003698123416,
+          "wave_coordinate": -0.1869473468390592,
+          "wave_energy": 0.25129697685611974,
+          "wave_action": 0.25130627012846457,
+          "wave_pressure": 0.002780663561200005,
+          "tension_pressure": 0.019999260402668022
+        },
+        {
+          "t": 186.0,
+          "radius": 0.9994206830872053,
+          "wave_coordinate": -0.5428513918960541,
+          "wave_energy": 0.2513927510207451,
+          "wave_action": 0.2512471149483248,
+          "wave_pressure": 0.02351854134379965,
+          "tension_pressure": 0.020011593054308326
+        },
+        {
+          "t": 188.0,
+          "radius": 0.9991815776043981,
+          "wave_coordinate": 0.6404201801431095,
+          "wave_energy": 0.25148800024727636,
+          "wave_action": 0.25128217683564885,
+          "wave_pressure": 0.03277163144845248,
+          "tension_pressure": 0.020016381855189207
+        },
+        {
+          "t": 190.0,
+          "radius": 1.0002734236084858,
+          "wave_coordinate": 0.008188941936638668,
+          "wave_energy": 0.25125690607369167,
+          "wave_action": 0.25132560564360734,
+          "wave_pressure": 5.329077901213404e-06,
+          "tension_pressure": 0.019994533022630965
+        },
+        {
+          "t": 192.0,
+          "radius": 0.9993003886633492,
+          "wave_coordinate": -0.6473486079460199,
+          "wave_energy": 0.25145516189743655,
+          "wave_action": 0.25127924101551374,
+          "wave_pressure": 0.03346465031325928,
+          "tension_pressure": 0.020014002022706836
+        },
+        {
+          "t": 194.0,
+          "radius": 0.9997280058572205,
+          "wave_coordinate": 0.531987921114988,
+          "wave_energy": 0.25132266373604734,
+          "wave_action": 0.2512543054435634,
+          "wave_pressure": 0.022551964926296856,
+          "tension_pressure": 0.02000544136287442
+        },
+        {
+          "t": 196.0,
+          "radius": 1.0004270189487212,
+          "wave_coordinate": 0.20358411105981178,
+          "wave_energy": 0.2511912028225435,
+          "wave_action": 0.2512984662259008,
+          "wave_pressure": 0.0032911739286033055,
+          "tension_pressure": 0.019991463266372595
+        },
+        {
+          "t": 198.0,
+          "radius": 0.9993950581011842,
+          "wave_coordinate": -0.7019682004002537,
+          "wave_energy": 0.2514715988595286,
+          "wave_action": 0.2513194731530162,
+          "wave_pressure": 0.03933136560866673,
+          "tension_pressure": 0.02001210616150064
+        },
+        {
+          "t": 200.0,
+          "radius": 1.0003652519197268,
+          "wave_coordinate": 0.381341374176515,
+          "wave_energy": 0.2511749472271883,
+          "wave_action": 0.2512666893588503,
+          "wave_pressure": 0.011551144075802055,
+          "tension_pressure": 0.01999269762881056
+        }
+      ]
+    },
+    "radius_plus_10percent": {
+      "completed": true,
+      "dt": 0.01,
+      "end_time": 200.0,
+      "radius_min": 0.9055312067447946,
+      "radius_max": 1.1006550815618843,
+      "max_scaled_energy_error": 7.19879190597128e-06,
+      "late_mean_radius_pressure_tension": [
+        0.9859728532694756,
+        0.022243625850819692,
+        0.020379502741365442
+      ],
+      "passes_radius_lock_screen": true,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 1.1,
+          "wave_coordinate": 0.7435861127211855,
+          "wave_energy": 0.22847946571562128,
+          "wave_action": 0.2513274122871834,
+          "wave_pressure": 0.027320538214602817,
+          "tension_pressure": 0.01818181818181818
+        },
+        {
+          "t": 2.0,
+          "radius": 1.09980335478812,
+          "wave_coordinate": -0.18184797129988425,
+          "wave_energy": 0.22834501470682692,
+          "wave_action": 0.2511346132237109,
+          "wave_pressure": 0.0016354296091900642,
+          "tension_pressure": 0.018185069097059674
+        },
+        {
+          "t": 4.0,
+          "radius": 1.0948060997967757,
+          "wave_coordinate": -0.6511899135481527,
+          "wave_energy": 0.22975759046752048,
+          "wave_action": 0.25154001151845096,
+          "wave_pressure": 0.02145455069001298,
+          "tension_pressure": 0.01826807505339303
+        },
+        {
+          "t": 6.0,
+          "radius": 1.088452553366197,
+          "wave_coordinate": 0.5093769001137047,
+          "wave_energy": 0.23032824983218342,
+          "wave_action": 0.2507013716422074,
+          "wave_pressure": 0.013515157642406827,
+          "tension_pressure": 0.018374709984507
+        },
+        {
+          "t": 8.0,
+          "radius": 1.079550118925365,
+          "wave_coordinate": 0.37614458656826927,
+          "wave_energy": 0.23321993007140238,
+          "wave_action": 0.25177260324434775,
+          "wave_pressure": 0.007678664981214053,
+          "tension_pressure": 0.018526235743375162
+        },
+        {
+          "t": 10.0,
+          "radius": 1.067304873462825,
+          "wave_coordinate": -0.7106794980279454,
+          "wave_energy": 0.23510628706145245,
+          "wave_action": 0.25093008596243815,
+          "wave_pressure": 0.029019855621118074,
+          "tension_pressure": 0.018738788229375226
+        },
+        {
+          "t": 12.0,
+          "radius": 1.0551838335416621,
+          "wave_coordinate": 0.05076049756118034,
+          "wave_energy": 0.2379899384763644,
+          "wave_action": 0.2511231356258345,
+          "wave_pressure": 0.00015674772021625441,
+          "tension_pressure": 0.018954043233273564
+        },
+        {
+          "t": 14.0,
+          "radius": 1.0392762281928583,
+          "wave_coordinate": 0.6629618820220523,
+          "wave_energy": 0.2424474850278006,
+          "wave_action": 0.2519699077745371,
+          "wave_pressure": 0.028847772564768226,
+          "tension_pressure": 0.019244161905614766
+        },
+        {
+          "t": 16.0,
+          "radius": 1.0237069516755954,
+          "wave_coordinate": -0.5028603516892878,
+          "wave_energy": 0.24437705974526552,
+          "wave_action": 0.25017049489127063,
+          "wave_pressure": 0.01789808899700441,
+          "tension_pressure": 0.019536841053256655
+        },
+        {
+          "t": 18.0,
+          "radius": 1.0074444897895292,
+          "wave_coordinate": -0.27292484467838274,
+          "wave_energy": 0.25012667565941393,
+          "wave_action": 0.2519887411424493,
+          "wave_pressure": 0.005711769202478364,
+          "tension_pressure": 0.019852210422212257
+        },
+        {
+          "t": 20.0,
+          "radius": 0.9894639431573657,
+          "wave_coordinate": 0.7046400278357204,
+          "wave_energy": 0.25404447995744506,
+          "wave_action": 0.25136785287605595,
+          "wave_pressure": 0.04166053973850414,
+          "tension_pressure": 0.02021296494764658
+        },
+        {
+          "t": 22.0,
+          "radius": 0.973816793741239,
+          "wave_coordinate": -0.33880721528207886,
+          "wave_energy": 0.25709083887094664,
+          "wave_action": 0.25035937640955075,
+          "wave_pressure": 0.010430596324525178,
+          "tension_pressure": 0.020537743986898595
+        },
+        {
+          "t": 24.0,
+          "radius": 0.9579727575313826,
+          "wave_coordinate": -0.37023346209309943,
+          "wave_energy": 0.26314555591698463,
+          "wave_action": 0.2520862738339224,
+          "wave_pressure": 0.013519968432944786,
+          "tension_pressure": 0.020877420409676748
+        },
+        {
+          "t": 26.0,
+          "radius": 0.9426166104559144,
+          "wave_coordinate": 0.6879651468337975,
+          "wave_energy": 0.2665076750379337,
+          "wave_action": 0.25121456130474334,
+          "wave_pressure": 0.05061130870230139,
+          "tension_pressure": 0.02121753401982448
+        },
+        {
+          "t": 28.0,
+          "radius": 0.930899843603784,
+          "wave_coordinate": -0.34937795441613734,
+          "wave_energy": 0.2691924869160609,
+          "wave_action": 0.2505912439694748,
+          "wave_pressure": 0.013895249355039958,
+          "tension_pressure": 0.02148458841992516
+        },
+        {
+          "t": 30.0,
+          "radius": 0.9206030827611038,
+          "wave_coordinate": -0.29083610521471537,
+          "wave_energy": 0.2734070053931079,
+          "wave_action": 0.25169933201337685,
+          "wave_pressure": 0.010179457930520391,
+          "tension_pressure": 0.02172488923240983
+        },
+        {
+          "t": 32.0,
+          "radius": 0.9118260143442533,
+          "wave_coordinate": 0.6669679572693464,
+          "wave_energy": 0.27568262803604127,
+          "wave_action": 0.25137459194605277,
+          "wave_pressure": 0.05616169201207542,
+          "tension_pressure": 0.02193400899444962
+        },
+        {
+          "t": 34.0,
+          "radius": 0.9075068451271369,
+          "wave_coordinate": -0.4842359980517997,
+          "wave_energy": 0.27656436146049845,
+          "wave_action": 0.2509840511436181,
+          "wave_pressure": 0.030314801710302815,
+          "tension_pressure": 0.022038401260982343
+        },
+        {
+          "t": 36.0,
+          "radius": 0.9063111519034792,
+          "wave_coordinate": -0.08983612099458745,
+          "wave_energy": 0.27730246867419583,
+          "wave_action": 0.25132231980978886,
+          "wave_pressure": 0.0010502809765051907,
+          "tension_pressure": 0.022067476448893977
+        },
+        {
+          "t": 38.0,
+          "radius": 0.9066865014021284,
+          "wave_coordinate": 0.5909174305081618,
+          "wave_energy": 0.27688460656423985,
+          "wave_action": 0.2510475352178354,
+          "wave_pressure": 0.04534798423999495,
+          "tension_pressure": 0.022058340969090613
+        },
+        {
+          "t": 40.0,
+          "radius": 0.9110263672325987,
+          "wave_coordinate": -0.6131354797849206,
+          "wave_energy": 0.27605580152083,
+          "wave_action": 0.25149411401300503,
+          "wave_pressure": 0.04767034536236887,
+          "tension_pressure": 0.021953261419593688
+        },
+        {
+          "t": 42.0,
+          "radius": 0.9193551721480296,
+          "wave_coordinate": 0.12174137577627857,
+          "wave_energy": 0.2735602499111191,
+          "wave_action": 0.25149903064989493,
+          "wave_pressure": 0.0017957667590469723,
+          "tension_pressure": 0.021754378074874972
+        },
+        {
+          "t": 44.0,
+          "radius": 0.9287532640166836,
+          "wave_coordinate": 0.48730246577704484,
+          "wave_energy": 0.26970895941874584,
+          "wave_action": 0.2504930763947034,
+          "wave_pressure": 0.027345482363762847,
+          "tension_pressure": 0.021534244642655416
+        },
+        {
+          "t": 46.0,
+          "radius": 0.9405111546832781,
+          "wave_coordinate": -0.6701344918052439,
+          "wave_energy": 0.2675285465688199,
+          "wave_action": 0.25161358224417996,
+          "wave_pressure": 0.04856174962562847,
+          "tension_pressure": 0.02126503221190939
+        },
+        {
+          "t": 48.0,
+          "radius": 0.9557818560869417,
+          "wave_coordinate": 0.2144571818907394,
+          "wave_energy": 0.2634725635811159,
+          "wave_action": 0.25182229584754373,
+          "wave_pressure": 0.004588570576700753,
+          "tension_pressure": 0.020925276905633918
+        },
+        {
+          "t": 50.0,
+          "radius": 0.9709208936829345,
+          "wave_coordinate": 0.47535189770023456,
+          "wave_energy": 0.2576834371539258,
+          "wave_action": 0.2501902330887799,
+          "wave_pressure": 0.020840175177964035,
+          "tension_pressure": 0.02059900052633045
+        },
+        {
+          "t": 52.0,
+          "radius": 0.9868519026217548,
+          "wave_coordinate": -0.6774943027346091,
+          "wave_energy": 0.25517188517125555,
+          "wave_action": 0.2518168603768335,
+          "wave_pressure": 0.03902487467667208,
+          "tension_pressure": 0.020266465461399322
+        },
+        {
+          "t": 54.0,
+          "radius": 1.0048771376151329,
+          "wave_coordinate": 0.11456048534609675,
+          "wave_energy": 0.25038331640737566,
+          "wave_action": 0.2516044702980278,
+          "wave_pressure": 0.0010192835098381862,
+          "tension_pressure": 0.019902930668186804
+        },
+        {
+          "t": 56.0,
+          "radius": 1.0207788720501825,
+          "wave_coordinate": 0.604098943293795,
+          "wave_energy": 0.24518826803227517,
+          "wave_action": 0.25028300368192363,
+          "wave_pressure": 0.026202813490388065,
+          "tension_pressure": 0.019592882011586914
+        },
+        {
+          "t": 58.0,
+          "radius": 1.0370072963748258,
+          "wave_coordinate": -0.5827351002078334,
+          "wave_energy": 0.24316061437387346,
+          "wave_action": 0.2521593312966921,
+          "wave_pressure": 0.02253322905805608,
+          "tension_pressure": 0.01928626738685068
+        },
+        {
+          "t": 60.0,
+          "radius": 1.0527933558852562,
+          "wave_coordinate": -0.20588268540194737,
+          "wave_energy": 0.2381665033692864,
+          "wave_action": 0.2507401123416082,
+          "wave_pressure": 0.0026080391544439975,
+          "tension_pressure": 0.01899708037498272
+        },
+        {
+          "t": 62.0,
+          "radius": 1.0652143899714979,
+          "wave_coordinate": 0.7313707180932439,
+          "wave_energy": 0.2358837100935239,
+          "wave_action": 0.2512667223514867,
+          "wave_pressure": 0.031037029537187025,
+          "tension_pressure": 0.018775563105691
+        },
+        {
+          "t": 64.0,
+          "radius": 1.078059715784206,
+          "wave_coordinate": -0.23557717918984822,
+          "wave_energy": 0.23340678742712284,
+          "wave_action": 0.25162645491578867,
+          "wave_pressure": 0.003032790987482867,
+          "tension_pressure": 0.018551848016555864
+        },
+        {
+          "t": 66.0,
+          "radius": 1.0868805114164783,
+          "wave_coordinate": -0.6085975578046126,
+          "wave_energy": 0.2306953016419263,
+          "wave_action": 0.2507382274299556,
+          "wave_pressure": 0.019433075525977617,
+          "tension_pressure": 0.018401286792726623
+        },
+        {
+          "t": 68.0,
+          "radius": 1.0941380129626073,
+          "wave_coordinate": 0.5646200475379957,
+          "wave_energy": 0.22993302916577463,
+          "wave_action": 0.25157846764591385,
+          "wave_pressure": 0.016178646686481543,
+          "tension_pressure": 0.018279229642927608
+        },
+        {
+          "t": 70.0,
+          "radius": 1.0991605586940598,
+          "wave_coordinate": 0.32439585224276035,
+          "wave_energy": 0.22839617880064766,
+          "wave_action": 0.25104407149410823,
+          "wave_pressure": 0.005219573775876582,
+          "tension_pressure": 0.018195703841268195
+        },
+        {
+          "t": 72.0,
+          "radius": 1.1000160798688043,
+          "wave_coordinate": -0.7281097512061361,
+          "wave_energy": 0.2284721229121752,
+          "wave_action": 0.2513230090051546,
+          "wave_pressure": 0.026193206237216035,
+          "tension_pressure": 0.018181552402747915
+        },
+        {
+          "t": 74.0,
+          "radius": 1.1002840435201853,
+          "wave_coordinate": 0.03174340493371411,
+          "wave_energy": 0.22831749110451793,
+          "wave_action": 0.25121409231886294,
+          "wave_pressure": 4.972480404928616e-05,
+          "tension_pressure": 0.018177124459619675
+        },
+        {
+          "t": 76.0,
+          "radius": 1.095463217473335,
+          "wave_coordinate": 0.7102552743504966,
+          "wave_energy": 0.22955617078219404,
+          "wave_action": 0.2514703414359206,
+          "wave_pressure": 0.02544661810290705,
+          "tension_pressure": 0.018257116880774527
+        },
+        {
+          "t": 78.0,
+          "radius": 1.0899553786149643,
+          "wave_coordinate": -0.3883478912594491,
+          "wave_energy": 0.23007592993587286,
+          "wave_action": 0.2507724973234443,
+          "wave_pressure": 0.007801685592777199,
+          "tension_pressure": 0.018349375022502792
+        },
+        {
+          "t": 80.0,
+          "radius": 1.080930993915797,
+          "wave_coordinate": -0.5001043722600715,
+          "wave_energy": 0.23297266978075087,
+          "wave_action": 0.2518273795013238,
+          "wave_pressure": 0.01348719356425731,
+          "tension_pressure": 0.018502568723233383
+        },
+        {
+          "t": 82.0,
+          "radius": 1.0694452131417713,
+          "wave_coordinate": 0.6577931729388979,
+          "wave_energy": 0.2343774083095525,
+          "wave_action": 0.2506537973852253,
+          "wave_pressure": 0.024613657605627545,
+          "tension_pressure": 0.01870128525915305
+        },
+        {
+          "t": 84.0,
+          "radius": 1.0574183928113146,
+          "wave_coordinate": 0.10661083630581387,
+          "wave_energy": 0.23783893918439739,
+          "wave_action": 0.2514952688203135,
+          "wave_pressure": 0.0006841613480396189,
+          "tension_pressure": 0.018913989141825713
+        },
+        {
+          "t": 86.0,
+          "radius": 1.0415985719026715,
+          "wave_coordinate": -0.710746544391199,
+          "wave_energy": 0.24159916109547758,
+          "wave_action": 0.2516493411699329,
+          "wave_pressure": 0.032788214742709314,
+          "tension_pressure": 0.019201255204743917
+        },
+        {
+          "t": 88.0,
+          "radius": 1.026614404193425,
+          "wave_coordinate": 0.3761066911507774,
+          "wave_energy": 0.24380645087739494,
+          "wave_action": 0.25029521430601037,
+          "wave_pressure": 0.009871325856336202,
+          "tension_pressure": 0.019481511186971216
+        },
+        {
+          "t": 90.0,
+          "radius": 1.0099132965006086,
+          "wave_coordinate": 0.41660459822580753,
+          "wave_energy": 0.24973838268100274,
+          "wave_action": 0.252214113316102,
+          "wave_pressure": 0.013146731807683195,
+          "tension_pressure": 0.01980368024591896
+        },
+        {
+          "t": 92.0,
+          "radius": 0.9922221877887802,
+          "wave_coordinate": -0.6923783408896671,
+          "wave_energy": 0.25283254711377634,
+          "wave_action": 0.250866063041441,
+          "wave_pressure": 0.039667279067807405,
+          "tension_pressure": 0.02015677561552122
+        },
+        {
+          "t": 94.0,
+          "radius": 0.9766566185809704,
+          "wave_coordinate": 0.1825956650298038,
+          "wave_energy": 0.2567394962421699,
+          "wave_action": 0.25074632825605947,
+          "wave_pressure": 0.002985805914384211,
+          "tension_pressure": 0.020478026380509176
+        },
+        {
+          "t": 96.0,
+          "radius": 0.9601332407991024,
+          "wave_coordinate": 0.5032725487430555,
+          "wave_energy": 0.26264037779257227,
+          "wave_action": 0.25216975709468303,
+          "wave_pressure": 0.02470239671275869,
+          "tension_pressure": 0.020830442224200406
+        },
+        {
+          "t": 98.0,
+          "radius": 0.9449266788281903,
+          "wave_coordinate": -0.6619405944975659,
+          "wave_energy": 0.2653932821403481,
+          "wave_action": 0.250777192676192,
+          "wave_pressure": 0.046284717002062443,
+          "tension_pressure": 0.02116566337697453
+        },
+        {
+          "t": 100.0,
+          "radius": 0.9330263140588444,
+          "wave_coordinate": 0.18849887134886037,
+          "wave_energy": 0.26889354090716006,
+          "wave_action": 0.2508847493468387,
+          "wave_pressure": 0.003998878260184798,
+          "tension_pressure": 0.021435622659982806
+        },
+        {
+          "t": 102.0,
+          "radius": 0.9218122459981299,
+          "wave_coordinate": 0.4400883185812793,
+          "wave_energy": 0.27315767028549975,
+          "wave_action": 0.25180008555749317,
+          "wave_pressure": 0.023155675332262562,
+          "tension_pressure": 0.021696392174031257
+        },
+        {
+          "t": 104.0,
+          "radius": 0.9128630089738539,
+          "wave_coordinate": -0.6743358607425977,
+          "wave_energy": 0.27514089309675277,
+          "wave_action": 0.2511659435640552,
+          "wave_pressure": 0.057084026984871535,
+          "tension_pressure": 0.021909092386690015
+        },
+        {
+          "t": 106.0,
+          "radius": 0.9084117580381297,
+          "wave_coordinate": 0.3434072259719347,
+          "wave_energy": 0.2763325021158334,
+          "wave_action": 0.2510236940501194,
+          "wave_pressure": 0.015170338109959308,
+          "tension_pressure": 0.022016447743029455
+        },
+        {
+          "t": 108.0,
+          "radius": 0.9062235880349888,
+          "wave_coordinate": 0.26314140480878956,
+          "wave_energy": 0.2773073507084206,
+          "wave_action": 0.25130246234746195,
+          "wave_pressure": 0.009015539130150296,
+          "tension_pressure": 0.022069608719153987
+        },
+        {
+          "t": 110.0,
+          "radius": 0.9060394527720111,
+          "wave_coordinate": -0.6558257205315118,
+          "wave_energy": 0.2772087220863421,
+          "wave_action": 0.25116203886273797,
+          "wave_pressure": 0.05605721022505101,
+          "tension_pressure": 0.022074093946803715
+        },
+        {
+          "t": 112.0,
+          "radius": 0.9104137585313945,
+          "wave_coordinate": 0.5164685946528654,
+          "wave_energy": 0.2762819338433431,
+          "wave_action": 0.25153087380464006,
+          "wave_pressure": 0.03393781755371868,
+          "tension_pressure": 0.021968033559007692
+        },
+        {
+          "t": 114.0,
+          "radius": 0.918018451469935,
+          "wave_coordinate": 0.05573864712644344,
+          "wave_energy": 0.27366649231229545,
+          "wave_action": 0.2512308894917423,
+          "wave_pressure": 0.0003791804445901871,
+          "tension_pressure": 0.021786054482865694
+        },
+        {
+          "t": 116.0,
+          "radius": 0.926669207133828,
+          "wave_coordinate": -0.5929636566347708,
+          "wave_energy": 0.27045268392162963,
+          "wave_action": 0.2506201741768723,
+          "wave_pressure": 0.040947050915494165,
+          "tension_pressure": 0.021582674643802677
+        },
+        {
+          "t": 118.0,
+          "radius": 0.9385977559637358,
+          "wave_coordinate": 0.6092948777431864,
+          "wave_energy": 0.26836327259847526,
+          "wave_action": 0.25188516544401324,
+          "wave_pressure": 0.040555301311635844,
+          "tension_pressure": 0.021308382502432416
+        },
+        {
+          "t": 120.0,
+          "radius": 0.9535044781725558,
+          "wave_coordinate": -0.045363007551570696,
+          "wave_energy": 0.2636795204740294,
+          "wave_action": 0.25141960357437915,
+          "wave_pressure": 0.00020776870432139224,
+          "tension_pressure": 0.020975255447495234
+        },
+        {
+          "t": 122.0,
+          "radius": 0.9680372013075691,
+          "wave_coordinate": -0.5840089256672663,
+          "wave_energy": 0.25855574140460474,
+          "wave_action": 0.2502915762913171,
+          "wave_pressure": 0.03192779073769116,
+          "tension_pressure": 0.020660363024256865
+        },
+        {
+          "t": 124.0,
+          "radius": 0.9843689936719784,
+          "wave_coordinate": 0.6121454683440385,
+          "wave_energy": 0.2561293921087837,
+          "wave_action": 0.252125831959939,
+          "wave_pressure": 0.03226337424658754,
+          "tension_pressure": 0.020317584288584985
+        },
+        {
+          "t": 126.0,
+          "radius": 1.0021802293174238,
+          "wave_coordinate": 0.05010575321002875,
+          "wave_energy": 0.2505763223615702,
+          "wave_action": 0.25112263620583514,
+          "wave_pressure": 0.00019762240109578002,
+          "tension_pressure": 0.019956490274829933
+        },
+        {
+          "t": 128.0,
+          "radius": 1.0178882747325915,
+          "wave_coordinate": -0.6744000827778068,
+          "wave_energy": 0.24620298782945935,
+          "wave_action": 0.2506071345157376,
+          "wave_pressure": 0.033122629558255574,
+          "tension_pressure": 0.019648521843179875
+        },
+        {
+          "t": 130.0,
+          "radius": 1.0347477730725574,
+          "wave_coordinate": 0.47377758079221594,
+          "wave_energy": 0.24372234935438708,
+          "wave_action": 0.2521911582424639,
+          "wave_pressure": 0.015057977572144802,
+          "tension_pressure": 0.019328381776181493
+        },
+        {
+          "t": 132.0,
+          "radius": 1.05026537780037,
+          "wave_coordinate": 0.35142291393414854,
+          "wave_energy": 0.23844533090602632,
+          "wave_action": 0.250430875548752,
+          "wave_pressure": 0.007690508232750178,
+          "tension_pressure": 0.019042806154276098
+        },
+        {
+          "t": 134.0,
+          "radius": 1.063188875673352,
+          "wave_coordinate": -0.7187234581147818,
+          "wave_energy": 0.23664344310409313,
+          "wave_action": 0.25159667620931164,
+          "wave_pressure": 0.030259493644359238,
+          "tension_pressure": 0.018811333016754292
+        },
+        {
+          "t": 136.0,
+          "radius": 1.0764258698329154,
+          "wave_coordinate": 0.0845246865839397,
+          "wave_energy": 0.23354491050061493,
+          "wave_action": 0.2513937834306748,
+          "wave_pressure": 0.00039340207011452925,
+          "tension_pressure": 0.01858000681747312
+        },
+        {
+          "t": 138.0,
+          "radius": 1.0852838278139492,
+          "wave_coordinate": 0.6816404693145287,
+          "wave_energy": 0.2311663619964493,
+          "wave_action": 0.2508811142093315,
+          "wave_pressure": 0.02455750335906668,
+          "tension_pressure": 0.018428359003824217
+        },
+        {
+          "t": 140.0,
+          "radius": 1.0934194782638704,
+          "wave_coordinate": -0.45414200860652615,
+          "wave_energy": 0.2300857154125809,
+          "wave_action": 0.2515802029023936,
+          "wave_pressure": 0.010501212768871565,
+          "tension_pressure": 0.01829124173986361
+        },
+        {
+          "t": 142.0,
+          "radius": 1.0983829804967802,
+          "wave_coordinate": -0.4534256143636332,
+          "wave_energy": 0.2284962820713967,
+          "wave_action": 0.2509764273340137,
+          "wave_pressure": 0.01023371367572664,
+          "tension_pressure": 0.01820858512479348
+        },
+        {
+          "t": 144.0,
+          "radius": 1.1000558009484123,
+          "wave_coordinate": 0.6823240300101626,
+          "wave_energy": 0.22845568084907503,
+          "wave_action": 0.25131399697764406,
+          "wave_pressure": 0.022998414193451867,
+          "tension_pressure": 0.018180895898878054
+        },
+        {
+          "t": 146.0,
+          "radius": 1.1005904592330478,
+          "wave_coordinate": 0.1196619335701526,
+          "wave_energy": 0.22829517661385296,
+          "wave_action": 0.2512594932701302,
+          "wave_pressure": 0.0007056241722857422,
+          "tension_pressure": 0.0181720637610625
+        },
+        {
+          "t": 148.0,
+          "radius": 1.0961392166877586,
+          "wave_coordinate": -0.7393896478966708,
+          "wave_energy": 0.22932655011927608,
+          "wave_action": 0.2513738250134493,
+          "wave_pressure": 0.027492123640446526,
+          "tension_pressure": 0.0182458575475793
+        },
+        {
+          "t": 150.0,
+          "radius": 1.0913458260123787,
+          "wave_coordinate": 0.2507725121686234,
+          "wave_energy": 0.22992164169752094,
+          "wave_action": 0.25092402397650315,
+          "wave_pressure": 0.003232496314148594,
+          "tension_pressure": 0.018325996694445734
+        },
+        {
+          "t": 152.0,
+          "radius": 1.0822449650966863,
+          "wave_coordinate": 0.6021081855812973,
+          "wave_energy": 0.23266177842728755,
+          "wave_action": 0.2517970382733728,
+          "wave_pressure": 0.01943172379242957,
+          "tension_pressure": 0.018480104454182633
+        },
+        {
+          "t": 154.0,
+          "radius": 1.0716027835784203,
+          "wave_coordinate": -0.575294487409143,
+          "wave_energy": 0.23375978722287827,
+          "wave_action": 0.25049763867673563,
+          "wave_pressure": 0.01863808962517944,
+          "tension_pressure": 0.018663631997309377
+        },
+        {
+          "t": 156.0,
+          "radius": 1.0595001016034096,
+          "wave_coordinate": -0.25888956556026305,
+          "wave_energy": 0.23765042298068897,
+          "wave_action": 0.2517906472941332,
+          "wave_pressure": 0.003994976380256081,
+          "tension_pressure": 0.018876826882538958
+        },
+        {
+          "t": 158.0,
+          "radius": 1.0440017038964176,
+          "wave_coordinate": 0.724004783447715,
+          "wave_energy": 0.24065756650147546,
+          "wave_action": 0.2512469094831058,
+          "wave_pressure": 0.03363310551232562,
+          "tension_pressure": 0.019157056856666143
+        },
+        {
+          "t": 160.0,
+          "radius": 1.0294446987097992,
+          "wave_coordinate": -0.23046235048623165,
+          "wave_energy": 0.2434496983145437,
+          "wave_action": 0.2506180013324069,
+          "wave_pressure": 0.0036557374895016823,
+          "tension_pressure": 0.019427949869542247
+        },
+        {
+          "t": 162.0,
+          "radius": 1.0123334270878346,
+          "wave_coordinate": -0.5381165811245854,
+          "wave_energy": 0.24918069782685676,
+          "wave_action": 0.25225394979520005,
+          "wave_pressure": 0.021673297751308905,
+          "tension_pressure": 0.019756336662253383
+        },
+        {
+          "t": 164.0,
+          "radius": 0.9951130353401333,
+          "wave_coordinate": 0.6417235514058971,
+          "wave_energy": 0.2516592704921071,
+          "wave_action": 0.2504294205308844,
+          "wave_pressure": 0.033583350051695736,
+          "tension_pressure": 0.020098219287383697
+        },
+        {
+          "t": 166.0,
+          "radius": 0.9793909757210966,
+          "wave_coordinate": -0.015943303003827805,
+          "wave_energy": 0.2565252901186741,
+          "wave_action": 0.25123855418646557,
+          "wave_pressure": 2.2447410349958813e-05,
+          "tension_pressure": 0.020420853873270164
+        },
+        {
+          "t": 168.0,
+          "radius": 0.9623339655570201,
+          "wave_coordinate": -0.6056621452077798,
+          "wave_energy": 0.2619240606925643,
+          "wave_action": 0.25205842000107304,
+          "wave_pressure": 0.03536893024353676,
+          "tension_pressure": 0.020782805882179956
+        },
+        {
+          "t": 170.0,
+          "radius": 0.9474142653873338,
+          "wave_coordinate": 0.5940253076543449,
+          "wave_energy": 0.26433005291708306,
+          "wave_action": 0.2504300629042333,
+          "wave_pressure": 0.036787513403565904,
+          "tension_pressure": 0.021110089567654283
+        },
+        {
+          "t": 172.0,
+          "radius": 0.9350713678960227,
+          "wave_coordinate": -0.015365745691040641,
+          "wave_energy": 0.26872250729976366,
+          "wave_action": 0.25127472248523897,
+          "wave_pressure": 2.628292061516986e-05,
+          "tension_pressure": 0.021388741743853655
+        },
+        {
+          "t": 174.0,
+          "radius": 0.9230605683982855,
+          "wave_coordinate": -0.5594757113028352,
+          "wave_energy": 0.2727731081661412,
+          "wave_action": 0.25178610026760534,
+          "wave_pressure": 0.03717077490914772,
+          "tension_pressure": 0.021667050554119573
+        },
+        {
+          "t": 176.0,
+          "radius": 0.9141428041296803,
+          "wave_coordinate": 0.6348844826302532,
+          "wave_energy": 0.2744860725484574,
+          "wave_action": 0.25091946805398974,
+          "wave_pressure": 0.05024690730880717,
+          "tension_pressure": 0.021878419771669287
+        },
+        {
+          "t": 178.0,
+          "radius": 0.9093115759605479,
+          "wave_coordinate": -0.17843513892547838,
+          "wave_energy": 0.2762045322521109,
+          "wave_action": 0.2511559785096129,
+          "wave_pressure": 0.004075560112653891,
+          "tension_pressure": 0.021994661157670927
+        },
+        {
+          "t": 180.0,
+          "radius": 0.9060954581142434,
+          "wave_coordinate": -0.4177952341004006,
+          "wave_energy": 0.2773317813076508,
+          "wave_action": 0.251289067433595,
+          "wave_pressure": 0.02274297802617009,
+          "tension_pressure": 0.022072729557240905
+        },
+        {
+          "t": 182.0,
+          "radius": 0.9056287504800413,
+          "wave_coordinate": 0.6742840790775547,
+          "wave_energy": 0.27743243500462084,
+          "wave_action": 0.25125078945587004,
+          "wave_pressure": 0.05939158833935483,
+          "tension_pressure": 0.022084104539965982
+        },
+        {
+          "t": 184.0,
+          "radius": 0.9099068760608138,
+          "wave_coordinate": -0.3836341480290505,
+          "wave_energy": 0.27641713265607254,
+          "wave_action": 0.25151384966477447,
+          "wave_pressure": 0.018777592777514205,
+          "tension_pressure": 0.021980271307086262
+        },
+        {
+          "t": 186.0,
+          "radius": 0.9165848910702385,
+          "wave_coordinate": -0.22947954551721544,
+          "wave_energy": 0.27380150431982797,
+          "wave_action": 0.250962322011857,
+          "wave_pressure": 0.006477607479661951,
+          "tension_pressure": 0.021820128386195913
+        },
+        {
+          "t": 188.0,
+          "radius": 0.9247307254824771,
+          "wave_coordinate": 0.6591002168271985,
+          "wave_energy": 0.2713365563684615,
+          "wave_action": 0.25091325062052444,
+          "wave_pressure": 0.051123032284341896,
+          "tension_pressure": 0.021627917672536537
+        },
+        {
+          "t": 190.0,
+          "radius": 0.936827095781638,
+          "wave_coordinate": -0.5090996975032142,
+          "wave_energy": 0.2689858996937129,
+          "wave_action": 0.251993279216272,
+          "wave_pressure": 0.028582393725858402,
+          "tension_pressure": 0.021348656641184228
+        },
+        {
+          "t": 192.0,
+          "radius": 0.9511136571571773,
+          "wave_coordinate": -0.12667626331644963,
+          "wave_energy": 0.2638589888261984,
+          "wave_action": 0.25095988783628037,
+          "wave_pressure": 0.0016406597931157975,
+          "tension_pressure": 0.02102798109300504
+        },
+        {
+          "t": 194.0,
+          "radius": 0.9652378929969834,
+          "wave_coordinate": 0.6580799503572096,
+          "wave_energy": 0.2596561951683437,
+          "wave_action": 0.2506299987279056,
+          "wave_pressure": 0.04113160343574876,
+          "tension_pressure": 0.020720280611758478
+        },
+        {
+          "t": 196.0,
+          "radius": 0.9819710366180747,
+          "wave_coordinate": -0.5119967833241167,
+          "wave_energy": 0.2568791586114418,
+          "wave_action": 0.25224789366725636,
+          "wave_pressure": 0.022847106649211305,
+          "tension_pressure": 0.0203671994938673
+        },
+        {
+          "t": 198.0,
+          "radius": 0.9993491227859223,
+          "wave_coordinate": -0.2122206319206632,
+          "wave_energy": 0.2508051190398362,
+          "wave_action": 0.2506418757026791,
+          "wave_pressure": 0.003595664520680255,
+          "tension_pressure": 0.020013026022622872
+        },
+        {
+          "t": 200.0,
+          "radius": 1.0150833784086295,
+          "wave_coordinate": 0.7098572169110331,
+          "wave_energy": 0.2473308411356488,
+          "wave_action": 0.25106142580462243,
+          "wave_pressure": 0.03720690607069073,
+          "tension_pressure": 0.019702814985853162
+        }
+      ]
+    },
+    "radius_minus_10percent": {
+      "completed": true,
+      "dt": 0.01,
+      "end_time": 200.0,
+      "radius_min": 0.9,
+      "radius_max": 1.1072926423691622,
+      "max_scaled_energy_error": 8.588340938697758e-06,
+      "late_mean_radius_pressure_tension": [
+        1.0250785731064869,
+        0.019161689510895478,
+        0.019609802686838294
+      ],
+      "passes_radius_lock_screen": true,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 0.9,
+          "wave_coordinate": 0.6725989459677514,
+          "wave_energy": 0.27925268031909267,
+          "wave_action": 0.2513274122871834,
+          "wave_pressure": 0.06096631611034902,
+          "tension_pressure": 0.022222222222222223
+        },
+        {
+          "t": 2.0,
+          "radius": 0.9024643499489075,
+          "wave_coordinate": -0.40717745266408345,
+          "wave_energy": 0.2786839984480016,
+          "wave_action": 0.2515023735005381,
+          "wave_pressure": 0.022039782441037072,
+          "tension_pressure": 0.02216154023273306
+        },
+        {
+          "t": 4.0,
+          "radius": 0.9077628973725966,
+          "wave_coordinate": -0.18618986969692,
+          "wave_energy": 0.27668283205779026,
+          "wave_action": 0.25116240928203526,
+          "wave_pressure": 0.004475484855228531,
+          "tension_pressure": 0.022032184899699513
+        },
+        {
+          "t": 6.0,
+          "radius": 0.9147669327463528,
+          "wave_coordinate": 0.6377885168680378,
+          "wave_energy": 0.2743079024871048,
+          "wave_action": 0.2509277985862145,
+          "wave_pressure": 0.05053488028763015,
+          "tension_pressure": 0.02186349252913541
+        },
+        {
+          "t": 8.0,
+          "radius": 0.9258678322656703,
+          "wave_coordinate": -0.5544924734823486,
+          "wave_energy": 0.2721828200800941,
+          "wave_action": 0.25200531760751366,
+          "wave_pressure": 0.03596138995588884,
+          "tension_pressure": 0.02160135529393915
+        },
+        {
+          "t": 10.0,
+          "radius": 0.9399199561898244,
+          "wave_coordinate": -0.03183780405308259,
+          "wave_energy": 0.26737241380220006,
+          "wave_action": 0.2513086674673315,
+          "wave_pressure": 0.00010995677516590079,
+          "tension_pressure": 0.021278407664706334
+        },
+        {
+          "t": 12.0,
+          "radius": 0.9541235277630579,
+          "wave_coordinate": 0.6088722904294321,
+          "wave_energy": 0.2625048685986653,
+          "wave_action": 0.25046207128233644,
+          "wave_pressure": 0.037309508639336776,
+          "tension_pressure": 0.02096164638858659
+        },
+        {
+          "t": 14.0,
+          "radius": 0.9708213883336642,
+          "wave_coordinate": -0.5891572628695096,
+          "wave_energy": 0.2598614143636575,
+          "wave_action": 0.2522790190668756,
+          "wave_pressure": 0.03202992551697731,
+          "tension_pressure": 0.020601111842342465
+        },
+        {
+          "t": 16.0,
+          "radius": 0.9892184944535112,
+          "wave_coordinate": -0.06729578178138645,
+          "wave_energy": 0.25388827028243804,
+          "wave_action": 0.2511509724881995,
+          "wave_pressure": 0.00038045621651928947,
+          "tension_pressure": 0.020217980266380785
+        },
+        {
+          "t": 18.0,
+          "radius": 1.005977819365062,
+          "wave_coordinate": 0.6705797582903024,
+          "wave_energy": 0.24915166739761027,
+          "wave_action": 0.25064105105981715,
+          "wave_pressure": 0.03473353534820529,
+          "tension_pressure": 0.019881154052306345
+        },
+        {
+          "t": 20.0,
+          "radius": 1.024210763106622,
+          "wave_coordinate": -0.4829531287408038,
+          "wave_energy": 0.24641484563974722,
+          "wave_action": 0.25238073709348596,
+          "wave_pressure": 0.016468476594353038,
+          "tension_pressure": 0.019527230840004333
+        },
+        {
+          "t": 22.0,
+          "radius": 1.0414977837660038,
+          "wave_coordinate": -0.324711985560078,
+          "wave_energy": 0.24049103040378003,
+          "wave_action": 0.25047087518113953,
+          "wave_pressure": 0.006846916379787216,
+          "tension_pressure": 0.019203113354385647
+        },
+        {
+          "t": 24.0,
+          "radius": 1.056307244509902,
+          "wave_coordinate": 0.7226313419621548,
+          "wave_energy": 0.2382228508591502,
+          "wave_action": 0.2516365231703223,
+          "wave_pressure": 0.031598934014724384,
+          "tension_pressure": 0.018933885102037203
+        },
+        {
+          "t": 26.0,
+          "radius": 1.0716783242227323,
+          "wave_coordinate": -0.13075694053407722,
+          "wave_energy": 0.23478286403141466,
+          "wave_action": 0.25161170628140006,
+          "wave_pressure": 0.0009624926082643615,
+          "tension_pressure": 0.018662316432037213
+        },
+        {
+          "t": 28.0,
+          "radius": 1.0828883849078124,
+          "wave_coordinate": -0.6593912250672302,
+          "wave_energy": 0.23158925891466922,
+          "wave_action": 0.2507853185481033,
+          "wave_pressure": 0.023235819032044264,
+          "tension_pressure": 0.018469124130186903
+        },
+        {
+          "t": 30.0,
+          "radius": 1.0931980049234558,
+          "wave_coordinate": 0.4953557054424103,
+          "wave_energy": 0.23035751293474976,
+          "wave_action": 0.25182637355939763,
+          "wave_pressure": 0.012506342634092647,
+          "tension_pressure": 0.01829494740195796
+        },
+        {
+          "t": 32.0,
+          "radius": 1.1006702787951268,
+          "wave_coordinate": 0.4112517365937219,
+          "wave_energy": 0.2279859726231125,
+          "wave_action": 0.2509373840484594,
+          "wave_pressure": 0.008331427671986018,
+          "tension_pressure": 0.018170745940276907
+        },
+        {
+          "t": 34.0,
+          "radius": 1.1044866853087472,
+          "wave_coordinate": -0.7016533689813157,
+          "wave_energy": 0.22770716628387475,
+          "wave_action": 0.25149953330992453,
+          "wave_pressure": 0.023835976122984975,
+          "tension_pressure": 0.018107959349830657
+        },
+        {
+          "t": 36.0,
+          "radius": 1.1072700196586118,
+          "wave_coordinate": -0.07873835194181897,
+          "wave_energy": 0.22695852610889955,
+          "wave_action": 0.25130437166629077,
+          "wave_pressure": 0.000296411514930604,
+          "tension_pressure": 0.018062441540832384
+        },
+        {
+          "t": 38.0,
+          "radius": 1.1048222366967184,
+          "wave_coordinate": 0.7389082057433526,
+          "wave_energy": 0.22759563380623796,
+          "wave_action": 0.2514527172042151,
+          "wave_pressure": 0.026394235153547357,
+          "tension_pressure": 0.01810245968600118
+        },
+        {
+          "t": 40.0,
+          "radius": 1.101790898525898,
+          "wave_coordinate": -0.2710374407353001,
+          "wave_energy": 0.22786260820564047,
+          "wave_action": 0.25105694783534727,
+          "wave_pressure": 0.0036004170455932426,
+          "tension_pressure": 0.018152264669056797
+        },
+        {
+          "t": 42.0,
+          "radius": 1.0942563209061218,
+          "wave_coordinate": -0.6019312301982247,
+          "wave_energy": 0.23011422946241555,
+          "wave_action": 0.2518039501196899,
+          "wave_pressure": 0.018377590463810357,
+          "tension_pressure": 0.018277253343566325
+        },
+        {
+          "t": 44.0,
+          "radius": 1.0848506411002665,
+          "wave_coordinate": 0.5728461133946959,
+          "wave_energy": 0.23104035666005074,
+          "wave_action": 0.25064427904269027,
+          "wave_pressure": 0.017378661648266673,
+          "tension_pressure": 0.018435717546994117
+        },
+        {
+          "t": 46.0,
+          "radius": 1.0735879594382964,
+          "wave_coordinate": 0.28593203797427547,
+          "wave_energy": 0.23461748687333056,
+          "wave_action": 0.25188250898088027,
+          "wave_pressure": 0.004561709392555515,
+          "tension_pressure": 0.018629120999516465
+        },
+        {
+          "t": 48.0,
+          "radius": 1.058646922392514,
+          "wave_coordinate": -0.7262826863978892,
+          "wave_energy": 0.23730421341301172,
+          "wave_action": 0.25122137520046117,
+          "wave_pressure": 0.0315679094379263,
+          "tension_pressure": 0.018892039996489605
+        },
+        {
+          "t": 50.0,
+          "radius": 1.0442611093705736,
+          "wave_coordinate": 0.16962409009163276,
+          "wave_energy": 0.24022730172779197,
+          "wave_action": 0.25086002860336354,
+          "wave_pressure": 0.0018438249057109903,
+          "tension_pressure": 0.019152298041679405
+        },
+        {
+          "t": 52.0,
+          "radius": 1.0266550412635675,
+          "wave_coordinate": 0.5936569434673529,
+          "wave_energy": 0.24577029070651657,
+          "wave_action": 0.2523213079466578,
+          "wave_pressure": 0.0245888670744368,
+          "tension_pressure": 0.01948074006959998
+        },
+        {
+          "t": 54.0,
+          "radius": 1.0090256335318781,
+          "wave_coordinate": -0.5960787844280527,
+          "wave_energy": 0.24804166711558995,
+          "wave_action": 0.2502804003036114,
+          "wave_pressure": 0.027032516015719255,
+          "tension_pressure": 0.019821101997175516
+        },
+        {
+          "t": 56.0,
+          "radius": 0.9920089196525816,
+          "wave_coordinate": -0.10514552538220688,
+          "wave_energy": 0.25371683821800933,
+          "wave_action": 0.25168936657831625,
+          "wave_pressure": 0.0009157856649352772,
+          "tension_pressure": 0.02016110904224968
+        },
+        {
+          "t": 58.0,
+          "radius": 0.9732926234505692,
+          "wave_coordinate": 0.6648229306077055,
+          "wave_energy": 0.25889510441325164,
+          "wave_action": 0.2519806953728827,
+          "wave_pressure": 0.040270308569341454,
+          "tension_pressure": 0.02054880466379672
+        },
+        {
+          "t": 60.0,
+          "radius": 0.956961845416357,
+          "wave_coordinate": -0.5058506660128859,
+          "wave_energy": 0.261524985625583,
+          "wave_action": 0.25026943286674413,
+          "wave_pressure": 0.02537240735538762,
+          "tension_pressure": 0.02089947482838081
+        },
+        {
+          "t": 62.0,
+          "radius": 0.9421400750732926,
+          "wave_coordinate": -0.1471458398003035,
+          "wave_energy": 0.26722015460894905,
+          "wave_action": 0.2517588165243721,
+          "wave_pressure": 0.002321179491479842,
+          "tension_pressure": 0.02122826586953551
+        },
+        {
+          "t": 64.0,
+          "radius": 0.9275268535997202,
+          "wave_coordinate": 0.6402945548577985,
+          "wave_energy": 0.2715005714892492,
+          "wave_action": 0.25182407082394925,
+          "wave_pressure": 0.04752447113580631,
+          "tension_pressure": 0.0215627180198398
+        },
+        {
+          "t": 66.0,
+          "radius": 0.9165706040718503,
+          "wave_coordinate": -0.5533284713407075,
+          "wave_energy": 0.2735126501043288,
+          "wave_action": 0.25069365492741724,
+          "wave_pressure": 0.03766400922716821,
+          "tension_pressure": 0.02182046850635436
+        },
+        {
+          "t": 68.0,
+          "radius": 0.9089242202587022,
+          "wave_coordinate": 0.0036220643730638007,
+          "wave_energy": 0.27659647115381664,
+          "wave_action": 0.2514052318697914,
+          "wave_pressure": 1.6829223711903755e-06,
+          "tension_pressure": 0.02200403460951619
+        },
+        {
+          "t": 70.0,
+          "radius": 0.902685161367048,
+          "wave_coordinate": 0.5381005784472912,
+          "wave_energy": 0.2786245851060923,
+          "wave_action": 0.2515102785673197,
+          "wave_pressure": 0.03844461681523708,
+          "tension_pressure": 0.022156119160872793
+        },
+        {
+          "t": 72.0,
+          "radius": 0.9001355639834268,
+          "wave_coordinate": -0.6469743641656627,
+          "wave_energy": 0.279171489633575,
+          "wave_action": 0.2512921862694114,
+          "wave_pressure": 0.05636696827251894,
+          "tension_pressure": 0.022218875467482628
+        },
+        {
+          "t": 74.0,
+          "radius": 0.9022746353334583,
+          "wave_coordinate": 0.24540469232728304,
+          "wave_energy": 0.2787197147915541,
+          "wave_action": 0.25148172902379495,
+          "wave_pressure": 0.00801423582182474,
+          "tension_pressure": 0.022166199975918083
+        },
+        {
+          "t": 76.0,
+          "radius": 0.9065219061360414,
+          "wave_coordinate": 0.354909373391824,
+          "wave_energy": 0.2768598060345256,
+          "wave_action": 0.2509794790988728,
+          "wave_pressure": 0.016373199686443768,
+          "tension_pressure": 0.02206234605542848
+        },
+        {
+          "t": 78.0,
+          "radius": 0.9131717754462104,
+          "wave_coordinate": -0.6756209153175242,
+          "wave_energy": 0.2751386553413158,
+          "wave_action": 0.2512488543919123,
+          "wave_pressure": 0.05720498928209669,
+          "tension_pressure": 0.02190168436845
+        },
+        {
+          "t": 80.0,
+          "radius": 0.9243253300205859,
+          "wave_coordinate": 0.4292884853482585,
+          "wave_energy": 0.2726488265550783,
+          "wave_action": 0.25201621658524825,
+          "wave_pressure": 0.021735235135151982,
+          "tension_pressure": 0.02163740335835498
+        },
+        {
+          "t": 82.0,
+          "radius": 0.9375798408042361,
+          "wave_coordinate": 0.20875195351649337,
+          "wave_energy": 0.26755214556830853,
+          "wave_action": 0.2508514980487665,
+          "wave_pressure": 0.004786410342709484,
+          "tension_pressure": 0.021331516666190715
+        },
+        {
+          "t": 84.0,
+          "radius": 0.9514096197992898,
+          "wave_coordinate": -0.6719248137739056,
+          "wave_energy": 0.2636968177959737,
+          "wave_action": 0.25088368916154996,
+          "wave_pressure": 0.04608863052373856,
+          "tension_pressure": 0.021021439749809568
+        },
+        {
+          "t": 86.0,
+          "radius": 0.968438649652991,
+          "wave_coordinate": 0.4763733520687271,
+          "wave_energy": 0.26058174027707764,
+          "wave_action": 0.25235742867815947,
+          "wave_pressure": 0.0211994448113372,
+          "tension_pressure": 0.02065179865256964
+        },
+        {
+          "t": 88.0,
+          "radius": 0.986290673017169,
+          "wave_coordinate": 0.2358337828841223,
+          "wave_energy": 0.2541156377863639,
+          "wave_action": 0.2506318834165,
+          "wave_pressure": 0.0047421745968571115,
+          "tension_pressure": 0.020277997701040662
+        },
+        {
+          "t": 90.0,
+          "radius": 1.0030358627525167,
+          "wave_coordinate": -0.7066593779760586,
+          "wave_energy": 0.25039457970188095,
+          "wave_action": 0.25115474327982995,
+          "wave_pressure": 0.03914065452284219,
+          "tension_pressure": 0.01993946651629812
+        },
+        {
+          "t": 92.0,
+          "radius": 1.0217364416529608,
+          "wave_coordinate": 0.3457064828659796,
+          "wave_energy": 0.24686932611044915,
+          "wave_action": 0.25223538681335467,
+          "wave_pressure": 0.008541040211995683,
+          "tension_pressure": 0.019574519596897304
+        },
+        {
+          "t": 94.0,
+          "radius": 1.0386268764430386,
+          "wave_coordinate": 0.46288464314299455,
+          "wave_energy": 0.2409511344275327,
+          "wave_action": 0.250258324125875,
+          "wave_pressure": 0.014107104984308895,
+          "tension_pressure": 0.019256193396894886
+        },
+        {
+          "t": 96.0,
+          "radius": 1.0540486972100618,
+          "wave_coordinate": -0.6824856901825952,
+          "wave_energy": 0.23906561026710776,
+          "wave_action": 0.25198679504977334,
+          "wave_pressure": 0.02848878034055229,
+          "tension_pressure": 0.018974455405084755
+        },
+        {
+          "t": 98.0,
+          "radius": 1.0696057968231734,
+          "wave_coordinate": -0.030872261523617973,
+          "wave_energy": 0.23490414132624962,
+          "wave_action": 0.25125483126032655,
+          "wave_pressure": 5.4176168264568976e-05,
+          "tension_pressure": 0.01869847756940157
+        },
+        {
+          "t": 100.0,
+          "radius": 1.0809386450502467,
+          "wave_coordinate": 0.7147999408545694,
+          "wave_energy": 0.2322473418113264,
+          "wave_action": 0.2510451269740567,
+          "wave_pressure": 0.027552050959701396,
+          "tension_pressure": 0.01850243775776035
+        },
+        {
+          "t": 102.0,
+          "radius": 1.092063700394986,
+          "wave_coordinate": -0.36589216244417067,
+          "wave_energy": 0.23054866033949012,
+          "wave_action": 0.25177382313145036,
+          "wave_pressure": 0.0068589319087267505,
+          "tension_pressure": 0.01831394999464431
+        },
+        {
+          "t": 104.0,
+          "radius": 1.0994372908404206,
+          "wave_coordinate": -0.532878576975371,
+          "wave_energy": 0.2281998281436004,
+          "wave_action": 0.2508914008244496,
+          "wave_pressure": 0.014066768528301847,
+          "tension_pressure": 0.018191123920048048
+        },
+        {
+          "t": 106.0,
+          "radius": 1.1041662402287795,
+          "wave_coordinate": 0.632924871945485,
+          "wave_energy": 0.2278012146221861,
+          "wave_action": 0.2515304106689285,
+          "wave_pressure": 0.01942326065448464,
+          "tension_pressure": 0.018113214542636324
+        },
+        {
+          "t": 108.0,
+          "radius": 1.1070891824650535,
+          "wave_coordinate": 0.23270677049629496,
+          "wave_energy": 0.22696362304205903,
+          "wave_action": 0.25126897188293973,
+          "wave_pressure": 0.002591165412407103,
+          "tension_pressure": 0.018065391945631556
+        },
+        {
+          "t": 110.0,
+          "radius": 1.1051940075932798,
+          "wave_coordinate": -0.7430534266389148,
+          "wave_energy": 0.2274631052569899,
+          "wave_action": 0.2513908608785847,
+          "wave_pressure": 0.026646342826014455,
+          "tension_pressure": 0.01809637028665483
+        },
+        {
+          "t": 112.0,
+          "radius": 1.1027598161497765,
+          "wave_coordinate": 0.11861812052116683,
+          "wave_energy": 0.22779799346885835,
+          "wave_action": 0.2512064733970062,
+          "wave_pressure": 0.0006865743134669188,
+          "tension_pressure": 0.01813631554859232
+        },
+        {
+          "t": 114.0,
+          "radius": 1.0952863949408567,
+          "wave_coordinate": 0.6807927543437634,
+          "wave_energy": 0.2298181629607835,
+          "wave_action": 0.2517167072012469,
+          "wave_pressure": 0.023398149965439787,
+          "tension_pressure": 0.018260064301337333
+        },
+        {
+          "t": 116.0,
+          "radius": 1.0867778319921997,
+          "wave_coordinate": -0.4593946267733064,
+          "wave_energy": 0.23063768429893322,
+          "wave_action": 0.25065192251809604,
+          "wave_pressure": 0.0110779168948822,
+          "tension_pressure": 0.018403025357388362
+        },
+        {
+          "t": 118.0,
+          "radius": 1.0753628152801427,
+          "wave_coordinate": -0.42718192829417434,
+          "wave_energy": 0.23437239701067453,
+          "wave_action": 0.25203536067335425,
+          "wave_pressure": 0.010098126444179104,
+          "tension_pressure": 0.018598374163411816
+        },
+        {
+          "t": 120.0,
+          "radius": 1.0610672686760663,
+          "wave_coordinate": 0.6934935984478758,
+          "wave_energy": 0.2363879433477981,
+          "wave_action": 0.25082350939600084,
+          "wave_pressure": 0.028455122519421224,
+          "tension_pressure": 0.01884894633019333
+        },
+        {
+          "t": 122.0,
+          "radius": 1.0468777684678032,
+          "wave_coordinate": -0.005820316594267357,
+          "wave_energy": 0.24006782821784645,
+          "wave_action": 0.25132167228561103,
+          "wave_pressure": 2.1438947814059193e-06,
+          "tension_pressure": 0.019104427090157566
+        },
+        {
+          "t": 124.0,
+          "radius": 1.0291295171138475,
+          "wave_coordinate": -0.6719867097587289,
+          "wave_energy": 0.24493434446289297,
+          "wave_action": 0.2520691636416938,
+          "wave_pressure": 0.031128724830673225,
+          "tension_pressure": 0.01943389988083249
+        },
+        {
+          "t": 126.0,
+          "radius": 1.0121229679082504,
+          "wave_coordinate": 0.4877201706524462,
+          "wave_energy": 0.24717672405298002,
+          "wave_action": 0.25017323954634074,
+          "wave_pressure": 0.0178223582198698,
+          "tension_pressure": 0.019760444762293956
+        },
+        {
+          "t": 128.0,
+          "radius": 0.9946648728881923,
+          "wave_coordinate": 0.2711976660374334,
+          "wave_energy": 0.2534750552601255,
+          "wave_action": 0.2521227336206402,
+          "wave_pressure": 0.006011434602358711,
+          "tension_pressure": 0.020107274867289044
+        },
+        {
+          "t": 130.0,
+          "radius": 0.9759091684209694,
+          "wave_coordinate": -0.6989194973541997,
+          "wave_energy": 0.2577177879699701,
+          "wave_action": 0.2515091521450652,
+          "wave_pressure": 0.04391343979285856,
+          "tension_pressure": 0.0204937105287782
+        },
+        {
+          "t": 132.0,
+          "radius": 0.9598438772955085,
+          "wave_coordinate": 0.36990270734213104,
+          "wave_energy": 0.2608514263029576,
+          "wave_action": 0.2503766444206944,
+          "wave_pressure": 0.013364790680784885,
+          "tension_pressure": 0.02083672196394349
+        },
+        {
+          "t": 134.0,
+          "radius": 0.9442540597572853,
+          "wave_coordinate": 0.3160273220747617,
+          "wave_energy": 0.26697258303573324,
+          "wave_action": 0.25208994537538004,
+          "wave_pressure": 0.010587540741077105,
+          "tension_pressure": 0.021180740282060188
+        },
+        {
+          "t": 136.0,
+          "radius": 0.9293767946491249,
+          "wave_coordinate": -0.680840067345672,
+          "wave_energy": 0.270593498451636,
+          "wave_action": 0.25148331824387443,
+          "wave_pressure": 0.05320117515414525,
+          "tension_pressure": 0.021519797045880366
+        },
+        {
+          "t": 138.0,
+          "radius": 0.918501481786411,
+          "wave_coordinate": 0.4286304753763861,
+          "wave_energy": 0.27289859477734224,
+          "wave_action": 0.25065776368041814,
+          "wave_pressure": 0.022364383012558612,
+          "tension_pressure": 0.021774597424820283
+        },
+        {
+          "t": 140.0,
+          "radius": 0.9099775136163321,
+          "wave_coordinate": 0.1791629336616169,
+          "wave_energy": 0.2765145812538347,
+          "wave_action": 0.25162205112802577,
+          "wave_pressure": 0.004093861660878262,
+          "tension_pressure": 0.02197856507521621
+        },
+        {
+          "t": 142.0,
+          "radius": 0.9030385239832464,
+          "wave_coordinate": -0.6282982926436502,
+          "wave_energy": 0.2784868710186167,
+          "wave_action": 0.25148437295336434,
+          "wave_pressure": 0.05231069687405462,
+          "tension_pressure": 0.022147449382094193
+        },
+        {
+          "t": 144.0,
+          "radius": 0.9005139769590867,
+          "wave_coordinate": 0.5720696019233611,
+          "wave_energy": 0.27897617019229026,
+          "wave_action": 0.25122194049667435,
+          "wave_pressure": 0.04397801153410117,
+          "tension_pressure": 0.02220953867649815
+        },
+        {
+          "t": 146.0,
+          "radius": 0.9020292777363742,
+          "wave_coordinate": -0.06501778473452413,
+          "wave_energy": 0.2787464857658483,
+          "wave_action": 0.2514374912269207,
+          "wave_pressure": 0.0005633149831146604,
+          "tension_pressure": 0.022172229320748468
+        },
+        {
+          "t": 148.0,
+          "radius": 0.905275800881878,
+          "wave_coordinate": -0.4970941104397854,
+          "wave_energy": 0.2771904337851884,
+          "wave_action": 0.2509337919416815,
+          "wave_pressure": 0.032341697799331846,
+          "tension_pressure": 0.022092714706962144
+        },
+        {
+          "t": 150.0,
+          "radius": 0.9118269964552896,
+          "wave_coordinate": 0.6638261422068312,
+          "wave_energy": 0.27585472788587595,
+          "wave_action": 0.25153178798616954,
+          "wave_pressure": 0.05563352878691102,
+          "tension_pressure": 0.02193398536975723
+        },
+        {
+          "t": 152.0,
+          "radius": 0.9228081538791845,
+          "wave_coordinate": -0.2734165843990778,
+          "wave_energy": 0.2729381305852162,
+          "wave_action": 0.2518695324085792,
+          "wave_pressure": 0.008889610382975466,
+          "tension_pressure": 0.021672977114394282
+        },
+        {
+          "t": 154.0,
+          "radius": 0.9351512117061525,
+          "wave_coordinate": -0.37140903981703344,
+          "wave_energy": 0.2679013783363343,
+          "wave_action": 0.2505282985689714,
+          "wave_pressure": 0.015349204461426265,
+          "tension_pressure": 0.02138691555936784
+        },
+        {
+          "t": 156.0,
+          "radius": 0.9488790193956779,
+          "wave_coordinate": 0.6905185803151535,
+          "wave_energy": 0.26493586562847243,
+          "wave_action": 0.25139208438029,
+          "wave_pressure": 0.04932722152856645,
+          "tension_pressure": 0.021077502601688464
+        },
+        {
+          "t": 158.0,
+          "radius": 0.9660701013459582,
+          "wave_coordinate": -0.33334404512016486,
+          "wave_energy": 0.261066223362262,
+          "wave_action": 0.252208272861587,
+          "wave_pressure": 0.010508296814726396,
+          "tension_pressure": 0.02070243139926947
+        },
+        {
+          "t": 160.0,
+          "radius": 0.983257252356342,
+          "wave_coordinate": -0.3902490232763305,
+          "wave_energy": 0.2545366180656938,
+          "wave_action": 0.25027497570334967,
+          "wave_pressure": 0.013186756706719992,
+          "tension_pressure": 0.020340556809594533
+        },
+        {
+          "t": 162.0,
+          "radius": 1.0002318360731735,
+          "wave_coordinate": 0.7019114749044945,
+          "wave_energy": 0.2516295487361258,
+          "wave_action": 0.2516878855425992,
+          "wave_pressure": 0.039160790815530575,
+          "tension_pressure": 0.01999536435324667
+        },
+        {
+          "t": 164.0,
+          "radius": 1.019173593656153,
+          "wave_coordinate": -0.1892913159011026,
+          "wave_energy": 0.24716051493809593,
+          "wave_action": 0.2518994702193645,
+          "wave_pressure": 0.0025930488764123252,
+          "tension_pressure": 0.019623742338390652
+        },
+        {
+          "t": 166.0,
+          "radius": 1.0357044284753172,
+          "wave_coordinate": -0.576711977637973,
+          "wave_energy": 0.24165909841941344,
+          "wave_action": 0.250287398414339,
+          "wave_pressure": 0.022208995316383044,
+          "tension_pressure": 0.019310528612340137
+        },
+        {
+          "t": 168.0,
+          "radius": 1.0518473540618396,
+          "wave_coordinate": 0.6076495778985203,
+          "wave_energy": 0.2397811737909385,
+          "wave_action": 0.2522131932058408,
+          "wave_pressure": 0.02282090920177433,
+          "tension_pressure": 0.01901416581290765
+        },
+        {
+          "t": 170.0,
+          "radius": 1.0673637887112737,
+          "wave_coordinate": 0.19109150699697128,
+          "wave_energy": 0.23504170627229282,
+          "wave_action": 0.2508750061119568,
+          "wave_pressure": 0.002097541597744851,
+          "tension_pressure": 0.01873775390501849
+        },
+        {
+          "t": 172.0,
+          "radius": 1.079036407300072,
+          "wave_coordinate": -0.7362787876794937,
+          "wave_energy": 0.23295294515227286,
+          "wave_action": 0.25136470900707925,
+          "wave_pressure": 0.0294913206917665,
+          "tension_pressure": 0.018535055781892767
+        },
+        {
+          "t": 174.0,
+          "radius": 1.0908075861466133,
+          "wave_coordinate": 0.21945015059960774,
+          "wave_energy": 0.2306893752200302,
+          "wave_action": 0.2516377205334315,
+          "wave_pressure": 0.0024815392815832325,
+          "tension_pressure": 0.018335039335995083
+        },
+        {
+          "t": 176.0,
+          "radius": 1.0981394547412167,
+          "wave_coordinate": 0.6303382786114485,
+          "wave_energy": 0.2285160216442701,
+          "wave_action": 0.2509424594080708,
+          "wave_pressure": 0.019799308444468446,
+          "tension_pressure": 0.01821262309959815
+        },
+        {
+          "t": 178.0,
+          "radius": 1.1038244562523012,
+          "wave_coordinate": -0.5357727776534478,
+          "wave_energy": 0.2278863161877916,
+          "wave_action": 0.25154648905332905,
+          "wave_pressure": 0.013939633738974182,
+          "tension_pressure": 0.018118823049005358
+        },
+        {
+          "t": 180.0,
+          "radius": 1.1067466416533949,
+          "wave_coordinate": -0.376302718978765,
+          "wave_energy": 0.22698910993374394,
+          "wave_action": 0.25121943511106437,
+          "wave_pressure": 0.006786155149675403,
+          "tension_pressure": 0.018070983228936237
+        },
+        {
+          "t": 182.0,
+          "radius": 1.1056040336530684,
+          "wave_coordinate": 0.713937434431143,
+          "wave_energy": 0.22731828163762996,
+          "wave_action": 0.25132400910164787,
+          "wave_pressure": 0.024553441441012885,
+          "tension_pressure": 0.018089659038161465
+        },
+        {
+          "t": 184.0,
+          "radius": 1.1035526699967424,
+          "wave_coordinate": 0.0391104964177834,
+          "wave_energy": 0.22775638322660327,
+          "wave_action": 0.2513411648185193,
+          "wave_pressure": 7.437234297425902e-05,
+          "tension_pressure": 0.01812328540699289
+        },
+        {
+          "t": 186.0,
+          "radius": 1.0963290991556651,
+          "wave_coordinate": -0.7284096412273947,
+          "wave_energy": 0.2294705152103949,
+          "wave_action": 0.2515752032233986,
+          "wave_pressure": 0.026658566934138116,
+          "tension_pressure": 0.018242697393878304
+        },
+        {
+          "t": 188.0,
+          "radius": 1.0886185782033835,
+          "wave_coordinate": 0.3244829579739353,
+          "wave_energy": 0.2303809080159868,
+          "wave_action": 0.250796936529568,
+          "wave_pressure": 0.005480184908960249,
+          "tension_pressure": 0.018371907663937974
+        },
+        {
+          "t": 190.0,
+          "radius": 1.07704661195495,
+          "wave_coordinate": 0.5477763010877942,
+          "wave_energy": 0.23403189587653817,
+          "wave_action": 0.2520632605432191,
+          "wave_pressure": 0.01647495054390758,
+          "tension_pressure": 0.018569298466756187
+        },
+        {
+          "t": 192.0,
+          "radius": 1.063543698231491,
+          "wave_coordinate": -0.6261393835993382,
+          "wave_energy": 0.23556345726422523,
+          "wave_action": 0.25053203050698986,
+          "wave_pressure": 0.02292743577549615,
+          "tension_pressure": 0.018805057124833623
+        },
+        {
+          "t": 194.0,
+          "radius": 1.0493328089779392,
+          "wave_coordinate": -0.15816637254347451,
+          "wave_energy": 0.23991464263373982,
+          "wave_action": 0.2517503058698007,
+          "wave_pressure": 0.0015647760312616445,
+          "tension_pressure": 0.019059729981644433
+        },
+        {
+          "t": 196.0,
+          "radius": 1.0316828913086054,
+          "wave_coordinate": 0.713942201578416,
+          "wave_energy": 0.2439350790076344,
+          "wave_action": 0.25166364760218934,
+          "wave_pressure": 0.03470444483406533,
+          "tension_pressure": 0.01938580175021768
+        },
+        {
+          "t": 198.0,
+          "radius": 1.015201976795919,
+          "wave_coordinate": -0.35191042582097276,
+          "wave_energy": 0.24659818014147422,
+          "wave_action": 0.25034695995390077,
+          "wave_pressure": 0.009138862211562675,
+          "tension_pressure": 0.019700513254635336
+        },
+        {
+          "t": 200.0,
+          "radius": 0.9972219726769694,
+          "wave_coordinate": -0.42109847829918984,
+          "wave_energy": 0.2530746718777613,
+          "wave_action": 0.25237162352451786,
+          "wave_pressure": 0.014308637603297307,
+          "tension_pressure": 0.020055715325156206
+        }
+      ]
+    },
+    "no_tension": {
+      "completed": false,
+      "dt": 0.01,
+      "end_time": 83.47,
+      "radius_min": 1.0,
+      "radius_max": 4.999825538471773,
+      "max_scaled_energy_error": 6.244916566977565e-06,
+      "late_mean_radius_pressure_tension": null,
+      "passes_radius_lock_screen": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 1.0,
+          "wave_coordinate": 0.7089815403622064,
+          "wave_energy": 0.25132741228718347,
+          "wave_action": 0.25132741228718347,
+          "wave_pressure": 0.04,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 2.0,
+          "radius": 1.006056298390629,
+          "wave_coordinate": -0.2939565486844435,
+          "wave_energy": 0.25049607074447533,
+          "wave_action": 0.252013149694584,
+          "wave_pressure": 0.006671830339939509,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 4.0,
+          "radius": 1.0206378136504495,
+          "wave_coordinate": -0.48140716747675694,
+          "wave_energy": 0.24512139416438444,
+          "wave_action": 0.25018016381888736,
+          "wave_pressure": 0.016651638255222305,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 6.0,
+          "radius": 1.044697370209338,
+          "wave_coordinate": 0.6759040687996575,
+          "wave_energy": 0.24178393515772525,
+          "wave_action": 0.2525910412181407,
+          "wave_pressure": 0.029215125096599563,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 8.0,
+          "radius": 1.0795582945609892,
+          "wave_coordinate": 0.039125670039993274,
+          "wave_energy": 0.23283141101500754,
+          "wave_action": 0.25135508099559023,
+          "wave_pressure": 8.307746176965544e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 10.0,
+          "radius": 1.120756217094568,
+          "wave_coordinate": -0.736099554066041,
+          "wave_energy": 0.22330085366033647,
+          "wave_action": 0.25026582002234643,
+          "wave_pressure": 0.024384141051062413,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 12.0,
+          "radius": 1.172207822790153,
+          "wave_coordinate": 0.2795169470180229,
+          "wave_energy": 0.2165534035006908,
+          "wave_action": 0.2538455936353422,
+          "wave_pressure": 0.0028092044491097585,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 14.0,
+          "radius": 1.2290867977183286,
+          "wave_coordinate": 0.7006500335339763,
+          "wave_energy": 0.20203120366961047,
+          "wave_action": 0.24831388515746097,
+          "wave_pressure": 0.013927708277496472,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 16.0,
+          "radius": 1.294207605179904,
+          "wave_coordinate": -0.3770504323804408,
+          "wave_energy": 0.19703608738561196,
+          "wave_action": 0.25500560278935114,
+          "wave_pressure": 0.0031157979306139154,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 18.0,
+          "radius": 1.3638100385665013,
+          "wave_coordinate": -0.7551996010891062,
+          "wave_energy": 0.18185670860423997,
+          "wave_action": 0.24801800477512548,
+          "wave_pressure": 0.00961931674979793,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 20.0,
+          "radius": 1.4405744871227588,
+          "wave_coordinate": 0.23468865459420377,
+          "wave_energy": 0.17640631099148718,
+          "wave_action": 0.25412643098177956,
+          "wave_pressure": 0.0007064732645104416,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 22.0,
+          "radius": 1.520062483717561,
+          "wave_coordinate": 0.8726409115007727,
+          "wave_energy": 0.16505407649977777,
+          "wave_action": 0.2508925094719605,
+          "wave_pressure": 0.007467136212480484,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 24.0,
+          "radius": 1.6062531962480915,
+          "wave_coordinate": 0.20410839005365233,
+          "wave_energy": 0.15506552658085893,
+          "wave_action": 0.24907449769839804,
+          "wave_pressure": 0.00031005720365999883,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 26.0,
+          "radius": 1.694378178208015,
+          "wave_coordinate": -0.7683640619585682,
+          "wave_energy": 0.15154196528760527,
+          "wave_action": 0.2567693990660749,
+          "wave_pressure": 0.003364127721932586,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 28.0,
+          "radius": 1.7867422925648133,
+          "wave_coordinate": -0.8017249144144174,
+          "wave_energy": 0.13778318358091432,
+          "wave_action": 0.24618304130824142,
+          "wave_pressure": 0.0028088678615207016,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 30.0,
+          "radius": 1.8832214898604096,
+          "wave_coordinate": 0.08008775265955881,
+          "wave_energy": 0.13406509500898572,
+          "wave_action": 0.25247426796109945,
+          "wave_pressure": 2.154841561451889e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 32.0,
+          "radius": 1.9806360213553968,
+          "wave_coordinate": 0.8975049452107029,
+          "wave_energy": 0.12950261177270797,
+          "wave_action": 0.2564975377366289,
+          "wave_pressure": 0.0021030057997240012,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 34.0,
+          "radius": 2.081672517347945,
+          "wave_coordinate": 0.8814837014470344,
+          "wave_energy": 0.11814391129764547,
+          "wave_action": 0.24593693324030197,
+          "wave_pressure": 0.0015818185573773665,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 36.0,
+          "radius": 2.1859064738321075,
+          "wave_coordinate": 0.10531608315265466,
+          "wave_energy": 0.11443055996821751,
+          "wave_action": 0.25013450183875985,
+          "wave_pressure": 1.7685675489762152e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 38.0,
+          "radius": 2.2907114527758288,
+          "wave_coordinate": -0.7648044901562576,
+          "wave_energy": 0.11271914856018439,
+          "wave_action": 0.25820704455395443,
+          "wave_pressure": 0.000737970596445703,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 40.0,
+          "radius": 2.3974101402376298,
+          "wave_coordinate": -1.0949441901130241,
+          "wave_energy": 0.10454600081390934,
+          "wave_action": 0.25063964247255777,
+          "wave_pressure": 0.0012046542397122625,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 42.0,
+          "radius": 2.507230920057845,
+          "wave_coordinate": -0.7053424018181613,
+          "wave_energy": 0.09761355714424282,
+          "wave_action": 0.24473972868887892,
+          "wave_pressure": 0.00039959352793334684,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 44.0,
+          "radius": 2.6184175063495063,
+          "wave_coordinate": 0.11609080327204599,
+          "wave_energy": 0.09655938671492459,
+          "wave_action": 0.25283278857673047,
+          "wave_pressure": 8.713472979076716e-06,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 46.0,
+          "radius": 2.729887334533028,
+          "wave_coordinate": 0.879797842468065,
+          "wave_energy": 0.09472382907796756,
+          "wave_action": 0.258585381278415,
+          "wave_pressure": 0.0004062864170275715,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 48.0,
+          "radius": 2.8428241663935063,
+          "wave_coordinate": 1.1958027356188938,
+          "wave_energy": 0.08855984171527401,
+          "wave_action": 0.2517600582001647,
+          "wave_pressure": 0.000612857108657935,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 50.0,
+          "radius": 2.958059195085302,
+          "wave_coordinate": 0.9437998710107859,
+          "wave_energy": 0.08264067250866981,
+          "wave_action": 0.24445600120230387,
+          "wave_pressure": 0.00031297933266239027,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 52.0,
+          "radius": 3.074660083415595,
+          "wave_coordinate": 0.273403372292474,
+          "wave_energy": 0.08074687429996338,
+          "wave_action": 0.24826919127067398,
+          "wave_pressure": 2.1647727961591832e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 54.0,
+          "radius": 3.1915004372921647,
+          "wave_coordinate": -0.5127538375764231,
+          "wave_energy": 0.08049685855407276,
+          "wave_action": 0.25690575927596876,
+          "wave_pressure": 6.3187828894739e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 56.0,
+          "radius": 3.3087351920076298,
+          "wave_coordinate": -1.1073310786509805,
+          "wave_energy": 0.07803183534878069,
+          "wave_action": 0.25818667971545567,
+          "wave_pressure": 0.00024605662393333596,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 58.0,
+          "radius": 3.4272615191556746,
+          "wave_coordinate": -1.31104294831856,
+          "wave_energy": 0.07321263002631019,
+          "wave_action": 0.2509188296053542,
+          "wave_pressure": 0.0002892595790949784,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 60.0,
+          "radius": 3.5474054388633394,
+          "wave_coordinate": -1.0805391958373904,
+          "wave_energy": 0.0689006705500618,
+          "wave_action": 0.24441861345062033,
+          "wave_pressure": 0.00016539297104438432,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 62.0,
+          "radius": 3.6685817837545716,
+          "wave_coordinate": -0.5139280917936584,
+          "wave_energy": 0.06708269469025094,
+          "wave_action": 0.2460983517458241,
+          "wave_pressure": 3.1630337379924555e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 64.0,
+          "radius": 3.7900301688732814,
+          "wave_coordinate": 0.20391111599837683,
+          "wave_energy": 0.0669175899870318,
+          "wave_action": 0.25361968487914316,
+          "wave_pressure": 4.231151774480848e-06,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 66.0,
+          "radius": 3.9115665435540166,
+          "wave_coordinate": 0.8683419862381558,
+          "wave_energy": 0.06620989802244097,
+          "wave_action": 0.25898442195670335,
+          "wave_pressure": 6.552667374334067e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 68.0,
+          "radius": 4.0336123738606515,
+          "wave_coordinate": 1.31209140245246,
+          "wave_energy": 0.06377499916449925,
+          "wave_action": 0.2572436257728769,
+          "wave_pressure": 0.00012830616148013397,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 70.0,
+          "radius": 4.156668654279529,
+          "wave_coordinate": 1.4404090257168412,
+          "wave_energy": 0.0602415475281636,
+          "wave_action": 0.2504041522956081,
+          "wave_pressure": 0.00013305609454295565,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 72.0,
+          "radius": 4.280839122958648,
+          "wave_coordinate": 1.2414297502303504,
+          "wave_energy": 0.057139828862627966,
+          "wave_action": 0.24460641487429954,
+          "wave_pressure": 8.530802713582648e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 74.0,
+          "radius": 4.4057841285654975,
+          "wave_coordinate": 0.7755521773066552,
+          "wave_energy": 0.055493715632648585,
+          "wave_action": 0.2444933315694502,
+          "wave_pressure": 2.8833416698081242e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 76.0,
+          "radius": 4.531031017228513,
+          "wave_coordinate": 0.1514423197006816,
+          "wave_energy": 0.055129951731910244,
+          "wave_action": 0.24979552127559612,
+          "wave_pressure": 9.556513259559467e-07,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 78.0,
+          "radius": 4.656319117470859,
+          "wave_coordinate": -0.5028724809726467,
+          "wave_energy": 0.05504437085048879,
+          "wave_action": 0.25630415630028663,
+          "wave_pressure": 9.193739467592231e-06,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 80.0,
+          "radius": 4.781726715319988,
+          "wave_coordinate": -1.0668183112289975,
+          "wave_energy": 0.05426157945239474,
+          "wave_action": 0.259464044082974,
+          "wave_pressure": 3.622824534282785e-05,
+          "tension_pressure": 0.0
+        },
+        {
+          "t": 82.0,
+          "radius": 4.907548412174348,
+          "wave_coordinate": -1.447510859743052,
+          "wave_energy": 0.05245430640151215,
+          "wave_action": 0.2574220480924477,
+          "wave_pressure": 5.857480272097038e-05,
+          "tension_pressure": 0.0
+        }
+      ]
+    },
+    "no_recurrence": {
+      "completed": false,
+      "dt": 0.01,
+      "end_time": 30.34,
+      "radius_min": 0.050254422422398144,
+      "radius_max": 1.0,
+      "max_scaled_energy_error": 7.8757436128285e-09,
+      "late_mean_radius_pressure_tension": null,
+      "passes_radius_lock_screen": false,
+      "trace": [
+        {
+          "t": 0.0,
+          "radius": 1.0,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.02
+        },
+        {
+          "t": 2.0,
+          "radius": 0.9949776612694909,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.020100953798783804
+        },
+        {
+          "t": 4.0,
+          "radius": 0.9799610928506127,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.02040897352549163
+        },
+        {
+          "t": 6.0,
+          "radius": 0.9551011313297033,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.020940190880263915
+        },
+        {
+          "t": 8.0,
+          "radius": 0.9206474870019343,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.021723841407670055
+        },
+        {
+          "t": 10.0,
+          "radius": 0.8769462356119339,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.02280641524852887
+        },
+        {
+          "t": 12.0,
+          "radius": 0.8244363421345584,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.02425899851554063
+        },
+        {
+          "t": 14.0,
+          "radius": 0.7636452515133005,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.026190171366045165
+        },
+        {
+          "t": 16.0,
+          "radius": 0.6951835906459528,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.028769378721117882
+        },
+        {
+          "t": 18.0,
+          "radius": 0.6197390348343755,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.03227164802576132
+        },
+        {
+          "t": 20.0,
+          "radius": 0.5380694003078835,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.03716992638599406
+        },
+        {
+          "t": 22.0,
+          "radius": 0.45099503220365594,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.04434638648296373
+        },
+        {
+          "t": 24.0,
+          "radius": 0.3593905644644212,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.05564976373212478
+        },
+        {
+          "t": 26.0,
+          "radius": 0.2641761344226086,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.07570706583209194
+        },
+        {
+          "t": 28.0,
+          "radius": 0.16630814031762264,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.12025869546615767
+        },
+        {
+          "t": 30.0,
+          "radius": 0.06676963458400485,
+          "wave_coordinate": 0.0,
+          "wave_energy": 0.0,
+          "wave_action": 0.0,
+          "wave_pressure": 0.0,
+          "tension_pressure": 0.2995373589297903
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Action J is used for the averaged prediction and initial condition only; it is not reset or constrained during dynamics.",
+    "Frequency inverse radius is a declared mode-reduction assumption; carrier confinement is not derived.",
+    "Surface coefficient and boundary kinetic weight are illustrative, not measured Mass Effect.",
+    "No spatial FCC field, phase-locking three-vortex knot, shell or Mirror response in this reduced calculation.",
+    "Radius lock does not imply full-state or phase lock.",
+    "No penetration force; radius is a moving boundary coordinate with reciprocal pressure-work."
+  ]
+}

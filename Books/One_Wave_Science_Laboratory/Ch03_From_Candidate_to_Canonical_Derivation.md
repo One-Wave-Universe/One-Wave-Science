@@ -100,3 +100,101 @@ A PASS accepts only its declared scope. FAIL, INCONCLUSIVE and INVALID results s
 Keep the exact energy and passive response controls. Keep the localized nonlinear branch and its detector trace. Also keep the coupling-off survival, approximately 15% spacing energy shift, shifted-seed branch and missing norm-selection rule. Those observations decide where the next calculation has to go.
 
 The objective is a field law whose excitations, measured responses and classifications arise together under reproducible constraints. That is a stronger result than either an unsupported prediction or a list of unresolved questions, because every next step has a specific observable and a condition that can reject it.
+
+## Constrained native compression follow-up
+
+[The native compression derivation](../../solvers/NATIVE_COMPRESSION_BRIDGE.md) retains displacement and enforces compression as minus its discrete divergence on the twelve-neighbor FCC graph. Ten controls pass (including a conditional stationary-scaling identity): constrained stationarity, zero total compression, reciprocal and reduced force gradients, coupling-off and uniform-density controls, the canonical linear limit, and timestep refinement. This is a constitutive hypothesis, with its coupling terms still assumed. The independently eliminated local compression shortcut fails the periodic divergence constraint. The small-input dynamic run spreads; no self-held localization or complete four-interaction requirement has been established. See the linked code and raw report for scope and the next branch test.
+
+The follow-up also proves an obstruction within this candidate: every stationary state with nonzero displacement is an energy saddle under joint excitation/displacement scaling, since the two-direction Hessian has determinant -16 U². The uniform zero-displacement state is not localized. This excludes stable static localization under this exact real unconstrained law; it does not exclude time-periodic localized recurrence or establish a failure of the complete four-interaction architecture. The next test is a periodic recurrence search and stability controls, rather than another static-minimum search.
+
+## Periodic recurrence screen with retained displacement
+
+[The executed search](../../solvers/PERIODIC_COMPRESSION_SEARCH.md) tests six initial states under the unchanged reciprocal FCC candidate, then adds two localization-refinement controls and three growth-onset timestep controls. No seed passes the declared localized full-state recurrence screen. The completed small coupled seed spreads; enlarging the domain reduces its minimum late localized fraction from about 9.6% to 1.6%. Higher-amplitude endpoints lose numerical energy control and remain invalid for physical interpretation. Smaller timesteps reproduce the earlier growth onset with second-order energy convergence. Raw traces and measured plots are published; phase/velocity seed families and periodic-orbit searches remain open. No clock-rate or translation claim follows from this finite screen.
+
+## Phase/velocity search and radiation-band constraint
+
+[The follow-up experiment](../../solvers/PHASE_VELOCITY_SEARCH.md) adds seven standing, kicked, quadrature, traveling and angular initial cases under the unchanged real reciprocal FCC law. Full-state returns use a time-5 reference, allowing an initial transient. No seed qualifies; two refinement runs preserve failure for the best completed coupled angular case. Enlarging the box reduces its minimum late localized activity from about 13.7% to 2.6%. Numerically invalid amplitude-stop endpoints remain flagged. A separate vacuum-band calculation derives exact scalar/transverse bands and a sampled plus rigorously bounded longitudinal range. There is no low-frequency gap in this candidate, so a periodic orbit must address outgoing radiation channels and its compression harmonics. The next step is bounded periodic-orbit shooting/continuation with nonzero-state and radiation controls, rather than repeated similar seed screens.
+
+
+### Direct retained-state recurrence solve
+
+The [finite-harmonic One-Wave recurrence solve](../../solvers/PERIODIC_ORBIT_SOLVE.md)
+finds three small periodic-box near-recurrences while retaining displacement and
+compression. All survive ten fitted periods with controlled energy error; the
+smallest state shows approximately fourfold improvement when dt is halved. None
+passes the declared localization screen: central activity is 58.8–64.5%, below
+80%. The two larger amplitudes also exceed the unprojected harmonic-defect limit.
+This advances beyond failed seed launches, but does not establish a Persistent
+Mode, Mass Effect or clock. The next bounded calculation is larger-domain and
+higher-harmonic continuation of the smallest branch, with zero-mean displacement
+and a nonzero-state anchor. Knot, shell, Mirror and Boundary-Tension Weave closure
+remain separate missing mechanisms; no node gate is promoted.
+
+
+### Domain check identifies what the recurrence still lacks
+
+The [domain and harmonic check](../../solvers/RECURRENCE_DOMAIN_CHECK.md) refines
+the smallest recurrence to full equation defect below 9e-12, then embeds and
+resolves it on 108 FCC sites. Central radius-1 activity falls from 64.55% to
+31.07%; even the radius-2 diagnostic falls from 98.55% to 75.05%. Near-periodic
+return remains numerically controlled, but localization weakens. A spectral
+projection identifies the upper-band eigenspace; its geometry and localization
+bounds explain the broad tails. The leading reciprocal compression correction
+lowers this branch into the Ground propagation band. No Persistent Mode or Mass
+Effect is assigned.
+
+A second exact closure check shows that the current compression law cannot
+create curl from zero displacement/velocity curl. C-319/C-320 supply the intended
+rotation/path-reorganization handoff, but its full reciprocal work law is absent
+from this reduced solver. Simply multiplying the present force by a positive
+accessibility tensor produces a nonsymmetric derivative in the current unit
+kinetic coordinates. The next physical step is a common energy/force closure
+for boundary, rotation and reorganization, preserving C-317 and D-412 rather
+than naming this near-linear branch as a complete knot.
+
+
+
+### Reciprocal balance and conditional pressure–tension radius lock
+
+The [balance/lock calculation](../../solvers/RECIPROCAL_BALANCE_AND_LOCK.md)
+supplies two separately scoped candidate cores. The reciprocal FCC path/circulation
+energy passes six work/recovery controls and permits a small timestep-converged
+compression-to-curl response. All six trajectories still fail the spatial
+return/localization screen. A separate freely moving spherical radius and assumed
+cavity recurrence give R_*³=J a_omega/(8 pi sigma_T), with positive averaged
+curvature 24 pi sigma_T. Radius remains bounded over 200 time units after ±10%
+radius perturbations; removing tension or recurrence loses that lock. Halving dt
+improves energy error by four. This is a reduced radial lock, not a self-held
+native spatial knot. Carrier confinement and its inverse-radius frequency are
+assumed. Next replace that assumption with a computed spatial recurrence and
+evolving boundary work law, retaining knot, shell, Mirror and weave coupling.
+
+
+
+### Computed spatial pressure replaces the assumed radial carrier
+
+The [spatial pressure and closure map](../../solvers/SPATIAL_BOUNDARY_PRESSURE_AND_GAPS.md)
+identifies and supplies the immediate field-to-boundary feedback for a computed
+13-site four-role FCC cavity. The moving material metric and stiffness both
+contribute to the reciprocal radius force. Under the same action and tension
+inputs, the computed spectrum changes the balance radius from 1 to .758813219;
+pressure and tension both equal .0263569473. Four 200-unit trajectories remain
+bounded, including ±10% radius perturbations and a tighter-tolerance control.
+
+Uniform relative-phase recurrences have nonzero frequencies but zero cycle-averaged radius
+pressure. Their energy cannot be assigned to confinement work merely because
+they recur. Five implementation/outcome checks pass. The reflecting graph and
+self-similar spherical geometry remain prescribed, so this is not emergent Knot
+Lock. The report specifies the remaining native-field/skin map, nonspherical
+surface dynamics, exterior/Mirror channels, circulation/phase topology, shell
+feedback and constitutive calibration in dependency order.
+
+
+### Current balance/lock work index
+
+[One-Wave lock status](../../solvers/ONE_WAVE_LOCK_STATUS.md) collects the verified
+native compression, recurrence, domain, reciprocal path and moving-boundary
+results. It identifies the next construction as one native field/closed-skin
+work law with geometry derivatives and exterior/Mirror channels. The complete
+architecture is retained; reduced radius locks do not promote to spatial Knot
+Lock or measured Mass Effect.
