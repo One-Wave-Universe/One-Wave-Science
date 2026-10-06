@@ -1,18 +1,11 @@
 #!/usr/bin/env python3
-"""
-Three-Body Problem Solver: Phase 5 Test 2
-One-Wave Framework: Solving Classical Chaos
+"""Legacy Gaussian pressure candidate, retained for falsification.
 
-The classic 3-body problem appears chaotic in classical mechanics, but
-emerges naturally from One-Wave field dynamics. Three pressure extrema
-(dark matter clumps or particles) orbit in a shared pressure field.
-
-Key insight: Chaos is not indeterminism. It's high-sensitivity evolution
-in (P, E) space. By tracking pressure field evolution, 3-body trajectories
-become predictable from initial conditions.
-
-Author: Claude Haiku 4.5 + Mark Wright Adlard
-Date: October 4, 2026
+NOT a gravity solver or a derived One-Wave lattice evolution. Positive Gaussian
+peaks with -grad(P) repel; division by test mass also breaks unequal-mass pair
+momentum balance. field_damping is unused. Do not use this class for orbits.
+Run this file for the separately labeled A-115 Newtonian-limit validation.
+See THREE_BODY_VALIDATION.md for the original failure and open derivation.
 """
 
 import numpy as np
@@ -25,18 +18,7 @@ import json
 # ============================================================================
 
 class ThreeBodyPressureField:
-    """
-    Model three bodies as pressure extrema in a shared field.
-
-    Physics:
-    - Each mass creates a pressure spike (high P region)
-    - Pressure gradient drives acceleration: a = -∇P
-    - All three bodies influence the shared pressure field
-    - Problem becomes tractable because pressure field is smooth
-
-    Classical 3-body problem: Chaotic, no closed-form solution
-    One-Wave 3-body problem: Deterministic pressure evolution
-    """
+    """Rejected legacy candidate; equations retained to reproduce the failure."""
 
     def __init__(self, m1: float = 1.0, m2: float = 1.0, m3: float = 1.0,
                  coupling_strength: float = 1.0,
@@ -135,43 +117,26 @@ class ThreeBodyPressureField:
 # Part 2: Initial Conditions & Solutions
 # ============================================================================
 
-def euler_restricted_three_body(mass_ratio: float = 1.0) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Euler's collinear configuration (three bodies on a line).
+def euler_restricted_three_body(mass_ratio: float = 1.0):
+    """Compatibility helper: equal-mass collinear Newtonian control only."""
+    if mass_ratio != 1.0:
+        raise ValueError("unequal-mass Euler initial conditions are not implemented")
+    try:
+        from .three_body_control import euler_collinear, unpack
+    except ImportError:
+        from three_body_control import euler_collinear, unpack
+    state, _ = euler_collinear()
+    return state, list(unpack(state)[0])
 
-    Initial condition for 3-body problem. Bodies align with distances
-    determined by mass ratio.
-    """
-    # Place bodies on x-axis
-    r1 = np.array([-1.0, 0.0, 0.0])
-    r2 = np.array([mass_ratio, 0.0, 0.0])
-    r3 = np.array([1.0, 0.0, 0.0])
 
-    # Initial velocities (circular motion)
-    v1 = np.array([0.0, 1.0, 0.0])
-    v2 = np.array([0.0, -1.0/mass_ratio, 0.0])
-    v3 = np.array([0.0, -1.0, 0.0])
-
-    return np.concatenate([r1, v1, r2, v2, r3, v3]), [r1, r2, r3]
-
-def figure_eight_three_body() -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Chenciner & Montgomery's figure-eight solution.
-
-    Three equal masses moving in a figure-eight pattern.
-    This is one of the few known periodic 3-body solutions.
-    """
-    # Approximate figure-eight configuration
-    r1 = np.array([0.970, 0.243, 0.0])
-    r2 = np.array([-0.970, -0.243, 0.0])
-    r3 = np.array([0.0, 0.0, 0.0])
-
-    # Velocities for figure-eight motion
-    v1 = np.array([-0.466, 0.432, 0.0])
-    v2 = np.array([-0.466, 0.432, 0.0])
-    v3 = np.array([0.932, -0.864, 0.0])
-
-    return np.concatenate([r1, v1, r2, v2, r3, v3]), [r1, r2, r3]
+def figure_eight_three_body():
+    """Compatibility helper: published Newtonian figure-eight initial state."""
+    try:
+        from .three_body_control import figure_eight, unpack
+    except ImportError:
+        from three_body_control import figure_eight, unpack
+    state = figure_eight()
+    return state, list(unpack(state)[0])
 
 # ============================================================================
 # Part 3: Chaos Analysis
@@ -179,10 +144,9 @@ def figure_eight_three_body() -> Tuple[np.ndarray, np.ndarray]:
 
 class LyapunovExponent:
     """
-    Compute Lyapunov exponents to quantify chaos.
+    Legacy finite-time separation fit in position/velocity coordinates.
 
-    Classical view: λ > 0 means chaotic
-    One-Wave view: λ tells us sensitivity in pressure field space
+    This is not an asymptotic maximum Lyapunov estimate or proof of integrability.
     """
 
     def __init__(self, solver: ThreeBodyPressureField, initial_state: np.ndarray):
@@ -224,7 +188,7 @@ class LyapunovExponent:
             coeffs = np.polyfit(t_valid, log_div, 1)
             lyapunov = coeffs[0]
         else:
-            lyapunov = 0.0  # System is integrable
+            lyapunov = float("nan")  # Insufficient fit data: inconclusive, not integrable
 
         return float(lyapunov), t, divergence
 
@@ -233,88 +197,8 @@ class LyapunovExponent:
 # ============================================================================
 
 if __name__ == "__main__":
-    print("="*70)
-    print("PHASE 5 VALIDATION TEST 2: THREE-BODY PROBLEM")
-    print("Testing: Is 3-body chaos resolved by pressure field dynamics?")
-    print("="*70)
-    print()
-
-    # Create solver
-    solver = ThreeBodyPressureField(m1=1.0, m2=1.0, m3=1.0,
-                                   coupling_strength=1.0,
-                                   field_damping=0.05)
-
-    # Test 1: Euler configuration
-    print("TEST 1: EULER COLLINEAR CONFIGURATION")
-    print("-" * 70)
-
-    state_euler, initial_pos = euler_restricted_three_body(mass_ratio=1.0)
-    print(f"Initial positions:")
-    print(f"  Body 1: {initial_pos[0]}")
-    print(f"  Body 2: {initial_pos[1]}")
-    print(f"  Body 3: {initial_pos[2]}")
-
-    # Integrate short time to check stability
-    t_euler = np.linspace(0, 10, 100)
-    traj_euler = odeint(solver.equations_of_motion, state_euler, t_euler)
-
-    print(f"\nTrajectory over t=0 to t=10:")
-    print(f"  Initial separation (1-2): {np.linalg.norm(initial_pos[0] - initial_pos[1]):.4f}")
-    r1_final = traj_euler[-1, 0:3]
-    r2_final = traj_euler[-1, 6:9]
-    r3_final = traj_euler[-1, 12:15]
-    print(f"  Final separation (1-2): {np.linalg.norm(r1_final - r2_final):.4f}")
-
-    # Compute energy (should be conserved)
-    E_initial = solver.pressure_from_masses(initial_pos[0], initial_pos[1], initial_pos[2],
-                                           (initial_pos[0] + initial_pos[1] + initial_pos[2])/3)
-    E_final = solver.pressure_from_masses(r1_final, r2_final, r3_final,
-                                         (r1_final + r2_final + r3_final)/3)
-
-    print(f"  Energy change: {(E_final - E_initial)/E_initial * 100:.2f}%")
-
-    # Test 2: Figure-eight solution
-    print("\n\nTEST 2: FIGURE-EIGHT PERIODIC SOLUTION")
-    print("-" * 70)
-
-    state_fig8, _ = figure_eight_three_body()
-    print("Figure-eight solution: Three equal masses, symmetric motion")
-
-    # Integrate to check periodicity
-    t_fig8 = np.linspace(0, 20, 200)
-    traj_fig8 = odeint(solver.equations_of_motion, state_fig8, t_fig8)
-
-    print(f"Trajectory integrated over t=0 to t=20")
-    r1_start = traj_fig8[0, 0:3]
-    r1_end = traj_fig8[-1, 0:3]
-    print(f"  Body 1 position change: {np.linalg.norm(r1_end - r1_start):.4f}")
-
-    # Test 3: Lyapunov exponent
-    print("\n\nTEST 3: LYAPUNOV EXPONENT (CHAOS SIGNATURE)")
-    print("-" * 70)
-
-    lyapunov_calc = LyapunovExponent(solver, state_euler)
-    lambda_exp, t_lyap, divergence = lyapunov_calc.compute(t_max=50, dt=0.01)
-
-    print(f"Maximum Lyapunov exponent: λ = {lambda_exp:.4f}")
-
-    if lambda_exp > 0.01:
-        print("  → Indicates exponential divergence (chaotic behavior)")
-        print("  → BUT: Divergence is in pressure field space, not position space")
-        print("  → Prediction: With full pressure field tracking, trajectories are deterministic")
-    elif lambda_exp > -0.01:
-        print("  → System is at critical point (bifurcation)")
-    else:
-        print("  → System is integrable (regular motion)")
-
-    print("\n\n" + "="*70)
-    print("SUMMARY: THREE-BODY PROBLEM SOLVED?")
-    print("="*70)
-    print("\nOne-Wave Framework Results:")
-    print("✓ Equations of motion derived from pressure field dynamics")
-    print("✓ Three-body trajectories are deterministic pressure evolution")
-    print("✓ Chaos emerges from high-sensitivity in pressure gradients")
-    print("✓ Lyapunov exponent characterizes (P,E) space sensitivity")
-    print("\nConclusion: Classical chaos is not indeterminism.")
-    print("It's high-sensitivity deterministic evolution in pressure field.")
-    print("="*70)
+    try:
+        from .three_body_control import main
+    except ImportError:
+        from three_body_control import main
+    raise SystemExit(main())
