@@ -15,7 +15,10 @@ always produce the same sequence of RouteDecisions.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 from . import policy
+from . import recall_integration
 from . import state_machine_a as sm_a
 from . import state_machine_b as sm_b
 from .models import (
@@ -30,6 +33,8 @@ from .models import (
 )
 from ..parser.core import build_problem
 from ..parser.models import GeneratedProblem, RulePacket
+from ..recall import worker as recall_worker
+from ..recall.models import RecallConfig, RecallRecord
 
 
 class RouterLoop:
@@ -42,6 +47,8 @@ class RouterLoop:
         config: policy.PolicyConfig,
         base_seed: int,
         packet_id_prefix: str = "cycle",
+        recall_config: RecallConfig | None = None,
+        recall_inverses: Mapping[str, str] | None = None,
     ):
         self.config = config
         self.base_seed = base_seed
@@ -54,6 +61,16 @@ class RouterLoop:
         self._last_error_kind: str | None = None
         self._consecutive_same_error: int = 0
         self._problems_by_id: dict[str, GeneratedProblem] = {}
+
+        # Phase 3: recall bookkeeping, instance state like everything else
+        # on this object -- see recall_integration.py for the demo
+        # RULE_INVERSES config this defaults to.
+        self.recall_config: RecallConfig = recall_config if recall_config is not None else RecallConfig()
+        self.recall_inverses: dict[str, str] = dict(
+            recall_inverses if recall_inverses is not None else recall_integration.RULE_INVERSES
+        )
+        self.recall_records: dict[str, RecallRecord] = {}
+        self._known_recall_rule_ids = recall_integration.known_rule_ids(config, self.recall_inverses)
 
     def generate_problem(self) -> GeneratedProblem:
         """IDLE -> PRIMED -> EXECUTING.
@@ -137,6 +154,14 @@ class RouterLoop:
         self._last_error_kind = evidence.error_kind
 
         self.cycle_count += 1
+        current_cycle = self.cycle_count
+
+        # Phase 3: update recall records from the SAME authenticated
+        # evidence just consumed above -- never a separate/parallel path,
+        # so forged/stale/replayed evidence can no more reach recall state
+        # than it can reach curriculum state.
+        self._update_recall_from_evidence(evidence, cycle=current_cycle)
+
         next_route, next_index = policy.decide_next_route(
             config=self.config,
             current=self.route,
@@ -144,14 +169,67 @@ class RouterLoop:
             outcome=evidence.outcome,
             rules_satisfied=not evidence.missing_rules,
             consecutive_same_error=self._consecutive_same_error,
-            seed=self.base_seed + self.cycle_count,
+            seed=self.base_seed + current_cycle,
         )
+        due_rule_ids = self._due_recall_rule_ids(cycle=current_cycle)
+        next_route = recall_integration.inject_due_recall(next_route, due_rule_ids)
+
         self.route = next_route
         self.curriculum_index = next_index
 
         self.evaluator_state = sm_b.acknowledge(self.evaluator_state)
         self.task_state = sm_a.resolve_cycle(self.task_state)
         return next_route
+
+    def _update_recall_from_evidence(self, evidence: EvaluationEvidence, *, cycle: int) -> None:
+        """For each rule this (just-finished) cycle targeted, record a
+        recall success/miss if it was already tracked, or start tracking
+        it if it was just demonstrated for the first time. A miss on a
+        rule that isn't tracked yet is simply not a recall event (the
+        rule hasn't been learned, so there's nothing to move closer).
+
+        Builds the update on a local copy and only assigns it to
+        self.recall_records once every rule in this cycle's target set has
+        been processed without error -- if anything raises partway (e.g.
+        an unrecognized rule_id), self.recall_records is left exactly as
+        it was; a failure here can never partially mutate session state.
+        """
+        updated_records = dict(self.recall_records)
+        for rule_id in self.route.target_rules:
+            demonstrated = rule_id not in evidence.missing_rules
+            existing = updated_records.get(rule_id)
+            if existing is not None:
+                updated = (
+                    recall_worker.record_success(existing, cycle=cycle, config=self.recall_config)
+                    if demonstrated
+                    else recall_worker.record_miss(existing, cycle=cycle, config=self.recall_config)
+                )
+                updated_records[rule_id] = updated
+                inverse_id = recall_worker.ready_for_reverse(updated, inverses=self.recall_inverses)
+                if inverse_id is not None and inverse_id not in updated_records:
+                    updated_records[inverse_id] = recall_worker.schedule_reverse(
+                        inverse_id, cycle=cycle, config=self.recall_config
+                    )
+            elif demonstrated:
+                updated_records[rule_id] = recall_integration.schedule_learned_rule(
+                    rule_id,
+                    cycle=cycle,
+                    config=self.recall_config,
+                    known_rules=self._known_recall_rule_ids,
+                )
+        self.recall_records = updated_records
+
+    def _due_recall_rule_ids(self, *, cycle: int) -> tuple[str, ...]:
+        return tuple(r.rule_id for r in recall_worker.due_rules(self.recall_records, cycle=cycle))
+
+    def recall_snapshot(self) -> list[dict]:
+        """A JSON-serializable snapshot of every tracked RecallRecord."""
+        return recall_worker.snapshot(self.recall_records)
+
+    def restore_recall(self, data: list[dict]) -> None:
+        """Replace recall_records with records rebuilt from a snapshot
+        (each individually re-validated by RecallRecord's constructor)."""
+        self.recall_records = recall_worker.restore(data)
 
     def run_one_cycle(
         self, attempt_factory

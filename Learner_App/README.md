@@ -356,6 +356,107 @@ output (same `base_seed`).
 
 From the repository root, Phase 1 and Phase 2 tests together:
 
+## Phase 3: Six-Step Recursive Recall (issue #45)
+
+Phase 3 extends the Phase 2 `RouterLoop` — unmodified in its core
+contract — with a Recall Worker: a rule that's been mastered enters a
+six-step spaced-recall schedule, and the router folds due rules back into
+later problems instead of leaving them to fade.
+
+```text
+STATE MACHINE A <-> ROUTER LOOP <-> STATE MACHINE B
+                        |
+         +--------------+--------------+
+         |                             |
+  Problem Builder (Phase 1)     Recall Worker (Phase 3)
+```
+
+**The Recall Worker is a worker under Router authority, exactly like the
+Phase 1 problem builder — not a third state machine, and not a curriculum
+planner.** It lives in `Learner_App/recall/` and is fully domain-agnostic:
+`recall/models.py` and `recall/worker.py` never import `router` or
+`parser`, only ever handling `rule_id` strings and cycle numbers.
+
+- **`RecallRecord`** (`recall/models.py`) — one rule's position in the
+  schedule: `times_seen`/`times_correct`/`times_missed`,
+  `current_recall_step` (1–6, validated at construction —
+  `MalformedRecallRecordError` on anything inconsistent, including on
+  `restore()` from a snapshot), `next_due_cycle`, `success_streak`/
+  `error_streak`, `direction` (`"forward"` | `"reverse"`), and a `weight`
+  snapshot for inspection. Immutable — every update
+  (`record_success`/`record_miss` in `recall/worker.py`) returns a new
+  record.
+- **`RecallConfig`** — explicit gaps-per-step and step-size configuration;
+  no magic numbers in the algorithm itself.
+- The worker's whole public surface is *facts*: `due_rules()` (most
+  overdue first, deterministic tie-breaks), `is_due()`/`overdue_amount()`,
+  `ready_for_reverse()` (the *safe* accessor — returns `None`, never
+  invents a mapping, for a rule with no configured inverse) and its
+  strict counterpart `require_inverse_rule_id()` (raises
+  `InvalidInverseMappingError` for callers that already need one to
+  exist). It never returns a `RouteDecision` or anything like one.
+
+### The router decides, using the worker's facts
+
+`router/recall_integration.py` is where Phase 3's *decisions* live —
+domain-specific configuration and logic kept separate from the
+domain-agnostic worker, exactly as `policy.py` keeps `DEFAULT_CURRICULUM`
+separate from `decide_next_route()`'s algorithm:
+
+- `RULE_INVERSES` — the real declared inverse pairs for
+  `math/basic_equations` (`ADD_INVERSE` ↔ `SUB_INVERSE`,
+  `MUL_INVERSE` ↔ `DIV_INVERSE`). `EQ.IDENTITY` has no entry: it must
+  never get a fake inverse, and doesn't.
+- `inject_due_recall()` — tries each due rule in priority order and folds
+  the first *feasible* one into the current cycle's `target_rules`
+  alongside the curriculum's own rule, checking feasibility via the
+  adapter's public `validate_packet()` contract method only (never
+  touching `SUPPORTED_COMBOS` or any other adapter internal). Trying
+  candidates *in order* — not just the single most-overdue one — matters:
+  in v1, `MUL_INVERSE` + `DIV_INVERSE` together is never feasible (a term
+  can't carry both a coefficient and a divisor), and that candidate would
+  otherwise permanently out-rank and starve everything less overdue but
+  actually combinable behind it. Injection is always *additive* to the
+  curriculum's target, never a replacement — a recall-only cycle would
+  make the curriculum-advancement policy (which reads the same evidence)
+  evaluate the wrong thing.
+- `RouterLoop.route_next()` (Phase 2, extended) updates recall records
+  from the *same* authenticated evidence it already validated — there is
+  no separate/parallel path recall state can be reached through, so
+  forged/stale/replayed evidence can no more touch recall state than it
+  can touch curriculum state. The update is computed on a local copy and
+  only committed to `self.recall_records` once every rule has been
+  processed without error, so a failure partway (e.g. an unrecognized
+  `rule_id`) can never partially mutate session state.
+- Per-rule outcomes come straight from `EvaluationEvidence.missing_rules`/
+  `demonstrated_rules` (both already track specific rule IDs, not just an
+  overall pass/fail) — a multi-rule problem where one rule succeeds and
+  another doesn't updates each rule's `RecallRecord` independently, with
+  no ambiguity about which one to credit.
+
+### Snapshot / restore
+
+`RouterLoop.recall_snapshot()` / `.restore_recall()` (backed by
+`recall.worker.snapshot()`/`restore()`) give a JSON-serializable,
+rule_id-sorted list of records. `restore()` reconstructs each record
+through `RecallRecord`'s own constructor, so malformed/corrupted snapshot
+data is rejected exactly as a malformed record built directly would be.
+
+### Running the Phase 3 demo
+
+```bash
+python3 -m Learner_App.demo_phase3
+```
+
+Headless, no UI, no LLM/network. Uses a small demo-only curriculum and
+shortened recall gaps so the full six-step journey — initial learning,
+spacing farther out on success, a deliberate miss moving a rule closer,
+combination with a newer rule, and a completed rule's inverse getting
+scheduled *and successfully served* in reverse direction — completes in
+under 20 cycles. Running it twice produces byte-identical output.
+
+## Running the tests
+
 ```bash
 python3 -m unittest discover -s Learner_App/tests -t . -p "test_*.py" -v
 ```
@@ -375,3 +476,8 @@ Per issue #42 (Phase 2): no six-step flashcard/recursive recall system
 not build a generic workflow framework — `RouterLoop`/`policy.py` are
 concrete and specific to proving this one loop, not a reusable
 state-machine core with its own adapter contract.
+
+Per issue #45 (Phase 3): no UI, no LLM/network calls in the core loop, no
+free-form AI tutoring, no Phase 4 explanation/coach worker, no database/
+cloud persistence (snapshot/restore is a plain in-memory/JSON path only),
+no generic workflow engine, no additional state machines.

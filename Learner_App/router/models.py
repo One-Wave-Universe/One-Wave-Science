@@ -152,6 +152,11 @@ class RouteDecision:
     domain: str
     seed: int
     reason_code: str
+    # Phase 3: set when a due recall rule was folded into target_rules
+    # alongside the curriculum's own rule(s) for this cycle. None means no
+    # recall injection happened this cycle. Additive/defaulted so every
+    # Phase 2 construction of RouteDecision is unaffected.
+    recall_injected_rule_id: str | None = None
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "target_rules", _as_tuple(self.target_rules))
