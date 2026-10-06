@@ -77,8 +77,8 @@ class OneWaveHighEnergyValidator:
         return lambda_plus, lambda_minus
 
     def eigenvalue_to_frequency(self, lam: np.ndarray) -> np.ndarray:
-        """Convert eigenvalue λ to frequency ω via ω = -i ln(λ)."""
-        return -1j * np.log(lam)
+        """Convert eigenvalue λ to frequency ω via ω = i ln(λ)."""
+        return 1j * np.log(lam)
 
     def d602_longitudinal_frequency(self, k: np.ndarray) -> np.ndarray:
         """D-602 longitudinal mode (E-like): suppressed at high k."""
@@ -118,20 +118,21 @@ class OneWaveHighEnergyValidator:
 
         Fit the dispersion relation to extract effective mass.
         """
-        # Use real part of frequency
-        omega_real = np.real(omega)
+        # Use magnitude of frequency (robust to phase sign)
+        omega_mag = np.abs(omega)
 
         # At high k, slope approaches 1 (light speed)
         # Extract mass from curvature at low k
 
         # Simple extraction: use ω(0) as effective mass indicator
         k_small = k[k < 0.5]  # Low k regime
-        omega_small = omega_real[k < 0.5]
+        omega_small = omega_mag[k < 0.5]
 
         if len(k_small) > 2:
             # Fit low-k behavior: ω ≈ m + k²/(2m)
             # Extract m from ω(k=0)
-            omega_zero = np.interp(0, k_small, omega_small)
+            # Use max of low-omega values to find mass scale
+            omega_zero = np.max(omega_small[omega_small > 0]) if np.any(omega_small > 0) else 1e-6
             effective_mass = max(omega_zero, 1e-6)  # Avoid zero mass
         else:
             effective_mass = 1.0

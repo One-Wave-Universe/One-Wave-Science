@@ -19,13 +19,19 @@ Downstream: Book 1 Ch7 Photon, Book 1 Ch9 No Observer Effect, Book 5 cosmic tran
 
 One-Wave contains no expansion of space. This node must not use a cosmological scale factor, Hubble expansion term, or wavelength stretching by metric expansion.
 
+## Light Creation and Propagation
+
+Light is created by boundary conditions in the lattice (structural discontinuities, compressed regions, surface transitions). The created wave propagates through the lattice as a "traveling spark" — field oscillations constrained by friction.
+
 ## Propagation Law
 
-Let \(\ell\) be path length through a static field background and let \(E_\gamma=h\nu\) be the Propagating Light Mode energy. Use
+Let \(\ell\) be path length through a static field background and let \(E_\gamma=h\nu\) be the Propagating Light Mode energy. The friction in the lattice causes energy loss:
 
 \[
 \frac{dE_\gamma}{d\ell}=-\kappa_\gamma(\mathbf x,\nu,\chi,\nabla\chi)E_\gamma.
 \]
+
+This friction that creates the traveling spark is the same mechanism that causes redshift. The energy lost to friction returns to the compressed space for recycling.
 
 Then
 
@@ -60,7 +66,7 @@ Because \(E_\gamma=h\nu\),
 \frac{d\nu}{d\ell}=-\kappa_\gamma\nu.
 \]
 
-The model therefore changes the oscillation frequency of each surviving Propagating Light Mode while transferring the missing energy into the field.
+The model therefore changes the oscillation frequency of each surviving Propagating Light Mode while transferring the missing energy into the field. This energy dissipation feeds the recycling loop (E-529, E-530).
 
 ## Compression Dependence Candidate
 

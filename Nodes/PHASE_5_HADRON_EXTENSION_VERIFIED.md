@@ -1,3 +1,14 @@
+---
+node_id: "PHASE_5_HADRON_EXTENSION_VERIFIED"
+canonical_name: "Phase 5 Hadron Spectrum Extension — Verification by Consequence"
+namespace: "NODE"
+gate: "YELLOW"
+lifecycle: "ACTIVE"
+classification: "Verification / Applied Hadron Physics"
+claim_gate_detail: "YELLOW (framework verified for nucleons; extension to full spectrum still open)"
+metadata_standard: "I-06"
+---
+
 # Phase 5 Hadron Spectrum Extension — Verification by Consequence
 
 **Date:** October 4, 2026  

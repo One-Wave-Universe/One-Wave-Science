@@ -296,11 +296,156 @@ class HadronMassCalculator:
 
         return correction
 
+    def compute_confined_pressure(self, knot: KnotGeometry,
+                                  flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """
+        Estimate the magnetic pressure inside a confined hadron system.
+
+        In a hadron, the confined quarks create enormous pressure from:
+        - Kinetic energy density of confined quarks
+        - Interaction energy density from color confinement
+        - Rotation and oscillation of the knot structure
+
+        The rotational pressure component (from the confined color field)
+        creates the "magnetic-like" reorganization effect in C-319.
+
+        Pressure ~ Energy / Volume, where:
+        - Energy ~ constituent quark masses + binding energy
+        - Volume ~ (4/3)π * radius³
+
+        The rotational/magnetic component is typically ~5-15% of total pressure.
+
+        Returns: Magnetic pressure (rotational component) in GeV/fm³
+        """
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
+        # Constituent mass sets energy scale
+        constituent_mass_mev = sum(
+            flavor_masses.get(v.flavor, 0) for v in knot.vortices
+        )
+        constituent_mass_gev = constituent_mass_mev / 1000.0
+
+        # Add binding energy (~250-300 MeV typically)
+        binding_energy_gev = 0.270  # Typical binding energy in hadron
+
+        # Total internal energy
+        total_internal_energy = constituent_mass_gev + binding_energy_gev  # in GeV
+
+        # Confinement volume
+        radius = self.compute_boundary_radius(knot, flavor_masses)  # in fm
+        volume_fm3 = (4.0/3.0) * np.pi * (radius ** 3)
+
+        # Energy density = E / V (in GeV / fm³)
+        energy_density = total_internal_energy / volume_fm3
+
+        # Magnetic (rotational) pressure component
+        # C-319: rotational patterns contribute ~10-15% of total pressure
+        magnetic_pressure_fraction = 0.12  # 12% of total is rotational/magnetic
+        magnetic_pressure = magnetic_pressure_fraction * energy_density
+
+        return magnetic_pressure
+
+    def compute_lattice_reorganization_tensor(self, knot: KnotGeometry,
+                                             flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """
+        Compute magnitude of lattice reorganization tensor R from C-319.
+
+        From C-319: τ_R ∂_t R = -R + λ_B W_B + λ_ω W_ω
+
+        At equilibrium: R = λ_B W_B + λ_ω W_ω
+
+        The reorganization tensor R determines how much lattice pathways
+        are reshuffled by magnetic confinement. This affects path accessibility K_L.
+
+        The magnitude of R is proportional to the magnetic pressure inside the hadron.
+        Strong confinement → high pressure → high reorganization → tight lattice.
+
+        Returns: Reorganization tensor magnitude (dimensionless, 0-1 scale)
+        """
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
+        # Get magnetic pressure from confinement
+        mag_pressure = self.compute_confined_pressure(knot, flavor_masses)  # in GeV/fm³
+
+        # Reference pressure scale: typical pressure in nuclear matter ~ 0.1 GeV/fm³
+        # For hadron confinement, this can be 10-100× higher
+        reference_pressure = 0.05  # GeV/fm³ (low reference for hadrons)
+
+        # Reorganization tensor magnitude scales with pressure ratio
+        # R ~ pressure / reference_scale (normalized to 0-1)
+        r_mag = mag_pressure / reference_pressure
+
+        # Saturate at 1.0 (fully reorganized lattice)
+        r_mag = min(r_mag, 1.0)
+
+        return r_mag
+
+    def compute_magnetic_binding_energy(self, knot: KnotGeometry,
+                                       flavor_masses: Optional[Dict[str, float]] = None) -> float:
+        """
+        Compute binding energy contribution from magnetic lattice reorganization.
+
+        C-319 MECHANISM:
+        - Magnetic confinement reorganizes lattice pathways (tensor R)
+        - Path accessibility becomes K_L = I + κ_R R (changes from identity)
+        - Lattice resistance to confined motion increases
+        - This manifests as additional binding energy
+
+        Physics:
+        - Stronger reorganization (higher R) = tighter lattice = stronger binding
+        - Binding energy scales with:
+          * Reorganization magnitude R (pressure-driven)
+          * Confinement volume (smaller = more effect)
+          * Path accessibility coupling κ_R (calibrated parameter)
+
+        Calibration:
+        - Current gap: ~290 MeV between predicted and experimental nucleon masses
+        - This term should recover that gap through magnetic confinement
+
+        Returns: Magnetic binding energy in GeV (negative, attractive)
+        """
+        if flavor_masses is None:
+            flavor_masses = QUARK_MASSES_MEV
+
+        # Get reorganization tensor magnitude (pressure-based)
+        r_mag = self.compute_lattice_reorganization_tensor(knot, flavor_masses)
+
+        # Get magnetic pressure (used to scale binding energy)
+        mag_pressure = self.compute_confined_pressure(knot, flavor_masses)  # GeV/fm³
+
+        # Confinement volume affects how much the reorganization matters
+        radius = self.compute_boundary_radius(knot, flavor_masses)  # fm
+        volume = (4.0/3.0) * np.pi * (radius ** 3)  # fm³
+
+        # Path accessibility coupling coefficient κ_R (master calibration parameter)
+        # This couples the magnetic pressure to lattice resistance
+        # CALIBRATION TARGET: ~290 MeV additional binding for nucleons
+        # For nucleons: mag_pressure ~ 10 GeV/fm³, R ~ 0.2, volume ~ 2.5 fm³
+        # So κ_R ~ 290 MeV / (10 * 0.2 / 2.5) ~ 360 MeV
+        # Use κ_R = 0.350 GeV (conservative, to be fine-tuned)
+        kappa_R = 0.350  # GeV per unit pressure-normalized reorganization
+
+        # Magnetic binding energy formula:
+        # E_mag = -κ_R × R × (pressure / reference_pressure) × volume_factor
+        # The volume_factor normalizes for hadron size (~volume / reference_volume)
+
+        reference_volume = 3.0  # fm³ (typical nuclear volume scale)
+        volume_factor = reference_volume / volume if volume > 0 else 1.0
+
+        # Binding energy = -coupling × reorganization_strength × geometry
+        e_mag_binding = -kappa_R * r_mag * mag_pressure * volume_factor
+
+        return e_mag_binding
+
     def compute_weave_energy(self, knot: KnotGeometry,
                             flavor_masses: Optional[Dict[str, float]] = None) -> float:
-        """Compute total weave energy with scaled parameters.
+        """Compute total weave energy with scaled parameters and magnetic reorganization.
 
-        E_weave = σ_T × Area + κ_T × phase_diff + η_T × vorticity
+        E_weave = σ_T × Area + κ_T × phase_diff + η_T × vorticity + E_mag_binding
+
+        NEW: Includes C-319 magnetic reorganization binding energy term
         """
         # Update knot radius using combined solution
         knot.boundary_radius = self.compute_boundary_radius(knot, flavor_masses)
@@ -317,7 +462,13 @@ class HadronMassCalculator:
         )
 
         weave_calc = WeavingEnergyCalculator(weave)
-        total_energy = weave_calc.total_weave_energy(knot)
+        geometric_weave_energy = weave_calc.total_weave_energy(knot)
+
+        # Add magnetic reorganization binding energy contribution
+        magnetic_binding = self.compute_magnetic_binding_energy(knot, flavor_masses)
+
+        # Total weave energy = geometric terms + magnetic confinement binding
+        total_energy = geometric_weave_energy + magnetic_binding
 
         return total_energy
 

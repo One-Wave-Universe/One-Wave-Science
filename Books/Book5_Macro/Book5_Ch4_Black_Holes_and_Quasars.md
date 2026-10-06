@@ -79,10 +79,29 @@ lattice-step structure doesn't hold there. This is a candidate
 definition, not yet distinguished mathematically from "extremely high
 compression" — flagged directly in Yellow Audit below.
 
+### Light Behavior at Black Holes
+
+Light is created by boundary conditions in the lattice (E-528: "Light is
+created by boundary conditions in the lattice — structural discontinuities,
+compressed regions, surface transitions"). Light propagates as a "traveling
+spark" through the lattice via oscillations constrained by friction.
+
+**Light does not enter a black hole.** Light requires an intact lattice to propagate.
+Because a black hole is a torn lattice — a structural discontinuity where the lattice
+itself has failed — light cannot propagate through it. Light bends around black holes
+(gravitational lensing) and loses energy to redshift during this deflection (E-528),
+but the light rays remain in the intact lattice outside the tear.
+
+In contrast, **matter and field energy DO enter the torn region.** Matter/field-state
+falling into a black hole enters the torn lattice region where the normal propagation
+rules no longer apply.
+
+### Mirror-Gate Crossing and Quasar Ejection
+
 C-301's real Mirror math, applied here directly:
 M(psi_C, psi_E) -> (psi_E, -psi_C), with M^2 = -I, M^4 = I.
 
-The claim: matter/field-state falling into a black hole undergoes
+The claim: matter/field-state that enters a black hole undergoes
 this same Mirror crossing — already established at quantum
 (spin-half), atomic (shell transition), and biological (nerve relay)
 scale, per C-301's own pre-existing list. A quasar's relativistic jet
@@ -221,24 +240,29 @@ No Hubble parameter, scale factor, or negative-pressure equation belongs in the 
 
 ## Redshift and Return Loop
 
+**Complete Recycling Mechanism:**
+
 E-528 gives the static propagation law
 
 \[
 1+z=\exp\left(\int_0^D\kappa_\gamma d\ell\right).
 \]
 
-Energy removed from a Propagating Light Mode enters the compression field. E-529 proposes Low-Coupling Return Modes as one transport channel toward compact reservoirs. E-530 closes the candidate loop:
+The full recycling loop (E-530) operates as:
 
-```text
-compression and Mass Effect
--> gravity / extended compression
--> tired-light redshift and field transfer
--> Low-Coupling Return Modes
--> compact reservoir
--> Mirror-Gate threshold
--> White Energy ejection
--> field reinjection
-```
+Compressed structure / black hole region
+→ Boundary conditions create Propagating Light Mode (E-528)
+→ Light propagates through lattice, friction causes redshift ($\frac{dE_\gamma}{d\ell}=-\kappa_\gamma E_\gamma$)
+→ Energy dissipated by friction returns directly to compression field ($Q_{\gamma\to\chi}=c_L\kappa_\gamma u_\gamma$)
+→ Field oscillations flatten; residual excitation becomes Low-Coupling Return Mode/neutrino (E-529)
+→ Neutrino carries residual energy to compact compression reservoir ($Q_{\nu\to C}$)
+→ Compact reservoir reaches Mirror-Gate threshold
+→ Mirror crossing releases stored compression as White Energy ejection
+→ White Energy reinjected into field
+→ Reinjected energy creates new boundary conditions and structures
+→ Loop repeats locally at each compressed region or black hole
+
+**Static cosmic balance:** No expansion parameter appears anywhere. Energy is continuously recycled at local scales (E-530). What appears as cosmic redshift is accumulated light energy loss over distance (E-528), not metric expansion.
 
 ## Yellow Audit
 

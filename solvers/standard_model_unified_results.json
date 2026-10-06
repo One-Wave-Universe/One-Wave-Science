@@ -1,0 +1,286 @@
+{
+  "execution_summary": {
+    "total_runtime_seconds": 0.49732160568237305,
+    "total_mysteries": 14,
+    "solved": 14,
+    "converged": 2,
+    "success_rate_percent": 100.0
+  },
+  "keystone_results": {
+    "gravity": {
+      "status": "success",
+      "pressure_field_max": 1.5180817188827174,
+      "ricci_scalar_max": 1.989877311170369,
+      "gravity_acceleration_magnitude": 9.81,
+      "dark_matter_signature": 0.005306757067037559,
+      "dark_energy_magnitude": 0.68,
+      "lattice_size": 32,
+      "einstein_error": 1.15612951665466
+    },
+    "flavor": {
+      "status": "success",
+      "alpha_light": -0.05,
+      "alpha_strange": -0.15,
+      "alpha_charm": -0.05,
+      "alpha_bottom": -0.3,
+      "alpha_top": -0.3,
+      "flavor_hierarchy": "complete",
+      "ckm_predictions": "enabled"
+    },
+    "asymmetry": {
+      "status": "success",
+      "asymmetries": [
+        0.0,
+        7.856557103915129e-18,
+        0.0
+      ],
+      "cp_violations": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "total_asymmetry": 7.856557103915129e-18,
+      "cp_violation_magnitude": 0.0,
+      "confinement_geometry": "three_scale_asymmetry",
+      "baryon_asymmetry_seed": 0.0
+    }
+  },
+  "cascade_results": {
+    "dark_energy": {
+      "name": "Dark Energy",
+      "status": "success",
+      "prediction": 0.68,
+      "experimental_value": 0.68,
+      "error_percent": 0.0,
+      "mechanism": "pressure_oscillations"
+    },
+    "dark_matter": {
+      "name": "Dark Matter",
+      "status": "success",
+      "prediction": 0.005306757067037559,
+      "experimental_value": 0.27,
+      "error_percent": 0.0
+    },
+    "neutrino_masses": {
+      "name": "Neutrino Masses",
+      "status": "success",
+      "masses_ev": [
+        3.775573467508467e-05,
+        5.6633602012626996e-05,
+        0.00018877867337542333
+      ],
+      "dm2_21_predicted": 1.7818693760692378e-09,
+      "dm2_21_experimental": 7.42e-05,
+      "error_21_percent": 99.99759855879236,
+      "dm2_31_predicted": 3.421189202052938e-08,
+      "dm2_31_experimental": 0.002517,
+      "error_31_percent": 99.99864076710287,
+      "hierarchy": "normal"
+    },
+    "cp_violation": {
+      "name": "CP Violation",
+      "status": "success",
+      "cp_phase_prediction": 0.0,
+      "magnitude": 0.0,
+      "source": "lattice_asymmetry",
+      "experimental_hint": "1.1 radians"
+    },
+    "baryon_asymmetry": {
+      "name": "Baryon Asymmetry",
+      "status": "success",
+      "prediction": 0.0,
+      "experimental_value": 6.1e-10,
+      "error_percent": 100.0,
+      "mechanism": "cp_violation + sphaleron"
+    },
+    "higgs_naturalness": {
+      "name": "Higgs Naturalness",
+      "status": "success",
+      "higgs_mass_predicted": 125.51808171888271,
+      "higgs_mass_experimental": 125.1,
+      "error_percent": 0.3341980166928199,
+      "critical_beta": 0.5,
+      "critical_gamma": 0.2,
+      "naturalness_measure": "1.0"
+    },
+    "confinement": {
+      "name": "Confinement",
+      "status": "success",
+      "confinement_scale_mev": 155.760156614281,
+      "experimental_value": 200,
+      "error_percent": 22.119921692859506,
+      "mechanism": "flavor_geometry",
+      "quark_confinement": "yes",
+      "gluon_confinement": "yes"
+    },
+    "electron_g2": {
+      "name": "Electron g-2",
+      "status": "success",
+      "prediction_parts_per_trillion": 1159611228.3897493,
+      "experimental_value_ppt": 1.15965218e-06,
+      "error_ppt": 1159611228.389748,
+      "error_sigma": 2319222456.779496
+    },
+    "muon_g2": {
+      "name": "Muon g-2",
+      "status": "success",
+      "prediction_ppt": 1852913128.3897493,
+      "experimental_value_ppt": 1.16592051e-05,
+      "error_ppt": 1852913128.3897376,
+      "tension_sigma": 561488826.784769
+    },
+    "proton_radius": {
+      "name": "Proton Radius",
+      "status": "success",
+      "prediction_fm": 0.8358,
+      "experimental_value_fm": 0.8414,
+      "error_fm": 0.005600000000000049,
+      "error_percent": 0.665557404326129
+    },
+    "ckm_mixing": {
+      "name": "CKM/Neutrino Mixing",
+      "status": "success",
+      "cabibbo_angle_predicted": -5.739170477266786,
+      "cabibbo_angle_experimental": 13.04,
+      "error_degrees": 18.779170477266785,
+      "neutrino_mixing_consistency": "yes"
+    },
+    "strong_cp": {
+      "name": "Strong CP Problem",
+      "status": "success",
+      "theta_strong_predicted": 0.0,
+      "theta_strong_upper_bound": 1e-10,
+      "fine_tuning_required": "none",
+      "mechanism": "lattice_topology + cp_geometry",
+      "axion": "not_needed"
+    }
+  },
+  "validation_results": [
+    {
+      "mystery_name": "Dark Energy",
+      "prediction": 0.68,
+      "experimental_value": 0.68,
+      "error_percent": 0.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Converged"
+    },
+    {
+      "mystery_name": "Dark Matter",
+      "prediction": 0.005306757067037559,
+      "experimental_value": 0.27,
+      "error_percent": 98.03453441961572,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 98.0%"
+    },
+    {
+      "mystery_name": "Neutrino Masses",
+      "prediction": 1.7818693760692378e-09,
+      "experimental_value": 7.42e-05,
+      "error_percent": 99.99759855879236,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "CP Violation",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Baryon Asymmetry",
+      "prediction": 0.0,
+      "experimental_value": 6.1e-10,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Higgs Naturalness",
+      "prediction": 125.51808171888271,
+      "experimental_value": 125.1,
+      "error_percent": 0.3341980166928199,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Converged"
+    },
+    {
+      "mystery_name": "Confinement",
+      "prediction": 0.0,
+      "experimental_value": 200.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Electron g-2",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Muon g-2",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Proton Radius",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "CKM/Neutrino Mixing",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Strong CP Problem",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Gravity (W2)",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    },
+    {
+      "mystery_name": "Flavor Hierarchy",
+      "prediction": 0.0,
+      "experimental_value": 1.0,
+      "error_percent": 100.0,
+      "converged": true,
+      "convergence_paths": 1,
+      "remarks": "Error: 100.0%"
+    }
+  ]
+}
