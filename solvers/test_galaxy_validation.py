@@ -14,6 +14,18 @@ class FixedParameterTests(unittest.TestCase):
             importlib.reload(module)
         self.assertEqual(stream.getvalue(), '')
 
+    def test_ring_interface_and_frozen_predictions_survive_rename(self):
+        from satellite_galaxy_validator_em_coherence_fixed import DistanceDependentPredictorWithEMCoherence
+        from galaxy_external_validation import evaluate
+        model = DistanceDependentPredictorWithEMCoherence()
+        for satellite in MW_SATELLITES:
+            result = model.predict_satellite_velocity(satellite)
+            self.assertAlmostEqual(result['v_total'], result['v_local'] + result['v_wake'])
+        results = evaluate()['variants']
+        for result, expected in zip(results, [86.283139, 81.647035]):
+            self.assertAlmostEqual(result['rms_residual_kms'], expected, places=5)
+            self.assertEqual(result['discrepancy_screen'], 'FAIL')
+
     def test_declared_fixed_scale_is_used(self):
         from satellite_galaxy_validator_em_coherence_fixed import DistanceDependentPredictorWithEMCoherence
         model = DistanceDependentPredictorWithEMCoherence()

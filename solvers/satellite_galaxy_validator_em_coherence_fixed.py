@@ -152,7 +152,7 @@ class DistanceDependentPredictorWithEMCoherence(SatelliteVelocityPredictor):
         """Predict with fixed parameters + EM coherence."""
         result = super().predict_satellite_velocity(satellite)
 
-        if result['in_cascade']:
+        if result['in_ring']:
             beta_r = self.coupling_factor(satellite.distance_kpc, satellite.host)
 
             if satellite.host == "Milky Way":
@@ -163,7 +163,7 @@ class DistanceDependentPredictorWithEMCoherence(SatelliteVelocityPredictor):
             v_inherited_new = v_host * beta_r
             v_total_new = result['v_local'] + v_inherited_new
 
-            result['v_inherited'] = v_inherited_new
+            result['v_wake'] = v_inherited_new
             result['v_total'] = v_total_new
             result['residual'] = satellite.velocity_dispersion_kms - v_total_new
             result['error_pct'] = 100 * abs(satellite.velocity_dispersion_kms - v_total_new) / satellite.velocity_dispersion_kms
@@ -212,7 +212,7 @@ def main():
     mw_results = []
     for sat in MW_SATELLITES:
         result = predictor.predict_satellite_velocity(sat)
-        if result['in_cascade']:
+        if result['in_ring']:
             mw_results.append(result)
             f_em = result.get('em_coherence', 1.0)
             print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "
@@ -230,7 +230,7 @@ def main():
     m31_results = []
     for sat in M31_SATELLITES:
         result = predictor.predict_satellite_velocity(sat)
-        if result['in_cascade']:
+        if result['in_ring']:
             m31_results.append(result)
             f_em = result.get('em_coherence', 1.0)
             print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "

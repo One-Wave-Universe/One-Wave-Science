@@ -40,7 +40,7 @@ explicitly reviewed contract; hash mismatches fail closed.
 - Complete transcription: `data/mw_dr3plus_2023.csv`
 - Executed output: `galaxy_external_validation_receipt.json`
 - Source model SHA256: `d38673ac9353b1c895a5391c59786a91ec2740d819511e64308eeffc6b429efa`
-- Contract SHA256: `63b215c408eb57fe89db68c71e5a71e212b1b0ad7688410e8f87dc73288765ff`
+- Contract SHA256: `ad8d0f1bcd56f2ea3fcd9788ee42238066bea1e7bc3a917e956842922ad4e822`
 
 ## External evidence and independence limits
 
@@ -186,3 +186,38 @@ confirmation with INVALID_COMPARISON while retaining all numerical diagnostics.
 A runtime report regression preserves MW 26.1% and M31 3.1% and excludes old proof
 phrases. Final direct/discovery entrypoints run eight tests. The legacy docstring
 retains the historical hypothesis under its explicit evidence warning.
+
+
+## Ring-interface integration repair — 2026-10-06
+
+Reference main 0ac6e27b831157c99b6f313a7c277295408cb4d4 on the Jetson,
+worktree .one-wave-metadata/task-worktrees/galaxy-compat-20261006,
+branch fix/galaxy-ring-interface-20261006. MAIN GOAL remains the reliable
+Field/Void coding engine. This step restores its existing galaxy validation
+following the concurrent compression-ring terminology merge.
+
+Choice/Field: migrate the fixed-EM caller to the base predictor's in_ring and
+v_wake keys, review source hash drift, and preserve every scored numerical row.
+Allowed files: fixed-EM caller, frozen contract, receipt, focused tests and
+this report. Protected: source equations, data cohort, coefficients, initial
+frozen timestamp, primary dirty checkout and node metadata.
+Void pre-check ALLOW only with unchanged numerical evidence; same-model review,
+not an independent provider or physical corroboration. No Claude/M4 runtime
+connection is claimed. Attempt 1/3.
+
+The changed wake method's numerical AST is identical after normalizing its
+internal rename and removing docstrings. The explicit contract revision retains
+both old/new hashes and the review reference. No outcome-based fitting occurs.
+The original timestamp still describes the original fixed candidate selection;
+it is not represented as the time of this later source review.
+
+View/Action: nine galaxy tests and five static-source tests pass. All 90 scored
+rows and every variant metric exactly equal the prior committed receipt.
+The external CLI still exits 1 for scientific failure: 86.283139 and 81.647035
+km/s RMS. Only provenance/runtime hashes change in the regenerated receipt.
+Void post ALLOW software repair; State RESOLVED regression, DO NOT SCALE into
+physical validation. Earlier comparison and source-closure failures remain.
+Reflection: terminology migration broke consumers and correctly tripped the
+hash gate; explicitly reviewing the change restores execution without hiding
+model failure. Hard stop: reviewed repair; next source derivation requires a
+fresh reference and independently specified constitutive law.
