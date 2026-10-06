@@ -181,3 +181,7 @@ CORE-RULES-POST:
 - AI is treated as an access and verification amplifier, not a truth machine.
 - Schrödinger's cat is treated as a foundations thought experiment, not an experimental claim that literal cats are observed in alive/dead superpositions.
 - Book status: YELLOW scaffold until individual chapters are completed and audited.
+
+## Active research register
+
+Use the [75-target problem register](01_PROBLEM_REGISTER.md) for numbered questions, existing node/solver routes, metadata acquisition, CERN particle-to-wave coordinates and the next bounded work packets. It preserves this chapter map and does not promote scientific claims.
