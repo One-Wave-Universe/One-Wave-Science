@@ -255,6 +255,21 @@
       ],
       "fetch_mode": "science_archive_search",
       "verified_note": "PDS product metadata and labels; mission coverage must have a matching identifier receipt. Legacy PDS3 holdings may require node archives."
+    },
+    {
+      "id": "gwosc-snapshot",
+      "domain": "gravitational-wave-release",
+      "coverage": [
+        "GWOSC Event Portal Snapshot 2025-10-31"
+      ],
+      "api_root": "https://zenodo.org/api/records/17496685",
+      "api_docs": "https://gwosc.org/GWTC-3/",
+      "source_kind": [
+        "metadata",
+        "versioned-event-portal-snapshot"
+      ],
+      "fetch_mode": "science_archive_search",
+      "verified_note": "Independent dated release; does not prove live GWOSC API availability."
     }
   ]
 }

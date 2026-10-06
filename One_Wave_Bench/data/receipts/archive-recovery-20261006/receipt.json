@@ -1,0 +1,197 @@
+{
+  "reference_head": "211f8fa2c7d9b840fb98d8aa5c8c4ceccca77cbd",
+  "device": "fc9b5227-716d-4508-a666-ee0a68a08d4c",
+  "live_api_healthy": false,
+  "receipts": [
+    {
+      "schema": "one-wave-archive-search-v1",
+      "source": "gwosc",
+      "query": "",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://gwosc.org/api/v2/runs",
+      "retrieved_at_utc": "2026-10-06T04:45:01.974278+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "attempts": [
+        {
+          "attempt": 1,
+          "error": "<urlopen error _ssl.c:983: The handshake operation timed out>",
+          "retryable": true
+        },
+        {
+          "attempt": 2,
+          "error": "<urlopen error _ssl.c:983: The handshake operation timed out>",
+          "retryable": true
+        },
+        {
+          "attempt": 3,
+          "error": "<urlopen error _ssl.c:983: The handshake operation timed out>",
+          "retryable": true
+        }
+      ],
+      "status": "failed",
+      "error": "URLError: <urlopen error _ssl.c:983: The handshake operation timed out>",
+      "artifact_receipt_path": "/home/Scales/One-Wave-Science/.one-wave-metadata/archive-recovery-20261006/gwosc/receipt.json",
+      "artifact_receipt_sha256": "c1e155be6fe38b394e90bb50e00d61aebf70d1040c9aa216d5b87fbe36f13a24"
+    },
+    {
+      "schema": "one-wave-archive-search-v1",
+      "source": "sdss",
+      "query": "",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+TOP+3+specObjID%2Cra%2Cdec%2Cz+FROM+SpecObj+WHERE+class%3D%27GALAXY%27&format=csv",
+      "retrieved_at_utc": "2026-10-06T04:45:00.721112+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "connected"
+        }
+      ],
+      "http_status": 200,
+      "final_url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+TOP+3+specObjID%2Cra%2Cdec%2Cz+FROM+SpecObj+WHERE+class%3D%27GALAXY%27&format=csv",
+      "content_type": "text/plain",
+      "raw_file": "provider.raw",
+      "sha256": "c4225a19a318ef9b2da7aa94d935c5ece2a795b84bc451a1a9c2c083617abfdc",
+      "bytes": 187,
+      "status": "acquired",
+      "returned_count": 3,
+      "sample": [
+        {
+          "specObjID": "1240744219610474496",
+          "ra": "338.63071",
+          "dec": "-0.761237",
+          "z": "-0.01022998"
+        },
+        {
+          "specObjID": "765782397865191424",
+          "ra": "351.93605",
+          "dec": "0.74170673",
+          "z": "-0.009178726"
+        },
+        {
+          "specObjID": "1240796446412793856",
+          "ra": "337.28232",
+          "dec": "0.044220658",
+          "z": "-0.009086601"
+        }
+      ],
+      "scope": "bounded provider page; no complete-catalog claim",
+      "artifact_receipt_path": "/home/Scales/One-Wave-Science/.one-wave-metadata/archive-recovery-20261006/sdss/receipt.json",
+      "artifact_receipt_sha256": "7c67818d6dae0d2762d8d9e234805ecb5f70151ac152add82d04ea417237f156"
+    },
+    {
+      "schema": "one-wave-archive-search-v1",
+      "source": "gwosc-snapshot",
+      "query": "",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://zenodo.org/api/records/17496685",
+      "retrieved_at_utc": "2026-10-06T04:46:32.097920+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "connected"
+        }
+      ],
+      "http_status": 200,
+      "final_url": "https://zenodo.org/api/records/17496685",
+      "content_type": "application/json",
+      "raw_file": "provider.raw",
+      "sha256": "3f8b51f7e960da49dd9cd541f40c107bfe8eef2bf3ac03cec09566352e6b1e24",
+      "bytes": 10011,
+      "provider": "Zenodo",
+      "release_id": 17496685,
+      "live_api_healthy": false,
+      "scope": "Versioned 2025-10-31 GWOSC event portal snapshot manifest; not current run inventory",
+      "page_next": null,
+      "status": "acquired",
+      "returned_count": 1,
+      "sample": [
+        {
+          "id": "dec12a12-2076-40a5-8f08-e9f2094d698a",
+          "key": "IGWN-GWOSC-snapshot-2025-10-31.tar",
+          "size": 11950080,
+          "checksum": "md5:1220ec2f80349b25924b73dba36b33ea",
+          "links": {
+            "self": "https://zenodo.org/api/records/17496685/files/IGWN-GWOSC-snapshot-2025-10-31.tar/content"
+          }
+        }
+      ],
+      "artifact_receipt_path": "/home/Scales/One-Wave-Science/.one-wave-metadata/archive-recovery-20261006/snapshot/manifest/receipt.json",
+      "artifact_receipt_sha256": "beff55db01b823977d0de8e06c61ff48f91a24ab77b91fa0b9671dd0cd26ce2f"
+    },
+    {
+      "schema": "one-wave-archive-search-v1",
+      "source": "gwosc-snapshot",
+      "query": "",
+      "record": "",
+      "limit": 3,
+      "requested_url": "https://zenodo.org/api/records/17496685",
+      "retrieved_at_utc": "2026-10-06T04:44:26.826973+00:00",
+      "classification": "provider_metadata_not_measurements",
+      "method": "GET",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "connected"
+        }
+      ],
+      "http_status": 200,
+      "final_url": "https://zenodo.org/api/records/17496685",
+      "content_type": "application/json",
+      "raw_file": "provider.raw",
+      "sha256": "3f8b51f7e960da49dd9cd541f40c107bfe8eef2bf3ac03cec09566352e6b1e24",
+      "bytes": 10011,
+      "provider": "Zenodo",
+      "release_id": 17496685,
+      "live_api_healthy": false,
+      "scope": "Versioned 2025-10-31 GWOSC event portal snapshot manifest; not current run inventory",
+      "page_next": null,
+      "status": "acquired",
+      "returned_count": 1,
+      "sample": [
+        {
+          "id": "dec12a12-2076-40a5-8f08-e9f2094d698a",
+          "key": "IGWN-GWOSC-snapshot-2025-10-31.tar",
+          "size": 11950080,
+          "checksum": "md5:1220ec2f80349b25924b73dba36b33ea",
+          "links": {
+            "self": "https://zenodo.org/api/records/17496685/files/IGWN-GWOSC-snapshot-2025-10-31.tar/content"
+          }
+        }
+      ],
+      "artifact_receipt_path": "/home/Scales/One-Wave-Science/.one-wave-metadata/archive-recovery-20261006/snapshot/receipt.json",
+      "artifact_receipt_sha256": "e4a3f7e4cd33b85d1c6030b42b86f5017dd479c1165b386c8b0dcc38f2344732"
+    },
+    {
+      "source": "gwosc-snapshot",
+      "release_id": 17496685,
+      "snapshot_date": "2025-10-31",
+      "live_api_healthy": false,
+      "scope": "Historical event metadata, not live run inventory or downloaded strain",
+      "status": "verified",
+      "download_url": "https://zenodo.org/api/records/17496685/files/IGWN-GWOSC-snapshot-2025-10-31.tar/content",
+      "bytes": 11950080,
+      "provider_checksum": "md5:1220ec2f80349b25924b73dba36b33ea",
+      "sha256": "94cdd807961be29dd224037c3b78c4e352f4d5a4286b3f570cc6111accb9102b",
+      "json_members": 579,
+      "event": "GW150914-v3",
+      "event_sha256": "ecf5280a240d5a3c23271034895cc105cf324b6008db006d65a7e9548ba4a12f",
+      "manifest_sha256": "3f8b51f7e960da49dd9cd541f40c107bfe8eef2bf3ac03cec09566352e6b1e24",
+      "artifact_receipt_path": "/home/Scales/One-Wave-Science/.one-wave-metadata/archive-recovery-20261006/snapshot/snapshot-receipt.json",
+      "artifact_receipt_sha256": "84d3fb024b8e2b6abc3add384ff4a6fe631603ccca7efdf0951f1a1527a0ce71"
+    }
+  ],
+  "relay": {
+    "request_id": "gwosc-fallback-18df5042a241421383e52f6762bb4751",
+    "matching_id": true,
+    "exit_code": 0,
+    "cwd": "/home/Scales/One-Wave-Science/.one-wave-metadata/task-worktrees/galactic-health-20261006"
+  }
+}

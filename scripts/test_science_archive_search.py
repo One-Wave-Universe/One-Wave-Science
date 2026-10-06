@@ -12,6 +12,39 @@ class Client:
     def __init__(self,raw):self.raw=raw;self.request=None
     def open(self,request,timeout):self.request=request;return Response(self.raw,request.full_url)
 class Tests(unittest.TestCase):
+    def test_transient_retry_preserves_attempt_and_exact_body(self):
+        from urllib.error import HTTPError
+        from unittest.mock import patch
+        class Flaky(Client):
+            calls=0
+            def open(self,request,timeout):
+                self.calls+=1
+                if self.calls==1:raise HTTPError(request.full_url,503,"unavailable",{},None)
+                return super().open(request,timeout)
+        with tempfile.TemporaryDirectory() as d,patch.object(relay.time,"sleep"):
+            c=Flaky(b'#Table1\nspecObjID,ra,dec,z\n123,1,2,0.1\n')
+            x=relay.acquire("sdss","","",3,d,opener=c)
+            self.assertEqual(x["status"],"acquired");self.assertEqual(c.calls,2)
+            self.assertTrue(x["attempts"][0]["retryable"])
+    def test_permanent_failure_and_retry_cap(self):
+        from urllib.error import HTTPError
+        from unittest.mock import patch
+        for code,calls in [(403,1),(503,3)]:
+            class Broken(Client):
+                count=0
+                def open(self,request,timeout):
+                    self.count+=1;raise HTTPError(request.full_url,code,"failed",{},None)
+            with tempfile.TemporaryDirectory() as d,patch.object(relay.time,"sleep"):
+                c=Broken(b'');x=relay.acquire("sdss","","",3,d,opener=c)
+                self.assertEqual(x["status"],"failed");self.assertEqual(c.count,calls)
+    def test_snapshot_identity_and_degraded_scope(self):
+        for record,status in [(17496685,"acquired"),(999,"failed")]:
+            with tempfile.TemporaryDirectory() as d:
+                raw=json.dumps({"id":record,"metadata":{"title":"GWOSC Event Portal Snapshots"},"files":[{"key":"file.tar"}]}).encode()
+                x=relay.acquire("gwosc-snapshot","","",3,d,opener=Client(raw))
+                self.assertEqual(x["status"],status)
+                if status=="acquired":self.assertFalse(x["live_api_healthy"]);self.assertIn("2025-10-31",x["scope"])
+
     def test_pds_identifier_and_mission_scope(self):
         with tempfile.TemporaryDirectory() as d:
             x=relay.acquire("pds","","urn:nasa:pds:mars2020.spice",3,d,opener=Client(b'{"id":"urn:nasa:pds:mars2020.spice::16.0"}'))

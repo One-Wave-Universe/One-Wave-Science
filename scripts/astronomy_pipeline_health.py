@@ -14,7 +14,7 @@ def jobs():
         result.append((mission,[sys.executable,native,'mast','--mission',mission]+args))
     for name,cat in [('NuSTAR','numaster'),('Chandra','chanmaster'),('Swift','swiftmastr'),('XMM','xmmmaster'),('Fermi','fermilasp'),('NICER','nicermastr'),('IXPE','ixmaster'),('XRISM','xrismmastr')]:
         result.append((name,[sys.executable,native,'heasarc','--catalog',cat,'--radius-deg','0.1']))
-    for source in ['gaia-archive','eso','alma','desi','sdss','gwosc']:
+    for source in ['gaia-archive','eso','alma','desi','sdss','gwosc','gwosc-snapshot']:
         result.append((source,[sys.executable,relay,source]))
     for mission in MISSIONS:result.append(('pds-'+mission,[sys.executable,relay,'pds','--query',mission]))
     return result

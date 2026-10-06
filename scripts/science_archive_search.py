@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Bounded public archive search/relay with exact response receipts."""
-import argparse,csv,hashlib,io,json,pathlib,re,subprocess,sys
+import argparse,csv,hashlib,io,json,pathlib,re,subprocess,sys,time,ssl
+from urllib.error import HTTPError,URLError
 from urllib.parse import urlencode,urlparse,quote
 from urllib.request import Request,build_opener,HTTPRedirectHandler
 from open_data_fetch import load_registry,source_by_id,allowed_hosts,utc_now
@@ -27,6 +28,9 @@ def route(source,query,record,limit):
     if source=="sdss":
         if query:raise ValueError("SDSS relay uses a bounded galaxy sample; arbitrary SQL is unsupported")
         return "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?"+urlencode({"cmd":"SELECT TOP "+str(limit)+" specObjID,ra,dec,z FROM SpecObj WHERE class='GALAXY'","format":"csv"}),None,"csv"
+    if source=="gwosc-snapshot":
+        if query or record:raise ValueError("GWOSC snapshot route is a fixed versioned release, not live search")
+        return "https://zenodo.org/api/records/17496685",None,"json"
     if source=="gwosc":return "https://gwosc.org/api/v2/runs",None,"json"
     if source=="dandi":return "https://api.dandiarchive.org/api/dandisets/?"+urlencode({"page_size":limit,"search":query}),None,"json"
     if source=="openneuro":
@@ -57,7 +61,18 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
     try:
         client=opener or build_opener(CheckedRedirect(hosts))
         req=Request(url,data=data,headers={"User-Agent":"One-Wave-Science/metadata-relay","Accept":"application/json" if kind=="json" else "*/*",**({"Content-Type":"application/json"} if data else {})})
-        with client.open(req,timeout=timeout) as response:
+        receipt["attempts"]=[]
+        for attempt in range(1,4):
+            try:
+                response=client.open(req,timeout=min(timeout,10))
+                receipt["attempts"].append({"attempt":attempt,"status":"connected"})
+                break
+            except (HTTPError,URLError,TimeoutError) as exc:
+                transient=(isinstance(exc,HTTPError) and exc.code in (429,500,502,503,504)) or (not isinstance(exc,HTTPError) and not isinstance(getattr(exc,"reason",None),ssl.SSLCertVerificationError))
+                receipt["attempts"].append({"attempt":attempt,"error":str(exc),"retryable":transient})
+                if not transient or attempt==3:raise
+                time.sleep(0.5)
+        with response:
             raw=response.read(MAX_BYTES+1)
             if len(raw)>MAX_BYTES:raise ValueError("Response exceeded 2 MiB cap")
             final=response.geturl()
@@ -69,6 +84,10 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
             doc=json.loads(raw)
             if isinstance(doc,dict) and (doc.get("errors") or doc.get("status")=="ERROR"):raise ValueError("Provider returned application error: "+str(doc)[:1000])
             if source=="openneuro":rows=([doc["data"]["dataset"]] if record and doc["data"].get("dataset") else [x["node"] for x in doc["data"].get("datasets",{}).get("edges",[])])
+            elif source=="gwosc-snapshot":
+                if doc.get("id")!=17496685 or doc.get("metadata",{}).get("title")!="GWOSC Event Portal Snapshots":raise ValueError("Unexpected GWOSC release identity")
+                rows=doc.get("files",[])
+                receipt.update(provider="Zenodo",release_id=17496685,live_api_healthy=False,scope="Versioned 2025-10-31 GWOSC event portal snapshot manifest; not current run inventory")
             elif source=="pds":
                 rows=[doc] if record else doc.get("data",[])
                 if record and (("::" in record and doc.get("id") != record) or ("::" not in record and str(doc.get("id","")).split("::")[0] != record)):raise ValueError("PDS returned a different product identifier")
@@ -89,7 +108,7 @@ def acquire(source,query,record,limit,output,timeout=30,opener=None):
         else:
             if b"<html" not in raw.lower() and b"<!doctype" not in raw.lower():raise ValueError("Expected archive directory HTML")
             rows=re.findall(r'href="([^"]+)"',raw.decode(errors="replace"))
-        receipt.update(status="acquired",returned_count=len(rows),sample=rows[:limit],scope="bounded provider page; no complete-catalog claim")
+        receipt.update(status="acquired",returned_count=len(rows),sample=rows[:limit]);receipt.setdefault("scope","bounded provider page; no complete-catalog claim")
     except Exception as exc:receipt.update(status="failed",error=type(exc).__name__+": "+str(exc))
     (output/"receipt.json").write_text(json.dumps(receipt,indent=2)+'\n')
     return receipt
