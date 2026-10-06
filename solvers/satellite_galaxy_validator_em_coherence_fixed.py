@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+EVIDENCE WARNING (2026-10-06): The historical proof/validation language below
+is not supported by these orbital-motion versus internal-dispersion comparisons.
+See GALAXY_EXTERNAL_VALIDATION.md for the corrected observable contract and
+source-qualified external rotation test. Hypotheses/formulas are preserved.
+
 SATELLITE VALIDATOR: EM COHERENCE MODULATION (Fixed Parameters from Clean Systems)
 
 Strategy: Keep the CLEAN SYSTEMS parameters (which achieved 0% error on M32, M110, LMC)
@@ -117,6 +122,9 @@ class DistanceDependentPredictorWithEMCoherence(SatelliteVelocityPredictor):
 
     def __init__(self):
         super().__init__()
+        # The base constructor writes an instance value; restore this model's
+        # declared fixed calibration rather than silently using the base value.
+        self.velocity_scale_factor = type(self).velocity_scale_factor
         self.em_coherence = {}  # Cache by host
 
     def coupling_factor(self, distance_kpc, host):
@@ -178,95 +186,90 @@ class DistanceDependentPredictorWithEMCoherence(SatelliteVelocityPredictor):
 # MAIN ANALYSIS
 # ============================================================================
 
-print("\n" + "="*90)
-print("EM COHERENCE MODULATION: Fixed Parameters Test")
-print("="*90)
-print("\nUsing FIXED parameters from clean systems validation:")
-print(f"  velocity_scale_factor: {DistanceDependentPredictorWithEMCoherence.velocity_scale_factor:.2f}")
-print(f"  β₀: {DistanceDependentPredictorWithEMCoherence.beta_0:.4f}")
-print(f"  r_decay_mw: {DistanceDependentPredictorWithEMCoherence.r_decay_mw:.1f} kpc")
-print(f"  r_decay_m31: {DistanceDependentPredictorWithEMCoherence.r_decay_m31:.1f} kpc")
-print("\nApplying EM coherence modulation: β_eff(r) = β₀ × exp(-r/r_decay) × f_EM(r)")
-print("Question: Does f_EM explain why M31 is tight but MW is scattered?\n")
+def main():
+    print("\n" + "="*90)
+    print("EM COHERENCE MODULATION: Legacy Numeric Diagnostics")
+    print("INVALID_COMPARISON: orbital-motion and internal-dispersion mapping is absent.")
+    print("="*90)
+    print("\nUsing FIXED parameters from clean systems validation:")
+    print(f"  velocity_scale_factor: {DistanceDependentPredictorWithEMCoherence.velocity_scale_factor:.2f}")
+    print(f"  β₀: {DistanceDependentPredictorWithEMCoherence.beta_0:.4f}")
+    print(f"  r_decay_mw: {DistanceDependentPredictorWithEMCoherence.r_decay_mw:.1f} kpc")
+    print(f"  r_decay_m31: {DistanceDependentPredictorWithEMCoherence.r_decay_m31:.1f} kpc")
+    print("\nApplying EM coherence modulation: β_eff(r) = β₀ × exp(-r/r_decay) × f_EM(r)")
+    print("No physical validation follows from these unmatched observables.\n")
 
-predictor = DistanceDependentPredictorWithEMCoherence()
+    predictor = DistanceDependentPredictorWithEMCoherence()
 
-print("="*90)
-print("RESULTS: WITH EM COHERENCE MODULATION")
-print("="*90)
+    print("="*90)
+    print("RESULTS: WITH EM COHERENCE MODULATION")
+    print("="*90)
 
-print("\nMILKY WAY (in-cascade satellites):")
-print("Name                          | r(kpc) | f_EM   | v_obs | v_pred | Error")
-print("-" * 90)
+    print("\nMILKY WAY (in-cascade satellites):")
+    print("Name                          | r(kpc) | f_EM   | v_obs | v_pred | Error")
+    print("-" * 90)
 
-mw_results = []
-for sat in MW_SATELLITES:
-    result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
-        mw_results.append(result)
-        f_em = result.get('em_coherence', 1.0)
-        print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "
-              f"{result['v_observed']:5.0f} | {result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
+    mw_results = []
+    for sat in MW_SATELLITES:
+        result = predictor.predict_satellite_velocity(sat)
+        if result['in_cascade']:
+            mw_results.append(result)
+            f_em = result.get('em_coherence', 1.0)
+            print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "
+                  f"{result['v_observed']:5.0f} | {result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
 
-if mw_results:
-    mw_errors = [r['error_pct'] for r in mw_results]
-    mw_mean = np.mean(mw_errors)
-    print(f"\nMW In-Cascade: Mean error = {mw_mean:.1f}%")
-
-print("\nANDROMEDA (in-cascade satellites):")
-print("Name                          | r(kpc) | f_EM   | v_obs | v_pred | Error")
-print("-" * 90)
-
-m31_results = []
-for sat in M31_SATELLITES:
-    result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
-        m31_results.append(result)
-        f_em = result.get('em_coherence', 1.0)
-        print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "
-              f"{result['v_observed']:5.0f} | {result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
-
-if m31_results:
-    m31_errors = [r['error_pct'] for r in m31_results]
-    m31_mean = np.mean(m31_errors)
-    print(f"\nM31 In-Cascade: Mean error = {m31_mean:.1f}%")
-
-print("\n" + "="*90)
-print("INTERPRETATION: EM COHERENCE EXPLAINS ASYMMETRY")
-print("="*90)
-
-if m31_results and mw_results:
-    m31_mean = np.mean([r['error_pct'] for r in m31_results])
-    mw_mean = np.mean([r['error_pct'] for r in mw_results])
-    spread = abs(m31_mean - mw_mean)
-
-    print(f"\nAsymmetry Analysis:")
-    print(f"  M31 mean error:   {m31_mean:.1f}%")
-    print(f"  MW mean error:    {mw_mean:.1f}%")
-    print(f"  Absolute spread:  {spread:.1f}%")
-
-    print(f"\nEM Coherence Levels:")
-    if m31_results:
-        m31_f_em = np.mean([r['em_coherence'] for r in m31_results])
-        print(f"  M31 average f_EM: {m31_f_em:.3f} (high coherence)")
     if mw_results:
-        mw_f_em = np.mean([r['em_coherence'] for r in mw_results])
-        print(f"  MW average f_EM:  {mw_f_em:.3f} (low coherence)")
+        mw_errors = [r['error_pct'] for r in mw_results]
+        mw_mean = np.mean(mw_errors)
+        print(f"\nMW In-Cascade: Mean error = {mw_mean:.1f}%")
 
-    print(f"\nPhysics Interpretation:")
-    if m31_mean < 15 and mw_mean > 45:
-        print(f"  ✓ Pattern confirmed: High coherence → tight validation")
-        print(f"                       Low coherence → scattered validation")
-        print(f"\n  EM field organization is LOAD-BEARING:")
-        print(f"  - M31 halo: well-organized B+E fields → cascade signal preserved")
-        print(f"  - MW disk: chaotic B+E fields → cascade signal corrupted by local field effects")
-        print(f"  - LMC/SMC: crossing galactic plane → maximum field chaos → high error")
-        print(f"\n  This is not a bug in cascade model — it's proof that EM coherence matters.")
-        print(f"  C-319 magnetic coupling IS the mechanism.")
-    elif spread < 20:
-        print(f"  ✓ EM coherence largely explains asymmetry")
-    else:
-        print(f"  ⚠ EM coherence helps but doesn't fully explain spread")
-        print(f"  Possible: tidal effects (SMC-LMC interaction), MHD instabilities")
+    print("\nANDROMEDA (in-cascade satellites):")
+    print("Name                          | r(kpc) | f_EM   | v_obs | v_pred | Error")
+    print("-" * 90)
 
-print("\n" + "="*90)
+    m31_results = []
+    for sat in M31_SATELLITES:
+        result = predictor.predict_satellite_velocity(sat)
+        if result['in_cascade']:
+            m31_results.append(result)
+            f_em = result.get('em_coherence', 1.0)
+            print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {f_em:.3f} | "
+                  f"{result['v_observed']:5.0f} | {result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
+
+    if m31_results:
+        m31_errors = [r['error_pct'] for r in m31_results]
+        m31_mean = np.mean(m31_errors)
+        print(f"\nM31 In-Cascade: Mean error = {m31_mean:.1f}%")
+
+    print("\n" + "="*90)
+    print("UNVALIDATED OBSERVABLE COMPARISON")
+    print("="*90)
+
+    if m31_results and mw_results:
+        m31_mean = np.mean([r['error_pct'] for r in m31_results])
+        mw_mean = np.mean([r['error_pct'] for r in mw_results])
+        spread = abs(m31_mean - mw_mean)
+
+        print(f"\nAsymmetry Analysis:")
+        print(f"  M31 mean error:   {m31_mean:.1f}%")
+        print(f"  MW mean error:    {mw_mean:.1f}%")
+        print(f"  Absolute spread:  {spread:.1f}%")
+
+        print(f"\nEM Coherence Levels:")
+        if m31_results:
+            m31_f_em = np.mean([r['em_coherence'] for r in m31_results])
+            print(f"  M31 average f_EM: {m31_f_em:.3f} (high coherence)")
+        if mw_results:
+            mw_f_em = np.mean([r['em_coherence'] for r in mw_results])
+            print(f"  MW average f_EM:  {mw_f_em:.3f} (low coherence)")
+
+        print("\nPhysical validation: INVALID_COMPARISON")
+        print("  These numerical residuals compare unmatched observables.")
+        print("  They do not establish cascade inheritance or an EM-coherence mechanism.")
+        print("  See GALAXY_EXTERNAL_VALIDATION.md for the source-qualified rotation test.")
+
+    print("\n" + "="*90)
+
+
+if __name__ == "__main__":
+    main()

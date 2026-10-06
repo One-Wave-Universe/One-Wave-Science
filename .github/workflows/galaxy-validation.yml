@@ -1,0 +1,59 @@
+name: Galaxy observable validation
+
+on:
+  pull_request:
+    paths:
+      - 'solvers/*galaxy*'
+      - 'solvers/observational_data_loader.py'
+      - 'solvers/GALAXY_EXTERNAL_VALIDATION.md'
+      - 'solvers/ONE_WAVE_UNIFIED_SATELLITE_VALIDATION.md'
+      - 'solvers/data/mw_dr3plus*'
+      - '.github/workflows/galaxy-validation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'solvers/*galaxy*'
+      - 'solvers/observational_data_loader.py'
+      - 'solvers/GALAXY_EXTERNAL_VALIDATION.md'
+      - 'solvers/ONE_WAVE_UNIFIED_SATELLITE_VALIDATION.md'
+      - 'solvers/data/mw_dr3plus*'
+      - '.github/workflows/galaxy-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-observable-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned numerical dependencies
+        run: python -m pip install numpy==2.3.5 scipy==1.17.0
+      - name: Run source and observable contract tests
+        run: python -m unittest discover -s solvers -p test_galaxy_validation.py -v
+      - name: Verify honest scientific rejection and retain fresh receipt
+        run: |
+          set +e
+          python solvers/galaxy_external_validation.py --output "$RUNNER_TEMP/galaxy-result.json"
+          result=$?
+          set -e
+          test "$result" -eq 1
+          python - "$RUNNER_TEMP/galaxy-result.json" <<'PY'
+          import json, sys
+          receipt = json.load(open(sys.argv[1]))
+          assert [v['discrepancy_screen'] for v in receipt['variants']] == ['FAIL', 'FAIL']
+          assert [v['count'] for v in receipt['variants']] == [45, 45]
+          assert receipt['model_fit_performed'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: galaxy-observable-receipt
+          path: ${{ runner.temp }}/galaxy-result.json
+          if-no-files-found: error
