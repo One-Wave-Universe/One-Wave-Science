@@ -1,4 +1,8 @@
 # Standard Model Mysteries: Cascade Solution Map
+
+## Current book-linked work register — 2026-10-06
+
+The [75-target problem register](BOOKS/Standard_Physics_Assumption_Audit/01_PROBLEM_REGISTER.md) connects this original cascade to the existing book, source-review tasks, metadata pipelines and CERN wave-coordinate chart, including solar-corona heating. Existing text below is preserved. Its completion labels and forecast checkmarks are not substitute execution receipts; claim status remains owned by canonical nodes and source-qualified evidence.
 **Date:** October 4, 2026  
 **Status:** Phase 5 Implementation Priority List  
 **Framework:** Keystone Problem Identification + Snowball Method
