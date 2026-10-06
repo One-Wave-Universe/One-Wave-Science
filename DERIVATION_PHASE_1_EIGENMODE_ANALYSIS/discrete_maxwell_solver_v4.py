@@ -78,37 +78,37 @@ def extract_fields_vector(
     psi: Dict[Site, Tuple[complex, complex]],
     sites: Sequence[Site],
     a: float = 1.0
-) -> Tuple[Dict[Site, Tuple[float, float]], Dict[Site, float]]:
+) -> Tuple[Dict[Site, Tuple[complex, complex]], Dict[Site, complex]]:
     """
     Extract E and B from vector field ψ = (ψ_x, ψ_y).
 
-    Both are extracted from the same ψ field, guaranteeing
-    frequency matching by Helmholtz structure.
+    CRITICAL FIX (Phase 6B-2): Work with COMPLEX ψ throughout.
+    Both are extracted from the same ψ field, preserving phase evolution.
+    This guarantees frequency matching needed for Faraday's law.
 
     Returns:
         (E_field, B_field_z) where:
-          E_field: Dict[Site, (E_x, E_y)] — real 2D vector
-          B_field_z: Dict[Site, B_z] — real scalar
-    """
+          E_field: Dict[Site, (E_x, E_y)] — complex 2D vector
+          B_field_z: Dict[Site, B_z] — complex scalar
 
-    # Convert complex ψ to real (take real parts of both components)
-    psi_real = {}
-    for site in sites:
-        psi_x, psi_y = psi[site]
-        psi_real[site] = (psi_x.real, psi_y.real)
+    The returned fields are complex because they encode the oscillating
+    behavior through e^{-iωt} factors inherited from ψ.
+    """
 
     # ====================================================================
     # E-field: comes from ∇(∇·ψ) [potential part]
+    # Apply operators directly to complex ψ
     # ====================================================================
 
-    div_psi = discrete_divergence(psi_real, sites, a)
+    div_psi = discrete_divergence(psi, sites, a)
     e_field = discrete_gradient(div_psi, sites, a)
 
     # ====================================================================
     # B-field: comes from (∇×(∇×ψ))_z [solenoidal part]
+    # Apply to complex ψ to preserve phase
     # ====================================================================
 
-    curl_psi_z = discrete_curl_z(psi_real, sites, a)
+    curl_psi_z = discrete_curl_z(psi, sites, a)
     grad_curl = discrete_gradient(curl_psi_z, sites, a)
 
     # ∇×(∇×ψ) in 2D: the z-component is ∂(curl_z)/∂x ∂(curl_z)/∂y mixed term
@@ -170,24 +170,30 @@ def test_faraday_law(
 ) -> Dict:
     """
     Test Faraday's law: ∇×E = -∂B/∂t
+
+    FIXED (Phase 6B-2): Now works with complex E and B fields.
+    Extracts magnitude of error: |∇×E + ∂B/∂t|
     """
     errors = []
 
     for t in range(1, len(psi_history) - 1):
-        # Extract fields at time t
+        # Extract complex fields at time t
         e_t, b_t = extract_fields_vector(psi_history[t], sites, a)
         e_tp, b_tp = extract_fields_vector(psi_history[t+1], sites, a)
         e_tm, b_tm = extract_fields_vector(psi_history[t-1], sites, a)
 
-        # Compute ∂B/∂t using finite differences
+        # Compute ∂B/∂t using finite differences (complex)
         db_dt = {site: (b_tp[site] - b_tm[site]) / (2.0 * dt) for site in sites}
 
-        # Compute ∇×E
+        # Compute ∇×E (now works on complex 2D vector field)
+        # Convert E to format for curl operator (complex tuple at each site)
         curl_e = discrete_curl_z(e_t, sites, a)
 
         # Faraday: ∇×E + ∂B/∂t should be zero
+        # Measure magnitude of the violation
         for site in sites:
-            error = abs(curl_e[site] + db_dt[site])
+            violation = curl_e[site] + db_dt[site]
+            error = abs(violation)
             errors.append(error)
 
     if errors:
@@ -215,23 +221,20 @@ def one_wave_update_vector(
     """
     Time-step the One-Wave rule for vector ψ = (ψ_x, ψ_y):
       ψⁿ⁺¹ = 2ψⁿ - ψⁿ⁻¹ - γ(ψⁿ - ψⁿ⁻¹) + β[∇(∇·ψ) - ∇×(∇×ψ)]
+
+    CRITICAL FIX (Phase 6B-2): Work with complex ψ throughout.
+    Differential operators apply component-wise to complex fields.
+    Discarding imaginary parts destroys the frequency information needed
+    for Faraday's law to hold. Keep phase evolution intact.
     """
-    # Convert to real for operator application
-    psi_real = {}
-    for site in sites:
-        psi_x, psi_y = psi_curr[site]
-        psi_real[site] = (psi_x.real, psi_y.real)
+    # Apply operators directly to complex ψ (no real() conversion)
+    # Operators apply component-wise: if ψ is complex, output is complex
 
-    psi_prev_real = {}
-    for site in sites:
-        psi_x, psi_y = psi_prev[site]
-        psi_prev_real[site] = (psi_x.real, psi_y.real)
-
-    # Divergence and curl terms
-    div_psi = discrete_divergence(psi_real, sites, a)
+    # Divergence and curl terms (on complex fields)
+    div_psi = discrete_divergence(psi_curr, sites, a)
     grad_div_psi = discrete_gradient(div_psi, sites, a)
 
-    curl_psi = discrete_curl_z(psi_real, sites, a)
+    curl_psi = discrete_curl_z(psi_curr, sites, a)
     grad_curl_psi = discrete_gradient(curl_psi, sites, a)
 
     # Update each site
