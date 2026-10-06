@@ -132,6 +132,7 @@ class CircuitController:
         # Control
         self.mode = ControlMode.IDLE
         self.gate_control_func: Optional[Callable[[str, float], float]] = None
+        self.analog_gate_control_func: Optional[Callable[[CircuitState], Dict[str, float]]] = None
 
         # AI hooks
         self.pre_step_hook: Optional[Callable[[CircuitState], None]] = None
@@ -147,6 +148,21 @@ class CircuitController:
             self for chaining
         """
         self.gate_control_func = func
+        return self
+
+    def set_analog_gate_control(self, func: Callable[[CircuitState], Dict[str, float]]) -> CircuitController:
+        """Set analog gate control function that receives full circuit state.
+
+        Enables feedback-based proportional/integral gate control.
+        Gate voltage varies continuously based on virtual ground feedback.
+
+        Args:
+            func: function(state: CircuitState) -> {mosfet_id: gate_voltage_0_to_5V}
+
+        Returns:
+            self for chaining
+        """
+        self.analog_gate_control_func = func
         return self
 
     def set_ai_hooks(self,
@@ -179,6 +195,16 @@ class CircuitController:
             current_state = self._make_state()
             self.pre_step_hook(current_state)
 
+        # Determine gate control function to use
+        gate_func = self.gate_control_func
+
+        # If analog gate control is set, call it with current state and wrap result
+        if self.analog_gate_control_func:
+            current_state = self._make_state()
+            analog_voltages = self.analog_gate_control_func(current_state)
+            # Convert dict {mosfet_id: voltage} to lambda matching solver's (mosfet_id, time) interface
+            gate_func = lambda mosfet_id, time: analog_voltages.get(mosfet_id, 0.0)
+
         # Solve step
         sol = self.circuit.solve_step(
             initial_cap_states=self.cap_states,
@@ -186,7 +212,7 @@ class CircuitController:
             initial_voltages=self.voltages,
             dt=dt_s,
             time=self.time,
-            gate_voltage_func=self.gate_control_func
+            gate_voltage_func=gate_func
         )
 
         # Update state

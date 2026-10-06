@@ -18,6 +18,7 @@ import sys
 import json
 import argparse
 from pathlib import Path
+from typing import Dict
 
 # Add repo root to path for imports
 repo_root = Path(__file__).parent.parent.parent.parent
@@ -159,6 +160,85 @@ def demo_ai_control_mode():
     return controller, ai_state
 
 
+def demo_analog_gate_control_mode():
+    """Demonstrate bidirectional analog gate control with feedback."""
+    print("\n" + "="*70)
+    print("DEMO: ANALOG GATE CONTROL (Proportional Feedback)")
+    print("="*70)
+
+    # Build P0 circuit
+    builder = P0TernaryCircuit(v_supply=5.0)
+    circuit, initial_state = builder.build(supply_mode="single")
+    controller = CircuitController(circuit, initial_state)
+
+    # Proportional control parameters
+    v_target = 2.5  # Target virtual ground voltage
+    k_p = 0.5  # Proportional gain (gate voltage change per volt error)
+    v_center = 2.5  # Center gate voltage (neutral point)
+    v_max = 5.0  # Maximum gate voltage
+    v_min = 0.0  # Minimum gate voltage
+
+    # Proportional control function: varies gate voltage based on V_0 feedback
+    def proportional_gate_control(state: CircuitState) -> Dict[str, float]:
+        """
+        Proportional control: V_gate = V_center + K_p * (V_target - V_0)
+
+        When V_0 is below target: increase gate voltage to charge midpoint higher
+        When V_0 is above target: decrease gate voltage to discharge midpoint lower
+        """
+        v_0 = state.node_voltages.get('0', v_target)
+        error = v_target - v_0
+
+        # Proportional control law
+        v_gate = v_center + k_p * error
+
+        # Clamp to valid range
+        v_gate = max(v_min, min(v_max, v_gate))
+
+        # Apply same voltage to all MOSFETs for symmetric operation
+        return {
+            "M_U_high": v_gate,
+            "M_U_low": v_gate,
+            "M_V_high": v_gate,
+            "M_V_low": v_gate,
+            "M_W_high": v_gate,
+            "M_W_low": v_gate,
+        }
+
+    controller.set_analog_gate_control(proportional_gate_control)
+
+    # Run simulation in analog control mode
+    duration_s = 100e-6  # 100 microseconds
+    dt_s = 1e-6  # 1 microsecond timesteps
+
+    print(f"\nRunning analog-controlled simulation ({duration_s*1e6:.1f}µs)")
+    print(f"Control parameters: V_target={v_target:.2f}V, K_p={k_p:.2f}")
+    state_history = controller.run_simulation(
+        duration_s=duration_s,
+        dt_s=dt_s,
+        mode=ControlMode.VISUALIZATION
+    )
+
+    # Analyze results
+    print(f"\nSimulation complete: {len(state_history)} states recorded")
+
+    if state_history:
+        final_state = state_history[-1]
+        v_0_final = final_state.node_voltages.get('0', v_target)
+        error_final = abs(v_0_final - v_target)
+
+        print(f"\nFinal state:")
+        print(f"  V_0 = {v_0_final:.6f}V (target: {v_target}V)")
+        print(f"  Error = {error_final:.6f}V")
+        print(f"  Status: {'✓ STABLE' if error_final < 0.01 else '✗ DRIFT'}")
+
+        # Sample gate voltages at final state
+        print(f"\nFinal gate voltages (all tied together):")
+        print(f"  V_gate = {v_center + k_p * (v_target - v_0_final):.4f}V (before clamping)")
+
+    return controller
+
+
 def demo_test_execution_mode():
     """Execute automated test suite."""
     print("\n" + "="*70)
@@ -210,17 +290,17 @@ def demo_test_execution_mode():
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Circuit Controller Demo: Visualization, AI Control, and Testing"
+        description="Circuit Controller Demo: Visualization, AI Control, Analog Control, and Testing"
     )
     parser.add_argument(
         "--mode",
-        choices=["visualization", "ai-control", "test"],
+        choices=["visualization", "ai-control", "analog-control", "test"],
         help="Run specific demo mode"
     )
     parser.add_argument(
         "--all",
         action="store_true",
-        help="Run all three demo modes in sequence"
+        help="Run all demo modes in sequence"
     )
     args = parser.parse_args()
 
@@ -235,6 +315,9 @@ def main():
 
     if args.all or args.mode == "ai-control":
         demo_ai_control_mode()
+
+    if args.all or args.mode == "analog-control":
+        demo_analog_gate_control_mode()
 
     if args.all or args.mode == "test":
         demo_test_execution_mode()
