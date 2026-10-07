@@ -26,7 +26,7 @@ from One_Wave_Bench.engine.electrical.circuit_controller import CircuitControlle
 class HexagonDirectForwardModel:
     def __init__(self):
         print("Building P0 hexagon direct phase circuit...")
-        builder = P0HexagonDirect(v_supply=5.0)
+        builder = P0HexagonDirect(v_supply=1.0)
         self.circuit, initial_state = builder.build()
         self.controller = CircuitController(self.circuit, initial_state)
 
@@ -44,7 +44,7 @@ class HexagonDirectForwardModel:
             (v_pos_final, v_neg_final, phase_current, stability)
         """
         # Reset circuit for fresh run
-        builder = P0HexagonDirect(v_supply=5.0)
+        builder = P0HexagonDirect(v_supply=1.0)
         circuit, initial_state = builder.build()
         self.controller = CircuitController(circuit, initial_state)
 
@@ -53,7 +53,7 @@ class HexagonDirectForwardModel:
             if pos_node in mosfet_id or neg_node in mosfet_id:
                 return gate_voltage
             else:
-                return 2.5  # Other phases: neutral (both FETs off)
+                return 0.50  # Other phases: neutral (virtual ground baseline)
 
         self.controller.set_gate_control(gate_control)
 
@@ -66,12 +66,12 @@ class HexagonDirectForwardModel:
             try:
                 self.controller.run_step(dt_s)
                 state = self.controller._make_state()
-                v_pos = state.node_voltages.get(pos_node, 2.5)
-                v_neg = state.node_voltages.get(neg_node, 2.5)
+                v_pos = state.node_voltages.get(pos_node, 0.50)
+                v_neg = state.node_voltages.get(neg_node, 0.50)
                 v_pos_history.append(v_pos)
                 v_neg_history.append(v_neg)
 
-                if v_pos > 10.0 or v_pos < -5.0 or v_neg > 10.0 or v_neg < -5.0:
+                if v_pos > 1.5 or v_pos < -0.5 or v_neg > 1.5 or v_neg < -0.5:
                     print(f"      ⚠ Divergence at step {step}: v_pos={v_pos:.2f}V, v_neg={v_neg:.2f}V")
                     break
             except Exception as e:
@@ -80,8 +80,8 @@ class HexagonDirectForwardModel:
 
         # Steady state from last 10%
         n_steady = max(10, len(v_pos_history) // 10)
-        v_pos_steady = v_pos_history[-n_steady:] if v_pos_history else [2.5]
-        v_neg_steady = v_neg_history[-n_steady:] if v_neg_history else [2.5]
+        v_pos_steady = v_pos_history[-n_steady:] if v_pos_history else [0.50]
+        v_neg_steady = v_neg_history[-n_steady:] if v_neg_history else [0.50]
 
         v_pos_final = v_pos_steady[-1]
         v_neg_final = v_neg_steady[-1]
@@ -96,8 +96,9 @@ class HexagonDirectForwardModel:
         print("\n" + "="*80)
         print("HEXAGON DIRECT PHASES FORWARD MODEL TEST")
         print("="*80)
-        print("\nThree independent phases, each swept 0.0V to 5.0V in 0.5V steps")
-        print("Measuring phase voltage response (letter-to-letter connections)\n")
+        print("\nThree independent phases, each swept 0.0V to 1.0V in 0.1V steps")
+        print("Measuring phase voltage response (letter-to-letter connections)")
+        print("Supply: 1.0V, Baseline: 0.50V\n")
 
         phases = [
             ("A", "a_pos", "a_neg"),
@@ -113,7 +114,7 @@ class HexagonDirectForwardModel:
             print(f"  " + "-"*70)
 
             phase_results = {}
-            gate_voltages = [v / 10.0 for v in range(0, 51, 5)]  # 0.0, 0.5, 1.0, ..., 5.0
+            gate_voltages = [v / 10.0 for v in range(0, 11, 1)]  # 0.0, 0.1, 0.2, ..., 1.0
 
             for gate_v in gate_voltages:
                 v_pos, v_neg, i_phase, stability = self.measure_phase_response(

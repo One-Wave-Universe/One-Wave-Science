@@ -23,7 +23,7 @@ class P0TernaryCircuit:
     """Builder for the P0 ternary circuit."""
 
     def __init__(self,
-                 v_supply: float = 5.0,
+                 v_supply: float = 1.0,
                  gate_drive_impedance: float = 10.0,
                  winding_inductance: float = 1e-3,
                  winding_resistance: float = 5.0,
@@ -169,20 +169,19 @@ class P0TernaryCircuit:
         circuit.add(Ground(node="GND"))
 
         # Virtual ground: resistor divider set to 0.50V (biological baseline)
-        # Divider creates 0.50V reference (9:1 ratio from 5V supply)
-        r_div_low = 100.0  # Lower impedance for stability
-        r_div_high = 900.0  # 9:1 divider → 0.50V from 5V supply
+        # With 1V supply: 1:1 divider creates 0.50V reference
+        r_div = 100.0  # Equal resistors for 1:1 divider
         circuit.add(Resistor(
             id="R_div_top",
             a="+V",
             b="vg_raw",
-            ohms=r_div_high
+            ohms=r_div
         ))
         circuit.add(Resistor(
             id="R_div_bottom",
             a="vg_raw",
             b="GND",
-            ohms=r_div_low
+            ohms=r_div
         ))
 
         # TLE2426 or op-amp buffer (unity gain, very low output impedance)

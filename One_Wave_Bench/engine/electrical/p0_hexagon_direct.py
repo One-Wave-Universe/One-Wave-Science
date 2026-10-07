@@ -30,7 +30,7 @@ class P0HexagonDirect:
     """P0 hexagon with direct phase-to-phase connections (no central nucleus)."""
 
     def __init__(self,
-                 v_supply: float = 5.0,
+                 v_supply: float = 1.0,
                  winding_inductance: float = 1e-3,
                  winding_resistance: float = 5.0,
                  mosfet_rds_on: float = 0.5,
