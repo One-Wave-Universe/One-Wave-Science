@@ -25,21 +25,16 @@ The window notation is: **(negative) (0) positive**
 
 ### Fundamental Chord Types
 
-**Power Chord: (-1, +1) — Augmented ±1**
+**Augmented ±1: (-1, +1)** (semitone reading; not a root-and-fifth power chord)
 
 - Simplest oscillation envelope
-- Root (0) + Perfect fifth (+1) + Complementary fifth below (-1)
-- Octave-synced root notes settle together (1:2 harmonic lock)
+- Root (0), one semitone below (-1 = B around C), one semitone above (+1 = C♯ around C)
 - Symmetric, centered, **direction-neutral**
-- Settles **fastest** because of immediate phase-lock in the octave relationship
+- Settling speed: hypothesis only (see Yellow Audit)
 
-Pitch classes: {0, 1, 11} (root, fifth up, fifth down)
+Pitch classes: {0, 1, 11} (root, one semitone up, one semitone down)
 
-Physical voicing: Root (low octave), Fifth (same octave), Root (higher octave)
-- The two roots lock and settle together (octave sync)
-- The fifth at same octave as lower root
-- No competing frequencies pulling in different directions
-- Clean, coherent, moves freely to any root
+Note: under the semitone reading this window does not contain a perfect fifth. The earlier "power chord" label described a root-fifth-root voicing that the window does not produce.
 
 **Major: (-5, +4)**
 
