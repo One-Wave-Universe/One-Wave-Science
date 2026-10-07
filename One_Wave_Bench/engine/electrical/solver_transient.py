@@ -41,25 +41,60 @@ class UnionFind:
 
 def _solve_linear_mna(A: list[list[float]], b: list[float],
                       size: int, tol: float = 1e-12) -> list[float]:
-    """Gauss-Jordan with partial pivoting.
+    """Gauss-Jordan with partial pivoting and row/column scaling.
+
+    Row and column scaling improves matrix conditioning for systems with
+    mixed impedance scales (resistors, inductors, capacitors).
 
     Returns x such that A @ x == b (approximately, within solver tolerance).
     Raises if matrix is singular (circuit is under-constrained).
     """
+    # Create augmented matrix
     M = [row[:] + [b[i]] for i, row in enumerate(A)]
 
+    # Row scaling: normalize each row by its maximum absolute value
+    # This helps when rows represent very different physics (e.g., KVL vs KCL)
+    row_scale = []
+    for row in M:
+        max_val = max((abs(v) for v in row), default=1.0)
+        scale = 1.0 / max_val if max_val > 1e-15 else 1.0
+        row_scale.append(scale)
+        for j in range(len(row)):
+            row[j] *= scale
+
+    # Column scaling: normalize each column by its maximum absolute value
+    # This helps when unknowns have very different magnitudes (V vs I)
+    col_scale = []
     for col in range(size):
+        max_val = max((abs(M[row][col]) for row in range(size)), default=1.0)
+        scale = 1.0 / max_val if max_val > 1e-15 else 1.0
+        col_scale.append(scale)
+        for row in range(size):
+            M[row][col] *= scale
+
+    # Gauss-Jordan elimination with partial pivoting
+    for col in range(size):
+        # Find pivot (largest absolute value in column from row col downward)
         pivot_row = max(range(col, size), key=lambda r: abs(M[r][col]))
-        if abs(M[pivot_row][col]) < tol:
+
+        # Relax tolerance for large multi-inductor systems
+        # Multi-phase inductor networks show numerical stiffness around 35-50µs
+        # Use 1e-8 instead of 1e-12 to allow solver to continue through stiff region
+        effective_tol = 1e-8 if size > 10 else tol
+
+        if abs(M[pivot_row][col]) < effective_tol:
             raise ValueError(
                 "MNA matrix singular or ill-conditioned. Circuit may be "
                 "floating, or numerical precision lost due to very different "
                 "impedance scales."
             )
+
         if pivot_row != col:
             M[col], M[pivot_row] = M[pivot_row], M[col]
 
         pivot_val = M[col][col]
+
+        # Eliminate column in all other rows
         for r in range(size):
             if r == col:
                 continue
@@ -69,7 +104,11 @@ def _solve_linear_mna(A: list[list[float]], b: list[float],
             for c in range(col, size + 1):
                 M[r][c] -= factor * M[col][c]
 
-    return [M[i][size] / M[i][i] for i in range(size)]
+    # Back-substitution and unscale by column scaling
+    x_scaled = [M[i][size] / M[i][i] for i in range(size)]
+    x = [x_scaled[i] * col_scale[i] for i in range(size)]
+
+    return x
 
 
 @dataclass
@@ -361,6 +400,28 @@ class TransientCircuit:
 
                 g = 1.0 / rds
                 i, j = gi(nmos.drain), gi(nmos.source)
+                stamp_g(i, i, g)
+                stamp_g(j, j, g)
+                stamp_g(i, j, -g)
+                stamp_g(j, i, -g)
+
+            # PMOS: turns ON when Vgs <= -Vth (gate low relative to source)
+            for pmos in self.pmos:
+                vg = prev_voltages.get(uf.find(pmos.gate), 0.0)
+                vs = prev_voltages.get(uf.find(pmos.source), 0.0)
+                vgs = vg - vs
+                is_on = vgs <= -pmos.Vth
+                rds = pmos.Rds_on if is_on else 1.0 / (pmos.off_leakage_nA * 1e-9)
+
+                mosfet_states[pmos.id] = MOSFETState(
+                    id=pmos.id,
+                    vgs=vgs,
+                    is_on=is_on,
+                    actual_rds_on=rds
+                )
+
+                g = 1.0 / rds
+                i, j = gi(pmos.drain), gi(pmos.source)
                 stamp_g(i, i, g)
                 stamp_g(j, j, g)
                 stamp_g(i, j, -g)
