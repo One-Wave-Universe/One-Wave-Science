@@ -22,6 +22,7 @@ import numpy as np
 from scipy.linalg import solve
 from scipy.sparse import lil_matrix, csr_matrix
 from scipy.sparse.linalg import spsolve
+from scipy.interpolate import interp1d
 import json
 from typing import Dict, Tuple, Optional
 
@@ -266,21 +267,39 @@ class FourInteractionSourceBridge:
 
         # For now, assume scalar/radial source
         if isinstance(J_source, np.ndarray) and J_source.ndim > 1:
-            J_r = np.linalg.norm(J_source, axis=1)
+            J_r_lattice = np.linalg.norm(J_source, axis=1)
         else:
-            J_r = J_source
+            J_r_lattice = J_source
 
         # Radial grid
         edges = np.linspace(0., domain_radius, grid_points + 1)
         dr = domain_radius / grid_points
         radius = (edges[:-1] + edges[1:]) / 2
 
+        # Interpolate source term from lattice grid to field grid
+        # Map lattice sites (0 to n_sites) to radial domain (0 to domain_radius)
+        lattice_radius = np.linspace(0., domain_radius, len(J_r_lattice))
+
+        # Create interpolation function (cubic spline, with boundary extrapolation)
+        try:
+            f_interp = interp1d(lattice_radius, J_r_lattice, kind='cubic',
+                               bounds_error=False, fill_value='extrapolate')
+            J_r_edges = f_interp(edges)
+        except:
+            # Fallback: linear interpolation if cubic fails
+            f_interp = interp1d(lattice_radius, J_r_lattice, kind='linear',
+                               bounds_error=False, fill_value='extrapolate')
+            J_r_edges = f_interp(edges)
+
+        # Ensure no NaN or inf values
+        J_r_edges = np.nan_to_num(J_r_edges, nan=0.0, posinf=0.0, neginf=0.0)
+
         # Stiffness (K_χ + S_u in units of A-115)
         stiffness = self.K_chi + self.S_u
 
         # Solve: (stiffness) * laplacian(chi) = -J_r
         # Flux: Φ(r) = r² dχ/dr
-        flux = edges**2 * J_r / stiffness
+        flux = edges**2 * J_r_edges / stiffness
 
         # Banded solver for tridiagonal system
         weights = edges**2 / dr

@@ -18,7 +18,7 @@ Date: 2026-10-06
 import json
 import numpy as np
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
 import warnings
 
 # Import the source-term bridge
@@ -181,21 +181,25 @@ class UnifiedCompressionSolver:
         2. Non-zero exterior acceleration from extended compression
         3. Dark-matter density profile inferred from g_wake
         """
-        radius = field_solution['radius']
+        edges = field_solution['edges']
         acceleration = field_solution['acceleration']
         compression = field_solution['compression']
 
         # Decompose into local and wake
         # Local: interior response
         # Wake: exterior retained compression
-        radius_source = np.where(compression > 1e-3 * np.max(np.abs(compression)))[0]
+        # Use compression (cell-center) to find source boundary
+        radius_center = field_solution['radius']
+        max_compression = np.max(np.abs(compression))
+        radius_source = np.where(compression > 1e-3 * max_compression)[0]
         if len(radius_source) > 0:
-            source_edge = radius[radius_source[-1]]
+            source_edge = radius_center[radius_source[-1]]
         else:
             source_edge = 1.0
 
-        local_mask = radius < source_edge
-        wake_mask = radius >= source_edge
+        # Create masks on edges grid to match acceleration shape
+        local_mask = edges < source_edge
+        wake_mask = edges >= source_edge
 
         acceleration_local = acceleration.copy()
         acceleration_local[wake_mask] = 0
@@ -205,7 +209,7 @@ class UnifiedCompressionSolver:
 
         # Inferred dark-matter density (conventional language)
         # ρ_DM ∝ -∇·g_wake
-        dr = radius[1] - radius[0] if len(radius) > 1 else 0.1
+        dr = edges[1] - edges[0] if len(edges) > 1 else 0.1
         if dr > 0:
             dgdr = np.gradient(acceleration_wake, dr)
             rho_dm_eff = -dgdr / (4 * np.pi * self.alpha_g) if self.alpha_g != 0 else dgdr
