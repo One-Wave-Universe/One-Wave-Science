@@ -1,3 +1,4 @@
+from .coach_integration import CoachRequest
 from .models import (
     EvaluationEvidence,
     EvaluationLifecycle,
@@ -11,7 +12,7 @@ from .models import (
     initial_task_state,
 )
 from .policy import PolicyConfig
-from .router_loop import RouterLoop
+from .router_loop import NoCoachRequestPendingError, RouterLoop
 from .state_machine_a import IllegalTaskTransitionError
 from .state_machine_b import (
     IllegalEvaluationTransitionError,
@@ -20,6 +21,7 @@ from .state_machine_b import (
 )
 
 __all__ = [
+    "CoachRequest",
     "EvaluationEvidence",
     "EvaluationLifecycle",
     "EvaluatorState",
@@ -28,6 +30,7 @@ __all__ = [
     "LearnerAttempt",
     "LearnerTaskState",
     "MalformedAttemptError",
+    "NoCoachRequestPendingError",
     "PolicyConfig",
     "RouteAction",
     "RouteDecision",
