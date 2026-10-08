@@ -1,0 +1,14 @@
+One-Wave-Science/solvers/cascade_neural_router.py
+One-Wave-Science/solvers/coherence_diagnostic.py
+One-Wave-Science/solvers/correction_formula_calibration.py
+One-Wave-Science/solvers/coupled_resonator_validator.py
+One-Wave-Science/solvers/coupling_constants_from_lattice.py
+One-Wave-Science/solvers/determine_flavor_hierarchy.py
+One-Wave-Science/solvers/determine_oscillation_correction.py
+One-Wave-Science/solvers/dispersion_validator.py
+One-Wave-Science/solvers/dispersion_visualizer.py
+One-Wave-Science/solvers/driven_bulk.py
+One-Wave-Science/solvers/electron_g2_solver.py
+One-Wave-Science/solvers/exoplanet_resonance_statistics.py
+One-Wave-Science/solvers/find_missing_physics.py
+One-Wave-Science/solvers/galaxy_external_validation.py

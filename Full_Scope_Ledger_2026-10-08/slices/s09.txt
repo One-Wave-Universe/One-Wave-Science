@@ -1,0 +1,9 @@
+One-Wave-Science/Nexus_Integration/Truth_Computer/REALITY_DATABASE_BUILDER_SPEC.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/INTERFACE_BUILD_GUIDE.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/README.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/WORK_RECORD.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/STATE_MACHINE_ARCHITECTURE.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/acceptance-tests.md
+One-Wave-Science/Nodes/D-413_Ground_Lattice_Orbital_Restoring_Simulation/README.md
+One-Wave-Science/Nodes/D-415_Hexagonal_Lattice_Interaction_Dynamics/README.md
+One-Wave-Science/Nodes/D-415_Nonlocal_Three_Excitation_Field_Bench/BALANCE_DERIVATION.md

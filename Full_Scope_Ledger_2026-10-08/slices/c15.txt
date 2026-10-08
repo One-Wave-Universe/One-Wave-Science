@@ -1,0 +1,11 @@
+One-Wave-Science/solvers/algorithm_zero_galaxy_validation_comprehensive.py
+One-Wave-Science/solvers/algorithm_zero_phase3_parameter_tuner.py
+One-Wave-Science/solvers/algorithm_zero_phase3_pressure_tensor.py
+One-Wave-Science/solvers/algorithm_zero_physics_engine.py
+One-Wave-Science/solvers/analyze_lambda_problem.py
+One-Wave-Science/solvers/asymmetric_oscillation_effects.py
+One-Wave-Science/solvers/atomic_spectra_cascade_resonance.py
+One-Wave-Science/solvers/atomic_spectroscopy_validator.py
+One-Wave-Science/solvers/boundary_condition_analysis.py
+One-Wave-Science/solvers/bulk_excitation.py
+One-Wave-Science/solvers/calibrate_coherence_parameters.py

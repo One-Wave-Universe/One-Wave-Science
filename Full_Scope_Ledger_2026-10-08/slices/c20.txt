@@ -1,0 +1,10 @@
+One-Wave-Science/solvers/oscillating_boundary_dynamics.py
+One-Wave-Science/solvers/oscillating_phase_mechanism.py
+One-Wave-Science/solvers/phase5a_source_term_bridge.py
+One-Wave-Science/solvers/phase5c_three_view_verification.py
+One-Wave-Science/solvers/phase5d_planetary_falsification.py
+One-Wave-Science/solvers/phase5e_inertial_coupling_dynamics.py
+One-Wave-Science/solvers/phase_locking_mechanism.py
+One-Wave-Science/solvers/precision_tests.py
+One-Wave-Science/solvers/pressure_model_calibrator.py
+One-Wave-Science/solvers/proton_compression_simulator.py

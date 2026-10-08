@@ -1,0 +1,13 @@
+One-Wave-Science/scripts/tests/test_brain_buddy_council.py
+One-Wave-Science/sims/00-lattice-primitive/dispersion_octave_fixture.py
+One-Wave-Science/sims/00-lattice-primitive/lattice-kernel.js
+One-Wave-Science/sims/00-lattice-primitive/test_dispersion_octave_fixture.py
+One-Wave-Science/sims/24-1-sandbox/modules/01-lattice-primitive/adapter.js
+One-Wave-Science/software-zer0/bench_assist.py
+One-Wave-Science/solvers/a115_galaxy_validation_derived_source.py
+One-Wave-Science/solvers/a115_noncompact_source_derivation.py
+One-Wave-Science/solvers/a115_source_amplitude_law.py
+One-Wave-Science/solvers/a115_source_scaling_derivation.py
+One-Wave-Science/solvers/a115_static_source.py
+One-Wave-Science/solvers/algorithm_zero_3d_volumetric_lattice.py
+One-Wave-Science/solvers/algorithm_zero_emergence.py

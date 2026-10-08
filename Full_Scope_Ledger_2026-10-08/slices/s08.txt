@@ -1,0 +1,10 @@
+One-Wave-Science/History/Superseded_Governance/I-01_Lifecycle_ALT_Superseded_by_I-02.md
+One-Wave-Science/History/Superseded_Governance/RECONCILIATION_duplex-gates-packet_v1.md
+One-Wave-Science/History/Superseded_Governance/RECONCILIATION_duplex-gates-packet_v2.md
+One-Wave-Science/History/Unintegrated_Nodes/Neutrino_Node_ALT_FORMAT.md
+One-Wave-Science/Learner_App/LEARNER_APP_EXPLICIT_MAP.md
+One-Wave-Science/Learner_App/README.md
+One-Wave-Science/Learner_App/curriculum/RULE_01_BALANCED_CHANGE.md
+One-Wave-Science/MATH_BACKBONE/00_MATH_BACKBONE_LOCK.md
+One-Wave-Science/MATH_BACKBONE/20_measurement_bell_v1.md
+One-Wave-Science/Nexus_Integration/Truth_Computer/NEXUS_PRIVATE_INSTALL.md

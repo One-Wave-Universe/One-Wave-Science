@@ -1,0 +1,15 @@
+One-Wave-Science/solvers/test_dispersion_validator.py
+One-Wave-Science/solvers/test_driven_bulk.py
+One-Wave-Science/solvers/test_driven_report.py
+One-Wave-Science/solvers/test_galaxy_validation.py
+One-Wave-Science/solvers/test_joint_boundary_response.py
+One-Wave-Science/solvers/test_no_kappa_scaling.py
+One-Wave-Science/solvers/test_strange_hadrons.py
+One-Wave-Science/solvers/time_averaged_phase_locking.py
+One-Wave-Science/solvers/time_resistance_probe.py
+One-Wave-Science/solvers/unified_phase_solver.py
+One-Wave-Science/solvers/validate_strange_baryon_family.py
+One-Wave-Science/solvers/vortex_phase_oscillations.py
+One-Wave-Science/solvers/w2_gravity_emergence.py
+One-Wave-Science/solvers/weave_energy_breakdown.py
+One-Wave-Science/solvers/yukawa_matrix_solver.py

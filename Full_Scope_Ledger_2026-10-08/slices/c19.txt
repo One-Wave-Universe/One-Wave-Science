@@ -1,0 +1,10 @@
+One-Wave-Science/solvers/mathematical_harmonic_proof.py
+One-Wave-Science/solvers/maxwell_validator.py
+One-Wave-Science/solvers/measure_weave_components.py
+One-Wave-Science/solvers/molecular_geometry_harmonic_resonance.py
+One-Wave-Science/solvers/multi_variable_correction_fit.py
+One-Wave-Science/solvers/muon_g2_harmonic_validator.py
+One-Wave-Science/solvers/muon_g2_solver.py
+One-Wave-Science/solvers/neural_oscillations_validator.py
+One-Wave-Science/solvers/neutrino_mass_solver.py
+One-Wave-Science/solvers/observational_data_loader.py

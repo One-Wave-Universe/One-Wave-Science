@@ -1,0 +1,6 @@
+One-Wave-Science/00_MASTER_INDEX.md
+One-Wave-Science/AGENTS.md
+One-Wave-Science/AI_ACCESS_BRIDGING_AND_OPEN_DATA_HOWTO.md
+One-Wave-Science/AI_BRIDGE_START_HERE.md
+One-Wave-Science/AI_CANONICAL_START_HERE.md
+One-Wave-Science/AI_CODE_BRIDGE.md

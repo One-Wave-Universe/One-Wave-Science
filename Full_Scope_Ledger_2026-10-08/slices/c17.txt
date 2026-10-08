@@ -1,0 +1,10 @@
+One-Wave-Science/solvers/galaxy_rotation_c319_corrected.py
+One-Wave-Science/solvers/galaxy_rotation_c319_magnetic_coupling.py
+One-Wave-Science/solvers/galaxy_rotation_cascade_wake_validator.py
+One-Wave-Science/solvers/galaxy_rotation_constant_inherited_velocity.py
+One-Wave-Science/solvers/galaxy_rotation_inherited_rotation_field.py
+One-Wave-Science/solvers/galaxy_rotation_validator.py
+One-Wave-Science/solvers/generate_publication_figures.py
+One-Wave-Science/solvers/gravity_emergence_validator.py
+One-Wave-Science/solvers/hadron_collision_simulator.py
+One-Wave-Science/solvers/hadron_flavor_dependent_scaling.py

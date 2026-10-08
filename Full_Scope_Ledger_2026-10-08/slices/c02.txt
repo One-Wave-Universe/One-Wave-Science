@@ -1,0 +1,3 @@
+Builds/Virtual_3D_Electronics/test/cores.test.js
+Builds/Virtual_3D_Electronics/test/physics.test.js
+Builds/Virtual_Breadboard/js/ai.js

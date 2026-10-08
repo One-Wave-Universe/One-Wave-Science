@@ -1,0 +1,9 @@
+One-Wave-Science/AI_Readable_Packs/Appendix_G.md
+One-Wave-Science/AI_Update_Inbox/2026-09-11-balanced-builds/UPDATE.md
+One-Wave-Science/Branch_Steps/DREAMSCAPE_TRANSLATOR_OPEN_WORK.md
+One-Wave-Science/Branch_Steps/RABBIT_HOPPING_12_24_DIVISION_RAIL.md
+One-Wave-Science/Branch_Steps/RABBIT_HOPPING_ADDRESS_TRANSLATOR_LOCK.md
+One-Wave-Science/Branch_Steps/RABBIT_HOP_RECONSTRUCTION.md
+One-Wave-Science/Branch_Steps/TRANSLATOR_HYPOTHESIS_VERBATIM.md
+One-Wave-Science/DERIVATION_PHASE_1_EIGENMODE_ANALYSIS/CANONICAL_CONSISTENCY_CHECK.md
+One-Wave-Science/DERIVATION_PHASE_1_EIGENMODE_ANALYSIS/D-600_1D_Dispersion_Relation.md

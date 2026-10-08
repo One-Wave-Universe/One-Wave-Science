@@ -1,0 +1,7 @@
+One-Wave-Science/solvers/hadron_knot_geometry.py
+One-Wave-Science/solvers/hadron_mass_predictor.py
+One-Wave-Science/solvers/harmonic_locking_unifier.py
+One-Wave-Science/solvers/higgs_criticality_solver.py
+One-Wave-Science/solvers/high_energy_validator.py
+One-Wave-Science/solvers/joint_boundary_response.py
+One-Wave-Science/solvers/lattice_visualizer.py

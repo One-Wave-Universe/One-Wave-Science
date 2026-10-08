@@ -1,0 +1,10 @@
+One-Wave-Science/solvers/satellite_galaxy_validator_em_coherence_fixed.py
+One-Wave-Science/solvers/satellite_galaxy_velocity_validator.py
+One-Wave-Science/solvers/standard_model_mysteries_unified.py
+One-Wave-Science/solvers/superconductor_phase_transition_validator.py
+One-Wave-Science/solvers/symmetric_pair_binding_asymmetry.py
+One-Wave-Science/solvers/test_algorithm_zero_3d_volumetric.py
+One-Wave-Science/solvers/test_algorithm_zero_complete.py
+One-Wave-Science/solvers/test_bulk_excitation.py
+One-Wave-Science/solvers/test_coherence_formulas.py
+One-Wave-Science/solvers/test_coherence_inversion.py

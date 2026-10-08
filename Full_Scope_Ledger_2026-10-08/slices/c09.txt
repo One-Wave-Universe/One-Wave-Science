@@ -1,0 +1,10 @@
+One-Wave-Science/Integrity_Tools/close_book1_chapter_gaps.py
+One-Wave-Science/Integrity_Tools/validate_repository_integrity.py
+One-Wave-Science/Integrity_Tools/validate_updated_32_artifacts.py
+One-Wave-Science/Learner_App/curriculum/rule_01_balanced_change.py
+One-Wave-Science/Learner_App/router/recall_integration.py
+One-Wave-Science/Learner_App/tests/test_rule_01_lesson.py
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/app.py
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/knowledge_loop.py
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/test_app.py
+One-Wave-Science/Nexus_Integration/Truth_Computer/Reference_App/test_knowledge_loop.py

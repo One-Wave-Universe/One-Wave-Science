@@ -1,0 +1,11 @@
+One-Wave-Science/solvers/ONE_WAVE_UNIFIED_SATELLITE_VALIDATION.md
+One-Wave-Science/solvers/README_ALGORITHM_ZERO.md
+One-Wave-Science/solvers/README_DISPERSION_VALIDATOR.md
+One-Wave-Science/solvers/REPAIR_STATUS_2026_10_05.md
+One-Wave-Science/solvers/SOLVER_INDEX.md
+One-Wave-Science/solvers/SOURCE_CONSTITUTIVE_DERIVATION.md
+One-Wave-Science/solvers/TIME_RESISTANCE_PROBE.md
+One-Wave-Science/solvers/WEEK_1_COMPLETION_SUMMARY.md
+One-Wave-Science/solvers/a115_galaxy_validation_report.md
+One-Wave-Science/tasks/gemini/dimensional-interaction-ladder-001.md
+One-Wave-Science/tasks/gemini/physics-engine-foundation-001.md
