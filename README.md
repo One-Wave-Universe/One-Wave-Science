@@ -10,6 +10,8 @@ Choose a subject below. Folder links show their contents; README and guide links
 | Operating rules | [GENERAL_REFERENCE_RULES.md](GENERAL_REFERENCE_RULES.md) | Canonical sources, branches, receipts and anti-drift rules |
 | AI worker instructions | [AGENTS.md](AGENTS.md) | Repository work requirements |
 | Master contents | [00_MASTER_INDEX.md](00_MASTER_INDEX.md) | Detailed science index |
+| PPF rotation node map | [Nodes/PPF_NODE_MAP.md](Nodes/PPF_NODE_MAP.md) | Point, Path, Field rotation sources and open work |
+| PPF research chapter | [chapters/09_PPF_Rotational_Recursion.md](chapters/09_PPF_Rotational_Recursion.md) | PPF model, established controls, falsifiable tests |
 | Scientific nodes | [Nodes/](Nodes/) | Individual models, hypotheses and governed evidence |
 | Research books | [Books/README.md](Books/README.md) | Books and chapter organization |
 | Current laboratory | [Books/One_Wave_Science_Laboratory/README.md](Books/One_Wave_Science_Laboratory/README.md) | Source-linked solver evidence and current derivations |
