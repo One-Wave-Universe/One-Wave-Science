@@ -1,0 +1,75 @@
+{
+  "argv": [
+    "bash",
+    "-lc",
+    "printf 'TERMINAL_LIVE\\n'; hostname; whoami; pwd"
+  ],
+  "completed_at": "2026-09-24T22:43:36.854052+00:00",
+  "cwd": "/home/Scales/One-Wave-Science",
+  "duration_ms": 46,
+  "exit_code": 0,
+  "guidance": {
+    "code": "VERIFIED_COMMAND_COMPLETE",
+    "explanation": "The command completed inside the bounded parser.",
+    "higher_level_required": false,
+    "level": "none",
+    "next_action": "Use the receipt as evidence and verify state before the next mutation."
+  },
+  "id": "terminal-live-check-20260924-01",
+  "ok": true,
+  "output_clipped": false,
+  "parser_contract": "one-wave-terminal-parser-v2",
+  "reference": {
+    "contract": "one-wave-terminal-parser-v2",
+    "instruction": "Call terminal_reference for workflow, limits, authorized roots, and intervention levels.",
+    "tool": "terminal_reference"
+  },
+  "reference_after": {
+    "agents_sha256": "356b9de89869ffd65025c7270faed1ab613c3391bacc8563b68e2cf0fdfb81b1",
+    "branch": "codex/ai-local-operations",
+    "head": "4f8a7720c9615a961a9db8a43773fb2d798b22a9",
+    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+    "root": "/home/Scales/One-Wave-Science",
+    "status": "M AGENTS.md\n M AI_CANONICAL_START_HERE.md\n M BRANCH_STEP_PROJECT_TEMPLATE.md\n M PRIMITIVE_BUILD_MAP.md\n M hive-pipe/deepseek_bridge.py\n M hive-pipe/gateway.py\n M hive-pipe/terminal_parser.py\n M hive-pipe/test_deepseek_bridge.py\n M hive-pipe/test_gateway.py\n M hive-pipe/test_terminal_parser.py\n?? AI_CURRENT_PROJECT_JOURNAL.md\n?? AI_REFERENCE_SYSTEM.md\n?? ALGORYTHM_ZERO_FRAMEWORK_LAYERS.md\n?? ALGORYTHM_ZERO_SHARED_CANON.md\n?? ALGORYTHM_ZERO_T_TIME_CHANGE.md\n?? ALGORYTHM_ZERO_X_CONTROL.md\n?? ALGORYTHM_ZERO_Y_ROTATIONAL_STRUCTURE.md\n?? ALGORYTHM_ZERO_Z_DEPTH.md\n?? CELL_V1_BUILD_AUTHORITY.md\n?? DEVICE_GOBLIN_AUTHORITY.md\n?? HEARTBEAT.md\n?? IDENTITY.md\n?? ONE_WAVE_EVIDENCE_REFERENCE_LAW.md\n?? SOUL.md\n?? THREE_REPO_AUTHORITY.md\n?? TOOLS.md\n?? USER.md\n?? hive-pipe/hosted_model_service.py\n?? hive-pipe/openclaw_mcp_stdio.py\n?? openclaw-workspace-state.json"
+  },
+  "reference_before": {
+    "agents_sha256": "356b9de89869ffd65025c7270faed1ab613c3391bacc8563b68e2cf0fdfb81b1",
+    "branch": "codex/ai-local-operations",
+    "head": "4f8a7720c9615a961a9db8a43773fb2d798b22a9",
+    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+    "root": "/home/Scales/One-Wave-Science",
+    "status": "M AGENTS.md\n M AI_CANONICAL_START_HERE.md\n M BRANCH_STEP_PROJECT_TEMPLATE.md\n M PRIMITIVE_BUILD_MAP.md\n M hive-pipe/deepseek_bridge.py\n M hive-pipe/gateway.py\n M hive-pipe/terminal_parser.py\n M hive-pipe/test_deepseek_bridge.py\n M hive-pipe/test_gateway.py\n M hive-pipe/test_terminal_parser.py\n?? AI_CURRENT_PROJECT_JOURNAL.md\n?? AI_REFERENCE_SYSTEM.md\n?? ALGORYTHM_ZERO_FRAMEWORK_LAYERS.md\n?? ALGORYTHM_ZERO_SHARED_CANON.md\n?? ALGORYTHM_ZERO_T_TIME_CHANGE.md\n?? ALGORYTHM_ZERO_X_CONTROL.md\n?? ALGORYTHM_ZERO_Y_ROTATIONAL_STRUCTURE.md\n?? ALGORYTHM_ZERO_Z_DEPTH.md\n?? CELL_V1_BUILD_AUTHORITY.md\n?? DEVICE_GOBLIN_AUTHORITY.md\n?? HEARTBEAT.md\n?? IDENTITY.md\n?? ONE_WAVE_EVIDENCE_REFERENCE_LAW.md\n?? SOUL.md\n?? THREE_REPO_AUTHORITY.md\n?? TOOLS.md\n?? USER.md\n?? hive-pipe/hosted_model_service.py\n?? hive-pipe/openclaw_mcp_stdio.py\n?? openclaw-workspace-state.json"
+  },
+  "reference_card": {
+    "action_sha256": "ff61bc943db26f7eee3103967c597d7a7432141726fdc056c572fad2d067e2b2",
+    "goblin": "reference",
+    "repository": {
+      "agents_sha256": "356b9de89869ffd65025c7270faed1ab613c3391bacc8563b68e2cf0fdfb81b1",
+      "branch": "codex/ai-local-operations",
+      "head": "4f8a7720c9615a961a9db8a43773fb2d798b22a9",
+      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+      "root": "/home/Scales/One-Wave-Science",
+      "status": "M AGENTS.md\n M AI_CANONICAL_START_HERE.md\n M BRANCH_STEP_PROJECT_TEMPLATE.md\n M PRIMITIVE_BUILD_MAP.md\n M hive-pipe/deepseek_bridge.py\n M hive-pipe/gateway.py\n M hive-pipe/terminal_parser.py\n M hive-pipe/test_deepseek_bridge.py\n M hive-pipe/test_gateway.py\n M hive-pipe/test_terminal_parser.py\n?? AI_CURRENT_PROJECT_JOURNAL.md\n?? AI_REFERENCE_SYSTEM.md\n?? ALGORYTHM_ZERO_FRAMEWORK_LAYERS.md\n?? ALGORYTHM_ZERO_SHARED_CANON.md\n?? ALGORYTHM_ZERO_T_TIME_CHANGE.md\n?? ALGORYTHM_ZERO_X_CONTROL.md\n?? ALGORYTHM_ZERO_Y_ROTATIONAL_STRUCTURE.md\n?? ALGORYTHM_ZERO_Z_DEPTH.md\n?? CELL_V1_BUILD_AUTHORITY.md\n?? DEVICE_GOBLIN_AUTHORITY.md\n?? HEARTBEAT.md\n?? IDENTITY.md\n?? ONE_WAVE_EVIDENCE_REFERENCE_LAW.md\n?? SOUL.md\n?? THREE_REPO_AUTHORITY.md\n?? TOOLS.md\n?? USER.md\n?? hive-pipe/hosted_model_service.py\n?? hive-pipe/openclaw_mcp_stdio.py\n?? openclaw-workspace-state.json"
+    },
+    "stamped_at": "2026-09-24T22:43:36.807420+00:00"
+  },
+  "reference_changed": false,
+  "request_commit": "5b7da4fcdc8ac51b43c3c2a345389c9b3182214c",
+  "request_digest": "a04f1ba2a1b727941f2a67926f9e5dfdc298d0d46f8c496667fa66efcce09aa3",
+  "response_card": {
+    "action_sha256": "ff61bc943db26f7eee3103967c597d7a7432141726fdc056c572fad2d067e2b2",
+    "goblin": "checker",
+    "repository": {
+      "agents_sha256": "356b9de89869ffd65025c7270faed1ab613c3391bacc8563b68e2cf0fdfb81b1",
+      "branch": "codex/ai-local-operations",
+      "head": "4f8a7720c9615a961a9db8a43773fb2d798b22a9",
+      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+      "root": "/home/Scales/One-Wave-Science",
+      "status": "M AGENTS.md\n M AI_CANONICAL_START_HERE.md\n M BRANCH_STEP_PROJECT_TEMPLATE.md\n M PRIMITIVE_BUILD_MAP.md\n M hive-pipe/deepseek_bridge.py\n M hive-pipe/gateway.py\n M hive-pipe/terminal_parser.py\n M hive-pipe/test_deepseek_bridge.py\n M hive-pipe/test_gateway.py\n M hive-pipe/test_terminal_parser.py\n?? AI_CURRENT_PROJECT_JOURNAL.md\n?? AI_REFERENCE_SYSTEM.md\n?? ALGORYTHM_ZERO_FRAMEWORK_LAYERS.md\n?? ALGORYTHM_ZERO_SHARED_CANON.md\n?? ALGORYTHM_ZERO_T_TIME_CHANGE.md\n?? ALGORYTHM_ZERO_X_CONTROL.md\n?? ALGORYTHM_ZERO_Y_ROTATIONAL_STRUCTURE.md\n?? ALGORYTHM_ZERO_Z_DEPTH.md\n?? CELL_V1_BUILD_AUTHORITY.md\n?? DEVICE_GOBLIN_AUTHORITY.md\n?? HEARTBEAT.md\n?? IDENTITY.md\n?? ONE_WAVE_EVIDENCE_REFERENCE_LAW.md\n?? SOUL.md\n?? THREE_REPO_AUTHORITY.md\n?? TOOLS.md\n?? USER.md\n?? hive-pipe/hosted_model_service.py\n?? hive-pipe/openclaw_mcp_stdio.py\n?? openclaw-workspace-state.json"
+    },
+    "stamped_at": "2026-09-24T22:43:36.853937+00:00"
+  },
+  "source_route": "origin:chatgpt-terminal",
+  "stderr": "",
+  "stdout": "TERMINAL_LIVE\nlocalhost.localdomain\nScales\n/home/Scales/One-Wave-Science\n"
+}
