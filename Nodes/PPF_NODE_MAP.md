@@ -4,7 +4,8 @@
 
 ## Core nodes
 - [G-727 — Two Choice, Three Move, Recursive PPF](G-727_Two_Choice_Three_Move_and_Recursive_PPF.md)
-- [G-743 — PPF Schema and 2D Hex Graph](G-743_PPF_Schema_and_2D_Hex_Graph.md)
+- [PPF Schema and 2D Hex Graph artifact — currently labeled G-743](G-743_PPF_Schema_and_2D_Hex_Graph.md) **ID COLLISION:** the master index assigns G-743 to [Quadrature Rotating-Field Hardware](G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md). Do not treat the PPF artifact as a unique canonical G-743 node until the registry resolves the conflict.
+- [G-763 — Scalar / Differential / Vector / Tensor / Stratum / Harmonic](G-763_Scalar_to_Harmonic.md)
 - [G-749 — Point Rotation](G-749_Point_Rotation_and_Angular_Momentum_Receipt.md)
 - [G-769 — Path Rotation](G-769_Path_Rotation.md)
 
@@ -22,3 +23,6 @@ The Field Rotation owning node and any other PPF node IDs must be verified again
 4. Reconcile the six recursive Scalar/Differential/Vector/Tensor/Stratum/Harmonic levels against the actual Algorithm Zero authority, without confusing six steps with six wedge ports.
 
 Node metadata and gate statuses remain owned by their original node files.
+
+## Registry blocker
+G-743 is duplicated between a quadrature node and a PPF artifact. Inspect `LEGACY_ID_ALIAS_REGISTRY.md` and I-06 metadata governance before assigning an ID or changing references. Do not overwrite either file.
