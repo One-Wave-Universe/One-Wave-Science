@@ -1,0 +1,9 @@
+{
+  "schema": "one-wave-two-state-relay/v1",
+  "id": "two-state-relay-install-20260928-06",
+  "state": "VOID",
+  "ok": false,
+  "exit_code": null,
+  "stdout": "",
+  "stderr": "ValueError: reference unavailable: AGENTS.md missing in /home/Scales/Bridge-Comand"
+}
