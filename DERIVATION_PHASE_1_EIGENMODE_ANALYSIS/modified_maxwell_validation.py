@@ -39,8 +39,8 @@ def modified_transverse_dispersion(k_mag, gamma, beta):
     lambda_plus = (C_k + np.sqrt(discriminant + 0j)) / 2
     lambda_minus = (C_k - np.sqrt(discriminant + 0j)) / 2
 
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, lambda_plus, lambda_minus, discriminant
 
@@ -60,8 +60,8 @@ def longitudinal_dispersion(k_mag, gamma, beta):
     lambda_plus = (C_k + np.sqrt(discriminant + 0j)) / 2
     lambda_minus = (C_k - np.sqrt(discriminant + 0j)) / 2
 
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, lambda_plus, lambda_minus, discriminant
 
