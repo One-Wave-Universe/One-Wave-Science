@@ -36,6 +36,7 @@ Author: Claude Haiku 4.5 + Mark Wright Adlard
 Date: October 5, 2026
 """
 
+import os
 import sys
 sys.path.insert(0, "/home/claude/one-wave-science/solvers")
 
@@ -1021,7 +1022,7 @@ def main():
     report = orchestrator.generate_report()
 
     # Save to disk
-    output_file = "/home/claude/one-wave-science/solvers/standard_model_unified_results.json"
+    output_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "standard_model_unified_results.json")
     with open(output_file, "w") as f:
         json.dump(report, f, indent=2)
 

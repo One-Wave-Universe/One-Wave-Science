@@ -30,6 +30,7 @@ Status: Framework skeleton (C-317 equations)
 Gate: YELLOW (geometry simulation pending)
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass, field
@@ -746,7 +747,7 @@ def main():
         ]
     }
 
-    with open("/home/claude/one-wave-science/solvers/hadron_knot_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hadron_knot_results.json"), "w") as f:
         json.dump(output, f, indent=2)
 
     print("✓ Results saved to hadron_knot_results.json")

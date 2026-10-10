@@ -28,6 +28,7 @@ Status: Framework skeleton
 Gate: YELLOW (numerical implementation pending)
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass, field
@@ -499,7 +500,7 @@ def main():
 
     # Load critical point from Higgs solver
     try:
-        with open("/home/claude/one-wave-science/solvers/higgs_criticality_results.json") as f:
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "higgs_criticality_results.json")) as f:
             higgs_results = json.load(f)
 
         crit = higgs_results["critical_point"]
@@ -519,7 +520,7 @@ def main():
     print(report)
 
     # Save results
-    with open("/home/claude/one-wave-science/solvers/yukawa_matrix_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "yukawa_matrix_results.json"), "w") as f:
         json.dump(results, f, indent=2)
 
     print("✓ Results saved to yukawa_matrix_results.json")

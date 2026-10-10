@@ -9,6 +9,7 @@ Extends 1D lattice to full 3D, enabling:
 - Realistic pair production/annihilation
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass
@@ -468,7 +469,7 @@ def main():
                 return bool(obj)
             return super().default(obj)
 
-    with open("/home/claude/one-wave-science/solvers/lattice_3d_validation_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lattice_3d_validation_results.json"), "w") as f:
         json.dump(output, f, indent=2, cls=NumpyEncoder)
 
     print("✓ Results saved to lattice_3d_validation_results.json")
