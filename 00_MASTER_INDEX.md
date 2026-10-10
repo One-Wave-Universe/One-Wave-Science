@@ -477,5 +477,6 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-766 | Discrete Lattice Dispersion and Octave-Emergence Proof | Exploratory Proof Packet / Lattice Dispersion / Scale Testing. Source: `Nodes/G-766_Discrete_Lattice_Dispersion_and_Octave_Emergence_Proof.md`. | YELLOW |
 | G-767 | Measured Spectrum Lattice Phase Map | Spectral Field Mapping / Open Data / Cross-Scale Lattice Test. Source: `Nodes/G-767_Measured_Spectrum_Lattice_Phase_Map.md`. | YELLOW |
 | G-768 | Anisotropic Signed-Axis Spectrum and Rotating-Axis Scale Test | Analytic lattice result / mode selection / renormalization boundary. Source: `Nodes/G-768_Anisotropic_Signed_Axis_Spectrum_and_Rotating_Axis_Scale_Test.md`. | YELLOW |
+| G-770 | C4 Field Rotation — Collective Carrier and Frame Coupling | Hypothesis-gated PPF field rotation reference. Source: `Nodes/G-770_Field_Rotation.md`. | BROWN |
 | G-769 | C3 Path Rotation | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-769_Path_Rotation.md`. | BROWN |
 <!-- AUTO-NODE-REGISTRY:END -->
