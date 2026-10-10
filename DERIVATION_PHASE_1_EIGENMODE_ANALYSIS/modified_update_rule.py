@@ -82,8 +82,8 @@ def modified_dispersion_transverse(k_mag, gamma, beta):
         lambda_minus = (C_k - np.sqrt(discriminant + 0j)) / 2
 
     # Extract frequencies
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, lambda_plus, lambda_minus, discriminant
 

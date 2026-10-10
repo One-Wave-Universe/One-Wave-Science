@@ -51,8 +51,8 @@ def dispersion_1d(k, gamma, beta, lattice_spacing=1.0):
     # ω = -i · ln(λ) / Δt
     # We'll use Δt = 1 for simplicity (set time scale)
 
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, lambda_plus, lambda_minus, discriminant
 

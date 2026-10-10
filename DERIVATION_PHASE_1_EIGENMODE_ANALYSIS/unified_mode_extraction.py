@@ -96,8 +96,8 @@ def unified_dispersion_symmetric(k_mag, gamma, beta):
     lambda_plus = (C_k + np.sqrt(discriminant + 0j)) / 2
     lambda_minus = (C_k - np.sqrt(discriminant + 0j)) / 2
 
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, lambda_plus, lambda_minus
 
@@ -187,7 +187,7 @@ def dispersion_E_like(k_mag, gamma, beta):
     P_k = 1 - gamma
     discriminant = C_k**2 - 4*P_k
     lambda_p = (C_k + np.sqrt(discriminant + 0j)) / 2
-    omega_p = -1j * np.log(lambda_p)
+    omega_p = 1j * np.log(lambda_p)
     return np.real(omega_p)
 
 def dispersion_B_like(k_mag, gamma, beta):
@@ -197,7 +197,7 @@ def dispersion_B_like(k_mag, gamma, beta):
     P_k = 1 + gamma - beta * k_sq
     discriminant = C_k**2 - 4*P_k
     lambda_p = (C_k + np.sqrt(discriminant + 0j)) / 2
-    omega_p = -1j * np.log(lambda_p)
+    omega_p = 1j * np.log(lambda_p)
     return np.real(omega_p)
 
 def dispersion_unified(k_mag, gamma, beta):

@@ -85,8 +85,8 @@ def dispersion_2d_hex(kx, ky, gamma, beta, a=1.0):
     lambda_minus = (C_k - np.sqrt(discriminant + 0j)) / 2
 
     # Convert to frequency (Δt = 1)
-    omega_plus = -1j * np.log(lambda_plus)
-    omega_minus = -1j * np.log(lambda_minus)
+    omega_plus = 1j * np.log(lambda_plus)
+    omega_minus = 1j * np.log(lambda_minus)
 
     return omega_plus, omega_minus, S_hex
 
