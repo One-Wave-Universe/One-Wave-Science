@@ -1,7 +1,7 @@
 # Point–Path–Field rotational recursion — research chapter
 
 **Status:** HYPOTHESIS / REFERENCE CHAPTER — not experimental validation.
-**Authority:** [PPF architecture](../ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md) and [PPF node map](../Nodes/PPF_NODE_MAP.md).
+**Authority:** [PPF architecture](../ARCHITECTURE_POINT_PATH_FIELD_SCALE_RECURSION.md) and [PPF node map](../docs/PPF_NODE_MAP.md).
 
 ## Gray: established reference physics
 Intrinsic spin/angular momentum, orbital motion, and collective field modes are distinct quantities. Quantum spin is not automatically classical rotation. Newtonian and relativistic orbital dynamics, Maxwell electrodynamics, and quantum chromodynamics remain separate physical controls.
