@@ -31,3 +31,13 @@ The six recursive levels (Scalar, Differential, Vector, Tensor, Stratum, Harmoni
 
 ## Evidence status
 The existence of node schemas, geometry graphs, and mathematical correspondences is not proof of a new universal physical law. Claims about proton knots, quark vortices, or independent dimensional boundaries remain hypotheses unless experimentally supported.
+
+## Six-level reference: G-763
+
+[G-763](../Nodes/G-763_Scalar_to_Harmonic.md) records the six names and their particular pairings. In that source, scalar is the ground/HOLD reference; differential is the Field-minus-Void two-rail relation; vector is a ternary move on a directed edge; tensor carries quadratic view/action relations; stratum identifies a nesting layer; and harmonic is the closed loop / next-scale DC. Its mirrored pairs are scalar–tensor (intersect), differential–stratum (oppose), and vector–harmonic (invert).
+
+These definitions are **not** interchangeable with Point/Path/Field rotation. A proposed bridge would have to specify which rotational observable supplies each six-level variable, its units and frame, and the resulting action mapping. Bidirectional coupling and six-within-each recursive containment remain implementation hypotheses until traced to their controlling Algorithm Zero specification and tested.
+
+## Required reconstruction receipts
+
+For each PPF rotation candidate, retain the reference frame, measurable input, transformation, retained state, predicted output, conventional control, and error metric. For cross-scale reconstruction, also record which lower-scale information is discarded and which is preserved. No inference of a physical dimensional boundary or new particle structure follows from diagrammatic resemblance alone.
