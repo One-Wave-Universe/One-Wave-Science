@@ -8,7 +8,7 @@
 - [G-763 — Scalar / Differential / Vector / Tensor / Stratum / Harmonic](../Nodes/G-763_Scalar_to_Harmonic.md)
 - [G-749 — Point Rotation](../Nodes/G-749_Point_Rotation_and_Angular_Momentum_Receipt.md)
 - [G-769 — Path Rotation](../Nodes/G-769_Path_Rotation.md)
-- [G-770 — Field Rotation](../Nodes/G-770_Field_Rotation.md) (BROWN / ACTIVE_HYPOTHESIS)
+- [G-770 — Field Rotation](../Nodes/G-770_Field_Rotation.md) (GREEN / ACTIVE_HYPOTHESIS; planar kinematics only)
 
 Field Rotation is now assigned G-770 on this branch. Other node IDs still require registry checks.
 
