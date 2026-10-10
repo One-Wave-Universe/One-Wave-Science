@@ -220,6 +220,18 @@ C1 and C2 must be resolved before any cosmology equation is rewritten. C3 and C4
 - The Blondin 6σ figure and the Lubin & Sandage and Lerner values come from secondary summaries and must be checked against the primary papers before any publication use.
 - The E-528 Tolman exponent (−1) is this audit's calculation under stated assumptions, not a repo result.
 
-## 8. Next step
+## 8. Simulator and solver status (checked 2026-10-10)
+
+- **Runs.** `python3 -m unittest discover -s solvers` (Python 3.13, numpy 2.5.3): 90 tests, all pass.
+- **Not validated by those tests.** Passing unit tests check internal consistency, such as energy equilibration and stability. They do not check agreement with measured data.
+- **Repo's own repair report (`solvers/REPAIR_STATUS_2026_10_05.md`).** Records that some solvers "claim to validate against experimental data but use hard-coded synthetic values," that a frequency sign error was "systematic across multiple validators," and that the validators were disconnected from real archives. The repairs listed are partial.
+- **Synthetic fallback.** `galaxy_rotation_validator.py` falls back to synthetic data when real data is unavailable. Of 128 solver scripts, 9 mention synthetic data and 24 load external files; the rest need checking per script.
+- **Fitted parameters.** `solvers/SOLVER_INDEX.md` describes parameter optimization ("variable parameter optimization") and reports error percentages from fitted models. Fitted agreement is not prediction, and the repo's own rule (A-115 §7, C9) treats it that way.
+- **Model conflict.** `SOLVER_INDEX.md` describes "cascade inheritance" as universal. That conflicts with the no-cascade-inheritance rule in `DARK_MATTER_TERMINOLOGY_CORRECTION.md` (C10).
+- **Not run.** `sims/` and `One_Wave_Bench/` were not executed in this check.
+
+Consequence: earlier validator results, especially any that fixed or tuned parameters, need to be re-run after the sign-error fix and checked against the data they claim to use before they are cited.
+
+## 9. Next step
 
 W2 rewrite is gated on C1, C2, and C5 being resolved. The next task is item 1 in §6: derive χ(r) from the A-115 source equation. That derivation is the first place the static and expanding interpretations can be tested against the same equation.
