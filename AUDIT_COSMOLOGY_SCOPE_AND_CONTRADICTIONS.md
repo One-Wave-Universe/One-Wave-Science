@@ -77,6 +77,23 @@ These are the tests the audit requires. None has been run yet.
 - The two models are **not** shown incompatible by any equation in the repo. Their coexistence is undetermined because the geometry equation is missing from the static side (T-Λ3) and the Λ term is undefined (T-Λ1).
 - The two models **do** conflict on the dark-energy account (T-Λ2), which must be resolved by derivation, not by preference.
 
+### 3a. Owner definitions: space and time
+
+Owner definitions, recorded as stated and not yet derived:
+
+- **Space** is the lattice.
+- **Time** is how hard it is to move through the lattice, i.e., transport resistance.
+- **Curvature** is the lattice geometry (§2, C2 and C13).
+
+The repo already has a candidate for this resistance. E-533 defines a local transport-difficulty term `Ξ(χ, ∇χ, γ, β, …) ≥ 0` and a timing factor `𝒯(v, Ξ)`, with `𝒯(0,0) = 1` and `∂𝒯/∂Ξ < 0` **[PROPOSAL]**. E-528 defines a friction `κ_γ` that causes redshift, and E-528 requires that one shared medium state determine both `κ_γ` and `𝒯` **[PROPOSAL]**. The owner's definition identifies these as one quantity: resistance in the lattice. If that holds, a single resistance field would give redshift (through `κ_γ`), time dilation (through `𝒯`), and gravity (through the wake that produces the resistance). That is the strongest version of the shared-law requirement, and it is also the one most exposed to test.
+
+What this definition requires:
+
+- The same resistance must set clock rates in gravitational potentials. That is an established measurement: gravitational redshift (Pound–Rebka, 1960) and GPS clock corrections **[ESTABLISHED]**. Any resistance model must reproduce those rates quantitatively, not only the sign.
+- Velocity time dilation must come from resistance. E-533 currently inserts the Lorentz form `d τ/dt = √(1 − v²/c²)` as a target, not a derivation. The square root must follow from the resistance law **[OPEN]**.
+- Resistance must not create a second time variable. C-309 requires that the propagation ceiling not be confused with Mass Effect **[PROPOSAL, from E-533]**.
+- The C13 question still stands. "Time is resistance" does not say whether the wake and the curvature are the same response. It says the resistance is one scalar candidate for the clock-rate part of that response **[OPEN]**.
+
 ---
 
 ## 4. Observational attacks
