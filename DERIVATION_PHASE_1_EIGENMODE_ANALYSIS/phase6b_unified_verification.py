@@ -111,9 +111,9 @@ def dispersion_unified(k_mag: float, gamma: float, beta: float) -> float:
 
 
 print(f"Using unified equation (E-like form):")
-print(f"  ω_unified = ω_E = {dispersion_unified(k_test, gamma, beta):.6f}")
-print(f"  ω_unified = ω_B = {dispersion_unified(k_test, gamma, beta):.6f}")
-print(f"  Ratio = 1.0 ✓ (compatible)")
+print(f"  ω_unified = {dispersion_unified(k_test, gamma, beta):.6f}")
+print(f"  Note: E and B both call this one function, so ω_E = ω_B holds by")
+print(f"  construction. This is NOT an independent validation of the Faraday link.")
 print()
 
 # ============================================================================
