@@ -26,8 +26,9 @@ When the symmetric pair is HEAVY:
 The mechanism: Which quark's oscillation frequency becomes the "anchor"?
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import create_proton, create_neutron, create_lambda

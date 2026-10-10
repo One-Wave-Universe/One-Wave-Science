@@ -12,6 +12,7 @@ Validates against:
 No approximations. Real validation.
 """
 
+import os
 import numpy as np
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
@@ -472,7 +473,7 @@ def main():
         "conclusion": "Algorithm Zero 3D volumetric model validated against multiple real galaxy datasets",
     }
 
-    with open("/home/claude/one-wave-science/solvers/algorithm_zero_comprehensive_validation_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "algorithm_zero_comprehensive_validation_results.json"), "w") as f:
         json.dump(output, f, indent=2)
 
     print("✓ Results saved to algorithm_zero_comprehensive_validation_results.json")

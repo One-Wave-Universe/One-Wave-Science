@@ -15,6 +15,7 @@ Framework Parameters (calibrated Week 1):
 - σ_T = 0.01200 GeV, κ_T = 0.01000 GeV (confinement calibration)
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass
@@ -456,7 +457,7 @@ def main():
 
     # Save results
     print("Saving results...")
-    with open("/home/claude/one-wave-science/solvers/precision_test_predictions.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "precision_test_predictions.json"), "w") as f:
         json.dump(results, f, indent=2)
 
     print("✓ Results saved to precision_test_predictions.json")

@@ -12,6 +12,7 @@ Experimental targets (PDG):
 - π0 binding: 135 MeV
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass
@@ -276,7 +277,7 @@ def main():
 
     # Save results
     print("Saving results...")
-    with open("/home/claude/one-wave-science/solvers/hadron_collision_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "hadron_collision_results.json"), "w") as f:
         json.dump(results, f, indent=2)
 
     print("✓ Results saved to hadron_collision_results.json")

@@ -9,8 +9,9 @@ Different formulas for how oscillation frequency mismatch reduces effective coup
 - Variant 4: 1 - (log(ω_ratio) - 1) / log(ω_ratio)  - softer decay
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import (

@@ -24,8 +24,9 @@ where:
 - E_binding = confinement cost (negative, binding attraction)
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from dataclasses import dataclass, field

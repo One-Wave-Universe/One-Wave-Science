@@ -13,6 +13,7 @@ Figures:
 6. Muon g-2 explanation (framework vs SM vs experiment)
 """
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -34,7 +35,7 @@ plt.rcParams.update({
     'lines.linewidth': 1.5,
 })
 
-OUTPUT_DIR = "/home/claude/one-wave-science/publication/figures"
+OUTPUT_DIR = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "publication", "figures"))
 
 # ============================================================================
 # FIGURE 1: SCHEMATIC OF LATTICE UPDATE RULE

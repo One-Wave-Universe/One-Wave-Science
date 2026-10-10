@@ -43,7 +43,7 @@ class DistanceDependentPredictor(SatelliteVelocityPredictor):
         """Predict with distance-dependent coupling."""
         result = super().predict_satellite_velocity(satellite)
         
-        if result['in_cascade']:
+        if result['in_ring']:
             # Replace constant coupling with distance-dependent
             beta_r = self.coupling_factor(satellite.distance_kpc, satellite.host)
             
@@ -77,7 +77,7 @@ def compute_chi2_distance_coupling(params):
     
     for satellite in MW_SATELLITES + M31_SATELLITES:
         result = predictor.predict_satellite_velocity(satellite)
-        if result['in_cascade']:
+        if result['in_ring']:
             obs_err = 2.0  # ~2 km/s measurement uncertainty
             residual = (result['v_observed'] - result['v_total']) / obs_err
             chi2_total += residual ** 2
@@ -122,7 +122,7 @@ print("-" * 80)
 mw_results = []
 for sat in MW_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         mw_results.append(result)
         beta_r = result.get('coupling_factor', 0.3)
         print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {beta_r:.3f} | "
@@ -139,7 +139,7 @@ print("-" * 80)
 m31_results = []
 for sat in M31_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         m31_results.append(result)
         beta_r = result.get('coupling_factor', 0.3)
         print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {beta_r:.3f} | "

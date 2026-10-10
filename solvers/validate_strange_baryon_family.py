@@ -14,8 +14,9 @@ If all three show <15% error, α_strange is validated as universal within
 the strangeness family.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import (
@@ -208,8 +209,9 @@ def validate_strange_family():
 
         if expt_mass is None or err is None:
             # Fallback: use manual experimental mass from PDG
-            if hadron_name in HADRON_MASSES_MEV:
-                expt_mass = HADRON_MASSES_MEV[hadron_name]
+            base_name = hadron_name.split(" (")[0]
+            if base_name in HADRON_MASSES_MEV:
+                expt_mass = HADRON_MASSES_MEV[base_name]
                 if pred_mass is not None and expt_mass is not None:
                     err = 100 * abs(pred_mass - expt_mass) / expt_mass
 
@@ -220,7 +222,8 @@ def validate_strange_family():
             print(f"{hadron_name:<20} {pred_mass:>12.1f} {expt_mass:>12.1f} {err:>9.1f}% {status:>10}")
             errors.append(err)
         else:
-            print(f"{hadron_name:<20} {pred_mass:>12.1f} {expt_mass:>12.1f} {'N/A':>10} {'?':>10}")
+            expt_str = f"{expt_mass:>12.1f}" if expt_mass is not None else f"{'N/A':>12}"
+            print(f"{hadron_name:<20} {pred_mass:>12.1f} {expt_str} {'N/A':>10} {'?':>10}")
 
     print("-" * 70)
     print()

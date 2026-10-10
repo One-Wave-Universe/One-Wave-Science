@@ -178,7 +178,7 @@ class DistanceDependentPredictorWithEMCoherence(SatelliteVelocityPredictor):
         """Predict with distance-dependent coupling + EM coherence."""
         result = super().predict_satellite_velocity(satellite)
 
-        if result['in_cascade']:
+        if result['in_ring']:
             beta_r = self.coupling_factor(
                 satellite.distance_kpc, satellite.host, galactic_lat, galactic_lon
             )
@@ -224,7 +224,7 @@ def compute_chi2_em_coherence(params):
 
     for satellite in MW_SATELLITES + M31_SATELLITES:
         result = predictor.predict_satellite_velocity(satellite)
-        if result['in_cascade']:
+        if result['in_ring']:
             obs_err = 2.0  # ~2 km/s measurement uncertainty
             residual = (result['v_observed'] - result['v_total']) / obs_err
             chi2_total += residual ** 2
@@ -272,7 +272,7 @@ print("-" * 90)
 mw_results = []
 for sat in MW_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         mw_results.append(result)
         f_em = result.get('em_coherence', 1.0)
         beta_r = result.get('coupling_factor', 0.3)
@@ -290,7 +290,7 @@ print("-" * 90)
 m31_results = []
 for sat in M31_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         m31_results.append(result)
         f_em = result.get('em_coherence', 1.0)
         beta_r = result.get('coupling_factor', 0.3)

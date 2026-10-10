@@ -573,7 +573,7 @@ def print_encyclopedia(encyclopedia: Dict[str, ScaleProfile]):
 
         print(f"\nHARMONIC RATIOS:")
         for ratio_name, ratio_val in profile.harmonic_ratios.items():
-            print(f"    {ratio_name}: {ratio_val:.4f}")
+            print(f"    {ratio_name}: {ratio_val:.4f}" if isinstance(ratio_val, float) else f"    {ratio_name}: {ratio_val}")
 
         print(f"\nCharacteristic structures: {', '.join(profile.characteristic_structures)}")
 

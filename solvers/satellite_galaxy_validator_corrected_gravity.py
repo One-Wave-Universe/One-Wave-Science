@@ -120,9 +120,9 @@ class CorrectedGravityPredictor(SatelliteVelocityPredictor):
 
         # Check cascade boundary (for informational purposes, but both terms always active)
         if satellite.host == "Milky Way":
-            r_cascade = self.mw_cascade_radius
+            r_cascade = self.mw_ring_radius
         else:
-            r_cascade = self.m31_cascade_radius
+            r_cascade = self.m31_ring_radius
 
         in_cascade = satellite.distance_kpc < r_cascade
 

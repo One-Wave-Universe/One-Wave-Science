@@ -15,6 +15,7 @@ Status: Framework skeleton
 Gate: YELLOW (numerical implementation pending)
 """
 
+import os
 import numpy as np
 import json
 from dataclasses import dataclass
@@ -487,7 +488,7 @@ def main():
         "total_points_evaluated": len(results["all_results"]),
     }
 
-    with open("/home/claude/one-wave-science/solvers/higgs_criticality_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "higgs_criticality_results.json"), "w") as f:
         json.dump(output, f, indent=2)
 
     print("✓ Results saved to higgs_criticality_results.json")

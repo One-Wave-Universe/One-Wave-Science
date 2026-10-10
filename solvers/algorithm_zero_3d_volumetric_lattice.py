@@ -14,6 +14,7 @@ not sequential cascade inheritance. Spiral structure, disk geometry, and
 bulk rotation all emerge from 3D volumetric coupling.
 """
 
+import os
 import numpy as np
 from dataclasses import dataclass
 from typing import Dict, Tuple, List
@@ -432,7 +433,7 @@ def main():
         "conclusion": "3D volumetric physics extends Algorithm Zero from quantum-molecular scales to galaxy-scale structure",
     }
 
-    with open("/home/claude/one-wave-science/solvers/algorithm_zero_3d_volumetric_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "algorithm_zero_3d_volumetric_results.json"), "w") as f:
         json.dump(results_dict, f, indent=2)
 
     print("✓ Results saved to algorithm_zero_3d_volumetric_results.json")
