@@ -26,14 +26,14 @@ def compute_chi2_in_cascade(scale_factor):
     
     for satellite in MW_SATELLITES:
         result = predictor.predict_satellite_velocity(satellite)
-        if result['in_cascade']:  # Only in-cascade
+        if result['in_ring']:  # Only in-cascade
             obs_err = 1.0  # Assume ~1 km/s error for now
             residual = (result['v_observed'] - result['v_total']) / obs_err
             chi2_total += residual ** 2
     
     for satellite in M31_SATELLITES:
         result = predictor.predict_satellite_velocity(satellite)
-        if result['in_cascade']:  # Only in-cascade
+        if result['in_ring']:  # Only in-cascade
             obs_err = 1.0
             residual = (result['v_observed'] - result['v_total']) / obs_err
             chi2_total += residual ** 2
@@ -68,7 +68,7 @@ print("-" * 70)
 mw_in_cascade = []
 for sat in MW_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         mw_in_cascade.append(result)
         print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {result['v_observed']:5.0f} | "
               f"{result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
@@ -84,7 +84,7 @@ print("-" * 70)
 m31_in_cascade = []
 for sat in M31_SATELLITES:
     result = predictor.predict_satellite_velocity(sat)
-    if result['in_cascade']:
+    if result['in_ring']:
         m31_in_cascade.append(result)
         print(f"{sat.name:28} | {result['distance_kpc']:6.1f} | {result['v_observed']:5.0f} | "
               f"{result['v_total']:6.0f} | {result['error_pct']:5.1f}%")
