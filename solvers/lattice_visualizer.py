@@ -4,6 +4,7 @@ Lattice visualization of peak/trough dynamics
 Simulates electron-positron pair production and annihilation on 1D lattice
 """
 
+import os
 import numpy as np
 import json
 import matplotlib.pyplot as plt
@@ -489,7 +490,7 @@ def main():
 
     # Load critical point from Higgs solver
     print("\n📂 Loading Higgs criticality results...")
-    with open("solvers/higgs_criticality_results.json") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "higgs_criticality_results.json")) as f:
         results = json.load(f)
 
     beta = results["critical_point"]["beta"]
@@ -549,13 +550,13 @@ def main():
         "test_results": convert_for_json(test_results)
     }
 
-    with open("solvers/lattice_validation_results.json", "w") as f:
+    with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "lattice_validation_results.json"), "w") as f:
         json.dump(test_output, f, indent=2)
     print(f"\n✓ Test results saved: solvers/lattice_validation_results.json")
 
     # Visualization
     print("\n📍 Phase 6: Visualization")
-    viz = Visualization(sim, spectrum_data, output_dir="solvers/lattice_visualizer_results")
+    viz = Visualization(sim, spectrum_data, output_dir=os.path.join(os.path.dirname(os.path.abspath(__file__)), "lattice_visualizer_results"))
     viz.plot_all()
 
     # Final summary
