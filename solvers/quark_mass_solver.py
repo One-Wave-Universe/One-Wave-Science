@@ -771,10 +771,10 @@ if __name__ == "__main__":
     print()
 
     print("One-Wave Framework Status:")
-    if light_error < 30 and heavy_error < 100:
+    if light_error_cal < 30 and heavy_error_cal < 100:
         print(f"△ Framework validated on light sector; heavy sector UNDERCALIBRATED")
-        print(f"  Light quarks: {light_error:.1f}% error (predictive power)")
-        print(f"  Heavy quarks: {heavy_error:.1f}% error (needs 125 GeV calibration)")
+        print(f"  Light quarks: {light_error_cal:.1f}% error (predictive power)")
+        print(f"  Heavy quarks: {heavy_error_cal:.1f}% error (needs 125 GeV calibration)")
         print(f"✓ Octave-scaling mechanism confirmed across 5+ orders of magnitude")
         print(f"✓ Universal coupling (g_SO = {g_SO_electron}) works without refitting")
     else:
