@@ -20,6 +20,8 @@ Foundational documentation of One-Wave physics, from lattice mechanics through a
 
 ---
 
+PPF source and placement: [PPF node map](../docs/PPF_NODE_MAP.md) · [Micro-to-Macro placement audit](../docs/PPF_BOOK_PLACEMENT_AUDIT.md). These are references, not new canonical nodes.
+
 ## Reading Path
 
 ### For Physics Foundation
