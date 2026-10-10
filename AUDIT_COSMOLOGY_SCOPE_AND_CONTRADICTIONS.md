@@ -40,7 +40,7 @@ D-601 concludes that the scalar update rule cannot produce E/B structure: "Scala
 | S8 | L305 | "density waves (∇·ψ) oscillate independently of shear (∇×ψ)" | Curl of a scalar is undefined. D-602 needs a vector field for the transverse mode. | **Hard conflict** |
 | S9 | L321–323, L353–358 | Code skeleton uses `np.gradient` on 1D arrays | A 1D scalar cannot represent 3D divergence or curl | **Implementation consequence of S1–S2** |
 
-**Gravity mechanism conflict (C2).** A-115 gives gravity as the gradient of a compression potential, `g = −α_g ∇χ`. W2 gives gravity as lattice curvature (Ricci/Einstein). These are different physical mechanisms. The repo has not chosen between them, and they can't both be the gravity derivation.
+**Gravity mechanism (C2): resolved in direction, derivation open.** Gravity is not lattice curvature. Per the project owner's direction, and consistent with `UPDATED_64_GRAVITY_IS_THE_WAKE_AND_THE_RELAY.md` (interpretation lock, 2026-10-05) and A-115 §2, gravity is the extended compression wake: the displaced medium a parent creates, which smaller displacements are carried along and trapped in as they move through its paths. W2's curvature mechanism is therefore out of scope for the rewrite. What is not yet derived: the path-capture term (A-115 `Q_capture`; E-09 capture fraction κ), the boundary test for "still distinguishable" (UPDATED_64 states it is not derived and no cutoff radius may be inserted by hand), and recovery of the Newtonian sum as the control **[PROPOSAL / OPEN]**.
 
 **Status conflict (C6).** W2's Part 10 marks "✓ Einstein equations follow from discrete lattice geometry" and "✓ Schwarzschild emerges." Every item in its implementation checklist is unchecked. W2 carries no I-06 gate metadata. These checkmarks are unsupported by the document's own steps **[OPEN]**.
 
@@ -123,7 +123,8 @@ W2 Part 9 gives values (breathing-mode fraction ≈ 0.01; `w ≈ −0.99` to `�
 | ID | Statement A | Statement B | Type | Resolution path |
 |---|---|---|---|---|
 | C1 | W2: scalar ψ primitive (S1–S3, S8) | A-115 and D-602: vector `u`/`ψ⃗` | **Hard contradiction** | Adopt vector. W2 must be rewritten. |
-| C2 | W2: gravity is curvature of a lattice metric | A-115 §2: gravity is gradient of a compression potential | **Hard contradiction** | Derive which mechanism the vector field gives. |
+| C2 | W2: gravity is curvature of a lattice metric | A-115 §2 and UPDATED_64: gravity is the compression wake and relay | **Resolved in direction; W2 mechanism rejected** | Derive path capture and the "still distinguishable" boundary (§6, item 2). |
+| C10 | GRAVITY_WAKE_NESTING: rotation cascades top-down from parent wakes | DARK_MATTER_TERMINOLOGY_CORRECTION: "no cascade inheritance" | **Repo-internal conflict** | Decide whether the wake is inherited from parents or only local; cannot both hold. |
 | C3 | W2: dark energy is Λ = β/a² | A-115 §5: dark energy is static White Energy circulation, no Λ | **Accounting conflict** | T-Λ2 |
 | C4 | E-528: no time stretch | Blondin et al.: time stretch present | **Observational conflict** | E-533 must derive the stretch with the shared κ |
 | C5 | W2 energy density: no `χ²` term | A-115 energy density: `(K_χ/2)χ²` | **Structural conflict** | Include the compression term in any rewrite |
@@ -139,7 +140,7 @@ C1 and C2 must be resolved before any cosmology equation is rewritten. C3 and C4
 ## 6. Missing derivations (ordered)
 
 1. Derive χ(r) from the A-115 sourced equation, with `K_eff` specified (A-115 §7, first Yellow requirement).
-2. Derive the gravity mechanism from the vector field and decide between the gradient-potential and curvature views (C2).
+2. Derive the wake mechanism from the vector field: the path-capture term, the boundary test for "still distinguishable," and the Newtonian control recovery (C2). The top-down vs. local question (C10) must be settled first, because it fixes whether the wake is inherited.
 3. Give the geometry equation for a static domain, including `a` and its relation to Λ (T-Λ1, T-Λ3).
 4. Derive the E-528 luminosity-distance relation with explicit photon-number and energy-flux assumptions (Attack C).
 5. Derive E-533's timing law `𝒯(v,Ξ)` so that the stretch exponent follows from the same κ_γ (Attack A).
