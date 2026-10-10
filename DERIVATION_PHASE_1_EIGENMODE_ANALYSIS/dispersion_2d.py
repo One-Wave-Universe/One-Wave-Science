@@ -7,6 +7,7 @@ The hexagonal lattice has 6 nearest neighbors in plane + coupling to upper/lower
 Goal: Derive ω(k_x, k_y) and look for radial vs rotational mode separation.
 """
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -162,7 +163,7 @@ ax4.set_title('Slow Mode: Imaginary Part (Damping)', fontweight='bold')
 fig.colorbar(surf4, ax=ax4, pad=0.1, shrink=0.8)
 
 plt.tight_layout()
-plt.savefig('/tmp/claude-0/-home-claude/3b9cfc7f-c329-58d1-9355-8542cf012cd9/scratchpad/dispersion_2d_hex.png', dpi=120)
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dispersion_2d_hex.png'), dpi=120)
 print("2D dispersion surfaces saved.")
 
 # ============================================================================
@@ -204,7 +205,7 @@ axes[1, 1].set_title('Im(ω₋): Decay Rate', fontweight='bold')
 plt.colorbar(c4, ax=axes[1, 1])
 
 plt.tight_layout()
-plt.savefig('/tmp/claude-0/-home-claude/3b9cfc7f-c329-58d1-9355-8542cf012cd9/scratchpad/dispersion_2d_contours.png', dpi=120)
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dispersion_2d_contours.png'), dpi=120)
 print("2D contour plots saved.")
 
 # ============================================================================

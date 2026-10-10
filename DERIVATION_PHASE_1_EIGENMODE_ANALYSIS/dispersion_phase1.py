@@ -11,6 +11,7 @@ Insert plane wave ansatz for a translationally symmetric lattice:
 Derive dispersion relation D(k, ω; γ, β) = 0 without external assumptions.
 """
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
@@ -172,7 +173,7 @@ for gamma, beta, ax in test_cases:
     ax.axhline(0, color='k', linewidth=0.5)
 
 plt.tight_layout()
-plt.savefig('/tmp/claude-0/-home-claude/3b9cfc7f-c329-58d1-9355-8542cf012cd9/scratchpad/dispersion_spectrum.png', dpi=150)
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dispersion_spectrum.png'), dpi=150)
 print("\n" + "="*80)
 print("DISPERSION PLOTS SAVED")
 print("="*80)

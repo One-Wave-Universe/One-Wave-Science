@@ -96,7 +96,9 @@ for gamma, beta, label in test_params:
             print(f"  k={k:.1f}: ω = {omega_real_p:8.4f} + {omega_imag_p:8.4f}i")
             print(f"          v = {velocity:.6f} (PROPAGATING) ✓")
         else:
-            print(f"  k={k:.1f}: ω = {omega_real_p:8.4f} + {omega_imag_p:8.4f}i (decay)")
+            # Convention e^{-i omega t}: Im(omega) > 0 grows, Im(omega) < 0 decays
+            tag = "growth" if omega_imag_p > 0 else "decay"
+            print(f"  k={k:.1f}: ω = {omega_real_p:8.4f} + {omega_imag_p:8.4f}i ({tag})")
 
     if has_real_omega:
         print(f"  ✓ BREAKTHROUGH: Transverse modes CAN propagate!")

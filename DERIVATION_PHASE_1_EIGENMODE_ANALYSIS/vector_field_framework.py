@@ -13,6 +13,7 @@ Two implementations:
 2. Full 3-component vector on 3D lattice with coupled equations
 """
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -261,7 +262,7 @@ axes[1, 1].legend()
 axes[1, 1].axhline(0, color='k', linewidth=0.5)
 
 plt.tight_layout()
-plt.savefig('/tmp/claude-0/-home-claude/3b9cfc7f-c329-58d1-9355-8542cf012cd9/scratchpad/vector_dispersion.png', dpi=150)
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vector_dispersion.png'), dpi=150)
 print("Vector field dispersion plot saved.")
 
 # ============================================================================
