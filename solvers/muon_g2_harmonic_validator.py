@@ -103,7 +103,8 @@ class MuonG2HarmonicValidator:
 
         # Base: muon has ~same coupling as electron at EM boundary
         # Correction: mass-dependent phase shift
-        phase_shift = np.log(self.mass_ratio) * 0.001  # Small correction
+        # 0.001 is a hand-picked constant, NOT derived from One-Wave. Not a prediction.
+        phase_shift = np.log(self.mass_ratio) * 0.001
 
         a_mu_predicted = self.a_e_experiment * (1.0 + phase_shift)
 
@@ -259,14 +260,14 @@ def main():
     # Reason: muon is heavier but shorter-lived
 
     if abs(anomaly1['error_percent']) < 1.0:
-        print("✓ Prediction 1 (Mass Scaling): MATCHES within 1%")
-        print("  Interpretation: Muon coupling follows mass-dependent scaling")
+        print("✓ Prediction 1 (Mass Scaling): within 1% of measured a_mu")
+        print("  Caveat: 0.001 coefficient is hand-picked; a_mu ~ a_e is the input, not evidence for One-Wave")
     else:
         print(f"✗ Prediction 1 (Mass Scaling): ERROR {anomaly1['error_percent']:.4f}%")
 
     if abs(anomaly2['error_percent']) < 0.1:
-        print("✓ Prediction 2 (Harmonic Resonance): MATCHES within 0.1%")
-        print("  Interpretation: Muon sits at harmonic node with electron")
+        print("✓ Prediction 2 (Harmonic Resonance): within 0.1% of measured a_mu")
+        print("  Caveat: a_mu = a_e*(1+0.0001) is a constant chosen to fit; not a derived harmonic result")
     else:
         print(f"✗ Prediction 2 (Harmonic Resonance): ERROR {anomaly2['error_percent']:.4f}%")
 
