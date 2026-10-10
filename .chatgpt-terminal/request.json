@@ -1,11 +1,11 @@
 {
-  "id": "grok-terminal-20261004-1447",
+  "id": "chatgpt-pull-no-tunnel-proof-20261010-01",
   "argv": [
     "printf",
-    "GROK_PULL_OK\n"
+    "JETSON_PULL_NO_TUNNEL_OK\n"
   ],
   "cwd": "/home/Scales/One-Wave-Science",
   "timeout": 30,
-  "intention": "Verify repaired worker intake independently of GitHub push authentication",
-  "consequence": "Print a marker without changing project files"
+  "intention": "Verify Jetson-initiated GitHub pull command pipeline without Cloudflare or Tailscale Funnel",
+  "consequence": "Print unique marker and return matching receipt; no files changed"
 }
