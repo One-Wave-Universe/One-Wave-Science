@@ -21,8 +21,9 @@ This is pure One-Wave: vortex phases aren't particles, they're field oscillation
 Their internal dynamics (time-dependent phase motion) explains residual mass errors.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import create_proton, create_neutron, create_lambda

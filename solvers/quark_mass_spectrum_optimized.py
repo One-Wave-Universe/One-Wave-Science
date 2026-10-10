@@ -23,8 +23,9 @@ This is SOLUTION PATH A: Flavor-dependent radius calibration.
 If validated, unlocks quark spectrum to <30% error across all flavors.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from typing import Dict, Optional

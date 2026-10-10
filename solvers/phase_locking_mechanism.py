@@ -17,8 +17,9 @@ But real phases might oscillate or shift based on quark flavor/mass, changing th
 effective phase separation and thus the phase-locking energy.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import create_proton, create_neutron, create_lambda

@@ -11,9 +11,10 @@ Authority:
 Expected Result: ~2.725 mm/year (observed lunar recession)
 """
 
+import os
 import json
 import sys
-sys.path.insert(0, '/home/claude/one-wave-science/solvers')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from phase5e_inertial_coupling_dynamics import (
     ConstraintMechanicsMoon,

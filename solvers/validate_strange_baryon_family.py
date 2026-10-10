@@ -14,8 +14,9 @@ If all three show <15% error, α_strange is validated as universal within
 the strangeness family.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import (

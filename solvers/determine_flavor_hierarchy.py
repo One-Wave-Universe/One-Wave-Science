@@ -21,8 +21,9 @@ Key test hadrons:
 This solver systematically finds the α that minimizes errors for each flavor.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import VortexPhase, KnotGeometry, create_proton, create_neutron, create_lambda

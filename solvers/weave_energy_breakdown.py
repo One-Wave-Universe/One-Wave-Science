@@ -13,8 +13,9 @@ Key Questions:
 4. Does the Phase 5 κ_T scaling (κ_T = κ_T_base × √m_scale) introduce an asymmetry?
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import (

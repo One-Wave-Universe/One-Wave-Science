@@ -12,8 +12,9 @@ This solver identifies which additional physics corrections are needed:
 4. Kinetic energy of confined quarks
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 

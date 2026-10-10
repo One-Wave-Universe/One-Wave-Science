@@ -8,8 +8,9 @@ because it makes Neutron's coupling HIGHER than Proton's, when it should be simi
 This test uses κ_T_base = 0.297 GeV for all hadrons without scaling.
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from dataclasses import dataclass

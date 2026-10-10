@@ -28,8 +28,9 @@ For same frequency (ω_i = ω_j): oscillations align, reduction is maximum
 For different frequencies: oscillations partially cancel, reduction depends on ratio
 """
 
+import os
 import sys
-sys.path.insert(0, "/home/claude/one-wave-science/solvers")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
 from hadron_knot_geometry import create_proton, create_neutron, create_lambda
