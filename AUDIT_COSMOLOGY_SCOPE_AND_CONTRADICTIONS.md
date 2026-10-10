@@ -94,6 +94,23 @@ What this definition requires:
 - Resistance must not create a second time variable. C-309 requires that the propagation ceiling not be confused with Mass Effect **[PROPOSAL, from E-533]**.
 - The C13 question still stands. "Time is resistance" does not say whether the wake and the curvature are the same response. It says the resistance is one scalar candidate for the clock-rate part of that response **[OPEN]**.
 
+### 3b. Owner definition: speed of light as friction limit
+
+Owner statement, recorded as stated: the speed of light is the friction limit, and a body moving too fast gets stuck in time at the edge of a wave.
+
+Repo mapping:
+
+- **Ceiling.** C-309 defines a propagation ceiling `c_lat = √β_max · Δx/Δt` for the discrete candidate **[PROPOSAL, YELLOW]**. E-509 proves the one-cell-per-step bound `c_L = Δx/Δt` **[GREEN, within the lattice model]**.
+- **Stall at the edge.** E-533 "Wave-Edge / Stall Limit" states that as `v → c⁻` the local-update fraction goes to zero and `dτ/dt → 0`. The owner's "stuck in time at the edge" is this mechanism **[PROPOSAL, E-533 YELLOW]**.
+- **Identification.** E-533 states that `c_phys = c` requires a derived continuum limit, and that it is "not granted merely by notation" **[OPEN]**.
+- **Scope.** C-309 forbids using the ceiling as a Mass-Effect mechanism. A body approaching the ceiling does not acquire its Mass Effect from the ceiling **[PROPOSAL, from C-309]**.
+
+Blockers and tests:
+
+- **C-313 (open, foundational).** The canonical update rule has a first-time-derivative damping term `μψ_t`, which selects a preferred time direction and is not exactly Lorentz invariant. C-313 says an exact Lorentz-invariant replacement must not be adopted until it reproduces the canonical damping. So "the speed of light is the friction limit" cannot be stated as a Lorentz-invariant result until C-313 is resolved **[OPEN, foundational]**.
+- **Light and friction.** E-528 has light losing energy to friction `κ_γ` along its path, with frequency changing. The owner's statement does not say whether `κ_γ` also changes the speed. If it does, light is not at the ceiling, and the speed-of-light identification fails. If it does not, the redshift must be carried entirely by frequency **[OPEN, question for owner]**.
+- **Established measurement.** The speed of light is measured as the same in all inertial frames, and the Lorentz form of time dilation is confirmed to high precision (for example, in muon lifetimes and atomic clocks) **[ESTABLISHED]**. The friction-limit account must reproduce this invariance, not only the stall at the edge.
+
 ---
 
 ## 4. Observational attacks
