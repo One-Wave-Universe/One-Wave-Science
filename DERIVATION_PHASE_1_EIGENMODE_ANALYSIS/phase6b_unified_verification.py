@@ -40,7 +40,7 @@ def dispersion_E_like(k_mag: float, gamma: float, beta: float) -> float:
 
     discriminant = C_k**2 - 4*P_k
     lambda_p = (C_k + np.sqrt(discriminant + 0j)) / 2
-    omega_p = -1j * np.log(lambda_p)
+    omega_p = 1j * np.log(lambda_p)
 
     return np.real(omega_p)
 
@@ -56,7 +56,7 @@ def dispersion_B_like(k_mag: float, gamma: float, beta: float) -> float:
 
     discriminant = C_k**2 - 4*P_k
     lambda_p = (C_k + np.sqrt(discriminant + 0j)) / 2
-    omega_p = -1j * np.log(lambda_p)
+    omega_p = 1j * np.log(lambda_p)
 
     return np.real(omega_p)
 
