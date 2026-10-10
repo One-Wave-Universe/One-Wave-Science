@@ -19,6 +19,10 @@ For each AI answer, record: tree SHA, relevant exact file paths, whether source 
 
 The six lenses are **not** six new spatial dimensions, six clock intervals, or Algorithm Zero's six-gate count. They do not force a physical temporal sequence. A resolved whole becomes a next-scale reference only when a projection preserves specified observables with quantified error (see `chapters/01_Continuous_Lattice.md`).
 
+## Explicit particle interpretation
+
+Before discussing particle identity or detector events, read [`PARTICLE_EXCITATION_AND_MEASUREMENT_INTERPRETATION.md`](PARTICLE_EXCITATION_AND_MEASUREMENT_INTERPRETATION.md). In the proposed One-Wave ontology, particle labels classify measurable excitation patterns and detector responses; they are not assumed fundamental standalone beads. This does not deny particle observations or promote the unverified single-medium hypothesis to established physics.
+
 ## Working One-Wave viewpoint — not a license to deny evidence
 
 - **No expansion as an assumed cosmological explanation.** Local compression/expression in the repository must still be preserved. Compare observations with standard expanding-universe models rather than deleting them.
