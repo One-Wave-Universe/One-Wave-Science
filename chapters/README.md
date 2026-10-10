@@ -15,6 +15,7 @@ Foundational documentation of One-Wave physics, from lattice mechanics through a
 | [05](./05_Simulation_Engine.md) | **Simulation Engine** | UNVERIFIED | Lattice dynamics solver architecture |
 | [06](./06_Dispersion_Validator.md) | **Dispersion Relation Validator** | ✓ VALIDATED | **Phase 2 Complete:** D-600 and D-602 characteristic equations proven; sign flip mechanism confirmed |
 | [07](./07_Maxwell_Validator.md) | **Maxwell Equation Validator** | ✓ VALIDATED | **Phase 3 Complete:** All 5 Maxwell-like checks pass; EM structure emerges naturally |
+| [09](./09_PPF_Rotational_Recursion.md) | **Point–Path–Field Rotational Recursion** | HYPOTHESIS | Canonical node links, scale recursion and test plan |
 | [08](./08_Publication_Readiness.md) | **Publication Readiness** | ✓ VALIDATED | **Phase 4 Complete:** Particle mass framework; ready for peer review; Nobel Prize track |
 
 ---
