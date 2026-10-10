@@ -1,14 +1,14 @@
 {
   "argv": [
     "printf",
-    "GROK_PULL_OK\n"
+    "JETSON_PULL_NO_TUNNEL_OK\n"
   ],
-  "completed_at": "2026-10-04T21:47:46.626932+00:00",
+  "completed_at": "2026-10-10T09:48:39.170448+00:00",
   "cwd_requested": "/home/Scales/One-Wave-Science",
   "exit_code": null,
-  "id": "grok-terminal-20261004-1447",
+  "id": "chatgpt-pull-no-tunnel-proof-20261010-01",
   "ok": false,
-  "requested_at_commit": "c39992d3187b41c784111539aeb77790cc87024f",
+  "requested_at_commit": "6abbf98ad8677ec0382d9e51c8c4756741f21850",
   "rpc_error": {
     "code": -32603,
     "message": "Reference Goblin HOLD: intention must be non-empty text <= 1024 characters"
