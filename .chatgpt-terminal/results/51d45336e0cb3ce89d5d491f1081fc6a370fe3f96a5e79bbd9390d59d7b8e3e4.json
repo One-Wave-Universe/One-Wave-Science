@@ -1,0 +1,76 @@
+{
+  "argv": [
+    "systemctl",
+    "--user",
+    "restart",
+    "desktop-commander-remote.service"
+  ],
+  "completed_at": "2026-09-29T16:03:10.882181+00:00",
+  "cwd": "/home/Scales/One-Wave-Science",
+  "duration_ms": 962,
+  "exit_code": 0,
+  "guidance": {
+    "code": "VERIFIED_COMMAND_COMPLETE",
+    "explanation": "The command completed inside the bounded parser.",
+    "higher_level_required": false,
+    "level": "none",
+    "next_action": "Use the receipt as evidence and verify state before the next mutation."
+  },
+  "id": "desktop-commander-service-restart-20260929-02",
+  "ok": true,
+  "output_clipped": false,
+  "parser_contract": "one-wave-terminal-parser-v2",
+  "reference": {
+    "contract": "one-wave-terminal-parser-v2",
+    "instruction": "Call terminal_reference for workflow, limits, authorized roots, and intervention levels.",
+    "tool": "terminal_reference"
+  },
+  "reference_after": {
+    "agents_sha256": "86e30e19afc4e6ea9fb98c722dead17062e14e5c5de5448481a67af873221d29",
+    "branch": "main",
+    "head": "19d2a77d3a5d962d21af3ceafe6185ddfa169a97",
+    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+    "root": "/home/Scales/One-Wave-Science",
+    "status": "?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/relay.md"
+  },
+  "reference_before": {
+    "agents_sha256": "86e30e19afc4e6ea9fb98c722dead17062e14e5c5de5448481a67af873221d29",
+    "branch": "main",
+    "head": "19d2a77d3a5d962d21af3ceafe6185ddfa169a97",
+    "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+    "root": "/home/Scales/One-Wave-Science",
+    "status": "?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/relay.md"
+  },
+  "reference_card": {
+    "action_sha256": "c969579ea25c7ced3e168f909a930a05593e799a65a5a578af987a328b66aac1",
+    "goblin": "reference",
+    "repository": {
+      "agents_sha256": "86e30e19afc4e6ea9fb98c722dead17062e14e5c5de5448481a67af873221d29",
+      "branch": "main",
+      "head": "19d2a77d3a5d962d21af3ceafe6185ddfa169a97",
+      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+      "root": "/home/Scales/One-Wave-Science",
+      "status": "?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/relay.md"
+    },
+    "stamped_at": "2026-09-29T16:03:09.919164+00:00"
+  },
+  "reference_changed": false,
+  "request_commit": "5345045d8725ec65358d532379195c6cae75f1ad",
+  "request_digest": "fa7e44ed45cb8e9ece7d23fa2c36f1e57bd7d7ae2d066777f80f897fdcf6ded1",
+  "response_card": {
+    "action_sha256": "c969579ea25c7ced3e168f909a930a05593e799a65a5a578af987a328b66aac1",
+    "goblin": "checker",
+    "repository": {
+      "agents_sha256": "86e30e19afc4e6ea9fb98c722dead17062e14e5c5de5448481a67af873221d29",
+      "branch": "main",
+      "head": "19d2a77d3a5d962d21af3ceafe6185ddfa169a97",
+      "remote": "https://github.com/One-Wave-Universe/One-Wave-Science.git",
+      "root": "/home/Scales/One-Wave-Science",
+      "status": "?? Engine/__pycache__/\n?? External_Work/brain_buddy/inbox/relay.md"
+    },
+    "stamped_at": "2026-09-29T16:03:10.882049+00:00"
+  },
+  "source_route": "transport:chatgpt-terminal-backup",
+  "stderr": "",
+  "stdout": ""
+}
