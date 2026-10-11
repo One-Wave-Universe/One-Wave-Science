@@ -1,0 +1,62 @@
+name: Canonical Self-Organization
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 12 * * 1'
+  push:
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: canonical-self-organization
+  cancel-in-progress: false
+jobs:
+  check-and-propose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Validate canonical metadata and math
+        run: |
+          set -euo pipefail
+          python3 scripts/normalize_legacy_node_metadata.py --check
+          python3 Math_Verification/verify.py --all
+          python3 Math_Verification/verify_integrations.py
+      - name: Regenerate only derived discovery indexes
+        run: |
+          set -euo pipefail
+          python3 scripts/sync_node_graph_indexes.py
+          git diff --check
+          git diff --name-only > /tmp/changed.txt
+          if grep -Ev '^(00_MASTER_INDEX\.md|AI_CANONICAL_START_HERE\.md)$' /tmp/changed.txt; then
+            echo 'Unexpected file modified by synchronizer'; exit 1
+          fi
+      - name: Propose bounded repair if indexes drifted
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- 00_MASTER_INDEX.md AI_CANONICAL_START_HERE.md; then
+            echo 'Derived discovery indexes current'; exit 0
+          fi
+          branch='automation/canonical-index-sync'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -B "$branch"
+          git add -- 00_MASTER_INDEX.md AI_CANONICAL_START_HERE.md
+          git commit -m 'Sync canonical derived node discovery indexes'
+          git push --force-with-lease origin "$branch"
+          if gh pr list --head "$branch" --state open --json number --jq '.[0].number' | grep -q '[0-9]'; then
+            echo 'Existing synchronization PR updated'
+          else
+            gh pr create --base main --head "$branch" --title 'Automated canonical discovery index synchronization' --body "$(cat <<'BODY'
+          Generated from canonical source nodes with scripts/sync_node_graph_indexes.py. Human review required; no science canon changed.
+          
+          CORE-RULES-PRE: Checked GENERAL_REFERENCE_RULES.md and canonical index source; changed only derived discovery surfaces.
+          MATH-BACKBONE: No protected math edited. Mathematical controls passed before this repair.
+          CORE-RULES-POST: Rebuilt deterministic indexes, checked diff whitelist, and proposed human-reviewed merge.
+          BODY
+          )"
+          fi
