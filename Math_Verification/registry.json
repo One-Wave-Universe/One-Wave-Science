@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "id": "harmonic_butterfly",
+      "owner": "One-Wave Science",
+      "source": "Nodes/DUAL_BUTTERFLY_HARMONIC_COORDINATES_A_E_20261010.md",
+      "canonical_math_reference": "MATH_BACKBONE/00_MATH_BACKBONE_LOCK.md",
+      "evidence_class": "established_musical_math_with_unverified_physical_mapping",
+      "equations": [
+        "f(n)=440*2^(n/12) Hz",
+        "T_zero=1/(2*f) s for a steady sinusoid",
+        "f(n+12)=2*f(n)",
+        "linear superposition p_total=sum(p_i)"
+      ],
+      "assumptions": [
+        "12-tone equal temperament",
+        "A4=440 Hz",
+        "initial phase zero for simple crossing interval",
+        "coordinate butterflies are not demonstrated intrinsic string modes"
+      ],
+      "units": {
+        "frequency": "Hz",
+        "time": "s",
+        "semitone": "dimensionless"
+      },
+      "tests": [
+        "octave",
+        "fifth",
+        "wrapping",
+        "crossing",
+        "transposition",
+        "major_minor",
+        "balanced",
+        "phase"
+      ],
+      "physical_hypotheses": [
+        "envelope lean",
+        "coupled-string energy transfer",
+        "frequency slowdown"
+      ]
+    }
+  ]
+}
