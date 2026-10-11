@@ -2,10 +2,10 @@
 node_id: "A-111"
 canonical_name: "Recursion"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Foundation Primitive / Extension"
-claim_gate_detail: "GREEN (Five closure criteria verified via a111_closure_validator.py, Oct 5 2026)"
+claim_gate_detail: "YELLOW (Audit 2026-10-10: a111_closure_validator.py Step 5 is not a valid test. Its selection rule passes a step if D_n < 0.1 OR S_total > 0.7; the run reports max D_n = 0.088, so the first condition holds at every step and the rule never rejects a pattern. Completeness is therefore true by construction, and the thresholds are not derived (Core Rule 5). No non-recursive control is run (Core Rule 10). Prior claim: GREEN, Oct 5 2026.)"
 metadata_standard: "I-06"
 ---
 
