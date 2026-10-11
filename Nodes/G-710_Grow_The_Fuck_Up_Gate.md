@@ -2,10 +2,10 @@
 node_id: "G-710"
 canonical_name: "Grow The Fuck Up Gate"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Evaluation, Control, and Route Grammar"
-claim_gate_detail: "Definition is GREEN; promotion to YELLOW depends on upstream audit completion"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: Definition is GREEN; promotion to YELLOW depends on upstream audit completion)"
 metadata_standard: "I-06"
 ---
 

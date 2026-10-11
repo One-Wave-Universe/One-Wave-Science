@@ -2,10 +2,10 @@
 node_id: "C-306"
 canonical_name: "Torque"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "HELD"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "GREEN (foundation) / YELLOW (math weak, parked for refinement)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (foundation) / YELLOW (math weak, parked for refinement))"
 metadata_standard: "I-06"
 ---
 

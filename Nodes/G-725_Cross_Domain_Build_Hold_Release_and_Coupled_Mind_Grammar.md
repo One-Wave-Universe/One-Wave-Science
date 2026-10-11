@@ -2,10 +2,10 @@
 node_id: "G-725"
 canonical_name: "Cross-Domain Build-Hold-Release and Coupled-Mind Grammar"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Cross-Domain Recurrence / Consciousness and Connection Architecture"
-claim_gate_detail: "GREEN (grammar) / BROWN (physical scale invariance)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (grammar) / BROWN (physical scale invariance))"
 metadata_standard: "I-06"
 ---
 

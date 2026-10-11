@@ -2,10 +2,10 @@
 node_id: "E-507"
 canonical_name: "Scale-Invariant Loop"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "GREEN (definition-form)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (definition-form))"
 metadata_standard: "I-06"
 ---
 

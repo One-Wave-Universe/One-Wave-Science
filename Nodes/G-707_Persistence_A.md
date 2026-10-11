@@ -2,10 +2,10 @@
 node_id: "G-707"
 canonical_name: "Persistence A"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Evaluation, Control, and Route Grammar"
-claim_gate_detail: "None"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: None)"
 metadata_standard: "I-06"
 ---
 

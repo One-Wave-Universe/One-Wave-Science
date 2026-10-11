@@ -2,10 +2,10 @@
 node_id: "A-111"
 canonical_name: "Recursion"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Foundation Primitive / Extension"
-claim_gate_detail: "GREEN (Five closure criteria verified via a111_closure_validator.py, Oct 5 2026)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (Five closure criteria verified via a111_closure_validator.py, Oct 5 2026))"
 metadata_standard: "I-06"
 ---
 

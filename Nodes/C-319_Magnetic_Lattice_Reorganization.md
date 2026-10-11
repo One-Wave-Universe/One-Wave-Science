@@ -2,10 +2,10 @@
 node_id: "C-319"
 canonical_name: "Magnetic Lattice Reorganization"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Applied Field Mechanics / Magnetic-Lattice Bridge"
-claim_gate_detail: "GREEN (canonical mechanism contract and test variables) / BROWN (physical coupling coefficients uncalibrated)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (canonical mechanism contract and test variables) / BROWN (physical coupling coefficients uncalibrated))"
 metadata_standard: "I-06"
 ---
 

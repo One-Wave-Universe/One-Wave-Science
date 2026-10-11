@@ -2,10 +2,10 @@
 node_id: "C-301"
 canonical_name: "Mirror Gate"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "Canonical role: three Mirror gates occupy three of the six primitive gate positions; the other three positions are Action gates"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: Canonical role: three Mirror gates occupy three of the six primitive gate positions; the other three positions are Action gates)"
 metadata_standard: "I-06"
 ---
 

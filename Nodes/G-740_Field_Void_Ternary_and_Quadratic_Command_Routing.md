@@ -2,10 +2,10 @@
 node_id: "G-740"
 canonical_name: "Field/Void Ternary and Quadratic Command Routing"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Legacy G-Series / Canonicalized Node"
-claim_gate_detail: "Routing contract projected onto three physical bidirectional A/B/C mirrors; Views propagate up and Actions down through the same mirrors"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: Routing contract projected onto three physical bidirectional A/B/C mirrors; Views propagate up and Actions down through the same mirrors)"
 metadata_standard: "I-06"
 ---
 

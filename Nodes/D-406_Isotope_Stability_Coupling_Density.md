@@ -2,10 +2,10 @@
 node_id: "D-406"
 canonical_name: "Isotope Stability via Outer-Shell Coupling Density"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "BLOCKED"
 classification: "Extension Node"
-claim_gate_detail: "GREEN (nuclear coupling hypothesis) / BLOCKED pending an inter-nucleon bridge"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (nuclear coupling hypothesis) / BLOCKED pending an inter-nucleon bridge)"
 metadata_standard: "I-06"
 ---
 

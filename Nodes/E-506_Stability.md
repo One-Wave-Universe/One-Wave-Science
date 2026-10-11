@@ -2,10 +2,10 @@
 node_id: "E-506"
 canonical_name: "Stability"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "GREEN (criterion) / YELLOW (window)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (criterion) / YELLOW (window))"
 metadata_standard: "I-06"
 ---
 

@@ -22,14 +22,14 @@ MASTER = ROOT / "00_MASTER_INDEX.md"
 AI_START = ROOT / "AI_CANONICAL_START_HERE.md"
 NODE_DIRS = (ROOT / "Nodes", ROOT / "Root_Axioms")
 
-C319_ROW = "| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | GREEN |"
-C320_ROW = "| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | GREEN |"
-D416_ROW = "| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | GREEN |"
+C319_ROW = "| C-319 | Magnetic Lattice Reorganization | Rotational magnetic state reorganizes directional lattice path accessibility without automatically inserting scalar compression. | YELLOW |"
+C320_ROW = "| C-320 | Magnetic-Compression Path Coupling | Canonical hypothesis: C-319 path reorganization weights the A-115 compression/restoring response; magnetism reorganizes the lattice rather than becoming gravity. | YELLOW |"
+D416_ROW = "| D-416 | Planetary Rotation-Magnetic Coupling Test Matrix | Joint Moon/Mercury/Venus/Uranus/Neptune falsification set for C-319/C-320, with locking required to emerge rather than be initialized. | YELLOW |"
 
 CURATED_REPLACEMENTS = {
     "| B-206b | Four Views | The four directional relationships (Inward/Outward/Across/Over) of a field mode at its boundary — perspectives, not separate forces. | YELLOW |":
         "| B-206b | Four Views — Direction, Phase, Strength, Reference | Four descriptive readout modes available to Mirror-gate evaluation; they are not four Mirror gates and do not change the six-gate count. | YELLOW |",
-    "| G-711 | Gate 7 | The review gate — Gates 1–6 build state, Gate 7 reviews it. | GREEN |":
+    "| G-711 | Gate 7 | The review gate — Gates 1–6 build state, Gate 7 reviews it. | YELLOW |":
         "| G-711 | Namika — Inter-System Relation (No Internal Gate 7) | A complete system has six internal gates; Namika names a higher-order relation between complete six-gate systems and is not an internal seventh gate. | YELLOW |",
 }
 
@@ -139,7 +139,7 @@ def sync_master(text: str) -> str:
             text = text.replace(old, new)
 
     if "| C-319 |" not in text:
-        anchor = "| C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | GREEN |"
+        anchor = "| C-318 | Four-Interaction Mass-Effect Response | Permanently removes the false speed-ceiling shortcut and scalar-gap import; defines Mass Effect as the carried-pattern response of the coupled knot, electrical shell, Mirror relation, Boundary-Tension Weave, and cross-terms. | YELLOW |"
         require_once(text, anchor, "C-318 master-index row")
         text = text.replace(anchor, anchor + "\n" + C319_ROW + "\n" + C320_ROW)
     if "| D-416 |" not in text:

@@ -2,10 +2,10 @@
 node_id: "G-737"
 canonical_name: "Synchronized Dual-State Mind — Fast Router and Consequence Feedback"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Legacy G-Series / Canonicalized Node"
-claim_gate_detail: "computational architecture; not proof of consciousness or literal neuroanatomy"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: computational architecture; not proof of consciousness or literal neuroanatomy)"
 metadata_standard: "I-06"
 ---
 

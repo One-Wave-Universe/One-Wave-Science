@@ -2,10 +2,10 @@
 node_id: "C-317"
 canonical_name: "Boundary-Tension Weave"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Boundary Mechanics / Terminology Anchor"
-claim_gate_detail: "YELLOW (geometry and energy forms) / GREEN (full QCD replacement claim)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (geometry and energy forms) / GREEN (full QCD replacement claim))"
 metadata_standard: "I-06"
 ---
 

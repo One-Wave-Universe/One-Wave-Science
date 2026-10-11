@@ -420,21 +420,22 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | A-114a | Exact Dispersion Roots | Foundation Extension. Source: `Nodes/A-114a_Exact_Dispersion_Roots.md`. | YELLOW |
 | A-114b | Dispersion Trail — Next Ten Questions | Trail / Compare-to-Repo. Source: `Nodes/A-114b_Dispersion_Trail.md`. | YELLOW |
 | B-206c | Four Action Modes — Inward, Outward, Across, Over | Cycle and Relationship Structure. Source: `Nodes/B-206c_Four_Actions.md`. | YELLOW |
-| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | GREEN |
-| B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | GREEN |
-| B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | GREEN |
+| B-221a | Six-Step / Six-Gate Mirror-Action Oscillator | Cycle and Relationship Structure. Source: `Nodes/B-221a_Six_Step_Oscillator_Program.md`. | YELLOW |
+| B-226 | Research Discovery and Invention Loop | Cycle and Relationship Structure. Source: `Nodes/B-226_Research_Discovery_Invention_Loop.md`. | YELLOW |
+| B-227 | Time-Scale Bottleneck Loop | Cycle and Relationship Structure. Source: `Nodes/B-227_Time_Scale_Bottleneck_Loop.md`. | YELLOW |
 | B-228 | Compression Energy Chains | Analogy / Scale Bridge — not established biochemistry identity. Source: `Nodes/B-228_Compression_Energy_Chains.md`. | YELLOW |
 | B-229 | One Wave Biology | Reinterpretation / Simplification — not a replacement textbook. Source: `Nodes/B-229_One_Wave_Biology.md`. | YELLOW |
 | C-323 | Displacement Interaction Regimes of the Unified Compression Field | Field Identity / Continuum Interaction Stress. Source: `Nodes/C-323_Four_Forces_as_Displacement_Regimes.md`. | YELLOW |
 | C-324 | No Entanglement — Detector Map | Principle / Measurement Mathematics. Source: `Nodes/C-324_No_Entanglement_Detector_Map.md`. | YELLOW |
+| C-325 | Transfluxor Magnetic Solver Triangulation and Reality Gate | Experimental Magnetics / Cross-Scale Falsification. Source: `Nodes/C-325_Transfluxor_Magnetic_Solver_Triangulation.md`. | BROWN |
 | D-417 | Hexagonal Lattice Interaction Dynamics | Lattice Dynamics / Interaction Discretization. Source: `Nodes/D-417_Hexagonal_Lattice_Interaction_Dynamics.md`. | YELLOW |
 | E-531 | Dual-Harmonic Propagation Operator | Propagation Primitive / Null-Tested Boundary. Source: `Nodes/E-531_Dual_Harmonic_Propagation_Operator.md`. | YELLOW |
 | E-532 | Bound vs Unbound Criterion and Finite Wake | Bound-State Primitive / Mass Mechanism Foundation. Source: `Nodes/E-532_Bound_Unbound_Criterion_and_Finite_Wake.md`. | YELLOW |
 | E-533 | Superfluid Transport Time Dilation | Propagation / Time-Transport Hypothesis. Source: `Nodes/E-533_Superfluid_Transport_Time_Dilation.md`. | YELLOW |
 | E-534 | Settling Dynamics | Applied Dynamics and Stability. Source: `Nodes/E-534_Settling_Dynamics.md`. | YELLOW |
-| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | GREEN |
-| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | GREEN |
-| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | GREEN |
+| G-724 | M4 Heterogeneous Runtime and Dual Six-Gate Controller | Heterogeneous Compute / Brainstem Control / Associative and Generative Memory. Source: `Nodes/G-724_M4_Heterogeneous_Runtime_and_Dual_Six_Gate_Controller.md`. | YELLOW |
+| G-725 | Cross-Domain Build-Hold-Release and Coupled-Mind Grammar | Cross-Domain Recurrence / Consciousness and Connection Architecture. Source: `Nodes/G-725_Cross_Domain_Build_Hold_Release_and_Coupled_Mind_Grammar.md`. | YELLOW |
+| G-726 | Dual Dream Engine — Programmed 2D Ternary Homeworld | Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage. Source: `Nodes/G-726_Dual_Dream_Engine_2D_Ternary_Homeworld_Mega_City.md`. | YELLOW |
 | G-727 | Two Choice, Three Move, and Recursive Point–Path–Field | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-727_Two_Choice_Three_Move_and_Recursive_PPF.md`. | YELLOW |
 | G-728 | Mathematics Attack Laundry List | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-728_Mathematics_Attack_Laundry_List.md`. | BROWN |
 | G-729 | Mirror Operator for the Three Mirror Gates | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-729_Mirror_as_Continuous_Phase_with_Six_Route_Projection.md`. | YELLOW |
@@ -445,13 +446,13 @@ These I-06 canonical nodes exist under `Nodes/` or `Root_Axioms/` but are not ye
 | G-734 | Asymmetric Center-Origin Oscillator Reference | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-734_Asymmetric_Center_Origin_Oscillator_Reference.md`. | YELLOW |
 | G-735 | Chapter-Driven Simulator Program | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-735_Chapter_Driven_Simulator_Program.md`. | BROWN |
 | G-736 | Standard Model Interpretation Overlay for Micro Simulators | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-736_Standard_Model_Interpretation_Overlay_for_Micro_Simulators.md`. | YELLOW |
-| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | GREEN |
+| G-737 | Synchronized Dual-State Mind — Fast Router and Consequence Feedback | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-737_Synchronized_Dual_State_Mind_Router_Feedback.md`. | YELLOW |
 | G-738 | Center Geometry Classification and Receipt | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-738_Center_Geometry_Classification_and_Receipt.md`. | YELLOW |
 | G-739 | Six-Gate Mirror-Action Trajectory Extraction | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-739_Six_Gate_Trajectory_Extraction.md`. | YELLOW |
-| G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | GREEN |
+| G-740 | Field/Void Ternary and Quadratic Command Routing | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-740_Field_Void_Ternary_and_Quadratic_Command_Routing.md`. | YELLOW |
 | G-741 | Crazy Town — Balanced-Rail Nested-Loop Physical Build Proposition | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-741_Crazy_Town_Balanced_Rail_Nested_Loop_Build_Proposition.md`. | YELLOW |
 | G-742 | Nonverbal Loop Continuity and Reconstructable Language Adapter | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-742_Nonverbal_Loop_Continuity_and_Language_Adapter.md`. | YELLOW |
-| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair. Source: `Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md`. | GREEN |
+| G-743 | Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down | Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair. Source: `Nodes/G-743_Proven_Quadrature_Rotating_Field_Views_Up_Actions_Down.md`. | YELLOW |
 | G-744 | Literal One-Cell Breadboard Build — Real Parts and Math | Breadboard / Mixed-Signal / One-Wave Cell Primitive. Source: `Nodes/G-744_Literal_One_Cell_Breadboard_Build_Real_Parts_and_Math.md`. | YELLOW |
 | G-745 | Zone-Edge 125 GeV Lattice-Constant Hypothesis | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-745_Zone_Edge_125GeV_Lattice_Constant_Hypothesis.md`. | YELLOW |
 | G-746 | E1 Scalar Dual Problem and Matrix Handoff | Legacy G-Series / Canonicalized Node. Source: `Nodes/G-746_Damping_Matrix_Dispersion.md`. | BROWN |

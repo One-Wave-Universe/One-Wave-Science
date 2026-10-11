@@ -2,10 +2,10 @@
 node_id: "G-726"
 canonical_name: "Dual Dream Engine — Programmed 2D Ternary Homeworld"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "PROPOSED_BUILD"
 classification: "Non-Cognitive Programmed Dream World / 2D Ternary Simulation / NAS Storage"
-claim_gate_detail: "GREEN (role separation) / BROWN (Homeworld implementation)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (role separation) / BROWN (Homeworld implementation))"
 metadata_standard: "I-06"
 ---
 

@@ -2,10 +2,10 @@
 node_id: "E-503"
 canonical_name: "Pressure (Gradient Form)"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "GREEN (form) / YELLOW (coefficient)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (form) / YELLOW (coefficient))"
 metadata_standard: "I-06"
 ---
 

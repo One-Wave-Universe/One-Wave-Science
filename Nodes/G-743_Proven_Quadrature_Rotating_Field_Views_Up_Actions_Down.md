@@ -2,10 +2,10 @@
 node_id: "G-743"
 canonical_name: "Proven Quadrature Rotating-Field Hardware — Views Up / Actions Down"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "PROPOSED_BUILD"
 classification: "Quadratic Routing / Established Hardware Analogy / Sensor-Actuator Pair"
-claim_gate_detail: "GREEN (external hardware principles) / YELLOW (One-Wave integration mapping)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (external hardware principles) / YELLOW (One-Wave integration mapping))"
 metadata_standard: "I-06"
 ---
 

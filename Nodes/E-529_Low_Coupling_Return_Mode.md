@@ -2,10 +2,10 @@
 node_id: "E-529"
 canonical_name: "Low-Coupling Return Mode"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Return Transport / Boundary-Release Mode"
-claim_gate_detail: "YELLOW (transport scaffold) / GREEN (cosmic-return role)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (transport scaffold) / GREEN (cosmic-return role))"
 metadata_standard: "I-06"
 ---
 

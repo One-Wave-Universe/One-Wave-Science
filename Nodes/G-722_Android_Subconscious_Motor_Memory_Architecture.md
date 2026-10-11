@@ -2,10 +2,10 @@
 node_id: "G-722"
 canonical_name: "Android Subconscious Motor Memory Architecture"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "PROPOSED_BUILD"
 classification: "Procedural Memory / Distributed Motor Control / Hybrid Energy-Based Memory"
-claim_gate_detail: "YELLOW (build architecture) / GREEN (role separation)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (build architecture) / GREEN (role separation))"
 metadata_standard: "I-06"
 ---
 

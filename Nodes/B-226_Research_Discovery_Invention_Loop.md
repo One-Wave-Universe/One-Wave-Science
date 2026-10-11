@@ -2,10 +2,10 @@
 node_id: "B-226"
 canonical_name: "Research Discovery and Invention Loop"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "GREEN (defined operational method; not yet independently validated across research domains)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (defined operational method; not yet independently validated across research domains))"
 metadata_standard: "I-06"
 ---
 

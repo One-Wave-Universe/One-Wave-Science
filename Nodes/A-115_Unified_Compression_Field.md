@@ -2,10 +2,10 @@
 node_id: "A-115"
 canonical_name: "Unified Compression Field"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Foundation Extension / Load-Bearing Cross-Scale Node"
-claim_gate_detail: "YELLOW (field decomposition and static-loop equations) / GREEN (physical identity claims and coefficients)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (field decomposition and static-loop equations) / GREEN (physical identity claims and coefficients))"
 metadata_standard: "I-06"
 ---
 

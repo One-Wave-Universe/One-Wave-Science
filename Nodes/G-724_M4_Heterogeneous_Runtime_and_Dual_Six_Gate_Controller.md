@@ -2,10 +2,10 @@
 node_id: "G-724"
 canonical_name: "M4 Heterogeneous Runtime and Dual Six-Gate Controller"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "PROPOSED_BUILD"
 classification: "Heterogeneous Compute / Brainstem Control / Associative and Generative Memory"
-claim_gate_detail: "YELLOW (state architecture) / GREEN (device allocation)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (state architecture) / GREEN (device allocation))"
 metadata_standard: "I-06"
 ---
 

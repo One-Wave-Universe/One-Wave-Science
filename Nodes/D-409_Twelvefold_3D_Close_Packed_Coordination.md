@@ -2,10 +2,10 @@
 node_id: "D-409"
 canonical_name: "Twelvefold 3D Close-Packed Coordination"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Native 3D Geometry / Volumetric Simulation Foundation"
-claim_gate_detail: "YELLOW (geometry) / GREEN (canonical physical-lattice candidate)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (geometry) / GREEN (canonical physical-lattice candidate))"
 metadata_standard: "I-06"
 ---
 

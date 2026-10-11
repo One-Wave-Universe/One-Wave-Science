@@ -2,10 +2,10 @@
 node_id: "A-116"
 canonical_name: "Three-Dimensional Spherical Default"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Foundation Geometry Rule"
-claim_gate_detail: "YELLOW (minimum-surface geometry) / GREEN (universal application)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (minimum-surface geometry) / GREEN (universal application))"
 metadata_standard: "I-06"
 ---
 

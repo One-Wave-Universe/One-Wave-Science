@@ -2,10 +2,10 @@
 node_id: "B-221a"
 canonical_name: "Six-Step / Six-Gate Mirror-Action Oscillator"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "Canonical architecture lock: the six process steps are the six gates; three are Mirror gates and three are Action gates"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: Canonical architecture lock: the six process steps are the six gates; three are Mirror gates and three are Action gates)"
 metadata_standard: "I-06"
 ---
 

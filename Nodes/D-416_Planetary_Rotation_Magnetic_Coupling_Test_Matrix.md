@@ -2,10 +2,10 @@
 node_id: "D-416"
 canonical_name: "Planetary Rotation-Magnetic Coupling Test Matrix"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Cross-Scale Falsification / Planetary Rotation and Magnetism"
-claim_gate_detail: "GREEN (observational control matrix and falsification rules) / BROWN (One-Wave magnetic-lock prediction not yet derived)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (observational control matrix and falsification rules) / BROWN (One-Wave magnetic-lock prediction not yet derived))"
 metadata_standard: "I-06"
 ---
 

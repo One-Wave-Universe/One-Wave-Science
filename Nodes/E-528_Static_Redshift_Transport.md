@@ -2,10 +2,10 @@
 node_id: "E-528"
 canonical_name: "Static Redshift Transport"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Field Propagation / Redshift Replacement"
-claim_gate_detail: "YELLOW (transport equation) / GREEN (tired-light identification)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (transport equation) / GREEN (tired-light identification))"
 metadata_standard: "I-06"
 ---
 
@@ -117,10 +117,13 @@ Required structure:
 [
 {chi,
 ablachi,gamma,eta,ldots}
-ightarrow
+
+ightarrow
 {kappa_gamma,mathcal T}
-ightarrow
-{z,Delta t_{m obs}}.
+
+ightarrow
+{z,Delta t_{
+m obs}}.
 ]
 
 This shared-law requirement must be frozen before fitting held-out supernova data.

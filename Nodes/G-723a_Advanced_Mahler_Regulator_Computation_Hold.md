@@ -2,10 +2,10 @@
 node_id: "G-723a"
 canonical_name: "Advanced Mahler and Regulator Computation Hold"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "HELD"
 classification: "Advanced Mathematical Audit / Not a Motor Primitive"
-claim_gate_detail: "GRAY external reference / HELD until a qualifying polynomial exists"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GRAY external reference / HELD until a qualifying polynomial exists)"
 metadata_standard: "I-06"
 ---
 

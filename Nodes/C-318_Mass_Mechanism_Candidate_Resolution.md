@@ -2,10 +2,10 @@
 node_id: "C-318"
 canonical_name: "Four-Interaction Mass-Effect Response"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Mass-Effect Derivation / Imported-Assumption Resolution"
-claim_gate_detail: "GREEN (One-Wave mechanism identity) / YELLOW (profiles, response coefficients, and numerical spectrum)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (One-Wave mechanism identity) / YELLOW (profiles, response coefficients, and numerical spectrum))"
 metadata_standard: "I-06"
 ---
 

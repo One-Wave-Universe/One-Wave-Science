@@ -2,10 +2,10 @@
 node_id: "D-408"
 canonical_name: "Sixfold 2D Triangular-Hexagonal Lattice"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Native 2D Geometry / Simulation Foundation"
-claim_gate_detail: "YELLOW (geometry) / GREEN (physical interpretation and dynamics)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (geometry) / GREEN (physical interpretation and dynamics))"
 metadata_standard: "I-06"
 ---
 

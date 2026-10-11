@@ -2,10 +2,10 @@
 node_id: "C-307"
 canonical_name: "Angular Momentum"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "GREEN (foundation) / YELLOW (endpoint needs refinement)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (foundation) / YELLOW (endpoint needs refinement))"
 metadata_standard: "I-06"
 ---
 

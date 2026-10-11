@@ -2,10 +2,10 @@
 node_id: "E-530"
 canonical_name: "White Energy Recirculation Loop"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Static Cosmic Circulation / Mirror-Gate Release"
-claim_gate_detail: "YELLOW (closed accounting and threshold model) / GREEN (quasar/white-hole identification)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (closed accounting and threshold model) / GREEN (quasar/white-hole identification))"
 metadata_standard: "I-06"
 ---
 

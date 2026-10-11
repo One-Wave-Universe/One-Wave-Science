@@ -2,10 +2,10 @@
 node_id: "B-201"
 canonical_name: "Equilibrium Balance"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "GREEN (Yellow Audit Open)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (Yellow Audit Open))"
 metadata_standard: "I-06"
 ---
 

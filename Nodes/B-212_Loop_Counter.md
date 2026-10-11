@@ -2,10 +2,10 @@
 node_id: "B-212"
 canonical_name: "Loop Counter"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Cycle and Relationship Structure"
-claim_gate_detail: "GREEN (definition) / YELLOW (threshold mathematics)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (definition) / YELLOW (threshold mathematics))"
 metadata_standard: "I-06"
 ---
 

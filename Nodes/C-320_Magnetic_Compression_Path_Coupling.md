@@ -2,10 +2,10 @@
 node_id: "C-320"
 canonical_name: "Magnetic-Compression Path Coupling"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE_HYPOTHESIS"
 classification: "Applied Field Mechanics / Magnetism-Gravity Bridge"
-claim_gate_detail: "GREEN (canonical coupling contract and recovery limits) / BROWN (physical coefficients and observational fit uncalibrated)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (canonical coupling contract and recovery limits) / BROWN (physical coefficients and observational fit uncalibrated))"
 metadata_standard: "I-06"
 ---
 

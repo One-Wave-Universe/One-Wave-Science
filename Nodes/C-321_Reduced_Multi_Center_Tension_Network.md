@@ -2,10 +2,10 @@
 node_id: "C-321"
 canonical_name: "Reduced Multi-Center Tension Network"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Boundary-Tension Reduction / Junction Geometry"
-claim_gate_detail: "YELLOW (N=3 reduced geometry) / GREEN (N>3 and nuclear application)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: YELLOW (N=3 reduced geometry) / GREEN (N>3 and nuclear application))"
 metadata_standard: "I-06"
 ---
 

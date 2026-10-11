@@ -2,10 +2,10 @@
 node_id: "C-305"
 canonical_name: "Work"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Mechanics and Boundary Structure"
-claim_gate_detail: "None"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: None)"
 metadata_standard: "I-06"
 ---
 

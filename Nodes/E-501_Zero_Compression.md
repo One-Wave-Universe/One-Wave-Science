@@ -2,10 +2,10 @@
 node_id: "E-501"
 canonical_name: "Zero Compression"
 namespace: "NODE"
-gate: "GREEN"
+gate: "YELLOW"
 lifecycle: "ACTIVE"
 classification: "Applied Dynamics and Stability"
-claim_gate_detail: "GREEN (definition) / YELLOW (mathematics)"
+claim_gate_detail: "YELLOW (demoted 2026-10-10: equations and Core Rule 10 kill tests not yet re-verified; prior claim: GREEN (definition) / YELLOW (mathematics))"
 metadata_standard: "I-06"
 ---
 
